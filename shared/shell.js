@@ -6,6 +6,7 @@
 // - 실험실 코드가 쓸 수 있는 API: window.__site.{quality, lang, share(), setVisible(bool), t(ko,en)}
 (() => {
   const site = (window.__SITE__ = window.__SITE__ || {});
+  window.__site = site; // 문서상 API 이름
   const lang = (document.documentElement.lang || 'ko').toLowerCase().startsWith('en') ? 'en' : 'ko';
   const t = (ko, en) => (lang === 'en' ? en : ko);
 
@@ -24,7 +25,9 @@
 .lb-toast{position:fixed;left:50%;bottom:64px;transform:translateX(-50%);z-index:2147483001;background:rgba(20,18,16,.85);
   color:#efe7dc;border-radius:10px;padding:10px 14px;font:500 13px/1.3 "Noto Sans KR",system-ui,sans-serif;opacity:0;transition:opacity .2s}
 .lb-toast.on{opacity:1}
-@media (max-width:980px){.lb-shell:not(.lb-inline){left:auto;right:8px;bottom:auto;top:8px}.lb-btn{padding:7px 10px}}`;
+.lb-short{display:none}
+@media (max-width:980px){.lb-shell:not(.lb-inline){left:auto;right:8px;bottom:auto;top:8px}.lb-btn{padding:7px 10px}
+  .lb-shell:not(.lb-inline) .lb-long{display:none}.lb-shell:not(.lb-inline) .lb-short{display:inline}.lb-shell:not(.lb-inline) .lb-hide-m{display:none}}`;
 
   function toast(msg) {
     let el = document.querySelector('.lb-toast');
@@ -67,16 +70,26 @@
       if (extra.href) { b.href = extra.href; if (extra.external) { b.target = '_blank'; b.rel = 'noopener'; } }
       else b.type = 'button';
       if (extra.pressed !== undefined) b.setAttribute('aria-pressed', String(extra.pressed));
-      b.innerHTML = (extra.pressed !== undefined ? '<span class="lb-dot"></span>' : '') + label;
+      // 좁은 화면(고정 알약)에서는 짧은 이름만 보여 실험실 헤더를 가리지 않는다
+      const text = extra.short ? `<span class="lb-long">${label}</span><span class="lb-short">${extra.short}</span>` : label;
+      b.innerHTML = (extra.pressed !== undefined ? '<span class="lb-dot"></span>' : '') + text;
+      if (extra.short) b.setAttribute('aria-label', label.replace(/^← /, ''));
+      if (extra.hideMobile) b.classList.add('lb-hide-m');
       if (onClick) b.addEventListener('click', onClick);
       bar.appendChild(b);
       return b;
     };
 
-    btn(t('← 모든 실험실', '← All labs'), null, { href: '/' });
+    btn(t('← 모든 실험실', '← All labs'), null, { href: '/', short: '←' });
     btn(t('공유', 'Share'), share);
     btn(t('저사양', 'Lite'), () => setLite(site.quality !== 'low'), { pressed: site.quality === 'low' });
-    if (site.requestFormUrl) btn(t('기관용 의뢰', 'For institutions'), null, { href: site.requestFormUrl, external: true });
+    if (site.requestFormUrl) {
+      // 폼의 숨은 필드(lab, lang)로 어느 실험실에서 왔는지 기록한다 (docs/forms.md)
+      const u = new URL(site.requestFormUrl);
+      u.searchParams.set('lab', location.pathname.split('/').filter(Boolean)[0] || 'home');
+      u.searchParams.set('lang', lang);
+      btn(t('기관용 의뢰', 'For institutions'), null, { href: u.toString(), external: true, hideMobile: true });
+    }
 
     (slot || document.body).appendChild(bar);
     site._bar = bar;

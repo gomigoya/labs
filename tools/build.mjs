@@ -11,7 +11,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const LABS = path.join(ROOT, 'labs');
 const DIST = path.join(ROOT, 'dist');
 const ALL = process.argv.includes('--all');
-const SKIP = new Set(['shots', 'docs', 'node_modules', 'meta.json']);
+const SKIP = new Set(['shots', 'docs', 'node_modules', 'meta.json', 'src', 'tools']); // src·tools: 조각 소스와 검증 스크립트(배포 불필요)
 const SKIP_EXT = new Set(['.ps1', '.md']);
 
 const cfg = JSON.parse(fs.readFileSync(path.join(ROOT, 'site.config.json'), 'utf8'));
