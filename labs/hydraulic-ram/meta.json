@@ -1,0 +1,13 @@
+{
+  "slug": "hydraulic-ram",
+  "status": "live",
+  "order": 1,
+  "subject": "physics",
+  "titleKo": "수격펌프",
+  "titleEn": "Hydraulic Ram Pump",
+  "hookKo": "전기 없이 물이 위로 솟는다",
+  "hookEn": "Water climbs uphill with no power at all",
+  "curriculumKo": "고등 물리 · 유체",
+  "curriculumEn": "Intro engineering · Fluids",
+  "reviewed": false
+}
