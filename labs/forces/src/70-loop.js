@@ -249,8 +249,8 @@ function lessonUpdate() {
 const PERF = { acc: 0, n: 0, t: 0 };
 let lastT = performance.now(), frameNo = 0, uiT = 0;
 
-function update(dt) {
-  frameNo++;
+function update(rdt) {
+  frameNo++; const dt = dirTime(rdt);   // dt: 물리(슬로 모션 반영) / rdt: 카메라·화면
   const k = 1 - Math.exp(-dt * 7);
   for (const n of ['g', 'jack', 'F1', 'F2']) S[n].cur += (S[n].tgt - S[n].cur) * (n === 'jack' ? 1 - Math.exp(-dt * 4) : k);
   // --- 매달기: 닫힌 해 + 화면용 감쇠 진동 (평형으로 수렴) ---
@@ -273,6 +273,7 @@ function update(dt) {
     const ev = PHYS.trackStep(S.trk, P, dts);
     S.dist += Math.abs(S.trk.x - x0);
     for (const e of ev) {
+      if (e.type === 'start' || e.type === 'bump') dirEvent(e.type === 'start' ? 'slip' : 'bump', e);
       if (e.type === 'start') { recordFriction(e); sfx('scrape'); if (S.mode !== 'kid') UI.event(T('evStart')(e), 1800); }
       if (e.type === 'stop') sfx('tick');
       if (e.type === 'bump') { sfx('clack'); if (S.mode !== 'kid') UI.event(T('evBump'), 1400); }
@@ -300,21 +301,21 @@ function update(dt) {
   if (frameNo % 3 === 0) CONSOLE.screenA.redraw();
   if (frameNo % 3 === 1) CONSOLE.screenB.redraw();
   // --- HUD ---
-  uiT += dt;
+  uiT += rdt;
   if (uiT > 0.08) { uiT = 0; document.getElementById('caption').innerHTML = captionFor(); UI.updateChips(); lessonUpdate(); KID.update(); }
-  UI.updateLabels(); KID.frame(dt); khFrame(); updateTheme(dt);
+  UI.updateLabels(); KID.frame(rdt); khFrame(); dirFrame(rdt); updateTheme(rdt);
   audioUpdate();
   // --- 카메라·렌더 ---
-  keyMove(dt); hoverUpdate(dt);
-  updateCamera(dt);
+  keyMove(rdt); hoverUpdate(rdt);
+  updateCamera(rdt);
   PIPE.bokeh.uniforms.focus.value = camera.position.distanceTo(controls.target);
   const now = performance.now() / 1000;
   PIPE.finish.uniforms.uTime.value = now;
-  updateFocus(dt);
+  updateFocus(rdt);
   renderer.shadowMap.needsUpdate = true;
-  PIPE.composer.render(dt);
+  PIPE.composer.render(rdt);
   renderOverlays();
-  PERF.acc += dt; PERF.n++; PERF.t += dt;
+  PERF.acc += rdt; PERF.n++; PERF.t += rdt;
   if (PERF.t > 2) {
     const avg = PERF.acc / PERF.n * 1000; PERF.acc = PERF.n = PERF.t = 0; PERF.last = avg;
     if (avg > 25 && !window.__labNoAuto) {

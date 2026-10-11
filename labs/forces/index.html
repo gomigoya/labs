@@ -700,6 +700,92 @@ body.kid #modeBtn{top:12px;bottom:auto;left:16px;right:auto;transform:none}
   .khknob{width:44px;height:44px;margin:-22px 0 0 -22px}
 }
 
+
+/* ===== 연출 층 (68-director.js) ===== */
+/* 레터박스: 결정적 순간·타이틀·시작 화면 */
+body::before,body::after{content:"";position:fixed;left:0;right:0;height:0;background:#05060a;z-index:14;pointer-events:none;transition:height .7s cubic-bezier(.65,0,.2,1)}
+body::before{top:0} body::after{bottom:0}
+body.kid.kbars::before,body.kid.kbars::after{height:8vh}
+/* 타이틀 카드: 눈썹 글이 올라오고, 제목이 왼쪽부터 닦여 나오고, 밑줄이 그어진 뒤 위로 빠진다 */
+#ktc{position:fixed;inset:0;z-index:15;display:grid;place-items:center;pointer-events:none;opacity:0;background:radial-gradient(ellipse 60% 45% at center,rgba(5,6,12,.62),rgba(5,6,12,0) 70%);font-family:var(--kfont)}
+body:not(.kid) #ktc{display:none}
+#ktc.on{animation:ktcFade 2.15s ease forwards}
+#ktc .in{text-align:center;color:#fff;padding:0 24px}
+#ktc .e{font:700 13px/1 var(--kfont);letter-spacing:.26em;text-transform:uppercase;color:#c7d2fe;opacity:0;transform:translateY(10px)}
+#ktc .t{margin-top:16px;font:800 clamp(30px,5.2vw,58px)/1.15 var(--kfont);letter-spacing:-.025em;word-break:keep-all;text-shadow:0 6px 40px rgba(0,0,0,.6);clip-path:inset(-10% 100% -10% 0)}
+#ktc .l{display:block;width:0;height:2px;margin:20px auto 0;background:linear-gradient(90deg,transparent,#a5b4fc,transparent)}
+#ktc.on .e{animation:ktcUp .55s .12s cubic-bezier(.2,.8,.2,1) forwards}
+#ktc.on .t{animation:ktcWipe .75s .28s cubic-bezier(.75,0,.2,1) forwards}
+#ktc.on .l{animation:ktcLine .9s .6s cubic-bezier(.2,.8,.2,1) forwards}
+#ktc.on .in{animation:ktcOut .45s 1.65s cubic-bezier(.6,0,.4,1) forwards}
+@keyframes ktcFade{0%{opacity:0}7%{opacity:1}82%{opacity:1}100%{opacity:0}}
+@keyframes ktcUp{to{opacity:1;transform:none}}
+@keyframes ktcWipe{to{clip-path:inset(-10% 0 -10% 0)}}
+@keyframes ktcLine{to{width:min(320px,60vw)}}
+@keyframes ktcOut{to{transform:translateY(-28px) scale(.97);opacity:0}}
+/* 컷 동안 화면 UI는 잠시 비켜 있다가 들어온다 */
+#kid>*{transition:opacity .45s ease}
+body.kcut #kid>*,body.kcut #khandles{opacity:0!important;pointer-events:none!important}
+/* 슬로 모션 표시 (중계 화면의 리플레이 표식) */
+#kslow{position:fixed;left:16px;top:calc(8vh + 12px);z-index:16;display:flex;align-items:center;gap:8px;padding:7px 12px;border-radius:999px;background:rgba(10,12,20,.78);color:#fff;font:700 12px/1 var(--knum);letter-spacing:.12em;opacity:0;transform:translateY(-6px);transition:opacity .3s,transform .3s;pointer-events:none}
+#kslow i{width:8px;height:8px;border-radius:50%;background:#ef4444;animation:kslowDot 1s ease-in-out infinite}
+body.kid.kslow #kslow{opacity:1;transform:none}
+@keyframes kslowDot{50%{opacity:.25}}
+/* 해설선 */
+#kcall{position:fixed;inset:0;z-index:11;pointer-events:none;font-family:var(--kfont)}
+.kco .d{position:absolute;width:12px;height:12px;margin:-6px 0 0 -6px;border-radius:50%;background:var(--c);box-shadow:0 0 0 3px rgba(255,255,255,.95),0 0 18px var(--c);animation:kcoDot .4s cubic-bezier(.2,1.7,.4,1) both}
+.kco .d::after{content:"";position:absolute;inset:-7px;border-radius:50%;border:2px solid var(--c);animation:kcoPing 1.3s .2s ease-out infinite}
+.kco .ln{position:absolute;height:2px;margin-top:-1px;transform-origin:0 50%;background:#fff;box-shadow:0 0 8px rgba(0,0,0,.55);transform:rotate(var(--a)) scaleX(0);animation:kcoLine .38s .18s cubic-bezier(.3,0,.2,1) forwards}
+.kco .bx{position:absolute;transform:translate(var(--bx),-50%);padding:9px 13px 10px;border-radius:12px;background:rgba(12,14,22,.88);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.12);border-left:3px solid var(--c);color:#fff;white-space:nowrap;opacity:0;clip-path:inset(0 100% 0 0);animation:kcoBox .45s .48s cubic-bezier(.3,0,.2,1) forwards;box-shadow:0 12px 30px -10px rgba(0,0,0,.7)}
+.kco .bx b{display:block;font:700 15px/1.2 var(--kfont)}
+.kco .bx span{display:block;margin-top:4px;font:700 14px/1 var(--knum);color:var(--c);font-variant-numeric:tabular-nums}
+.kco.out{opacity:0;transition:opacity .4s}
+@keyframes kcoDot{from{transform:scale(0)}to{transform:none}}
+@keyframes kcoPing{from{transform:scale(.6);opacity:1}to{transform:scale(2.2);opacity:0}}
+@keyframes kcoLine{to{transform:rotate(var(--a)) scaleX(1)}}
+@keyframes kcoBox{to{opacity:1;clip-path:inset(0 0 0 0)}}
+/* 원격 측정 그래프 */
+#kid .ktele{display:block;width:230px;height:54px;border-radius:14px;background:var(--kglass);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.1);box-shadow:0 10px 26px -10px rgba(0,0,0,.6)}
+/* HUD: 퀘스트 / 자유 실험 */
+#kidhud .kmode{display:flex;gap:2px;height:40px;padding:3px;background:rgba(255,255,255,.95);border:1px solid var(--kline);border-radius:12px;box-shadow:0 6px 18px -6px rgba(16,24,40,.45)}
+#kidhud .kmode button{padding:0 13px;border:0;border-radius:9px;background:none;color:var(--ksub);font:600 13px/1 var(--kfont);cursor:pointer;transition:background .2s,color .2s}
+#kidhud .kmode button.on{background:var(--kacc);color:#fff}
+#kidhud .kprog.off{display:none}
+/* 자유 실험실 카드 */
+#kid .kban.kfree{min-width:min(560px,calc(100vw - 32px))}
+#kid .kstations{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+#kid .kstations button{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1.5px solid var(--kline);border-radius:14px;background:#fff;color:var(--ktx);font:inherit;text-align:left;cursor:pointer;transition:border-color .15s,box-shadow .15s}
+#kid .kstations button:hover{border-color:#c7cbf5}
+#kid .kstations button.on{border-color:var(--kacc);box-shadow:0 0 0 4px var(--kacc2)}
+#kid .kstations .kso{width:36px;height:36px;font-size:20px;color:var(--kacc)}
+#kid .kstations b{display:block;font:700 15px/1.25 var(--kfont)}
+#kid .kstations small{display:block;margin-top:2px;font:500 12px/1.3 var(--kfont);color:var(--ksub)}
+#kid .kfinal .kbtns.g3{grid-template-columns:1fr 1fr 1fr}
+#kidIntro .kistart{display:grid;grid-template-columns:2fr 1fr;gap:8px}
+#kidIntro .kistart .kbtn{height:52px}
+/* 퀘스트 밖 기구: 은은하게, 만지면 또렷하게 */
+.kh.sub{opacity:.6;transition:opacity .2s}
+.kh.sub:hover,.kh.sub.drag{opacity:1}
+.khrail.sub .khknob{width:40px;height:40px;margin:-20px 0 0 -20px;font-size:17px}
+#khandles.fresh .kh.sub .khknob,#khandles.fresh .kh.sub{animation:none}
+.kh.sub .khghost{display:none}
+#khandles .kh.sub{transition:opacity .45s}
+#khandles.calm .kh.sub{opacity:0;pointer-events:none}
+#kid .kfoot .kmeter{flex-wrap:wrap;justify-content:center;row-gap:4px}
+#kid .kfoot .kmeter>span{white-space:nowrap}
+/* 고르기 버튼 그림 */
+.ksw.al{background:linear-gradient(135deg,#f5f6f8,#a3a9b4 55%,#e6e8ec)}
+.kfl{display:inline-block;width:22px;height:22px;border-radius:50% 50% 50% 50%/58% 58% 42% 42%;box-shadow:inset 0 -4px 0 rgba(0,0,0,.12)}
+.kfl.water{background:#58b6ea} .kfl.brine{background:#5fbdb2} .kfl.oil{background:#e5ac3c}
+.kpl{display:inline-block;width:22px;height:22px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fdba8c,#c2410c)}
+.khpick .ki{font-size:22px;color:var(--ktx)}
+.khpick button.on .ki{color:var(--kacc)}
+@media (max-width:980px){
+  #kidhud .kmode button{padding:0 9px;font-size:12px} #kidhud .kseg{display:none}
+  #kid .ktele{width:100%;max-width:340px}
+  #kid .kstations{grid-template-columns:1fr}
+  #ktc .t{font-size:30px}
+}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 <script type="importmap">
@@ -807,6 +893,7 @@ body.kid #modeBtn{top:12px;bottom:auto;left:16px;right:auto;transform:none}
 </div>
 <div id="event" role="status"></div>
 <div id="legend" aria-label="arrow colours"></div>
+<div id="kslow" aria-hidden="true"><i></i>SLOW ×0.25</div>
 <button id="modeBtn"></button>
 <div id="kidhud" aria-label="quest progress"></div>
 <div id="kpop" aria-live="polite"></div>
@@ -2210,19 +2297,23 @@ function shot(s) {
   CAM.fly = null;
   camera.position.copy(Sh.pos); camera.fov = Sh.fov || 34; camera.updateProjectionMatrix();
   controls.target.copy(Sh.tgt); camera.lookAt(Sh.tgt); controls.update();
+  if (typeof DIR !== 'undefined') { DIR.offP.set(0, 0, 0); DIR.offT.set(0, 0, 0); }
 }
-function flyTo(s, dur = 2.4) {
-  const Sh = typeof s === 'number' ? SHOTS[s] : s;
-  CAM.fly = { p0: camera.position.clone(), t0: controls.target.clone(), f0: camera.fov, p1: Sh.pos.clone(), t1: Sh.tgt.clone(), f1: Sh.fov || 34, t: 0, dur };
+// ease 'out': 끝에서 천천히 내려앉는 밀어 들어가기 / arc: 이동 중 위로 뜨는 높이
+function flyTo(s, dur = 2.4, ease = 'io', arc = 0.12) {
+  const Sh = typeof s === 'number' ? SHOTS[s] : s, D = typeof DIR !== 'undefined' ? DIR : null;
+  CAM.fly = { p0: camera.position.clone().sub(D ? D.offP : V3(0, 0, 0)), t0: controls.target.clone().sub(D ? D.offT : V3(0, 0, 0)), f0: camera.fov, p1: Sh.pos.clone(), t1: Sh.tgt.clone(), f1: Sh.fov || 34, t: 0, dur, ease, arc };
+  CAM.next = null;
 }
 function updateCamera(dt) {
+  dirCamPre();
   if (CAM.fly) {
-    const F = CAM.fly; F.t += dt; const k = smooth(clamp(F.t / F.dur, 0, 1));
+    const F = CAM.fly; F.t += dt; const u = clamp(F.t / F.dur, 0, 1), k = F.ease === 'out' ? 1 - Math.pow(1 - u, 3) : smooth(u);
     camera.position.lerpVectors(F.p0, F.p1, k);
-    camera.position.y += Math.sin(k * Math.PI) * 0.12;
+    camera.position.y += Math.sin(k * Math.PI) * F.arc;
     controls.target.lerpVectors(F.t0, F.t1, k);
     camera.fov = lerp(F.f0, F.f1, k); camera.updateProjectionMatrix();
-    if (F.t >= F.dur) CAM.fly = null;
+    if (F.t >= F.dur) { CAM.fly = null; if (CAM.next) { const n = CAM.next; CAM.next = null; flyTo(n.s, n.dur, n.ease, n.arc); CAM.fly.p0.copy(camera.position); CAM.fly.t0.copy(controls.target); } }
   }
   if (CAM.cine) {
     CAM.cineT += dt;
@@ -2233,6 +2324,7 @@ function updateCamera(dt) {
   camera.position.z = Math.max(camera.position.z, WALL_Z + 0.35);
   camera.position.y = clamp(camera.position.y, 0.35, CEIL - 0.25);
   controls.update();
+  dirCamPost(dt);
 }
 function setCinematic(on) {
   CAM.cine = on; CAM.cineT = 0;
@@ -2470,6 +2562,20 @@ function sfx(kind) {
   } else if (kind === 'win' || kind === 'pick' || kind === 'pop') {
     const notes = kind === 'win' ? [523, 659, 784, 1047] : kind === 'pick' ? [660, 990] : [784, 1175, 1568];
     notes.forEach((f, i) => { const o = C.createOscillator(), gg = C.createGain(), t0 = t + i * (kind === 'win' ? 0.09 : 0.06); o.type = 'triangle'; o.frequency.value = f; gg.gain.setValueAtTime(0.0001, t0); gg.gain.exponentialRampToValueAtTime(0.12, t0 + 0.01); gg.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.32); o.connect(gg).connect(AUD.master); o.start(t0); o.stop(t0 + 0.34); });
+  } else if (kind === 'swell' || kind === 'whoosh' || kind === 'splash') {
+    const s = C.createBufferSource(); s.buffer = AUD.noise; const f = C.createBiquadFilter();
+    if (kind === 'swell') {
+      f.type = 'lowpass'; f.frequency.setValueAtTime(2400, t); f.frequency.exponentialRampToValueAtTime(220, t + 0.9);
+      g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.2, t + 0.08); g.gain.exponentialRampToValueAtTime(0.0001, t + 1.0); s.connect(f).connect(g); s.start(t, rr(0, 1), 1.05);
+      const o = C.createOscillator(), og = C.createGain(); o.type = 'sine'; o.frequency.setValueAtTime(92, t); o.frequency.exponentialRampToValueAtTime(46, t + 0.8);
+      og.gain.setValueAtTime(0.0001, t); og.gain.exponentialRampToValueAtTime(0.22, t + 0.05); og.gain.exponentialRampToValueAtTime(0.0001, t + 0.9); o.connect(og).connect(AUD.master); o.start(t); o.stop(t + 0.95);
+    } else if (kind === 'whoosh') {
+      f.type = 'bandpass'; f.Q.value = 0.9; f.frequency.setValueAtTime(260, t); f.frequency.exponentialRampToValueAtTime(1500, t + 0.6);
+      g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.12, t + 0.3); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.8); s.connect(f).connect(g); s.start(t, rr(0, 1), 0.85);
+    } else {
+      f.type = 'bandpass'; f.Q.value = 0.7; f.frequency.setValueAtTime(2300, t); f.frequency.exponentialRampToValueAtTime(650, t + 0.4);
+      g.gain.setValueAtTime(0.28, t); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.5); s.connect(f).connect(g); s.start(t, rr(0, 1), 0.55);
+    }
   } else if (kind === 'ding') {
     const o = C.createOscillator(); o.type = 'sine'; o.frequency.value = 880;
     g.gain.setValueAtTime(0.12, t); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.6); o.connect(g); o.start(t); o.stop(t + 0.62);
@@ -2855,7 +2961,7 @@ const UI = {
     $('playIcon').setAttribute('d', S.playing ? 'M7 5h4v14H7zM13 5h4v14h-4z' : 'M8 5v14l11-7z');
   },
   dragHint(k) { const m = { F1: 'dragF', F2: 'dragF', sF1: 'dragF', sF2: 'dragF', jack: 'dragJ', dialJ: 'dragJ', dialG: 'dragG' }; if (m[k]) this.event(T(m[k]), 900); },
-  event(msg, ms = 1800) { const el = this.$('event'); el.textContent = msg; el.classList.add('on'); clearTimeout(this._ev); this._ev = setTimeout(() => el.classList.remove('on'), ms); },
+  event(msg, ms = 1800) { if (S.mode === 'kid') return; const el = this.$('event'); el.textContent = msg; el.classList.add('on'); clearTimeout(this._ev); this._ev = setTimeout(() => el.classList.remove('on'), ms); },
   modal(name) {
     if (name && S.mode === 'kid' && name !== 'help') setMode('full');
     for (const id of ['help', 'guide', 'eval']) this.$(id).classList.toggle('on', id === name);
@@ -3131,7 +3237,7 @@ function speak(html, force) {
 function speakOnce(key, html) { if (VOICE.key === key) return; VOICE.key = key; speak(html); }
 const AUTO_NEXT = 7.5, WIN_DELAY = 1.4;   // 성공 뒤 결과를 1.4초 지켜본 다음 팝업   // 성공 팝업이 떠 있는 시간(초). 지나면 저절로 다음 퀘스트
 const KID = {
-  i: -1, done: [], hit: [], pick: [], cards: new Set(), score: 0, shown: 0, ctx: {}, passed: false,
+  i: -1, done: [], hit: [], pick: [], cards: new Set(), score: 0, shown: 0, ctx: {}, passed: false, free: false,
   missions: [
     {
       id: 'pull', stage: 1, icon: '👉', shot: 'track', look: 'block', theme: 'field', allow: ['F2'],
@@ -3257,29 +3363,30 @@ const KID = {
   max() { return this.missions.length * 100 + this.missions.filter((m) => m.pred).length * 50 + KID_QUIZ.length * 50; },
   go(i) {
     if (i >= this.missions.length) { this.i = this.missions.length; this.render(); this.burst(90); sfx('win'); return; }
-    this.i = Math.max(0, i); this.ctx = {}; this.passed = false; this.showWin = false;
+    this.free = false; this.i = Math.max(0, i); this.ctx = {}; this.passed = false; this.showWin = false;
     const m = this.missions[this.i];
     S.overlays.K = false; UI.syncButtons();
     m.enter && m.enter();
     S.overlays.F = true; S.overlays.L = true;
-    CAM.cine = false; flyTo(stationShot(m.shot), 1.8);
+    CAM.cine = false; dirCut(m);
     if (m.look) this.ring(3.2, true);
     UI.syncControls(); this.render();
   },
   // 직접 조작: 지금 퀘스트에서 만질 수 있는 기구인지 (예상을 고르기 전에는 잠금)
-  allows(k) { const m = this.missions[this.i]; if (!m || !m.allow || !m.allow.includes(k)) return false; if (this.phase() === 'predict') { const pr = document.querySelector('#kid .kpred'); if (pr) { pr.classList.remove('shake'); void pr.offsetWidth; pr.classList.add('shake'); } return false; } return true; },
+  allows(k) { if (this.free) return true; const m = this.missions[this.i]; if (!m || m.quiz || !((m.allow || []).includes(k) || (KH_STATION[S.station] || []).includes(k))) return false; if (this.phase() === 'predict') { const pr = document.querySelector('#kid .kpred'); if (pr) { pr.classList.remove('shake'); void pr.offsetWidth; pr.classList.add('shake'); } return false; } return true; },
   acted() { this.ctx.acted = true; this.idle = 0; },
   rocket(el) {
     const set = (e) => { const r = el.getBoundingClientRect(); const f = clamp((e.clientX - r.left) / r.width, 0, 1); let g = 9.8 - f * 8.2; for (const q of [1.6, 3.7, 9.8]) if (Math.abs(g - q) < 0.35) g = q; if (g !== S.g.tgt) { setParam('g', g); S.hv.v += 0.004; } this.acted(); this.update(); };
     el.onpointerdown = (e) => { if (this.phase() === 'predict') return this.allows('rocket'); ensureAudio(); el.setPointerCapture(e.pointerId); el.classList.add('drag'); set(e); el.onpointermove = set; };
     el.onpointerup = el.onpointercancel = () => { el.onpointermove = null; el.classList.remove('drag'); };
   },
-  phase() { const m = this.missions[this.i]; return m && m.pred && this.pick[this.i] == null ? 'predict' : 'play'; },
+  phase() { if (this.free) return 'play'; const m = this.missions[this.i]; return m && m.pred && this.pick[this.i] == null ? 'predict' : 'play'; },
   hud() {
     const M = this.missions, el = document.getElementById('kidhud'); if (!el) return;
-    el.innerHTML = `<div class="kprog"><span class="kpn"><b>${Math.min(this.i + 1, M.length)}</b> / ${M.length}</span><div class="kseg">${M.map((m, k) => `<i class="${this.done[k] ? 'done' : ''}${k === this.i ? ' cur' : ''}${m.boss ? ' boss' : ''}" title="${(STAGE[LANG] || STAGE.ko)[m.stage]}"></i>`).join('')}</div></div>
+    el.innerHTML = `<div class="kmode"><button data-m="q" class="${this.free ? '' : 'on'}">${L2('퀘스트', 'Quests')}</button><button data-m="f" class="${this.free ? 'on' : ''}">${L2('자유 실험', 'Free lab')}</button></div><div class="kprog${this.free ? ' off' : ''}"><span class="kpn"><b>${Math.min(this.i + 1, M.length)}</b> / ${M.length}</span><div class="kseg">${M.map((m, k) => `<i class="${this.done[k] ? 'done' : ''}${k === this.i ? ' cur' : ''}${m.boss ? ' boss' : ''}" title="${(STAGE[LANG] || STAGE.ko)[m.stage]}"></i>`).join('')}</div></div>
       <div class="kscore">${ico('star')}<b id="kpts">${Math.round(this.shown)}</b></div>
       <button class="ksnd" title="${VOICE.on ? L2('소리 끄기', 'Sound off') : L2('소리 켜기', 'Sound on')}">${ico(VOICE.on ? 'speaker' : 'mute')}</button>`;
+    el.querySelectorAll('.kmode button').forEach((b) => (b.onclick = () => { ensureAudio(); this.setFree(b.dataset.m === 'f'); }));
     el.querySelector('.ksnd').onclick = () => { VOICE.on = !VOICE.on; setSound(VOICE.on); ensureAudio(); if (!VOICE.on) try { speechSynthesis.cancel(); } catch (e) {} this.hud(); };
   },
   legend() {
@@ -3289,7 +3396,8 @@ const KID = {
   render() {
     const box = document.getElementById('kid'), M = this.missions, N = M.length;
     this.hud(); this.legend();
-    if (this.i >= N) { khBuild(); box.innerHTML = `<div class="kmodal"><div class="kbox">${this.finalHTML()}</div></div>`; box.querySelector('[data-k=again]').onclick = () => this.reset(); box.querySelector('[data-k=full]').onclick = () => setMode('full'); return; }
+    if (this.free) return this.renderFree();
+    if (this.i >= N) { khBuild(); box.innerHTML = `<div class="kmodal"><div class="kbox">${this.finalHTML()}</div></div>`; box.querySelector('[data-k=again]').onclick = () => this.reset(); box.querySelector('[data-k=full]').onclick = () => setMode('full'); box.querySelector('[data-k=free]').onclick = () => this.setFree(true); return; }
     const m = M[this.i], t = m.t[LANG] || m.t.ko, ph = this.phase(), tag = '';
     let body = '';
     const lis = `<button class="ksay2" title="${L2('다시 듣기', 'Listen again')}">${ico('speaker')}</button>`;
@@ -3299,7 +3407,7 @@ const KID = {
     else {
       const mine = m.pred ? `<div class="kmine">${KT('mine')}${predPic(m.id, this.pick[this.i])}</div>` : '';
       const rocket = m.widget === 'rocket' ? `<div class="krocket">${ico('globe')}<div class="krk"><b style="left:100%"></b><b class="mars" style="left:${(9.8 - 3.7) / 8.2 * 100}%"></b><i class="kr">${ico('grip')}</i></div>${ico('moon')}</div>` : '';
-      body = `<div class="kfoot"><div class="know"><div class="knowtxt"></div></div><div class="krow">${mine}<div class="kmeterbox"></div>${m.reset ? `<button class="kreset">${ico('reset')}<span>${L2('처음으로', 'Reset')}</span></button>` : ''}</div>${rocket}</div>`;
+      body = `<div class="kfoot"><div class="know"><div class="knowtxt"></div></div><div class="krow">${mine}<div class="kmeterbox"></div>${m.shot !== 'hero' ? '<canvas class="ktele"></canvas>' : ''}${m.reset ? `<button class="kreset">${ico('reset')}<span>${L2('처음으로', 'Reset')}</span></button>` : ''}</div>${rocket}</div>`;
     }
     box.innerHTML = `<div class="kban${m.boss ? ' boss' : ''}"><div class="kav">${quokka()}</div><div class="kbtxt"><div class="keye">${m.boss ? L2('도전 과제', 'Challenge') : 'Step ' + m.stage}<i></i>${(STAGE[LANG] || STAGE.ko)[m.stage]}</div><div class="ktitle">${t[0]}${lis}</div><div class="ksteps">${kidSteps(m)}</div></div><button class="kskip">${KT('skip')}${ico('chevR')}</button></div>${body}
       <div class="kwin"><div class="kbox"><div class="kwintxt"></div><div class="kwrow"><div class="kwok">${ico('check')}</div><div class="kwmain"><div class="kwt">${L2('미션 성공', 'Mission clear')}<span class="kstars"><i>${ico('star')}</i><i>${ico('star')}</i><i>${ico('star')}</i></span></div><div class="kgain"></div></div><button class="kwhybtn">${ico('speaker')}<span>${L2('왜 그럴까?', 'Why?')}</span></button><button class="kbtn main kgo"></button></div><div class="kauto"><div><i></i></div></div></div></div>`;
@@ -3316,6 +3424,37 @@ const KID = {
     box.querySelector('.kwhybtn').onclick = () => { box.querySelector('.kwin').classList.toggle('open'); speak(m.quiz ? '' : m.win(), true); };
     if (m.quiz) speakOnce(`${this.i}:q${this.ctx.q}:${this.ctx.ans[this.ctx.q] == null ? 'ask' : 'fb'}`, this.quizSpeech());
     else if (ph !== 'predict') speakOnce(`${this.i}:play`, `${t[0]}. ${t[1]}`);
+    khBuild(); this.update(true);
+  },
+  // ---- 자유 실험실: 퀘스트 없이 실험대의 모든 기구를 마음대로 ----
+  setFree(on) {
+    if (on === this.free) return;
+    if (!on) { this.go(Math.min(Math.max(this.i, 0), this.missions.length - 1)); return; }
+    this.free = true; this.passed = false; this.showWin = false; this.ctx = {};
+    if (S.station !== 'track' && S.station !== 'hang') setStation('track', false);
+    S.playing = true; S.speed = 1; S.overlays.F = true; S.overlays.L = true;
+    CAM.cine = false; dirReveal(stationShot(S.station)); sfx('whoosh');
+    this.render();
+  },
+  freeStation(st) {
+    if (st === 'track') { if (S.station !== 'track') kidTrack(S.surface); } else if (S.station !== 'hang') kidHang(S.obj, S.obj === 'weights' ? Math.max(1, S.n.tgt) : 0);
+    dirReveal(stationShot(st)); sfx('whoosh'); this.render();
+  },
+  freeMeter() {
+    const sep = '<span class="keq">·</span>';
+    if (S.station === 'track') { const F = S.F || {}; return `<div class="kmeter"><span>${ico('arrowL')} ${big(n1(S.F1.tgt))}</span>${sep}<span>${big(n1(S.F2.tgt))} ${ico('arrowR')}</span>${sep}<span>${L2('붙잡는 힘 최대', 'Max grip')} ${big(fx(F.fsMax || 0, 1))}</span>${sep}<span>${L2('빠르기', 'Speed')} ${big(fx(Math.abs(S.trk.v), 2), 'm/s')}</span></div>`; }
+    const r = S.hang || {};
+    return `<div class="kmeter"><span>${L2('저울', 'Scale')} ${big(fx(S.Tlive, 2))}</span>${sep}<span>${L2('무게', 'Weight')} ${big(fx(r.W || 0, 2))}</span>${sep}<span>${L2('부력', 'Buoyancy')} ${big(fx(r.B || 0, 2))}</span>${sep}<span>${L2('잠김', 'Under')} ${big(fx((r.frac || 0) * 100, 0), '%')}</span></div>`;
+  },
+  renderFree() {
+    const box = document.getElementById('kid'), st = S.station;
+    const btn = (k, ic, t, sub) => `<button data-st="${k}" class="${st === k ? 'on' : ''}"><span class="kso">${ico(ic)}</span><span><b>${t}</b><small>${sub}</small></span></button>`;
+    box.innerHTML = `<div class="kban kfree"><div class="kbtxt"><div class="keye">${L2('자유 실험실', 'Free lab')}</div><div class="ktitle">${L2('기구를 마음대로 바꿔 보세요', 'Change anything you like')}</div>
+      <div class="kstations">${btn('track', 'box', L2('끌기대', 'Pulling track'), L2('힘의 평형 · 마찰력 · 운동', 'Balance · friction · motion'))}${btn('hang', 'weight', L2('용수철과 물', 'Spring & water'), L2('무게 · 탄성력 · 부력', 'Weight · spring · buoyancy'))}</div></div></div>
+      <div class="kfoot"><div class="krow"><div class="kmeterbox"></div><canvas class="ktele"></canvas><button class="kreset">${ico('reset')}<span>${L2('처음으로', 'Reset')}</span></button></div></div>`;
+    box.querySelectorAll('[data-st]').forEach((b) => (b.onclick = () => this.freeStation(b.dataset.st)));
+    box.querySelector('.kreset').onclick = () => { if (S.station === 'track') { const L = S.load.tgt; kidTrack(S.surface); setParam('load', L, true); } else { setParam('jack', PC.jack.min); S.hv.v += 0.01; } this.update(true); };
+    speakOnce(`free:${st}`, L2('자유 실험실이에요. 기구를 마음대로 바꿔 보세요.', 'Free lab. Change anything you like.'));
     khBuild(); this.update(true);
   },
   quizHTML() {
@@ -3344,11 +3483,12 @@ const KID = {
       <div class="kfs"><div><b>${this.score}</b><span>${L2('점수', 'Score')} / ${mx}</span></div><div><b>${nDone}/${this.missions.length}</b><span>${L2('완료한 퀘스트', 'Quests done')}</span></div><div><b>${nHit}/${this.missions.filter((m) => m.pred).length}</b><span>${L2('예상 적중', 'Good guesses')}</span></div></div>
       <div class="kcards">${CARDS.map((c) => { const on = this.cards.has(c.k), t = cardT(c); return `<div class="kcard ${on ? 'on' : 'off'}" style="--c:${hex(c.col)}"><i></i><b>${on ? t[0] : L2('잠김', 'Locked')}</b></div>`; }).join('')}</div>
       <p class="ksay">${L2('힘이 비기면 그대로, 한쪽이 이기면 움직임이 바뀌어요!', 'Balanced forces change nothing; an unbalanced force changes the motion!')}</p>
-      <div class="kbtns"><button class="kbtn main" data-k="again">${KT('again')}</button><button class="kbtn" data-k="full">${KT('full')}</button></div></div>`;
+      <div class="kbtns g3"><button class="kbtn main" data-k="free">${L2('자유 실험실', 'Free lab')}</button><button class="kbtn" data-k="again">${KT('again')}</button><button class="kbtn" data-k="full">${KT('full')}</button></div></div>`;
   },
   reset() { this.done = []; this.hit = []; this.pick = []; this.cards = new Set(); this.score = 0; this.shown = 0; this.fx.later.length = 0; this.go(0); },
   add(n) { this.score += n; this.float(`+${n}`); },
   update(force) {
+    if (this.free) { if (S.mode === 'kid') { const mb = document.querySelector('#kid .kmeterbox'); if (mb) { const h = this.freeMeter(); if (h !== mb._h) { mb.innerHTML = h; mb._h = h; } } } return; }
     if (S.mode !== 'kid' || this.i < 0 || this.i >= this.missions.length) return;
     const m = this.missions[this.i], box = document.getElementById('kid');
     if (this.phase() === 'play' && !m.quiz && m.tick) m.tick();
@@ -3366,7 +3506,7 @@ const KID = {
       if (m.pred && this.pick[this.i] === m.pred.ans) { this.hit[this.i] = true; this.after(0.45, () => this.add(50)); }
       if (m.card && !this.cards.has(m.card)) { this.cards.add(m.card); this.after(0.7, () => this.cardPop(m.card)); }
     }
-    sfx('win'); this.burst(m.boss ? 120 : 60); this.hud(); this.legend();
+    sfx('win'); this.burst(m.boss ? 120 : 60); this.hud(); this.legend(); dirEvent('win', m);
     const i0 = this.i; this.showWin = !!m.quiz; this.after(m.quiz ? 0 : WIN_DELAY, () => { if (this.i === i0) { this.showWin = true; this.update(true); } });
     this.after(AUTO_NEXT, () => { if (this.i === i0 && this.passed && S.mode === 'kid') this.go(this.i + 1); });
   },
@@ -3393,9 +3533,9 @@ const KID = {
   after(sec, fn) { this.fx.later.push({ t: sec, fn }); },   // 시뮬레이션 시간 기준 지연 실행
   ring(dur, label) { this.fx.ring = { t: 0, dur, label }; },
   burst(n) {
-    const cx = innerWidth / 2, cy = innerHeight * 0.5;
+    const W = innerWidth, H = innerHeight;   // 양옆 아래에서 쏘아 올려 가운데 실험 장면은 가리지 않는다
     const cols = ['#6366f1', '#a5b4fc', '#38bdf8', '#34d399', '#fbbf24', '#ffffff'];
-    for (let i = 0; i < n; i++) { const a = rr(-Math.PI * 0.92, -Math.PI * 0.08), sp = rr(5, 13); this.fx.parts.push({ x: cx + rr(-60, 60), y: cy, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, r: rr(0, 6.28), vr: rr(-0.3, 0.3), w: rr(6, 10), h: rr(3, 6), c: cols[i % cols.length], life: rr(1.4, 2.4) }); }
+    for (let i = 0; i < n; i++) { const L = i % 2 === 0, a = L ? rr(-Math.PI * 0.42, -Math.PI * 0.22) : rr(-Math.PI * 0.78, -Math.PI * 0.58), sp = rr(9, 16); this.fx.parts.push({ x: L ? rr(0, 30) : W - rr(0, 30), y: H * rr(0.72, 0.85), vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, r: rr(0, 6.28), vr: rr(-0.3, 0.3), w: rr(6, 10), h: rr(3, 6), c: cols[i % cols.length], life: rr(1.4, 2.4) }); }
   },
   float(txt) { const L = document.querySelector('#kidhud .kscore')?.getBoundingClientRect(); this.fx.floats.push({ txt, x: L && L.width ? L.left + L.width / 2 : innerWidth / 2, y: L && L.width ? L.bottom + 26 : 120, t: 0 }); },
   frame(dt) {
@@ -3454,6 +3594,7 @@ const KID = {
       c.fillStyle = 'rgba(20,16,12,.82)'; c.beginPath(); c.roundRect(x - tw / 2, y - 20, tw, 40, 20); c.fill();
       c.fillStyle = DRAG.kind === 'jack' ? '#7dd3fc' : '#c4b5fd'; c.fillText(txt, x, y);
     }
+    dirDraw(c, dt);
     // 색종이
     for (const p of F.parts) { p.vy += dt * 30; p.vx *= 0.99; p.x += p.vx * dt * 30; p.y += p.vy * dt * 30; p.r += p.vr; p.life -= dt; c.save(); c.globalAlpha = Math.max(0, Math.min(1, p.life * 2)); c.translate(p.x, p.y); c.rotate(p.r); c.fillStyle = p.c; c.fillRect(-p.w / 2, -p.h / 2, p.w, p.h); c.restore(); }
     F.parts = F.parts.filter((p) => p.life > 0 && p.y < H + 20);
@@ -3517,15 +3658,17 @@ function setMode(m) {
 }
 function KID_INTRO(on) {
   const el = document.getElementById('kidIntro'); if (!el) return;
-  el.classList.toggle('on', on);
+  el.classList.toggle('on', on); document.body.classList.toggle('kbars', on);
   if (on) {
+    setCinematic(true);
     const t = KT('intro');
     const tiles = [['eye', L2('힘이 화살표로 보여요', 'Forces show as arrows')], ['ruler', L2('길수록 센 힘', 'Longer = stronger')], ['tap', L2('예상하고 직접 조작', 'Guess, then try')], ['award', L2('별과 힘 카드', 'Stars & cards')]];
     el.querySelector('.box').innerHTML = `<div class="kav lg">${quokka('win')}</div><div class="keye">${L2('힘의 작용 · 과학 실험실', 'Forces · Science lab')}</div><h2>${t[0]}</h2><div class="kitiles">${tiles.map(([ic, tx]) => `<div class="kitile"><span>${ico(ic)}</span><b>${tx}</b></div>`).join('')}</div><button class="kilisten">${ico('speaker')}<span>${L2('설명 듣기', 'Listen')}</span></button>
       <div class="kimap">${KID.missions.map((m) => `<i class="${m.boss ? 'boss' : ''}"></i>`).join('')}</div>
-      <button class="kbtn main kstart">${t[5]}</button><button class="kfull">${KT('full')}</button>`;
+      <div class="kistart"><button class="kbtn main kstart">${t[5]}</button><button class="kbtn kfreego">${L2('자유 실험실', 'Free lab')}</button></div><button class="kfull">${KT('full')}</button>`;
     el.querySelector('.kstart').onclick = () => { ensureAudio(); if (VOICE.on) setSound(true); VOICE.key = ''; KID_INTRO(false); KID.go(0); };
     el.querySelector('.kfull').onclick = () => { KID_INTRO(false); setMode('full'); };
+    el.querySelector('.kfreego').onclick = () => { ensureAudio(); if (VOICE.on) setSound(true); KID_INTRO(false); if (KID.i < 0) KID.i = 0; KID.setFree(true); };
     el.querySelector('.kilisten').onclick = () => speak(t.slice(1, 5).map((q) => q[1]).join(' '), true);
   }
 }
@@ -3692,6 +3835,7 @@ function themeMode(on) {
 }
 function themeTarget() {
   const m = KID.missions[KID.i];
+  if (KID.free) return S.station === 'track' ? { glass: 'ice', wood: 'forest', sand: 'desert' }[S.surface] : 'water';
   if (!m) return 'class';
   if (m.theme === 'surface') return { glass: 'ice', wood: 'forest', sand: 'desert' }[S.surface];
   return m.theme || 'class';
@@ -3699,7 +3843,7 @@ function themeTarget() {
 function updateTheme(dt) {
   if (!THEME.on) return;
   const u = THEME.mesh.material.uniforms, m = KID.missions[KID.i];
-  if (m && m.theme === 'moon') {   // 중력 다이얼에 따라 운동장 → 우주
+  if ((m && m.theme === 'moon' && !KID.free) || (KID.free && S.station === 'hang' && S.g.cur < 9.6)) {   // 중력에 따라 운동장 → 우주
     u.tA.value = themeCanvas('field'); u.tB.value = themeCanvas('space');
     u.uMix.value = clamp((9.8 - S.g.cur) / (9.8 - 1.6), 0, 1); THEME.a = THEME.b = S.g.cur < 5.7 ? 'space' : 'field'; THEME.m = 1;
   } else {
@@ -3708,7 +3852,7 @@ function updateTheme(dt) {
     THEME.m = Math.min(1, THEME.m + dt / 0.8);
     u.tA.value = themeCanvas(THEME.a); u.tB.value = themeCanvas(THEME.b); u.uMix.value = smooth(THEME.m);
   }
-  const fk = THEME.m < 0.5 && !(m && m.theme === 'moon') ? THEME.a : THEME.b;
+  const fk = THEME.m < 0.5 && !(m && m.theme === 'moon' && !KID.free) ? THEME.a : THEME.b;
   const fm = STUDIO.children[1].material; if (fm.map !== floorTex(fk)) { fm.map = floorTex(fk); fm.color.setHex(0xffffff); fm.needsUpdate = true; }
 }
 
@@ -3719,7 +3863,17 @@ function updateTheme(dt) {
 //  · 바닥(surface): 재질 버튼 3개 / 짐(block)·추(obj): ➖ ➕
 const KH = { el: null, items: [], drag: null };
 const KH_GOAL = { team: { F1: 1, F2: 1 }, floor: { F2: 2 }, boss: { F2: 4 } };
-const KH_FLEN = 0.22;   // 힘 레일 길이 (m, 장면 속)
+const KH_FLEN = 0.22;
+// 실험대마다 만질 수 있는 기구 (퀘스트가 고른 기구는 강조, 나머지는 은은하게)
+const KH_STATION = { track: ['F2', 'F1', 'block', 'surface'], hang: ['objt', 'obj', 'jack', 'fluid', 'grav'] };
+const PLANET_NAME = { earth: ['지구', 'Earth'], mars: ['화성', 'Mars'], moon: ['달', 'Moon'] };
+// 고르기 버튼: 목록·지금 값·그림·이름·바꾸기·붙일 곳·화면 오프셋
+const KH_PICK = {
+  surface: { list: () => SURFS, cur: () => S.surface, pic: (v) => swatch(v), name: (v) => T('surfName')[v], set: (v) => { const L = S.load.tgt; kidTrack(v); setParam('load', L, true); KID.ctx.fail = false; KID.ctx.hold = 0; }, at: () => KID_AT.surface(), off: () => (isPortrait() ? [0, 84] : [-10, -84]) },
+  objt: { list: () => OBJS, cur: () => S.obj, pic: (v) => (v === 'weights' ? ico('weight') : swatch(v === 'al' ? 'al' : 'wood')), name: (v) => T('objName')[v], set: (v) => { setObj(v); if (v === 'weights' && !S.n.tgt) setParam('n', 2); }, at: () => LOOK.obj().clone(), off: [-170, 0] },
+  fluid: { list: () => FLUIDS, cur: () => S.fluid, pic: (v) => `<span class="kfl ${v}"></span>`, name: (v) => T('fluidName')[v], set: (v) => setFluid(v), at: () => HERO.beaker.getWorldPosition(new THREE.Vector3()), off: [210, 10] },
+  grav: { list: () => ['earth', 'mars', 'moon'], cur: () => (PHYS.nearPlanet(S.g.tgt) || {}).id, pic: (v) => (v === 'moon' ? ico('moon') : v === 'mars' ? '<span class="kpl"></span>' : ico('globe')), name: (v) => PLANET_NAME[v][isEn() ? 1 : 0], set: (v) => { setParam('g', PHYS.PLANETS.find((q) => q.id === v).g); S.hv.v += 0.004; }, at: () => LOOK.scale().clone(), off: [-150, 30] },
+};   // 힘 레일 길이 (m, 장면 속)
 const khRailPx = () => clamp(innerWidth * 0.2, 120, 270);
 function khScreenEnds(k) {
   const R = KH_RAIL[k]; let [a, b] = R.ends().map(khProj); if (k === 'jack') return [a, b];
@@ -3751,9 +3905,11 @@ function khBuild() {
   if (!KH.el) { KH.el = document.createElement('div'); KH.el.id = 'khandles'; document.body.appendChild(KH.el); }
   KH.el.innerHTML = ''; KH.items = []; KH.drag = null;
   const m = KID.missions[KID.i];
-  if (S.mode !== 'kid' || !m || m.quiz || !m.allow) return;
-  const goal = KH_GOAL[m.id] || {};
-  for (const k of m.allow) {
+  if (S.mode !== 'kid') return;
+  const free = KID.free;
+  if (!free && (!m || m.quiz || m.shot === 'hero')) return;
+  const goal = free ? {} : KH_GOAL[m.id] || {}, focus = free ? [] : m.allow || [];
+  for (const k of [...new Set([...focus, ...(KH_STATION[S.station] || [])])]) {
     let el;
     if (KH_RAIL[k]) {
       const R = KH_RAIL[k], force = k !== 'jack';
@@ -3765,16 +3921,16 @@ function khBuild() {
       knob.onpointerdown = (e) => {
         if (!KID.allows(k)) return; ensureAudio(); KID.acted(); if (k !== 'jack') KID.ctx.fail = false;
         try { knob.setPointerCapture(e.pointerId); } catch (er) {} el.classList.add('drag');
-        KH.drag = { k, ends: khScreenEnds(k), last: R.get() }; DRAG.kind = 'kh-' + k; khMove(e); sfx('pick');
+        KH.drag = { k, ends: khScreenEnds(k), last: R.get() }; DRAG.kind = 'kh-' + k; khMove(e); sfx('pick'); dirGrab(k);
       };
       knob.onpointermove = (e) => { if (KH.drag && KH.drag.k === k) khMove(e); };
-      knob.onpointerup = knob.onpointercancel = () => { if (!KH.drag) return; KH.drag = null; DRAG.kind = null; el.classList.remove('drag'); KID.update(true); };
-    } else if (k === 'surface') {
+      knob.onpointerup = knob.onpointercancel = () => { if (!KH.drag) return; KH.drag = null; DRAG.kind = null; dirGrab(null); el.classList.remove('drag'); KID.update(true); };
+    } else if (KH_PICK[k]) {
+      const P = KH_PICK[k];
       el = document.createElement('div'); el.className = 'kh khpick';
-      el.innerHTML = SURFS.map((s) => `<button data-s="${s}">${swatch(s)}<span>${T('surfName')[s]}</span></button>`).join('');
+      el.innerHTML = P.list().map((v) => `<button data-s="${v}">${P.pic(v)}<span>${P.name(v)}</span></button>`).join('');
       el.querySelectorAll('button').forEach((b) => (b.onclick = () => {
-        if (!KID.allows('surface')) return; KID.acted(); ensureAudio();
-        const L = S.load.tgt; kidTrack(b.dataset.s); setParam('load', L, true); KID.ctx.fail = false; KID.ctx.hold = 0; sfx('click'); KID.update(true);
+        if (!KID.allows(k)) return; KID.acted(); ensureAudio(); P.set(b.dataset.s); sfx('click'); KID.update(true);
       }));
     } else if (k === 'block' || k === 'obj') {
       el = document.createElement('div'); el.className = `kh khstep ${k}`;
@@ -3786,6 +3942,7 @@ function khBuild() {
         sfx('click'); KID.update(true);
       }));
     } else continue;
+    if (!free && !focus.includes(k)) el.classList.add('sub');
     el.dataset.k = k; KH.el.appendChild(el); KH.items.push({ k, el });
   }
 }
@@ -3804,6 +3961,8 @@ function khFrame() {
   const hide = S.mode !== 'kid' || !m || CAM.fly || KID.phase() === 'predict' || document.getElementById('kidIntro').classList.contains('on');
   KH.el.classList.toggle('off', !!hide); if (hide) return;
   KH.el.classList.toggle('fresh', !KID.ctx.acted);
+  // 점진적 공개: 퀘스트에서는 첫 조작 뒤에 다른 기구가 나타나고, 결정적 순간에는 화면을 비운다
+  KH.el.classList.toggle('calm', !KID.free && (!KID.ctx.acted || !!DIR.slow));
   for (const { k, el } of KH.items) {
     if (KH_RAIL[k]) {
       const R = KH_RAIL[k], D = KH.drag && KH.drag.k === k ? KH.drag : null;
@@ -3822,10 +3981,10 @@ function khFrame() {
       else { const f = k === 'F1' ? S.F1.tgt : S.F2.tgt; val.textContent = `${n1(f)} N`; }
       val.style.cssText = `left:${kx}px;top:${ky}px`;
     } else {
-      const p = khProj(k === 'surface' ? KID_AT.surface() : k === 'block' ? KID_AT.block() : LOOK.obj().clone());
-      const off = k === 'surface' ? [0, 74] : k === 'block' ? [0, -86] : [118, 0];
-      el.style.cssText = `left:${p.x + off[0]}px;top:${p.y + off[1]}px`;
-      if (k === 'surface') el.querySelectorAll('button').forEach((b) => b.classList.toggle('on', b.dataset.s === S.surface));
+      const P = KH_PICK[k], p = khProj(P ? P.at() : k === 'block' ? KID_AT.block() : LOOK.obj().clone());
+      const off = P ? (typeof P.off === 'function' ? P.off() : P.off) : k === 'block' ? [0, -86] : [118, 0];
+      el.style.cssText = `left:${p.x + off[0]}px;top:${p.y + off[1]}px${k === 'obj' && S.obj !== 'weights' ? ';display:none' : ''}`;
+      if (P) { const cur = P.cur(); el.querySelectorAll('button').forEach((b) => b.classList.toggle('on', b.dataset.s === cur)); }
       else {
         const n = k === 'block' ? S.load.tgt : S.n.tgt, mx = k === 'block' ? PC.loadMax : PC.nMax, ic = ico(k === 'block' ? 'box' : 'weight');
         const h = `${ic}<b>${n}</b>`; const c = el.querySelector('.khcount'); if (c._h !== h) { c.innerHTML = h; c._h = h; }
@@ -3833,6 +3992,217 @@ function khFrame() {
       }
     }
   }
+}
+
+// ==== 13c 연출 (쉬운 모드): 물리 사건에 맞춰 카메라·시간·화면 그래픽이 반응한다 ====
+// 영화·중계·모션그래픽 문법을 실험실에 옮겼다.
+//  · 퀘스트 시작: 타이틀 카드(글자 닦아내기) + 레터박스 + 넓은 설정 숏 → 피사체로 밀어 들어가는 2단 카메라
+//  · 평소: 손에 든 카메라 같은 숨결, 도막이 움직이면 시선이 따라가는 패닝
+//  · 조작: 손잡이를 잡으면 피사체 쪽으로 살짝 밀어 들어가고(주목), 힘에 따라 높아지는 긴장음
+//  · 결정적 순간(미끄러지기 시작·물에 닿음·성공): 슬로 모션 + 비네트 + 레터박스 + 해설선(텔레스트레이션)
+//  · 충돌: 카메라 흔들림과 충격 고리 / 거친 바닥: 먼지 / 물: 물보라와 물결
+//  · 계기판: 힘을 시간에 따라 그리는 원격 측정 그래프 (정지 마찰 → 운동 마찰 꺾임이 눈에 보인다)
+const DIR = {
+  ts: 1, slow: null, t: 0, shake: 0, push: 0, punch: 0, follow: 0, grabK: null, tone: null,
+  offP: new THREE.Vector3(), offT: new THREE.Vector3(),
+  callouts: [], parts: [], cool: {}, prevIn: null, prevFloat: null, dustAcc: 0, side: 1,
+  tele: [], teleAcc: 0, teleSt: null, marks: [],
+};
+const dirOn = () => S.mode === 'kid';
+const _dd = new THREE.Vector3();
+
+// ---- 시간: 슬로 모션 (물리에만 적용, 카메라·화면은 실제 시간) ----
+function dirSlow(scale, hold, ramp = 0.6) {
+  if (DIR.slow) { DIR.slow.hold = Math.max(DIR.slow.hold, DIR.slow.t + hold); DIR.slow.scale = Math.min(DIR.slow.scale, scale); return; }
+  DIR.slow = { t: 0, scale, hold, ramp }; document.body.classList.add('kslow', 'kbars');
+}
+function dirTime(dt) {
+  const s = DIR.slow;
+  if (!dirOn()) { DIR.ts = 1; return dt; }
+  if (s) {
+    s.t += dt;
+    const a = s.t < 0.15 ? s.t / 0.15 : s.t < 0.15 + s.hold ? 1 : 1 - (s.t - 0.15 - s.hold) / s.ramp;
+    if (a <= 0) { DIR.slow = null; DIR.ts = 1; document.body.classList.remove('kslow'); if (!document.body.classList.contains('kcut')) document.body.classList.remove('kbars'); }
+    else DIR.ts = lerp(1, s.scale, smooth(clamp(a, 0, 1)));
+  } else DIR.ts = 1;
+  return dt * DIR.ts;
+}
+
+// ---- 카메라: 앞 프레임의 연출 오프셋을 빼고, 새로 계산해서 더한다 (기본 숏은 그대로) ----
+function dirCamPre() { camera.position.sub(DIR.offP); controls.target.sub(DIR.offT); }
+function dirCamPost(dt) {
+  const P = DIR.offP.set(0, 0, 0), T = DIR.offT.set(0, 0, 0);
+  if (!dirOn()) return;
+  DIR.t += dt;
+  const t = DIR.t, still = CAM.fly ? 0 : 1;
+  // 숨결: 서로 다른 느린 사인파를 겹쳐 사람 손 같은 흔들림
+  P.x += (Math.sin(t * 0.37) * 0.6 + Math.sin(t * 0.91 + 1.3) * 0.4) * 0.006 * still;
+  P.y += (Math.sin(t * 0.53 + 0.7) * 0.6 + Math.sin(t * 1.13) * 0.4) * 0.004 * still;
+  // 따라가기: 도막이 움직이면 시선이 늦게 따라간다
+  const want = S.station === 'track' && still ? clamp(blockX(S.trk.x) - controls.target.x, -0.24, 0.24) * 0.6 : 0;
+  DIR.follow += (want - DIR.follow) * (1 - Math.exp(-dt * 1.4));
+  P.x += DIR.follow; T.x += DIR.follow;
+  // 밀어 들어가기: 잡고 있는 동안 + 결정적 순간
+  DIR.punch = Math.max(0, DIR.punch - dt * 0.05);
+  const pw = (DIR.grabK ? 0.06 : 0) + DIR.punch;
+  DIR.push += (pw - DIR.push) * (1 - Math.exp(-dt * 2.6));
+  _dd.copy(controls.target).sub(camera.position); const dist = _dd.length(); _dd.normalize();
+  P.addScaledVector(_dd, dist * DIR.push * still);
+  // 흔들림
+  if (DIR.shake > 0.0004) { P.x += (Math.random() - 0.5) * DIR.shake; P.y += (Math.random() - 0.5) * DIR.shake; DIR.shake *= Math.exp(-dt * 10); } else DIR.shake = 0;
+  camera.position.add(P); controls.target.add(T); camera.lookAt(controls.target);
+}
+// 2단 카메라: 넓은 설정 숏 → 피사체로 밀어 들어가기
+function dirReveal(Sh) {
+  const d = Sh.pos.clone().sub(Sh.tgt);
+  flyTo({ pos: Sh.tgt.clone().add(d.multiplyScalar(1.55)).add(V3(0, 0.25, 0)), tgt: Sh.tgt.clone(), fov: (Sh.fov || 34) + 5 }, 0.9);
+  CAM.next = { s: Sh, dur: 1.8, ease: 'out', arc: 0 };
+}
+
+// ---- 퀘스트 시작 컷: 타이틀 카드 + 레터박스 + 카메라 ----
+function dirLayer(id) { let el = document.getElementById(id); if (!el) { el = document.createElement('div'); el.id = id; document.body.appendChild(el); } return el; }
+function dirCut(m) {
+  const Sh = stationShot(m.shot);
+  if (!dirOn()) { flyTo(Sh, 1.8); return; }
+  dirReveal(Sh); sfx('whoosh');
+  const t = m.t[LANG] || m.t.ko, eye = m.boss ? L2('도전 과제', 'Challenge') : `Step ${m.stage} · ${(STAGE[LANG] || STAGE.ko)[m.stage]}`;
+  const el = dirLayer('ktc');
+  el.innerHTML = `<div class="in"><div class="e">${eye}</div><div class="t">${t[0]}</div><i class="l"></i></div>`;
+  el.classList.remove('on'); void el.offsetWidth; el.classList.add('on');
+  document.body.classList.add('kcut', 'kbars');
+  const id = (DIR.cutId = (DIR.cutId || 0) + 1);
+  KID.after(1.8, () => { if (DIR.cutId === id) document.body.classList.remove('kcut'); });
+  KID.after(2.2, () => { if (DIR.cutId === id && !DIR.slow) document.body.classList.remove('kbars'); });
+}
+
+// ---- 사건 → 연출 ----
+const CARD_AT = { F: ['block', () => Math.max(S.F2.tgt, S.F1.tgt)], net: ['block', () => Math.abs(S.F ? S.F.net : 0)], W: ['obj', () => (S.hang ? S.hang.W : 0)], T: ['obj', () => S.Tlive], f: ['block', () => Math.abs(S.F ? S.F.f : 0)], B: ['obj', () => (S.hang ? S.hang.B : 0)], N: ['block', () => (S.F ? S.F.N : 0)] };
+const dirAt = (k) => (k === 'obj' ? () => LOOK.obj().clone() : () => KID_AT.block());
+function dirEvent(type, e) {
+  if (!dirOn()) return;
+  const cd = (k, s) => { if ((DIR.cool[k] ?? -99) + s > DIR.t) return false; DIR.cool[k] = DIR.t; return true; };
+  if (type === 'slip' && cd('slip', 5)) {
+    dirSlow(0.22, 0.9); DIR.punch = 0.08; sfx('swell'); DIR.marks.push(DIR.tele.length);
+    dirCallout(dirAt('block'), L2('미끄러지기 시작!', 'It starts to slide!'), () => `${L2('붙잡는 힘 최대', 'Max grip')} ${fx(e && e.fsMax || 0, 1)} N`, hex(FCOL.f), 2.8);
+  }
+  if (type === 'bump') { DIR.shake = 0.035; dirRing(KID_AT.block()); }
+  if (type === 'splash' && cd('splash', 4)) {
+    dirSlow(0.3, 0.8); DIR.punch = 0.06; sfx('splash'); dirSplash();
+    dirCallout(dirAt('obj'), L2('물이 밀어 올려요', 'Water pushes up'), () => `${L2('부력', 'Buoyancy')} ${fx(S.hang ? S.hang.B : 0, 2)} N`, hex(FCOL.B), 3);
+  }
+  if (type === 'float' && cd('float', 4)) dirCallout(dirAt('obj'), L2('둥둥 떠요!', 'It floats!'), () => L2('부력 = 무게', 'Buoyancy = weight'), hex(FCOL.B), 2.6);
+  if (type === 'win') {
+    dirSlow(0.35, 0.7); DIR.punch = Math.max(DIR.punch, 0.09);
+    const c = e && e.card && CARD_AT[e.card], card = c && CARDS.find((q) => q.k === e.card);
+    if (c) dirCallout(dirAt(c[0]), cardT(card)[0], () => `${fx(c[1](), 2)} N`, hex(card.col), 3.2);
+  }
+}
+function dirGrab(k) {
+  DIR.grabK = k;
+  if (!S.sound || !AUD.ctx) return;
+  const C = AUD.ctx;
+  if (k && !DIR.tone) {
+    const o = C.createOscillator(), lp = C.createBiquadFilter(), g = C.createGain();
+    o.type = 'sawtooth'; lp.type = 'lowpass'; lp.frequency.value = 520; g.gain.value = 0;
+    o.connect(lp).connect(g).connect(AUD.master); o.start(); g.gain.setTargetAtTime(0.03, C.currentTime, 0.06);
+    DIR.tone = { o, g };
+  } else if (!k && DIR.tone) { const T = DIR.tone; DIR.tone = null; T.g.gain.setTargetAtTime(0, C.currentTime, 0.07); T.o.stop(C.currentTime + 0.5); }
+}
+
+// ---- 해설선 (텔레스트레이션): 점이 튀어나오고, 선이 그어지고, 이름표가 미끄러져 들어온다 ----
+function dirCallout(at, title, val, col, dur = 2.8) {
+  const L = dirLayer('kcall');
+  DIR.callouts.forEach((q) => (q.t = Math.max(q.t, q.dur)));   // 앞의 해설은 비켜 준다
+  const el = document.createElement('div'); el.className = 'kco'; el.style.setProperty('--c', col);
+  el.innerHTML = `<i class="ln"></i><i class="d"></i><div class="bx"><b>${title}</b><span></span></div>`;
+  L.appendChild(el);
+  DIR.side = -DIR.side;
+  DIR.callouts.push({ el, at, val, t: 0, dur, side: DIR.side });
+}
+function dirCallouts(dt) {
+  DIR.callouts = DIR.callouts.filter((q) => {
+    q.t += dt;
+    if (q.t > q.dur + 0.45 || !dirOn()) { q.el.remove(); return false; }
+    if (q.t > q.dur) q.el.classList.add('out');
+    const p = khProj(q.at()), side = p.x > innerWidth * 0.64 ? -1 : p.x < innerWidth * 0.36 ? 1 : q.side;
+    const bx = p.x + side * 78, by = p.y - 82, len = Math.hypot(bx - p.x, by - p.y), ang = Math.atan2(by - p.y, bx - p.x);
+    const [ln, d, box] = q.el.children;
+    ln.style.cssText = `left:${p.x}px;top:${p.y}px;width:${len}px;--a:${ang}rad`;
+    d.style.cssText = `left:${p.x}px;top:${p.y}px`;
+    box.style.cssText = `left:${bx + side * 4}px;top:${by}px;--bx:${side > 0 ? '0%' : '-100%'}`;
+    const v = q.val(), s = box.lastChild; if (s.textContent !== v) s.textContent = v;
+    return true;
+  });
+}
+
+// ---- 입자: 물보라·물결·먼지·충격 고리 (#kfx 캔버스에 KID.frame이 그린다) ----
+function dirSplash() {
+  const p = khProj(LOOK.obj().clone()), y = p.y + 26;
+  for (let i = 0; i < 28; i++) DIR.parts.push({ k: 'drop', x: p.x + rr(-14, 14), y, vx: rr(-2.6, 2.6), vy: rr(-7.5, -2.5), r: rr(1.4, 3.2), life: rr(0.6, 1.0) });
+  for (let i = 0; i < 3; i++) DIR.parts.push({ k: 'ripple', x: p.x, y: y + 6, r: 6 + i * 6, life: 1.1 + i * 0.25, t0: 1.1 + i * 0.25 });
+}
+function dirRing(v) { const p = khProj(v); DIR.parts.push({ k: 'ring', x: p.x, y: p.y, r: 8, life: 0.5, t0: 0.5 }); }
+function dirDust() {
+  const sg = Math.sign(S.trk.v), p = khProj(V3(blockX(S.trk.x) - sg * PC.block.w * 0.5, TRK_Y + 0.006, TRK.z + 0.03));
+  DIR.parts.push({ k: 'dust', x: p.x + rr(-4, 4), y: p.y + rr(-2, 2), vx: -sg * rr(0.3, 1.4), vy: -rr(0.1, 0.6), r: rr(2.5, 5), life: rr(0.6, 1.1), t0: 1, c: S.surface === 'sand' ? '150,110,70' : '185,150,105' });
+}
+function dirDraw(c, dt) {
+  const f = dt * 60;
+  for (const q of DIR.parts) {
+    q.life -= dt;
+    if (q.k === 'drop') { q.vy += 0.32 * f; q.x += q.vx * f; q.y += q.vy * f; c.fillStyle = `rgba(205,236,255,${clamp(q.life * 2, 0, 0.9)})`; c.beginPath(); c.arc(q.x, q.y, q.r, 0, 7); c.fill(); }
+    else if (q.k === 'ripple') { const k = 1 - q.life / q.t0; c.strokeStyle = `rgba(220,242,255,${clamp(q.life, 0, 0.7)})`; c.lineWidth = 1.5; c.beginPath(); c.ellipse(q.x, q.y, q.r + k * 60, (q.r + k * 60) * 0.28, 0, 0, 7); c.stroke(); }
+    else if (q.k === 'ring') { const k = 1 - q.life / q.t0; c.strokeStyle = `rgba(255,255,255,${q.life * 1.6})`; c.lineWidth = 3 * (1 - k) + 0.5; c.beginPath(); c.arc(q.x, q.y, q.r + k * 46, 0, 7); c.stroke(); }
+    else if (q.k === 'dust') { q.x += q.vx * f; q.y += q.vy * f; q.r += 0.12 * f; c.fillStyle = `rgba(${q.c},${clamp(q.life * 0.45, 0, 0.35)})`; c.beginPath(); c.arc(q.x, q.y, q.r, 0, 7); c.fill(); }
+  }
+  DIR.parts = DIR.parts.filter((q) => q.life > 0);
+}
+
+// ---- 원격 측정 그래프: 최근 6초의 힘 ----
+function dirTele(dt) {
+  const cv = document.querySelector('#kid .ktele'); if (!cv) return;
+  const st = S.station;
+  if (DIR.teleSt !== st) { DIR.teleSt = st; DIR.tele.length = 0; DIR.marks.length = 0; }
+  DIR.teleAcc += dt * DIR.ts;
+  if (DIR.teleAcc >= 0.05) {
+    DIR.teleAcc = 0;
+    DIR.tele.push(st === 'track' ? [Math.abs(S.F ? S.F.Fa : 0), Math.abs(S.F ? S.F.f : 0)] : [S.Tlive, S.hang ? S.hang.B : 0]);
+    if (DIR.tele.length > 120) { DIR.tele.shift(); DIR.marks = DIR.marks.map((i) => i - 1).filter((i) => i >= 0); }
+  }
+  const dpr = Math.min(2, devicePixelRatio || 1), W = cv.clientWidth, H = cv.clientHeight; if (!W) return;
+  if (cv.width !== Math.round(W * dpr)) { cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr); }
+  const c = cv.getContext('2d'); c.setTransform(dpr, 0, 0, dpr, 0, 0); c.clearRect(0, 0, W, H);
+  const cols = st === 'track' ? [hex(FCOL.F), hex(FCOL.f)] : [hex(FCOL.T), hex(FCOL.B)];
+  const names = st === 'track' ? [L2('당기는 힘', 'Pull'), L2('붙잡는 힘', 'Grip')] : [L2('저울', 'Scale'), L2('부력', 'Buoyancy')];
+  const mx = Math.max(st === 'track' ? 3 : 1, ...DIR.tele.map((q) => Math.max(q[0], q[1]))) * 1.15, x0 = 8, x1 = W - 8, y0 = 18, y1 = H - 6;
+  c.strokeStyle = 'rgba(255,255,255,.08)'; c.lineWidth = 1; c.beginPath(); c.moveTo(x0, y1); c.lineTo(x1, y1); c.stroke();
+  const X = (i) => x0 + (i / 119) * (x1 - x0), Y = (v) => y1 - (v / mx) * (y1 - y0);
+  for (const i of DIR.marks) { c.strokeStyle = 'rgba(252,165,165,.55)'; c.setLineDash([3, 3]); c.beginPath(); c.moveTo(X(i), y0 - 4); c.lineTo(X(i), y1); c.stroke(); c.setLineDash([]); }
+  for (let s = 1; s >= 0; s--) {
+    c.strokeStyle = cols[s]; c.lineWidth = s ? 1.6 : 2; c.beginPath();
+    DIR.tele.forEach((q, i) => (i ? c.lineTo(X(i), Y(q[s])) : c.moveTo(X(i), Y(q[s])))); c.stroke();
+  }
+  c.font = '600 10px "Noto Sans KR", sans-serif'; c.textBaseline = 'top';
+  c.fillStyle = cols[0]; c.fillText(names[0], x0, 4); const w0 = c.measureText(names[0]).width;
+  c.fillStyle = cols[1]; c.fillText(names[1], x0 + w0 + 10, 4);
+}
+
+// ---- 매 프레임 (실제 시간) ----
+function dirFrame(dt) {
+  const kid = dirOn(), r = S.hang;
+  if (!kid) { document.body.classList.remove('kcut', 'kbars', 'kslow'); DIR.parts.length = 0; if (DIR.callouts.length) dirCallouts(dt); return; }
+  if (r && S.station === 'hang') {
+    if (DIR.prevIn === false && r.inFluid && !r.empty) dirEvent('splash');
+    if (DIR.prevFloat === false && r.floating) dirEvent('float');
+  }
+  DIR.prevIn = r ? r.inFluid : null; DIR.prevFloat = r ? r.floating : null;
+  if (S.station === 'track' && Math.abs(S.trk.v) > 0.03 && S.surface !== 'glass' && !CAM.fly) {
+    DIR.dustAcc += dt * Math.min(40, Math.abs(S.trk.v) * 70);
+    while (DIR.dustAcc > 1) { DIR.dustAcc--; dirDust(); }
+  }
+  dirCallouts(dt); dirTele(dt);
+  if (DIR.tone && AUD.ctx) { const k = DIR.grabK, f = k === 'jack' ? 150 + (S.jack.tgt - PC.jack.min) * 900 : 80 + ((S[k] && S[k].tgt) || 0) * 30; DIR.tone.o.frequency.setTargetAtTime(f, AUD.ctx.currentTime, 0.05); }
+  if (PIPE.finish) PIPE.finish.uniforms.uVig.value = 0.5 + (1 - DIR.ts) * 0.6;
 }
 
 // ==== 14 STATE / LOOP ====
@@ -4086,8 +4456,8 @@ function lessonUpdate() {
 const PERF = { acc: 0, n: 0, t: 0 };
 let lastT = performance.now(), frameNo = 0, uiT = 0;
 
-function update(dt) {
-  frameNo++;
+function update(rdt) {
+  frameNo++; const dt = dirTime(rdt);   // dt: 물리(슬로 모션 반영) / rdt: 카메라·화면
   const k = 1 - Math.exp(-dt * 7);
   for (const n of ['g', 'jack', 'F1', 'F2']) S[n].cur += (S[n].tgt - S[n].cur) * (n === 'jack' ? 1 - Math.exp(-dt * 4) : k);
   // --- 매달기: 닫힌 해 + 화면용 감쇠 진동 (평형으로 수렴) ---
@@ -4110,6 +4480,7 @@ function update(dt) {
     const ev = PHYS.trackStep(S.trk, P, dts);
     S.dist += Math.abs(S.trk.x - x0);
     for (const e of ev) {
+      if (e.type === 'start' || e.type === 'bump') dirEvent(e.type === 'start' ? 'slip' : 'bump', e);
       if (e.type === 'start') { recordFriction(e); sfx('scrape'); if (S.mode !== 'kid') UI.event(T('evStart')(e), 1800); }
       if (e.type === 'stop') sfx('tick');
       if (e.type === 'bump') { sfx('clack'); if (S.mode !== 'kid') UI.event(T('evBump'), 1400); }
@@ -4137,21 +4508,21 @@ function update(dt) {
   if (frameNo % 3 === 0) CONSOLE.screenA.redraw();
   if (frameNo % 3 === 1) CONSOLE.screenB.redraw();
   // --- HUD ---
-  uiT += dt;
+  uiT += rdt;
   if (uiT > 0.08) { uiT = 0; document.getElementById('caption').innerHTML = captionFor(); UI.updateChips(); lessonUpdate(); KID.update(); }
-  UI.updateLabels(); KID.frame(dt); khFrame(); updateTheme(dt);
+  UI.updateLabels(); KID.frame(rdt); khFrame(); dirFrame(rdt); updateTheme(rdt);
   audioUpdate();
   // --- 카메라·렌더 ---
-  keyMove(dt); hoverUpdate(dt);
-  updateCamera(dt);
+  keyMove(rdt); hoverUpdate(rdt);
+  updateCamera(rdt);
   PIPE.bokeh.uniforms.focus.value = camera.position.distanceTo(controls.target);
   const now = performance.now() / 1000;
   PIPE.finish.uniforms.uTime.value = now;
-  updateFocus(dt);
+  updateFocus(rdt);
   renderer.shadowMap.needsUpdate = true;
-  PIPE.composer.render(dt);
+  PIPE.composer.render(rdt);
   renderOverlays();
-  PERF.acc += dt; PERF.n++; PERF.t += dt;
+  PERF.acc += rdt; PERF.n++; PERF.t += rdt;
   if (PERF.t > 2) {
     const avg = PERF.acc / PERF.n * 1000; PERF.acc = PERF.n = PERF.t = 0; PERF.last = avg;
     if (avg > 25 && !window.__labNoAuto) {

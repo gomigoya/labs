@@ -5,7 +5,17 @@
 //  · 바닥(surface): 재질 버튼 3개 / 짐(block)·추(obj): ➖ ➕
 const KH = { el: null, items: [], drag: null };
 const KH_GOAL = { team: { F1: 1, F2: 1 }, floor: { F2: 2 }, boss: { F2: 4 } };
-const KH_FLEN = 0.22;   // 힘 레일 길이 (m, 장면 속)
+const KH_FLEN = 0.22;
+// 실험대마다 만질 수 있는 기구 (퀘스트가 고른 기구는 강조, 나머지는 은은하게)
+const KH_STATION = { track: ['F2', 'F1', 'block', 'surface'], hang: ['objt', 'obj', 'jack', 'fluid', 'grav'] };
+const PLANET_NAME = { earth: ['지구', 'Earth'], mars: ['화성', 'Mars'], moon: ['달', 'Moon'] };
+// 고르기 버튼: 목록·지금 값·그림·이름·바꾸기·붙일 곳·화면 오프셋
+const KH_PICK = {
+  surface: { list: () => SURFS, cur: () => S.surface, pic: (v) => swatch(v), name: (v) => T('surfName')[v], set: (v) => { const L = S.load.tgt; kidTrack(v); setParam('load', L, true); KID.ctx.fail = false; KID.ctx.hold = 0; }, at: () => KID_AT.surface(), off: () => (isPortrait() ? [0, 84] : [-10, -84]) },
+  objt: { list: () => OBJS, cur: () => S.obj, pic: (v) => (v === 'weights' ? ico('weight') : swatch(v === 'al' ? 'al' : 'wood')), name: (v) => T('objName')[v], set: (v) => { setObj(v); if (v === 'weights' && !S.n.tgt) setParam('n', 2); }, at: () => LOOK.obj().clone(), off: [-170, 0] },
+  fluid: { list: () => FLUIDS, cur: () => S.fluid, pic: (v) => `<span class="kfl ${v}"></span>`, name: (v) => T('fluidName')[v], set: (v) => setFluid(v), at: () => HERO.beaker.getWorldPosition(new THREE.Vector3()), off: [210, 10] },
+  grav: { list: () => ['earth', 'mars', 'moon'], cur: () => (PHYS.nearPlanet(S.g.tgt) || {}).id, pic: (v) => (v === 'moon' ? ico('moon') : v === 'mars' ? '<span class="kpl"></span>' : ico('globe')), name: (v) => PLANET_NAME[v][isEn() ? 1 : 0], set: (v) => { setParam('g', PHYS.PLANETS.find((q) => q.id === v).g); S.hv.v += 0.004; }, at: () => LOOK.scale().clone(), off: [-150, 30] },
+};   // 힘 레일 길이 (m, 장면 속)
 const khRailPx = () => clamp(innerWidth * 0.2, 120, 270);
 function khScreenEnds(k) {
   const R = KH_RAIL[k]; let [a, b] = R.ends().map(khProj); if (k === 'jack') return [a, b];
@@ -37,9 +47,11 @@ function khBuild() {
   if (!KH.el) { KH.el = document.createElement('div'); KH.el.id = 'khandles'; document.body.appendChild(KH.el); }
   KH.el.innerHTML = ''; KH.items = []; KH.drag = null;
   const m = KID.missions[KID.i];
-  if (S.mode !== 'kid' || !m || m.quiz || !m.allow) return;
-  const goal = KH_GOAL[m.id] || {};
-  for (const k of m.allow) {
+  if (S.mode !== 'kid') return;
+  const free = KID.free;
+  if (!free && (!m || m.quiz || m.shot === 'hero')) return;
+  const goal = free ? {} : KH_GOAL[m.id] || {}, focus = free ? [] : m.allow || [];
+  for (const k of [...new Set([...focus, ...(KH_STATION[S.station] || [])])]) {
     let el;
     if (KH_RAIL[k]) {
       const R = KH_RAIL[k], force = k !== 'jack';
@@ -51,16 +63,16 @@ function khBuild() {
       knob.onpointerdown = (e) => {
         if (!KID.allows(k)) return; ensureAudio(); KID.acted(); if (k !== 'jack') KID.ctx.fail = false;
         try { knob.setPointerCapture(e.pointerId); } catch (er) {} el.classList.add('drag');
-        KH.drag = { k, ends: khScreenEnds(k), last: R.get() }; DRAG.kind = 'kh-' + k; khMove(e); sfx('pick');
+        KH.drag = { k, ends: khScreenEnds(k), last: R.get() }; DRAG.kind = 'kh-' + k; khMove(e); sfx('pick'); dirGrab(k);
       };
       knob.onpointermove = (e) => { if (KH.drag && KH.drag.k === k) khMove(e); };
-      knob.onpointerup = knob.onpointercancel = () => { if (!KH.drag) return; KH.drag = null; DRAG.kind = null; el.classList.remove('drag'); KID.update(true); };
-    } else if (k === 'surface') {
+      knob.onpointerup = knob.onpointercancel = () => { if (!KH.drag) return; KH.drag = null; DRAG.kind = null; dirGrab(null); el.classList.remove('drag'); KID.update(true); };
+    } else if (KH_PICK[k]) {
+      const P = KH_PICK[k];
       el = document.createElement('div'); el.className = 'kh khpick';
-      el.innerHTML = SURFS.map((s) => `<button data-s="${s}">${swatch(s)}<span>${T('surfName')[s]}</span></button>`).join('');
+      el.innerHTML = P.list().map((v) => `<button data-s="${v}">${P.pic(v)}<span>${P.name(v)}</span></button>`).join('');
       el.querySelectorAll('button').forEach((b) => (b.onclick = () => {
-        if (!KID.allows('surface')) return; KID.acted(); ensureAudio();
-        const L = S.load.tgt; kidTrack(b.dataset.s); setParam('load', L, true); KID.ctx.fail = false; KID.ctx.hold = 0; sfx('click'); KID.update(true);
+        if (!KID.allows(k)) return; KID.acted(); ensureAudio(); P.set(b.dataset.s); sfx('click'); KID.update(true);
       }));
     } else if (k === 'block' || k === 'obj') {
       el = document.createElement('div'); el.className = `kh khstep ${k}`;
@@ -72,6 +84,7 @@ function khBuild() {
         sfx('click'); KID.update(true);
       }));
     } else continue;
+    if (!free && !focus.includes(k)) el.classList.add('sub');
     el.dataset.k = k; KH.el.appendChild(el); KH.items.push({ k, el });
   }
 }
@@ -90,6 +103,8 @@ function khFrame() {
   const hide = S.mode !== 'kid' || !m || CAM.fly || KID.phase() === 'predict' || document.getElementById('kidIntro').classList.contains('on');
   KH.el.classList.toggle('off', !!hide); if (hide) return;
   KH.el.classList.toggle('fresh', !KID.ctx.acted);
+  // 점진적 공개: 퀘스트에서는 첫 조작 뒤에 다른 기구가 나타나고, 결정적 순간에는 화면을 비운다
+  KH.el.classList.toggle('calm', !KID.free && (!KID.ctx.acted || !!DIR.slow));
   for (const { k, el } of KH.items) {
     if (KH_RAIL[k]) {
       const R = KH_RAIL[k], D = KH.drag && KH.drag.k === k ? KH.drag : null;
@@ -108,10 +123,10 @@ function khFrame() {
       else { const f = k === 'F1' ? S.F1.tgt : S.F2.tgt; val.textContent = `${n1(f)} N`; }
       val.style.cssText = `left:${kx}px;top:${ky}px`;
     } else {
-      const p = khProj(k === 'surface' ? KID_AT.surface() : k === 'block' ? KID_AT.block() : LOOK.obj().clone());
-      const off = k === 'surface' ? [0, 74] : k === 'block' ? [0, -86] : [118, 0];
-      el.style.cssText = `left:${p.x + off[0]}px;top:${p.y + off[1]}px`;
-      if (k === 'surface') el.querySelectorAll('button').forEach((b) => b.classList.toggle('on', b.dataset.s === S.surface));
+      const P = KH_PICK[k], p = khProj(P ? P.at() : k === 'block' ? KID_AT.block() : LOOK.obj().clone());
+      const off = P ? (typeof P.off === 'function' ? P.off() : P.off) : k === 'block' ? [0, -86] : [118, 0];
+      el.style.cssText = `left:${p.x + off[0]}px;top:${p.y + off[1]}px${k === 'obj' && S.obj !== 'weights' ? ';display:none' : ''}`;
+      if (P) { const cur = P.cur(); el.querySelectorAll('button').forEach((b) => b.classList.toggle('on', b.dataset.s === cur)); }
       else {
         const n = k === 'block' ? S.load.tgt : S.n.tgt, mx = k === 'block' ? PC.loadMax : PC.nMax, ic = ico(k === 'block' ? 'box' : 'weight');
         const h = `${ic}<b>${n}</b>`; const c = el.querySelector('.khcount'); if (c._h !== h) { c.innerHTML = h; c._h = h; }

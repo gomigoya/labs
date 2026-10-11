@@ -179,6 +179,20 @@ function sfx(kind) {
   } else if (kind === 'win' || kind === 'pick' || kind === 'pop') {
     const notes = kind === 'win' ? [523, 659, 784, 1047] : kind === 'pick' ? [660, 990] : [784, 1175, 1568];
     notes.forEach((f, i) => { const o = C.createOscillator(), gg = C.createGain(), t0 = t + i * (kind === 'win' ? 0.09 : 0.06); o.type = 'triangle'; o.frequency.value = f; gg.gain.setValueAtTime(0.0001, t0); gg.gain.exponentialRampToValueAtTime(0.12, t0 + 0.01); gg.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.32); o.connect(gg).connect(AUD.master); o.start(t0); o.stop(t0 + 0.34); });
+  } else if (kind === 'swell' || kind === 'whoosh' || kind === 'splash') {
+    const s = C.createBufferSource(); s.buffer = AUD.noise; const f = C.createBiquadFilter();
+    if (kind === 'swell') {
+      f.type = 'lowpass'; f.frequency.setValueAtTime(2400, t); f.frequency.exponentialRampToValueAtTime(220, t + 0.9);
+      g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.2, t + 0.08); g.gain.exponentialRampToValueAtTime(0.0001, t + 1.0); s.connect(f).connect(g); s.start(t, rr(0, 1), 1.05);
+      const o = C.createOscillator(), og = C.createGain(); o.type = 'sine'; o.frequency.setValueAtTime(92, t); o.frequency.exponentialRampToValueAtTime(46, t + 0.8);
+      og.gain.setValueAtTime(0.0001, t); og.gain.exponentialRampToValueAtTime(0.22, t + 0.05); og.gain.exponentialRampToValueAtTime(0.0001, t + 0.9); o.connect(og).connect(AUD.master); o.start(t); o.stop(t + 0.95);
+    } else if (kind === 'whoosh') {
+      f.type = 'bandpass'; f.Q.value = 0.9; f.frequency.setValueAtTime(260, t); f.frequency.exponentialRampToValueAtTime(1500, t + 0.6);
+      g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.12, t + 0.3); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.8); s.connect(f).connect(g); s.start(t, rr(0, 1), 0.85);
+    } else {
+      f.type = 'bandpass'; f.Q.value = 0.7; f.frequency.setValueAtTime(2300, t); f.frequency.exponentialRampToValueAtTime(650, t + 0.4);
+      g.gain.setValueAtTime(0.28, t); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.5); s.connect(f).connect(g); s.start(t, rr(0, 1), 0.55);
+    }
   } else if (kind === 'ding') {
     const o = C.createOscillator(); o.type = 'sine'; o.frequency.value = 880;
     g.gain.setValueAtTime(0.12, t); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.6); o.connect(g); o.start(t); o.stop(t + 0.62);
@@ -564,7 +578,7 @@ const UI = {
     $('playIcon').setAttribute('d', S.playing ? 'M7 5h4v14H7zM13 5h4v14h-4z' : 'M8 5v14l11-7z');
   },
   dragHint(k) { const m = { F1: 'dragF', F2: 'dragF', sF1: 'dragF', sF2: 'dragF', jack: 'dragJ', dialJ: 'dragJ', dialG: 'dragG' }; if (m[k]) this.event(T(m[k]), 900); },
-  event(msg, ms = 1800) { const el = this.$('event'); el.textContent = msg; el.classList.add('on'); clearTimeout(this._ev); this._ev = setTimeout(() => el.classList.remove('on'), ms); },
+  event(msg, ms = 1800) { if (S.mode === 'kid') return; const el = this.$('event'); el.textContent = msg; el.classList.add('on'); clearTimeout(this._ev); this._ev = setTimeout(() => el.classList.remove('on'), ms); },
   modal(name) {
     if (name && S.mode === 'kid' && name !== 'help') setMode('full');
     for (const id of ['help', 'guide', 'eval']) this.$(id).classList.toggle('on', id === name);

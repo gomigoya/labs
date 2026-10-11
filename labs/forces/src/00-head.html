@@ -700,6 +700,92 @@ body.kid #modeBtn{top:12px;bottom:auto;left:16px;right:auto;transform:none}
   .khknob{width:44px;height:44px;margin:-22px 0 0 -22px}
 }
 
+
+/* ===== 연출 층 (68-director.js) ===== */
+/* 레터박스: 결정적 순간·타이틀·시작 화면 */
+body::before,body::after{content:"";position:fixed;left:0;right:0;height:0;background:#05060a;z-index:14;pointer-events:none;transition:height .7s cubic-bezier(.65,0,.2,1)}
+body::before{top:0} body::after{bottom:0}
+body.kid.kbars::before,body.kid.kbars::after{height:8vh}
+/* 타이틀 카드: 눈썹 글이 올라오고, 제목이 왼쪽부터 닦여 나오고, 밑줄이 그어진 뒤 위로 빠진다 */
+#ktc{position:fixed;inset:0;z-index:15;display:grid;place-items:center;pointer-events:none;opacity:0;background:radial-gradient(ellipse 60% 45% at center,rgba(5,6,12,.62),rgba(5,6,12,0) 70%);font-family:var(--kfont)}
+body:not(.kid) #ktc{display:none}
+#ktc.on{animation:ktcFade 2.15s ease forwards}
+#ktc .in{text-align:center;color:#fff;padding:0 24px}
+#ktc .e{font:700 13px/1 var(--kfont);letter-spacing:.26em;text-transform:uppercase;color:#c7d2fe;opacity:0;transform:translateY(10px)}
+#ktc .t{margin-top:16px;font:800 clamp(30px,5.2vw,58px)/1.15 var(--kfont);letter-spacing:-.025em;word-break:keep-all;text-shadow:0 6px 40px rgba(0,0,0,.6);clip-path:inset(-10% 100% -10% 0)}
+#ktc .l{display:block;width:0;height:2px;margin:20px auto 0;background:linear-gradient(90deg,transparent,#a5b4fc,transparent)}
+#ktc.on .e{animation:ktcUp .55s .12s cubic-bezier(.2,.8,.2,1) forwards}
+#ktc.on .t{animation:ktcWipe .75s .28s cubic-bezier(.75,0,.2,1) forwards}
+#ktc.on .l{animation:ktcLine .9s .6s cubic-bezier(.2,.8,.2,1) forwards}
+#ktc.on .in{animation:ktcOut .45s 1.65s cubic-bezier(.6,0,.4,1) forwards}
+@keyframes ktcFade{0%{opacity:0}7%{opacity:1}82%{opacity:1}100%{opacity:0}}
+@keyframes ktcUp{to{opacity:1;transform:none}}
+@keyframes ktcWipe{to{clip-path:inset(-10% 0 -10% 0)}}
+@keyframes ktcLine{to{width:min(320px,60vw)}}
+@keyframes ktcOut{to{transform:translateY(-28px) scale(.97);opacity:0}}
+/* 컷 동안 화면 UI는 잠시 비켜 있다가 들어온다 */
+#kid>*{transition:opacity .45s ease}
+body.kcut #kid>*,body.kcut #khandles{opacity:0!important;pointer-events:none!important}
+/* 슬로 모션 표시 (중계 화면의 리플레이 표식) */
+#kslow{position:fixed;left:16px;top:calc(8vh + 12px);z-index:16;display:flex;align-items:center;gap:8px;padding:7px 12px;border-radius:999px;background:rgba(10,12,20,.78);color:#fff;font:700 12px/1 var(--knum);letter-spacing:.12em;opacity:0;transform:translateY(-6px);transition:opacity .3s,transform .3s;pointer-events:none}
+#kslow i{width:8px;height:8px;border-radius:50%;background:#ef4444;animation:kslowDot 1s ease-in-out infinite}
+body.kid.kslow #kslow{opacity:1;transform:none}
+@keyframes kslowDot{50%{opacity:.25}}
+/* 해설선 */
+#kcall{position:fixed;inset:0;z-index:11;pointer-events:none;font-family:var(--kfont)}
+.kco .d{position:absolute;width:12px;height:12px;margin:-6px 0 0 -6px;border-radius:50%;background:var(--c);box-shadow:0 0 0 3px rgba(255,255,255,.95),0 0 18px var(--c);animation:kcoDot .4s cubic-bezier(.2,1.7,.4,1) both}
+.kco .d::after{content:"";position:absolute;inset:-7px;border-radius:50%;border:2px solid var(--c);animation:kcoPing 1.3s .2s ease-out infinite}
+.kco .ln{position:absolute;height:2px;margin-top:-1px;transform-origin:0 50%;background:#fff;box-shadow:0 0 8px rgba(0,0,0,.55);transform:rotate(var(--a)) scaleX(0);animation:kcoLine .38s .18s cubic-bezier(.3,0,.2,1) forwards}
+.kco .bx{position:absolute;transform:translate(var(--bx),-50%);padding:9px 13px 10px;border-radius:12px;background:rgba(12,14,22,.88);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.12);border-left:3px solid var(--c);color:#fff;white-space:nowrap;opacity:0;clip-path:inset(0 100% 0 0);animation:kcoBox .45s .48s cubic-bezier(.3,0,.2,1) forwards;box-shadow:0 12px 30px -10px rgba(0,0,0,.7)}
+.kco .bx b{display:block;font:700 15px/1.2 var(--kfont)}
+.kco .bx span{display:block;margin-top:4px;font:700 14px/1 var(--knum);color:var(--c);font-variant-numeric:tabular-nums}
+.kco.out{opacity:0;transition:opacity .4s}
+@keyframes kcoDot{from{transform:scale(0)}to{transform:none}}
+@keyframes kcoPing{from{transform:scale(.6);opacity:1}to{transform:scale(2.2);opacity:0}}
+@keyframes kcoLine{to{transform:rotate(var(--a)) scaleX(1)}}
+@keyframes kcoBox{to{opacity:1;clip-path:inset(0 0 0 0)}}
+/* 원격 측정 그래프 */
+#kid .ktele{display:block;width:230px;height:54px;border-radius:14px;background:var(--kglass);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.1);box-shadow:0 10px 26px -10px rgba(0,0,0,.6)}
+/* HUD: 퀘스트 / 자유 실험 */
+#kidhud .kmode{display:flex;gap:2px;height:40px;padding:3px;background:rgba(255,255,255,.95);border:1px solid var(--kline);border-radius:12px;box-shadow:0 6px 18px -6px rgba(16,24,40,.45)}
+#kidhud .kmode button{padding:0 13px;border:0;border-radius:9px;background:none;color:var(--ksub);font:600 13px/1 var(--kfont);cursor:pointer;transition:background .2s,color .2s}
+#kidhud .kmode button.on{background:var(--kacc);color:#fff}
+#kidhud .kprog.off{display:none}
+/* 자유 실험실 카드 */
+#kid .kban.kfree{min-width:min(560px,calc(100vw - 32px))}
+#kid .kstations{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+#kid .kstations button{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1.5px solid var(--kline);border-radius:14px;background:#fff;color:var(--ktx);font:inherit;text-align:left;cursor:pointer;transition:border-color .15s,box-shadow .15s}
+#kid .kstations button:hover{border-color:#c7cbf5}
+#kid .kstations button.on{border-color:var(--kacc);box-shadow:0 0 0 4px var(--kacc2)}
+#kid .kstations .kso{width:36px;height:36px;font-size:20px;color:var(--kacc)}
+#kid .kstations b{display:block;font:700 15px/1.25 var(--kfont)}
+#kid .kstations small{display:block;margin-top:2px;font:500 12px/1.3 var(--kfont);color:var(--ksub)}
+#kid .kfinal .kbtns.g3{grid-template-columns:1fr 1fr 1fr}
+#kidIntro .kistart{display:grid;grid-template-columns:2fr 1fr;gap:8px}
+#kidIntro .kistart .kbtn{height:52px}
+/* 퀘스트 밖 기구: 은은하게, 만지면 또렷하게 */
+.kh.sub{opacity:.6;transition:opacity .2s}
+.kh.sub:hover,.kh.sub.drag{opacity:1}
+.khrail.sub .khknob{width:40px;height:40px;margin:-20px 0 0 -20px;font-size:17px}
+#khandles.fresh .kh.sub .khknob,#khandles.fresh .kh.sub{animation:none}
+.kh.sub .khghost{display:none}
+#khandles .kh.sub{transition:opacity .45s}
+#khandles.calm .kh.sub{opacity:0;pointer-events:none}
+#kid .kfoot .kmeter{flex-wrap:wrap;justify-content:center;row-gap:4px}
+#kid .kfoot .kmeter>span{white-space:nowrap}
+/* 고르기 버튼 그림 */
+.ksw.al{background:linear-gradient(135deg,#f5f6f8,#a3a9b4 55%,#e6e8ec)}
+.kfl{display:inline-block;width:22px;height:22px;border-radius:50% 50% 50% 50%/58% 58% 42% 42%;box-shadow:inset 0 -4px 0 rgba(0,0,0,.12)}
+.kfl.water{background:#58b6ea} .kfl.brine{background:#5fbdb2} .kfl.oil{background:#e5ac3c}
+.kpl{display:inline-block;width:22px;height:22px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fdba8c,#c2410c)}
+.khpick .ki{font-size:22px;color:var(--ktx)}
+.khpick button.on .ki{color:var(--kacc)}
+@media (max-width:980px){
+  #kidhud .kmode button{padding:0 9px;font-size:12px} #kidhud .kseg{display:none}
+  #kid .ktele{width:100%;max-width:340px}
+  #kid .kstations{grid-template-columns:1fr}
+  #ktc .t{font-size:30px}
+}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 <script type="importmap">
@@ -807,6 +893,7 @@ body.kid #modeBtn{top:12px;bottom:auto;left:16px;right:auto;transform:none}
 </div>
 <div id="event" role="status"></div>
 <div id="legend" aria-label="arrow colours"></div>
+<div id="kslow" aria-hidden="true"><i></i>SLOW ×0.25</div>
 <button id="modeBtn"></button>
 <div id="kidhud" aria-label="quest progress"></div>
 <div id="kpop" aria-live="polite"></div>

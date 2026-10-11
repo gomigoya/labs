@@ -150,7 +150,7 @@ function speak(html, force) {
 function speakOnce(key, html) { if (VOICE.key === key) return; VOICE.key = key; speak(html); }
 const AUTO_NEXT = 7.5, WIN_DELAY = 1.4;   // 성공 뒤 결과를 1.4초 지켜본 다음 팝업   // 성공 팝업이 떠 있는 시간(초). 지나면 저절로 다음 퀘스트
 const KID = {
-  i: -1, done: [], hit: [], pick: [], cards: new Set(), score: 0, shown: 0, ctx: {}, passed: false,
+  i: -1, done: [], hit: [], pick: [], cards: new Set(), score: 0, shown: 0, ctx: {}, passed: false, free: false,
   missions: [
     {
       id: 'pull', stage: 1, icon: '👉', shot: 'track', look: 'block', theme: 'field', allow: ['F2'],
@@ -276,29 +276,30 @@ const KID = {
   max() { return this.missions.length * 100 + this.missions.filter((m) => m.pred).length * 50 + KID_QUIZ.length * 50; },
   go(i) {
     if (i >= this.missions.length) { this.i = this.missions.length; this.render(); this.burst(90); sfx('win'); return; }
-    this.i = Math.max(0, i); this.ctx = {}; this.passed = false; this.showWin = false;
+    this.free = false; this.i = Math.max(0, i); this.ctx = {}; this.passed = false; this.showWin = false;
     const m = this.missions[this.i];
     S.overlays.K = false; UI.syncButtons();
     m.enter && m.enter();
     S.overlays.F = true; S.overlays.L = true;
-    CAM.cine = false; flyTo(stationShot(m.shot), 1.8);
+    CAM.cine = false; dirCut(m);
     if (m.look) this.ring(3.2, true);
     UI.syncControls(); this.render();
   },
   // 직접 조작: 지금 퀘스트에서 만질 수 있는 기구인지 (예상을 고르기 전에는 잠금)
-  allows(k) { const m = this.missions[this.i]; if (!m || !m.allow || !m.allow.includes(k)) return false; if (this.phase() === 'predict') { const pr = document.querySelector('#kid .kpred'); if (pr) { pr.classList.remove('shake'); void pr.offsetWidth; pr.classList.add('shake'); } return false; } return true; },
+  allows(k) { if (this.free) return true; const m = this.missions[this.i]; if (!m || m.quiz || !((m.allow || []).includes(k) || (KH_STATION[S.station] || []).includes(k))) return false; if (this.phase() === 'predict') { const pr = document.querySelector('#kid .kpred'); if (pr) { pr.classList.remove('shake'); void pr.offsetWidth; pr.classList.add('shake'); } return false; } return true; },
   acted() { this.ctx.acted = true; this.idle = 0; },
   rocket(el) {
     const set = (e) => { const r = el.getBoundingClientRect(); const f = clamp((e.clientX - r.left) / r.width, 0, 1); let g = 9.8 - f * 8.2; for (const q of [1.6, 3.7, 9.8]) if (Math.abs(g - q) < 0.35) g = q; if (g !== S.g.tgt) { setParam('g', g); S.hv.v += 0.004; } this.acted(); this.update(); };
     el.onpointerdown = (e) => { if (this.phase() === 'predict') return this.allows('rocket'); ensureAudio(); el.setPointerCapture(e.pointerId); el.classList.add('drag'); set(e); el.onpointermove = set; };
     el.onpointerup = el.onpointercancel = () => { el.onpointermove = null; el.classList.remove('drag'); };
   },
-  phase() { const m = this.missions[this.i]; return m && m.pred && this.pick[this.i] == null ? 'predict' : 'play'; },
+  phase() { if (this.free) return 'play'; const m = this.missions[this.i]; return m && m.pred && this.pick[this.i] == null ? 'predict' : 'play'; },
   hud() {
     const M = this.missions, el = document.getElementById('kidhud'); if (!el) return;
-    el.innerHTML = `<div class="kprog"><span class="kpn"><b>${Math.min(this.i + 1, M.length)}</b> / ${M.length}</span><div class="kseg">${M.map((m, k) => `<i class="${this.done[k] ? 'done' : ''}${k === this.i ? ' cur' : ''}${m.boss ? ' boss' : ''}" title="${(STAGE[LANG] || STAGE.ko)[m.stage]}"></i>`).join('')}</div></div>
+    el.innerHTML = `<div class="kmode"><button data-m="q" class="${this.free ? '' : 'on'}">${L2('퀘스트', 'Quests')}</button><button data-m="f" class="${this.free ? 'on' : ''}">${L2('자유 실험', 'Free lab')}</button></div><div class="kprog${this.free ? ' off' : ''}"><span class="kpn"><b>${Math.min(this.i + 1, M.length)}</b> / ${M.length}</span><div class="kseg">${M.map((m, k) => `<i class="${this.done[k] ? 'done' : ''}${k === this.i ? ' cur' : ''}${m.boss ? ' boss' : ''}" title="${(STAGE[LANG] || STAGE.ko)[m.stage]}"></i>`).join('')}</div></div>
       <div class="kscore">${ico('star')}<b id="kpts">${Math.round(this.shown)}</b></div>
       <button class="ksnd" title="${VOICE.on ? L2('소리 끄기', 'Sound off') : L2('소리 켜기', 'Sound on')}">${ico(VOICE.on ? 'speaker' : 'mute')}</button>`;
+    el.querySelectorAll('.kmode button').forEach((b) => (b.onclick = () => { ensureAudio(); this.setFree(b.dataset.m === 'f'); }));
     el.querySelector('.ksnd').onclick = () => { VOICE.on = !VOICE.on; setSound(VOICE.on); ensureAudio(); if (!VOICE.on) try { speechSynthesis.cancel(); } catch (e) {} this.hud(); };
   },
   legend() {
@@ -308,7 +309,8 @@ const KID = {
   render() {
     const box = document.getElementById('kid'), M = this.missions, N = M.length;
     this.hud(); this.legend();
-    if (this.i >= N) { khBuild(); box.innerHTML = `<div class="kmodal"><div class="kbox">${this.finalHTML()}</div></div>`; box.querySelector('[data-k=again]').onclick = () => this.reset(); box.querySelector('[data-k=full]').onclick = () => setMode('full'); return; }
+    if (this.free) return this.renderFree();
+    if (this.i >= N) { khBuild(); box.innerHTML = `<div class="kmodal"><div class="kbox">${this.finalHTML()}</div></div>`; box.querySelector('[data-k=again]').onclick = () => this.reset(); box.querySelector('[data-k=full]').onclick = () => setMode('full'); box.querySelector('[data-k=free]').onclick = () => this.setFree(true); return; }
     const m = M[this.i], t = m.t[LANG] || m.t.ko, ph = this.phase(), tag = '';
     let body = '';
     const lis = `<button class="ksay2" title="${L2('다시 듣기', 'Listen again')}">${ico('speaker')}</button>`;
@@ -318,7 +320,7 @@ const KID = {
     else {
       const mine = m.pred ? `<div class="kmine">${KT('mine')}${predPic(m.id, this.pick[this.i])}</div>` : '';
       const rocket = m.widget === 'rocket' ? `<div class="krocket">${ico('globe')}<div class="krk"><b style="left:100%"></b><b class="mars" style="left:${(9.8 - 3.7) / 8.2 * 100}%"></b><i class="kr">${ico('grip')}</i></div>${ico('moon')}</div>` : '';
-      body = `<div class="kfoot"><div class="know"><div class="knowtxt"></div></div><div class="krow">${mine}<div class="kmeterbox"></div>${m.reset ? `<button class="kreset">${ico('reset')}<span>${L2('처음으로', 'Reset')}</span></button>` : ''}</div>${rocket}</div>`;
+      body = `<div class="kfoot"><div class="know"><div class="knowtxt"></div></div><div class="krow">${mine}<div class="kmeterbox"></div>${m.shot !== 'hero' ? '<canvas class="ktele"></canvas>' : ''}${m.reset ? `<button class="kreset">${ico('reset')}<span>${L2('처음으로', 'Reset')}</span></button>` : ''}</div>${rocket}</div>`;
     }
     box.innerHTML = `<div class="kban${m.boss ? ' boss' : ''}"><div class="kav">${quokka()}</div><div class="kbtxt"><div class="keye">${m.boss ? L2('도전 과제', 'Challenge') : 'Step ' + m.stage}<i></i>${(STAGE[LANG] || STAGE.ko)[m.stage]}</div><div class="ktitle">${t[0]}${lis}</div><div class="ksteps">${kidSteps(m)}</div></div><button class="kskip">${KT('skip')}${ico('chevR')}</button></div>${body}
       <div class="kwin"><div class="kbox"><div class="kwintxt"></div><div class="kwrow"><div class="kwok">${ico('check')}</div><div class="kwmain"><div class="kwt">${L2('미션 성공', 'Mission clear')}<span class="kstars"><i>${ico('star')}</i><i>${ico('star')}</i><i>${ico('star')}</i></span></div><div class="kgain"></div></div><button class="kwhybtn">${ico('speaker')}<span>${L2('왜 그럴까?', 'Why?')}</span></button><button class="kbtn main kgo"></button></div><div class="kauto"><div><i></i></div></div></div></div>`;
@@ -335,6 +337,37 @@ const KID = {
     box.querySelector('.kwhybtn').onclick = () => { box.querySelector('.kwin').classList.toggle('open'); speak(m.quiz ? '' : m.win(), true); };
     if (m.quiz) speakOnce(`${this.i}:q${this.ctx.q}:${this.ctx.ans[this.ctx.q] == null ? 'ask' : 'fb'}`, this.quizSpeech());
     else if (ph !== 'predict') speakOnce(`${this.i}:play`, `${t[0]}. ${t[1]}`);
+    khBuild(); this.update(true);
+  },
+  // ---- 자유 실험실: 퀘스트 없이 실험대의 모든 기구를 마음대로 ----
+  setFree(on) {
+    if (on === this.free) return;
+    if (!on) { this.go(Math.min(Math.max(this.i, 0), this.missions.length - 1)); return; }
+    this.free = true; this.passed = false; this.showWin = false; this.ctx = {};
+    if (S.station !== 'track' && S.station !== 'hang') setStation('track', false);
+    S.playing = true; S.speed = 1; S.overlays.F = true; S.overlays.L = true;
+    CAM.cine = false; dirReveal(stationShot(S.station)); sfx('whoosh');
+    this.render();
+  },
+  freeStation(st) {
+    if (st === 'track') { if (S.station !== 'track') kidTrack(S.surface); } else if (S.station !== 'hang') kidHang(S.obj, S.obj === 'weights' ? Math.max(1, S.n.tgt) : 0);
+    dirReveal(stationShot(st)); sfx('whoosh'); this.render();
+  },
+  freeMeter() {
+    const sep = '<span class="keq">·</span>';
+    if (S.station === 'track') { const F = S.F || {}; return `<div class="kmeter"><span>${ico('arrowL')} ${big(n1(S.F1.tgt))}</span>${sep}<span>${big(n1(S.F2.tgt))} ${ico('arrowR')}</span>${sep}<span>${L2('붙잡는 힘 최대', 'Max grip')} ${big(fx(F.fsMax || 0, 1))}</span>${sep}<span>${L2('빠르기', 'Speed')} ${big(fx(Math.abs(S.trk.v), 2), 'm/s')}</span></div>`; }
+    const r = S.hang || {};
+    return `<div class="kmeter"><span>${L2('저울', 'Scale')} ${big(fx(S.Tlive, 2))}</span>${sep}<span>${L2('무게', 'Weight')} ${big(fx(r.W || 0, 2))}</span>${sep}<span>${L2('부력', 'Buoyancy')} ${big(fx(r.B || 0, 2))}</span>${sep}<span>${L2('잠김', 'Under')} ${big(fx((r.frac || 0) * 100, 0), '%')}</span></div>`;
+  },
+  renderFree() {
+    const box = document.getElementById('kid'), st = S.station;
+    const btn = (k, ic, t, sub) => `<button data-st="${k}" class="${st === k ? 'on' : ''}"><span class="kso">${ico(ic)}</span><span><b>${t}</b><small>${sub}</small></span></button>`;
+    box.innerHTML = `<div class="kban kfree"><div class="kbtxt"><div class="keye">${L2('자유 실험실', 'Free lab')}</div><div class="ktitle">${L2('기구를 마음대로 바꿔 보세요', 'Change anything you like')}</div>
+      <div class="kstations">${btn('track', 'box', L2('끌기대', 'Pulling track'), L2('힘의 평형 · 마찰력 · 운동', 'Balance · friction · motion'))}${btn('hang', 'weight', L2('용수철과 물', 'Spring & water'), L2('무게 · 탄성력 · 부력', 'Weight · spring · buoyancy'))}</div></div></div>
+      <div class="kfoot"><div class="krow"><div class="kmeterbox"></div><canvas class="ktele"></canvas><button class="kreset">${ico('reset')}<span>${L2('처음으로', 'Reset')}</span></button></div></div>`;
+    box.querySelectorAll('[data-st]').forEach((b) => (b.onclick = () => this.freeStation(b.dataset.st)));
+    box.querySelector('.kreset').onclick = () => { if (S.station === 'track') { const L = S.load.tgt; kidTrack(S.surface); setParam('load', L, true); } else { setParam('jack', PC.jack.min); S.hv.v += 0.01; } this.update(true); };
+    speakOnce(`free:${st}`, L2('자유 실험실이에요. 기구를 마음대로 바꿔 보세요.', 'Free lab. Change anything you like.'));
     khBuild(); this.update(true);
   },
   quizHTML() {
@@ -363,11 +396,12 @@ const KID = {
       <div class="kfs"><div><b>${this.score}</b><span>${L2('점수', 'Score')} / ${mx}</span></div><div><b>${nDone}/${this.missions.length}</b><span>${L2('완료한 퀘스트', 'Quests done')}</span></div><div><b>${nHit}/${this.missions.filter((m) => m.pred).length}</b><span>${L2('예상 적중', 'Good guesses')}</span></div></div>
       <div class="kcards">${CARDS.map((c) => { const on = this.cards.has(c.k), t = cardT(c); return `<div class="kcard ${on ? 'on' : 'off'}" style="--c:${hex(c.col)}"><i></i><b>${on ? t[0] : L2('잠김', 'Locked')}</b></div>`; }).join('')}</div>
       <p class="ksay">${L2('힘이 비기면 그대로, 한쪽이 이기면 움직임이 바뀌어요!', 'Balanced forces change nothing; an unbalanced force changes the motion!')}</p>
-      <div class="kbtns"><button class="kbtn main" data-k="again">${KT('again')}</button><button class="kbtn" data-k="full">${KT('full')}</button></div></div>`;
+      <div class="kbtns g3"><button class="kbtn main" data-k="free">${L2('자유 실험실', 'Free lab')}</button><button class="kbtn" data-k="again">${KT('again')}</button><button class="kbtn" data-k="full">${KT('full')}</button></div></div>`;
   },
   reset() { this.done = []; this.hit = []; this.pick = []; this.cards = new Set(); this.score = 0; this.shown = 0; this.fx.later.length = 0; this.go(0); },
   add(n) { this.score += n; this.float(`+${n}`); },
   update(force) {
+    if (this.free) { if (S.mode === 'kid') { const mb = document.querySelector('#kid .kmeterbox'); if (mb) { const h = this.freeMeter(); if (h !== mb._h) { mb.innerHTML = h; mb._h = h; } } } return; }
     if (S.mode !== 'kid' || this.i < 0 || this.i >= this.missions.length) return;
     const m = this.missions[this.i], box = document.getElementById('kid');
     if (this.phase() === 'play' && !m.quiz && m.tick) m.tick();
@@ -385,7 +419,7 @@ const KID = {
       if (m.pred && this.pick[this.i] === m.pred.ans) { this.hit[this.i] = true; this.after(0.45, () => this.add(50)); }
       if (m.card && !this.cards.has(m.card)) { this.cards.add(m.card); this.after(0.7, () => this.cardPop(m.card)); }
     }
-    sfx('win'); this.burst(m.boss ? 120 : 60); this.hud(); this.legend();
+    sfx('win'); this.burst(m.boss ? 120 : 60); this.hud(); this.legend(); dirEvent('win', m);
     const i0 = this.i; this.showWin = !!m.quiz; this.after(m.quiz ? 0 : WIN_DELAY, () => { if (this.i === i0) { this.showWin = true; this.update(true); } });
     this.after(AUTO_NEXT, () => { if (this.i === i0 && this.passed && S.mode === 'kid') this.go(this.i + 1); });
   },
@@ -412,9 +446,9 @@ const KID = {
   after(sec, fn) { this.fx.later.push({ t: sec, fn }); },   // 시뮬레이션 시간 기준 지연 실행
   ring(dur, label) { this.fx.ring = { t: 0, dur, label }; },
   burst(n) {
-    const cx = innerWidth / 2, cy = innerHeight * 0.5;
+    const W = innerWidth, H = innerHeight;   // 양옆 아래에서 쏘아 올려 가운데 실험 장면은 가리지 않는다
     const cols = ['#6366f1', '#a5b4fc', '#38bdf8', '#34d399', '#fbbf24', '#ffffff'];
-    for (let i = 0; i < n; i++) { const a = rr(-Math.PI * 0.92, -Math.PI * 0.08), sp = rr(5, 13); this.fx.parts.push({ x: cx + rr(-60, 60), y: cy, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, r: rr(0, 6.28), vr: rr(-0.3, 0.3), w: rr(6, 10), h: rr(3, 6), c: cols[i % cols.length], life: rr(1.4, 2.4) }); }
+    for (let i = 0; i < n; i++) { const L = i % 2 === 0, a = L ? rr(-Math.PI * 0.42, -Math.PI * 0.22) : rr(-Math.PI * 0.78, -Math.PI * 0.58), sp = rr(9, 16); this.fx.parts.push({ x: L ? rr(0, 30) : W - rr(0, 30), y: H * rr(0.72, 0.85), vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, r: rr(0, 6.28), vr: rr(-0.3, 0.3), w: rr(6, 10), h: rr(3, 6), c: cols[i % cols.length], life: rr(1.4, 2.4) }); }
   },
   float(txt) { const L = document.querySelector('#kidhud .kscore')?.getBoundingClientRect(); this.fx.floats.push({ txt, x: L && L.width ? L.left + L.width / 2 : innerWidth / 2, y: L && L.width ? L.bottom + 26 : 120, t: 0 }); },
   frame(dt) {
@@ -473,6 +507,7 @@ const KID = {
       c.fillStyle = 'rgba(20,16,12,.82)'; c.beginPath(); c.roundRect(x - tw / 2, y - 20, tw, 40, 20); c.fill();
       c.fillStyle = DRAG.kind === 'jack' ? '#7dd3fc' : '#c4b5fd'; c.fillText(txt, x, y);
     }
+    dirDraw(c, dt);
     // 색종이
     for (const p of F.parts) { p.vy += dt * 30; p.vx *= 0.99; p.x += p.vx * dt * 30; p.y += p.vy * dt * 30; p.r += p.vr; p.life -= dt; c.save(); c.globalAlpha = Math.max(0, Math.min(1, p.life * 2)); c.translate(p.x, p.y); c.rotate(p.r); c.fillStyle = p.c; c.fillRect(-p.w / 2, -p.h / 2, p.w, p.h); c.restore(); }
     F.parts = F.parts.filter((p) => p.life > 0 && p.y < H + 20);
@@ -536,15 +571,17 @@ function setMode(m) {
 }
 function KID_INTRO(on) {
   const el = document.getElementById('kidIntro'); if (!el) return;
-  el.classList.toggle('on', on);
+  el.classList.toggle('on', on); document.body.classList.toggle('kbars', on);
   if (on) {
+    setCinematic(true);
     const t = KT('intro');
     const tiles = [['eye', L2('힘이 화살표로 보여요', 'Forces show as arrows')], ['ruler', L2('길수록 센 힘', 'Longer = stronger')], ['tap', L2('예상하고 직접 조작', 'Guess, then try')], ['award', L2('별과 힘 카드', 'Stars & cards')]];
     el.querySelector('.box').innerHTML = `<div class="kav lg">${quokka('win')}</div><div class="keye">${L2('힘의 작용 · 과학 실험실', 'Forces · Science lab')}</div><h2>${t[0]}</h2><div class="kitiles">${tiles.map(([ic, tx]) => `<div class="kitile"><span>${ico(ic)}</span><b>${tx}</b></div>`).join('')}</div><button class="kilisten">${ico('speaker')}<span>${L2('설명 듣기', 'Listen')}</span></button>
       <div class="kimap">${KID.missions.map((m) => `<i class="${m.boss ? 'boss' : ''}"></i>`).join('')}</div>
-      <button class="kbtn main kstart">${t[5]}</button><button class="kfull">${KT('full')}</button>`;
+      <div class="kistart"><button class="kbtn main kstart">${t[5]}</button><button class="kbtn kfreego">${L2('자유 실험실', 'Free lab')}</button></div><button class="kfull">${KT('full')}</button>`;
     el.querySelector('.kstart').onclick = () => { ensureAudio(); if (VOICE.on) setSound(true); VOICE.key = ''; KID_INTRO(false); KID.go(0); };
     el.querySelector('.kfull').onclick = () => { KID_INTRO(false); setMode('full'); };
+    el.querySelector('.kfreego').onclick = () => { ensureAudio(); if (VOICE.on) setSound(true); KID_INTRO(false); if (KID.i < 0) KID.i = 0; KID.setFree(true); };
     el.querySelector('.kilisten').onclick = () => speak(t.slice(1, 5).map((q) => q[1]).join(' '), true);
   }
 }

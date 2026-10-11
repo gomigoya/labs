@@ -138,19 +138,23 @@ function shot(s) {
   CAM.fly = null;
   camera.position.copy(Sh.pos); camera.fov = Sh.fov || 34; camera.updateProjectionMatrix();
   controls.target.copy(Sh.tgt); camera.lookAt(Sh.tgt); controls.update();
+  if (typeof DIR !== 'undefined') { DIR.offP.set(0, 0, 0); DIR.offT.set(0, 0, 0); }
 }
-function flyTo(s, dur = 2.4) {
-  const Sh = typeof s === 'number' ? SHOTS[s] : s;
-  CAM.fly = { p0: camera.position.clone(), t0: controls.target.clone(), f0: camera.fov, p1: Sh.pos.clone(), t1: Sh.tgt.clone(), f1: Sh.fov || 34, t: 0, dur };
+// ease 'out': 끝에서 천천히 내려앉는 밀어 들어가기 / arc: 이동 중 위로 뜨는 높이
+function flyTo(s, dur = 2.4, ease = 'io', arc = 0.12) {
+  const Sh = typeof s === 'number' ? SHOTS[s] : s, D = typeof DIR !== 'undefined' ? DIR : null;
+  CAM.fly = { p0: camera.position.clone().sub(D ? D.offP : V3(0, 0, 0)), t0: controls.target.clone().sub(D ? D.offT : V3(0, 0, 0)), f0: camera.fov, p1: Sh.pos.clone(), t1: Sh.tgt.clone(), f1: Sh.fov || 34, t: 0, dur, ease, arc };
+  CAM.next = null;
 }
 function updateCamera(dt) {
+  dirCamPre();
   if (CAM.fly) {
-    const F = CAM.fly; F.t += dt; const k = smooth(clamp(F.t / F.dur, 0, 1));
+    const F = CAM.fly; F.t += dt; const u = clamp(F.t / F.dur, 0, 1), k = F.ease === 'out' ? 1 - Math.pow(1 - u, 3) : smooth(u);
     camera.position.lerpVectors(F.p0, F.p1, k);
-    camera.position.y += Math.sin(k * Math.PI) * 0.12;
+    camera.position.y += Math.sin(k * Math.PI) * F.arc;
     controls.target.lerpVectors(F.t0, F.t1, k);
     camera.fov = lerp(F.f0, F.f1, k); camera.updateProjectionMatrix();
-    if (F.t >= F.dur) CAM.fly = null;
+    if (F.t >= F.dur) { CAM.fly = null; if (CAM.next) { const n = CAM.next; CAM.next = null; flyTo(n.s, n.dur, n.ease, n.arc); CAM.fly.p0.copy(camera.position); CAM.fly.t0.copy(controls.target); } }
   }
   if (CAM.cine) {
     CAM.cineT += dt;
@@ -161,6 +165,7 @@ function updateCamera(dt) {
   camera.position.z = Math.max(camera.position.z, WALL_Z + 0.35);
   camera.position.y = clamp(camera.position.y, 0.35, CEIL - 0.25);
   controls.update();
+  dirCamPost(dt);
 }
 function setCinematic(on) {
   CAM.cine = on; CAM.cineT = 0;

@@ -146,6 +146,7 @@ function themeMode(on) {
 }
 function themeTarget() {
   const m = KID.missions[KID.i];
+  if (KID.free) return S.station === 'track' ? { glass: 'ice', wood: 'forest', sand: 'desert' }[S.surface] : 'water';
   if (!m) return 'class';
   if (m.theme === 'surface') return { glass: 'ice', wood: 'forest', sand: 'desert' }[S.surface];
   return m.theme || 'class';
@@ -153,7 +154,7 @@ function themeTarget() {
 function updateTheme(dt) {
   if (!THEME.on) return;
   const u = THEME.mesh.material.uniforms, m = KID.missions[KID.i];
-  if (m && m.theme === 'moon') {   // 중력 다이얼에 따라 운동장 → 우주
+  if ((m && m.theme === 'moon' && !KID.free) || (KID.free && S.station === 'hang' && S.g.cur < 9.6)) {   // 중력에 따라 운동장 → 우주
     u.tA.value = themeCanvas('field'); u.tB.value = themeCanvas('space');
     u.uMix.value = clamp((9.8 - S.g.cur) / (9.8 - 1.6), 0, 1); THEME.a = THEME.b = S.g.cur < 5.7 ? 'space' : 'field'; THEME.m = 1;
   } else {
@@ -162,6 +163,6 @@ function updateTheme(dt) {
     THEME.m = Math.min(1, THEME.m + dt / 0.8);
     u.tA.value = themeCanvas(THEME.a); u.tB.value = themeCanvas(THEME.b); u.uMix.value = smooth(THEME.m);
   }
-  const fk = THEME.m < 0.5 && !(m && m.theme === 'moon') ? THEME.a : THEME.b;
+  const fk = THEME.m < 0.5 && !(m && m.theme === 'moon' && !KID.free) ? THEME.a : THEME.b;
   const fm = STUDIO.children[1].material; if (fm.map !== floorTex(fk)) { fm.map = floorTex(fk); fm.color.setHex(0xffffff); fm.needsUpdate = true; }
 }
