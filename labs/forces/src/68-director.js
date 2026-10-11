@@ -117,7 +117,7 @@ function dirGrab(k) {
   } else if (!k && DIR.tone) { const T = DIR.tone; DIR.tone = null; T.g.gain.setTargetAtTime(0, C.currentTime, 0.07); T.o.stop(C.currentTime + 0.5); }
 }
 
-function dirTeleReset() { DIR.tele.length = 0; DIR.marks.length = 0; DIR.teleAcc = 0; DIR.callouts.forEach((q) => (q.t = Math.max(q.t, q.dur))); if (LENS.cur) LENS.cur.t = Math.max(LENS.cur.t, LENS.cur.dur); DIR.home = null; }
+function dirTeleReset() { cueReset(); DIR.tele.length = 0; DIR.marks.length = 0; DIR.teleAcc = 0; DIR.callouts.forEach((q) => (q.t = Math.max(q.t, q.dur))); if (LENS.cur) LENS.cur.t = Math.max(LENS.cur.t, LENS.cur.dur); DIR.home = null; }
 
 // ---- 바닥 바꾸기: 새 바닥이 실험대를 따라 쓸고 지나가고, 이름표가 뜬다 ----
 const SURF_FEEL = { glass: ['매끈매끈', 'Slick'], wood: ['보통', 'Medium'], sand: ['까끌까끌', 'Rough'] };

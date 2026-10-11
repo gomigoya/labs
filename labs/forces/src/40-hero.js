@@ -285,10 +285,20 @@ function updateTrack(st, P) {
 const OVL = {};
 const ARROW_GEO = new THREE.PlaneGeometry(1, 1).translate(0, 0.5, 0);
 const ARROW_VS = 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix*modelViewMatrix*vec4(position,1.0); }';
-const ARROW_FS = `uniform float uLen, uW, uTime, uGain; uniform vec3 uColor; varying vec2 vUv;
+// uUnit: 마디 간격(m, 0.5 N) → 셰브론 위에 가로 눈금을 그어 '마디 수 = 힘의 크기'로 센다
+// uStyle 1: 점선 윤곽 (직전 값·한계를 나타내는 빈 화살표)
+const ARROW_FS = `uniform float uLen, uW, uTime, uGain, uUnit, uStyle; uniform vec3 uColor; varying vec2 vUv;
+  float headIn(float s, float t, float hl, float e){ float hw = (uLen - s) / hl * uW * 0.5 - e; return step(uLen - hl + e, s) * step(t, hw) * step(s, uLen - e * 1.8); }
   void main(){
     float s = vUv.y * uLen, t = abs(vUv.x - 0.5) * uW;
     float hl = min(uW * 1.5, uLen * 0.5), sh = uW * 0.15;
+    if (uStyle > 0.5) {
+      float dash = step(0.45, fract(s / 0.011 - uTime * 0.6)) * step(t, sh * 0.6) * step(s, uLen - hl);
+      float rim = headIn(s, t, hl, 0.0) - headIn(s, t, hl, 0.0022);
+      float tail = step(s, 0.0016) * step(t, uW * 0.22);
+      float a = clamp(dash * 0.9 + rim + tail, 0.0, 1.0);
+      gl_FragColor = vec4(uColor * uGain * a, a); return;
+    }
     float body;
     if (s < uLen - hl) body = 1.0 - smoothstep(sh * 0.55, sh, t);
     else { float hw = (uLen - s) / hl * uW * 0.5; body = 1.0 - smoothstep(hw * 0.8, hw + 0.0006, t); }
@@ -297,20 +307,23 @@ const ARROW_FS = `uniform float uLen, uW, uTime, uGain; uniform vec3 uColor; var
     float ch = fract((s + t * 1.3) / (uW * 1.7) - uTime * 1.1);
     float stripe = smoothstep(0.0, 0.12, ch) * (1.0 - smoothstep(0.38, 0.5, ch));
     float core = body * (0.62 + 0.55 * stripe * shaft);
-    float a = clamp(core + glow, 0.0, 1.0);
-    gl_FragColor = vec4(uColor * uGain * (core + glow), a);
+    float tick = 0.0;
+    if (uUnit > 0.0) { float k = floor(s / uUnit + 0.5); tick = step(0.5, k) * step(k * uUnit, uLen - hl * 0.45) * (1.0 - smoothstep(0.0008, 0.0014, abs(s - k * uUnit))) * step(t, uW * 0.3); }
+    float a = clamp(core + glow + tick, 0.0, 1.0);
+    gl_FragColor = vec4(uColor * uGain * (core + glow) + vec3(tick * 1.4), a);
   }`;
-function makeArrow(col) {
-  const mat = new THREE.ShaderMaterial({ uniforms: { uLen: { value: 0.1 }, uW: { value: 0.03 }, uTime: { value: 0 }, uGain: { value: 1.5 }, uColor: { value: new THREE.Color(col) } },
+function makeArrow(col, style = 0) {
+  const mat = new THREE.ShaderMaterial({ uniforms: { uLen: { value: 0.1 }, uW: { value: 0.03 }, uTime: { value: 0 }, uGain: { value: style ? 1.1 : 1.5 }, uUnit: { value: style ? 0 : PC.arrow * 0.5 }, uStyle: { value: style }, uColor: { value: new THREE.Color(col) } },
     vertexShader: ARROW_VS, fragmentShader: ARROW_FS, transparent: true, depthTest: false, depthWrite: false, blending: THREE.AdditiveBlending, toneMapped: false });
   const m = new THREE.Mesh(ARROW_GEO, mat); m.matrixAutoUpdate = false; m.frustumCulled = false; m.renderOrder = 10; m.visible = false; overlayScene.add(m);
-  return { mesh: m, mat, tip: new THREE.Vector3(), mid: new THREE.Vector3(), on: false, N: 0 };
+  return { mesh: m, mat, tip: new THREE.Vector3(), mid: new THREE.Vector3(), o: new THREE.Vector3(), dir: new THREE.Vector3(0, 1, 0), on: false, N: 0 };
 }
 const _ax = new THREE.Vector3(), _ay = new THREE.Vector3(), _az = new THREE.Vector3(), _am = new THREE.Matrix4();
 // origin에서 dir(단위) 방향으로 크기 N(뉴턴)인 화살표
 function setArrow(a, origin, dir, N, show) {
   const len = Math.abs(N) * PC.arrow;
   a.N = Math.abs(N); a.on = !!show && len > 0.004; a.mesh.visible = a.on;
+  a.o.copy(origin); a.dir.copy(dir);
   if (!a.on) return;
   const W = 0.03;
   _ay.copy(dir).normalize();

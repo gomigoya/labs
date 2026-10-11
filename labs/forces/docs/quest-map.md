@@ -88,3 +88,7 @@
 ## 과정·결과 묘사 (`src/69-depict.js`)
 
 원칙은 [experiment-depiction.md](experiment-depiction.md). 구현: 돋보기 렌즈(접촉면·물속 단면 도해를 코드 SVG로 + 압력 화살표), 실험 노트(시행 자동 기록 · 비교 막대 · 바꾼 조건 강조 · 공정한 실험 안내), 레일의 '지난번' 눈금. 삽화·생성 그림은 쓰지 않는다.
+
+## 글 없이 읽히는 장면 문법 (`src/71-cues.js`, 두 모드 공통)
+
+힘 마디(0.5 N 눈금), 마찰 한계 점선, 바꾸기 전 값 점선, 상쇄 →←, 용수철 늘어남 계단, 부력 이어 붙이기, 시간 기록 점. 원칙과 표: [experiment-depiction.md](experiment-depiction.md) 5장.

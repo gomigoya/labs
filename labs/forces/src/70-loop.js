@@ -49,6 +49,7 @@ function setStation(st, fly = true) {
 function resetTrack(x = PC.track.x0) { S.trk.x = x; S.trk.v = 0; S.dist = 0; S.rec.vt.length = 0; S.tTrk = 0; S.lastSign = 0; }
 function applyPreset(i) {
   const p = PRESETS[i];
+  cueReset();
   if (p.station === 'track') {
     setSame(p.same); setSurface(p.surface);
     for (const k of ['F1', 'F2', 'load', 'g']) setParam(k, p[k], true);
@@ -232,6 +233,7 @@ const LESSON = {
 function lessonGo(i) {
   if (i < 0 || i >= LESSON.steps.length) { lessonEnd(); return; }
   LESSON.i = i; LESSON.ctx = {}; LESSON.passed = false;
+  cueReset();
   const st = LESSON.steps[i];
   st.enter && st.enter();
   S.station = st.st === 'beaker' || st.st === 'hang' ? 'hang' : st.st === 'track' ? 'track' : S.station;
@@ -290,6 +292,7 @@ function update(rdt) {
   }
   updateTrack(S.trk, { ...P, F1: S.F1.cur, F2: S.F2.cur });
   updateArrows(r, hv.x, S.Tlive, F, P, S.trk, S.overlays.F, dt);
+  updateCues(r, hv.x, F, P, dt);
   // --- 콘솔 ---
   CONSOLE.dialG.set((S.g.cur - PC.gMin) / (PC.gMax - PC.gMin)); CONSOLE.dialJ.set((S.jack.cur - PC.jack.min) / (PC.jack.max - PC.jack.min));
   CONSOLE.sF1.set(S.F1.cur / PC.trackMax); CONSOLE.sF2.set(S.F2.cur / PC.trackMax);
@@ -374,7 +377,7 @@ window.__lab = {
 
 async function init() {
   try { await Promise.race([document.fonts.ready, new Promise((r) => setTimeout(r, 2500))]); } catch {}
-  buildRoom(); buildConsole(); buildHero(); buildOverlays(); buildLights(); buildStudio(); buildThemes(); buildPipeline(); buildCamera();
+  buildRoom(); buildConsole(); buildHero(); buildOverlays(); buildCues(); buildLights(); buildStudio(); buildThemes(); buildPipeline(); buildCamera();
   setFluidLook(S.fluid); setSurfaceLook(S.surface);
   tagPickables();
   UI.init();
