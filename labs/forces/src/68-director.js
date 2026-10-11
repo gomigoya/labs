@@ -10,7 +10,7 @@ const DIR = {
   ts: 1, slow: null, t: 0, shake: 0, push: 0, punch: 0, follow: 0, grabK: null, tone: null,
   offP: new THREE.Vector3(), offT: new THREE.Vector3(),
   callouts: [], parts: [], cool: {}, prevIn: null, prevFloat: null, dustAcc: 0, side: 1,
-  tele: [], teleAcc: 0, teleSt: null, marks: [],
+  tele: [], teleAcc: 0, teleSt: null, marks: [], prevDeep: null, drop: null, squash: 0, home: null,
 };
 const dirOn = () => S.mode === 'kid';
 const _dd = new THREE.Vector3();
@@ -44,7 +44,7 @@ function dirCamPost(dt) {
   P.y += (Math.sin(t * 0.53 + 0.7) * 0.6 + Math.sin(t * 1.13) * 0.4) * 0.004 * still;
   // 따라가기: 도막이 움직이면 시선이 늦게 따라간다
   const want = S.station === 'track' && still ? clamp(blockX(S.trk.x) - controls.target.x, -0.24, 0.24) * 0.6 : 0;
-  DIR.follow += (want - DIR.follow) * (1 - Math.exp(-dt * 1.4));
+  if (!KH.drag) DIR.follow += (want - DIR.follow) * (1 - Math.exp(-dt * 1.4));
   P.x += DIR.follow; T.x += DIR.follow;
   // 밀어 들어가기: 잡고 있는 동안 + 결정적 순간
   DIR.punch = Math.max(0, DIR.punch - dt * 0.05);
@@ -89,10 +89,13 @@ function dirEvent(type, e) {
     dirSlow(0.22, 0.9); DIR.punch = 0.08; sfx('swell'); DIR.marks.push(DIR.tele.length);
     dirCallout(dirAt('block'), L2('미끄러지기 시작!', 'It starts to slide!'), () => `${L2('붙잡는 힘 최대', 'Max grip')} ${fx(e && e.fsMax || 0, 1)} N`, hex(FCOL.f), 2.8);
   }
-  if (type === 'bump') { DIR.shake = 0.035; dirRing(KID_AT.block()); }
+  if (type === 'bump') { DIR.shake = 0.035; dirRing(KID_AT.block()); if (KID.free && !DIR.home) DIR.home = { t: 0 }; }
   if (type === 'splash' && cd('splash', 4)) {
     dirSlow(0.3, 0.8); DIR.punch = 0.06; sfx('splash'); dirSplash();
-    dirCallout(dirAt('obj'), L2('물이 밀어 올려요', 'Water pushes up'), () => `${L2('부력', 'Buoyancy')} ${fx(S.hang ? S.hang.B : 0, 2)} N`, hex(FCOL.B), 3);
+  }
+  if (type === 'deep' && cd('deep', 4)) {
+    DIR.punch = Math.max(DIR.punch, 0.05); sfx('swell');
+    dirCallout(dirAt('obj'), L2('물이 밀어 올려요', 'Water pushes up'), () => `${L2('부력', 'Buoyancy')} ${fx(S.hang ? S.hang.B : 0, 2)} N`, hex(FCOL.B), 3.2);
   }
   if (type === 'float' && cd('float', 4)) dirCallout(dirAt('obj'), L2('둥둥 떠요!', 'It floats!'), () => L2('부력 = 무게', 'Buoyancy = weight'), hex(FCOL.B), 2.6);
   if (type === 'win') {
@@ -111,6 +114,61 @@ function dirGrab(k) {
     o.connect(lp).connect(g).connect(AUD.master); o.start(); g.gain.setTargetAtTime(0.03, C.currentTime, 0.06);
     DIR.tone = { o, g };
   } else if (!k && DIR.tone) { const T = DIR.tone; DIR.tone = null; T.g.gain.setTargetAtTime(0, C.currentTime, 0.07); T.o.stop(C.currentTime + 0.5); }
+}
+
+function dirTeleReset() { DIR.tele.length = 0; DIR.marks.length = 0; DIR.teleAcc = 0; DIR.callouts.forEach((q) => (q.t = Math.max(q.t, q.dur))); DIR.home = null; }
+
+// ---- 바닥 바꾸기: 새 바닥이 실험대를 따라 쓸고 지나가고, 이름표가 뜬다 ----
+const SURF_FEEL = { glass: ['매끈매끈', 'Slick'], wood: ['보통', 'Medium'], sand: ['까끌까끌', 'Rough'] };
+const SURF_RGB = { glass: '200,235,255', wood: '196,150,98', sand: '178,132,84' };
+function dirSurface(v) {
+  if (!dirOn()) return;
+  sfx('whoosh'); DIR.shake = Math.max(DIR.shake, 0.008);
+  const n = 26, x0 = blockX(PC.track.xmin) - 0.1, x1 = blockX(PC.track.xmax) + 0.1;
+  for (let i = 0; i < n; i++) {
+    const p = khProj(V3(lerp(x0, x1, i / (n - 1)), TRK_Y + 0.004, TRK.z + rr(-0.03, 0.04)));
+    DIR.parts.push({ k: 'sweep', x: p.x, y: p.y, r: rr(3, 7), life: 0.75, t0: 0.75, delay: i * 0.016, c: SURF_RGB[v] || '255,255,255' });
+  }
+  dirCallout(dirAt('block'), `${T('surfName')[v]} · ${SURF_FEEL[v][isEn() ? 1 : 0]}`, () => `${L2('붙잡는 힘 최대', 'Max grip')} ${fx(S.F ? S.F.fsMax : 0, 1)} N`, hex(FCOL.f), 2.4);
+}
+// ---- 짐 올리기: 위에서 떨어져 쿵 → 도막이 눌리고 먼지 → '바닥이 받치는 힘' 해설 ----
+function dirLoad(d) {
+  if (!dirOn()) return;
+  if (d < 0) { sfx('pick'); DIR.squash = -0.04; return; }
+  DIR.drop = { i: S.load.tgt - 1, t: 0, hit: false };
+}
+function dirDropFrame(dt) {
+  const D = DIR.drop, L = HERO.loads;
+  L.forEach((m) => { if (m.userData.y0 == null) m.userData.y0 = m.position.y; });
+  if (D) {
+    D.t += dt; const H = 0.16, T = 0.32, u = Math.min(1, D.t / T), m = L[D.i];
+    if (m) m.position.y = m.userData.y0 + H * (1 - u * u);
+    if (u >= 1 && !D.hit) {
+      D.hit = true; sfx('clack'); DIR.shake = Math.max(DIR.shake, 0.02); DIR.squash = 0.11; DIR.punch = Math.max(DIR.punch, 0.07);
+      const c = khProj(V3(blockX(S.trk.x), TRK_Y + 0.004, TRK.z + 0.03));
+      for (let i = 0; i < 14; i++) { const s = i % 2 ? 1 : -1; DIR.parts.push({ k: 'dust', x: c.x + s * rr(18, 34), y: c.y + rr(-2, 3), vx: s * rr(0.6, 1.8), vy: -rr(0.1, 0.5), r: rr(2.5, 5), life: rr(0.5, 0.9), t0: 1, c: S.surface === 'sand' ? '150,110,70' : S.surface === 'glass' ? '220,235,245' : '185,150,105' }); }
+      dirCallout(() => V3(blockX(S.trk.x), TRK_Y + PC.block.h + S.load.tgt * PC.load.h, TRK.z), L2(`짐 ${S.load.tgt}개 · 더 무거워요`, `${S.load.tgt} load(s) · heavier`), () => `${L2('바닥이 받치는 힘', 'Floor push')} ${fx(S.F ? S.F.N : 0, 1)} N`, hex(FCOL.N), 2.6);
+    }
+    if (D.t > T + 0.05) { if (m) m.position.y = m.userData.y0; DIR.drop = null; }
+  }
+  // 도막이 눌렸다 튀어 오르는 탄성 (감쇠 진동)
+  DIR.squash *= Math.exp(-dt * 7);
+  const q = DIR.squash, k = Math.sin(DIR.t * 38) * q;
+  if (HERO.block) HERO.block.scale.set(1 + Math.abs(q) * 0.25, 1 - k, 1 + Math.abs(q) * 0.25);
+}
+// ---- 쉬운 모드 화면 틀: 퀘스트 카드 아래 ~ 도구대 위 빈 띠에 장면 중심을 맞추고, 좁으면 살짝 넓게 본다 ----
+function dirView(dt) {
+  if (KH.drag) return;   // 조작 중에는 틀을 바꾸지 않는다
+  const H = innerHeight, rect = (q) => { const e = document.querySelector(q); if (!e) return null; const r = e.getBoundingClientRect(); return r.height > 0 ? r : null; };
+  const ban = rect('#kid .kban'), hud = rect('#kidhud'), foot = rect('#kid .kfoot'), dock = KH.dock && !KH.dock.classList.contains('none') && KH.el && !KH.el.classList.contains('off') ? rect('#khdock') : null;
+  if (!ban && !foot) return;
+  const top = Math.max(ban ? ban.bottom : 0, hud ? hud.bottom : 0) + 8;
+  const bot = Math.min(dock ? dock.top : H, foot ? foot.top : H) - 8;
+  if (bot - top < 120) return;
+  const td = (top + bot) / 2 - H / 2, pt = isPortrait(), tz = pt && S.station === 'track' ? 1 : clamp((bot - top) / (H * (pt ? 0.5 : 0.6)), pt ? 0.66 : 0.74, 1);   // 세로 화면의 끌기대는 가로로 길어 줄이지 않는다
+  const k = KVIEW.d == null ? 1 : 1 - Math.exp(-dt * 2.4);
+  const nd = KVIEW.d == null ? td : KVIEW.d + (td - KVIEW.d) * k, nz = KVIEW.z + (tz - KVIEW.z) * k;
+  if (KVIEW.d == null || Math.abs(nd - KVIEW.d) > 0.3 || Math.abs(nz - KVIEW.z) > 0.0005) { KVIEW.d = nd; KVIEW.z = nz; applyViewOffset(); }
 }
 
 // ---- 해설선 (텔레스트레이션): 점이 튀어나오고, 선이 그어지고, 이름표가 미끄러져 들어온다 ----
@@ -157,6 +215,7 @@ function dirDraw(c, dt) {
     if (q.k === 'drop') { q.vy += 0.32 * f; q.x += q.vx * f; q.y += q.vy * f; c.fillStyle = `rgba(205,236,255,${clamp(q.life * 2, 0, 0.9)})`; c.beginPath(); c.arc(q.x, q.y, q.r, 0, 7); c.fill(); }
     else if (q.k === 'ripple') { const k = 1 - q.life / q.t0; c.strokeStyle = `rgba(220,242,255,${clamp(q.life, 0, 0.7)})`; c.lineWidth = 1.5; c.beginPath(); c.ellipse(q.x, q.y, q.r + k * 60, (q.r + k * 60) * 0.28, 0, 0, 7); c.stroke(); }
     else if (q.k === 'ring') { const k = 1 - q.life / q.t0; c.strokeStyle = `rgba(255,255,255,${q.life * 1.6})`; c.lineWidth = 3 * (1 - k) + 0.5; c.beginPath(); c.arc(q.x, q.y, q.r + k * 46, 0, 7); c.stroke(); }
+    else if (q.k === 'sweep') { if ((q.delay -= dt) > 0) { q.life += dt; continue; } const k = 1 - q.life / q.t0; c.fillStyle = `rgba(${q.c},${clamp(q.life * 1.2, 0, 0.85)})`; c.beginPath(); c.ellipse(q.x, q.y - k * 10, q.r * (1 + k), q.r * 0.45 * (1 + k), 0, 0, 7); c.fill(); }
     else if (q.k === 'dust') { q.x += q.vx * f; q.y += q.vy * f; q.r += 0.12 * f; c.fillStyle = `rgba(${q.c},${clamp(q.life * 0.45, 0, 0.35)})`; c.beginPath(); c.arc(q.x, q.y, q.r, 0, 7); c.fill(); }
   }
   DIR.parts = DIR.parts.filter((q) => q.life > 0);
@@ -198,8 +257,12 @@ function dirFrame(dt) {
   if (r && S.station === 'hang') {
     if (DIR.prevIn === false && r.inFluid && !r.empty) dirEvent('splash');
     if (DIR.prevFloat === false && r.floating) dirEvent('float');
+    if (DIR.prevDeep === false && r.frac >= 0.6 && !r.floating) dirEvent('deep');
   }
-  DIR.prevIn = r ? r.inFluid : null; DIR.prevFloat = r ? r.floating : null;
+  DIR.prevIn = r ? r.inFluid : null; DIR.prevFloat = r ? r.floating : null; DIR.prevDeep = r ? r.frac >= 0.6 : null;
+  // 자유 실험: 끝에 부딪힌 도막은 1.4초 뒤 줄을 풀고 제자리로
+  if (DIR.home) { DIR.home.t += dt; if (DIR.home.t > 1.4) { DIR.home = null; if (KID.free && S.station === 'track' && !KH.drag) { setParam('F1', 0, true); setParam('F2', 0, true); resetTrack(); sfx('whoosh'); dirRing(KID_AT.block()); KID.update(true); } } }
+  dirDropFrame(dt); dirView(dt);
   if (S.station === 'track' && Math.abs(S.trk.v) > 0.03 && S.surface !== 'glass' && !CAM.fly) {
     DIR.dustAcc += dt * Math.min(40, Math.abs(S.trk.v) * 70);
     while (DIR.dustAcc > 1) { DIR.dustAcc--; dirDust(); }

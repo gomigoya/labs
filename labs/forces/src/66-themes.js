@@ -137,9 +137,9 @@ function buildThemes() {
 function themeMode(on) {
   THEME.on = on;
   if (on) {
-    ROOM.visible = false; LIGHTS.room.forEach((l) => (l.visible = false)); LIGHTS.studio.visible = true; LIGHTS.studio.children[0].intensity = 22; STUDIO.visible = true; STUDIO.children[0].visible = false;
+    ROOM.visible = false; LIGHTS.room.forEach((l) => (l.visible = false)); LIGHTS.studio.visible = true; LIGHTS.studio.children[0].intensity = 22; LIGHTS.studio.children[3].intensity = 3;   /* 뒤 조명이 반들한 실험대에 비쳐 생기는 흰 얼룩을 줄인다 */ STUDIO.visible = true; STUDIO.children[0].visible = false;
     scene.background = new THREE.Color(0x111111); scene.fog = null; scene.environmentIntensity = 0.3; THEME.mesh.visible = true;
-  } else { THEME.mesh.visible = false; LIGHTS.studio.children[0].intensity = 40; STUDIO.children[0].visible = true; const fm = STUDIO.children[1].material; fm.map = null; fm.color.setHex(0x141210); fm.needsUpdate = true; setView(S.view); }
+  } else { THEME.mesh.visible = false; LIGHTS.studio.children[0].intensity = 40; LIGHTS.studio.children[3].intensity = 30; STUDIO.children[0].visible = true; const fm = STUDIO.children[1].material; fm.map = null; fm.color.setHex(0x141210); fm.needsUpdate = true; setView(S.view); }
   // 쉬운 모드에서는 콘솔 앞면 계기(다이얼·화면·슬라이더·램프)를 숨긴다: 아이는 실험 기구를 직접 만진다
   const C = CONSOLE; [C.dialG, C.dialJ, C.sF1, C.sF2, C.button, C.screenA, C.screenB].forEach((q) => q && q.group && (q.group.visible = !on));
   Object.values(C.lamps || {}).forEach((l) => l && l.mesh && (l.mesh.visible = !on));

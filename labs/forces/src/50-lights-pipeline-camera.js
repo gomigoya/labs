@@ -109,14 +109,16 @@ const SHOTS_VERTICAL = [
 const SHOT_IDX = { hero: 0, hang: 1, beaker: 2, track: 3, top: 4, console: 5 };
 const isPortrait = () => innerWidth / innerHeight < 0.9;
 const heroShot = () => (isPortrait() ? SHOTS_VERTICAL[0] : SHOTS[0]);
-const KID_SHOTS = { track: { pos: V3(0.45, 2.3, 1.62), tgt: V3(0.45, 0.99, 0.08), fov: 40 }, hang: { pos: V3(-0.64, 1.68, 1.66), tgt: V3(-1.1, 1.34, -0.2), fov: 38 }, hero: { pos: V3(0.3, 2.6, 3.3), tgt: V3(0.1, 1.05, -0.1), fov: 42 } };
+const KID_SHOTS = { track: { pos: V3(0.45, 2.3, 1.62), tgt: V3(0.45, 0.99, 0.08), fov: 40 }, hang: { pos: V3(-0.64, 1.58, 1.66), tgt: V3(-1.1, 1.24, -0.2), fov: 38 }, hero: { pos: V3(0.3, 2.6, 3.3), tgt: V3(0.1, 1.05, -0.1), fov: 42 } };
 // 쉬운 모드: 퀘스트 카드가 화면 일부를 덮으므로 화면 중심을 카드 바깥 빈 곳으로 옮긴다
 // (넓은 화면은 카드 오른쪽, 좁은 화면은 위쪽 진행 지도와 아래 카드 사이)
+// 쉬운 모드: 위(퀘스트 카드)와 아래(도구대·계기판) 사이 빈 띠에 장면을 맞춘다 (KVIEW: 68-director.js가 매 프레임 갱신)
+const KVIEW = { d: null, z: 1 };
 function applyViewOffset() {
-  const W = innerWidth, H = innerHeight, L = document.getElementById('left'), kid = S.mode === 'kid';
-  const dx = 0, dy = kid ? Math.min(60, H * 0.06) : 0;   // 쉬운 모드: 위 안내 띠만큼 장면을 살짝 아래로
-  if (dx > 0) { camera.aspect = (W + 2 * dx) / H; camera.setViewOffset(W + 2 * dx, H, 0, 0, W, H); }
-  else if (dy > 0) { camera.aspect = W / (H + 2 * dy); camera.setViewOffset(W, H + 2 * dy, 0, 0, W, H); }
+  const W = innerWidth, H = innerHeight, kid = S.mode === 'kid';
+  const d = kid ? (KVIEW.d ?? Math.min(60, H * 0.06)) : 0, a = Math.abs(d);
+  camera.zoom = kid ? KVIEW.z : 1;
+  if (a > 0.5) { camera.aspect = W / (H + 2 * a); camera.setViewOffset(W, H + 2 * a, 0, d < 0 ? 2 * a : 0, W, H); }
   else { camera.aspect = W / H; camera.clearViewOffset(); }
   camera.updateProjectionMatrix();
 }

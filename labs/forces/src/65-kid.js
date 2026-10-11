@@ -89,6 +89,7 @@ function quokka(mood = '') {
 const ICON = {
   speaker: '<path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/>',
   mute: '<path d="M11 5 6 9H3v6h3l5 4z"/><path d="m16 9 5 6M21 9l-5 6"/>',
+  lock: '<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>', unlock: '<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 7.6-1.8"/>',
   arrowR: '<path d="M5 12h14M13 6l6 6-6 6"/>', arrowL: '<path d="M19 12H5M11 6l-6 6 6 6"/>',
   arrowU: '<path d="M12 19V5M6 11l6-6 6 6"/>', arrowD: '<path d="M12 5v14M6 13l6 6 6-6"/>',
   hold: '<path d="M2.5 12h4M21.5 12h-4M5 9l3 3-3 3M19 9l-3 3 3 3"/><rect x="9.5" y="8" width="5" height="8" rx="1"/>',
@@ -133,7 +134,8 @@ function kidSteps(m) {
   const hs = m.hint || [];
   return hs.map(([k, g, dx, dy], i) => {
     const o = STEP_OBJ[k] || 'tap', a = g === 'drag' ? (dx > 0 ? 'R' : dx < 0 ? 'L' : dy < 0 ? 'U' : 'D') : 'tap';
-    return `<span class="kstep">${hs.length > 1 ? `<em>${i + 1}</em>` : ''}<span class="kso${o === 'puller' ? ' pull' : ''}">${o === 'swatch' ? swatch('sand') : ico(o)}</span><span class="ksa ${a}">${ico(a === 'tap' ? 'tap' : 'arrow' + a)}</span></span>`;
+    const word = { R: L2('오른쪽으로', 'right'), L: L2('왼쪽으로', 'left'), U: L2('위로', 'up'), D: L2('아래로', 'down'), tap: L2('누르기', 'tap') }[a];
+    return `<span class="kstep">${hs.length > 1 ? `<em>${i + 1}</em>` : ''}<span class="kso${o === 'puller' ? ' knob' : ''}">${o === 'puller' ? ico('grip') : o === 'swatch' ? swatch('sand') : ico(o)}</span><span class="ksa ${a}">${ico(a === 'tap' ? 'tap' : 'arrow' + a)}</span><span class="ksw2">${word}</span></span>`;
   }).join('');
 }
 // 읽어 주기 (글을 못 읽는 아이도 OK)
@@ -167,10 +169,20 @@ const KID = {
       hint: [['F1', 'drag', -1, 0], ['F2', 'drag', 1, 0]],
       t: { ko: ['줄다리기 무승부', '왼쪽 끌개는 <b>왼쪽으로</b>, 오른쪽 끌개는 <b>오른쪽으로</b> 끌어서 두 힘을 <b>똑같이</b> 맞춰 보세요. 도막이 안 움직이면 성공!'], en: ['Tug-of-war tie', 'Drag the left puller <b>left</b> and the right one <b>right</b> until both pulls are <b>equal</b>. If the block stays put, you win!'] },
       pred: PRED(['양쪽에서 똑같은 힘으로 당기면 도막은?', ['← 왼쪽으로 가요', '그대로 있어요', '오른쪽으로 가요 →']], ['If both sides pull equally, the block…', ['← goes left', 'stays put', 'goes right →']], 1),
-      enter() { kidTrack('glass'); },
-      reset() { setParam('F1', 0); setParam('F2', 0); resetTrack(); },
+      enter() { kidTrack('glass'); S.pin = true; },
+      reset() { setParam('F1', 0); setParam('F2', 0); resetTrack(); S.pin = true; KID.ctx.armT = KID.ctx.freeT = null; },
+      // 마우스로는 손잡이를 하나씩만 잡을 수 있다 → 양쪽을 다 맞출 때까지 도막을 핀으로 잡아 두고, 손을 떼면 잠시 뒤 풀어 준다
+      tick() {
+        const c = KID.ctx, now = DIR.t;
+        if (DRAG.kind || S.F1.tgt < 1 || S.F2.tgt < 1) {
+          if (!S.pin) { S.pin = true; resetTrack(); sfx('click'); }
+          if (DRAG.kind && Math.abs(S.trk.x - PC.track.x0) > 1e-4) resetTrack();
+          c.armT = c.freeT = null; return;
+        }
+        if (S.pin) { if (c.armT == null) c.armT = now; if (now - c.armT >= KH_PIN_T) { S.pin = false; c.freeT = now; sfx('pop'); DIR.punch = Math.max(DIR.punch, 0.05); } }
+      },
       meter: tug,
-      check: () => S.F1.tgt >= 1 && S.F1.tgt === S.F2.tgt && S.trk.v === 0 && !S.same, card: 'net',
+      check: () => S.F1.tgt >= 1 && S.F1.tgt === S.F2.tgt && S.trk.v === 0 && !S.same && !S.pin && KID.ctx.freeT != null && DIR.t - KID.ctx.freeT > 1.1, card: 'net',
       win: () => L2(`양쪽이 똑같이 ${n1(S.F1.tgt)} N씩 당겨서 힘이 <b>비겼어요</b>(힘의 평형). <b style="color:#fde68a">노란 ‘모두 합친 힘’</b> 화살표가 사라지고 도막은 그대로예요.`, `Both sides pull ${n1(S.F1.tgt)} N, so the forces <b>cancel out</b>. The <b style="color:#fde68a">yellow “all together”</b> arrow disappears and the block stays put.`),
     },
     {
@@ -276,7 +288,7 @@ const KID = {
   max() { return this.missions.length * 100 + this.missions.filter((m) => m.pred).length * 50 + KID_QUIZ.length * 50; },
   go(i) {
     if (i >= this.missions.length) { this.i = this.missions.length; this.render(); this.burst(90); sfx('win'); return; }
-    this.free = false; this.i = Math.max(0, i); this.ctx = {}; this.passed = false; this.showWin = false;
+    this.free = false; this.i = Math.max(0, i); this.ctx = {}; this.passed = false; this.showWin = false; S.pin = false; dirTeleReset();
     const m = this.missions[this.i];
     S.overlays.K = false; UI.syncButtons();
     m.enter && m.enter();
@@ -343,15 +355,16 @@ const KID = {
   setFree(on) {
     if (on === this.free) return;
     if (!on) { this.go(Math.min(Math.max(this.i, 0), this.missions.length - 1)); return; }
-    this.free = true; this.passed = false; this.showWin = false; this.ctx = {};
+    this.free = true; this.passed = false; this.showWin = false; this.ctx = {}; S.pin = false; dirTeleReset();
     if (S.station !== 'track' && S.station !== 'hang') setStation('track', false);
+    if (S.station === 'track') { const L = S.load.tgt; kidTrack(S.surface); setParam('load', L, true); }
     S.playing = true; S.speed = 1; S.overlays.F = true; S.overlays.L = true;
     CAM.cine = false; dirReveal(stationShot(S.station)); sfx('whoosh');
     this.render();
   },
   freeStation(st) {
     if (st === 'track') { if (S.station !== 'track') kidTrack(S.surface); } else if (S.station !== 'hang') kidHang(S.obj, S.obj === 'weights' ? Math.max(1, S.n.tgt) : 0);
-    dirReveal(stationShot(st)); sfx('whoosh'); this.render();
+    dirTeleReset(); dirReveal(stationShot(st)); sfx('whoosh'); this.render();
   },
   freeMeter() {
     const sep = '<span class="keq">·</span>';
@@ -362,7 +375,7 @@ const KID = {
   renderFree() {
     const box = document.getElementById('kid'), st = S.station;
     const btn = (k, ic, t, sub) => `<button data-st="${k}" class="${st === k ? 'on' : ''}"><span class="kso">${ico(ic)}</span><span><b>${t}</b><small>${sub}</small></span></button>`;
-    box.innerHTML = `<div class="kban kfree"><div class="kbtxt"><div class="keye">${L2('자유 실험실', 'Free lab')}</div><div class="ktitle">${L2('기구를 마음대로 바꿔 보세요', 'Change anything you like')}</div>
+    box.innerHTML = `<div class="kban kfree"><div class="kbtxt"><div class="keye">${L2('자유 실험실', 'Free lab')}<i></i>${L2('무엇이든 바꿔 보세요', 'Change anything')}</div>
       <div class="kstations">${btn('track', 'box', L2('끌기대', 'Pulling track'), L2('힘의 평형 · 마찰력 · 운동', 'Balance · friction · motion'))}${btn('hang', 'weight', L2('용수철과 물', 'Spring & water'), L2('무게 · 탄성력 · 부력', 'Weight · spring · buoyancy'))}</div></div></div>
       <div class="kfoot"><div class="krow"><div class="kmeterbox"></div><canvas class="ktele"></canvas><button class="kreset">${ico('reset')}<span>${L2('처음으로', 'Reset')}</span></button></div></div>`;
     box.querySelectorAll('[data-st]').forEach((b) => (b.onclick = () => this.freeStation(b.dataset.st)));

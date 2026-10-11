@@ -2,26 +2,33 @@
 // 기구 바로 옆에 크고 눈에 보이는 손잡이를 붙인다 (3D 물체를 정확히 맞혀 잡지 않아도 된다)
 //  · 끌개(F1·F2): 줄 끝 손잡이를 레일 따라 끌면 그만큼 센 힘 (눈금 0~6 N, 목표 깃발)
 //  · 비커(jack): 위아래 레일
-//  · 바닥(surface): 재질 버튼 3개 / 짐(block)·추(obj): ➖ ➕
+//  · 바닥·물체·액체·중력 고르기, 짐·추 ➖ ➕ 는 장면 아래 고정된 '도구대'에 (누르는 동안 움직이지 않게)
+//  · 줄다리기: 양쪽을 다 맞추고 손을 떼면 '고정 핀'이 잠시 뒤 풀린다 (마우스는 한 번에 손잡이 하나만 잡을 수 있으므로)
 const KH = { el: null, items: [], drag: null };
 const KH_GOAL = { team: { F1: 1, F2: 1 }, floor: { F2: 2 }, boss: { F2: 4 } };
 const KH_FLEN = 0.22;
+// 바닥·짐을 바꾸면 당기던 힘은 그대로 두고, 퀘스트에서는 이미 미끄러진 도막만 출발점으로 (바로 다시 비교해 볼 수 있게)
+function khFresh() { KID.ctx.fail = false; KID.ctx.hold = 0; if (!KID.free && Math.abs(S.trk.x - PC.track.x0) > 1e-3) resetTrack(); }
 // 실험대마다 만질 수 있는 기구 (퀘스트가 고른 기구는 강조, 나머지는 은은하게)
 const KH_STATION = { track: ['F2', 'F1', 'block', 'surface'], hang: ['objt', 'obj', 'jack', 'fluid', 'grav'] };
+const KH_DOCK = ['surface', 'block', 'objt', 'obj', 'fluid', 'grav'];   // 도구대 순서
+const KH_LABEL = { surface: ['바닥', 'Surface'], block: ['짐', 'Loads'], objt: ['물체', 'Object'], obj: ['추', 'Weights'], fluid: ['액체', 'Liquid'], grav: ['중력', 'Gravity'] };
 const PLANET_NAME = { earth: ['지구', 'Earth'], mars: ['화성', 'Mars'], moon: ['달', 'Moon'] };
 // 고르기 버튼: 목록·지금 값·그림·이름·바꾸기·붙일 곳·화면 오프셋
 const KH_PICK = {
-  surface: { list: () => SURFS, cur: () => S.surface, pic: (v) => swatch(v), name: (v) => T('surfName')[v], set: (v) => { const L = S.load.tgt; kidTrack(v); setParam('load', L, true); KID.ctx.fail = false; KID.ctx.hold = 0; }, at: () => KID_AT.surface(), off: () => (isPortrait() ? [0, 84] : [-10, -84]) },
-  objt: { list: () => OBJS, cur: () => S.obj, pic: (v) => (v === 'weights' ? ico('weight') : swatch(v === 'al' ? 'al' : 'wood')), name: (v) => T('objName')[v], set: (v) => { setObj(v); if (v === 'weights' && !S.n.tgt) setParam('n', 2); }, at: () => LOOK.obj().clone(), off: [-170, 0] },
-  fluid: { list: () => FLUIDS, cur: () => S.fluid, pic: (v) => `<span class="kfl ${v}"></span>`, name: (v) => T('fluidName')[v], set: (v) => setFluid(v), at: () => HERO.beaker.getWorldPosition(new THREE.Vector3()), off: [210, 10] },
-  grav: { list: () => ['earth', 'mars', 'moon'], cur: () => (PHYS.nearPlanet(S.g.tgt) || {}).id, pic: (v) => (v === 'moon' ? ico('moon') : v === 'mars' ? '<span class="kpl"></span>' : ico('globe')), name: (v) => PLANET_NAME[v][isEn() ? 1 : 0], set: (v) => { setParam('g', PHYS.PLANETS.find((q) => q.id === v).g); S.hv.v += 0.004; }, at: () => LOOK.scale().clone(), off: [-150, 30] },
+  surface: { list: () => SURFS, cur: () => S.surface, pic: (v) => swatch(v), name: (v) => T('surfName')[v], set: (v) => { if (S.surface === v) return; setSurface(v); khFresh(); dirSurface(v); } },
+  objt: { list: () => OBJS, cur: () => S.obj, pic: (v) => (v === 'weights' ? ico('weight') : swatch(v === 'al' ? 'al' : 'wood')), name: (v) => T('objName')[v], set: (v) => { setObj(v); if (v === 'weights' && !S.n.tgt) setParam('n', 2); } },
+  fluid: { list: () => FLUIDS, cur: () => S.fluid, pic: (v) => `<span class="kfl ${v}"></span>`, name: (v) => T('fluidName')[v], set: (v) => setFluid(v) },
+  grav: { list: () => ['earth', 'mars', 'moon'], cur: () => (PHYS.nearPlanet(S.g.tgt) || {}).id, pic: (v) => (v === 'moon' ? ico('moon') : v === 'mars' ? '<span class="kpl"></span>' : ico('globe')), name: (v) => PLANET_NAME[v][isEn() ? 1 : 0], set: (v) => { setParam('g', PHYS.PLANETS.find((q) => q.id === v).g); S.hv.v += 0.004; } },
 };   // 힘 레일 길이 (m, 장면 속)
 const khRailPx = () => clamp(innerWidth * 0.2, 120, 270);
 function khScreenEnds(k) {
   const R = KH_RAIL[k]; let [a, b] = R.ends().map(khProj); if (k === 'jack') return [a, b];
-  const dx = b.x - a.x, dy = b.y - a.y, l = Math.hypot(dx, dy) || 1, L = khRailPx(), P = 40;   // 끌개에서 화면상 40px 떨어져 시작 (두 손잡이가 겹치지 않게)
+  const dx = b.x - a.x, dy = b.y - a.y, l = Math.hypot(dx, dy) || 1, P = isPortrait() ? 58 : 40, M = 44;   // 끌개에서 화면상 P px 떨어져 시작 (두 손잡이가 겹치지 않게)
   a = { x: a.x + dx / l * P, y: a.y + dy / l * P };
-  const b2 = { x: a.x + dx / l * L, y: a.y + dy / l * L }, M = 44;   // 화면 밖으로 나가지 않게 밀어 넣기
+  // 레일 길이: 화면 가장자리까지 남은 자리에 맞춘다 (좁은 화면에서 밀려 들어와 손잡이끼리 겹치지 않게)
+  const room = dx > 0 ? innerWidth - M - a.x : a.x - M, L = clamp(Math.min(khRailPx(), room * l / Math.abs(dx || 1)), 84, 270);
+  const b2 = { x: a.x + dx / l * L, y: a.y + dy / l * L };   // 그래도 모자라면 화면 안으로 밀어 넣기
   const lo = Math.min(a.x, b2.x), hi = Math.max(a.x, b2.x), sh = lo < M ? M - lo : hi > innerWidth - M ? innerWidth - M - hi : 0;
   return [{ x: a.x + sh, y: a.y }, { x: b2.x + sh, y: b2.y }];
 }
@@ -34,7 +41,7 @@ const KH_RAIL = {
   F2: { max: () => PC.trackMax, get: () => S.F2.tgt / PC.trackMax, set: (t) => setParam('F2', Math.round(t * PC.trackMax * 2) / 2), ends: () => khForceEnds('F2') },
   jack: {
     get: () => (S.jack.tgt - PC.jack.min) / (PC.jack.max - PC.jack.min), set: (t) => setParam('jack', PC.jack.min + t * (PC.jack.max - PC.jack.min)),
-    ends: () => { const p = HERO.beaker.getWorldPosition(new THREE.Vector3()).add(V3(PC.beaker.R + 0.09, PC.beaker.height + 0.02, 0.05)); return [p.clone().setY(p.y - (S.jack.cur - PC.jack.min)), p.clone().setY(p.y + (PC.jack.max - S.jack.cur))]; },
+    ends: () => { const p = HERO.beaker.getWorldPosition(new THREE.Vector3()).add(V3(PC.beaker.R + (isPortrait() ? 0.15 : 0.09), PC.beaker.height + 0.02, 0.05)); return [p.clone().setY(p.y - (S.jack.cur - PC.jack.min)), p.clone().setY(p.y + (PC.jack.max - S.jack.cur))]; },
   },
 };
 function khForceEnds(k) {
@@ -45,13 +52,16 @@ function khForceEnds(k) {
 
 function khBuild() {
   if (!KH.el) { KH.el = document.createElement('div'); KH.el.id = 'khandles'; document.body.appendChild(KH.el); }
-  KH.el.innerHTML = ''; KH.items = []; KH.drag = null;
+  KH.el.innerHTML = '<div id="khdock"></div><div class="khpin"><span class="khpr"></span><span class="khpi"></span><b></b></div>'; KH.items = []; KH.drag = null;
+  KH.dock = KH.el.firstChild; KH.pin = KH.el.lastChild; KH.dockY = null;
   const m = KID.missions[KID.i];
   if (S.mode !== 'kid') return;
   const free = KID.free;
   if (!free && (!m || m.quiz || m.shot === 'hero')) return;
   const goal = free ? {} : KH_GOAL[m.id] || {}, focus = free ? [] : m.allow || [];
-  for (const k of [...new Set([...focus, ...(KH_STATION[S.station] || [])])]) {
+  const keys = [...new Set([...focus, ...(KH_STATION[S.station] || [])])];
+  keys.sort((a, b) => KH_DOCK.indexOf(a) - KH_DOCK.indexOf(b));
+  for (const k of keys) {
     let el;
     if (KH_RAIL[k]) {
       const R = KH_RAIL[k], force = k !== 'jack';
@@ -70,22 +80,22 @@ function khBuild() {
     } else if (KH_PICK[k]) {
       const P = KH_PICK[k];
       el = document.createElement('div'); el.className = 'kh khpick';
-      el.innerHTML = P.list().map((v) => `<button data-s="${v}">${P.pic(v)}<span>${P.name(v)}</span></button>`).join('');
+      el.innerHTML = `<span class="khl">${KH_LABEL[k][isEn() ? 1 : 0]}</span><div class="khb">${P.list().map((v) => `<button data-s="${v}">${P.pic(v)}<span>${P.name(v)}</span></button>`).join('')}</div>`;
       el.querySelectorAll('button').forEach((b) => (b.onclick = () => {
         if (!KID.allows(k)) return; KID.acted(); ensureAudio(); P.set(b.dataset.s); sfx('click'); KID.update(true);
       }));
     } else if (k === 'block' || k === 'obj') {
       el = document.createElement('div'); el.className = `kh khstep ${k}`;
-      el.innerHTML = `<button data-d="-1" aria-label="-">${ico('minus')}</button><span class="khcount"></span><button data-d="1" aria-label="+">${ico('plus')}</button>`;
+      el.innerHTML = `<span class="khl">${KH_LABEL[k][isEn() ? 1 : 0]}</span><div class="khb"><button data-d="-1" aria-label="-">${ico('minus')}</button><span class="khcount"></span><button data-d="1" aria-label="+">${ico('plus')}</button></div>`;
       el.querySelectorAll('button').forEach((b) => (b.onclick = () => {
         if (!KID.allows(k)) return; KID.acted(); ensureAudio(); const d = +b.dataset.d;
-        if (k === 'block') { const L = clamp(S.load.tgt + d, 0, PC.loadMax); kidDesign(S.surface); setParam('load', L, true); }
+        if (k === 'block') { const L = clamp(S.load.tgt + d, 0, PC.loadMax); if (L === S.load.tgt) return; setParam('load', L, true); khFresh(); dirLoad(d); }
         else { setParam('n', clamp(S.n.tgt + d, 0, PC.nMax)); S.hv.v -= 0.05 * d; }
         sfx('click'); KID.update(true);
       }));
     } else continue;
     if (!free && !focus.includes(k)) el.classList.add('sub');
-    el.dataset.k = k; KH.el.appendChild(el); KH.items.push({ k, el });
+    el.dataset.k = k; (KH_RAIL[k] ? KH.el : KH.dock).appendChild(el); KH.items.push({ k, el });
   }
 }
 function khMove(e) {
@@ -105,6 +115,13 @@ function khFrame() {
   KH.el.classList.toggle('fresh', !KID.ctx.acted);
   // 점진적 공개: 퀘스트에서는 첫 조작 뒤에 다른 기구가 나타나고, 결정적 순간에는 화면을 비운다
   KH.el.classList.toggle('calm', !KID.free && (!KID.ctx.acted || !!DIR.slow));
+  KH.el.classList.toggle('hush', !!DIR.slow);
+  // 도구대: 아래 계기판(또는 성공 띠) 바로 위에 고정
+  const fo = [...document.querySelectorAll('#kid .kwin.on .kbox, #kid .kfoot')].map((e) => e.getBoundingClientRect()).find((r) => r.height > 0);
+  const dy = Math.round((fo ? fo.top : innerHeight - 24) - 10);
+  if (dy !== KH.dockY) { KH.dockY = dy; KH.dock.style.top = `${dy}px`; }
+  KH.dock.classList.toggle('none', !KH.dock.children.length || (KH.el.classList.contains('calm') && !KH.dock.querySelector('.kh:not(.sub)')));
+  khPin();
   for (const { k, el } of KH.items) {
     if (KH_RAIL[k]) {
       const R = KH_RAIL[k], D = KH.drag && KH.drag.k === k ? KH.drag : null;
@@ -123,9 +140,8 @@ function khFrame() {
       else { const f = k === 'F1' ? S.F1.tgt : S.F2.tgt; val.textContent = `${n1(f)} N`; }
       val.style.cssText = `left:${kx}px;top:${ky}px`;
     } else {
-      const P = KH_PICK[k], p = khProj(P ? P.at() : k === 'block' ? KID_AT.block() : LOOK.obj().clone());
-      const off = P ? (typeof P.off === 'function' ? P.off() : P.off) : k === 'block' ? [0, -86] : [118, 0];
-      el.style.cssText = `left:${p.x + off[0]}px;top:${p.y + off[1]}px${k === 'obj' && S.obj !== 'weights' ? ';display:none' : ''}`;
+      const P = KH_PICK[k], hid = k === 'obj' && S.obj !== 'weights';
+      if (el._hid !== hid) { el._hid = hid; el.style.display = hid ? 'none' : ''; }
       if (P) { const cur = P.cur(); el.querySelectorAll('button').forEach((b) => b.classList.toggle('on', b.dataset.s === cur)); }
       else {
         const n = k === 'block' ? S.load.tgt : S.n.tgt, mx = k === 'block' ? PC.loadMax : PC.nMax, ic = ico(k === 'block' ? 'box' : 'weight');
@@ -133,5 +149,21 @@ function khFrame() {
         el.querySelector('[data-d="-1"]').disabled = n <= 0; el.querySelector('[data-d="1"]').disabled = n >= mx;
       }
     }
+  }
+}
+
+// 줄다리기 고정 핀: 도막 위 자물쇠 → 손을 떼면 고리가 차오르고 → 풀림
+const KH_PIN_T = 1.3;   // 손을 뗀 뒤 핀이 풀리기까지 (초)
+function khPin() {
+  const el = KH.pin, c = KID.ctx, now = DIR.t;
+  const show = S.station === 'track' && (S.pin || (c.freeT && now - c.freeT < 0.9));
+  el.classList.toggle('on', !!show); if (!show) return;
+  const p = khProj(KID_AT.block()), arm = S.pin && c.armT != null ? clamp((now - c.armT) / KH_PIN_T, 0, 1) : S.pin ? 0 : 1;
+  el.style.cssText = `left:${p.x}px;top:${p.y - 74}px;--p:${arm}`;
+  const st = S.pin ? (arm > 0 ? 'arm' : 'lock') : 'go';
+  if (el._st !== st) {
+    el._st = st; el.className = `khpin on ${st}`;
+    el.querySelector('.khpi').innerHTML = ico(st === 'go' ? 'unlock' : 'lock');
+    el.querySelector('b').textContent = st === 'go' ? L2('출발!', 'Go!') : st === 'arm' ? L2('손을 떼고 기다려요', 'Hands off…') : L2('고정', 'Locked');
   }
 }

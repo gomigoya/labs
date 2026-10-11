@@ -786,6 +786,64 @@ body.kid.kslow #kslow{opacity:1;transform:none}
   #kid .kstations{grid-template-columns:1fr}
   #ktc .t{font-size:30px}
 }
+/* ===== 도구대: 고르기·덧셈 버튼은 장면 아래 한 줄로 고정 (누르는 동안 자리가 바뀌지 않는다) ===== */
+#kcall{z-index:13}
+/* 쉬운 모드 힘 이름표: 읽기 쉬운 글꼴, 결정적 순간(슬로 모션·해설)에는 비켜 준다 */
+body.kid .lbl.force{padding:4px 10px 4px 8px;gap:6px;font:600 12px/1.2 var(--kfont);letter-spacing:0;background:rgba(12,14,22,.78);border-color:rgba(255,255,255,.14)}
+body.kid .lbl.force b{font-weight:700}
+body.kid .lbl.force span{font:700 12px/1 var(--knum);color:#fff}
+body.kid .lbl.force i{width:8px;height:8px}
+body.kid.kslow #labels{opacity:0}
+#kid .kfoot{width:min(1000px,calc(100vw - 32px))}
+#khdock{position:fixed;left:50%;transform:translate(-50%,-100%);display:flex;align-items:stretch;gap:0;padding:6px 4px;max-width:calc(100vw - 24px);overflow-x:auto;scrollbar-width:none;background:rgba(255,255,255,.97);border:1px solid var(--kline);border-radius:18px;box-shadow:0 16px 36px -14px rgba(0,0,0,.65);pointer-events:auto;transition:opacity .35s}
+#khdock::-webkit-scrollbar{display:none}
+#khdock.none{opacity:0;pointer-events:none}
+#khandles.hush #khdock{opacity:.35}
+#khdock .kh{position:static;transform:none;display:flex;flex-direction:column;align-items:center;gap:3px;padding:0 10px;background:none;border:0;border-radius:0;box-shadow:none;flex:none}
+#khdock .kh+.kh{border-left:1px solid var(--kline)}
+#khdock .khl{font:700 11px/1 var(--kfont);letter-spacing:.06em;color:var(--ksub)}
+#khdock .khb{display:flex;align-items:center;gap:3px}
+#khdock .khpick button{min-width:54px;padding:6px 5px 5px}
+#khdock .khstep .khb{height:100%;min-height:52px}
+#khdock .khcount{display:flex;align-items:center;gap:5px;min-width:44px;justify-content:center;font:700 18px/1 var(--knum);color:var(--ktx)}
+#khdock .khcount .ki{font-size:18px;color:var(--ksub)}
+#khandles.calm #khdock .kh.sub{display:none}
+#khdock .kh.sub{opacity:.72}
+#khdock .kh.sub:hover{opacity:1}
+#khandles.fresh #khdock .khpick,#khandles.fresh #khdock .khstep{animation:none}
+#khandles.fresh #khdock .kh:not(.sub) .khb{border-radius:12px;animation:khglow 1.6s ease-in-out infinite}
+/* 줄다리기 고정 핀 */
+.khpin{position:absolute;display:none;align-items:center;gap:8px;padding:6px 12px 6px 6px;transform:translate(-50%,-100%);border-radius:999px;background:rgba(12,14,22,.86);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.14);color:#fff;font-family:var(--kfont);white-space:nowrap;pointer-events:none;box-shadow:0 10px 26px -8px rgba(0,0,0,.6)}
+.khpin.on{display:flex}
+.khpin .khpr{position:relative;display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:conic-gradient(#a5b4fc calc(var(--p,0)*360deg),rgba(255,255,255,.14) 0)}
+.khpin .khpi{position:absolute;left:6px;top:6px;display:grid;place-items:center;width:30px;height:30px;font-size:15px}
+.khpin .khpr::after{content:"";position:absolute;inset:3px;border-radius:50%;background:#151827}
+.khpin .khpi{z-index:1}
+.khpin b{font:700 13px/1 var(--kfont)}
+.khpin.go{background:rgba(79,70,229,.92);animation:khgo .9s ease forwards}
+.khpin.go .khpr{background:#fff}
+.khpin.go .khpr::after{background:var(--kacc)}
+@keyframes khgo{0%{transform:translate(-50%,-100%) scale(1)}25%{transform:translate(-50%,-100%) scale(1.12)}70%{opacity:1}100%{opacity:0;transform:translate(-50%,-130%) scale(.96)}}
+/* 단계 그림: 장면 속 손잡이와 같은 모양 + 방향 낱말 */
+#kid .kso.knob{border-radius:50%;background:#fff;box-shadow:inset 0 0 0 2.5px var(--kacc);color:var(--kacc);font-size:15px}
+#kid .kstep .ksw2{font:600 12.5px/1 var(--kfont);color:var(--ksub)}
+/* 자유 실험실 카드: 작게 */
+#kid .kban.kfree{min-width:0;padding:10px 12px}
+#kid .kban.kfree .keye{margin:0 0 8px 2px}
+#kid .kfree .kstations{margin-top:0;grid-template-columns:1fr 1fr}
+#kid .kfree .kstations button{padding:7px 12px 7px 8px;gap:8px}
+#kid .kfree .kstations .kso{width:30px;height:30px;font-size:17px}
+#kid .kfree .kstations b{font-size:14px}
+@media (max-width:980px){
+  #kid .kfree .kstations{grid-template-columns:1fr 1fr}
+  #kid .kfree .kstations small{display:none}
+  #khdock{width:calc(100vw - 24px);padding:6px 4px;border-radius:16px;flex-wrap:wrap;justify-content:center;row-gap:8px;overflow:visible}
+  #khdock .kh+.kh{border-left:0}
+  #khdock .kh{padding:0 6px}
+  #khdock .khpick button{min-width:46px;padding:5px 3px 4px;font-size:10.5px}
+  #khdock .khpick .ksw,#khdock .khpick .kfl,#khdock .khpick .kpl{width:22px;height:22px}
+  #khdock .khstep button{width:32px;height:32px}
+}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 <script type="importmap">
@@ -2268,14 +2326,16 @@ const SHOTS_VERTICAL = [
 const SHOT_IDX = { hero: 0, hang: 1, beaker: 2, track: 3, top: 4, console: 5 };
 const isPortrait = () => innerWidth / innerHeight < 0.9;
 const heroShot = () => (isPortrait() ? SHOTS_VERTICAL[0] : SHOTS[0]);
-const KID_SHOTS = { track: { pos: V3(0.45, 2.3, 1.62), tgt: V3(0.45, 0.99, 0.08), fov: 40 }, hang: { pos: V3(-0.64, 1.68, 1.66), tgt: V3(-1.1, 1.34, -0.2), fov: 38 }, hero: { pos: V3(0.3, 2.6, 3.3), tgt: V3(0.1, 1.05, -0.1), fov: 42 } };
+const KID_SHOTS = { track: { pos: V3(0.45, 2.3, 1.62), tgt: V3(0.45, 0.99, 0.08), fov: 40 }, hang: { pos: V3(-0.64, 1.58, 1.66), tgt: V3(-1.1, 1.24, -0.2), fov: 38 }, hero: { pos: V3(0.3, 2.6, 3.3), tgt: V3(0.1, 1.05, -0.1), fov: 42 } };
 // 쉬운 모드: 퀘스트 카드가 화면 일부를 덮으므로 화면 중심을 카드 바깥 빈 곳으로 옮긴다
 // (넓은 화면은 카드 오른쪽, 좁은 화면은 위쪽 진행 지도와 아래 카드 사이)
+// 쉬운 모드: 위(퀘스트 카드)와 아래(도구대·계기판) 사이 빈 띠에 장면을 맞춘다 (KVIEW: 68-director.js가 매 프레임 갱신)
+const KVIEW = { d: null, z: 1 };
 function applyViewOffset() {
-  const W = innerWidth, H = innerHeight, L = document.getElementById('left'), kid = S.mode === 'kid';
-  const dx = 0, dy = kid ? Math.min(60, H * 0.06) : 0;   // 쉬운 모드: 위 안내 띠만큼 장면을 살짝 아래로
-  if (dx > 0) { camera.aspect = (W + 2 * dx) / H; camera.setViewOffset(W + 2 * dx, H, 0, 0, W, H); }
-  else if (dy > 0) { camera.aspect = W / (H + 2 * dy); camera.setViewOffset(W, H + 2 * dy, 0, 0, W, H); }
+  const W = innerWidth, H = innerHeight, kid = S.mode === 'kid';
+  const d = kid ? (KVIEW.d ?? Math.min(60, H * 0.06)) : 0, a = Math.abs(d);
+  camera.zoom = kid ? KVIEW.z : 1;
+  if (a > 0.5) { camera.aspect = W / (H + 2 * a); camera.setViewOffset(W, H + 2 * a, 0, d < 0 ? 2 * a : 0, W, H); }
   else { camera.aspect = W / H; camera.clearViewOffset(); }
   camera.updateProjectionMatrix();
 }
@@ -3176,6 +3236,7 @@ function quokka(mood = '') {
 const ICON = {
   speaker: '<path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/>',
   mute: '<path d="M11 5 6 9H3v6h3l5 4z"/><path d="m16 9 5 6M21 9l-5 6"/>',
+  lock: '<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>', unlock: '<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 7.6-1.8"/>',
   arrowR: '<path d="M5 12h14M13 6l6 6-6 6"/>', arrowL: '<path d="M19 12H5M11 6l-6 6 6 6"/>',
   arrowU: '<path d="M12 19V5M6 11l6-6 6 6"/>', arrowD: '<path d="M12 5v14M6 13l6 6 6-6"/>',
   hold: '<path d="M2.5 12h4M21.5 12h-4M5 9l3 3-3 3M19 9l-3 3 3 3"/><rect x="9.5" y="8" width="5" height="8" rx="1"/>',
@@ -3220,7 +3281,8 @@ function kidSteps(m) {
   const hs = m.hint || [];
   return hs.map(([k, g, dx, dy], i) => {
     const o = STEP_OBJ[k] || 'tap', a = g === 'drag' ? (dx > 0 ? 'R' : dx < 0 ? 'L' : dy < 0 ? 'U' : 'D') : 'tap';
-    return `<span class="kstep">${hs.length > 1 ? `<em>${i + 1}</em>` : ''}<span class="kso${o === 'puller' ? ' pull' : ''}">${o === 'swatch' ? swatch('sand') : ico(o)}</span><span class="ksa ${a}">${ico(a === 'tap' ? 'tap' : 'arrow' + a)}</span></span>`;
+    const word = { R: L2('오른쪽으로', 'right'), L: L2('왼쪽으로', 'left'), U: L2('위로', 'up'), D: L2('아래로', 'down'), tap: L2('누르기', 'tap') }[a];
+    return `<span class="kstep">${hs.length > 1 ? `<em>${i + 1}</em>` : ''}<span class="kso${o === 'puller' ? ' knob' : ''}">${o === 'puller' ? ico('grip') : o === 'swatch' ? swatch('sand') : ico(o)}</span><span class="ksa ${a}">${ico(a === 'tap' ? 'tap' : 'arrow' + a)}</span><span class="ksw2">${word}</span></span>`;
   }).join('');
 }
 // 읽어 주기 (글을 못 읽는 아이도 OK)
@@ -3254,10 +3316,20 @@ const KID = {
       hint: [['F1', 'drag', -1, 0], ['F2', 'drag', 1, 0]],
       t: { ko: ['줄다리기 무승부', '왼쪽 끌개는 <b>왼쪽으로</b>, 오른쪽 끌개는 <b>오른쪽으로</b> 끌어서 두 힘을 <b>똑같이</b> 맞춰 보세요. 도막이 안 움직이면 성공!'], en: ['Tug-of-war tie', 'Drag the left puller <b>left</b> and the right one <b>right</b> until both pulls are <b>equal</b>. If the block stays put, you win!'] },
       pred: PRED(['양쪽에서 똑같은 힘으로 당기면 도막은?', ['← 왼쪽으로 가요', '그대로 있어요', '오른쪽으로 가요 →']], ['If both sides pull equally, the block…', ['← goes left', 'stays put', 'goes right →']], 1),
-      enter() { kidTrack('glass'); },
-      reset() { setParam('F1', 0); setParam('F2', 0); resetTrack(); },
+      enter() { kidTrack('glass'); S.pin = true; },
+      reset() { setParam('F1', 0); setParam('F2', 0); resetTrack(); S.pin = true; KID.ctx.armT = KID.ctx.freeT = null; },
+      // 마우스로는 손잡이를 하나씩만 잡을 수 있다 → 양쪽을 다 맞출 때까지 도막을 핀으로 잡아 두고, 손을 떼면 잠시 뒤 풀어 준다
+      tick() {
+        const c = KID.ctx, now = DIR.t;
+        if (DRAG.kind || S.F1.tgt < 1 || S.F2.tgt < 1) {
+          if (!S.pin) { S.pin = true; resetTrack(); sfx('click'); }
+          if (DRAG.kind && Math.abs(S.trk.x - PC.track.x0) > 1e-4) resetTrack();
+          c.armT = c.freeT = null; return;
+        }
+        if (S.pin) { if (c.armT == null) c.armT = now; if (now - c.armT >= KH_PIN_T) { S.pin = false; c.freeT = now; sfx('pop'); DIR.punch = Math.max(DIR.punch, 0.05); } }
+      },
       meter: tug,
-      check: () => S.F1.tgt >= 1 && S.F1.tgt === S.F2.tgt && S.trk.v === 0 && !S.same, card: 'net',
+      check: () => S.F1.tgt >= 1 && S.F1.tgt === S.F2.tgt && S.trk.v === 0 && !S.same && !S.pin && KID.ctx.freeT != null && DIR.t - KID.ctx.freeT > 1.1, card: 'net',
       win: () => L2(`양쪽이 똑같이 ${n1(S.F1.tgt)} N씩 당겨서 힘이 <b>비겼어요</b>(힘의 평형). <b style="color:#fde68a">노란 ‘모두 합친 힘’</b> 화살표가 사라지고 도막은 그대로예요.`, `Both sides pull ${n1(S.F1.tgt)} N, so the forces <b>cancel out</b>. The <b style="color:#fde68a">yellow “all together”</b> arrow disappears and the block stays put.`),
     },
     {
@@ -3363,7 +3435,7 @@ const KID = {
   max() { return this.missions.length * 100 + this.missions.filter((m) => m.pred).length * 50 + KID_QUIZ.length * 50; },
   go(i) {
     if (i >= this.missions.length) { this.i = this.missions.length; this.render(); this.burst(90); sfx('win'); return; }
-    this.free = false; this.i = Math.max(0, i); this.ctx = {}; this.passed = false; this.showWin = false;
+    this.free = false; this.i = Math.max(0, i); this.ctx = {}; this.passed = false; this.showWin = false; S.pin = false; dirTeleReset();
     const m = this.missions[this.i];
     S.overlays.K = false; UI.syncButtons();
     m.enter && m.enter();
@@ -3430,15 +3502,16 @@ const KID = {
   setFree(on) {
     if (on === this.free) return;
     if (!on) { this.go(Math.min(Math.max(this.i, 0), this.missions.length - 1)); return; }
-    this.free = true; this.passed = false; this.showWin = false; this.ctx = {};
+    this.free = true; this.passed = false; this.showWin = false; this.ctx = {}; S.pin = false; dirTeleReset();
     if (S.station !== 'track' && S.station !== 'hang') setStation('track', false);
+    if (S.station === 'track') { const L = S.load.tgt; kidTrack(S.surface); setParam('load', L, true); }
     S.playing = true; S.speed = 1; S.overlays.F = true; S.overlays.L = true;
     CAM.cine = false; dirReveal(stationShot(S.station)); sfx('whoosh');
     this.render();
   },
   freeStation(st) {
     if (st === 'track') { if (S.station !== 'track') kidTrack(S.surface); } else if (S.station !== 'hang') kidHang(S.obj, S.obj === 'weights' ? Math.max(1, S.n.tgt) : 0);
-    dirReveal(stationShot(st)); sfx('whoosh'); this.render();
+    dirTeleReset(); dirReveal(stationShot(st)); sfx('whoosh'); this.render();
   },
   freeMeter() {
     const sep = '<span class="keq">·</span>';
@@ -3449,7 +3522,7 @@ const KID = {
   renderFree() {
     const box = document.getElementById('kid'), st = S.station;
     const btn = (k, ic, t, sub) => `<button data-st="${k}" class="${st === k ? 'on' : ''}"><span class="kso">${ico(ic)}</span><span><b>${t}</b><small>${sub}</small></span></button>`;
-    box.innerHTML = `<div class="kban kfree"><div class="kbtxt"><div class="keye">${L2('자유 실험실', 'Free lab')}</div><div class="ktitle">${L2('기구를 마음대로 바꿔 보세요', 'Change anything you like')}</div>
+    box.innerHTML = `<div class="kban kfree"><div class="kbtxt"><div class="keye">${L2('자유 실험실', 'Free lab')}<i></i>${L2('무엇이든 바꿔 보세요', 'Change anything')}</div>
       <div class="kstations">${btn('track', 'box', L2('끌기대', 'Pulling track'), L2('힘의 평형 · 마찰력 · 운동', 'Balance · friction · motion'))}${btn('hang', 'weight', L2('용수철과 물', 'Spring & water'), L2('무게 · 탄성력 · 부력', 'Weight · spring · buoyancy'))}</div></div></div>
       <div class="kfoot"><div class="krow"><div class="kmeterbox"></div><canvas class="ktele"></canvas><button class="kreset">${ico('reset')}<span>${L2('처음으로', 'Reset')}</span></button></div></div>`;
     box.querySelectorAll('[data-st]').forEach((b) => (b.onclick = () => this.freeStation(b.dataset.st)));
@@ -3826,9 +3899,9 @@ function buildThemes() {
 function themeMode(on) {
   THEME.on = on;
   if (on) {
-    ROOM.visible = false; LIGHTS.room.forEach((l) => (l.visible = false)); LIGHTS.studio.visible = true; LIGHTS.studio.children[0].intensity = 22; STUDIO.visible = true; STUDIO.children[0].visible = false;
+    ROOM.visible = false; LIGHTS.room.forEach((l) => (l.visible = false)); LIGHTS.studio.visible = true; LIGHTS.studio.children[0].intensity = 22; LIGHTS.studio.children[3].intensity = 3;   /* 뒤 조명이 반들한 실험대에 비쳐 생기는 흰 얼룩을 줄인다 */ STUDIO.visible = true; STUDIO.children[0].visible = false;
     scene.background = new THREE.Color(0x111111); scene.fog = null; scene.environmentIntensity = 0.3; THEME.mesh.visible = true;
-  } else { THEME.mesh.visible = false; LIGHTS.studio.children[0].intensity = 40; STUDIO.children[0].visible = true; const fm = STUDIO.children[1].material; fm.map = null; fm.color.setHex(0x141210); fm.needsUpdate = true; setView(S.view); }
+  } else { THEME.mesh.visible = false; LIGHTS.studio.children[0].intensity = 40; LIGHTS.studio.children[3].intensity = 30; STUDIO.children[0].visible = true; const fm = STUDIO.children[1].material; fm.map = null; fm.color.setHex(0x141210); fm.needsUpdate = true; setView(S.view); }
   // 쉬운 모드에서는 콘솔 앞면 계기(다이얼·화면·슬라이더·램프)를 숨긴다: 아이는 실험 기구를 직접 만진다
   const C = CONSOLE; [C.dialG, C.dialJ, C.sF1, C.sF2, C.button, C.screenA, C.screenB].forEach((q) => q && q.group && (q.group.visible = !on));
   Object.values(C.lamps || {}).forEach((l) => l && l.mesh && (l.mesh.visible = !on));
@@ -3860,26 +3933,33 @@ function updateTheme(dt) {
 // 기구 바로 옆에 크고 눈에 보이는 손잡이를 붙인다 (3D 물체를 정확히 맞혀 잡지 않아도 된다)
 //  · 끌개(F1·F2): 줄 끝 손잡이를 레일 따라 끌면 그만큼 센 힘 (눈금 0~6 N, 목표 깃발)
 //  · 비커(jack): 위아래 레일
-//  · 바닥(surface): 재질 버튼 3개 / 짐(block)·추(obj): ➖ ➕
+//  · 바닥·물체·액체·중력 고르기, 짐·추 ➖ ➕ 는 장면 아래 고정된 '도구대'에 (누르는 동안 움직이지 않게)
+//  · 줄다리기: 양쪽을 다 맞추고 손을 떼면 '고정 핀'이 잠시 뒤 풀린다 (마우스는 한 번에 손잡이 하나만 잡을 수 있으므로)
 const KH = { el: null, items: [], drag: null };
 const KH_GOAL = { team: { F1: 1, F2: 1 }, floor: { F2: 2 }, boss: { F2: 4 } };
 const KH_FLEN = 0.22;
+// 바닥·짐을 바꾸면 당기던 힘은 그대로 두고, 퀘스트에서는 이미 미끄러진 도막만 출발점으로 (바로 다시 비교해 볼 수 있게)
+function khFresh() { KID.ctx.fail = false; KID.ctx.hold = 0; if (!KID.free && Math.abs(S.trk.x - PC.track.x0) > 1e-3) resetTrack(); }
 // 실험대마다 만질 수 있는 기구 (퀘스트가 고른 기구는 강조, 나머지는 은은하게)
 const KH_STATION = { track: ['F2', 'F1', 'block', 'surface'], hang: ['objt', 'obj', 'jack', 'fluid', 'grav'] };
+const KH_DOCK = ['surface', 'block', 'objt', 'obj', 'fluid', 'grav'];   // 도구대 순서
+const KH_LABEL = { surface: ['바닥', 'Surface'], block: ['짐', 'Loads'], objt: ['물체', 'Object'], obj: ['추', 'Weights'], fluid: ['액체', 'Liquid'], grav: ['중력', 'Gravity'] };
 const PLANET_NAME = { earth: ['지구', 'Earth'], mars: ['화성', 'Mars'], moon: ['달', 'Moon'] };
 // 고르기 버튼: 목록·지금 값·그림·이름·바꾸기·붙일 곳·화면 오프셋
 const KH_PICK = {
-  surface: { list: () => SURFS, cur: () => S.surface, pic: (v) => swatch(v), name: (v) => T('surfName')[v], set: (v) => { const L = S.load.tgt; kidTrack(v); setParam('load', L, true); KID.ctx.fail = false; KID.ctx.hold = 0; }, at: () => KID_AT.surface(), off: () => (isPortrait() ? [0, 84] : [-10, -84]) },
-  objt: { list: () => OBJS, cur: () => S.obj, pic: (v) => (v === 'weights' ? ico('weight') : swatch(v === 'al' ? 'al' : 'wood')), name: (v) => T('objName')[v], set: (v) => { setObj(v); if (v === 'weights' && !S.n.tgt) setParam('n', 2); }, at: () => LOOK.obj().clone(), off: [-170, 0] },
-  fluid: { list: () => FLUIDS, cur: () => S.fluid, pic: (v) => `<span class="kfl ${v}"></span>`, name: (v) => T('fluidName')[v], set: (v) => setFluid(v), at: () => HERO.beaker.getWorldPosition(new THREE.Vector3()), off: [210, 10] },
-  grav: { list: () => ['earth', 'mars', 'moon'], cur: () => (PHYS.nearPlanet(S.g.tgt) || {}).id, pic: (v) => (v === 'moon' ? ico('moon') : v === 'mars' ? '<span class="kpl"></span>' : ico('globe')), name: (v) => PLANET_NAME[v][isEn() ? 1 : 0], set: (v) => { setParam('g', PHYS.PLANETS.find((q) => q.id === v).g); S.hv.v += 0.004; }, at: () => LOOK.scale().clone(), off: [-150, 30] },
+  surface: { list: () => SURFS, cur: () => S.surface, pic: (v) => swatch(v), name: (v) => T('surfName')[v], set: (v) => { if (S.surface === v) return; setSurface(v); khFresh(); dirSurface(v); } },
+  objt: { list: () => OBJS, cur: () => S.obj, pic: (v) => (v === 'weights' ? ico('weight') : swatch(v === 'al' ? 'al' : 'wood')), name: (v) => T('objName')[v], set: (v) => { setObj(v); if (v === 'weights' && !S.n.tgt) setParam('n', 2); } },
+  fluid: { list: () => FLUIDS, cur: () => S.fluid, pic: (v) => `<span class="kfl ${v}"></span>`, name: (v) => T('fluidName')[v], set: (v) => setFluid(v) },
+  grav: { list: () => ['earth', 'mars', 'moon'], cur: () => (PHYS.nearPlanet(S.g.tgt) || {}).id, pic: (v) => (v === 'moon' ? ico('moon') : v === 'mars' ? '<span class="kpl"></span>' : ico('globe')), name: (v) => PLANET_NAME[v][isEn() ? 1 : 0], set: (v) => { setParam('g', PHYS.PLANETS.find((q) => q.id === v).g); S.hv.v += 0.004; } },
 };   // 힘 레일 길이 (m, 장면 속)
 const khRailPx = () => clamp(innerWidth * 0.2, 120, 270);
 function khScreenEnds(k) {
   const R = KH_RAIL[k]; let [a, b] = R.ends().map(khProj); if (k === 'jack') return [a, b];
-  const dx = b.x - a.x, dy = b.y - a.y, l = Math.hypot(dx, dy) || 1, L = khRailPx(), P = 40;   // 끌개에서 화면상 40px 떨어져 시작 (두 손잡이가 겹치지 않게)
+  const dx = b.x - a.x, dy = b.y - a.y, l = Math.hypot(dx, dy) || 1, P = isPortrait() ? 58 : 40, M = 44;   // 끌개에서 화면상 P px 떨어져 시작 (두 손잡이가 겹치지 않게)
   a = { x: a.x + dx / l * P, y: a.y + dy / l * P };
-  const b2 = { x: a.x + dx / l * L, y: a.y + dy / l * L }, M = 44;   // 화면 밖으로 나가지 않게 밀어 넣기
+  // 레일 길이: 화면 가장자리까지 남은 자리에 맞춘다 (좁은 화면에서 밀려 들어와 손잡이끼리 겹치지 않게)
+  const room = dx > 0 ? innerWidth - M - a.x : a.x - M, L = clamp(Math.min(khRailPx(), room * l / Math.abs(dx || 1)), 84, 270);
+  const b2 = { x: a.x + dx / l * L, y: a.y + dy / l * L };   // 그래도 모자라면 화면 안으로 밀어 넣기
   const lo = Math.min(a.x, b2.x), hi = Math.max(a.x, b2.x), sh = lo < M ? M - lo : hi > innerWidth - M ? innerWidth - M - hi : 0;
   return [{ x: a.x + sh, y: a.y }, { x: b2.x + sh, y: b2.y }];
 }
@@ -3892,7 +3972,7 @@ const KH_RAIL = {
   F2: { max: () => PC.trackMax, get: () => S.F2.tgt / PC.trackMax, set: (t) => setParam('F2', Math.round(t * PC.trackMax * 2) / 2), ends: () => khForceEnds('F2') },
   jack: {
     get: () => (S.jack.tgt - PC.jack.min) / (PC.jack.max - PC.jack.min), set: (t) => setParam('jack', PC.jack.min + t * (PC.jack.max - PC.jack.min)),
-    ends: () => { const p = HERO.beaker.getWorldPosition(new THREE.Vector3()).add(V3(PC.beaker.R + 0.09, PC.beaker.height + 0.02, 0.05)); return [p.clone().setY(p.y - (S.jack.cur - PC.jack.min)), p.clone().setY(p.y + (PC.jack.max - S.jack.cur))]; },
+    ends: () => { const p = HERO.beaker.getWorldPosition(new THREE.Vector3()).add(V3(PC.beaker.R + (isPortrait() ? 0.15 : 0.09), PC.beaker.height + 0.02, 0.05)); return [p.clone().setY(p.y - (S.jack.cur - PC.jack.min)), p.clone().setY(p.y + (PC.jack.max - S.jack.cur))]; },
   },
 };
 function khForceEnds(k) {
@@ -3903,13 +3983,16 @@ function khForceEnds(k) {
 
 function khBuild() {
   if (!KH.el) { KH.el = document.createElement('div'); KH.el.id = 'khandles'; document.body.appendChild(KH.el); }
-  KH.el.innerHTML = ''; KH.items = []; KH.drag = null;
+  KH.el.innerHTML = '<div id="khdock"></div><div class="khpin"><span class="khpr"></span><span class="khpi"></span><b></b></div>'; KH.items = []; KH.drag = null;
+  KH.dock = KH.el.firstChild; KH.pin = KH.el.lastChild; KH.dockY = null;
   const m = KID.missions[KID.i];
   if (S.mode !== 'kid') return;
   const free = KID.free;
   if (!free && (!m || m.quiz || m.shot === 'hero')) return;
   const goal = free ? {} : KH_GOAL[m.id] || {}, focus = free ? [] : m.allow || [];
-  for (const k of [...new Set([...focus, ...(KH_STATION[S.station] || [])])]) {
+  const keys = [...new Set([...focus, ...(KH_STATION[S.station] || [])])];
+  keys.sort((a, b) => KH_DOCK.indexOf(a) - KH_DOCK.indexOf(b));
+  for (const k of keys) {
     let el;
     if (KH_RAIL[k]) {
       const R = KH_RAIL[k], force = k !== 'jack';
@@ -3928,22 +4011,22 @@ function khBuild() {
     } else if (KH_PICK[k]) {
       const P = KH_PICK[k];
       el = document.createElement('div'); el.className = 'kh khpick';
-      el.innerHTML = P.list().map((v) => `<button data-s="${v}">${P.pic(v)}<span>${P.name(v)}</span></button>`).join('');
+      el.innerHTML = `<span class="khl">${KH_LABEL[k][isEn() ? 1 : 0]}</span><div class="khb">${P.list().map((v) => `<button data-s="${v}">${P.pic(v)}<span>${P.name(v)}</span></button>`).join('')}</div>`;
       el.querySelectorAll('button').forEach((b) => (b.onclick = () => {
         if (!KID.allows(k)) return; KID.acted(); ensureAudio(); P.set(b.dataset.s); sfx('click'); KID.update(true);
       }));
     } else if (k === 'block' || k === 'obj') {
       el = document.createElement('div'); el.className = `kh khstep ${k}`;
-      el.innerHTML = `<button data-d="-1" aria-label="-">${ico('minus')}</button><span class="khcount"></span><button data-d="1" aria-label="+">${ico('plus')}</button>`;
+      el.innerHTML = `<span class="khl">${KH_LABEL[k][isEn() ? 1 : 0]}</span><div class="khb"><button data-d="-1" aria-label="-">${ico('minus')}</button><span class="khcount"></span><button data-d="1" aria-label="+">${ico('plus')}</button></div>`;
       el.querySelectorAll('button').forEach((b) => (b.onclick = () => {
         if (!KID.allows(k)) return; KID.acted(); ensureAudio(); const d = +b.dataset.d;
-        if (k === 'block') { const L = clamp(S.load.tgt + d, 0, PC.loadMax); kidDesign(S.surface); setParam('load', L, true); }
+        if (k === 'block') { const L = clamp(S.load.tgt + d, 0, PC.loadMax); if (L === S.load.tgt) return; setParam('load', L, true); khFresh(); dirLoad(d); }
         else { setParam('n', clamp(S.n.tgt + d, 0, PC.nMax)); S.hv.v -= 0.05 * d; }
         sfx('click'); KID.update(true);
       }));
     } else continue;
     if (!free && !focus.includes(k)) el.classList.add('sub');
-    el.dataset.k = k; KH.el.appendChild(el); KH.items.push({ k, el });
+    el.dataset.k = k; (KH_RAIL[k] ? KH.el : KH.dock).appendChild(el); KH.items.push({ k, el });
   }
 }
 function khMove(e) {
@@ -3963,6 +4046,13 @@ function khFrame() {
   KH.el.classList.toggle('fresh', !KID.ctx.acted);
   // 점진적 공개: 퀘스트에서는 첫 조작 뒤에 다른 기구가 나타나고, 결정적 순간에는 화면을 비운다
   KH.el.classList.toggle('calm', !KID.free && (!KID.ctx.acted || !!DIR.slow));
+  KH.el.classList.toggle('hush', !!DIR.slow);
+  // 도구대: 아래 계기판(또는 성공 띠) 바로 위에 고정
+  const fo = [...document.querySelectorAll('#kid .kwin.on .kbox, #kid .kfoot')].map((e) => e.getBoundingClientRect()).find((r) => r.height > 0);
+  const dy = Math.round((fo ? fo.top : innerHeight - 24) - 10);
+  if (dy !== KH.dockY) { KH.dockY = dy; KH.dock.style.top = `${dy}px`; }
+  KH.dock.classList.toggle('none', !KH.dock.children.length || (KH.el.classList.contains('calm') && !KH.dock.querySelector('.kh:not(.sub)')));
+  khPin();
   for (const { k, el } of KH.items) {
     if (KH_RAIL[k]) {
       const R = KH_RAIL[k], D = KH.drag && KH.drag.k === k ? KH.drag : null;
@@ -3981,9 +4071,8 @@ function khFrame() {
       else { const f = k === 'F1' ? S.F1.tgt : S.F2.tgt; val.textContent = `${n1(f)} N`; }
       val.style.cssText = `left:${kx}px;top:${ky}px`;
     } else {
-      const P = KH_PICK[k], p = khProj(P ? P.at() : k === 'block' ? KID_AT.block() : LOOK.obj().clone());
-      const off = P ? (typeof P.off === 'function' ? P.off() : P.off) : k === 'block' ? [0, -86] : [118, 0];
-      el.style.cssText = `left:${p.x + off[0]}px;top:${p.y + off[1]}px${k === 'obj' && S.obj !== 'weights' ? ';display:none' : ''}`;
+      const P = KH_PICK[k], hid = k === 'obj' && S.obj !== 'weights';
+      if (el._hid !== hid) { el._hid = hid; el.style.display = hid ? 'none' : ''; }
       if (P) { const cur = P.cur(); el.querySelectorAll('button').forEach((b) => b.classList.toggle('on', b.dataset.s === cur)); }
       else {
         const n = k === 'block' ? S.load.tgt : S.n.tgt, mx = k === 'block' ? PC.loadMax : PC.nMax, ic = ico(k === 'block' ? 'box' : 'weight');
@@ -3991,6 +4080,22 @@ function khFrame() {
         el.querySelector('[data-d="-1"]').disabled = n <= 0; el.querySelector('[data-d="1"]').disabled = n >= mx;
       }
     }
+  }
+}
+
+// 줄다리기 고정 핀: 도막 위 자물쇠 → 손을 떼면 고리가 차오르고 → 풀림
+const KH_PIN_T = 1.3;   // 손을 뗀 뒤 핀이 풀리기까지 (초)
+function khPin() {
+  const el = KH.pin, c = KID.ctx, now = DIR.t;
+  const show = S.station === 'track' && (S.pin || (c.freeT && now - c.freeT < 0.9));
+  el.classList.toggle('on', !!show); if (!show) return;
+  const p = khProj(KID_AT.block()), arm = S.pin && c.armT != null ? clamp((now - c.armT) / KH_PIN_T, 0, 1) : S.pin ? 0 : 1;
+  el.style.cssText = `left:${p.x}px;top:${p.y - 74}px;--p:${arm}`;
+  const st = S.pin ? (arm > 0 ? 'arm' : 'lock') : 'go';
+  if (el._st !== st) {
+    el._st = st; el.className = `khpin on ${st}`;
+    el.querySelector('.khpi').innerHTML = ico(st === 'go' ? 'unlock' : 'lock');
+    el.querySelector('b').textContent = st === 'go' ? L2('출발!', 'Go!') : st === 'arm' ? L2('손을 떼고 기다려요', 'Hands off…') : L2('고정', 'Locked');
   }
 }
 
@@ -4006,7 +4111,7 @@ const DIR = {
   ts: 1, slow: null, t: 0, shake: 0, push: 0, punch: 0, follow: 0, grabK: null, tone: null,
   offP: new THREE.Vector3(), offT: new THREE.Vector3(),
   callouts: [], parts: [], cool: {}, prevIn: null, prevFloat: null, dustAcc: 0, side: 1,
-  tele: [], teleAcc: 0, teleSt: null, marks: [],
+  tele: [], teleAcc: 0, teleSt: null, marks: [], prevDeep: null, drop: null, squash: 0, home: null,
 };
 const dirOn = () => S.mode === 'kid';
 const _dd = new THREE.Vector3();
@@ -4040,7 +4145,7 @@ function dirCamPost(dt) {
   P.y += (Math.sin(t * 0.53 + 0.7) * 0.6 + Math.sin(t * 1.13) * 0.4) * 0.004 * still;
   // 따라가기: 도막이 움직이면 시선이 늦게 따라간다
   const want = S.station === 'track' && still ? clamp(blockX(S.trk.x) - controls.target.x, -0.24, 0.24) * 0.6 : 0;
-  DIR.follow += (want - DIR.follow) * (1 - Math.exp(-dt * 1.4));
+  if (!KH.drag) DIR.follow += (want - DIR.follow) * (1 - Math.exp(-dt * 1.4));
   P.x += DIR.follow; T.x += DIR.follow;
   // 밀어 들어가기: 잡고 있는 동안 + 결정적 순간
   DIR.punch = Math.max(0, DIR.punch - dt * 0.05);
@@ -4085,10 +4190,13 @@ function dirEvent(type, e) {
     dirSlow(0.22, 0.9); DIR.punch = 0.08; sfx('swell'); DIR.marks.push(DIR.tele.length);
     dirCallout(dirAt('block'), L2('미끄러지기 시작!', 'It starts to slide!'), () => `${L2('붙잡는 힘 최대', 'Max grip')} ${fx(e && e.fsMax || 0, 1)} N`, hex(FCOL.f), 2.8);
   }
-  if (type === 'bump') { DIR.shake = 0.035; dirRing(KID_AT.block()); }
+  if (type === 'bump') { DIR.shake = 0.035; dirRing(KID_AT.block()); if (KID.free && !DIR.home) DIR.home = { t: 0 }; }
   if (type === 'splash' && cd('splash', 4)) {
     dirSlow(0.3, 0.8); DIR.punch = 0.06; sfx('splash'); dirSplash();
-    dirCallout(dirAt('obj'), L2('물이 밀어 올려요', 'Water pushes up'), () => `${L2('부력', 'Buoyancy')} ${fx(S.hang ? S.hang.B : 0, 2)} N`, hex(FCOL.B), 3);
+  }
+  if (type === 'deep' && cd('deep', 4)) {
+    DIR.punch = Math.max(DIR.punch, 0.05); sfx('swell');
+    dirCallout(dirAt('obj'), L2('물이 밀어 올려요', 'Water pushes up'), () => `${L2('부력', 'Buoyancy')} ${fx(S.hang ? S.hang.B : 0, 2)} N`, hex(FCOL.B), 3.2);
   }
   if (type === 'float' && cd('float', 4)) dirCallout(dirAt('obj'), L2('둥둥 떠요!', 'It floats!'), () => L2('부력 = 무게', 'Buoyancy = weight'), hex(FCOL.B), 2.6);
   if (type === 'win') {
@@ -4107,6 +4215,61 @@ function dirGrab(k) {
     o.connect(lp).connect(g).connect(AUD.master); o.start(); g.gain.setTargetAtTime(0.03, C.currentTime, 0.06);
     DIR.tone = { o, g };
   } else if (!k && DIR.tone) { const T = DIR.tone; DIR.tone = null; T.g.gain.setTargetAtTime(0, C.currentTime, 0.07); T.o.stop(C.currentTime + 0.5); }
+}
+
+function dirTeleReset() { DIR.tele.length = 0; DIR.marks.length = 0; DIR.teleAcc = 0; DIR.callouts.forEach((q) => (q.t = Math.max(q.t, q.dur))); DIR.home = null; }
+
+// ---- 바닥 바꾸기: 새 바닥이 실험대를 따라 쓸고 지나가고, 이름표가 뜬다 ----
+const SURF_FEEL = { glass: ['매끈매끈', 'Slick'], wood: ['보통', 'Medium'], sand: ['까끌까끌', 'Rough'] };
+const SURF_RGB = { glass: '200,235,255', wood: '196,150,98', sand: '178,132,84' };
+function dirSurface(v) {
+  if (!dirOn()) return;
+  sfx('whoosh'); DIR.shake = Math.max(DIR.shake, 0.008);
+  const n = 26, x0 = blockX(PC.track.xmin) - 0.1, x1 = blockX(PC.track.xmax) + 0.1;
+  for (let i = 0; i < n; i++) {
+    const p = khProj(V3(lerp(x0, x1, i / (n - 1)), TRK_Y + 0.004, TRK.z + rr(-0.03, 0.04)));
+    DIR.parts.push({ k: 'sweep', x: p.x, y: p.y, r: rr(3, 7), life: 0.75, t0: 0.75, delay: i * 0.016, c: SURF_RGB[v] || '255,255,255' });
+  }
+  dirCallout(dirAt('block'), `${T('surfName')[v]} · ${SURF_FEEL[v][isEn() ? 1 : 0]}`, () => `${L2('붙잡는 힘 최대', 'Max grip')} ${fx(S.F ? S.F.fsMax : 0, 1)} N`, hex(FCOL.f), 2.4);
+}
+// ---- 짐 올리기: 위에서 떨어져 쿵 → 도막이 눌리고 먼지 → '바닥이 받치는 힘' 해설 ----
+function dirLoad(d) {
+  if (!dirOn()) return;
+  if (d < 0) { sfx('pick'); DIR.squash = -0.04; return; }
+  DIR.drop = { i: S.load.tgt - 1, t: 0, hit: false };
+}
+function dirDropFrame(dt) {
+  const D = DIR.drop, L = HERO.loads;
+  L.forEach((m) => { if (m.userData.y0 == null) m.userData.y0 = m.position.y; });
+  if (D) {
+    D.t += dt; const H = 0.16, T = 0.32, u = Math.min(1, D.t / T), m = L[D.i];
+    if (m) m.position.y = m.userData.y0 + H * (1 - u * u);
+    if (u >= 1 && !D.hit) {
+      D.hit = true; sfx('clack'); DIR.shake = Math.max(DIR.shake, 0.02); DIR.squash = 0.11; DIR.punch = Math.max(DIR.punch, 0.07);
+      const c = khProj(V3(blockX(S.trk.x), TRK_Y + 0.004, TRK.z + 0.03));
+      for (let i = 0; i < 14; i++) { const s = i % 2 ? 1 : -1; DIR.parts.push({ k: 'dust', x: c.x + s * rr(18, 34), y: c.y + rr(-2, 3), vx: s * rr(0.6, 1.8), vy: -rr(0.1, 0.5), r: rr(2.5, 5), life: rr(0.5, 0.9), t0: 1, c: S.surface === 'sand' ? '150,110,70' : S.surface === 'glass' ? '220,235,245' : '185,150,105' }); }
+      dirCallout(() => V3(blockX(S.trk.x), TRK_Y + PC.block.h + S.load.tgt * PC.load.h, TRK.z), L2(`짐 ${S.load.tgt}개 · 더 무거워요`, `${S.load.tgt} load(s) · heavier`), () => `${L2('바닥이 받치는 힘', 'Floor push')} ${fx(S.F ? S.F.N : 0, 1)} N`, hex(FCOL.N), 2.6);
+    }
+    if (D.t > T + 0.05) { if (m) m.position.y = m.userData.y0; DIR.drop = null; }
+  }
+  // 도막이 눌렸다 튀어 오르는 탄성 (감쇠 진동)
+  DIR.squash *= Math.exp(-dt * 7);
+  const q = DIR.squash, k = Math.sin(DIR.t * 38) * q;
+  if (HERO.block) HERO.block.scale.set(1 + Math.abs(q) * 0.25, 1 - k, 1 + Math.abs(q) * 0.25);
+}
+// ---- 쉬운 모드 화면 틀: 퀘스트 카드 아래 ~ 도구대 위 빈 띠에 장면 중심을 맞추고, 좁으면 살짝 넓게 본다 ----
+function dirView(dt) {
+  if (KH.drag) return;   // 조작 중에는 틀을 바꾸지 않는다
+  const H = innerHeight, rect = (q) => { const e = document.querySelector(q); if (!e) return null; const r = e.getBoundingClientRect(); return r.height > 0 ? r : null; };
+  const ban = rect('#kid .kban'), hud = rect('#kidhud'), foot = rect('#kid .kfoot'), dock = KH.dock && !KH.dock.classList.contains('none') && KH.el && !KH.el.classList.contains('off') ? rect('#khdock') : null;
+  if (!ban && !foot) return;
+  const top = Math.max(ban ? ban.bottom : 0, hud ? hud.bottom : 0) + 8;
+  const bot = Math.min(dock ? dock.top : H, foot ? foot.top : H) - 8;
+  if (bot - top < 120) return;
+  const td = (top + bot) / 2 - H / 2, pt = isPortrait(), tz = pt && S.station === 'track' ? 1 : clamp((bot - top) / (H * (pt ? 0.5 : 0.6)), pt ? 0.66 : 0.74, 1);   // 세로 화면의 끌기대는 가로로 길어 줄이지 않는다
+  const k = KVIEW.d == null ? 1 : 1 - Math.exp(-dt * 2.4);
+  const nd = KVIEW.d == null ? td : KVIEW.d + (td - KVIEW.d) * k, nz = KVIEW.z + (tz - KVIEW.z) * k;
+  if (KVIEW.d == null || Math.abs(nd - KVIEW.d) > 0.3 || Math.abs(nz - KVIEW.z) > 0.0005) { KVIEW.d = nd; KVIEW.z = nz; applyViewOffset(); }
 }
 
 // ---- 해설선 (텔레스트레이션): 점이 튀어나오고, 선이 그어지고, 이름표가 미끄러져 들어온다 ----
@@ -4153,6 +4316,7 @@ function dirDraw(c, dt) {
     if (q.k === 'drop') { q.vy += 0.32 * f; q.x += q.vx * f; q.y += q.vy * f; c.fillStyle = `rgba(205,236,255,${clamp(q.life * 2, 0, 0.9)})`; c.beginPath(); c.arc(q.x, q.y, q.r, 0, 7); c.fill(); }
     else if (q.k === 'ripple') { const k = 1 - q.life / q.t0; c.strokeStyle = `rgba(220,242,255,${clamp(q.life, 0, 0.7)})`; c.lineWidth = 1.5; c.beginPath(); c.ellipse(q.x, q.y, q.r + k * 60, (q.r + k * 60) * 0.28, 0, 0, 7); c.stroke(); }
     else if (q.k === 'ring') { const k = 1 - q.life / q.t0; c.strokeStyle = `rgba(255,255,255,${q.life * 1.6})`; c.lineWidth = 3 * (1 - k) + 0.5; c.beginPath(); c.arc(q.x, q.y, q.r + k * 46, 0, 7); c.stroke(); }
+    else if (q.k === 'sweep') { if ((q.delay -= dt) > 0) { q.life += dt; continue; } const k = 1 - q.life / q.t0; c.fillStyle = `rgba(${q.c},${clamp(q.life * 1.2, 0, 0.85)})`; c.beginPath(); c.ellipse(q.x, q.y - k * 10, q.r * (1 + k), q.r * 0.45 * (1 + k), 0, 0, 7); c.fill(); }
     else if (q.k === 'dust') { q.x += q.vx * f; q.y += q.vy * f; q.r += 0.12 * f; c.fillStyle = `rgba(${q.c},${clamp(q.life * 0.45, 0, 0.35)})`; c.beginPath(); c.arc(q.x, q.y, q.r, 0, 7); c.fill(); }
   }
   DIR.parts = DIR.parts.filter((q) => q.life > 0);
@@ -4194,8 +4358,12 @@ function dirFrame(dt) {
   if (r && S.station === 'hang') {
     if (DIR.prevIn === false && r.inFluid && !r.empty) dirEvent('splash');
     if (DIR.prevFloat === false && r.floating) dirEvent('float');
+    if (DIR.prevDeep === false && r.frac >= 0.6 && !r.floating) dirEvent('deep');
   }
-  DIR.prevIn = r ? r.inFluid : null; DIR.prevFloat = r ? r.floating : null;
+  DIR.prevIn = r ? r.inFluid : null; DIR.prevFloat = r ? r.floating : null; DIR.prevDeep = r ? r.frac >= 0.6 : null;
+  // 자유 실험: 끝에 부딪힌 도막은 1.4초 뒤 줄을 풀고 제자리로
+  if (DIR.home) { DIR.home.t += dt; if (DIR.home.t > 1.4) { DIR.home = null; if (KID.free && S.station === 'track' && !KH.drag) { setParam('F1', 0, true); setParam('F2', 0, true); resetTrack(); sfx('whoosh'); dirRing(KID_AT.block()); KID.update(true); } } }
+  dirDropFrame(dt); dirView(dt);
   if (S.station === 'track' && Math.abs(S.trk.v) > 0.03 && S.surface !== 'glass' && !CAM.fly) {
     DIR.dustAcc += dt * Math.min(40, Math.abs(S.trk.v) * 70);
     while (DIR.dustAcc > 1) { DIR.dustAcc--; dirDust(); }
@@ -4475,7 +4643,7 @@ function update(rdt) {
   updateHang(r, hv.x);
   // --- 끌기 ---
   const P = trackParams();
-  if (S.playing) {
+  if (S.playing && !S.pin) {
     const dts = dt * S.speed, x0 = S.trk.x;
     const ev = PHYS.trackStep(S.trk, P, dts);
     S.dist += Math.abs(S.trk.x - x0);

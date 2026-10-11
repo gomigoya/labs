@@ -268,7 +268,7 @@ function update(rdt) {
   updateHang(r, hv.x);
   // --- 끌기 ---
   const P = trackParams();
-  if (S.playing) {
+  if (S.playing && !S.pin) {
     const dts = dt * S.speed, x0 = S.trk.x;
     const ev = PHYS.trackStep(S.trk, P, dts);
     S.dist += Math.abs(S.trk.x - x0);
