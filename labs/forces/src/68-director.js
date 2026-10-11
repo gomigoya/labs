@@ -85,6 +85,7 @@ const dirAt = (k) => (k === 'obj' ? () => LOOK.obj().clone() : () => KID_AT.bloc
 function dirEvent(type, e) {
   if (!dirOn()) return;
   const cd = (k, s) => { if ((DIR.cool[k] ?? -99) + s > DIR.t) return false; DIR.cool[k] = DIR.t; return true; };
+  if (type === 'slip') noteTrack(e);   // 기록은 연출 쿨다운과 상관없이 매번
   if (type === 'slip' && cd('slip', 5)) {
     dirSlow(0.22, 0.9); DIR.punch = 0.08; sfx('swell'); DIR.marks.push(DIR.tele.length);
     dirCallout(dirAt('block'), L2('미끄러지기 시작!', 'It starts to slide!'), () => `${L2('붙잡는 힘 최대', 'Max grip')} ${fx(e && e.fsMax || 0, 1)} N`, hex(FCOL.f), 2.8);
@@ -95,7 +96,7 @@ function dirEvent(type, e) {
   }
   if (type === 'deep' && cd('deep', 4)) {
     DIR.punch = Math.max(DIR.punch, 0.05); sfx('swell');
-    dirCallout(dirAt('obj'), L2('물이 밀어 올려요', 'Water pushes up'), () => `${L2('부력', 'Buoyancy')} ${fx(S.hang ? S.hang.B : 0, 2)} N`, hex(FCOL.B), 3.2);
+    dirLens(dirAt('obj'), 'micro-water', L2('물이 밀어 올려요', 'Water pushes up'), () => `${L2('아래가 더 세게 → 부력', 'Stronger from below → buoyancy')} ${fx(S.hang ? S.hang.B : 0, 2)} N`, hex(FCOL.B), 3.6, LENS_WATER_SVG);
   }
   if (type === 'float' && cd('float', 4)) dirCallout(dirAt('obj'), L2('둥둥 떠요!', 'It floats!'), () => L2('부력 = 무게', 'Buoyancy = weight'), hex(FCOL.B), 2.6);
   if (type === 'win') {
@@ -116,7 +117,7 @@ function dirGrab(k) {
   } else if (!k && DIR.tone) { const T = DIR.tone; DIR.tone = null; T.g.gain.setTargetAtTime(0, C.currentTime, 0.07); T.o.stop(C.currentTime + 0.5); }
 }
 
-function dirTeleReset() { DIR.tele.length = 0; DIR.marks.length = 0; DIR.teleAcc = 0; DIR.callouts.forEach((q) => (q.t = Math.max(q.t, q.dur))); DIR.home = null; }
+function dirTeleReset() { DIR.tele.length = 0; DIR.marks.length = 0; DIR.teleAcc = 0; DIR.callouts.forEach((q) => (q.t = Math.max(q.t, q.dur))); if (LENS.cur) LENS.cur.t = Math.max(LENS.cur.t, LENS.cur.dur); DIR.home = null; }
 
 // ---- 바닥 바꾸기: 새 바닥이 실험대를 따라 쓸고 지나가고, 이름표가 뜬다 ----
 const SURF_FEEL = { glass: ['매끈매끈', 'Slick'], wood: ['보통', 'Medium'], sand: ['까끌까끌', 'Rough'] };
@@ -129,7 +130,7 @@ function dirSurface(v) {
     const p = khProj(V3(lerp(x0, x1, i / (n - 1)), TRK_Y + 0.004, TRK.z + rr(-0.03, 0.04)));
     DIR.parts.push({ k: 'sweep', x: p.x, y: p.y, r: rr(3, 7), life: 0.75, t0: 0.75, delay: i * 0.016, c: SURF_RGB[v] || '255,255,255' });
   }
-  dirCallout(dirAt('block'), `${T('surfName')[v]} · ${SURF_FEEL[v][isEn() ? 1 : 0]}`, () => `${L2('붙잡는 힘 최대', 'Max grip')} ${fx(S.F ? S.F.fsMax : 0, 1)} N`, hex(FCOL.f), 2.4);
+  dirLens(() => V3(blockX(S.trk.x), TRK_Y + 0.004, TRK.z), SURF_IMG[v], `${T('surfName')[v]} · ${SURF_FEEL[v][isEn() ? 1 : 0]}`, () => `${L2('붙잡는 힘 최대', 'Max grip')} ${fx(S.F ? S.F.fsMax : 0, 1)} N`, hex(FCOL.f), 3.2);
 }
 // ---- 짐 올리기: 위에서 떨어져 쿵 → 도막이 눌리고 먼지 → '바닥이 받치는 힘' 해설 ----
 function dirLoad(d) {
@@ -253,7 +254,7 @@ function dirTele(dt) {
 // ---- 매 프레임 (실제 시간) ----
 function dirFrame(dt) {
   const kid = dirOn(), r = S.hang;
-  if (!kid) { document.body.classList.remove('kcut', 'kbars', 'kslow'); DIR.parts.length = 0; if (DIR.callouts.length) dirCallouts(dt); return; }
+  if (!kid) { document.body.classList.remove('kcut', 'kbars', 'kslow'); DIR.parts.length = 0; if (DIR.callouts.length) dirCallouts(dt); dirLensFrame(dt); if (NOTE.el) NOTE.el.classList.remove('on'); return; }
   if (r && S.station === 'hang') {
     if (DIR.prevIn === false && r.inFluid && !r.empty) dirEvent('splash');
     if (DIR.prevFloat === false && r.floating) dirEvent('float');
@@ -267,7 +268,7 @@ function dirFrame(dt) {
     DIR.dustAcc += dt * Math.min(40, Math.abs(S.trk.v) * 70);
     while (DIR.dustAcc > 1) { DIR.dustAcc--; dirDust(); }
   }
-  dirCallouts(dt); dirTele(dt);
+  dirCallouts(dt); dirTele(dt); dirLensFrame(dt); noteFrame();
   if (DIR.tone && AUD.ctx) { const k = DIR.grabK, f = k === 'jack' ? 150 + (S.jack.tgt - PC.jack.min) * 900 : 80 + ((S[k] && S[k].tgt) || 0) * 30; DIR.tone.o.frequency.setTargetAtTime(f, AUD.ctx.currentTime, 0.05); }
   if (PIPE.finish) PIPE.finish.uniforms.uVig.value = 0.5 + (1 - DIR.ts) * 0.6;
 }

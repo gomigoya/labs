@@ -10,9 +10,9 @@ const KH_FLEN = 0.22;
 // 바닥·짐을 바꾸면 당기던 힘은 그대로 두고, 퀘스트에서는 이미 미끄러진 도막만 출발점으로 (바로 다시 비교해 볼 수 있게)
 function khFresh() { KID.ctx.fail = false; KID.ctx.hold = 0; if (!KID.free && Math.abs(S.trk.x - PC.track.x0) > 1e-3) resetTrack(); }
 // 실험대마다 만질 수 있는 기구 (퀘스트가 고른 기구는 강조, 나머지는 은은하게)
-const KH_STATION = { track: ['F2', 'F1', 'block', 'surface'], hang: ['objt', 'obj', 'jack', 'fluid', 'grav'] };
-const KH_DOCK = ['surface', 'block', 'objt', 'obj', 'fluid', 'grav'];   // 도구대 순서
-const KH_LABEL = { surface: ['바닥', 'Surface'], block: ['짐', 'Loads'], objt: ['물체', 'Object'], obj: ['추', 'Weights'], fluid: ['액체', 'Liquid'], grav: ['중력', 'Gravity'] };
+const KH_STATION = { track: ['F2', 'F1', 'block', 'surface', 'zoom'], hang: ['objt', 'obj', 'jack', 'fluid', 'grav', 'zoom'] };
+const KH_DOCK = ['surface', 'block', 'objt', 'obj', 'fluid', 'grav', 'zoom'];   // 도구대 순서
+const KH_LABEL = { surface: ['바닥', 'Surface'], block: ['짐', 'Loads'], objt: ['물체', 'Object'], obj: ['추', 'Weights'], fluid: ['액체', 'Liquid'], grav: ['중력', 'Gravity'], zoom: ['돋보기', 'Zoom'] };
 const PLANET_NAME = { earth: ['지구', 'Earth'], mars: ['화성', 'Mars'], moon: ['달', 'Moon'] };
 // 고르기 버튼: 목록·지금 값·그림·이름·바꾸기·붙일 곳·화면 오프셋
 const KH_PICK = {
@@ -68,7 +68,7 @@ function khBuild() {
       el = document.createElement('div'); el.className = `kh khrail ${force ? 'force' : 'water'}`;
       const ticks = force ? Array.from({ length: R.max() + 1 }, (_, i) => `<span class="khtick" style="left:${(i / R.max()) * 100}%"><em>${i}</em></span>`).join('') : '';
       const g = goal[k] != null ? `<span class="khgoal" style="left:${(goal[k] / R.max()) * 100}%">${ico('flag')}</span>` : '';
-      el.innerHTML = `<div class="khbar"><i class="khfill"></i>${ticks}${g}</div><i class="khghost"></i><button class="khknob" aria-label="${k}">${ico('grip')}</button><div class="khval"></div>`;
+      el.innerHTML = `<div class="khbar"><i class="khfill"></i>${ticks}${g}${force ? `<span class="khlast"><em>${L2('지난번', 'Last')}</em></span>` : ''}</div><i class="khghost"></i><button class="khknob" aria-label="${k}">${ico('grip')}</button><div class="khval"></div>`;
       const knob = el.querySelector('.khknob');
       knob.onpointerdown = (e) => {
         if (!KID.allows(k)) return; ensureAudio(); KID.acted(); if (k !== 'jack') KID.ctx.fail = false;
@@ -93,6 +93,10 @@ function khBuild() {
         else { setParam('n', clamp(S.n.tgt + d, 0, PC.nMax)); S.hv.v -= 0.05 * d; }
         sfx('click'); KID.update(true);
       }));
+    } else if (k === 'zoom') {
+      el = document.createElement('div'); el.className = 'kh khzoom';
+      el.innerHTML = `<span class="khl">${KH_LABEL[k][isEn() ? 1 : 0]}</span><div class="khb"><button aria-label="${KH_LABEL[k][isEn() ? 1 : 0]}">${ico('eye')}<span>${L2('가까이', 'Look')}</span></button></div>`;
+      el.querySelector('button').onclick = () => { if (!KID.allows(k)) return; ensureAudio(); lensNow(); };
     } else continue;
     if (!free && !focus.includes(k)) el.classList.add('sub');
     el.dataset.k = k; (KH_RAIL[k] ? KH.el : KH.dock).appendChild(el); KH.items.push({ k, el });
@@ -123,6 +127,7 @@ function khFrame() {
   KH.dock.classList.toggle('none', !KH.dock.children.length || (KH.el.classList.contains('calm') && !KH.dock.querySelector('.kh:not(.sub)')));
   khPin();
   for (const { k, el } of KH.items) {
+    if (k === 'zoom') continue;
     if (KH_RAIL[k]) {
       const R = KH_RAIL[k], D = KH.drag && KH.drag.k === k ? KH.drag : null;
       const [A, B] = D ? D.ends : khScreenEnds(k), t = clamp(R.get(), 0, 1);
@@ -131,6 +136,8 @@ function khFrame() {
       bar.style.cssText = `left:${A.x}px;top:${A.y}px;width:${len}px;transform:translateY(-50%) rotate(${ang}rad)`;
       bar.classList.toggle('flip', Math.abs(ang) > Math.PI / 2);
       el.querySelector('.khfill').style.width = `${t * 100}%`;
+      const lm = el.querySelector('.khlast');
+      if (lm) { const lv = noteLast(), m = KID.missions[KID.i], on = lv != null && (KID.free || (m && NOTE_Q.has(m.id))) && k === 'F2'; lm.style.display = on ? '' : 'none'; if (on) lm.style.left = `${clamp(lv / R.max(), 0, 1) * 100}%`; }
       const kx = A.x + dx * t, ky = A.y + dy * t;
       el.querySelector('.khknob').style.cssText = `left:${kx}px;top:${ky}px`;
       const gl = Math.min(len * (1 - t), len * 0.6);

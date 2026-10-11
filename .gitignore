@@ -2,3 +2,6 @@ dist/
 shots/
 node_modules/
 .wrangler/
+
+# 생성 그림 원본(1024px PNG) — 배포·저장소에는 WebP만
+labs/*/src/assets-src/

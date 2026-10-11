@@ -844,6 +844,86 @@ body.kid.kslow #labels{opacity:0}
   #khdock .khpick .ksw,#khdock .khpick .kfl,#khdock .khpick .kpl{width:22px;height:22px}
   #khdock .khstep button{width:32px;height:32px}
 }
+/* ===== 묘사 층 (69-depict.js) ===== */
+/* 돋보기 렌즈: 점 → 선 → 원이 홍채처럼 열리고, 그림은 천천히 다가온다 */
+.klens{position:absolute;inset:0;pointer-events:none;--c:#a5b4fc}
+.klens .d{position:absolute;width:12px;height:12px;margin:-6px 0 0 -6px;border-radius:50%;background:var(--c);box-shadow:0 0 0 3px #fff,0 0 16px var(--c);animation:kcoDot .35s cubic-bezier(.2,1.7,.4,1) both}
+.klens .ln{position:absolute;height:2px;margin-top:-1px;transform-origin:0 50%;background:#fff;box-shadow:0 0 8px rgba(0,0,0,.5);transform:rotate(var(--a)) scaleX(0);animation:kcoLine .3s .15s cubic-bezier(.3,0,.2,1) forwards}
+.klens .lw{position:absolute;width:calc(var(--r) * 2);height:calc(var(--r) * 2);margin:calc(var(--r) * -1) 0 0 calc(var(--r) * -1);border-radius:50%;box-shadow:0 0 0 4px #fff,0 0 0 6px var(--c),0 24px 50px -12px rgba(0,0,0,.75);clip-path:circle(0% at 50% 50%);animation:klIris .55s .35s cubic-bezier(.2,.8,.2,1) forwards}
+.klens .lc{position:absolute;inset:0;border-radius:50%;overflow:hidden;background:#e9e3d8}
+.klens .lc img{width:100%;height:100%;object-fit:cover;transform:scale(1.22);animation:klZoom 4.2s .35s cubic-bezier(.2,.6,.2,1) forwards}
+.klens .lov{position:absolute;inset:0;width:100%;height:100%;opacity:0;animation:klFade .5s 1s forwards;filter:drop-shadow(0 1px 2px rgba(0,0,0,.6))}
+.klens .ltag{position:absolute;left:50%;top:-12px;transform:translateX(-50%);display:inline-flex;align-items:center;gap:4px;padding:4px 9px;border-radius:999px;background:#fff;color:var(--ktx);font:700 11px/1 var(--kfont);white-space:nowrap;box-shadow:0 4px 12px -4px rgba(0,0,0,.4)}
+.klens .ltag .ki{font-size:13px;color:var(--kacc)}
+.klens .lcap{position:absolute;transform:translateX(-50%);padding:8px 12px 9px;border-radius:12px;background:rgba(12,14,22,.9);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.12);border-top:3px solid var(--c);color:#fff;text-align:center;white-space:nowrap;opacity:0;animation:klFade .4s .75s forwards;box-shadow:0 12px 30px -10px rgba(0,0,0,.7)}
+.klens .lcap b{display:block;font:700 14.5px/1.2 var(--kfont)}
+.klens .lcap span{display:block;margin-top:4px;font:700 13px/1 var(--knum);color:var(--c)}
+.klens.out{opacity:0;transition:opacity .45s}
+@keyframes klIris{to{clip-path:circle(75% at 50% 50%)}}
+@keyframes klZoom{to{transform:scale(1)}}
+@keyframes klFade{to{opacity:1}}
+/* 실험 노트 */
+#knote{position:fixed;left:16px;top:64px;z-index:12;width:268px;display:none;background:rgba(255,255,255,.97);border:1px solid var(--kline);border-radius:16px;box-shadow:0 14px 34px -14px rgba(0,0,0,.6);font-family:var(--kfont);color:var(--ktx);overflow:hidden}
+#knote.on{display:block}
+#knote:not(.open){width:auto!important}
+#knote:not(.open) .knh{padding:8px 10px}
+body.kcut #knote{opacity:0}
+#knote .knh{display:flex;align-items:center;gap:8px;width:100%;padding:10px 12px;border:0;background:none;color:inherit;font:inherit;cursor:pointer;text-align:left}
+#knote .knh .kni{display:grid;place-items:center;width:26px;height:26px;border-radius:8px;background:var(--kacc2);color:var(--kacc);font-size:15px}
+#knote .knh b{font:700 14px/1 var(--kfont)}
+#knote .knh em{min-width:20px;padding:3px 6px;border-radius:999px;background:var(--kbg2);font:700 11.5px/1 var(--knum);font-style:normal;color:var(--ksub);text-align:center}
+#knote .knh>.ki:last-child{margin-left:auto;color:var(--ksub);transition:transform .2s}
+#knote.open .knh>.ki:last-child{transform:rotate(90deg)}
+#knote .knb{display:none;padding:0 12px 12px}
+#knote.open .knb{display:block}
+#knote .kny{padding:7px 9px;border-radius:9px;background:var(--kbg2);font:500 12px/1.35 var(--kfont);color:var(--ksub)}
+#knote .kny b{color:var(--ktx);font-weight:700}
+#knote .knrows{display:flex;flex-direction:column;gap:6px;margin-top:9px}
+#knote .knr{display:flex;align-items:center;gap:6px}
+#knote .knc{display:inline-flex;align-items:center;gap:3px;height:26px;padding:0 5px;border-radius:7px;font-size:15px;color:var(--ktx);box-shadow:inset 0 0 0 1px var(--kline)}
+#knote .knc em{font:700 12px/1 var(--knum);font-style:normal}
+#knote .knc .ksw{width:16px;height:16px;border-radius:4px}
+#knote .knc .kfl,#knote .knc .kpl{width:15px;height:15px}
+#knote .knc.chg{box-shadow:inset 0 0 0 2px var(--kacc);background:var(--kacc2)}
+#knote .knbar{flex:1;min-width:30px;position:relative;height:10px;border-radius:5px;background:var(--kbg2);overflow:hidden}
+#knote .knbar i{position:absolute;left:0;top:0;bottom:0;width:var(--w);border-radius:5px;background:var(--c);transition:width .5s cubic-bezier(.2,.8,.2,1)}
+#knote .knr.new .knbar i{animation:knGrow .8s cubic-bezier(.2,.8,.2,1)}
+#knote .knr.new{animation:knIn .45s cubic-bezier(.2,.9,.3,1.1)}
+#knote .knr>b{min-width:46px;text-align:right;font:700 14px/1 var(--knum)}
+#knote .knr>b small{font-size:11px;color:var(--ksub)}
+#knote .kne{margin:9px 2px 0;font:500 12.5px/1.5 var(--kfont);color:var(--ksub)}
+#knote .knt{margin:9px 2px 0;font:500 11.5px/1.3 var(--kfont);color:var(--ksub)}
+#knote .knw{display:flex;gap:6px;margin:9px 0 0;padding:8px 9px;border-radius:9px;background:#fff7ed;color:#9a3412;font:600 12px/1.45 var(--kfont)}
+#knote .knw .ki{flex:none;font-size:15px;margin-top:1px}
+@keyframes knGrow{from{width:0}}
+@keyframes knIn{from{opacity:0;transform:translateX(-10px)}}
+/* 도구대: 돋보기 버튼 */
+#khdock .khzoom button{display:flex;flex-direction:column;align-items:center;gap:5px;min-width:58px;padding:7px 6px 6px;border:0;border-radius:10px;background:var(--kacc2);color:var(--kacc);font:600 11.5px/1 var(--kfont);cursor:pointer}
+#khdock .khzoom button .ki{font-size:22px}
+#khdock .khzoom button:hover{background:var(--kacc);color:#fff}
+/* 레일: 지난번 미끄러진 힘 */
+.khlast{position:absolute;top:50%;width:2px;height:22px;margin:-11px 0 0 -1px;background:#fca5a5;border-radius:1px;box-shadow:0 0 6px rgba(252,165,165,.8)}
+.khlast em{position:absolute;bottom:100%;left:50%;transform:translateX(-50%);margin-bottom:3px;padding:2px 6px;border-radius:999px;background:rgba(12,14,22,.8);color:#fecaca;font:700 10px/1.2 var(--kfont);font-style:normal;white-space:nowrap}
+.khbar.flip .khlast em{transform:translateX(-50%) rotate(180deg)}
+/* 힘 카드·성공 띠·마지막 화면: 생활 속 그림 */
+#kpop .kpcard .kpimg{height:132px;overflow:hidden;background:#e9e3d8}
+#kpop .kpcard .kpimg img{width:100%;height:100%;object-fit:cover}
+#kid .kwlife{flex:none;width:56px;height:56px;padding:0;border:0;border-radius:14px;overflow:hidden;cursor:pointer;box-shadow:0 0 0 2px #fff,0 0 0 3.5px var(--kline)}
+#kid .kwlife img{width:100%;height:100%;object-fit:cover}
+#kid .kwfig{float:left;width:132px;margin:0 14px 6px 0}
+#kid .kwfig img{display:block;width:132px;height:132px;object-fit:cover;border-radius:12px}
+#kid .kwfig figcaption{margin-top:5px;font:600 11.5px/1 var(--kfont);color:var(--ksub);text-align:center}
+#kid .kwintxt::after{content:"";display:block;clear:both}
+#kid .kcard.on img{display:block;width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px;margin-bottom:6px}
+@media (max-width:980px){
+  #knote{left:12px;width:min(268px,calc(100vw - 24px))}
+  #kid .kwfig{width:96px} #kid .kwfig img{width:96px;height:96px}
+  #kid .kwlife{width:46px;height:46px}
+  #kpop .kpcard .kpimg{height:110px}
+  #khdock .kh{padding:0 3px}
+  #khdock .khpick button,#khdock .khzoom button{min-width:42px;padding:5px 2px 4px;font-size:10.5px}
+  #khdock .khzoom button .ki{font-size:19px}
+}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 <script type="importmap">
@@ -3482,7 +3562,7 @@ const KID = {
       body = `<div class="kfoot"><div class="know"><div class="knowtxt"></div></div><div class="krow">${mine}<div class="kmeterbox"></div>${m.shot !== 'hero' ? '<canvas class="ktele"></canvas>' : ''}${m.reset ? `<button class="kreset">${ico('reset')}<span>${L2('처음으로', 'Reset')}</span></button>` : ''}</div>${rocket}</div>`;
     }
     box.innerHTML = `<div class="kban${m.boss ? ' boss' : ''}"><div class="kav">${quokka()}</div><div class="kbtxt"><div class="keye">${m.boss ? L2('도전 과제', 'Challenge') : 'Step ' + m.stage}<i></i>${(STAGE[LANG] || STAGE.ko)[m.stage]}</div><div class="ktitle">${t[0]}${lis}</div><div class="ksteps">${kidSteps(m)}</div></div><button class="kskip">${KT('skip')}${ico('chevR')}</button></div>${body}
-      <div class="kwin"><div class="kbox"><div class="kwintxt"></div><div class="kwrow"><div class="kwok">${ico('check')}</div><div class="kwmain"><div class="kwt">${L2('미션 성공', 'Mission clear')}<span class="kstars"><i>${ico('star')}</i><i>${ico('star')}</i><i>${ico('star')}</i></span></div><div class="kgain"></div></div><button class="kwhybtn">${ico('speaker')}<span>${L2('왜 그럴까?', 'Why?')}</span></button><button class="kbtn main kgo"></button></div><div class="kauto"><div><i></i></div></div></div></div>`;
+      <div class="kwin"><div class="kbox"><div class="kwintxt"></div><div class="kwrow"><div class="kwok">${ico('check')}</div><button class="kwlife" aria-label="${L2('생활 속에서', 'In real life')}"></button><div class="kwmain"><div class="kwt">${L2('미션 성공', 'Mission clear')}<span class="kstars"><i>${ico('star')}</i><i>${ico('star')}</i><i>${ico('star')}</i></span></div><div class="kgain"></div></div><button class="kwhybtn">${ico('speaker')}<span>${L2('왜 그럴까?', 'Why?')}</span></button><button class="kbtn main kgo"></button></div><div class="kauto"><div><i></i></div></div></div></div>`;
     box.querySelectorAll('[data-p]').forEach((el) => (el.onclick = () => { ensureAudio(); this.pick[this.i] = +el.dataset.p; sfx('pick'); this.render(); if (m.look) this.ring(2.2, false); }));
     box.querySelectorAll('[data-b]').forEach((el) => (el.onclick = () => { ensureAudio(); if (m.quiz) this.answer(+el.dataset.b === 0); }));
     const qn = box.querySelector('.kqnext'); if (qn) qn.onclick = () => { this.ctx.q++; this.render(); };
@@ -3493,7 +3573,7 @@ const KID = {
     box.querySelectorAll('.kban .ksay2').forEach((b) => (b.onclick = () => speak(`${t[0]}. ${t[1]}`, true)));
     const pb = box.querySelector('.kpred .ksay2'); if (pb) pb.onclick = () => { const p = m.pred[LANG] || m.pred.ko; speak(`${p[0]} ${p[1].join(', ')}`, true); };
     const qb = box.querySelector('.kquiz .ksay2'); if (qb) qb.onclick = () => speak(this.quizSpeech(), true);
-    box.querySelector('.kwhybtn').onclick = () => { box.querySelector('.kwin').classList.toggle('open'); speak(m.quiz ? '' : m.win(), true); };
+    box.querySelector('.kwhybtn').onclick = box.querySelector('.kwlife').onclick = () => { box.querySelector('.kwin').classList.toggle('open'); speak(m.quiz ? '' : m.win(), true); };
     if (m.quiz) speakOnce(`${this.i}:q${this.ctx.q}:${this.ctx.ans[this.ctx.q] == null ? 'ask' : 'fb'}`, this.quizSpeech());
     else if (ph !== 'predict') speakOnce(`${this.i}:play`, `${t[0]}. ${t[1]}`);
     khBuild(); this.update(true);
@@ -3554,7 +3634,7 @@ const KID = {
     return `<div class="kfinal"><div class="ktro">${ico('trophy')}</div><div class="keye">${L2('최종 결과', 'Results')}</div><div class="ktitle">${L2('힘 탐험 완료!', 'Force quest complete!')}</div>
       <div class="krank">${rank}</div>
       <div class="kfs"><div><b>${this.score}</b><span>${L2('점수', 'Score')} / ${mx}</span></div><div><b>${nDone}/${this.missions.length}</b><span>${L2('완료한 퀘스트', 'Quests done')}</span></div><div><b>${nHit}/${this.missions.filter((m) => m.pred).length}</b><span>${L2('예상 적중', 'Good guesses')}</span></div></div>
-      <div class="kcards">${CARDS.map((c) => { const on = this.cards.has(c.k), t = cardT(c); return `<div class="kcard ${on ? 'on' : 'off'}" style="--c:${hex(c.col)}"><i></i><b>${on ? t[0] : L2('잠김', 'Locked')}</b></div>`; }).join('')}</div>
+      <div class="kcards">${CARDS.map((c) => { const on = this.cards.has(c.k), t = cardT(c); return `<div class="kcard ${on ? 'on' : 'off'}" style="--c:${hex(c.col)}">${on ? `<img src="${GEN(CARD_IMG[c.k])}" alt="">` : ''}<i></i><b>${on ? t[0] : L2('잠김', 'Locked')}</b></div>`; }).join('')}</div>
       <p class="ksay">${L2('힘이 비기면 그대로, 한쪽이 이기면 움직임이 바뀌어요!', 'Balanced forces change nothing; an unbalanced force changes the motion!')}</p>
       <div class="kbtns g3"><button class="kbtn main" data-k="free">${L2('자유 실험실', 'Free lab')}</button><button class="kbtn" data-k="again">${KT('again')}</button><button class="kbtn" data-k="full">${KT('full')}</button></div></div>`;
   },
@@ -3586,7 +3666,9 @@ const KID = {
   winText(m, w) {
     const quiz = m.quiz, nOk = quiz ? this.ctx.ans.filter(Boolean).length : 0, card = m.card && CARDS.find((c) => c.k === m.card);
     w.classList.remove('open'); speak(quiz ? w.querySelector('.kwintxt').textContent : `${L2('미션 성공!', 'Mission clear!')} ${m.win()}`);
-    w.querySelector('.kwintxt').innerHTML = quiz ? L2(`퀴즈 ${nOk}/${KID_QUIZ.length} 정답! 마지막 문제: ${(KID_QUIZ.at(-1)[LANG] || KID_QUIZ.at(-1).ko)[1]}`, `Quiz: ${nOk}/${KID_QUIZ.length} correct! Last one: ${(KID_QUIZ.at(-1)[LANG] || KID_QUIZ.at(-1).ko)[1]}`) : m.win();
+    const li = card ? `<figure class="kwfig"><img src="${GEN(CARD_IMG[card.k])}" alt=""><figcaption>${L2('생활 속에서', 'In real life')}</figcaption></figure>` : '';
+    const lb = w.querySelector('.kwlife'); lb.innerHTML = card ? `<img src="${GEN(CARD_IMG[card.k])}" alt="">` : ''; lb.style.display = card ? '' : 'none';
+    w.querySelector('.kwintxt').innerHTML = li + (quiz ? L2(`퀴즈 ${nOk}/${KID_QUIZ.length} 정답! 마지막 문제: ${(KID_QUIZ.at(-1)[LANG] || KID_QUIZ.at(-1).ko)[1]}`, `Quiz: ${nOk}/${KID_QUIZ.length} correct! Last one: ${(KID_QUIZ.at(-1)[LANG] || KID_QUIZ.at(-1).ko)[1]}`) : m.win());
     const nStar = quiz ? (nOk >= KID_QUIZ.length - 1 ? 3 : nOk >= KID_QUIZ.length / 2 ? 2 : 1) : m.pred && this.pick[this.i] !== m.pred.ans ? 2 : 3;
     w.querySelectorAll('.kstars i').forEach((el, k) => { el.className = k < nStar ? 'on' : ''; el.style.animationDelay = `${0.2 + k * 0.15}s`; });
     const why = quiz || !m.pred ? '' : this.pick[this.i] === m.pred.ans ? `<span class="kchip ok">${ico('check')}${L2('예상 적중', 'Good guess')} +50</span>` : `<span class="kchip">${L2('예상과 달랐어요', 'Not what you guessed')}</span>`;
@@ -3597,7 +3679,7 @@ const KID = {
   cardPop(k) {
     const c = CARDS.find((q) => q.k === k), el = document.getElementById('kpop'); if (!el || !c || S.mode !== 'kid') return;
     const t = cardT(c);
-    el.innerHTML = `<div class="kpcard" style="--c:${hex(c.col)}"><small>${L2('새 힘 카드', 'New force card')}</small><i></i><b>${t[0]}</b><span>${t[1]}</span></div>`;
+    el.innerHTML = `<div class="kpcard" style="--c:${hex(c.col)}"><div class="kpimg"><img src="${GEN(CARD_IMG[k])}" alt=""></div><small>${L2('새 힘 카드', 'New force card')}</small><b>${t[0]}</b><span>${t[1]}</span></div>`;
     el.classList.remove('on'); void el.offsetWidth; el.classList.add('on'); sfx('pop');
     const id = (this._pid = (this._pid || 0) + 1); this.after(2.6, () => { if (this._pid === id) el.classList.remove('on'); });
   },
@@ -3746,6 +3828,7 @@ function KID_INTRO(on) {
   }
 }
 function initKid() {
+  genPreload();
   document.body.appendChild(document.getElementById('kid'));
   document.getElementById('kidSub').innerHTML = KT('sub');
   document.getElementById('modeBtn').onclick = () => setMode(S.mode === 'kid' ? 'full' : 'kid');
@@ -3941,9 +4024,9 @@ const KH_FLEN = 0.22;
 // 바닥·짐을 바꾸면 당기던 힘은 그대로 두고, 퀘스트에서는 이미 미끄러진 도막만 출발점으로 (바로 다시 비교해 볼 수 있게)
 function khFresh() { KID.ctx.fail = false; KID.ctx.hold = 0; if (!KID.free && Math.abs(S.trk.x - PC.track.x0) > 1e-3) resetTrack(); }
 // 실험대마다 만질 수 있는 기구 (퀘스트가 고른 기구는 강조, 나머지는 은은하게)
-const KH_STATION = { track: ['F2', 'F1', 'block', 'surface'], hang: ['objt', 'obj', 'jack', 'fluid', 'grav'] };
-const KH_DOCK = ['surface', 'block', 'objt', 'obj', 'fluid', 'grav'];   // 도구대 순서
-const KH_LABEL = { surface: ['바닥', 'Surface'], block: ['짐', 'Loads'], objt: ['물체', 'Object'], obj: ['추', 'Weights'], fluid: ['액체', 'Liquid'], grav: ['중력', 'Gravity'] };
+const KH_STATION = { track: ['F2', 'F1', 'block', 'surface', 'zoom'], hang: ['objt', 'obj', 'jack', 'fluid', 'grav', 'zoom'] };
+const KH_DOCK = ['surface', 'block', 'objt', 'obj', 'fluid', 'grav', 'zoom'];   // 도구대 순서
+const KH_LABEL = { surface: ['바닥', 'Surface'], block: ['짐', 'Loads'], objt: ['물체', 'Object'], obj: ['추', 'Weights'], fluid: ['액체', 'Liquid'], grav: ['중력', 'Gravity'], zoom: ['돋보기', 'Zoom'] };
 const PLANET_NAME = { earth: ['지구', 'Earth'], mars: ['화성', 'Mars'], moon: ['달', 'Moon'] };
 // 고르기 버튼: 목록·지금 값·그림·이름·바꾸기·붙일 곳·화면 오프셋
 const KH_PICK = {
@@ -3999,7 +4082,7 @@ function khBuild() {
       el = document.createElement('div'); el.className = `kh khrail ${force ? 'force' : 'water'}`;
       const ticks = force ? Array.from({ length: R.max() + 1 }, (_, i) => `<span class="khtick" style="left:${(i / R.max()) * 100}%"><em>${i}</em></span>`).join('') : '';
       const g = goal[k] != null ? `<span class="khgoal" style="left:${(goal[k] / R.max()) * 100}%">${ico('flag')}</span>` : '';
-      el.innerHTML = `<div class="khbar"><i class="khfill"></i>${ticks}${g}</div><i class="khghost"></i><button class="khknob" aria-label="${k}">${ico('grip')}</button><div class="khval"></div>`;
+      el.innerHTML = `<div class="khbar"><i class="khfill"></i>${ticks}${g}${force ? `<span class="khlast"><em>${L2('지난번', 'Last')}</em></span>` : ''}</div><i class="khghost"></i><button class="khknob" aria-label="${k}">${ico('grip')}</button><div class="khval"></div>`;
       const knob = el.querySelector('.khknob');
       knob.onpointerdown = (e) => {
         if (!KID.allows(k)) return; ensureAudio(); KID.acted(); if (k !== 'jack') KID.ctx.fail = false;
@@ -4024,6 +4107,10 @@ function khBuild() {
         else { setParam('n', clamp(S.n.tgt + d, 0, PC.nMax)); S.hv.v -= 0.05 * d; }
         sfx('click'); KID.update(true);
       }));
+    } else if (k === 'zoom') {
+      el = document.createElement('div'); el.className = 'kh khzoom';
+      el.innerHTML = `<span class="khl">${KH_LABEL[k][isEn() ? 1 : 0]}</span><div class="khb"><button aria-label="${KH_LABEL[k][isEn() ? 1 : 0]}">${ico('eye')}<span>${L2('가까이', 'Look')}</span></button></div>`;
+      el.querySelector('button').onclick = () => { if (!KID.allows(k)) return; ensureAudio(); lensNow(); };
     } else continue;
     if (!free && !focus.includes(k)) el.classList.add('sub');
     el.dataset.k = k; (KH_RAIL[k] ? KH.el : KH.dock).appendChild(el); KH.items.push({ k, el });
@@ -4054,6 +4141,7 @@ function khFrame() {
   KH.dock.classList.toggle('none', !KH.dock.children.length || (KH.el.classList.contains('calm') && !KH.dock.querySelector('.kh:not(.sub)')));
   khPin();
   for (const { k, el } of KH.items) {
+    if (k === 'zoom') continue;
     if (KH_RAIL[k]) {
       const R = KH_RAIL[k], D = KH.drag && KH.drag.k === k ? KH.drag : null;
       const [A, B] = D ? D.ends : khScreenEnds(k), t = clamp(R.get(), 0, 1);
@@ -4062,6 +4150,8 @@ function khFrame() {
       bar.style.cssText = `left:${A.x}px;top:${A.y}px;width:${len}px;transform:translateY(-50%) rotate(${ang}rad)`;
       bar.classList.toggle('flip', Math.abs(ang) > Math.PI / 2);
       el.querySelector('.khfill').style.width = `${t * 100}%`;
+      const lm = el.querySelector('.khlast');
+      if (lm) { const lv = noteLast(), m = KID.missions[KID.i], on = lv != null && (KID.free || (m && NOTE_Q.has(m.id))) && k === 'F2'; lm.style.display = on ? '' : 'none'; if (on) lm.style.left = `${clamp(lv / R.max(), 0, 1) * 100}%`; }
       const kx = A.x + dx * t, ky = A.y + dy * t;
       el.querySelector('.khknob').style.cssText = `left:${kx}px;top:${ky}px`;
       const gl = Math.min(len * (1 - t), len * 0.6);
@@ -4186,6 +4276,7 @@ const dirAt = (k) => (k === 'obj' ? () => LOOK.obj().clone() : () => KID_AT.bloc
 function dirEvent(type, e) {
   if (!dirOn()) return;
   const cd = (k, s) => { if ((DIR.cool[k] ?? -99) + s > DIR.t) return false; DIR.cool[k] = DIR.t; return true; };
+  if (type === 'slip') noteTrack(e);   // 기록은 연출 쿨다운과 상관없이 매번
   if (type === 'slip' && cd('slip', 5)) {
     dirSlow(0.22, 0.9); DIR.punch = 0.08; sfx('swell'); DIR.marks.push(DIR.tele.length);
     dirCallout(dirAt('block'), L2('미끄러지기 시작!', 'It starts to slide!'), () => `${L2('붙잡는 힘 최대', 'Max grip')} ${fx(e && e.fsMax || 0, 1)} N`, hex(FCOL.f), 2.8);
@@ -4196,7 +4287,7 @@ function dirEvent(type, e) {
   }
   if (type === 'deep' && cd('deep', 4)) {
     DIR.punch = Math.max(DIR.punch, 0.05); sfx('swell');
-    dirCallout(dirAt('obj'), L2('물이 밀어 올려요', 'Water pushes up'), () => `${L2('부력', 'Buoyancy')} ${fx(S.hang ? S.hang.B : 0, 2)} N`, hex(FCOL.B), 3.2);
+    dirLens(dirAt('obj'), 'micro-water', L2('물이 밀어 올려요', 'Water pushes up'), () => `${L2('아래가 더 세게 → 부력', 'Stronger from below → buoyancy')} ${fx(S.hang ? S.hang.B : 0, 2)} N`, hex(FCOL.B), 3.6, LENS_WATER_SVG);
   }
   if (type === 'float' && cd('float', 4)) dirCallout(dirAt('obj'), L2('둥둥 떠요!', 'It floats!'), () => L2('부력 = 무게', 'Buoyancy = weight'), hex(FCOL.B), 2.6);
   if (type === 'win') {
@@ -4217,7 +4308,7 @@ function dirGrab(k) {
   } else if (!k && DIR.tone) { const T = DIR.tone; DIR.tone = null; T.g.gain.setTargetAtTime(0, C.currentTime, 0.07); T.o.stop(C.currentTime + 0.5); }
 }
 
-function dirTeleReset() { DIR.tele.length = 0; DIR.marks.length = 0; DIR.teleAcc = 0; DIR.callouts.forEach((q) => (q.t = Math.max(q.t, q.dur))); DIR.home = null; }
+function dirTeleReset() { DIR.tele.length = 0; DIR.marks.length = 0; DIR.teleAcc = 0; DIR.callouts.forEach((q) => (q.t = Math.max(q.t, q.dur))); if (LENS.cur) LENS.cur.t = Math.max(LENS.cur.t, LENS.cur.dur); DIR.home = null; }
 
 // ---- 바닥 바꾸기: 새 바닥이 실험대를 따라 쓸고 지나가고, 이름표가 뜬다 ----
 const SURF_FEEL = { glass: ['매끈매끈', 'Slick'], wood: ['보통', 'Medium'], sand: ['까끌까끌', 'Rough'] };
@@ -4230,7 +4321,7 @@ function dirSurface(v) {
     const p = khProj(V3(lerp(x0, x1, i / (n - 1)), TRK_Y + 0.004, TRK.z + rr(-0.03, 0.04)));
     DIR.parts.push({ k: 'sweep', x: p.x, y: p.y, r: rr(3, 7), life: 0.75, t0: 0.75, delay: i * 0.016, c: SURF_RGB[v] || '255,255,255' });
   }
-  dirCallout(dirAt('block'), `${T('surfName')[v]} · ${SURF_FEEL[v][isEn() ? 1 : 0]}`, () => `${L2('붙잡는 힘 최대', 'Max grip')} ${fx(S.F ? S.F.fsMax : 0, 1)} N`, hex(FCOL.f), 2.4);
+  dirLens(() => V3(blockX(S.trk.x), TRK_Y + 0.004, TRK.z), SURF_IMG[v], `${T('surfName')[v]} · ${SURF_FEEL[v][isEn() ? 1 : 0]}`, () => `${L2('붙잡는 힘 최대', 'Max grip')} ${fx(S.F ? S.F.fsMax : 0, 1)} N`, hex(FCOL.f), 3.2);
 }
 // ---- 짐 올리기: 위에서 떨어져 쿵 → 도막이 눌리고 먼지 → '바닥이 받치는 힘' 해설 ----
 function dirLoad(d) {
@@ -4354,7 +4445,7 @@ function dirTele(dt) {
 // ---- 매 프레임 (실제 시간) ----
 function dirFrame(dt) {
   const kid = dirOn(), r = S.hang;
-  if (!kid) { document.body.classList.remove('kcut', 'kbars', 'kslow'); DIR.parts.length = 0; if (DIR.callouts.length) dirCallouts(dt); return; }
+  if (!kid) { document.body.classList.remove('kcut', 'kbars', 'kslow'); DIR.parts.length = 0; if (DIR.callouts.length) dirCallouts(dt); dirLensFrame(dt); if (NOTE.el) NOTE.el.classList.remove('on'); return; }
   if (r && S.station === 'hang') {
     if (DIR.prevIn === false && r.inFluid && !r.empty) dirEvent('splash');
     if (DIR.prevFloat === false && r.floating) dirEvent('float');
@@ -4368,10 +4459,122 @@ function dirFrame(dt) {
     DIR.dustAcc += dt * Math.min(40, Math.abs(S.trk.v) * 70);
     while (DIR.dustAcc > 1) { DIR.dustAcc--; dirDust(); }
   }
-  dirCallouts(dt); dirTele(dt);
+  dirCallouts(dt); dirTele(dt); dirLensFrame(dt); noteFrame();
   if (DIR.tone && AUD.ctx) { const k = DIR.grabK, f = k === 'jack' ? 150 + (S.jack.tgt - PC.jack.min) * 900 : 80 + ((S[k] && S[k].tgt) || 0) * 30; DIR.tone.o.frequency.setTargetAtTime(f, AUD.ctx.currentTime, 0.05); }
   if (PIPE.finish) PIPE.finish.uniforms.uVig.value = 0.5 + (1 - DIR.ts) * 0.6;
 }
+
+// ==== 13d 묘사 (쉬운 모드): 실험 과정·결과를 한눈에 ====
+// docs/experiment-depiction.md 의 원칙을 구현한다.
+//  · 돋보기 렌즈: 접촉면·물속 단면 그림(ChatGPT 이미지 생성)을 원형 렌즈로 열어 '보이지 않는 이유'를 보여 준다
+//  · 실험 노트: 시행마다 조건(그림)과 잰 값(막대)을 한 줄씩 자동 기록 → 결과를 '비교'로 본다
+//    이번에 바꾼 조건만 테두리로 강조하고, 두 개 이상 바꾸면 공정한 실험 안내
+//  · 생활 속 그림: 힘 카드·성공 띠에 같은 개념의 일상 장면
+const GEN = (k) => `assets/gen/${k}.webp`;
+const CARD_IMG = { F: 'life-pull', net: 'life-balance', W: 'life-weight', T: 'life-spring', f: 'life-friction', B: 'life-buoyancy', N: 'life-normal' };
+const SURF_IMG = { glass: 'micro-glass', wood: 'micro-wood', sand: 'micro-sand' };
+function genPreload() { [...Object.values(CARD_IMG), ...Object.values(SURF_IMG), 'micro-water'].forEach((k) => { const i = new Image(); i.src = GEN(k); }); }
+
+// ---- 돋보기 렌즈 ----
+const LENS = { cur: null };
+// 물속 단면 위에 겹치는 압력 화살표: 아래에서 미는 화살표가 위에서 누르는 것보다 길다 → 부력
+const LENS_WATER_SVG = `<svg class="lov" viewBox="0 0 100 100" aria-hidden="true"><defs><marker id="lah" markerWidth="5" markerHeight="5" refX="2.5" refY="2.5" orient="auto"><path d="M0 0L5 2.5L0 5z" fill="#7dd3fc"/></marker></defs>
+  <g stroke="#7dd3fc" stroke-width="2.4" stroke-linecap="round" marker-end="url(#lah)" fill="none">
+  <path d="M46.5 33v8"/><path d="M53.5 33v8"/>
+  <path d="M46.5 92V69"/><path d="M53.5 92V69"/>
+  <path d="M31 50h10"/><path d="M31 58h10"/><path d="M69 50H59"/><path d="M69 58H59"/></g></svg>`;
+function dirLens(at, img, title, val, col, dur = 3.4, overlay = '') {
+  if (!dirOn()) return;
+  const L = dirLayer('kcall');
+  if (LENS.cur) LENS.cur.t = Math.max(LENS.cur.t, LENS.cur.dur);
+  const el = document.createElement('div'); el.className = 'klens'; el.style.setProperty('--c', col);
+  el.innerHTML = `<i class="ln"></i><i class="d"></i><div class="lw"><div class="lc"><img src="${GEN(img)}" alt=""></div>${overlay}<span class="ltag">${ico('eye')}${L2('가까이 보면', 'Up close')}</span></div><div class="lcap"><b>${title}</b><span></span></div>`;
+  L.appendChild(el);
+  LENS.cur = { el, at, val, t: 0, dur, side: DIR.side = -DIR.side };
+  sfx('whoosh');
+}
+function dirLensFrame(dt) {
+  const q = LENS.cur; if (!q) return;
+  q.t += dt;
+  if (q.t > q.dur + 0.5 || !dirOn()) { q.el.remove(); LENS.cur = null; return; }
+  if (q.t > q.dur) q.el.classList.add('out');
+  const R = innerWidth < 640 ? 62 : 86, p = khProj(q.at());
+  const side = p.x > innerWidth * 0.62 ? -1 : p.x < innerWidth * 0.38 ? 1 : q.side;
+  const top = (document.querySelector('#kid .kban')?.getBoundingClientRect().bottom || 120) + R + 14;
+  const cx = clamp(p.x + side * (R + 70), R + 12, innerWidth - R - 12), cy = clamp(p.y - R - 40, top, innerHeight - R - 120);
+  const dx = cx - p.x, dy = cy - p.y, d = Math.hypot(dx, dy) || 1, len = Math.max(0, d - R), ang = Math.atan2(dy, dx);
+  const [ln, dot, w, cap] = q.el.children;
+  ln.style.cssText = `left:${p.x}px;top:${p.y}px;width:${len}px;--a:${ang}rad`;
+  dot.style.cssText = `left:${p.x}px;top:${p.y}px`;
+  w.style.cssText = `left:${cx}px;top:${cy}px;--r:${R}px`;
+  cap.style.cssText = `left:${cx}px;top:${cy + R + 10}px`;
+  const v = q.val ? q.val() : '', s = cap.lastChild; if (s.textContent !== v) s.textContent = v;
+}
+// 지금 기구에 맞는 돋보기 (도구대 '돋보기' 버튼)
+function lensNow() {
+  if (S.station === 'track') dirLens(() => V3(blockX(S.trk.x), TRK_Y + 0.004, TRK.z), SURF_IMG[S.surface], `${T('surfName')[S.surface]} · ${SURF_FEEL[S.surface][isEn() ? 1 : 0]}`, () => `${L2('붙잡는 힘 최대', 'Max grip')} ${fx(S.F ? S.F.fsMax : 0, 1)} N`, hex(FCOL.f), 4);
+  else dirLens(() => LOOK.obj().clone(), 'micro-water', L2('물이 사방에서 눌러요', 'Water presses on all sides'), () => `${L2('아래가 더 세게 → 부력', 'Stronger from below → buoyancy')} ${fx(S.hang ? S.hang.B : 0, 2)} N`, hex(FCOL.B), 4, LENS_WATER_SVG);
+}
+
+// ---- 실험 노트: 시행 기록과 비교 막대 ----
+const NOTE = { rec: { track: [], hang: [] }, el: null, open: !matchMedia('(max-width:980px)').matches, sig: '', flash: -1 };
+const NOTE_Q = new Set(['floor', 'boss', 'weights', 'moon', 'water', 'float']);   // 노트를 보여 줄 퀘스트
+const NOTE_KEYS = { track: ['s', 'l'], hang: ['o', 'n', 'f', 'w', 'g'] };
+function noteAdd(st, r) {
+  const A = NOTE.rec[st], last = A[A.length - 1], key = (q) => NOTE_KEYS[st].map((k) => q[k]).join('|');
+  if (last && key(last) === key(r)) { last.v = r.v; NOTE.flash = A.length - 1; }
+  else { A.push(r); if (A.length > 6) A.shift(); NOTE.flash = A.length - 1; sfx('pick'); }
+  NOTE.sig = '';
+}
+function noteTrack(e) { if (dirOn()) noteAdd('track', { s: S.surface, l: S.load.tgt, v: e && e.fsMax || 0 }); }
+function noteHang() {
+  const r = S.hang; if (!r || r.empty || S.settle < 0.5 || KH.drag) return;
+  const w = r.floating ? 'float' : r.frac > 0.98 ? 'in' : r.frac < 0.02 ? 'out' : null; if (!w) return;
+  noteAdd('hang', { o: S.obj, n: S.obj === 'weights' ? S.n.tgt : 0, f: w === 'out' ? '' : S.fluid, w, g: (PHYS.nearPlanet(S.g.tgt) || {}).id || 'x', v: S.Tlive });
+}
+function noteShown() {
+  const m = KID.missions[KID.i];
+  if (S.mode !== 'kid' || document.getElementById('kidIntro').classList.contains('on') || KID.phase() === 'predict' || CAM.fly) return false;
+  if (S.station !== 'track' && S.station !== 'hang') return false;
+  return KID.free || !!(m && NOTE_Q.has(m.id) && KID.i < KID.missions.length);
+}
+function noteConds(st, q, p) {
+  const ch = (k) => (p && p[k] !== q[k] ? ' chg' : '');
+  if (st === 'track') return `<span class="knc${ch('s')}">${swatch(q.s)}</span><span class="knc${ch('l')}">${ico('box')}<em>${q.l}</em></span>`;
+  const obj = q.o === 'weights' ? `${ico('weight')}<em>${q.n}</em>` : swatch(q.o === 'al' ? 'al' : 'wood');
+  const med = q.w === 'out' ? `<em>${L2('공기', 'Air')}</em>` : `<span class="kfl ${q.f}"></span>`;
+  const g = q.g === 'moon' ? ico('moon') : q.g === 'mars' ? '<span class="kpl"></span>' : ico('globe');
+  return `<span class="knc${ch('o')}${ch('n')}">${obj}</span><span class="knc${ch('w')}${ch('f')}">${med}</span><span class="knc${ch('g')}">${g}</span>`;
+}
+function noteRender() {
+  const st = S.station, A = NOTE.rec[st] || [], el = NOTE.el;
+  const sig = `${st}|${NOTE.open}|${LANG}|${A.map((q) => Object.values(q).join(',') + fx(q.v, 2)).join(';')}|${NOTE.flash}`;
+  if (sig === NOTE.sig) return; NOTE.sig = sig;
+  const mx = Math.max(st === 'track' ? 2 : 1, ...A.map((q) => q.v)) * 1.08;
+  const what = st === 'track' ? L2('미끄러지기 시작한 힘', 'Force when it starts to slide') : L2('저울 눈금', 'Scale reading');
+  const prev = (i) => A[i - 1];
+  const nChg = A.length > 1 ? NOTE_KEYS[st].filter((k) => A.at(-1)[k] !== A.at(-2)[k] && !(st === 'hang' && k === 'f' && A.at(-1).w !== A.at(-2).w)).length : 0;
+  const empty = st === 'track' ? L2('줄을 당겨 도막을 미끄러뜨리면 여기에 기록돼요', 'Pull until the block slides — it gets recorded here') : L2('추가 멈추면 저울 눈금이 기록돼요. 물에 넣어 보세요', 'When it settles, the reading is recorded. Try dipping it in water');
+  el.innerHTML = `<button class="knh"><span class="kni">${ico('ruler')}</span><b>${L2('실험 노트', 'Lab notes')}</b><em>${A.length}</em>${ico('chevR')}</button>
+    <div class="knb"><div class="kny">${L2('잰 것', 'Measured')} · <b>${what}</b></div>
+    ${A.length ? `<div class="knrows">${A.map((q, i) => `<div class="knr${i === NOTE.flash ? ' new' : ''}">${noteConds(st, q, prev(i))}<span class="knbar"><i style="--w:${(q.v / mx) * 100}%;--c:${hex(st === 'track' ? FCOL.f : FCOL.T)}"></i></span><b>${fx(q.v, st === 'track' ? 1 : 2)}<small> N</small></b></div>`).join('')}</div>` : `<p class="kne">${empty}</p>`}
+    ${nChg >= 2 ? `<p class="knw">${ico('info')}${L2('한꺼번에 두 가지를 바꿨어요. 하나만 바꿔야 무엇 때문인지 알 수 있어요', 'You changed two things at once. Change one at a time to know which one matters')}</p>` : A.length > 1 ? `<p class="knt">${L2('테두리 = 이번에 바꾼 조건', 'Outlined = what you changed')}</p>` : ''}</div>`;
+  el.querySelector('.knh').onclick = () => { NOTE.open = !NOTE.open; NOTE.sig = ''; noteRender(); };
+  el.classList.toggle('open', NOTE.open);
+}
+function noteFrame() {
+  if (!NOTE.el) { NOTE.el = document.createElement('div'); NOTE.el.id = 'knote'; document.body.appendChild(NOTE.el); }
+  const show = noteShown(); NOTE.el.classList.toggle('on', show); if (!show) return;
+  if (S.station === 'hang') noteHang();
+  noteRender();
+  // 자리: 왼쪽 위 (퀘스트 카드와 겹치면 그 아래)
+  const mb = document.getElementById('modeBtn'), b = mb && mb.offsetParent ? mb.getBoundingClientRect() : null, ban = document.querySelector('#kid .kban')?.getBoundingClientRect(), hud = document.getElementById('kidhud')?.getBoundingClientRect();
+  let top = Math.max(b ? b.bottom + 10 : 0, hud ? hud.bottom + 8 : 0); const w = NOTE.el.offsetWidth || 260;
+  if (ban && ban.height && ban.left < 16 + w + 8) top = Math.max(top, ban.bottom + 10);
+  const t = `${Math.round(top)}px`; if (NOTE.el.style.top !== t) NOTE.el.style.top = t;
+}
+// 레일에 '지난번' 눈금
+function noteLast() { const A = NOTE.rec.track; return A.length ? A[A.length - 1].v : null; }
 
 // ==== 14 STATE / LOOP ====
 const S = {
