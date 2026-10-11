@@ -76,39 +76,72 @@ const KID_QUIZ = [
 
 // 길잡이 쿼카 (mood: '' 보통, 'win' 신남, 'think' 궁금)
 function quokka(mood = '') {
-  const ink = '#160f3a';
-  const eyes = mood === 'win' ? `<path d="M31 53q6-8 12 0M57 53q6-8 12 0" stroke="${ink}" stroke-width="4.5" fill="none" stroke-linecap="round"/>`
+  const ink = '#4a3426';
+  const eyes = mood === 'win' ? `<path d="M31 53q6-8 12 0M57 53q6-8 12 0" stroke="${ink}" stroke-width="3.6" fill="none" stroke-linecap="round"/>`
     : mood === 'think' ? `<circle cx="38" cy="49" r="6" fill="${ink}"/><circle cx="64" cy="49" r="6" fill="${ink}"/><circle cx="40" cy="46.5" r="2.2" fill="#fff"/><circle cx="66" cy="46.5" r="2.2" fill="#fff"/>`
     : `<circle cx="37" cy="53" r="6.2" fill="${ink}"/><circle cx="63" cy="53" r="6.2" fill="${ink}"/><circle cx="39.2" cy="50.6" r="2.3" fill="#fff"/><circle cx="65.2" cy="50.6" r="2.3" fill="#fff"/>`;
   const mouth = mood === 'win' ? `<path d="M40 69q10 13 20 0z" fill="#ff5d73" stroke="${ink}" stroke-width="3.5" stroke-linejoin="round"/>`
     : mood === 'think' ? `<ellipse cx="54" cy="72" rx="3.6" ry="4.2" fill="${ink}"/>`
     : `<path d="M41 69q4.5 6 9 0q4.5 6 9 0" stroke="${ink}" stroke-width="3.5" fill="none" stroke-linecap="round"/>`;
-  return `<svg viewBox="0 0 100 100" aria-hidden="true"><g stroke="${ink}" stroke-width="4"><circle cx="23" cy="27" r="14" fill="#a8693c"/><circle cx="77" cy="27" r="14" fill="#a8693c"/></g><circle cx="23" cy="28" r="7" fill="#f0a98a"/><circle cx="77" cy="28" r="7" fill="#f0a98a"/><ellipse cx="50" cy="57" rx="38" ry="34" fill="#c98a55" stroke="${ink}" stroke-width="4"/><ellipse cx="50" cy="67" rx="24" ry="18" fill="#f6dcb4"/><circle cx="27" cy="65" r="6" fill="#ff8fa3" opacity=".75"/><circle cx="73" cy="65" r="6" fill="#ff8fa3" opacity=".75"/>${eyes}<ellipse cx="50" cy="62" rx="5.5" ry="3.8" fill="${ink}"/>${mouth}</svg>`;
+  return `<svg viewBox="0 0 100 100" aria-hidden="true"><g stroke="${ink}" stroke-width="3"><circle cx="23" cy="27" r="14" fill="#a8693c"/><circle cx="77" cy="27" r="14" fill="#a8693c"/></g><circle cx="23" cy="28" r="7" fill="#f0a98a"/><circle cx="77" cy="28" r="7" fill="#f0a98a"/><ellipse cx="50" cy="57" rx="38" ry="34" fill="#c98a55" stroke="${ink}" stroke-width="3"/><ellipse cx="50" cy="67" rx="24" ry="18" fill="#f6dcb4"/><circle cx="27" cy="65" r="6" fill="#ff8fa3" opacity=".75"/><circle cx="73" cy="65" r="6" fill="#ff8fa3" opacity=".75"/>${eyes}<ellipse cx="50" cy="62" rx="5.5" ry="3.8" fill="${ink}"/>${mouth}</svg>`;
 }
-// 글 대신 그림: 예상 보기마다 큰 그림 하나
-const PRED_PIC = {
-  tug: ['⬅️', '✋', '➡️'], team: ['0', '1', '2'], moon: ['🔺', '🟰', '🔻'], weights: ['🟰', '✌️', '🤏'],
-  floor: ['🧊', '🟫', '🟰'], water: ['🔺', '🟰', '🔻'], float: ['⬇️', '🛶'], motion: ['⏩', '🐢', '🛑'],
+// 선 아이콘 (24×24, 2px 선). 이모지는 기기마다 모양이 달라 교과서 화면에 쓰지 않는다
+const ICON = {
+  speaker: '<path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/>',
+  mute: '<path d="M11 5 6 9H3v6h3l5 4z"/><path d="m16 9 5 6M21 9l-5 6"/>',
+  arrowR: '<path d="M5 12h14M13 6l6 6-6 6"/>', arrowL: '<path d="M19 12H5M11 6l-6 6 6 6"/>',
+  arrowU: '<path d="M12 19V5M6 11l6-6 6 6"/>', arrowD: '<path d="M12 5v14M6 13l6 6 6-6"/>',
+  hold: '<path d="M2.5 12h4M21.5 12h-4M5 9l3 3-3 3M19 9l-3 3 3 3"/><rect x="9.5" y="8" width="5" height="8" rx="1"/>',
+  equal: '<path d="M5 9h14M5 15h14"/>', plus: '<path d="M12 5v14M5 12h14"/>', minus: '<path d="M5 12h14"/>',
+  sink: '<path d="M3 16c2 0 2-1.5 4.5-1.5S10 16 12 16s2.5-1.5 4.5-1.5S19 16 21 16"/><path d="M12 3v8M9 8l3 3 3-3"/>',
+  float: '<path d="M3 16c2 0 2-1.5 4.5-1.5S10 16 12 16s2.5-1.5 4.5-1.5S19 16 21 16"/><rect x="8" y="8.5" width="8" height="4.5" rx="1"/>',
+  faster: '<path d="M5 6l6 6-6 6M13 6l6 6-6 6"/>', slower: '<path d="M3 12h3M9 12h2.5M14.5 12h1.5"/><path d="M17.5 8l3 4-3 4"/>',
+  stop: '<rect x="6" y="6" width="12" height="12" rx="2.5"/>',
+  grip: '<g class="f"><circle cx="9" cy="7" r="1.4"/><circle cx="15" cy="7" r="1.4"/><circle cx="9" cy="12" r="1.4"/><circle cx="15" cy="12" r="1.4"/><circle cx="9" cy="17" r="1.4"/><circle cx="15" cy="17" r="1.4"/></g>',
+  tap: '<circle cx="12" cy="12" r="3.2"/><circle cx="12" cy="12" r="7.5" opacity=".45"/>',
+  puller: '<circle cx="12" cy="12" r="6.5" fill="currentColor" stroke="none"/>',
+  box: '<path d="M3.5 7.5 12 3l8.5 4.5v9L12 21l-8.5-4.5z"/><path d="M3.5 7.5 12 12l8.5-4.5M12 12v9"/>',
+  weight: '<circle cx="12" cy="4.6" r="1.8"/><path d="M12 6.4V8.5"/><rect x="6.5" y="8.5" width="11" height="12.5" rx="2.5"/>',
+  beaker: '<path d="M5 3h14M7 3v14.5A3.5 3.5 0 0 0 10.5 21h3a3.5 3.5 0 0 0 3.5-3.5V3"/><path d="M7 12h10"/>',
+  globe: '<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/>',
+  moon: '<path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5z"/>',
+  circle: '<circle cx="12" cy="12" r="8"/>', x: '<path d="M6 6l12 12M18 6 6 18"/>',
+  check: '<path d="M5 12.5l4.5 4.5L19 7.5"/>', info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 7.5v.5"/>',
+  star: '<path class="f" d="M12 2.8l2.8 5.7 6.3.9-4.55 4.45 1.07 6.25L12 17.15 6.38 20.1l1.07-6.25L2.9 9.4l6.3-.9z"/>',
+  chevR: '<path d="M9 6l6 6-6 6"/>', reset: '<path d="M3.5 12a8.5 8.5 0 1 0 2.6-6.1L3.5 8.5"/><path d="M3.5 3.5v5h5"/>',
+  eye: '<path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
+  ruler: '<rect x="2.5" y="8" width="19" height="8" rx="1.5"/><path d="M6.5 8v3M10.5 8v4M14.5 8v3M18.5 8v4"/>',
+  award: '<circle cx="12" cy="9" r="6"/><path d="M8.6 13.9 7 22l5-3 5 3-1.6-8.1"/>',
+  trophy: '<path d="M8 21h8M12 16.5V21M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M17 5.5h3V7a3 3 0 0 1-3 3M7 5.5H4V7a3 3 0 0 0 3 3"/>',
+  flag: '<path d="M5 21V4"/><path class="f" d="M5 4h12l-2.5 4L17 12H5z"/>',
+  cards: '<rect x="3.5" y="3" width="12" height="16" rx="2"/><path d="M8 21h10.5a2 2 0 0 0 2-2V7.5"/>',
 };
-// 만질 기구 그림
-// 추 그림 (윈도에서 깨지는 이모지 대신 직접 그린다)
-const WEIGHT_SVG = '<svg class="kwsvg" viewBox="0 0 40 40" aria-hidden="true"><path d="M20 3v8" stroke="#160f3a" stroke-width="3" fill="none"/><circle cx="20" cy="6" r="3.5" fill="none" stroke="#160f3a" stroke-width="2.5"/><rect x="8" y="11" width="24" height="26" rx="5" fill="#e0a83a" stroke="#160f3a" stroke-width="3"/><rect x="12" y="15" width="5" height="17" rx="2.5" fill="#ffe08a"/></svg>';
-const OBJ_PIC = { F1: '🟣', F2: '🟣', surface: '🟫', block: '📦', obj: WEIGHT_SVG, jack: '🥛' };
-const DIR_PIC = { '1,0': '➡️', '-1,0': '⬅️', '0,-1': '⬆️', '0,1': '⬇️' };
-// 할 일을 그림으로: [기구] + 손 동작(끌기 방향 / 톡 누르기)
+const ico = (n, c = '') => `<svg class="ki ${c}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${(ICON[n] || '').replace(/class="f"/g, 'fill="currentColor" stroke="none"')}</svg>`;
+const kcb = (on) => `<i class="kcb${on ? ' on' : ''}">${on ? ico('check') : ''}</i>`;
+const swatch = (s) => `<span class="ksw ${s}"></span>`;
+// 예상 보기 그림: i:아이콘 / s:바닥 견본 / t:글자(숫자)
+const PRED_PIC = {
+  tug: ['i:arrowL', 'i:hold', 'i:arrowR'], team: ['t:0 N', 't:1 N', 't:2 N'], moon: ['i:arrowU', 'i:equal', 'i:arrowD'], weights: ['i:equal', 't:×2', 'i:plus'],
+  floor: ['s:glass', 's:sand', 'i:equal'], water: ['i:arrowU', 'i:equal', 'i:arrowD'], float: ['i:sink', 'i:float'], motion: ['i:faster', 'i:slower', 'i:stop'],
+};
+function predPic(id, k) { const v = (PRED_PIC[id] || [])[k]; if (!v) return ''; const t = v[0], x = v.slice(2); return t === 'i' ? ico(x) : t === 's' ? swatch(x) : `<span class="kpt">${x}</span>`; }
+// 할 일 그림: [기구] + [끄는 방향 / 누르기]
+const STEP_OBJ = { F1: 'puller', F2: 'puller', surface: 'swatch', block: 'box', obj: 'weight', jack: 'beaker' };
 function kidSteps(m) {
-  if (m.quiz) return '<span class="kstep"><i class="kbig">⭕</i><i class="kbig">❌</i></span>';
-  if (m.widget === 'rocket') return '<span class="kstep"><i class="kobj">🌍</i><i class="kges drag r">👆</i><i class="kobj">🌙</i></span>';
-  return (m.hint || []).map(([k, g, dx, dy]) => g === 'drag'
-    ? `<span class="kstep"><i class="kobj">${OBJ_PIC[k] || '❓'}</i><i class="kges drag ${dx > 0 ? 'r' : dx < 0 ? 'l' : dy < 0 ? 'u' : 'd'}">👆</i><i class="kdir">${DIR_PIC[`${dx},${dy}`] || ''}</i></span>`
-    : `<span class="kstep"><i class="kobj">${OBJ_PIC[k] || '❓'}</i><i class="kges tap">👆</i></span>`).join('<b class="kplus">+</b>');
+  if (m.quiz) return `<span class="kstep"><span class="kso">${ico('circle')}</span><span class="kso">${ico('x')}</span></span>`;
+  if (m.widget === 'rocket') return `<span class="kstep"><span class="kso">${ico('globe')}</span><span class="ksa R">${ico('arrowR')}</span><span class="kso">${ico('moon')}</span></span>`;
+  const hs = m.hint || [];
+  return hs.map(([k, g, dx, dy], i) => {
+    const o = STEP_OBJ[k] || 'tap', a = g === 'drag' ? (dx > 0 ? 'R' : dx < 0 ? 'L' : dy < 0 ? 'U' : 'D') : 'tap';
+    return `<span class="kstep">${hs.length > 1 ? `<em>${i + 1}</em>` : ''}<span class="kso${o === 'puller' ? ' pull' : ''}">${o === 'swatch' ? swatch('sand') : ico(o)}</span><span class="ksa ${a}">${ico(a === 'tap' ? 'tap' : 'arrow' + a)}</span></span>`;
+  }).join('');
 }
 // 읽어 주기 (글을 못 읽는 아이도 OK)
 const VOICE = { on: true, key: '' };
 function speak(html, force) {
   try {
     const sy = window.speechSynthesis; if (!sy || (!VOICE.on && !force) || S.mode !== 'kid') return;
-    const tx = String(html).replace(/<[^>]+>/g, ' ').replace(/[←→⏩⏪▶■·…]/g, ' ').replace(/\s+/g, ' ').trim(); if (!tx) return;
+    const tx = String(html).replace(/<[^>]+>/g, ' ').replace(/[←→⏩⏪▶■·…]/g, ' ').replace(/\p{Extended_Pictographic}|\uFE0F/gu, ' ').replace(/\s+/g, ' ').trim(); if (!tx) return;
     sy.cancel(); const u = new SpeechSynthesisUtterance(tx); u.lang = isEn() ? 'en-US' : 'ko-KR'; u.rate = 0.95; u.pitch = 1.15;
     const v = sy.getVoices().find((q) => q.lang && q.lang.replace('_', '-').startsWith(u.lang)); if (v) u.voice = v;
     sy.speak(u);
@@ -153,10 +186,10 @@ const KID = {
     },
     {
       id: 'moon', stage: 4, icon: '🌙', shot: 'hang', look: 'scale', theme: 'moon', allow: [], widget: 'rocket',
-      t: { ko: ['달나라 여행', '추 3개가 걸려 있어요. 아래 <b>🚀 로켓을 잡고 달까지 끌어</b> 보세요. 저울 눈금이 어떻게 될까요?'], en: ['Trip to the Moon', 'Three weights are hanging. <b>Drag the 🚀 rocket</b> below all the way to the Moon. Watch the scale!'] },
+      t: { ko: ['달나라 여행', '추 3개가 걸려 있어요. 아래 <b>로켓 손잡이를 달까지 끌어</b> 보세요. 저울 눈금이 어떻게 될까요?'], en: ['Trip to the Moon', 'Three weights are hanging. <b>Drag the 🚀 rocket</b> below all the way to the Moon. Watch the scale!'] },
       pred: PRED(['달에 가면 저울 눈금은?', ['커져요', '그대로예요', '작아져요']], ['On the Moon, the scale reading…', ['goes up', 'stays the same', 'goes down']], 2),
       enter() { kidHang('weights', 3); },
-      meter: () => `<div class="kmeter"><span>${PHYS.nearPlanet(S.g.tgt)?.id === 'moon' ? '🌙' : PHYS.nearPlanet(S.g.tgt)?.id === 'mars' ? '🔴' : '🌍'} ${L2('저울', 'scale')} ${big(fx(S.Tlive, 2))}</span><span class="keq">·</span><span>${L2('추의 양', 'mass')} ${big(S.n.tgt * 50, 'g')}</span></div>`,
+      meter: () => `<div class="kmeter"><span>${ico(PHYS.nearPlanet(S.g.tgt)?.id === 'moon' ? 'moon' : 'globe')} ${L2('저울', 'scale')} ${big(fx(S.Tlive, 2))}</span><span class="keq">·</span><span>${L2('추의 양', 'mass')} ${big(S.n.tgt * 50, 'g')}</span></div>`,
       check: () => S.g.tgt <= 2 && S.n.tgt >= 1 && S.settle > 0.3, card: 'W',
       win: () => L2(`달에서는 끌어당기는 힘이 약해서 저울이 ${fx(S.Tlive, 2)} N만 가리켜요(지구에서는 ${fx(S.n.tgt * 0.05 * 9.8, 2)} N). 추의 양은 그대로 ${S.n.tgt * 50} g! <b style="color:#ffb36b">주황 화살표</b>(무게)만 짧아졌어요.`, `On the Moon gravity pulls only ${fx(S.Tlive, 2)} N (on Earth ${fx(S.n.tgt * 0.05 * 9.8, 2)} N). The weights are still ${S.n.tgt * 50} g — only the <b style="color:#ffb36b">orange arrow</b> (weight) got shorter!`),
     },
@@ -179,7 +212,7 @@ const KID = {
       id: 'floor', stage: 6, icon: '🧊', shot: 'track', look: 'block', theme: 'surface', allow: ['F2', 'surface'],
       hint: [['F2', 'drag', 1, 0], ['surface', 'tap']],
       t: { ko: ['미끌미끌 vs 까끌까끌', '<b>유리(얼음판)</b>에서 오른쪽 끌개를 <b>2 N쯤</b> 끌어 보세요. 그다음 <b>바닥을 눌러</b> 사포(사막)로 바꾸고 다시 2 N으로 당겨 보세요.'], en: ['Slippery vs rough', 'On <b>glass (ice)</b>, drag the right puller to about <b>2 N</b>. Then <b>tap the floor</b> to switch to sandpaper (desert) and pull 2 N again.'] },
-      pred: PRED(['똑같이 2 N으로 당기면 어느 바닥에서 미끄러질까요?', ['🧊 유리', '🟫 사포', '둘 다 똑같아요']], ['Pulling with 2 N — which floor lets it slide?', ['🧊 Glass', '🟫 Sandpaper', 'Both the same']], 0),
+      pred: PRED(['똑같이 2 N으로 당기면 어느 바닥에서 미끄러질까요?', ['유리', '사포', '둘 다 똑같아요']], ['Pulling with 2 N — which floor lets it slide?', ['Glass', 'Sandpaper', 'Both the same']], 0),
       enter() { kidTrack('glass'); },
       reset() { setParam('F2', 0); resetTrack(); },
       tick() {
@@ -188,7 +221,7 @@ const KID = {
         if (S.surface === 'sand' && S.F2.tgt >= 1.5 && S.F && S.F.mode === 'held') { c.sandT = (c.sandT || 0) + 0.08; if (c.sandT > 0.8) c.sand = true; }
       },
       check: () => KID.ctx.glass && KID.ctx.sand, card: 'f',
-      meter: () => `<div class="kmeter"><span>${T('surfName')[S.surface]} ${L2('바닥', 'floor')}</span><span class="keq">·</span><span style="color:#c4b5fd">${L2('당기는 힘', 'pull')} ${big(n1(S.F2.tgt))}</span></div><div class="kchk">${KID.ctx.glass ? '✅' : '⬜'} ${L2('유리에서 미끄러짐', 'Glass slides')} &nbsp; ${KID.ctx.sand ? '✅' : '⬜'} ${L2('사포에서 버팀 (1.5 N 이상)', 'Sandpaper holds (≥ 1.5 N)')}</div>`,
+      meter: () => `<div class="kmeter"><span>${T('surfName')[S.surface]} ${L2('바닥', 'floor')}</span><span class="keq">·</span><span style="color:#c4b5fd">${L2('당기는 힘', 'pull')} ${big(n1(S.F2.tgt))}</span></div><div class="kchk">${kcb(KID.ctx.glass)} ${L2('유리에서 미끄러짐', 'Glass slides')} &nbsp; ${kcb(KID.ctx.sand)} ${L2('사포에서 버팀 (1.5 N 이상)', 'Sandpaper holds (≥ 1.5 N)')}</div>`,
       win: () => L2(`까끌까끌한 사포는 꽉 붙잡아요. <b style="color:#fca5a5">빨간 ‘바닥이 붙잡는 힘’</b>(마찰력)이 ${n1(0.8 * 0.3 * 9.8)} N까지 커질 수 있어서 2 N으로는 못 움직여요. 미끌미끌한 유리는 ${n1(0.25 * 0.3 * 9.8)} N까지만 붙잡아요.`, `Rough sandpaper grips hard: the <b style="color:#fca5a5">red “floor grips”</b> arrow (friction) can grow to ${n1(0.8 * 0.3 * 9.8)} N, so 2 N can’t move it. Slippery glass only grips up to ${n1(0.25 * 0.3 * 9.8)} N.`),
     },
     {
@@ -219,7 +252,7 @@ const KID = {
       pred: PRED(['달리는 도막을 반대쪽에서 더 세게 당기면?', ['더 빨라져요', '점점 느려져요', '그 자리에 딱 멈춰요']], ['Pull a moving block harder the other way. It will…', ['speed up', 'slow down bit by bit', 'stop instantly']], 1),
       enter() { kidTrack('glass', XMIN()); S.speed = 0.45; S.seen = { acc: false, dec: false, rev: false }; },
       reset() { setParam('F1', 0); setParam('F2', 0); resetTrack(XMIN()); S.seen = { acc: false, dec: false, rev: false }; },
-      meter: () => { const v = Math.abs(S.trk.v), a = S.F && v > 0.01 ? S.F.a * Math.sign(S.trk.v) : 0; const st = v < 0.01 ? L2('■ 멈춤', '■ stopped') : a > 0.02 ? L2('⏩ 빨라지는 중', '⏩ speeding up') : a < -0.02 ? L2('⏪ 느려지는 중', '⏪ slowing down') : L2('▶ 같은 빠르기', '▶ steady'); return `<div class="kmeter"><span>${L2('빠르기', 'speed')} ${big(fx(v, 2), 'm/s')}</span><span class="keq">·</span><span style="color:#fde68a">${st}</span></div><div class="kchk">${S.seen.acc ? '✅' : '⬜'} ${L2('빨라짐', 'sped up')} &nbsp; ${S.seen.dec ? '✅' : '⬜'} ${L2('느려짐', 'slowed down')}</div>`; },
+      meter: () => { const v = Math.abs(S.trk.v), a = S.F && v > 0.01 ? S.F.a * Math.sign(S.trk.v) : 0; const st = v < 0.01 ? L2('멈춤', 'stopped') : a > 0.02 ? L2('빨라지는 중', 'speeding up') : a < -0.02 ? L2('느려지는 중', 'slowing down') : L2('같은 빠르기', 'steady'); return `<div class="kmeter"><span>${L2('빠르기', 'speed')} ${big(fx(v, 2), 'm/s')}</span><span class="keq">·</span><span style="color:#fde68a">${st}</span></div><div class="kchk">${kcb(S.seen.acc)} ${L2('빨라짐', 'sped up')} &nbsp; ${kcb(S.seen.dec)} ${L2('느려짐', 'slowed down')}</div>`; },
       check: () => S.seen.acc && S.seen.dec,
       win: () => L2('<b style="color:#fde68a">노란 ‘모두 합친 힘’</b>이 움직이는 쪽을 향하면 <b>빨라지고</b>, 반대쪽을 향하면 <b>느려져요</b>. 힘이 움직임(빠르기와 방향)을 바꾼 거예요!', 'When the <b style="color:#fde68a">yellow “all together”</b> arrow points the way it moves, it <b>speeds up</b>; when it points back, it <b>slows down</b>. Forces change motion!'),
     },
@@ -263,31 +296,32 @@ const KID = {
   phase() { const m = this.missions[this.i]; return m && m.pred && this.pick[this.i] == null ? 'predict' : 'play'; },
   hud() {
     const M = this.missions, el = document.getElementById('kidhud'); if (!el) return;
-    el.innerHTML = `<div class="kmap">${M.map((m, k) => `<span class="kn2${this.done[k] ? ' done' : ''}${k === this.i ? ' cur' : ''}${m.boss ? ' boss' : ''}" title="${(STAGE[LANG] || STAGE.ko)[m.stage]}">${m.icon}${this.done[k] ? '<em>★</em>' : ''}</span>`).join('<i></i>')}</div>
-      <div class="kscore"><span class="kcoin">⚡</span><b id="kpts">${Math.round(this.shown)}</b></div>
-      <button class="ksnd" title="${VOICE.on ? KT('soundOff') : KT('soundOn')}">${VOICE.on ? '🔊' : '🔇'}</button>`;
+    el.innerHTML = `<div class="kprog"><span class="kpn"><b>${Math.min(this.i + 1, M.length)}</b> / ${M.length}</span><div class="kseg">${M.map((m, k) => `<i class="${this.done[k] ? 'done' : ''}${k === this.i ? ' cur' : ''}${m.boss ? ' boss' : ''}" title="${(STAGE[LANG] || STAGE.ko)[m.stage]}"></i>`).join('')}</div></div>
+      <div class="kscore">${ico('star')}<b id="kpts">${Math.round(this.shown)}</b></div>
+      <button class="ksnd" title="${VOICE.on ? L2('소리 끄기', 'Sound off') : L2('소리 켜기', 'Sound on')}">${ico(VOICE.on ? 'speaker' : 'mute')}</button>`;
     el.querySelector('.ksnd').onclick = () => { VOICE.on = !VOICE.on; setSound(VOICE.on); ensureAudio(); if (!VOICE.on) try { speechSynthesis.cancel(); } catch (e) {} this.hud(); };
   },
   legend() {
     const el = document.getElementById('legend'); if (!el) return;
-    el.innerHTML = `<b>🃏 ${KT('cardsT')} ${this.cards.size}/${CARDS.length}</b>` + CARDS.map((c) => { const on = this.cards.has(c.k); return on ? `<span class="on"><i style="background:${hex(c.col)};box-shadow:0 0 6px ${hex(c.col)}"></i>${cardT(c)[0]}</span>` : '<span class="off">?</span>'; }).join('');
+    el.innerHTML = `<b>${ico('cards')}${KT('cardsT')} <em>${this.cards.size}/${CARDS.length}</em></b>` + CARDS.map((c) => (this.cards.has(c.k) ? `<span class="on"><i style="background:${hex(c.col)}"></i>${cardT(c)[0]}</span>` : '<span class="off"></span>')).join('');
   },
   render() {
     const box = document.getElementById('kid'), M = this.missions, N = M.length;
     this.hud(); this.legend();
-    if (this.i >= N) { khBuild(); box.innerHTML = `<div class="kmodal"><div class="kbox"><div class="kribbon gold">${L2('최종 결과', 'Results')}</div>${this.finalHTML()}</div></div>`; box.querySelector('[data-k=again]').onclick = () => this.reset(); box.querySelector('[data-k=full]').onclick = () => setMode('full'); return; }
+    if (this.i >= N) { khBuild(); box.innerHTML = `<div class="kmodal"><div class="kbox">${this.finalHTML()}</div></div>`; box.querySelector('[data-k=again]').onclick = () => this.reset(); box.querySelector('[data-k=full]').onclick = () => setMode('full'); return; }
     const m = M[this.i], t = m.t[LANG] || m.t.ko, ph = this.phase(), tag = '';
     let body = '';
-    if (m.quiz) body = `<div class="kmodal kquizm"><div class="kbox"><div class="kribbon">${L2('OX 퀴즈', 'O/X quiz')}</div>${this.quizHTML()}</div></div>`;
-    else if (ph === 'predict') { const p = m.pred[LANG] || m.pred.ko; const pic = PRED_PIC[m.id] || []; body = `<div class="kmodal"><div class="kbox kpred"><div class="kribbon">🤔 ?</div><div class="kmascot sm">${quokka('think')}</div><div class="kq"><b>${p[0]}</b><button class="ksay2" title="${L2('다시 듣기', 'Listen again')}">🔊</button></div><div class="kopts n${p[1].length}">${p[1].map((o, k) => `<button class="kopt" data-p="${k}"><i>${pic[k] || '❓'}</i><span>${o}</span></button>`).join('')}</div></div></div>`;
+    const lis = `<button class="ksay2" title="${L2('다시 듣기', 'Listen again')}">${ico('speaker')}</button>`;
+    if (m.quiz) body = `<div class="kmodal kquizm"><div class="kbox">${this.quizHTML()}</div></div>`;
+    else if (ph === 'predict') { const p = m.pred[LANG] || m.pred.ko; body = `<div class="kmodal"><div class="kbox kpred"><div class="kmh"><div class="kav sm">${quokka('think')}</div><div><div class="keye">${L2('예상하기', 'Predict')}</div><div class="kq">${p[0]}</div></div>${lis}</div><div class="kopts n${p[1].length}">${p[1].map((o, k) => `<button class="kopt" data-p="${k}"><span class="kpic">${predPic(m.id, k)}</span><span class="kol">${o}</span></button>`).join('')}</div></div></div>`;
       speakOnce(`${this.i}:pred`, `${p[0]} ${p[1].join(', ')}`); }
     else {
-      const mine = m.pred ? `<div class="kmine">🤔 <b>${(PRED_PIC[m.id] || [])[this.pick[this.i]] || ''}</b></div>` : '';
-      const rocket = m.widget === 'rocket' ? `<div class="krocket"><span>🌍<br>${L2('지구', 'Earth')}</span><div class="krk"><b style="left:100%"></b><b class="mars" style="left:${(9.8 - 3.7) / 8.2 * 100}%"></b><i class="kr">🚀</i></div><span>🌙<br>${L2('달', 'Moon')}</span></div>` : '';
-      body = `<div class="kfoot"><div class="know"><div class="knowtxt"></div></div><div class="krow">${mine}<div class="kmeterbox"></div>${m.reset ? `<button class="kreset">↺ ${L2('처음으로', 'Start again')}</button>` : ''}</div>${rocket}</div>`;
+      const mine = m.pred ? `<div class="kmine">${KT('mine')}${predPic(m.id, this.pick[this.i])}</div>` : '';
+      const rocket = m.widget === 'rocket' ? `<div class="krocket">${ico('globe')}<div class="krk"><b style="left:100%"></b><b class="mars" style="left:${(9.8 - 3.7) / 8.2 * 100}%"></b><i class="kr">${ico('grip')}</i></div>${ico('moon')}</div>` : '';
+      body = `<div class="kfoot"><div class="know"><div class="knowtxt"></div></div><div class="krow">${mine}<div class="kmeterbox"></div>${m.reset ? `<button class="kreset">${ico('reset')}<span>${L2('처음으로', 'Reset')}</span></button>` : ''}</div>${rocket}</div>`;
     }
-    box.innerHTML = `<div class="kban${m.boss ? ' boss' : ''}"><div class="kmascot">${quokka()}</div><div class="kbubble"><div class="khead"><span class="kstage">${m.boss ? 'BOSS' : 'STAGE ' + m.stage}</span><span class="ktopic">${(STAGE[LANG] || STAGE.ko)[m.stage]}</span><button class="kskip">${KT('skip')} ›</button></div><div class="ktitle"><span class="kicon">${m.icon}</span>${t[0]}<button class="ksay2" title="${L2('다시 듣기', 'Listen again')}">🔊</button></div><div class="ksteps">${kidSteps(m)}</div></div></div>${body}
-      <div class="kwin"><div class="kbox"><div class="kribbon gold">${L2('미션 성공!', 'Mission clear!')}</div><div class="kmascot sm">${quokka('win')}</div><div class="kstars"><i></i><i></i><i></i></div><div class="kwhy"></div><div class="kgain"></div><button class="kwhybtn">🔊 ${L2('왜 그럴까?', 'Why?')}</button><div class="kwintxt"></div><div class="kauto"><span>${L2('다음 미션까지', 'Next mission in')}</span><div><i></i></div></div><button class="kbtn main kgo">${KT('next')}</button></div></div>`;
+    box.innerHTML = `<div class="kban${m.boss ? ' boss' : ''}"><div class="kav">${quokka()}</div><div class="kbtxt"><div class="keye">${m.boss ? L2('도전 과제', 'Challenge') : 'Step ' + m.stage}<i></i>${(STAGE[LANG] || STAGE.ko)[m.stage]}</div><div class="ktitle">${t[0]}${lis}</div><div class="ksteps">${kidSteps(m)}</div></div><button class="kskip">${KT('skip')}${ico('chevR')}</button></div>${body}
+      <div class="kwin"><div class="kbox"><div class="kwintxt"></div><div class="kwrow"><div class="kwok">${ico('check')}</div><div class="kwmain"><div class="kwt">${L2('미션 성공', 'Mission clear')}<span class="kstars"><i>${ico('star')}</i><i>${ico('star')}</i><i>${ico('star')}</i></span></div><div class="kgain"></div></div><button class="kwhybtn">${ico('speaker')}<span>${L2('왜 그럴까?', 'Why?')}</span></button><button class="kbtn main kgo"></button></div><div class="kauto"><div><i></i></div></div></div></div>`;
     box.querySelectorAll('[data-p]').forEach((el) => (el.onclick = () => { ensureAudio(); this.pick[this.i] = +el.dataset.p; sfx('pick'); this.render(); if (m.look) this.ring(2.2, false); }));
     box.querySelectorAll('[data-b]').forEach((el) => (el.onclick = () => { ensureAudio(); if (m.quiz) this.answer(+el.dataset.b === 0); }));
     const qn = box.querySelector('.kqnext'); if (qn) qn.onclick = () => { this.ctx.q++; this.render(); };
@@ -306,9 +340,9 @@ const KID = {
   quizHTML() {
     const c = this.ctx, n = KID_QUIZ.length, q = KID_QUIZ[Math.min(c.q, n - 1)], t = q[LANG] || q.ko, a = c.ans[c.q];
     const dots = KID_QUIZ.map((_, k) => `<i class="${c.ans[k] == null ? (k === c.q ? 'cur' : '') : c.ans[k] ? 'ok' : 'no'}"></i>`).join('');
-    const fb = a == null ? '' : `<div class="kqfb ${a ? 'ok' : 'no'}"><i>${a ? '🎉' : '🤔'}</i><i>${q.a ? '⭕' : '❌'}</i><small>${t[1]}</small></div>${c.q < n - 1 ? `<button class="kbtn main wide kqnext">${KT('qNext')}</button>` : ''}`;
-    return `<div class="kquiz"><div class="kqd">${dots}<span>${Math.min(c.q + 1, n)} / ${n}</span></div><div class="kqq">${t[0]}<button class="ksay2" title="${L2('다시 듣기', 'Listen again')}">🔊</button></div>
-      ${a == null ? `<div class="kbtns"><button class="kbtn main" data-b="0" aria-label="${KT('yes')}">⭕</button><button class="kbtn main" data-b="1" aria-label="${KT('no')}">❌</button></div>` : fb}</div>`;
+    const fb = a == null ? '' : `<div class="kqfb ${a ? 'ok' : 'no'}"><span class="kqfi">${ico(a ? 'check' : 'info')}</span><div><b>${a ? L2('정답이에요', 'Correct') : L2('아쉬워요', 'Not quite')}</b><span>${L2('정답', 'Answer')} ${ico(q.a ? 'circle' : 'x')} · ${t[1]}</span></div></div>${c.q < n - 1 ? `<button class="kbtn main wide kqnext">${L2('다음 문제', 'Next question')}${ico('chevR')}</button>` : ''}`;
+    return `<div class="kquiz"><div class="kmh"><div><div class="keye">${L2('OX 퀴즈', 'O/X quiz')}<i></i>${Math.min(c.q + 1, n)} / ${n}</div><div class="kqd">${dots}</div></div><button class="ksay2" title="${L2('다시 듣기', 'Listen again')}">${ico('speaker')}</button></div><div class="kqq">${t[0]}</div>
+      ${a == null ? `<div class="kbtns kox"><button class="kbtn ko" data-b="0" aria-label="${KT('yes')}">${ico('circle')}<span>${L2('맞아요', 'True')}</span></button><button class="kbtn kx" data-b="1" aria-label="${KT('no')}">${ico('x')}<span>${L2('아니에요', 'False')}</span></button></div>` : fb}</div>`;
   },
   quizSpeech() {
     const c = this.ctx, q = KID_QUIZ[Math.min(c.q, KID_QUIZ.length - 1)], t = q[LANG] || q.ko, a = c.ans[c.q];
@@ -323,11 +357,11 @@ const KID = {
   },
   finalHTML() {
     const mx = this.max(), p = this.score / mx, nDone = this.done.filter(Boolean).length, nHit = this.hit.filter(Boolean).length;
-    const rank = p >= 0.85 ? L2('🏅 힘 박사', '🏅 Force Professor') : p >= 0.6 ? L2('🔭 힘 탐험가', '🔭 Force Explorer') : L2('🌱 힘 새싹', '🌱 Force Sprout');
-    return `<div class="kfinal"><div class="ktro">🏆</div><div class="ktitle">${L2('힘 탐험 완료!', 'Force quest complete!')}</div>
+    const rank = p >= 0.85 ? L2('힘 박사', 'Force Professor') : p >= 0.6 ? L2('힘 탐험가', 'Force Explorer') : L2('힘 새싹', 'Force Sprout');
+    return `<div class="kfinal"><div class="ktro">${ico('trophy')}</div><div class="keye">${L2('최종 결과', 'Results')}</div><div class="ktitle">${L2('힘 탐험 완료!', 'Force quest complete!')}</div>
       <div class="krank">${rank}</div>
-      <div class="kfs"><span>⚡ <b>${this.score}</b> / ${mx}</span><span>✅ ${nDone}/${this.missions.length}</span><span>🎯 ${nHit}/${this.missions.filter((m) => m.pred).length}</span></div>
-      <div class="kcards">${CARDS.map((c) => { const on = this.cards.has(c.k), t = cardT(c); return `<div class="kcard ${on ? 'on' : 'off'}" style="--c:${hex(c.col)}"><i></i><b>${on ? t[0] : '???'}</b></div>`; }).join('')}</div>
+      <div class="kfs"><div><b>${this.score}</b><span>${L2('점수', 'Score')} / ${mx}</span></div><div><b>${nDone}/${this.missions.length}</b><span>${L2('완료한 퀘스트', 'Quests done')}</span></div><div><b>${nHit}/${this.missions.filter((m) => m.pred).length}</b><span>${L2('예상 적중', 'Good guesses')}</span></div></div>
+      <div class="kcards">${CARDS.map((c) => { const on = this.cards.has(c.k), t = cardT(c); return `<div class="kcard ${on ? 'on' : 'off'}" style="--c:${hex(c.col)}"><i></i><b>${on ? t[0] : L2('잠김', 'Locked')}</b></div>`; }).join('')}</div>
       <p class="ksay">${L2('힘이 비기면 그대로, 한쪽이 이기면 움직임이 바뀌어요!', 'Balanced forces change nothing; an unbalanced force changes the motion!')}</p>
       <div class="kbtns"><button class="kbtn main" data-k="again">${KT('again')}</button><button class="kbtn" data-k="full">${KT('full')}</button></div></div>`;
   },
@@ -357,19 +391,19 @@ const KID = {
   },
   winText(m, w) {
     const quiz = m.quiz, nOk = quiz ? this.ctx.ans.filter(Boolean).length : 0, card = m.card && CARDS.find((c) => c.k === m.card);
-    w.querySelector('.kwhy').innerHTML = quiz ? '' : m.pred ? (this.pick[this.i] === m.pred.ans ? `<b class="khit">🎯 +50</b>` : `<span class="kmiss">😮 🔄</span>`) : '';
     w.classList.remove('open'); speak(quiz ? w.querySelector('.kwintxt').textContent : `${L2('미션 성공!', 'Mission clear!')} ${m.win()}`);
     w.querySelector('.kwintxt').innerHTML = quiz ? L2(`퀴즈 ${nOk}/${KID_QUIZ.length} 정답! 마지막 문제: ${(KID_QUIZ.at(-1)[LANG] || KID_QUIZ.at(-1).ko)[1]}`, `Quiz: ${nOk}/${KID_QUIZ.length} correct! Last one: ${(KID_QUIZ.at(-1)[LANG] || KID_QUIZ.at(-1).ko)[1]}`) : m.win();
     const nStar = quiz ? (nOk >= KID_QUIZ.length - 1 ? 3 : nOk >= KID_QUIZ.length / 2 ? 2 : 1) : m.pred && this.pick[this.i] !== m.pred.ans ? 2 : 3;
-    w.querySelectorAll('.kstars i').forEach((el, k) => { el.className = k < nStar ? 'on' : ''; el.style.animationDelay = `${0.25 + k * 0.22}s`; });
-    w.querySelector('.kgain').innerHTML = `<span><b class="kcoin">⚡</b>+100</span>${card ? `<span class="kgcard" style="--c:${hex(card.col)}"><i></i>🃏 ${cardT(card)[0]}</span>` : ''}`;
-    w.querySelector('.kgo').textContent = this.i === this.missions.length - 1 ? L2('🏆 결과 보기', '🏆 See results') : L2('바로 다음 →', 'Next now →');
+    w.querySelectorAll('.kstars i').forEach((el, k) => { el.className = k < nStar ? 'on' : ''; el.style.animationDelay = `${0.2 + k * 0.15}s`; });
+    const why = quiz || !m.pred ? '' : this.pick[this.i] === m.pred.ans ? `<span class="kchip ok">${ico('check')}${L2('예상 적중', 'Good guess')} +50</span>` : `<span class="kchip">${L2('예상과 달랐어요', 'Not what you guessed')}</span>`;
+    w.querySelector('.kgain').innerHTML = `${why}<span class="kchip">${ico('star')}+100</span>${card ? `<span class="kchip" style="--c:${hex(card.col)}"><i class="dot"></i>${L2('힘 카드', 'Card')} · ${cardT(card)[0]}</span>` : ''}`;
+    w.querySelector('.kgo').innerHTML = this.i === this.missions.length - 1 ? `${L2('결과 보기', 'See results')}${ico('chevR')}` : `${L2('다음', 'Next')}${ico('chevR')}`;
     const bar = w.querySelector('.kauto div i'); bar.style.animation = 'none'; void bar.offsetWidth; bar.style.animation = `kauto ${AUTO_NEXT - (m.quiz ? 0 : WIN_DELAY)}s linear forwards`;
   },
   cardPop(k) {
     const c = CARDS.find((q) => q.k === k), el = document.getElementById('kpop'); if (!el || !c || S.mode !== 'kid') return;
     const t = cardT(c);
-    el.innerHTML = `<div class="kpcard" style="--c:${hex(c.col)}"><small>🃏 ${KT('newCard')}</small><i></i><b>${t[0]}</b><span>${t[1]}</span></div>`;
+    el.innerHTML = `<div class="kpcard" style="--c:${hex(c.col)}"><small>${L2('새 힘 카드', 'New force card')}</small><i></i><b>${t[0]}</b><span>${t[1]}</span></div>`;
     el.classList.remove('on'); void el.offsetWidth; el.classList.add('on'); sfx('pop');
     const id = (this._pid = (this._pid || 0) + 1); this.after(2.6, () => { if (this._pid === id) el.classList.remove('on'); });
   },
@@ -379,7 +413,7 @@ const KID = {
   ring(dur, label) { this.fx.ring = { t: 0, dur, label }; },
   burst(n) {
     const cx = innerWidth / 2, cy = innerHeight * 0.5;
-    const cols = ['#fde68a', '#ffb36b', '#86efac', '#7dd3fc', '#c4b5fd', '#fca5a5', '#ffffff'];
+    const cols = ['#6366f1', '#a5b4fc', '#38bdf8', '#34d399', '#fbbf24', '#ffffff'];
     for (let i = 0; i < n; i++) { const a = rr(-Math.PI * 0.92, -Math.PI * 0.08), sp = rr(5, 13); this.fx.parts.push({ x: cx + rr(-60, 60), y: cy, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, r: rr(0, 6.28), vr: rr(-0.3, 0.3), w: rr(6, 10), h: rr(3, 6), c: cols[i % cols.length], life: rr(1.4, 2.4) }); }
   },
   float(txt) { const L = document.querySelector('#kidhud .kscore')?.getBoundingClientRect(); this.fx.floats.push({ txt, x: L && L.width ? L.left + L.width / 2 : innerWidth / 2, y: L && L.width ? L.bottom + 26 : 120, t: 0 }); },
@@ -400,14 +434,14 @@ const KID = {
       else {
         const v = LOOK[m.look]().clone().project(camera), x = (v.x + 1) / 2 * W, y = (1 - v.y) / 2 * H;
         const al = Math.min(1, R.t * 4, (R.dur - R.t) * 2.5);
-        for (let j = 0; j < 2; j++) { const p = (R.t * 0.9 + j * 0.5) % 1; c.strokeStyle = `rgba(253,230,138,${al * (1 - p) * 0.9})`; c.lineWidth = 3; c.beginPath(); c.arc(x, y, 30 + p * 34, 0, 7); c.stroke(); }
+        for (let j = 0; j < 2; j++) { const p = (R.t * 0.9 + j * 0.5) % 1; c.strokeStyle = `rgba(255,255,255,${al * (1 - p) * 0.9})`; c.lineWidth = 3; c.beginPath(); c.arc(x, y, 30 + p * 34, 0, 7); c.stroke(); }
         c.strokeStyle = `rgba(255,255,255,${al * 0.85})`; c.lineWidth = 2.5; c.setLineDash([7, 6]); c.lineDashOffset = -R.t * 30; c.beginPath(); c.arc(x, y, 34, 0, 7); c.stroke(); c.setLineDash([]);
         if (R.label) {   // 말풍선은 고리 왼쪽 (힘 이름표는 위쪽에 붙으므로 겹치지 않게)
-          const txt = KT('look'); c.font = '700 16px "Noto Sans KR", system-ui, sans-serif';
+          const txt = L2('여기를 보세요', 'Look here'); c.font = '600 14px "Noto Sans KR", system-ui, sans-serif';
           const tw = c.measureText(txt).width + 28, bx = x - 52 - tw - Math.abs(Math.sin(R.t * 5)) * 8;
-          c.fillStyle = `rgba(253,230,138,${al})`; c.beginPath(); c.roundRect(bx, y - 15, tw, 30, 15); c.fill();
+          c.fillStyle = `rgba(255,255,255,${al})`; c.beginPath(); c.roundRect(bx, y - 15, tw, 30, 10); c.fill();
           c.beginPath(); c.moveTo(bx + tw - 1, y - 8); c.lineTo(bx + tw - 1, y + 8); c.lineTo(bx + tw + 9, y); c.fill();
-          c.fillStyle = `rgba(42,26,12,${al})`; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText(txt, bx + tw / 2, y);
+          c.fillStyle = `rgba(17,24,39,${al})`; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText(txt, bx + tw / 2, y);
         }
       }
     }
@@ -443,7 +477,7 @@ const KID = {
     for (const p of F.parts) { p.vy += dt * 30; p.vx *= 0.99; p.x += p.vx * dt * 30; p.y += p.vy * dt * 30; p.r += p.vr; p.life -= dt; c.save(); c.globalAlpha = Math.max(0, Math.min(1, p.life * 2)); c.translate(p.x, p.y); c.rotate(p.r); c.fillStyle = p.c; c.fillRect(-p.w / 2, -p.h / 2, p.w, p.h); c.restore(); }
     F.parts = F.parts.filter((p) => p.life > 0 && p.y < H + 20);
     // 점수 떠오르기
-    for (const f of F.floats) { f.t += dt; const a = Math.max(0, 1 - f.t / 1.3), y = f.y - f.t * 50; c.globalAlpha = a; c.font = '800 30px "Noto Sans KR", system-ui, sans-serif'; c.textAlign = 'center'; c.textBaseline = 'middle'; c.lineWidth = 5; c.strokeStyle = 'rgba(42,26,12,.8)'; c.strokeText(f.txt, f.x, y); c.fillStyle = '#fde68a'; c.fillText(f.txt, f.x, y); c.globalAlpha = 1; }
+    for (const f of F.floats) { f.t += dt; const a = Math.max(0, 1 - f.t / 1.3), y = f.y - f.t * 50; c.globalAlpha = a; c.font = '700 22px Outfit, "Noto Sans KR", sans-serif'; c.textAlign = 'center'; c.textBaseline = 'middle'; c.lineWidth = 4; c.strokeStyle = 'rgba(17,24,39,.55)'; c.strokeText(f.txt, f.x, y); c.fillStyle = '#ffffff'; c.fillText(f.txt, f.x, y); c.globalAlpha = 1; }
     F.floats = F.floats.filter((f) => f.t < 1.3);
   },
 };
@@ -505,10 +539,10 @@ function KID_INTRO(on) {
   el.classList.toggle('on', on);
   if (on) {
     const t = KT('intro');
-    const tiles = isEn() ? [['👀✨', 'Forces glow'], ['📏💪', 'Long = strong'], ['🤔👆', 'Guess, then touch'], ['⭐🃏', 'Stars & cards']] : [['👀✨', '힘이 빛나요'], ['📏💪', '길면 세요'], ['🤔👆', '고르고 만져요'], ['⭐🃏', '별과 카드']];
-    el.querySelector('.box').innerHTML = `<div class="kmascot big">${quokka('win')}</div><h2>${t[0]}</h2><div class="kitiles">${tiles.map(([ic, tx]) => `<div class="kitile"><i>${ic}</i><span>${tx}</span></div>`).join('')}</div><button class="ksay2 kilisten">🔊 ${L2('설명 듣기', 'Listen')}</button>
-      <div class="kimap">${KID.missions.map((m) => `<span class="${m.boss ? 'boss' : ''}">${m.icon}</span>`).join('<i></i>')}</div>
-      <button class="kbtn main kstart">${t[5]} ▶</button><button class="kfull">${KT('full')}</button>`;
+    const tiles = [['eye', L2('힘이 화살표로 보여요', 'Forces show as arrows')], ['ruler', L2('길수록 센 힘', 'Longer = stronger')], ['tap', L2('예상하고 직접 조작', 'Guess, then try')], ['award', L2('별과 힘 카드', 'Stars & cards')]];
+    el.querySelector('.box').innerHTML = `<div class="kav lg">${quokka('win')}</div><div class="keye">${L2('힘의 작용 · 과학 실험실', 'Forces · Science lab')}</div><h2>${t[0]}</h2><div class="kitiles">${tiles.map(([ic, tx]) => `<div class="kitile"><span>${ico(ic)}</span><b>${tx}</b></div>`).join('')}</div><button class="kilisten">${ico('speaker')}<span>${L2('설명 듣기', 'Listen')}</span></button>
+      <div class="kimap">${KID.missions.map((m) => `<i class="${m.boss ? 'boss' : ''}"></i>`).join('')}</div>
+      <button class="kbtn main kstart">${t[5]}</button><button class="kfull">${KT('full')}</button>`;
     el.querySelector('.kstart').onclick = () => { ensureAudio(); if (VOICE.on) setSound(true); VOICE.key = ''; KID_INTRO(false); KID.go(0); };
     el.querySelector('.kfull').onclick = () => { KID_INTRO(false); setMode('full'); };
     el.querySelector('.kilisten').onclick = () => speak(t.slice(1, 5).map((q) => q[1]).join(' '), true);

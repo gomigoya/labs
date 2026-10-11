@@ -6,11 +6,11 @@
 const KH = { el: null, items: [], drag: null };
 const KH_GOAL = { team: { F1: 1, F2: 1 }, floor: { F2: 2 }, boss: { F2: 4 } };
 const KH_FLEN = 0.22;   // 힘 레일 길이 (m, 장면 속)
-const KH_SURF = { glass: '🧊', wood: '🌲', sand: '🟫' };
-const khRailPx = () => clamp(innerWidth * 0.2, 170, 270);
+const khRailPx = () => clamp(innerWidth * 0.2, 120, 270);
 function khScreenEnds(k) {
-  const R = KH_RAIL[k], [a, b] = R.ends().map(khProj); if (k === 'jack') return [a, b];
-  const dx = b.x - a.x, dy = b.y - a.y, l = Math.hypot(dx, dy) || 1, L = khRailPx();
+  const R = KH_RAIL[k]; let [a, b] = R.ends().map(khProj); if (k === 'jack') return [a, b];
+  const dx = b.x - a.x, dy = b.y - a.y, l = Math.hypot(dx, dy) || 1, L = khRailPx(), P = 40;   // 끌개에서 화면상 40px 떨어져 시작 (두 손잡이가 겹치지 않게)
+  a = { x: a.x + dx / l * P, y: a.y + dy / l * P };
   const b2 = { x: a.x + dx / l * L, y: a.y + dy / l * L }, M = 44;   // 화면 밖으로 나가지 않게 밀어 넣기
   const lo = Math.min(a.x, b2.x), hi = Math.max(a.x, b2.x), sh = lo < M ? M - lo : hi > innerWidth - M ? innerWidth - M - hi : 0;
   return [{ x: a.x + sh, y: a.y }, { x: b2.x + sh, y: b2.y }];
@@ -29,7 +29,7 @@ const KH_RAIL = {
 };
 function khForceEnds(k) {
   const c = HERO.ts[k === 'F1' ? 0 : 1].cart.getWorldPosition(new THREE.Vector3()), d = khDirF(k);
-  const a = c.clone().add(V3(d * 0.05, 0.05, 0.03));
+  const a = c.clone().add(V3(0, 0.05, 0.03));
   return [a, a.clone().add(V3(d * KH_FLEN, 0, 0))];
 }
 
@@ -45,26 +45,26 @@ function khBuild() {
       const R = KH_RAIL[k], force = k !== 'jack';
       el = document.createElement('div'); el.className = `kh khrail ${force ? 'force' : 'water'}`;
       const ticks = force ? Array.from({ length: R.max() + 1 }, (_, i) => `<span class="khtick" style="left:${(i / R.max()) * 100}%"><em>${i}</em></span>`).join('') : '';
-      const g = goal[k] != null ? `<span class="khgoal" style="left:${(goal[k] / R.max()) * 100}%">🚩</span>` : '';
-      el.innerHTML = `<div class="khbar"><i class="khfill"></i>${ticks}${g}</div><i class="khghost">👆</i><button class="khknob" aria-label="${k}"><span>✋</span></button><div class="khval"></div>`;
+      const g = goal[k] != null ? `<span class="khgoal" style="left:${(goal[k] / R.max()) * 100}%">${ico('flag')}</span>` : '';
+      el.innerHTML = `<div class="khbar"><i class="khfill"></i>${ticks}${g}</div><i class="khghost"></i><button class="khknob" aria-label="${k}">${ico('grip')}</button><div class="khval"></div>`;
       const knob = el.querySelector('.khknob');
       knob.onpointerdown = (e) => {
         if (!KID.allows(k)) return; ensureAudio(); KID.acted(); if (k !== 'jack') KID.ctx.fail = false;
-        try { knob.setPointerCapture(e.pointerId); } catch (er) {} el.classList.add('drag'); knob.firstChild.textContent = '✊';
+        try { knob.setPointerCapture(e.pointerId); } catch (er) {} el.classList.add('drag');
         KH.drag = { k, ends: khScreenEnds(k), last: R.get() }; DRAG.kind = 'kh-' + k; khMove(e); sfx('pick');
       };
       knob.onpointermove = (e) => { if (KH.drag && KH.drag.k === k) khMove(e); };
-      knob.onpointerup = knob.onpointercancel = () => { if (!KH.drag) return; KH.drag = null; DRAG.kind = null; el.classList.remove('drag'); knob.firstChild.textContent = '✋'; KID.update(true); };
+      knob.onpointerup = knob.onpointercancel = () => { if (!KH.drag) return; KH.drag = null; DRAG.kind = null; el.classList.remove('drag'); KID.update(true); };
     } else if (k === 'surface') {
       el = document.createElement('div'); el.className = 'kh khpick';
-      el.innerHTML = SURFS.map((s) => `<button data-s="${s}"><i>${KH_SURF[s]}</i><span>${T('surfName')[s]}</span></button>`).join('');
+      el.innerHTML = SURFS.map((s) => `<button data-s="${s}">${swatch(s)}<span>${T('surfName')[s]}</span></button>`).join('');
       el.querySelectorAll('button').forEach((b) => (b.onclick = () => {
         if (!KID.allows('surface')) return; KID.acted(); ensureAudio();
         const L = S.load.tgt; kidTrack(b.dataset.s); setParam('load', L, true); KID.ctx.fail = false; KID.ctx.hold = 0; sfx('click'); KID.update(true);
       }));
     } else if (k === 'block' || k === 'obj') {
       el = document.createElement('div'); el.className = `kh khstep ${k}`;
-      el.innerHTML = `<button data-d="-1">➖</button><span class="khcount"></span><button data-d="1">➕</button>`;
+      el.innerHTML = `<button data-d="-1" aria-label="-">${ico('minus')}</button><span class="khcount"></span><button data-d="1" aria-label="+">${ico('plus')}</button>`;
       el.querySelectorAll('button').forEach((b) => (b.onclick = () => {
         if (!KID.allows(k)) return; KID.acted(); ensureAudio(); const d = +b.dataset.d;
         if (k === 'block') { const L = clamp(S.load.tgt + d, 0, PC.loadMax); kidDesign(S.surface); setParam('load', L, true); }
@@ -113,8 +113,8 @@ function khFrame() {
       el.style.cssText = `left:${p.x + off[0]}px;top:${p.y + off[1]}px`;
       if (k === 'surface') el.querySelectorAll('button').forEach((b) => b.classList.toggle('on', b.dataset.s === S.surface));
       else {
-        const n = k === 'block' ? S.load.tgt : S.n.tgt, mx = k === 'block' ? PC.loadMax : PC.nMax, ic = k === 'block' ? '📦' : WEIGHT_SVG;
-        const h = `<i>${ic}</i><b>${n}</b>`; const c = el.querySelector('.khcount'); if (c._h !== h) { c.innerHTML = h; c._h = h; }
+        const n = k === 'block' ? S.load.tgt : S.n.tgt, mx = k === 'block' ? PC.loadMax : PC.nMax, ic = ico(k === 'block' ? 'box' : 'weight');
+        const h = `${ic}<b>${n}</b>`; const c = el.querySelector('.khcount'); if (c._h !== h) { c.innerHTML = h; c._h = h; }
         el.querySelector('[data-d="-1"]').disabled = n <= 0; el.querySelector('[data-d="1"]').disabled = n >= mx;
       }
     }

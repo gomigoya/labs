@@ -7,7 +7,7 @@
 <meta name="theme-color" content="#1a1511">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Jua&family=Outfit:wght@600;800&family=DM+Mono:wght@400;500&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&family=DM+Mono:wght@400;500&family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{
   --warm:#ffb36b; --warm2:#ffcf9a; --cool:#7dd3fc; --cool2:#bae6fd; --violet:#c4b5fd; --green:#86efac; --red:#fca5a5; --yellow:#fde68a;
@@ -398,315 +398,308 @@ body.kid #modeBtn{top:auto;bottom:14px;left:286px;right:auto;transform:none;padd
   #kid .kskip{position:static;display:block;margin:8px 0 0 auto}
 }
 
-/* ===== 쉬운 모드: 게임 화면 (장면 위 팝업 층) ===== */
-:root{--ki:#160f3a;--kp1:#5b41d6;--kp2:#33208f;--ky1:#ffe066;--ky2:#ffb21e;--kg1:#5ef0a8;--kg2:#14b46c;--kr1:#ff8197;--kr2:#ee3a5c;--kb1:#6fd0ff;--kb2:#1e93e6;--kdisp:'Black Han Sans','Noto Sans KR',sans-serif;--kbody:'Jua','Noto Sans KR',sans-serif}
+/* ===== 쉬운 모드 UI: 디지털 교과서 (흰 카드 + 남색 강조, 측정값은 어두운 계기판) ===== */
+:root{--kbg:#fff;--kbg2:#f4f5f9;--kline:rgba(17,24,39,.09);--ktx:#111827;--ksub:#5b6475;--kacc:#4f46e5;--kacc-d:#4338ca;--kacc2:#eef0ff;--kok:#16a34a;--kok2:#e9f8ee;--kgold:#f5b301;--kpull:#6d5ce8;--kglass:rgba(15,18,26,.76);--kshadow:0 1px 2px rgba(16,24,40,.06),0 14px 36px -10px rgba(16,24,40,.38);--kfont:'Noto Sans KR',system-ui,sans-serif;--knum:'Outfit','Noto Sans KR',sans-serif}
 body.kid #left{display:none!important}
-body.kid #kid{position:fixed!important;inset:0!important;max-height:none!important;overflow:visible!important;margin:0!important;padding:0;background:none;border:0;border-radius:0;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none;pointer-events:none;z-index:12;font-family:var(--kbody)}
+body.kid #kid{position:fixed!important;inset:0!important;max-height:none!important;overflow:visible!important;margin:0!important;padding:0;background:none;border:0;border-radius:0;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none;pointer-events:none;z-index:12;font-family:var(--kfont);color:var(--ktx)}
+#kid,#kidIntro,#khandles,#kidhud,#legend,#kpop{word-break:keep-all;overflow-wrap:anywhere}
 #kid>*{pointer-events:auto}
-#kid b{font-weight:400}
-/* 공통: 보라 게임 패널 */
-#kid .kbubble,#kid .kbox,#kidIntro .box{background:linear-gradient(180deg,var(--kp1),var(--kp2));border:3px solid var(--ki);border-radius:24px;box-shadow:inset 0 3px 0 rgba(255,255,255,.28),inset 0 -5px 0 rgba(0,0,0,.2),0 6px 0 var(--ki),0 18px 34px rgba(0,0,0,.35);color:#fff}
-/* 공통: 말랑한 3D 버튼 */
-body.kid .kbtn,#kidIntro .kbtn{font:400 20px/1.15 var(--kdisp);letter-spacing:.01em;color:var(--ki);background:linear-gradient(180deg,var(--ky1),var(--ky2));border:3px solid var(--ki);border-radius:18px;padding:13px 16px;box-shadow:inset 0 3px 0 rgba(255,255,255,.55),inset 0 -4px 0 rgba(0,0,0,.14),0 5px 0 var(--ki);cursor:pointer;transition:transform .08s,box-shadow .08s,filter .15s}
-body.kid .kbtn:hover,#kidIntro .kbtn:hover{filter:brightness(1.07);background:linear-gradient(180deg,var(--ky1),var(--ky2))}
-body.kid .kbtn:active,#kidIntro .kbtn:active{transform:translateY(4px);box-shadow:inset 0 3px 0 rgba(255,255,255,.55),0 1px 0 var(--ki)}
-/* 리본 제목 */
-#kid .kribbon{position:absolute;left:50%;top:-24px;transform:translateX(-50%) rotate(-2deg);white-space:nowrap;font:400 24px/1 var(--kdisp);color:#fff;background:linear-gradient(180deg,var(--kr1),var(--kr2));border:3px solid var(--ki);border-radius:12px;padding:9px 26px 10px;box-shadow:inset 0 3px 0 rgba(255,255,255,.4),0 5px 0 var(--ki);text-shadow:0 3px 0 var(--ki),2px 0 0 var(--ki),-2px 0 0 var(--ki),0 -2px 0 var(--ki);z-index:2}
-#kid .kribbon.gold{background:linear-gradient(180deg,var(--ky1),var(--ky2));animation:kribbon .5s cubic-bezier(.2,1.6,.4,1)}
-@keyframes kribbon{from{transform:translateX(-50%) scale(.3) rotate(-12deg)}to{transform:translateX(-50%) rotate(-2deg)}}
-/* 쿼카 */
-#kid .kmascot,#kidIntro .kmascot{flex:none;width:92px;height:92px;filter:drop-shadow(0 5px 0 rgba(22,15,58,.55));animation:kbounce 2.4s ease-in-out infinite}
-#kid .kmascot svg,#kidIntro .kmascot svg{width:100%;height:100%;display:block}
-#kid .kmascot.sm{width:70px;height:70px;margin:2px auto -2px}
-#kidIntro .kmascot.big{width:84px;height:84px;margin:-6px auto 2px}
-@keyframes kbounce{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-6px) rotate(3deg)}}
+.ki{width:1em;height:1em;flex:none;display:inline-block;vertical-align:-.14em}
+.ki.f{fill:currentColor;stroke:none}
+.ksw{display:inline-block;width:1em;height:1em;border-radius:.24em;box-shadow:inset 0 0 0 1px rgba(17,24,39,.16)}
+.ksw.glass{background:linear-gradient(135deg,#eaf7ff 0%,#bfe4f8 42%,#f6fcff 52%,#a7d5ee 100%)}
+.ksw.wood{background:repeating-linear-gradient(100deg,#c38c57 0 3px,#a8733f 3px 5px,#cf9c68 5px 9px)}
+.ksw.sand{background:radial-gradient(circle at 25% 30%,#6b4527 1px,transparent 1.6px) 0 0/5px 5px,radial-gradient(circle at 70% 65%,#4e311b 1px,transparent 1.6px) 0 0/6px 6px,#a06e45}
 
-/* ---- 위: 쿼카 + 말풍선 ---- */
-#kid .kban{position:absolute;top:66px;left:50%;transform:translateX(-50%);width:min(760px,calc(100vw - 32px));display:flex;align-items:flex-start;gap:10px;animation:kdrop .45s cubic-bezier(.2,1.4,.4,1)}
-#kid .kban .kmascot{margin-top:4px}
-#kid .kbubble{position:relative;flex:1;min-width:0;padding:11px 18px 13px}
-#kid .kbubble::before{content:"";position:absolute;left:-15px;top:30px;border:12px solid transparent;border-right:15px solid var(--ki);border-left:0}
-#kid .kbubble::after{content:"";position:absolute;left:-9px;top:33px;border:9px solid transparent;border-right:11px solid var(--kp1);border-left:0}
-#kid .kban .khead{display:flex;align-items:center;gap:8px;margin:0 0 4px}
-#kid .kstage{font:400 14px/1 var(--kdisp);letter-spacing:.06em;color:var(--ki);background:linear-gradient(180deg,var(--ky1),var(--ky2));border:2.5px solid var(--ki);border-radius:9px;padding:5px 9px 4px;transform:rotate(-3deg);box-shadow:0 3px 0 var(--ki)}
-#kid .kban.boss .kstage{background:linear-gradient(180deg,var(--kr1),var(--kr2));color:#fff}
-#kid .ktopic{font:400 14px/1 var(--kbody);color:#d9d0ff}
-#kid .kban .kskip{position:static;margin-left:auto;border:0;background:rgba(22,15,58,.35);color:#d9d0ff;border-radius:999px;padding:5px 10px;font:400 13px/1 var(--kbody);cursor:pointer}
-#kid .kban .kskip:hover{color:#fff;background:rgba(22,15,58,.6)}
-#kid .ktitle{display:flex;align-items:center;gap:8px;font:400 27px/1.15 var(--kdisp);color:#fff;text-shadow:0 3px 0 var(--ki),2px 0 0 var(--ki),-2px 0 0 var(--ki),0 -2px 0 var(--ki)}
-#kid .ktitle .kicon{font-size:26px;text-shadow:none}
-#kid .ksay{margin:6px 0 0;font:400 17px/1.45 var(--kbody);color:#f1edff}
-#kid .ksay b{color:var(--ky1)}
+/* 공통 표면 */
+#kid .kban,#kid .kbox,#kidIntro .box{background:var(--kbg);border:1px solid var(--kline);border-radius:20px;box-shadow:var(--kshadow);color:var(--ktx)}
+#kid .keye,#kidIntro .keye{display:flex;align-items:center;gap:7px;font:700 12px/1 var(--kfont);letter-spacing:.06em;color:var(--kacc);text-transform:uppercase}
+#kid .keye i{width:3px;height:3px;border-radius:50%;background:currentColor;opacity:.55}
+#kid .kav,#kidIntro .kav{flex:none;display:grid;place-items:center;width:52px;height:52px;border-radius:50%;background:#f5ece1;overflow:hidden}
+#kid .kav svg,#kidIntro .kav svg{width:86%;height:86%;margin-top:8%}
+#kid .kav.sm{width:44px;height:44px}
+#kid .ksay2{flex:none;display:inline-grid;place-items:center;width:32px;height:32px;border-radius:10px;border:0;background:var(--kbg2);color:var(--ksub);font-size:17px;cursor:pointer;transition:background .15s,color .15s}
+#kid .ksay2:hover{background:var(--kacc2);color:var(--kacc)}
+body.kid .kbtn,#kidIntro .kbtn{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:44px;padding:0 18px;border-radius:12px;border:1px solid var(--kline);background:#fff;color:var(--ktx);font:600 15px/1 var(--kfont);box-shadow:0 1px 2px rgba(16,24,40,.06);cursor:pointer;transition:background .15s,border-color .15s,transform .1s}
+body.kid .kbtn:hover,#kidIntro .kbtn:hover{background:var(--kbg2)}
+body.kid .kbtn:active,#kidIntro .kbtn:active{transform:scale(.98)}
+body.kid .kbtn.main,#kidIntro .kbtn.main{background:var(--kacc);border-color:var(--kacc);color:#fff;box-shadow:0 1px 2px rgba(16,24,40,.1),0 8px 18px -8px rgba(79,70,229,.7)}
+body.kid .kbtn.main:hover,#kidIntro .kbtn.main:hover{background:var(--kacc-d)}
 
-/* ---- 아래: 지금 상태 + 계기 ---- */
-#kid .kfoot{position:absolute;left:50%;bottom:64px;transform:translateX(-50%);width:min(700px,calc(100vw - 32px));display:flex;flex-direction:column;gap:8px;align-items:center}
-#kid .kfoot .krow{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;width:100%}
-#kid .kfoot .know{margin:0;border:2.5px solid var(--ki);border-radius:999px;background:rgba(255,255,255,.94);color:var(--ki);padding:7px 16px;font:400 16px/1.35 var(--kbody);box-shadow:0 4px 0 var(--ki);text-align:center}
-#kid .kfoot .know b{color:#5b41d6!important}
-#kid .kfoot .kmeter,#kid .kfoot .kchk{margin:0;background:linear-gradient(180deg,var(--kp1),var(--kp2));border:3px solid var(--ki);border-radius:18px;box-shadow:inset 0 2px 0 rgba(255,255,255,.25),0 5px 0 var(--ki);font:400 16px/1.3 var(--kbody);color:#fff;padding:8px 14px}
-#kid .kfoot .kchk{margin-top:6px}
-#kid .kn{font:400 28px/1 var(--kdisp);color:var(--ky1);text-shadow:0 2px 0 var(--ki)}
-#kid .keq{font:400 26px/1 var(--kdisp);color:var(--ky1)}
-#kid .kfoot .kmine{margin:0;font:400 15px/1 var(--kbody);color:#fff;background:linear-gradient(180deg,var(--kr1),var(--kr2));border:2.5px solid var(--ki);border-radius:999px;padding:8px 13px;box-shadow:0 4px 0 var(--ki)}
-#kid .kfoot .kmine b{color:#fff}
-#kid .kfoot .kreset{margin:0;font:400 15px/1 var(--kbody);color:var(--ki);background:#fff;border:2.5px solid var(--ki);border-radius:999px;padding:9px 14px;box-shadow:0 4px 0 var(--ki);cursor:pointer}
-#kid .kfoot .kreset:active{transform:translateY(3px);box-shadow:0 1px 0 var(--ki)}
-#kid .kfoot .krocket{width:min(460px,100%);margin:0;background:linear-gradient(180deg,var(--kp1),var(--kp2));border:3px solid var(--ki);border-radius:999px;padding:6px 14px;box-shadow:0 5px 0 var(--ki);font:400 13px/1.2 var(--kbody);color:#fff}
-#kid .krk{border:2.5px solid var(--ki)}
-#kid .kgauge{border:2px solid var(--ki);background:rgba(22,15,58,.5)}
-#kid .kgl,#kid .kgl2{font-family:var(--kbody)}
+/* ---- 위: 퀘스트 카드 ---- */
+#kid .kban{position:absolute;top:64px;left:50%;transform:translateX(-50%);width:max-content;min-width:min(440px,calc(100vw - 32px));max-width:min(640px,calc(100vw - 32px));display:flex;align-items:flex-start;gap:14px;padding:14px 14px 14px 14px;animation:kin .35s cubic-bezier(.2,.9,.3,1)}
+#kid .kbtxt{flex:1;min-width:0}
+#kid .kban.boss .keye{color:#c2410c}
+#kid .ktitle{display:flex;align-items:center;gap:8px;margin-top:6px;font:700 20px/1.3 var(--kfont);letter-spacing:-.01em;color:var(--ktx)}
+#kid .kskip{position:static;right:auto;bottom:auto;flex:none;display:inline-flex;align-items:center;gap:2px;border:0;background:none;color:var(--ksub);font:500 13px/1 var(--kfont);padding:4px 2px;cursor:pointer;white-space:nowrap}
+#kid .kskip:hover{color:var(--ktx)}
+#kid .ksteps{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+#kid .kstep{display:inline-flex;align-items:center;gap:7px;padding:5px 12px 5px 6px;border-radius:12px;background:var(--kbg2)}
+#kid .kstep em{display:grid;place-items:center;width:18px;height:18px;border-radius:50%;background:var(--kacc);color:#fff;font:700 11px/1 var(--knum);font-style:normal}
+#kid .kso{display:grid;place-items:center;width:30px;height:30px;border-radius:9px;background:#fff;box-shadow:inset 0 0 0 1px var(--kline);font-size:18px;color:var(--ktx)}
+#kid .kso.pull{color:var(--kpull)}
+#kid .kso .ksw{width:18px;height:18px}
+#kid .ksa{display:inline-grid;font-size:20px;color:var(--kacc)}
+#kid .ksa.R{animation:knR 1.6s ease-in-out infinite}
+#kid .ksa.L{animation:knL 1.6s ease-in-out infinite}
+#kid .ksa.U{animation:knU 1.6s ease-in-out infinite}
+#kid .ksa.D{animation:knD 1.6s ease-in-out infinite}
+#kid .ksa.tap{animation:knT 1.3s ease-in-out infinite}
+@keyframes knR{0%,100%{transform:translateX(-2px)}50%{transform:translateX(4px)}}
+@keyframes knL{0%,100%{transform:translateX(2px)}50%{transform:translateX(-4px)}}
+@keyframes knU{0%,100%{transform:translateY(2px)}50%{transform:translateY(-4px)}}
+@keyframes knD{0%,100%{transform:translateY(-2px)}50%{transform:translateY(4px)}}
+@keyframes knT{0%,100%{transform:scale(1)}50%{transform:scale(.82)}}
+#kid .kban .ksay,#kid .kfoot .know{display:none}
 
-/* ---- 가운데 팝업 (예상·퀴즈·결과) ---- */
-#kid .kmodal{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:16px;background:radial-gradient(circle at 50% 50%,rgba(22,15,58,.25),rgba(22,15,58,.62))}
-#kid .kbox{position:relative;width:min(500px,100%);max-height:calc(100vh - 120px);overflow:visible;padding:34px 22px 22px;text-align:center;animation:kpopin .45s cubic-bezier(.2,1.5,.4,1)}
+/* ---- 아래: 측정 계기판 (어두운 유리) ---- */
+#kid .kfoot{position:absolute;left:50%;bottom:20px;transform:translateX(-50%);width:min(720px,calc(100vw - 32px));display:flex;flex-direction:column;align-items:center;gap:8px}
+#kid .kfoot .krow{display:flex;align-items:stretch;justify-content:center;gap:8px;flex-wrap:wrap;width:100%}
+#kid .kfoot .kmeterbox{display:flex;flex-direction:column;gap:6px}
+#kid .kfoot .kmeter,#kid .kfoot .kchk,#kid .kfoot .kmine,#kid .kfoot .kreset,#kid .kfoot .krocket{margin:0;background:var(--kglass);backdrop-filter:blur(14px) saturate(1.2);-webkit-backdrop-filter:blur(14px) saturate(1.2);border:1px solid rgba(255,255,255,.1);border-radius:14px;color:#e8eaf0;box-shadow:0 10px 26px -10px rgba(0,0,0,.6)}
+#kid .kfoot .kmeter{padding:10px 16px;font:500 14px/1.3 var(--kfont);gap:12px}
+#kid .kfoot .kchk{padding:8px 14px;font:500 13.5px/1.4 var(--kfont)}
+#kid .kn{font:700 22px/1 var(--knum);font-variant-numeric:tabular-nums;color:#fff}
+#kid .keq{font:600 20px/1 var(--knum);color:#fde68a}
+#kid .kfoot .kmine{display:flex;align-items:center;gap:8px;padding:0 14px;font:500 12.5px/1 var(--kfont);color:#a9afbd}
+#kid .kfoot .kmine .ki,#kid .kfoot .kmine .kpt{font-size:20px;color:#c4b5fd}
+#kid .kfoot .kmine .kpt{font:700 18px/1 var(--knum)}
+#kid .kfoot .kmine .ksw{width:20px;height:20px}
+#kid .kfoot .kreset{display:flex;align-items:center;gap:6px;padding:0 14px;font:500 13px/1 var(--kfont);cursor:pointer}
+#kid .kfoot .kreset:hover{background:rgba(30,34,46,.88)}
+#kid .kfoot .krocket{display:flex;align-items:center;gap:12px;width:min(460px,100%);padding:6px 16px;font-size:22px;color:#cbd5e1}
+#kid .krk{position:relative;flex:1;height:36px;background:none;border:0;box-shadow:none;border-radius:0;cursor:grab;touch-action:none}
+#kid .krk::before{content:"";position:absolute;left:0;right:0;top:50%;height:6px;margin-top:-3px;border-radius:3px;background:linear-gradient(90deg,#60a5fa,#94a3b8)}
+#kid .krk b{position:absolute;top:50%;width:8px;height:8px;margin:-4px 0 0 -4px;border-radius:50%;background:#fff}
+#kid .krk b.mars{background:#f87171}
+#kid .krk .kr{position:absolute;top:50%;display:grid;place-items:center;width:32px;height:32px;border-radius:50%;background:#fff;color:var(--kpull);font-size:15px;transform:translate(-50%,-50%);filter:none;box-shadow:0 0 0 3px var(--kpull),0 4px 10px rgba(0,0,0,.45)}
+
+/* ---- 가운데 창 (예상·퀴즈·결과) ---- */
+#kid .kmodal{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(10,12,20,.45);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
+#kid .kbox{position:relative;width:min(560px,100%);max-height:calc(100vh - 96px);overflow:auto;padding:22px;text-align:left;animation:kpop2 .32s cubic-bezier(.2,.9,.3,1.12)}
+#kid .kmh{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+#kid .kmh>div:not(.kav){flex:1;min-width:0}
+#kid .kq{margin-top:5px;font:700 20px/1.4 var(--kfont);color:var(--ktx);text-wrap:balance}
 #kid .kpred{margin:0}
-#kid .kpred .kq{font:400 15px/1.4 var(--kbody);color:#d9d0ff;margin:4px 0 0}
-#kid .kpred .kq b{display:block;font:400 25px/1.25 var(--kdisp);color:#fff;margin-top:6px;text-shadow:0 3px 0 var(--ki)}
-#kid .kopts{display:grid;gap:12px;margin-top:16px;grid-template-columns:1fr}
-#kid .kopts.n2{grid-template-columns:1fr 1fr}
-#kid .kopt{display:flex;align-items:center;gap:10px;text-align:left;font:400 18px/1.25 var(--kbody);color:var(--ki);border:3px solid var(--ki);border-radius:18px;padding:13px 14px;background:linear-gradient(180deg,var(--kb1),var(--kb2));box-shadow:inset 0 3px 0 rgba(255,255,255,.5),0 5px 0 var(--ki);cursor:pointer;transition:transform .1s,box-shadow .1s}
-#kid .kopt:nth-child(2){background:linear-gradient(180deg,var(--kr1),var(--kr2))}
-#kid .kopt:nth-child(3){background:linear-gradient(180deg,var(--kg1),var(--kg2))}
-#kid .kopt:hover{transform:translateY(-3px) rotate(-1deg);box-shadow:inset 0 3px 0 rgba(255,255,255,.5),0 8px 0 var(--ki)}
-#kid .kopt:active{transform:translateY(4px);box-shadow:0 1px 0 var(--ki)}
-#kid .kopt em{flex:none;display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:#fff;border:2.5px solid var(--ki);font:400 18px/1 var(--kdisp);font-style:normal;color:var(--ki)}
-#kid .kopt span{color:#fff;text-shadow:0 2px 0 rgba(22,15,58,.7)}
+#kid .kopts{display:grid;grid-template-columns:repeat(var(--n,3),1fr);gap:10px;margin:0}
+#kid .kopts.n2{--n:2}
+#kid .kopt{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;min-height:132px;padding:16px 10px 14px;border-radius:16px;border:1.5px solid var(--kline);background:#fff;color:var(--ktx);font:inherit;text-align:center;cursor:pointer;box-shadow:none;transition:border-color .15s,box-shadow .15s,transform .15s}
+#kid .kopt:hover{border-color:var(--kacc);box-shadow:0 0 0 4px var(--kacc2);transform:translateY(-2px)}
+#kid .kopt:active{transform:translateY(0) scale(.98)}
+#kid .kpic{display:grid;place-items:center;height:52px;font-size:46px;color:var(--kacc)}
+#kid .kpic .ksw{width:46px;height:46px;border-radius:12px}
+#kid .kpt{font:700 34px/1 var(--knum);color:var(--kacc)}
+#kid .kol{font:500 14px/1.35 var(--kfont);color:var(--ksub)}
 #kid .kpred.shake{animation:kshake .4s}
 
-/* ---- 미션 성공 ---- */
-#kid .kwin{display:none!important;position:absolute;left:50%;bottom:50px;transform:translateX(-50%);width:min(540px,calc(100vw - 32px));margin:0;padding:0;background:none;border:0}
-#kid .kwin.on{display:block!important}
-#kid .kwin .kbox{width:100%;padding-top:30px}
+/* ---- 미션 성공 (아래 띠) ---- */
+#kid .kwin{display:none!important;position:absolute;left:50%;bottom:20px;transform:translateX(-50%);width:min(720px,calc(100vw - 32px));margin:0;padding:0;background:none;border:0}
+#kid .kwin.on{display:block!important;animation:kup .35s cubic-bezier(.2,.9,.3,1.1)}
+#kid .kwin .kbox{width:100%;max-height:none;overflow:hidden;padding:14px 16px 16px;animation:none}
 #kid:has(.kwin.on) .kfoot{display:none}
-#kid .kwin .kmascot.sm{position:absolute;left:-26px;top:-46px;width:84px;height:84px;margin:0}
-#kid .kstars{display:flex;justify-content:center;align-items:flex-end;gap:6px;margin:4px 0 8px}
-#kid .kstars i{width:46px;height:46px;background:#2a1b72;clip-path:polygon(50% 0,63% 34%,100% 36%,71% 59%,81% 96%,50% 75%,19% 96%,29% 59%,0 36%,37% 34%);filter:drop-shadow(0 3px 0 var(--ki))}
-#kid .kstars i:nth-child(2){width:60px;height:60px;margin-bottom:8px}
-#kid .kstars i.on{background:linear-gradient(180deg,#fff6a8,var(--ky2));animation:kstar .5s cubic-bezier(.2,1.8,.4,1) both}
-@keyframes kstar{from{transform:scale(0) rotate(-90deg)}to{transform:none}}
-#kid .kwhy:empty{display:none}
-#kid .kwhy{margin:0 0 8px;font:400 15px/1.4 var(--kbody)}
-#kid .khit{display:inline-block;color:var(--ki);background:linear-gradient(180deg,var(--kg1),var(--kg2));border:2.5px solid var(--ki);border-radius:999px;padding:5px 12px;box-shadow:0 3px 0 var(--ki)}
-#kid .kmiss{color:#ffe7a6}
-#kid .kwintxt{font:400 16.5px/1.5 var(--kbody);color:#fff;margin:0 0 10px;text-align:left;background:rgba(22,15,58,.35);border-radius:14px;padding:10px 14px}
-#kid .kgain{display:flex;justify-content:center;flex-wrap:wrap;gap:8px;margin:0 0 12px}
-#kid .kgain span{display:inline-flex;align-items:center;gap:7px;font:400 17px/1 var(--kdisp);color:#fff;background:var(--ki);border-radius:999px;padding:5px 12px 5px 5px}
-#kid .kgain span i{width:14px;height:6px;border-radius:3px;background:var(--c);box-shadow:0 0 6px var(--c);margin-left:6px}
-#kid .kcoin,#kidhud .kcoin{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff6a8,var(--ky2) 70%);border:2.5px solid var(--ki);font-size:13px;line-height:1}
-#kid .kauto{display:flex;align-items:center;gap:10px;margin:0 0 12px;font:400 13px/1 var(--kbody);color:#d9d0ff;background:none;height:auto;overflow:visible}
-#kid .kauto div{flex:1;height:14px;border-radius:8px;background:rgba(22,15,58,.6);border:2.5px solid var(--ki);overflow:hidden}
-#kid .kauto div i{display:block;height:100%;width:0;background:repeating-linear-gradient(-45deg,var(--ky1) 0 8px,var(--ky2) 8px 16px)}
-#kid .kwin .kbtn{width:100%;color:var(--ki);background:linear-gradient(180deg,var(--kg1),var(--kg2))}
+#kid .kwrow{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+#kid .kwok{display:grid;place-items:center;flex:none;width:44px;height:44px;border-radius:50%;background:var(--kok);color:#fff;font-size:24px;box-shadow:0 0 0 6px var(--kok2)}
+#kid .kwmain{flex:1;min-width:200px}
+#kid .kwt{display:flex;align-items:center;gap:10px;font:700 17px/1.2 var(--kfont);color:var(--ktx)}
+#kid .kstars{display:inline-flex;gap:2px;margin:0;font-size:18px;color:#e2e5ea}
+#kid .kstars i{display:inline-grid;width:auto;height:auto;background:none;clip-path:none;filter:none}
+#kid .kstars i.on{color:var(--kgold);animation:kstar2 .45s cubic-bezier(.2,1.6,.4,1) both}
+@keyframes kstar2{from{transform:scale(0)}to{transform:none}}
+#kid .kgain{display:flex;flex-wrap:wrap;gap:6px;margin:7px 0 0}
+#kid .kchip{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;background:var(--kbg2);font:600 12.5px/1.4 var(--kfont);color:var(--ksub)}
+#kid .kchip .ki{color:var(--kgold)}
+#kid .kchip.ok{background:var(--kok2);color:#15803d}
+#kid .kchip.ok .ki{color:#15803d}
+#kid .kchip .dot{width:9px;height:9px;border-radius:50%;background:var(--c)}
+#kid .kwhybtn{display:inline-flex;align-items:center;gap:6px;height:44px;margin:0;padding:0 14px;border-radius:12px;border:1px solid var(--kline);background:#fff;color:var(--ktx);font:600 14px/1 var(--kfont);cursor:pointer;box-shadow:none}
+#kid .kwhybtn:hover{background:var(--kbg2)}
+#kid .kwin .kgo{width:auto;margin:0;padding:0 18px}
+#kid .kwintxt{display:none;position:static;margin:0 0 12px;padding:12px 14px;border:0;border-radius:12px;background:var(--kbg2);box-shadow:none;font:500 15px/1.6 var(--kfont);color:var(--ktx);text-align:left}
+#kid .kwin.open .kwintxt{display:block}
+#kid .kwintxt b{color:var(--ktx)!important;font-weight:700}
+#kid .kauto{position:absolute;left:0;right:0;bottom:0;height:3px;margin:0;background:none;overflow:hidden}
+#kid .kauto div{height:100%;border:0;border-radius:0;background:none}
+#kid .kauto i{display:block;height:100%;width:0;background:var(--kacc)}
+@keyframes kauto{from{width:0}to{width:100%}}
 
 /* ---- 퀴즈 ---- */
-#kid .kquiz{margin-top:0}
-#kid .kqd{display:flex;align-items:center;justify-content:center;gap:7px;margin:4px 0 12px;font:400 14px/1 var(--kdisp);color:#d9d0ff}
-#kid .kqd i{width:16px;height:16px;border-radius:50%;background:rgba(22,15,58,.5);border:2px solid var(--ki)}
-#kid .kqd i.cur{background:#fff;transform:scale(1.2)}
-#kid .kqd i.ok{background:var(--kg1)}
-#kid .kqd i.no{background:var(--kr1)}
-#kid .kqd span{margin-left:8px}
-#kid .kqq{font:400 22px/1.4 var(--kbody);color:var(--ki);background:#fff;border:3px solid var(--ki);border-radius:18px;padding:16px;margin-bottom:16px;box-shadow:0 5px 0 var(--ki)}
-#kid .kquiz .kbtns{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-#kid .kquiz .kbtn[data-b]{font-size:24px;padding:18px 8px;color:#fff;text-shadow:0 2px 0 var(--ki);background:linear-gradient(180deg,var(--kb1),var(--kb2))}
-#kid .kquiz .kbtn[data-b="1"]{background:linear-gradient(180deg,var(--kr1),var(--kr2))}
-#kid .kqfb{font:400 16px/1.45 var(--kbody);color:#fff;border:3px solid var(--ki);border-radius:16px;padding:12px 14px;margin-bottom:12px;text-align:left;box-shadow:0 4px 0 var(--ki)}
-#kid .kqfb.ok{background:linear-gradient(180deg,#2fc985,#15955c)}
-#kid .kqfb.no{background:linear-gradient(180deg,#f0904f,#d4652a)}
-#kid .kqfb b{font-family:var(--kdisp);font-size:19px}
+#kid .kquiz{margin:0}
+#kid .kqd{display:flex;gap:4px;margin-top:8px}
+#kid .kqd i{width:22px;height:4px;border-radius:2px;background:#e5e7eb;border:0}
+#kid .kqd i.cur{background:var(--kacc)}
+#kid .kqd i.ok{background:var(--kok)}
+#kid .kqd i.no{background:#f59e0b}
+#kid .kqq{margin:0 0 18px;padding:0;border:0;background:none;box-shadow:none;font:700 21px/1.45 var(--kfont);color:var(--ktx);text-wrap:balance}
+#kid .kox{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+#kid .kox .kbtn{flex-direction:column;gap:10px;height:auto;min-height:124px;border-radius:16px;border:1.5px solid var(--kline);background:#fff;color:var(--ksub);font:600 15px/1 var(--kfont);text-shadow:none}
+#kid .kox .kbtn .ki{font-size:56px;stroke-width:2.4}
+#kid .kox .ko .ki{color:#2563eb}
+#kid .kox .kx .ki{color:#e5484d}
+#kid .kox .ko:hover{border-color:#2563eb;box-shadow:0 0 0 4px #e3edff;background:#fff}
+#kid .kox .kx:hover{border-color:#e5484d;box-shadow:0 0 0 4px #fde8e8;background:#fff}
+#kid .kqfb{display:flex;align-items:flex-start;gap:12px;margin:0 0 12px;padding:14px;border:0;border-radius:14px;box-shadow:none;color:var(--ktx);text-align:left}
+#kid .kqfb.ok{background:var(--kok2)}
+#kid .kqfb.no{background:#fff6e5}
+#kid .kqfi{display:grid;place-items:center;flex:none;width:34px;height:34px;border-radius:50%;background:var(--kok);color:#fff;font-size:18px}
+#kid .kqfb.no .kqfi{background:#f59e0b}
+#kid .kqfb b{display:block;margin-bottom:4px;font:700 16px/1.3 var(--kfont)}
+#kid .kqfb span{font:500 14px/1.6 var(--kfont);color:var(--ksub)}
+#kid .kqnext{width:100%}
 
 /* ---- 최종 결과 ---- */
 #kid .kfinal{text-align:center}
-#kid .ktro{position:relative;font-size:72px;line-height:1;margin:6px 0 4px;filter:drop-shadow(0 4px 0 var(--ki))}
-#kid .ktro::before{content:"";position:absolute;left:50%;top:50%;width:170px;height:170px;margin:-85px 0 0 -85px;border-radius:50%;background:repeating-conic-gradient(rgba(255,224,102,.35) 0 12deg,transparent 12deg 24deg);animation:kspin 8s linear infinite;z-index:-1}
-@keyframes kspin{to{transform:rotate(360deg)}}
-#kid .kfinal .ktitle{justify-content:center}
-#kid .krank{display:inline-block;margin:10px 0;font:400 22px/1 var(--kdisp);color:var(--ki);background:linear-gradient(180deg,var(--ky1),var(--ky2));border:3px solid var(--ki);border-radius:999px;padding:10px 20px;box-shadow:0 5px 0 var(--ki)}
-#kid .kfs{display:flex;justify-content:center;gap:8px;font:400 15px var(--kbody);color:#fff;margin:6px 0 12px;flex-wrap:wrap}
-#kid .kfs span{background:rgba(22,15,58,.45);border-radius:999px;padding:6px 12px}
-#kid .kfs b{color:var(--ky1);font:400 20px var(--kdisp)}
-#kid .kcards{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:6px 0 8px}
-#kid .kcard{border:2.5px solid var(--ki);border-radius:12px;padding:10px 4px 8px;background:#fff;color:var(--ki);font:400 13px/1.2 var(--kbody);box-shadow:0 3px 0 var(--ki)}
-#kid .kcard b{color:var(--ki)}
-#kid .kcard i{display:block;height:8px;width:70%;margin:0 auto 6px;border-radius:4px;background:var(--c)}
-#kid .kcard.off{opacity:1;background:repeating-linear-gradient(45deg,#3a249a 0 6px,#2c1d7a 6px 12px)}
-#kid .kcard.off b{color:#9d8ef0}
-#kid .kcard.off i{background:rgba(255,255,255,.2)}
-#kid .kfinal .ksay{text-align:center}
-#kid .kfinal .kbtns{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
-#kid .kfinal .kbtn:not(.main){background:#fff}
+#kid .ktro{display:grid;place-items:center;width:72px;height:72px;margin:2px auto 12px;border-radius:50%;background:#fff5d6;color:#d99a00;font-size:36px;filter:none}
+#kid .ktro::before{display:none}
+#kid .kfinal .keye{justify-content:center}
+#kid .kfinal .ktitle{justify-content:center;font-size:24px}
+#kid .krank{display:inline-block;margin:10px 0 16px;padding:7px 14px;border:0;border-radius:999px;background:var(--kacc2);color:var(--kacc);font:700 14px/1 var(--kfont);box-shadow:none}
+#kid .kfs{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 16px}
+#kid .kfs div{padding:12px 6px;border-radius:14px;background:var(--kbg2)}
+#kid .kfs b{display:block;font:700 24px/1.15 var(--knum);color:var(--ktx)}
+#kid .kfs span{font:500 12px/1.3 var(--kfont);color:var(--ksub)}
+#kid .kcards{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:0}
+#kid .kcard{padding:10px 6px;border:1px solid var(--kline);border-radius:12px;background:#fff;box-shadow:none;font:600 12px/1.3 var(--kfont);color:var(--ktx)}
+#kid .kcard b{color:inherit;font-weight:600}
+#kid .kcard i{display:block;width:28px;height:4px;margin:0 auto 7px;border-radius:2px;background:var(--c);box-shadow:none}
+#kid .kcard.off{background:var(--kbg2);color:#9aa1ad;border-color:transparent}
+#kid .kcard.off i{background:#d6d9e0}
+#kid .kfinal .ksay{display:block;margin:14px 0;font:500 14px/1.6 var(--kfont);color:var(--ksub)}
+#kid .kfinal .kbtns{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0}
 
-/* ---- 위 HUD: 레벨 지도 + 동전 ---- */
-body.kid #kidhud{left:50%;top:10px;display:flex;align-items:center;gap:8px;font-family:var(--kbody)}
-#kidhud .kmap{display:inline-flex;align-items:center;background:linear-gradient(180deg,var(--kp1),var(--kp2));border:3px solid var(--ki);border-radius:999px;padding:5px 10px;box-shadow:inset 0 2px 0 rgba(255,255,255,.25),0 4px 0 var(--ki);backdrop-filter:none;-webkit-backdrop-filter:none}
-#kidhud .kmap>i{width:8px;height:4px;border-radius:2px;background:rgba(22,15,58,.6)}
-#kidhud .kn2{position:relative;display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;font-size:15px;background:#2a1b72;border:2.5px solid var(--ki);filter:grayscale(.85);opacity:.7}
-#kidhud .kn2.done{filter:none;opacity:1;background:linear-gradient(180deg,var(--ky1),var(--ky2))}
-#kidhud .kn2.cur{filter:none;opacity:1;background:#fff;transform:scale(1.3);box-shadow:0 0 0 3px var(--ky1);animation:kbob 1.2s ease-in-out infinite;z-index:1}
-#kidhud .kn2.boss{width:34px;height:34px;font-size:17px}
-#kidhud .kn2 em{position:absolute;right:-6px;top:-8px;font:400 13px/1 var(--kdisp);font-style:normal;color:var(--ky1);-webkit-text-stroke:1.5px var(--ki);paint-order:stroke}
-#kidhud .kscore{display:inline-flex;align-items:center;gap:6px;margin:0;background:var(--ki);border:3px solid var(--ki);border-radius:999px;padding:3px 14px 3px 3px;box-shadow:0 4px 0 rgba(0,0,0,.35)}
-#kidhud .kscore .kcoin{width:30px;height:30px;font-size:15px}
-#kidhud .kscore b{font:400 21px/1 var(--kdisp);font-variant-numeric:tabular-nums;color:#fff;margin:0;min-width:2.2em}
-#kidhud .ksnd{margin:0;width:42px;height:42px;padding:0;display:grid;place-items:center;font-size:18px;border:3px solid var(--ki);background:#fff;border-radius:50%;box-shadow:0 4px 0 var(--ki);cursor:pointer}
-#kidhud .ksnd:active{transform:translateY(3px);box-shadow:0 1px 0 var(--ki)}
+/* ---- 위 HUD: 진행·점수·소리 ---- */
+body.kid #kidhud{top:12px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:8px;font-family:var(--kfont)}
+#kidhud .kprog,#kidhud .kscore,#kidhud .ksnd{height:40px;margin:0;background:rgba(255,255,255,.95);border:1px solid var(--kline);border-radius:12px;box-shadow:0 6px 18px -6px rgba(16,24,40,.45)}
+#kidhud .kprog{display:flex;align-items:center;gap:10px;padding:0 14px}
+#kidhud .kpn{font:500 13px/1 var(--knum);color:var(--ksub);white-space:nowrap}
+#kidhud .kpn b{font-size:16px;font-weight:700;color:var(--ktx)}
+#kidhud .kseg{display:flex;gap:3px}
+#kidhud .kseg i{width:14px;height:6px;border-radius:3px;background:#e5e7eb;transition:width .3s,background .3s}
+#kidhud .kseg i.done{background:#a5b4fc}
+#kidhud .kseg i.cur{width:26px;background:var(--kacc)}
+#kidhud .kseg i.boss{background:#fde3b5}
+#kidhud .kseg i.boss.done{background:#fbbf6a}
+#kidhud .kseg i.boss.cur{background:#f59e0b}
+#kidhud .kscore{display:flex;align-items:center;gap:6px;padding:0 14px 0 12px;font-size:16px;color:var(--kgold)}
+#kidhud .kscore b{min-width:2.4em;font:700 16px/1 var(--knum);font-variant-numeric:tabular-nums;color:var(--ktx)}
+#kidhud .ksnd{display:grid;place-items:center;width:40px;padding:0;color:var(--ksub);font-size:18px;cursor:pointer}
+#kidhud .ksnd:hover{color:var(--kacc)}
 
-/* ---- 새 힘 카드 (트레이딩 카드) ---- */
-#kpop{left:50%!important;top:20%!important}
-#kpop .kpcard{width:240px;background:linear-gradient(180deg,#fff,#f1ecff);border:4px solid var(--ki);border-radius:20px;padding:0 0 16px;overflow:hidden;box-shadow:0 7px 0 var(--ki),0 0 40px -4px var(--c)}
-#kpop small{display:block;margin:0 0 12px;padding:9px 0 8px;font:400 17px/1 var(--kdisp);letter-spacing:.02em;color:#fff;background:var(--ki)}
-#kpop i{height:50px;width:50px;border-radius:50%;margin:0 auto 10px;background:var(--c);border:3px solid var(--ki);box-shadow:0 0 0 6px rgba(22,15,58,.08)}
-#kpop b{font:400 23px/1.2 'Black Han Sans','Noto Sans KR',sans-serif;color:var(--ki);margin:0 12px 6px}
-#kpop span{font:400 14.5px/1.45 'Jua','Noto Sans KR',sans-serif;color:#3a2f6b;padding:0 14px}
+/* ---- 새 힘 카드 ---- */
+#kpop{left:50%!important;top:18%!important}
+#kpop .kpcard{width:260px;padding:0 0 16px;overflow:hidden;text-align:center;background:#fff;border:1px solid var(--kline);border-radius:18px;box-shadow:var(--kshadow)}
+#kpop .kpcard::before{content:"";display:block;height:6px;background:var(--c)}
+#kpop small{display:block;margin:14px 0 12px;padding:0;background:none;font:700 12px/1 var(--kfont);letter-spacing:.06em;color:var(--kacc)}
+#kpop i{display:block;width:40px;height:40px;margin:0 auto 10px;border:0;border-radius:50%;background:var(--c);box-shadow:0 0 0 6px rgba(17,24,39,.05)}
+#kpop b{display:block;margin:0 14px 6px;font:700 19px/1.3 var(--kfont);color:var(--ktx)}
+#kpop span{display:block;padding:0 18px;font:500 13.5px/1.55 var(--kfont);color:var(--ksub)}
 
-/* ---- 아래 카드 모음, 모드 버튼 ---- */
-body.kid #legend{background:var(--ki);border:3px solid var(--ki);border-radius:16px;font:400 13.5px/1.3 var(--kbody);box-shadow:0 4px 0 rgba(0,0,0,.35);backdrop-filter:none;-webkit-backdrop-filter:none}
-body.kid #legend b{color:var(--ky1);font-weight:400}
-body.kid #legend span.on{background:#fff;color:var(--ki);border-radius:8px;padding:3px 8px}
-body.kid #legend span.off{width:20px;height:26px;border-radius:5px;border:2px solid #6f5ad8;background:repeating-linear-gradient(45deg,#3a249a 0 4px,#2c1d7a 4px 8px);color:#c9bfff;font:400 12px/1 var(--kdisp)}
-body.kid #modeBtn{font:400 13px/1 var(--kbody);background:rgba(22,15,58,.8);border:2px solid rgba(255,255,255,.25);color:#e6e0ff}
+/* ---- 아래 힘 카드 모음 ---- */
+body.kid #legend{align-items:center;gap:6px 8px;background:rgba(255,255,255,.95);border:1px solid var(--kline);border-radius:14px;box-shadow:0 6px 18px -6px rgba(16,24,40,.45);backdrop-filter:none;-webkit-backdrop-filter:none;padding:8px 12px;font:500 12.5px/1.3 var(--kfont);color:var(--ktx)}
+body.kid #legend b{display:inline-flex;align-items:center;gap:6px;margin-right:2px;font-weight:700;color:var(--ktx)}
+body.kid #legend b .ki{color:var(--kacc)}
+body.kid #legend b em{font:600 12.5px var(--knum);font-style:normal;color:var(--ksub)}
+body.kid #legend span.on{gap:6px;padding:3px 9px 3px 7px;border-radius:999px;background:var(--kbg2)}
+body.kid #legend span.on i{width:8px;height:8px;border-radius:50%;box-shadow:none!important}
+body.kid #legend span.off{width:16px;height:16px;border-radius:5px;border:1.5px dashed #cdd1d9;background:none;font-size:0}
 
 /* ---- 시작 화면 ---- */
-#kidIntro .box{position:relative;width:min(560px,100%);padding:18px 28px 20px;text-align:center;font-family:var(--kbody)}
-#kidIntro h2{font:400 46px/1.1 var(--kdisp);color:var(--ky1);margin:0 0 14px;text-shadow:0 4px 0 var(--ki),3px 0 0 var(--ki),-3px 0 0 var(--ki),0 -3px 0 var(--ki)}
-#kidIntro .kil{font:400 18px/1.45 var(--kbody);text-align:left;color:#fff;background:rgba(22,15,58,.3);border-radius:14px;padding:8px 12px;margin:8px 0}
-#kidIntro .kil b{color:var(--ky1);font-weight:400}
-#kidIntro .kimap{background:rgba(22,15,58,.45);border-radius:999px;border:2.5px solid var(--ki)}
-#kidIntro .kstart{width:100%;font-size:24px;padding:16px}
-#kidIntro .kfull{color:#d9d0ff;font-family:var(--kbody)}
+#kidIntro .box{position:relative;width:min(520px,100%);margin:0;padding:28px 28px 20px;text-align:center;font-family:var(--kfont)}
+#kidIntro .kav.lg{width:84px;height:84px;margin:0 auto 14px}
+#kidIntro .keye{justify-content:center}
+#kidIntro h2{margin:8px 0 20px;font:800 30px/1.2 var(--kfont);letter-spacing:-.02em;color:var(--ktx);text-shadow:none}
+#kidIntro .kitiles{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:0 0 14px}
+#kidIntro .kitile{display:flex;flex-direction:column;align-items:center;gap:8px;padding:14px 6px 12px;border:0;border-radius:14px;background:var(--kbg2);box-shadow:none}
+#kidIntro .kitile span{display:grid;place-items:center;width:40px;height:40px;border-radius:12px;background:#fff;color:var(--kacc);font-size:20px;box-shadow:inset 0 0 0 1px var(--kline)}
+#kidIntro .kitile b{font:600 12.5px/1.35 var(--kfont);color:var(--ktx)}
+#kidIntro .kilisten{display:inline-flex;align-items:center;gap:6px;margin:0 0 16px;padding:6px 10px;border:0;border-radius:10px;background:none;box-shadow:none;color:var(--kacc);font:600 13px/1 var(--kfont);cursor:pointer}
+#kidIntro .kilisten:hover{background:var(--kacc2)}
+#kidIntro .kimap{display:flex;justify-content:center;gap:4px;margin:0 0 18px;padding:0;border:0;background:none}
+#kidIntro .kimap i{flex:none;width:18px;max-width:none;height:6px;margin:0;border-radius:3px;background:#e5e7eb}
+#kidIntro .kimap i.boss{background:#fbbf6a}
+#kidIntro .kstart{width:100%;height:52px;font-size:17px}
+#kidIntro .kfull{display:block;margin:12px auto 0;border:0;background:none;color:var(--ksub);font:500 13px var(--kfont);cursor:pointer;text-decoration:underline}
 
-@keyframes kauto{from{width:0}to{width:100%}}
-@keyframes kpopin{from{transform:scale(.6);opacity:0}to{transform:none;opacity:1}}
-@keyframes kdrop{from{transform:translate(-50%,-24px);opacity:0}to{transform:translateX(-50%);opacity:1}}
-@media (max-width:980px){
-  #kid .kban{top:62px;gap:6px} #kid .kban .kmascot{width:58px;height:58px}
-  #kid .kbubble{padding:9px 12px 10px} #kid .kbubble::before,#kid .kbubble::after{top:18px}
-  #kid .ktitle{font-size:20px} #kid .ksay{font-size:14.5px}
-  #kid .kfoot,#kid .kwin{bottom:12px}
-  body.kid #kidhud{top:52px;gap:6px;left:8px;right:8px;transform:none;justify-content:center} #kidhud .kmap{padding:3px 6px;gap:2px} #kidhud .kn2{width:20px;height:20px;font-size:10px;border-width:2px} #kidhud .kn2.boss{width:23px;height:23px} #kidhud .kmap>i{display:none}
-  #kidhud .kscore{padding-right:10px} #kidhud .kscore .kcoin{width:24px;height:24px} #kidhud .kscore b{font-size:16px;min-width:1.6em} #kidhud .ksnd{display:none}
-  #kid .kban{top:96px}
-  #kid .kopts.n2{grid-template-columns:1fr}
-  body.kid #modeBtn{display:none}
-}
-
-
-/* ===== 쉬운 모드: 글 대신 그림 ===== */
-#kid .ksay2{flex:none;display:inline-grid;place-items:center;width:38px;height:38px;margin-left:8px;border-radius:50%;border:2.5px solid var(--ki);background:#fff;font-size:18px;line-height:1;cursor:pointer;box-shadow:0 3px 0 var(--ki);text-shadow:none;vertical-align:middle}
-#kid .ksay2:active{transform:translateY(2px);box-shadow:0 1px 0 var(--ki)}
-#kid .ksteps{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin-top:8px}
-#kid .kstep{display:inline-flex;align-items:center;gap:4px;background:rgba(22,15,58,.4);border-radius:16px;padding:6px 12px}
-#kid .kstep i{font-style:normal;line-height:1}
-#kid .kobj{font-size:34px}
-#kid .kdir{font-size:30px}
-#kid .kbig{font-size:38px}
-#kid .kplus{font:400 24px/1 var(--kdisp);color:var(--ky1)}
-#kid .kges{font-size:32px;display:inline-block}
-#kid .kges.drag.r{animation:kdragr 1.4s ease-in-out infinite}
-#kid .kges.drag.l{animation:kdragl 1.4s ease-in-out infinite}
-#kid .kges.drag.d{animation:kdragd 1.4s ease-in-out infinite}
-#kid .kges.tap{animation:ktap 1s ease-in-out infinite}
-@keyframes kdragr{0%,15%{transform:translateX(-6px)}70%,100%{transform:translateX(16px)}}
-@keyframes kdragl{0%,15%{transform:translateX(6px) scaleX(-1)}70%,100%{transform:translateX(-16px) scaleX(-1)}}
-@keyframes kdragd{0%,15%{transform:translateY(-6px)}70%,100%{transform:translateY(10px)}}
-#kid .kges.drag.u{animation:kdragu 1.4s ease-in-out infinite}
-@keyframes kdragu{0%,15%{transform:translateY(6px)}70%,100%{transform:translateY(-10px)}}
-.kwsvg{width:1em;height:1em;display:inline-block;vertical-align:middle}
-@keyframes ktap{0%,100%{transform:translateY(0) scale(1)}45%{transform:translateY(6px) scale(.88)}}
-#kid .kban .ksay{display:none}
-#kid .kfoot .know{display:none}
-/* 예상: 큰 그림 타일 */
-#kid .kpred .kq{display:flex;align-items:center;justify-content:center;gap:4px}
-#kid .kpred .kq b{margin:0}
-#kid .kopts,#kid .kopts.n2,#kid .kopts.n3{grid-template-columns:repeat(var(--n,3),1fr)}
-#kid .kopts.n2{--n:2}
-#kid .kopt{flex-direction:column;justify-content:center;text-align:center;gap:6px;padding:14px 6px 10px;min-height:118px}
-#kid .kopt>i{font-style:normal;font-size:52px;line-height:1;font-family:var(--kdisp);color:#fff;text-shadow:0 3px 0 var(--ki)}
-#kid .kopt span{font-size:14px;line-height:1.2;opacity:.95}
-#kid .kfoot .kmine b{font-size:22px;line-height:1;vertical-align:middle}
-/* 성공: 그림 위주, 설명은 접어 두고 읽어 주기 */
-#kid .kwin .kwintxt{display:none}
-#kid .kwin.open .kwintxt{display:block}
-#kid .kwhy{font-size:22px}
-#kid .kwhy .khit{font:400 20px/1 var(--kdisp)}
-#kid .kgain span{font-size:20px;padding:6px 14px 6px 6px}
-#kid .kgain .kgcard{background:#fff;color:var(--ki);border:3px solid var(--ki);box-shadow:0 4px 0 var(--ki);padding:8px 14px;font-size:19px;animation:kpopin .5s .5s both cubic-bezier(.2,1.6,.4,1)}
-#kid .kgain .kgcard i{width:22px;height:22px;border-radius:50%;margin:0;border:2.5px solid var(--ki);box-shadow:none}
-#kid .kwhybtn{display:inline-block;margin:0 0 12px;font:400 15px/1 var(--kbody);color:var(--ki);background:#fff;border:2.5px solid var(--ki);border-radius:999px;padding:8px 14px;box-shadow:0 3px 0 var(--ki);cursor:pointer}
-/* 퀴즈: 큰 ⭕ ❌ */
-#kid .kqq{display:flex;align-items:center;gap:6px;justify-content:center}
-#kid .kquiz .kbtn[data-b]{font-size:54px;line-height:1;padding:16px 8px}
-#kid .kqfb{display:flex;align-items:center;gap:10px}
-#kid .kqfb i{font-style:normal;font-size:40px;line-height:1}
-#kid .kqfb small{font:400 14px/1.4 var(--kbody);opacity:.95}
-/* 시작 화면: 그림 카드 */
-#kidIntro .kitiles{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:6px 0 10px}
-#kidIntro .kitile{display:flex;flex-direction:column;align-items:center;gap:6px;background:#fff;color:var(--ki);border:3px solid var(--ki);border-radius:18px;padding:12px 4px 10px;box-shadow:0 4px 0 var(--ki);font:400 14px/1.2 var(--kbody)}
-#kidIntro .kitile i{font-style:normal;font-size:34px;line-height:1;letter-spacing:-4px}
-#kidIntro .kilisten{display:inline-block;margin:0 0 12px;font:400 15px/1 var(--kbody);color:var(--ki);background:#fff;border:2.5px solid var(--ki);border-radius:999px;padding:8px 14px;box-shadow:0 3px 0 var(--ki);cursor:pointer}
-@media (max-width:980px){
-  #kid .kobj,#kid .kges{font-size:26px} #kid .kdir{font-size:22px} #kid .kstep{padding:4px 8px}
-  #kid .kopt{min-height:96px} #kid .kopt>i{font-size:40px} #kid .kopt span{font-size:12px}
-  #kidIntro .kitiles{grid-template-columns:repeat(2,1fr)}
-}
-
-/* ===== 쉬운 모드: 장면 속 손잡이 ===== */
-#khandles{position:fixed;inset:0;pointer-events:none;z-index:11;transition:opacity .25s}
+/* ---- 장면 속 손잡이 ---- */
+#khandles{position:fixed;inset:0;pointer-events:none;z-index:11;transition:opacity .25s;font-family:var(--kfont)}
 #khandles.off{opacity:0}
 #khandles.off *{pointer-events:none!important}
 body:not(.kid) #khandles{display:none}
-.kh{font-family:var(--kbody)}
-.khrail .khbar{position:absolute;height:16px;transform-origin:0 50%;border:3px solid var(--ki);border-radius:10px;background:rgba(255,255,255,.75);box-shadow:0 3px 0 rgba(22,15,58,.6)}
-.khrail .khfill{position:absolute;left:0;top:0;bottom:0;border-radius:6px;background:linear-gradient(180deg,#c4b5fd,#7c5cf0)}
-.khrail.water .khfill{background:linear-gradient(180deg,#7dd3fc,#1e93e6)}
-.khrail.water .khbar{height:14px}
-.khtick{position:absolute;top:100%;width:2px;height:7px;margin-left:-1px;background:var(--ki)}
-.khtick em{position:absolute;top:8px;left:50%;transform:translateX(-50%);font:400 13px/1 var(--kdisp);font-style:normal;color:#fff;text-shadow:0 1px 0 var(--ki),1px 0 0 var(--ki),-1px 0 0 var(--ki),0 -1px 0 var(--ki)}
+.khrail .khbar{position:absolute;height:8px;transform-origin:0 50%;border-radius:4px;background:rgba(255,255,255,.9);box-shadow:0 0 0 1px rgba(17,24,39,.18),0 2px 8px rgba(0,0,0,.4)}
+.khrail .khfill{position:absolute;left:0;top:0;bottom:0;border-radius:4px;background:linear-gradient(90deg,#a78bfa,var(--kpull))}
+.khrail.water .khfill{background:linear-gradient(90deg,#7dd3fc,#2563eb)}
+.khtick{position:absolute;top:calc(100% + 3px);width:1.5px;height:5px;margin-left:-.75px;background:rgba(255,255,255,.9)}
+.khtick em{position:absolute;top:7px;left:50%;transform:translateX(-50%);font:600 11.5px/1 var(--knum);font-style:normal;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.95)}
 .khbar.flip .khtick em{transform:translateX(-50%) rotate(180deg)}
-.khgoal{position:absolute;bottom:100%;margin-left:-4px;font-size:22px;line-height:1;transform-origin:4px 100%}
+.khgoal{position:absolute;bottom:calc(100% + 2px);margin-left:-3px;font-size:18px;line-height:1;color:var(--kgold);filter:drop-shadow(0 1px 2px rgba(0,0,0,.7))}
 .khbar.flip .khgoal{transform:rotate(180deg) translateY(-100%)}
-.khknob{position:absolute;width:62px;height:62px;margin:-31px 0 0 -31px;border-radius:50%;border:4px solid var(--ki);background:radial-gradient(circle at 35% 30%,#fff,#e9e2ff 70%);box-shadow:0 5px 0 var(--ki),0 0 0 6px rgba(196,181,253,.45);font-size:30px;line-height:1;cursor:grab;touch-action:none;pointer-events:auto;padding:0;display:grid;place-items:center;transition:transform .12s}
-.khknob:hover{transform:scale(1.08)}
-.khrail.drag .khknob{cursor:grabbing;transform:scale(1.15);box-shadow:0 3px 0 var(--ki),0 0 0 10px rgba(255,224,102,.55)}
-.khrail.water .khknob{box-shadow:0 5px 0 var(--ki),0 0 0 6px rgba(125,211,252,.5)}
-#khandles.fresh .khknob,#khandles.fresh .khpick,#khandles.fresh .khstep{animation:khpulse 1.3s ease-in-out infinite}
-@keyframes khpulse{0%,100%{filter:none}50%{filter:drop-shadow(0 0 12px #ffe066) drop-shadow(0 0 4px #ffe066)}}
-.khval{position:absolute;transform:translate(-50%,-78px);font:400 24px/1 var(--kdisp);color:var(--ki);background:#fff;border:3px solid var(--ki);border-radius:12px;padding:5px 10px 4px;box-shadow:0 3px 0 var(--ki);white-space:nowrap;pointer-events:none}
+.khknob{position:absolute;display:grid;place-items:center;width:48px;height:48px;margin:-24px 0 0 -24px;padding:0;border:0;border-radius:50%;background:#fff;color:var(--kpull);font-size:20px;box-shadow:0 0 0 3px var(--kpull),0 6px 16px rgba(0,0,0,.45);cursor:grab;touch-action:none;pointer-events:auto;transition:transform .12s,box-shadow .12s}
+.khknob::before{content:"";position:absolute;inset:-14px;border-radius:50%}
+.khknob:hover{transform:scale(1.06)}
+.khrail.drag .khknob{cursor:grabbing;transform:scale(1.1);box-shadow:0 0 0 3px var(--kpull),0 0 0 10px rgba(109,92,232,.28),0 8px 20px rgba(0,0,0,.45)}
+.khrail.water .khknob{color:#2563eb;box-shadow:0 0 0 3px #2563eb,0 6px 16px rgba(0,0,0,.45)}
+#khandles.fresh .khrail.force .khknob{animation:khp 1.6s ease-out infinite}
+#khandles.fresh .khrail.water .khknob{animation:khpw 1.6s ease-out infinite}
+@keyframes khp{0%{box-shadow:0 0 0 3px var(--kpull),0 0 0 3px rgba(255,255,255,.75),0 6px 16px rgba(0,0,0,.45)}100%{box-shadow:0 0 0 3px var(--kpull),0 0 0 20px rgba(255,255,255,0),0 6px 16px rgba(0,0,0,.45)}}
+@keyframes khpw{0%{box-shadow:0 0 0 3px #2563eb,0 0 0 3px rgba(255,255,255,.75),0 6px 16px rgba(0,0,0,.45)}100%{box-shadow:0 0 0 3px #2563eb,0 0 0 20px rgba(255,255,255,0),0 6px 16px rgba(0,0,0,.45)}}
+.khval{position:absolute;transform:translate(-50%,-62px);padding:6px 9px;border-radius:8px;background:rgba(17,24,39,.92);color:#fff;font:700 15px/1 var(--knum);white-space:nowrap;pointer-events:none;box-shadow:0 4px 12px rgba(0,0,0,.3)}
+.khval::after{content:"";position:absolute;left:50%;top:100%;margin-left:-5px;border:5px solid transparent;border-top-color:rgba(17,24,39,.92)}
 .khval:empty{display:none}
-.khrail.drag .khval{background:var(--ky1);transform:translate(-50%,-84px) scale(1.12)}
-.khpick,.khstep{position:absolute;transform:translate(-50%,-50%);display:flex;gap:6px;padding:6px;background:var(--ki);border-radius:20px;box-shadow:0 5px 0 rgba(0,0,0,.35);pointer-events:auto}
-.khpick button{display:flex;flex-direction:column;align-items:center;gap:2px;min-width:62px;padding:6px 6px 5px;border:3px solid transparent;border-radius:14px;background:#2c1d7a;color:#d9d0ff;font:400 12px/1 var(--kbody);cursor:pointer}
-.khpick button i{font-style:normal;font-size:28px;line-height:1}
-.khpick button.on{background:#fff;color:var(--ki);border-color:var(--ky2);transform:translateY(-3px)}
-.khstep button{width:46px;height:46px;border-radius:50%;border:3px solid var(--ki);background:linear-gradient(180deg,var(--ky1),var(--ky2));font-size:20px;line-height:1;cursor:pointer;box-shadow:inset 0 2px 0 rgba(255,255,255,.5)}
-.khstep button:active{transform:translateY(2px)}
-.khstep button:disabled{filter:grayscale(1);opacity:.4;cursor:default}
-.khcount{display:flex;align-items:center;gap:4px;padding:0 6px;color:#fff;font:400 24px/1 var(--kdisp)}
-.khcount i{font-style:normal;font-size:24px}
-.khghost{position:absolute;font-style:normal;font-size:34px;line-height:1;pointer-events:none;opacity:0;margin:-4px 0 0 -10px;filter:drop-shadow(0 3px 2px rgba(0,0,0,.5));z-index:2}
-#khandles.fresh .khghost{animation:khghost 1.8s ease-in-out infinite}
+.khrail.drag .khval{background:var(--kpull)}
+.khrail.drag .khval::after{border-top-color:var(--kpull)}
+.khghost{position:absolute;width:44px;height:44px;margin:-22px 0 0 -22px;border-radius:50%;border:2px solid rgba(255,255,255,.95);background:rgba(255,255,255,.22);pointer-events:none;opacity:0;z-index:2}
+#khandles.fresh .khghost{animation:khghost 2s ease-in-out infinite}
 .khrail.drag .khghost{display:none}
-@keyframes khghost{0%{opacity:0;transform:translate(0,0) scale(1.1)}15%{opacity:1;transform:translate(0,0) scale(.9)}75%{opacity:1;transform:translate(var(--gx),var(--gy)) scale(.9)}100%{opacity:0;transform:translate(var(--gx),var(--gy)) scale(1)}}
-@media (max-width:980px){.khknob{width:52px;height:52px;margin:-26px 0 0 -26px;font-size:24px}.khpick button{min-width:52px}}
+@keyframes khghost{0%{opacity:0;transform:translate(0,0) scale(1.15)}15%{opacity:1;transform:translate(0,0) scale(.9)}75%{opacity:1;transform:translate(var(--gx),var(--gy)) scale(.9)}100%{opacity:0;transform:translate(var(--gx),var(--gy)) scale(1)}}
+.khpick,.khstep{position:absolute;display:flex;align-items:center;gap:4px;padding:5px;transform:translate(-50%,-50%);background:rgba(255,255,255,.97);border:1px solid var(--kline);border-radius:14px;box-shadow:0 10px 26px -8px rgba(0,0,0,.6);pointer-events:auto}
+.khpick button{display:flex;flex-direction:column;align-items:center;gap:5px;min-width:58px;padding:7px 6px 6px;border:0;border-radius:10px;background:none;color:var(--ksub);font:600 11.5px/1 var(--kfont);cursor:pointer;transition:background .15s}
+.khpick button:hover{background:var(--kbg2)}
+.khpick .ksw{width:26px;height:26px;border-radius:7px}
+.khpick button.on{background:var(--kacc2);color:var(--kacc);box-shadow:inset 0 0 0 1.5px var(--kacc)}
+.khstep button{display:grid;place-items:center;width:36px;height:36px;border:0;border-radius:10px;background:var(--kbg2);color:var(--ktx);font-size:16px;cursor:pointer;transition:background .15s,color .15s}
+.khstep button:hover{background:var(--kacc2);color:var(--kacc)}
+.khstep button:disabled{opacity:.35;cursor:default;background:var(--kbg2);color:var(--ktx)}
+.khcount{display:flex;align-items:center;gap:6px;padding:0 8px;font:700 18px/1 var(--knum);color:var(--ktx)}
+.khcount .ki{font-size:20px;color:var(--ksub)}
+#khandles.fresh .khpick,#khandles.fresh .khstep{animation:khglow 1.6s ease-in-out infinite}
+@keyframes khglow{0%,100%{box-shadow:0 10px 26px -8px rgba(0,0,0,.6),0 0 0 0 rgba(255,255,255,0)}50%{box-shadow:0 10px 26px -8px rgba(0,0,0,.6),0 0 0 6px rgba(255,255,255,.5)}}
 
-/* 미션 성공: 실험 장면을 가리지 않는 아래쪽 띠 */
-#kid .kwin{bottom:14px;width:min(820px,calc(100vw - 32px))}
-#kid .kwin .kbox{display:flex;align-items:center;flex-wrap:wrap;gap:10px 14px;padding:22px 18px 22px 96px;text-align:left;max-height:none}
-#kid .kwin .kribbon{left:96px;transform:rotate(-2deg);font-size:20px;padding:7px 18px 8px;top:-20px}
-#kid .kwin .kribbon.gold{animation:none}
-#kid .kwin .kmascot.sm{left:4px;top:-26px;width:84px;height:84px}
-#kid .kwin .kstars{margin:0;gap:3px}
-#kid .kwin .kstars i{width:34px;height:34px}
-#kid .kwin .kstars i:nth-child(2){width:44px;height:44px;margin-bottom:6px}
-#kid .kwin .kwhy{margin:0}
-#kid .kwin .kgain{margin:0}
-#kid .kwin .kwhybtn{margin:0}
-#kid .kwin .kgo{width:auto;margin-left:auto;padding:12px 22px}
-#kid .kwin .kauto{position:absolute;left:96px;right:18px;bottom:7px;margin:0}
-#kid .kwin .kauto span{display:none}
-#kid .kwin .kauto div{height:9px;border-width:2px}
-#kid .kwin .kwintxt{position:absolute;left:0;right:0;bottom:calc(100% + 34px);margin:0;background:#fff;color:var(--ki);border:3px solid var(--ki);box-shadow:0 5px 0 var(--ki)}
-@media (max-width:980px){#kid .kwin .kbox{padding:20px 12px 20px 74px}#kid .kwin .kmascot.sm{width:64px;height:64px;top:-18px}#kid .kwin .kribbon{left:74px}#kid .kwin .kauto{left:74px}#kid .kwin .kgo{margin-left:0;width:100%}}
+@keyframes kin{from{opacity:0;transform:translate(-50%,-10px)}to{opacity:1;transform:translateX(-50%)}}
+@keyframes kup{from{opacity:0;transform:translate(-50%,16px)}to{opacity:1;transform:translateX(-50%)}}
+@keyframes kpop2{from{opacity:0;transform:scale(.96) translateY(8px)}to{opacity:1;transform:none}}
+
+
+/* 앞 규칙 덮기 + 겹침 정리 */
+#kid .kfoot .krow{align-items:center}
+#kid .kfoot .kmine,#kid .kfoot .kreset{height:44px}
+#kid .kcb{display:inline-grid;place-items:center;width:16px;height:16px;margin-right:4px;border-radius:4px;border:1.5px solid rgba(255,255,255,.4);vertical-align:-3px;font-size:12px;font-style:normal;color:#fff}
+#kid .kcb.on{background:#22c55e;border-color:#22c55e}
+#kid .kmeter .ki{font-size:18px;color:#cbd5e1}
+#kid .kqfb .kqfi{color:#fff;font-size:18px;line-height:1}
+#kid .kopts.n3{--n:3;grid-template-columns:repeat(3,1fr)}
+#kid .kwin .kgo{background:var(--kacc);border-color:var(--kacc);color:#fff}
+#kid .kwin .kgo:hover{background:var(--kacc-d)}
+#kid .kgain .kchip{background:var(--kbg2);color:var(--ksub);font:600 12.5px/1.4 var(--kfont);padding:4px 10px;gap:6px}
+#kid .kgain .kchip.ok{background:var(--kok2);color:#15803d}
+#kid .kgain .kchip i.dot{width:9px;height:9px;border-radius:50%;margin:0;background:var(--c);box-shadow:none}
+#kid .kfoot,#kid .kwin{bottom:66px}
+body.kid #modeBtn{top:12px;bottom:auto;left:16px;right:auto;transform:none}
+#kpop{left:auto!important;right:20px;top:64px!important;transform:none}
+#kpop.on{animation:kcard2 2.6s ease forwards}
+@keyframes kcard2{0%{opacity:0;transform:translateX(20px)}10%{opacity:1;transform:none}85%{opacity:1;transform:none}100%{opacity:0;transform:translateX(20px)}}
+@media (max-width:980px){
+  #kid .kban{top:96px;gap:10px;padding:12px} #kid .kban .kav{width:40px;height:40px}
+  #kid .ktitle{font-size:17px} #kid .kskip{font-size:12px}
+  #kid .kfoot,#kid .kwin{bottom:12px}
+  #kid .kopt{min-height:108px} #kid .kpic{font-size:36px;height:42px} #kid .kol{font-size:12.5px}
+  #kid .kwin .kgo,#kid .kwhybtn{flex:1}
+  body.kid #kidhud{top:52px;left:8px;right:8px;transform:none;justify-content:center;gap:6px}
+  #kidhud .kprog{padding:0 10px;gap:8px} #kidhud .kseg i{width:8px} #kidhud .kseg i.cur{width:16px}
+  #kidhud .ksnd{display:none}
+  #kidIntro .kitiles{grid-template-columns:repeat(2,1fr)}
+  body.kid #modeBtn{display:none}
+  .khknob{width:44px;height:44px;margin:-22px 0 0 -22px}
+}
+
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 <script type="importmap">
@@ -3064,39 +3057,72 @@ const KID_QUIZ = [
 
 // 길잡이 쿼카 (mood: '' 보통, 'win' 신남, 'think' 궁금)
 function quokka(mood = '') {
-  const ink = '#160f3a';
-  const eyes = mood === 'win' ? `<path d="M31 53q6-8 12 0M57 53q6-8 12 0" stroke="${ink}" stroke-width="4.5" fill="none" stroke-linecap="round"/>`
+  const ink = '#4a3426';
+  const eyes = mood === 'win' ? `<path d="M31 53q6-8 12 0M57 53q6-8 12 0" stroke="${ink}" stroke-width="3.6" fill="none" stroke-linecap="round"/>`
     : mood === 'think' ? `<circle cx="38" cy="49" r="6" fill="${ink}"/><circle cx="64" cy="49" r="6" fill="${ink}"/><circle cx="40" cy="46.5" r="2.2" fill="#fff"/><circle cx="66" cy="46.5" r="2.2" fill="#fff"/>`
     : `<circle cx="37" cy="53" r="6.2" fill="${ink}"/><circle cx="63" cy="53" r="6.2" fill="${ink}"/><circle cx="39.2" cy="50.6" r="2.3" fill="#fff"/><circle cx="65.2" cy="50.6" r="2.3" fill="#fff"/>`;
   const mouth = mood === 'win' ? `<path d="M40 69q10 13 20 0z" fill="#ff5d73" stroke="${ink}" stroke-width="3.5" stroke-linejoin="round"/>`
     : mood === 'think' ? `<ellipse cx="54" cy="72" rx="3.6" ry="4.2" fill="${ink}"/>`
     : `<path d="M41 69q4.5 6 9 0q4.5 6 9 0" stroke="${ink}" stroke-width="3.5" fill="none" stroke-linecap="round"/>`;
-  return `<svg viewBox="0 0 100 100" aria-hidden="true"><g stroke="${ink}" stroke-width="4"><circle cx="23" cy="27" r="14" fill="#a8693c"/><circle cx="77" cy="27" r="14" fill="#a8693c"/></g><circle cx="23" cy="28" r="7" fill="#f0a98a"/><circle cx="77" cy="28" r="7" fill="#f0a98a"/><ellipse cx="50" cy="57" rx="38" ry="34" fill="#c98a55" stroke="${ink}" stroke-width="4"/><ellipse cx="50" cy="67" rx="24" ry="18" fill="#f6dcb4"/><circle cx="27" cy="65" r="6" fill="#ff8fa3" opacity=".75"/><circle cx="73" cy="65" r="6" fill="#ff8fa3" opacity=".75"/>${eyes}<ellipse cx="50" cy="62" rx="5.5" ry="3.8" fill="${ink}"/>${mouth}</svg>`;
+  return `<svg viewBox="0 0 100 100" aria-hidden="true"><g stroke="${ink}" stroke-width="3"><circle cx="23" cy="27" r="14" fill="#a8693c"/><circle cx="77" cy="27" r="14" fill="#a8693c"/></g><circle cx="23" cy="28" r="7" fill="#f0a98a"/><circle cx="77" cy="28" r="7" fill="#f0a98a"/><ellipse cx="50" cy="57" rx="38" ry="34" fill="#c98a55" stroke="${ink}" stroke-width="3"/><ellipse cx="50" cy="67" rx="24" ry="18" fill="#f6dcb4"/><circle cx="27" cy="65" r="6" fill="#ff8fa3" opacity=".75"/><circle cx="73" cy="65" r="6" fill="#ff8fa3" opacity=".75"/>${eyes}<ellipse cx="50" cy="62" rx="5.5" ry="3.8" fill="${ink}"/>${mouth}</svg>`;
 }
-// 글 대신 그림: 예상 보기마다 큰 그림 하나
-const PRED_PIC = {
-  tug: ['⬅️', '✋', '➡️'], team: ['0', '1', '2'], moon: ['🔺', '🟰', '🔻'], weights: ['🟰', '✌️', '🤏'],
-  floor: ['🧊', '🟫', '🟰'], water: ['🔺', '🟰', '🔻'], float: ['⬇️', '🛶'], motion: ['⏩', '🐢', '🛑'],
+// 선 아이콘 (24×24, 2px 선). 이모지는 기기마다 모양이 달라 교과서 화면에 쓰지 않는다
+const ICON = {
+  speaker: '<path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/>',
+  mute: '<path d="M11 5 6 9H3v6h3l5 4z"/><path d="m16 9 5 6M21 9l-5 6"/>',
+  arrowR: '<path d="M5 12h14M13 6l6 6-6 6"/>', arrowL: '<path d="M19 12H5M11 6l-6 6 6 6"/>',
+  arrowU: '<path d="M12 19V5M6 11l6-6 6 6"/>', arrowD: '<path d="M12 5v14M6 13l6 6 6-6"/>',
+  hold: '<path d="M2.5 12h4M21.5 12h-4M5 9l3 3-3 3M19 9l-3 3 3 3"/><rect x="9.5" y="8" width="5" height="8" rx="1"/>',
+  equal: '<path d="M5 9h14M5 15h14"/>', plus: '<path d="M12 5v14M5 12h14"/>', minus: '<path d="M5 12h14"/>',
+  sink: '<path d="M3 16c2 0 2-1.5 4.5-1.5S10 16 12 16s2.5-1.5 4.5-1.5S19 16 21 16"/><path d="M12 3v8M9 8l3 3 3-3"/>',
+  float: '<path d="M3 16c2 0 2-1.5 4.5-1.5S10 16 12 16s2.5-1.5 4.5-1.5S19 16 21 16"/><rect x="8" y="8.5" width="8" height="4.5" rx="1"/>',
+  faster: '<path d="M5 6l6 6-6 6M13 6l6 6-6 6"/>', slower: '<path d="M3 12h3M9 12h2.5M14.5 12h1.5"/><path d="M17.5 8l3 4-3 4"/>',
+  stop: '<rect x="6" y="6" width="12" height="12" rx="2.5"/>',
+  grip: '<g class="f"><circle cx="9" cy="7" r="1.4"/><circle cx="15" cy="7" r="1.4"/><circle cx="9" cy="12" r="1.4"/><circle cx="15" cy="12" r="1.4"/><circle cx="9" cy="17" r="1.4"/><circle cx="15" cy="17" r="1.4"/></g>',
+  tap: '<circle cx="12" cy="12" r="3.2"/><circle cx="12" cy="12" r="7.5" opacity=".45"/>',
+  puller: '<circle cx="12" cy="12" r="6.5" fill="currentColor" stroke="none"/>',
+  box: '<path d="M3.5 7.5 12 3l8.5 4.5v9L12 21l-8.5-4.5z"/><path d="M3.5 7.5 12 12l8.5-4.5M12 12v9"/>',
+  weight: '<circle cx="12" cy="4.6" r="1.8"/><path d="M12 6.4V8.5"/><rect x="6.5" y="8.5" width="11" height="12.5" rx="2.5"/>',
+  beaker: '<path d="M5 3h14M7 3v14.5A3.5 3.5 0 0 0 10.5 21h3a3.5 3.5 0 0 0 3.5-3.5V3"/><path d="M7 12h10"/>',
+  globe: '<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/>',
+  moon: '<path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5z"/>',
+  circle: '<circle cx="12" cy="12" r="8"/>', x: '<path d="M6 6l12 12M18 6 6 18"/>',
+  check: '<path d="M5 12.5l4.5 4.5L19 7.5"/>', info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 7.5v.5"/>',
+  star: '<path class="f" d="M12 2.8l2.8 5.7 6.3.9-4.55 4.45 1.07 6.25L12 17.15 6.38 20.1l1.07-6.25L2.9 9.4l6.3-.9z"/>',
+  chevR: '<path d="M9 6l6 6-6 6"/>', reset: '<path d="M3.5 12a8.5 8.5 0 1 0 2.6-6.1L3.5 8.5"/><path d="M3.5 3.5v5h5"/>',
+  eye: '<path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
+  ruler: '<rect x="2.5" y="8" width="19" height="8" rx="1.5"/><path d="M6.5 8v3M10.5 8v4M14.5 8v3M18.5 8v4"/>',
+  award: '<circle cx="12" cy="9" r="6"/><path d="M8.6 13.9 7 22l5-3 5 3-1.6-8.1"/>',
+  trophy: '<path d="M8 21h8M12 16.5V21M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M17 5.5h3V7a3 3 0 0 1-3 3M7 5.5H4V7a3 3 0 0 0 3 3"/>',
+  flag: '<path d="M5 21V4"/><path class="f" d="M5 4h12l-2.5 4L17 12H5z"/>',
+  cards: '<rect x="3.5" y="3" width="12" height="16" rx="2"/><path d="M8 21h10.5a2 2 0 0 0 2-2V7.5"/>',
 };
-// 만질 기구 그림
-// 추 그림 (윈도에서 깨지는 이모지 대신 직접 그린다)
-const WEIGHT_SVG = '<svg class="kwsvg" viewBox="0 0 40 40" aria-hidden="true"><path d="M20 3v8" stroke="#160f3a" stroke-width="3" fill="none"/><circle cx="20" cy="6" r="3.5" fill="none" stroke="#160f3a" stroke-width="2.5"/><rect x="8" y="11" width="24" height="26" rx="5" fill="#e0a83a" stroke="#160f3a" stroke-width="3"/><rect x="12" y="15" width="5" height="17" rx="2.5" fill="#ffe08a"/></svg>';
-const OBJ_PIC = { F1: '🟣', F2: '🟣', surface: '🟫', block: '📦', obj: WEIGHT_SVG, jack: '🥛' };
-const DIR_PIC = { '1,0': '➡️', '-1,0': '⬅️', '0,-1': '⬆️', '0,1': '⬇️' };
-// 할 일을 그림으로: [기구] + 손 동작(끌기 방향 / 톡 누르기)
+const ico = (n, c = '') => `<svg class="ki ${c}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${(ICON[n] || '').replace(/class="f"/g, 'fill="currentColor" stroke="none"')}</svg>`;
+const kcb = (on) => `<i class="kcb${on ? ' on' : ''}">${on ? ico('check') : ''}</i>`;
+const swatch = (s) => `<span class="ksw ${s}"></span>`;
+// 예상 보기 그림: i:아이콘 / s:바닥 견본 / t:글자(숫자)
+const PRED_PIC = {
+  tug: ['i:arrowL', 'i:hold', 'i:arrowR'], team: ['t:0 N', 't:1 N', 't:2 N'], moon: ['i:arrowU', 'i:equal', 'i:arrowD'], weights: ['i:equal', 't:×2', 'i:plus'],
+  floor: ['s:glass', 's:sand', 'i:equal'], water: ['i:arrowU', 'i:equal', 'i:arrowD'], float: ['i:sink', 'i:float'], motion: ['i:faster', 'i:slower', 'i:stop'],
+};
+function predPic(id, k) { const v = (PRED_PIC[id] || [])[k]; if (!v) return ''; const t = v[0], x = v.slice(2); return t === 'i' ? ico(x) : t === 's' ? swatch(x) : `<span class="kpt">${x}</span>`; }
+// 할 일 그림: [기구] + [끄는 방향 / 누르기]
+const STEP_OBJ = { F1: 'puller', F2: 'puller', surface: 'swatch', block: 'box', obj: 'weight', jack: 'beaker' };
 function kidSteps(m) {
-  if (m.quiz) return '<span class="kstep"><i class="kbig">⭕</i><i class="kbig">❌</i></span>';
-  if (m.widget === 'rocket') return '<span class="kstep"><i class="kobj">🌍</i><i class="kges drag r">👆</i><i class="kobj">🌙</i></span>';
-  return (m.hint || []).map(([k, g, dx, dy]) => g === 'drag'
-    ? `<span class="kstep"><i class="kobj">${OBJ_PIC[k] || '❓'}</i><i class="kges drag ${dx > 0 ? 'r' : dx < 0 ? 'l' : dy < 0 ? 'u' : 'd'}">👆</i><i class="kdir">${DIR_PIC[`${dx},${dy}`] || ''}</i></span>`
-    : `<span class="kstep"><i class="kobj">${OBJ_PIC[k] || '❓'}</i><i class="kges tap">👆</i></span>`).join('<b class="kplus">+</b>');
+  if (m.quiz) return `<span class="kstep"><span class="kso">${ico('circle')}</span><span class="kso">${ico('x')}</span></span>`;
+  if (m.widget === 'rocket') return `<span class="kstep"><span class="kso">${ico('globe')}</span><span class="ksa R">${ico('arrowR')}</span><span class="kso">${ico('moon')}</span></span>`;
+  const hs = m.hint || [];
+  return hs.map(([k, g, dx, dy], i) => {
+    const o = STEP_OBJ[k] || 'tap', a = g === 'drag' ? (dx > 0 ? 'R' : dx < 0 ? 'L' : dy < 0 ? 'U' : 'D') : 'tap';
+    return `<span class="kstep">${hs.length > 1 ? `<em>${i + 1}</em>` : ''}<span class="kso${o === 'puller' ? ' pull' : ''}">${o === 'swatch' ? swatch('sand') : ico(o)}</span><span class="ksa ${a}">${ico(a === 'tap' ? 'tap' : 'arrow' + a)}</span></span>`;
+  }).join('');
 }
 // 읽어 주기 (글을 못 읽는 아이도 OK)
 const VOICE = { on: true, key: '' };
 function speak(html, force) {
   try {
     const sy = window.speechSynthesis; if (!sy || (!VOICE.on && !force) || S.mode !== 'kid') return;
-    const tx = String(html).replace(/<[^>]+>/g, ' ').replace(/[←→⏩⏪▶■·…]/g, ' ').replace(/\s+/g, ' ').trim(); if (!tx) return;
+    const tx = String(html).replace(/<[^>]+>/g, ' ').replace(/[←→⏩⏪▶■·…]/g, ' ').replace(/\p{Extended_Pictographic}|\uFE0F/gu, ' ').replace(/\s+/g, ' ').trim(); if (!tx) return;
     sy.cancel(); const u = new SpeechSynthesisUtterance(tx); u.lang = isEn() ? 'en-US' : 'ko-KR'; u.rate = 0.95; u.pitch = 1.15;
     const v = sy.getVoices().find((q) => q.lang && q.lang.replace('_', '-').startsWith(u.lang)); if (v) u.voice = v;
     sy.speak(u);
@@ -3141,10 +3167,10 @@ const KID = {
     },
     {
       id: 'moon', stage: 4, icon: '🌙', shot: 'hang', look: 'scale', theme: 'moon', allow: [], widget: 'rocket',
-      t: { ko: ['달나라 여행', '추 3개가 걸려 있어요. 아래 <b>🚀 로켓을 잡고 달까지 끌어</b> 보세요. 저울 눈금이 어떻게 될까요?'], en: ['Trip to the Moon', 'Three weights are hanging. <b>Drag the 🚀 rocket</b> below all the way to the Moon. Watch the scale!'] },
+      t: { ko: ['달나라 여행', '추 3개가 걸려 있어요. 아래 <b>로켓 손잡이를 달까지 끌어</b> 보세요. 저울 눈금이 어떻게 될까요?'], en: ['Trip to the Moon', 'Three weights are hanging. <b>Drag the 🚀 rocket</b> below all the way to the Moon. Watch the scale!'] },
       pred: PRED(['달에 가면 저울 눈금은?', ['커져요', '그대로예요', '작아져요']], ['On the Moon, the scale reading…', ['goes up', 'stays the same', 'goes down']], 2),
       enter() { kidHang('weights', 3); },
-      meter: () => `<div class="kmeter"><span>${PHYS.nearPlanet(S.g.tgt)?.id === 'moon' ? '🌙' : PHYS.nearPlanet(S.g.tgt)?.id === 'mars' ? '🔴' : '🌍'} ${L2('저울', 'scale')} ${big(fx(S.Tlive, 2))}</span><span class="keq">·</span><span>${L2('추의 양', 'mass')} ${big(S.n.tgt * 50, 'g')}</span></div>`,
+      meter: () => `<div class="kmeter"><span>${ico(PHYS.nearPlanet(S.g.tgt)?.id === 'moon' ? 'moon' : 'globe')} ${L2('저울', 'scale')} ${big(fx(S.Tlive, 2))}</span><span class="keq">·</span><span>${L2('추의 양', 'mass')} ${big(S.n.tgt * 50, 'g')}</span></div>`,
       check: () => S.g.tgt <= 2 && S.n.tgt >= 1 && S.settle > 0.3, card: 'W',
       win: () => L2(`달에서는 끌어당기는 힘이 약해서 저울이 ${fx(S.Tlive, 2)} N만 가리켜요(지구에서는 ${fx(S.n.tgt * 0.05 * 9.8, 2)} N). 추의 양은 그대로 ${S.n.tgt * 50} g! <b style="color:#ffb36b">주황 화살표</b>(무게)만 짧아졌어요.`, `On the Moon gravity pulls only ${fx(S.Tlive, 2)} N (on Earth ${fx(S.n.tgt * 0.05 * 9.8, 2)} N). The weights are still ${S.n.tgt * 50} g — only the <b style="color:#ffb36b">orange arrow</b> (weight) got shorter!`),
     },
@@ -3167,7 +3193,7 @@ const KID = {
       id: 'floor', stage: 6, icon: '🧊', shot: 'track', look: 'block', theme: 'surface', allow: ['F2', 'surface'],
       hint: [['F2', 'drag', 1, 0], ['surface', 'tap']],
       t: { ko: ['미끌미끌 vs 까끌까끌', '<b>유리(얼음판)</b>에서 오른쪽 끌개를 <b>2 N쯤</b> 끌어 보세요. 그다음 <b>바닥을 눌러</b> 사포(사막)로 바꾸고 다시 2 N으로 당겨 보세요.'], en: ['Slippery vs rough', 'On <b>glass (ice)</b>, drag the right puller to about <b>2 N</b>. Then <b>tap the floor</b> to switch to sandpaper (desert) and pull 2 N again.'] },
-      pred: PRED(['똑같이 2 N으로 당기면 어느 바닥에서 미끄러질까요?', ['🧊 유리', '🟫 사포', '둘 다 똑같아요']], ['Pulling with 2 N — which floor lets it slide?', ['🧊 Glass', '🟫 Sandpaper', 'Both the same']], 0),
+      pred: PRED(['똑같이 2 N으로 당기면 어느 바닥에서 미끄러질까요?', ['유리', '사포', '둘 다 똑같아요']], ['Pulling with 2 N — which floor lets it slide?', ['Glass', 'Sandpaper', 'Both the same']], 0),
       enter() { kidTrack('glass'); },
       reset() { setParam('F2', 0); resetTrack(); },
       tick() {
@@ -3176,7 +3202,7 @@ const KID = {
         if (S.surface === 'sand' && S.F2.tgt >= 1.5 && S.F && S.F.mode === 'held') { c.sandT = (c.sandT || 0) + 0.08; if (c.sandT > 0.8) c.sand = true; }
       },
       check: () => KID.ctx.glass && KID.ctx.sand, card: 'f',
-      meter: () => `<div class="kmeter"><span>${T('surfName')[S.surface]} ${L2('바닥', 'floor')}</span><span class="keq">·</span><span style="color:#c4b5fd">${L2('당기는 힘', 'pull')} ${big(n1(S.F2.tgt))}</span></div><div class="kchk">${KID.ctx.glass ? '✅' : '⬜'} ${L2('유리에서 미끄러짐', 'Glass slides')} &nbsp; ${KID.ctx.sand ? '✅' : '⬜'} ${L2('사포에서 버팀 (1.5 N 이상)', 'Sandpaper holds (≥ 1.5 N)')}</div>`,
+      meter: () => `<div class="kmeter"><span>${T('surfName')[S.surface]} ${L2('바닥', 'floor')}</span><span class="keq">·</span><span style="color:#c4b5fd">${L2('당기는 힘', 'pull')} ${big(n1(S.F2.tgt))}</span></div><div class="kchk">${kcb(KID.ctx.glass)} ${L2('유리에서 미끄러짐', 'Glass slides')} &nbsp; ${kcb(KID.ctx.sand)} ${L2('사포에서 버팀 (1.5 N 이상)', 'Sandpaper holds (≥ 1.5 N)')}</div>`,
       win: () => L2(`까끌까끌한 사포는 꽉 붙잡아요. <b style="color:#fca5a5">빨간 ‘바닥이 붙잡는 힘’</b>(마찰력)이 ${n1(0.8 * 0.3 * 9.8)} N까지 커질 수 있어서 2 N으로는 못 움직여요. 미끌미끌한 유리는 ${n1(0.25 * 0.3 * 9.8)} N까지만 붙잡아요.`, `Rough sandpaper grips hard: the <b style="color:#fca5a5">red “floor grips”</b> arrow (friction) can grow to ${n1(0.8 * 0.3 * 9.8)} N, so 2 N can’t move it. Slippery glass only grips up to ${n1(0.25 * 0.3 * 9.8)} N.`),
     },
     {
@@ -3207,7 +3233,7 @@ const KID = {
       pred: PRED(['달리는 도막을 반대쪽에서 더 세게 당기면?', ['더 빨라져요', '점점 느려져요', '그 자리에 딱 멈춰요']], ['Pull a moving block harder the other way. It will…', ['speed up', 'slow down bit by bit', 'stop instantly']], 1),
       enter() { kidTrack('glass', XMIN()); S.speed = 0.45; S.seen = { acc: false, dec: false, rev: false }; },
       reset() { setParam('F1', 0); setParam('F2', 0); resetTrack(XMIN()); S.seen = { acc: false, dec: false, rev: false }; },
-      meter: () => { const v = Math.abs(S.trk.v), a = S.F && v > 0.01 ? S.F.a * Math.sign(S.trk.v) : 0; const st = v < 0.01 ? L2('■ 멈춤', '■ stopped') : a > 0.02 ? L2('⏩ 빨라지는 중', '⏩ speeding up') : a < -0.02 ? L2('⏪ 느려지는 중', '⏪ slowing down') : L2('▶ 같은 빠르기', '▶ steady'); return `<div class="kmeter"><span>${L2('빠르기', 'speed')} ${big(fx(v, 2), 'm/s')}</span><span class="keq">·</span><span style="color:#fde68a">${st}</span></div><div class="kchk">${S.seen.acc ? '✅' : '⬜'} ${L2('빨라짐', 'sped up')} &nbsp; ${S.seen.dec ? '✅' : '⬜'} ${L2('느려짐', 'slowed down')}</div>`; },
+      meter: () => { const v = Math.abs(S.trk.v), a = S.F && v > 0.01 ? S.F.a * Math.sign(S.trk.v) : 0; const st = v < 0.01 ? L2('멈춤', 'stopped') : a > 0.02 ? L2('빨라지는 중', 'speeding up') : a < -0.02 ? L2('느려지는 중', 'slowing down') : L2('같은 빠르기', 'steady'); return `<div class="kmeter"><span>${L2('빠르기', 'speed')} ${big(fx(v, 2), 'm/s')}</span><span class="keq">·</span><span style="color:#fde68a">${st}</span></div><div class="kchk">${kcb(S.seen.acc)} ${L2('빨라짐', 'sped up')} &nbsp; ${kcb(S.seen.dec)} ${L2('느려짐', 'slowed down')}</div>`; },
       check: () => S.seen.acc && S.seen.dec,
       win: () => L2('<b style="color:#fde68a">노란 ‘모두 합친 힘’</b>이 움직이는 쪽을 향하면 <b>빨라지고</b>, 반대쪽을 향하면 <b>느려져요</b>. 힘이 움직임(빠르기와 방향)을 바꾼 거예요!', 'When the <b style="color:#fde68a">yellow “all together”</b> arrow points the way it moves, it <b>speeds up</b>; when it points back, it <b>slows down</b>. Forces change motion!'),
     },
@@ -3251,31 +3277,32 @@ const KID = {
   phase() { const m = this.missions[this.i]; return m && m.pred && this.pick[this.i] == null ? 'predict' : 'play'; },
   hud() {
     const M = this.missions, el = document.getElementById('kidhud'); if (!el) return;
-    el.innerHTML = `<div class="kmap">${M.map((m, k) => `<span class="kn2${this.done[k] ? ' done' : ''}${k === this.i ? ' cur' : ''}${m.boss ? ' boss' : ''}" title="${(STAGE[LANG] || STAGE.ko)[m.stage]}">${m.icon}${this.done[k] ? '<em>★</em>' : ''}</span>`).join('<i></i>')}</div>
-      <div class="kscore"><span class="kcoin">⚡</span><b id="kpts">${Math.round(this.shown)}</b></div>
-      <button class="ksnd" title="${VOICE.on ? KT('soundOff') : KT('soundOn')}">${VOICE.on ? '🔊' : '🔇'}</button>`;
+    el.innerHTML = `<div class="kprog"><span class="kpn"><b>${Math.min(this.i + 1, M.length)}</b> / ${M.length}</span><div class="kseg">${M.map((m, k) => `<i class="${this.done[k] ? 'done' : ''}${k === this.i ? ' cur' : ''}${m.boss ? ' boss' : ''}" title="${(STAGE[LANG] || STAGE.ko)[m.stage]}"></i>`).join('')}</div></div>
+      <div class="kscore">${ico('star')}<b id="kpts">${Math.round(this.shown)}</b></div>
+      <button class="ksnd" title="${VOICE.on ? L2('소리 끄기', 'Sound off') : L2('소리 켜기', 'Sound on')}">${ico(VOICE.on ? 'speaker' : 'mute')}</button>`;
     el.querySelector('.ksnd').onclick = () => { VOICE.on = !VOICE.on; setSound(VOICE.on); ensureAudio(); if (!VOICE.on) try { speechSynthesis.cancel(); } catch (e) {} this.hud(); };
   },
   legend() {
     const el = document.getElementById('legend'); if (!el) return;
-    el.innerHTML = `<b>🃏 ${KT('cardsT')} ${this.cards.size}/${CARDS.length}</b>` + CARDS.map((c) => { const on = this.cards.has(c.k); return on ? `<span class="on"><i style="background:${hex(c.col)};box-shadow:0 0 6px ${hex(c.col)}"></i>${cardT(c)[0]}</span>` : '<span class="off">?</span>'; }).join('');
+    el.innerHTML = `<b>${ico('cards')}${KT('cardsT')} <em>${this.cards.size}/${CARDS.length}</em></b>` + CARDS.map((c) => (this.cards.has(c.k) ? `<span class="on"><i style="background:${hex(c.col)}"></i>${cardT(c)[0]}</span>` : '<span class="off"></span>')).join('');
   },
   render() {
     const box = document.getElementById('kid'), M = this.missions, N = M.length;
     this.hud(); this.legend();
-    if (this.i >= N) { khBuild(); box.innerHTML = `<div class="kmodal"><div class="kbox"><div class="kribbon gold">${L2('최종 결과', 'Results')}</div>${this.finalHTML()}</div></div>`; box.querySelector('[data-k=again]').onclick = () => this.reset(); box.querySelector('[data-k=full]').onclick = () => setMode('full'); return; }
+    if (this.i >= N) { khBuild(); box.innerHTML = `<div class="kmodal"><div class="kbox">${this.finalHTML()}</div></div>`; box.querySelector('[data-k=again]').onclick = () => this.reset(); box.querySelector('[data-k=full]').onclick = () => setMode('full'); return; }
     const m = M[this.i], t = m.t[LANG] || m.t.ko, ph = this.phase(), tag = '';
     let body = '';
-    if (m.quiz) body = `<div class="kmodal kquizm"><div class="kbox"><div class="kribbon">${L2('OX 퀴즈', 'O/X quiz')}</div>${this.quizHTML()}</div></div>`;
-    else if (ph === 'predict') { const p = m.pred[LANG] || m.pred.ko; const pic = PRED_PIC[m.id] || []; body = `<div class="kmodal"><div class="kbox kpred"><div class="kribbon">🤔 ?</div><div class="kmascot sm">${quokka('think')}</div><div class="kq"><b>${p[0]}</b><button class="ksay2" title="${L2('다시 듣기', 'Listen again')}">🔊</button></div><div class="kopts n${p[1].length}">${p[1].map((o, k) => `<button class="kopt" data-p="${k}"><i>${pic[k] || '❓'}</i><span>${o}</span></button>`).join('')}</div></div></div>`;
+    const lis = `<button class="ksay2" title="${L2('다시 듣기', 'Listen again')}">${ico('speaker')}</button>`;
+    if (m.quiz) body = `<div class="kmodal kquizm"><div class="kbox">${this.quizHTML()}</div></div>`;
+    else if (ph === 'predict') { const p = m.pred[LANG] || m.pred.ko; body = `<div class="kmodal"><div class="kbox kpred"><div class="kmh"><div class="kav sm">${quokka('think')}</div><div><div class="keye">${L2('예상하기', 'Predict')}</div><div class="kq">${p[0]}</div></div>${lis}</div><div class="kopts n${p[1].length}">${p[1].map((o, k) => `<button class="kopt" data-p="${k}"><span class="kpic">${predPic(m.id, k)}</span><span class="kol">${o}</span></button>`).join('')}</div></div></div>`;
       speakOnce(`${this.i}:pred`, `${p[0]} ${p[1].join(', ')}`); }
     else {
-      const mine = m.pred ? `<div class="kmine">🤔 <b>${(PRED_PIC[m.id] || [])[this.pick[this.i]] || ''}</b></div>` : '';
-      const rocket = m.widget === 'rocket' ? `<div class="krocket"><span>🌍<br>${L2('지구', 'Earth')}</span><div class="krk"><b style="left:100%"></b><b class="mars" style="left:${(9.8 - 3.7) / 8.2 * 100}%"></b><i class="kr">🚀</i></div><span>🌙<br>${L2('달', 'Moon')}</span></div>` : '';
-      body = `<div class="kfoot"><div class="know"><div class="knowtxt"></div></div><div class="krow">${mine}<div class="kmeterbox"></div>${m.reset ? `<button class="kreset">↺ ${L2('처음으로', 'Start again')}</button>` : ''}</div>${rocket}</div>`;
+      const mine = m.pred ? `<div class="kmine">${KT('mine')}${predPic(m.id, this.pick[this.i])}</div>` : '';
+      const rocket = m.widget === 'rocket' ? `<div class="krocket">${ico('globe')}<div class="krk"><b style="left:100%"></b><b class="mars" style="left:${(9.8 - 3.7) / 8.2 * 100}%"></b><i class="kr">${ico('grip')}</i></div>${ico('moon')}</div>` : '';
+      body = `<div class="kfoot"><div class="know"><div class="knowtxt"></div></div><div class="krow">${mine}<div class="kmeterbox"></div>${m.reset ? `<button class="kreset">${ico('reset')}<span>${L2('처음으로', 'Reset')}</span></button>` : ''}</div>${rocket}</div>`;
     }
-    box.innerHTML = `<div class="kban${m.boss ? ' boss' : ''}"><div class="kmascot">${quokka()}</div><div class="kbubble"><div class="khead"><span class="kstage">${m.boss ? 'BOSS' : 'STAGE ' + m.stage}</span><span class="ktopic">${(STAGE[LANG] || STAGE.ko)[m.stage]}</span><button class="kskip">${KT('skip')} ›</button></div><div class="ktitle"><span class="kicon">${m.icon}</span>${t[0]}<button class="ksay2" title="${L2('다시 듣기', 'Listen again')}">🔊</button></div><div class="ksteps">${kidSteps(m)}</div></div></div>${body}
-      <div class="kwin"><div class="kbox"><div class="kribbon gold">${L2('미션 성공!', 'Mission clear!')}</div><div class="kmascot sm">${quokka('win')}</div><div class="kstars"><i></i><i></i><i></i></div><div class="kwhy"></div><div class="kgain"></div><button class="kwhybtn">🔊 ${L2('왜 그럴까?', 'Why?')}</button><div class="kwintxt"></div><div class="kauto"><span>${L2('다음 미션까지', 'Next mission in')}</span><div><i></i></div></div><button class="kbtn main kgo">${KT('next')}</button></div></div>`;
+    box.innerHTML = `<div class="kban${m.boss ? ' boss' : ''}"><div class="kav">${quokka()}</div><div class="kbtxt"><div class="keye">${m.boss ? L2('도전 과제', 'Challenge') : 'Step ' + m.stage}<i></i>${(STAGE[LANG] || STAGE.ko)[m.stage]}</div><div class="ktitle">${t[0]}${lis}</div><div class="ksteps">${kidSteps(m)}</div></div><button class="kskip">${KT('skip')}${ico('chevR')}</button></div>${body}
+      <div class="kwin"><div class="kbox"><div class="kwintxt"></div><div class="kwrow"><div class="kwok">${ico('check')}</div><div class="kwmain"><div class="kwt">${L2('미션 성공', 'Mission clear')}<span class="kstars"><i>${ico('star')}</i><i>${ico('star')}</i><i>${ico('star')}</i></span></div><div class="kgain"></div></div><button class="kwhybtn">${ico('speaker')}<span>${L2('왜 그럴까?', 'Why?')}</span></button><button class="kbtn main kgo"></button></div><div class="kauto"><div><i></i></div></div></div></div>`;
     box.querySelectorAll('[data-p]').forEach((el) => (el.onclick = () => { ensureAudio(); this.pick[this.i] = +el.dataset.p; sfx('pick'); this.render(); if (m.look) this.ring(2.2, false); }));
     box.querySelectorAll('[data-b]').forEach((el) => (el.onclick = () => { ensureAudio(); if (m.quiz) this.answer(+el.dataset.b === 0); }));
     const qn = box.querySelector('.kqnext'); if (qn) qn.onclick = () => { this.ctx.q++; this.render(); };
@@ -3294,9 +3321,9 @@ const KID = {
   quizHTML() {
     const c = this.ctx, n = KID_QUIZ.length, q = KID_QUIZ[Math.min(c.q, n - 1)], t = q[LANG] || q.ko, a = c.ans[c.q];
     const dots = KID_QUIZ.map((_, k) => `<i class="${c.ans[k] == null ? (k === c.q ? 'cur' : '') : c.ans[k] ? 'ok' : 'no'}"></i>`).join('');
-    const fb = a == null ? '' : `<div class="kqfb ${a ? 'ok' : 'no'}"><i>${a ? '🎉' : '🤔'}</i><i>${q.a ? '⭕' : '❌'}</i><small>${t[1]}</small></div>${c.q < n - 1 ? `<button class="kbtn main wide kqnext">${KT('qNext')}</button>` : ''}`;
-    return `<div class="kquiz"><div class="kqd">${dots}<span>${Math.min(c.q + 1, n)} / ${n}</span></div><div class="kqq">${t[0]}<button class="ksay2" title="${L2('다시 듣기', 'Listen again')}">🔊</button></div>
-      ${a == null ? `<div class="kbtns"><button class="kbtn main" data-b="0" aria-label="${KT('yes')}">⭕</button><button class="kbtn main" data-b="1" aria-label="${KT('no')}">❌</button></div>` : fb}</div>`;
+    const fb = a == null ? '' : `<div class="kqfb ${a ? 'ok' : 'no'}"><span class="kqfi">${ico(a ? 'check' : 'info')}</span><div><b>${a ? L2('정답이에요', 'Correct') : L2('아쉬워요', 'Not quite')}</b><span>${L2('정답', 'Answer')} ${ico(q.a ? 'circle' : 'x')} · ${t[1]}</span></div></div>${c.q < n - 1 ? `<button class="kbtn main wide kqnext">${L2('다음 문제', 'Next question')}${ico('chevR')}</button>` : ''}`;
+    return `<div class="kquiz"><div class="kmh"><div><div class="keye">${L2('OX 퀴즈', 'O/X quiz')}<i></i>${Math.min(c.q + 1, n)} / ${n}</div><div class="kqd">${dots}</div></div><button class="ksay2" title="${L2('다시 듣기', 'Listen again')}">${ico('speaker')}</button></div><div class="kqq">${t[0]}</div>
+      ${a == null ? `<div class="kbtns kox"><button class="kbtn ko" data-b="0" aria-label="${KT('yes')}">${ico('circle')}<span>${L2('맞아요', 'True')}</span></button><button class="kbtn kx" data-b="1" aria-label="${KT('no')}">${ico('x')}<span>${L2('아니에요', 'False')}</span></button></div>` : fb}</div>`;
   },
   quizSpeech() {
     const c = this.ctx, q = KID_QUIZ[Math.min(c.q, KID_QUIZ.length - 1)], t = q[LANG] || q.ko, a = c.ans[c.q];
@@ -3311,11 +3338,11 @@ const KID = {
   },
   finalHTML() {
     const mx = this.max(), p = this.score / mx, nDone = this.done.filter(Boolean).length, nHit = this.hit.filter(Boolean).length;
-    const rank = p >= 0.85 ? L2('🏅 힘 박사', '🏅 Force Professor') : p >= 0.6 ? L2('🔭 힘 탐험가', '🔭 Force Explorer') : L2('🌱 힘 새싹', '🌱 Force Sprout');
-    return `<div class="kfinal"><div class="ktro">🏆</div><div class="ktitle">${L2('힘 탐험 완료!', 'Force quest complete!')}</div>
+    const rank = p >= 0.85 ? L2('힘 박사', 'Force Professor') : p >= 0.6 ? L2('힘 탐험가', 'Force Explorer') : L2('힘 새싹', 'Force Sprout');
+    return `<div class="kfinal"><div class="ktro">${ico('trophy')}</div><div class="keye">${L2('최종 결과', 'Results')}</div><div class="ktitle">${L2('힘 탐험 완료!', 'Force quest complete!')}</div>
       <div class="krank">${rank}</div>
-      <div class="kfs"><span>⚡ <b>${this.score}</b> / ${mx}</span><span>✅ ${nDone}/${this.missions.length}</span><span>🎯 ${nHit}/${this.missions.filter((m) => m.pred).length}</span></div>
-      <div class="kcards">${CARDS.map((c) => { const on = this.cards.has(c.k), t = cardT(c); return `<div class="kcard ${on ? 'on' : 'off'}" style="--c:${hex(c.col)}"><i></i><b>${on ? t[0] : '???'}</b></div>`; }).join('')}</div>
+      <div class="kfs"><div><b>${this.score}</b><span>${L2('점수', 'Score')} / ${mx}</span></div><div><b>${nDone}/${this.missions.length}</b><span>${L2('완료한 퀘스트', 'Quests done')}</span></div><div><b>${nHit}/${this.missions.filter((m) => m.pred).length}</b><span>${L2('예상 적중', 'Good guesses')}</span></div></div>
+      <div class="kcards">${CARDS.map((c) => { const on = this.cards.has(c.k), t = cardT(c); return `<div class="kcard ${on ? 'on' : 'off'}" style="--c:${hex(c.col)}"><i></i><b>${on ? t[0] : L2('잠김', 'Locked')}</b></div>`; }).join('')}</div>
       <p class="ksay">${L2('힘이 비기면 그대로, 한쪽이 이기면 움직임이 바뀌어요!', 'Balanced forces change nothing; an unbalanced force changes the motion!')}</p>
       <div class="kbtns"><button class="kbtn main" data-k="again">${KT('again')}</button><button class="kbtn" data-k="full">${KT('full')}</button></div></div>`;
   },
@@ -3345,19 +3372,19 @@ const KID = {
   },
   winText(m, w) {
     const quiz = m.quiz, nOk = quiz ? this.ctx.ans.filter(Boolean).length : 0, card = m.card && CARDS.find((c) => c.k === m.card);
-    w.querySelector('.kwhy').innerHTML = quiz ? '' : m.pred ? (this.pick[this.i] === m.pred.ans ? `<b class="khit">🎯 +50</b>` : `<span class="kmiss">😮 🔄</span>`) : '';
     w.classList.remove('open'); speak(quiz ? w.querySelector('.kwintxt').textContent : `${L2('미션 성공!', 'Mission clear!')} ${m.win()}`);
     w.querySelector('.kwintxt').innerHTML = quiz ? L2(`퀴즈 ${nOk}/${KID_QUIZ.length} 정답! 마지막 문제: ${(KID_QUIZ.at(-1)[LANG] || KID_QUIZ.at(-1).ko)[1]}`, `Quiz: ${nOk}/${KID_QUIZ.length} correct! Last one: ${(KID_QUIZ.at(-1)[LANG] || KID_QUIZ.at(-1).ko)[1]}`) : m.win();
     const nStar = quiz ? (nOk >= KID_QUIZ.length - 1 ? 3 : nOk >= KID_QUIZ.length / 2 ? 2 : 1) : m.pred && this.pick[this.i] !== m.pred.ans ? 2 : 3;
-    w.querySelectorAll('.kstars i').forEach((el, k) => { el.className = k < nStar ? 'on' : ''; el.style.animationDelay = `${0.25 + k * 0.22}s`; });
-    w.querySelector('.kgain').innerHTML = `<span><b class="kcoin">⚡</b>+100</span>${card ? `<span class="kgcard" style="--c:${hex(card.col)}"><i></i>🃏 ${cardT(card)[0]}</span>` : ''}`;
-    w.querySelector('.kgo').textContent = this.i === this.missions.length - 1 ? L2('🏆 결과 보기', '🏆 See results') : L2('바로 다음 →', 'Next now →');
+    w.querySelectorAll('.kstars i').forEach((el, k) => { el.className = k < nStar ? 'on' : ''; el.style.animationDelay = `${0.2 + k * 0.15}s`; });
+    const why = quiz || !m.pred ? '' : this.pick[this.i] === m.pred.ans ? `<span class="kchip ok">${ico('check')}${L2('예상 적중', 'Good guess')} +50</span>` : `<span class="kchip">${L2('예상과 달랐어요', 'Not what you guessed')}</span>`;
+    w.querySelector('.kgain').innerHTML = `${why}<span class="kchip">${ico('star')}+100</span>${card ? `<span class="kchip" style="--c:${hex(card.col)}"><i class="dot"></i>${L2('힘 카드', 'Card')} · ${cardT(card)[0]}</span>` : ''}`;
+    w.querySelector('.kgo').innerHTML = this.i === this.missions.length - 1 ? `${L2('결과 보기', 'See results')}${ico('chevR')}` : `${L2('다음', 'Next')}${ico('chevR')}`;
     const bar = w.querySelector('.kauto div i'); bar.style.animation = 'none'; void bar.offsetWidth; bar.style.animation = `kauto ${AUTO_NEXT - (m.quiz ? 0 : WIN_DELAY)}s linear forwards`;
   },
   cardPop(k) {
     const c = CARDS.find((q) => q.k === k), el = document.getElementById('kpop'); if (!el || !c || S.mode !== 'kid') return;
     const t = cardT(c);
-    el.innerHTML = `<div class="kpcard" style="--c:${hex(c.col)}"><small>🃏 ${KT('newCard')}</small><i></i><b>${t[0]}</b><span>${t[1]}</span></div>`;
+    el.innerHTML = `<div class="kpcard" style="--c:${hex(c.col)}"><small>${L2('새 힘 카드', 'New force card')}</small><i></i><b>${t[0]}</b><span>${t[1]}</span></div>`;
     el.classList.remove('on'); void el.offsetWidth; el.classList.add('on'); sfx('pop');
     const id = (this._pid = (this._pid || 0) + 1); this.after(2.6, () => { if (this._pid === id) el.classList.remove('on'); });
   },
@@ -3367,7 +3394,7 @@ const KID = {
   ring(dur, label) { this.fx.ring = { t: 0, dur, label }; },
   burst(n) {
     const cx = innerWidth / 2, cy = innerHeight * 0.5;
-    const cols = ['#fde68a', '#ffb36b', '#86efac', '#7dd3fc', '#c4b5fd', '#fca5a5', '#ffffff'];
+    const cols = ['#6366f1', '#a5b4fc', '#38bdf8', '#34d399', '#fbbf24', '#ffffff'];
     for (let i = 0; i < n; i++) { const a = rr(-Math.PI * 0.92, -Math.PI * 0.08), sp = rr(5, 13); this.fx.parts.push({ x: cx + rr(-60, 60), y: cy, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, r: rr(0, 6.28), vr: rr(-0.3, 0.3), w: rr(6, 10), h: rr(3, 6), c: cols[i % cols.length], life: rr(1.4, 2.4) }); }
   },
   float(txt) { const L = document.querySelector('#kidhud .kscore')?.getBoundingClientRect(); this.fx.floats.push({ txt, x: L && L.width ? L.left + L.width / 2 : innerWidth / 2, y: L && L.width ? L.bottom + 26 : 120, t: 0 }); },
@@ -3388,14 +3415,14 @@ const KID = {
       else {
         const v = LOOK[m.look]().clone().project(camera), x = (v.x + 1) / 2 * W, y = (1 - v.y) / 2 * H;
         const al = Math.min(1, R.t * 4, (R.dur - R.t) * 2.5);
-        for (let j = 0; j < 2; j++) { const p = (R.t * 0.9 + j * 0.5) % 1; c.strokeStyle = `rgba(253,230,138,${al * (1 - p) * 0.9})`; c.lineWidth = 3; c.beginPath(); c.arc(x, y, 30 + p * 34, 0, 7); c.stroke(); }
+        for (let j = 0; j < 2; j++) { const p = (R.t * 0.9 + j * 0.5) % 1; c.strokeStyle = `rgba(255,255,255,${al * (1 - p) * 0.9})`; c.lineWidth = 3; c.beginPath(); c.arc(x, y, 30 + p * 34, 0, 7); c.stroke(); }
         c.strokeStyle = `rgba(255,255,255,${al * 0.85})`; c.lineWidth = 2.5; c.setLineDash([7, 6]); c.lineDashOffset = -R.t * 30; c.beginPath(); c.arc(x, y, 34, 0, 7); c.stroke(); c.setLineDash([]);
         if (R.label) {   // 말풍선은 고리 왼쪽 (힘 이름표는 위쪽에 붙으므로 겹치지 않게)
-          const txt = KT('look'); c.font = '700 16px "Noto Sans KR", system-ui, sans-serif';
+          const txt = L2('여기를 보세요', 'Look here'); c.font = '600 14px "Noto Sans KR", system-ui, sans-serif';
           const tw = c.measureText(txt).width + 28, bx = x - 52 - tw - Math.abs(Math.sin(R.t * 5)) * 8;
-          c.fillStyle = `rgba(253,230,138,${al})`; c.beginPath(); c.roundRect(bx, y - 15, tw, 30, 15); c.fill();
+          c.fillStyle = `rgba(255,255,255,${al})`; c.beginPath(); c.roundRect(bx, y - 15, tw, 30, 10); c.fill();
           c.beginPath(); c.moveTo(bx + tw - 1, y - 8); c.lineTo(bx + tw - 1, y + 8); c.lineTo(bx + tw + 9, y); c.fill();
-          c.fillStyle = `rgba(42,26,12,${al})`; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText(txt, bx + tw / 2, y);
+          c.fillStyle = `rgba(17,24,39,${al})`; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText(txt, bx + tw / 2, y);
         }
       }
     }
@@ -3431,7 +3458,7 @@ const KID = {
     for (const p of F.parts) { p.vy += dt * 30; p.vx *= 0.99; p.x += p.vx * dt * 30; p.y += p.vy * dt * 30; p.r += p.vr; p.life -= dt; c.save(); c.globalAlpha = Math.max(0, Math.min(1, p.life * 2)); c.translate(p.x, p.y); c.rotate(p.r); c.fillStyle = p.c; c.fillRect(-p.w / 2, -p.h / 2, p.w, p.h); c.restore(); }
     F.parts = F.parts.filter((p) => p.life > 0 && p.y < H + 20);
     // 점수 떠오르기
-    for (const f of F.floats) { f.t += dt; const a = Math.max(0, 1 - f.t / 1.3), y = f.y - f.t * 50; c.globalAlpha = a; c.font = '800 30px "Noto Sans KR", system-ui, sans-serif'; c.textAlign = 'center'; c.textBaseline = 'middle'; c.lineWidth = 5; c.strokeStyle = 'rgba(42,26,12,.8)'; c.strokeText(f.txt, f.x, y); c.fillStyle = '#fde68a'; c.fillText(f.txt, f.x, y); c.globalAlpha = 1; }
+    for (const f of F.floats) { f.t += dt; const a = Math.max(0, 1 - f.t / 1.3), y = f.y - f.t * 50; c.globalAlpha = a; c.font = '700 22px Outfit, "Noto Sans KR", sans-serif'; c.textAlign = 'center'; c.textBaseline = 'middle'; c.lineWidth = 4; c.strokeStyle = 'rgba(17,24,39,.55)'; c.strokeText(f.txt, f.x, y); c.fillStyle = '#ffffff'; c.fillText(f.txt, f.x, y); c.globalAlpha = 1; }
     F.floats = F.floats.filter((f) => f.t < 1.3);
   },
 };
@@ -3493,10 +3520,10 @@ function KID_INTRO(on) {
   el.classList.toggle('on', on);
   if (on) {
     const t = KT('intro');
-    const tiles = isEn() ? [['👀✨', 'Forces glow'], ['📏💪', 'Long = strong'], ['🤔👆', 'Guess, then touch'], ['⭐🃏', 'Stars & cards']] : [['👀✨', '힘이 빛나요'], ['📏💪', '길면 세요'], ['🤔👆', '고르고 만져요'], ['⭐🃏', '별과 카드']];
-    el.querySelector('.box').innerHTML = `<div class="kmascot big">${quokka('win')}</div><h2>${t[0]}</h2><div class="kitiles">${tiles.map(([ic, tx]) => `<div class="kitile"><i>${ic}</i><span>${tx}</span></div>`).join('')}</div><button class="ksay2 kilisten">🔊 ${L2('설명 듣기', 'Listen')}</button>
-      <div class="kimap">${KID.missions.map((m) => `<span class="${m.boss ? 'boss' : ''}">${m.icon}</span>`).join('<i></i>')}</div>
-      <button class="kbtn main kstart">${t[5]} ▶</button><button class="kfull">${KT('full')}</button>`;
+    const tiles = [['eye', L2('힘이 화살표로 보여요', 'Forces show as arrows')], ['ruler', L2('길수록 센 힘', 'Longer = stronger')], ['tap', L2('예상하고 직접 조작', 'Guess, then try')], ['award', L2('별과 힘 카드', 'Stars & cards')]];
+    el.querySelector('.box').innerHTML = `<div class="kav lg">${quokka('win')}</div><div class="keye">${L2('힘의 작용 · 과학 실험실', 'Forces · Science lab')}</div><h2>${t[0]}</h2><div class="kitiles">${tiles.map(([ic, tx]) => `<div class="kitile"><span>${ico(ic)}</span><b>${tx}</b></div>`).join('')}</div><button class="kilisten">${ico('speaker')}<span>${L2('설명 듣기', 'Listen')}</span></button>
+      <div class="kimap">${KID.missions.map((m) => `<i class="${m.boss ? 'boss' : ''}"></i>`).join('')}</div>
+      <button class="kbtn main kstart">${t[5]}</button><button class="kfull">${KT('full')}</button>`;
     el.querySelector('.kstart').onclick = () => { ensureAudio(); if (VOICE.on) setSound(true); VOICE.key = ''; KID_INTRO(false); KID.go(0); };
     el.querySelector('.kfull').onclick = () => { KID_INTRO(false); setMode('full'); };
     el.querySelector('.kilisten').onclick = () => speak(t.slice(1, 5).map((q) => q[1]).join(' '), true);
@@ -3693,11 +3720,11 @@ function updateTheme(dt) {
 const KH = { el: null, items: [], drag: null };
 const KH_GOAL = { team: { F1: 1, F2: 1 }, floor: { F2: 2 }, boss: { F2: 4 } };
 const KH_FLEN = 0.22;   // 힘 레일 길이 (m, 장면 속)
-const KH_SURF = { glass: '🧊', wood: '🌲', sand: '🟫' };
-const khRailPx = () => clamp(innerWidth * 0.2, 170, 270);
+const khRailPx = () => clamp(innerWidth * 0.2, 120, 270);
 function khScreenEnds(k) {
-  const R = KH_RAIL[k], [a, b] = R.ends().map(khProj); if (k === 'jack') return [a, b];
-  const dx = b.x - a.x, dy = b.y - a.y, l = Math.hypot(dx, dy) || 1, L = khRailPx();
+  const R = KH_RAIL[k]; let [a, b] = R.ends().map(khProj); if (k === 'jack') return [a, b];
+  const dx = b.x - a.x, dy = b.y - a.y, l = Math.hypot(dx, dy) || 1, L = khRailPx(), P = 40;   // 끌개에서 화면상 40px 떨어져 시작 (두 손잡이가 겹치지 않게)
+  a = { x: a.x + dx / l * P, y: a.y + dy / l * P };
   const b2 = { x: a.x + dx / l * L, y: a.y + dy / l * L }, M = 44;   // 화면 밖으로 나가지 않게 밀어 넣기
   const lo = Math.min(a.x, b2.x), hi = Math.max(a.x, b2.x), sh = lo < M ? M - lo : hi > innerWidth - M ? innerWidth - M - hi : 0;
   return [{ x: a.x + sh, y: a.y }, { x: b2.x + sh, y: b2.y }];
@@ -3716,7 +3743,7 @@ const KH_RAIL = {
 };
 function khForceEnds(k) {
   const c = HERO.ts[k === 'F1' ? 0 : 1].cart.getWorldPosition(new THREE.Vector3()), d = khDirF(k);
-  const a = c.clone().add(V3(d * 0.05, 0.05, 0.03));
+  const a = c.clone().add(V3(0, 0.05, 0.03));
   return [a, a.clone().add(V3(d * KH_FLEN, 0, 0))];
 }
 
@@ -3732,26 +3759,26 @@ function khBuild() {
       const R = KH_RAIL[k], force = k !== 'jack';
       el = document.createElement('div'); el.className = `kh khrail ${force ? 'force' : 'water'}`;
       const ticks = force ? Array.from({ length: R.max() + 1 }, (_, i) => `<span class="khtick" style="left:${(i / R.max()) * 100}%"><em>${i}</em></span>`).join('') : '';
-      const g = goal[k] != null ? `<span class="khgoal" style="left:${(goal[k] / R.max()) * 100}%">🚩</span>` : '';
-      el.innerHTML = `<div class="khbar"><i class="khfill"></i>${ticks}${g}</div><i class="khghost">👆</i><button class="khknob" aria-label="${k}"><span>✋</span></button><div class="khval"></div>`;
+      const g = goal[k] != null ? `<span class="khgoal" style="left:${(goal[k] / R.max()) * 100}%">${ico('flag')}</span>` : '';
+      el.innerHTML = `<div class="khbar"><i class="khfill"></i>${ticks}${g}</div><i class="khghost"></i><button class="khknob" aria-label="${k}">${ico('grip')}</button><div class="khval"></div>`;
       const knob = el.querySelector('.khknob');
       knob.onpointerdown = (e) => {
         if (!KID.allows(k)) return; ensureAudio(); KID.acted(); if (k !== 'jack') KID.ctx.fail = false;
-        try { knob.setPointerCapture(e.pointerId); } catch (er) {} el.classList.add('drag'); knob.firstChild.textContent = '✊';
+        try { knob.setPointerCapture(e.pointerId); } catch (er) {} el.classList.add('drag');
         KH.drag = { k, ends: khScreenEnds(k), last: R.get() }; DRAG.kind = 'kh-' + k; khMove(e); sfx('pick');
       };
       knob.onpointermove = (e) => { if (KH.drag && KH.drag.k === k) khMove(e); };
-      knob.onpointerup = knob.onpointercancel = () => { if (!KH.drag) return; KH.drag = null; DRAG.kind = null; el.classList.remove('drag'); knob.firstChild.textContent = '✋'; KID.update(true); };
+      knob.onpointerup = knob.onpointercancel = () => { if (!KH.drag) return; KH.drag = null; DRAG.kind = null; el.classList.remove('drag'); KID.update(true); };
     } else if (k === 'surface') {
       el = document.createElement('div'); el.className = 'kh khpick';
-      el.innerHTML = SURFS.map((s) => `<button data-s="${s}"><i>${KH_SURF[s]}</i><span>${T('surfName')[s]}</span></button>`).join('');
+      el.innerHTML = SURFS.map((s) => `<button data-s="${s}">${swatch(s)}<span>${T('surfName')[s]}</span></button>`).join('');
       el.querySelectorAll('button').forEach((b) => (b.onclick = () => {
         if (!KID.allows('surface')) return; KID.acted(); ensureAudio();
         const L = S.load.tgt; kidTrack(b.dataset.s); setParam('load', L, true); KID.ctx.fail = false; KID.ctx.hold = 0; sfx('click'); KID.update(true);
       }));
     } else if (k === 'block' || k === 'obj') {
       el = document.createElement('div'); el.className = `kh khstep ${k}`;
-      el.innerHTML = `<button data-d="-1">➖</button><span class="khcount"></span><button data-d="1">➕</button>`;
+      el.innerHTML = `<button data-d="-1" aria-label="-">${ico('minus')}</button><span class="khcount"></span><button data-d="1" aria-label="+">${ico('plus')}</button>`;
       el.querySelectorAll('button').forEach((b) => (b.onclick = () => {
         if (!KID.allows(k)) return; KID.acted(); ensureAudio(); const d = +b.dataset.d;
         if (k === 'block') { const L = clamp(S.load.tgt + d, 0, PC.loadMax); kidDesign(S.surface); setParam('load', L, true); }
@@ -3800,8 +3827,8 @@ function khFrame() {
       el.style.cssText = `left:${p.x + off[0]}px;top:${p.y + off[1]}px`;
       if (k === 'surface') el.querySelectorAll('button').forEach((b) => b.classList.toggle('on', b.dataset.s === S.surface));
       else {
-        const n = k === 'block' ? S.load.tgt : S.n.tgt, mx = k === 'block' ? PC.loadMax : PC.nMax, ic = k === 'block' ? '📦' : WEIGHT_SVG;
-        const h = `<i>${ic}</i><b>${n}</b>`; const c = el.querySelector('.khcount'); if (c._h !== h) { c.innerHTML = h; c._h = h; }
+        const n = k === 'block' ? S.load.tgt : S.n.tgt, mx = k === 'block' ? PC.loadMax : PC.nMax, ic = ico(k === 'block' ? 'box' : 'weight');
+        const h = `${ic}<b>${n}</b>`; const c = el.querySelector('.khcount'); if (c._h !== h) { c.innerHTML = h; c._h = h; }
         el.querySelector('[data-d="-1"]').disabled = n <= 0; el.querySelector('[data-d="1"]').disabled = n >= mx;
       }
     }
