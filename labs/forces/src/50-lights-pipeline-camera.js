@@ -114,10 +114,9 @@ const KID_SHOTS = { track: { pos: V3(0.45, 2.3, 1.62), tgt: V3(0.45, 0.99, 0.08)
 // (넓은 화면은 카드 오른쪽, 좁은 화면은 위쪽 진행 지도와 아래 카드 사이)
 function applyViewOffset() {
   const W = innerWidth, H = innerHeight, L = document.getElementById('left'), kid = S.mode === 'kid';
-  const dx = kid && W > 980 && L ? Math.max(0, L.getBoundingClientRect().right * 0.5 - 10) : 0;
-  const dy = kid && W <= 980 ? Math.max(0, H / 2 - (96 + H * 0.42) / 2) : 0;
+  const dx = 0, dy = kid ? Math.min(60, H * 0.06) : 0;   // 쉬운 모드: 위 안내 띠만큼 장면을 살짝 아래로
   if (dx > 0) { camera.aspect = (W + 2 * dx) / H; camera.setViewOffset(W + 2 * dx, H, 0, 0, W, H); }
-  else if (dy > 0) { camera.aspect = W / (H + 2 * dy); camera.setViewOffset(W, H + 2 * dy, 0, 2 * dy, W, H); }
+  else if (dy > 0) { camera.aspect = W / (H + 2 * dy); camera.setViewOffset(W, H + 2 * dy, 0, 0, W, H); }
   else { camera.aspect = W / H; camera.clearViewOffset(); }
   camera.updateProjectionMatrix();
 }

@@ -397,6 +397,48 @@ body.kid #modeBtn{top:auto;bottom:14px;left:286px;right:auto;transform:none;padd
   #kid .ktitle{font-size:19px} #kid .ksay{font-size:15px} .kbtn{padding:11px 8px;font-size:15px}
   #kid .kskip{position:static;display:block;margin:8px 0 0 auto}
 }
+
+/* ===== 쉬운 모드: 장면 안 팝업 (마지막에 두어 앞 규칙을 덮는다) ===== */
+body.kid #left{display:none!important}
+body.kid #kid{position:fixed!important;inset:0!important;left:0!important;right:0!important;bottom:0!important;max-height:none!important;overflow:visible!important;margin:0!important;padding:0;background:none;border:0;border-radius:0;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none;pointer-events:none;z-index:12}
+#kid>*{pointer-events:auto}
+#kid .kban{position:absolute;top:60px;left:50%;transform:translateX(-50%);width:min(680px,calc(100vw - 32px));background:rgba(24,20,17,.84);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.14);border-radius:16px;padding:10px 16px 10px;box-shadow:0 10px 30px rgba(0,0,0,.35);animation:kdrop .4s ease}
+#kid .kban .khead{margin:0;gap:8px;flex-wrap:wrap}
+#kid .kban .kicon{font-size:26px}
+#kid .kban .ktitle{font-size:20px}
+#kid .kban .ksay{margin:5px 0 0;font-size:15.5px}
+#kid .kban .kskip{position:static;margin-left:auto;padding:4px 6px}
+#kid .kfoot{position:absolute;left:50%;bottom:62px;transform:translateX(-50%);width:min(680px,calc(100vw - 32px));display:flex;flex-direction:column;gap:8px;align-items:center}
+#kid .kfoot .krow{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;width:100%}
+#kid .kfoot .kmeterbox{flex:0 1 auto}
+#kid .kfoot .kmeter,#kid .kfoot .kchk{margin:0;background:rgba(20,16,12,.8);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.12)}
+#kid .kfoot .kchk{margin-top:6px}
+#kid .kfoot .kmine{margin:0}
+#kid .kfoot .kreset{margin:0;background:rgba(20,16,12,.8)}
+#kid .kfoot .know{margin:0;align-self:center;background:rgba(20,16,12,.7);border-radius:999px;border-left:0;padding:6px 14px;font-size:14px}
+#kid .kfoot .krocket{width:min(440px,100%);margin:0;background:rgba(20,16,12,.8);border-radius:999px;padding:6px 12px}
+#kid .kmodal{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(10,8,7,.38)}
+#kid .kbox{width:min(480px,100%);max-height:calc(100vh - 140px);overflow:auto;background:rgba(28,23,19,.95);border:1px solid rgba(255,255,255,.16);border-radius:20px;padding:18px 18px 16px;box-shadow:0 24px 70px rgba(0,0,0,.55);animation:kpopin .35s cubic-bezier(.2,1.4,.4,1)}
+#kid .kpred{margin:0;background:linear-gradient(180deg,#2a2440,#1e1a2c);border-color:rgba(196,181,253,.5);text-align:center}
+#kid .kpi{font-size:44px;line-height:1;margin-bottom:6px}
+#kid .kpred .kq{font-size:15px}
+#kid .kpred .kq b{font-size:20px;margin-top:6px}
+#kid .kwin{display:none!important;position:absolute;left:50%;bottom:62px;transform:translateX(-50%);width:min(560px,calc(100vw - 32px));margin:0;padding:0;background:none;border:0}
+#kid .kwin.on{display:block!important}
+#kid .kwin .kbox{width:100%;background:rgba(18,40,28,.94);border-color:rgba(134,239,172,.6)}
+#kid:has(.kwin.on) .kfoot{display:none}
+#kid .kauto{height:5px;border-radius:3px;background:rgba(255,255,255,.12);margin:2px 0 10px;overflow:hidden}
+#kid .kauto i{display:block;height:100%;width:0;background:#86efac}
+@keyframes kauto{from{width:0}to{width:100%}}
+@keyframes kpopin{from{transform:scale(.85);opacity:0}to{transform:none;opacity:1}}
+@keyframes kdrop{from{transform:translate(-50%,-14px);opacity:0}to{transform:translateX(-50%);opacity:1}}
+body.kid #kidhud{left:50%}
+#kpop{left:50%!important;top:24%!important}
+@media (max-width:980px){
+  #kid .kban{top:88px;padding:8px 12px} #kid .kban .ksay{font-size:14px} #kid .kban .ktitle{font-size:17px}
+  #kid .kfoot,#kid .kwin{bottom:12px}
+  body.kid #modeBtn{bottom:auto;top:52px;right:8px;display:none}
+}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 <script type="importmap">
@@ -1883,10 +1925,9 @@ const KID_SHOTS = { track: { pos: V3(0.45, 2.3, 1.62), tgt: V3(0.45, 0.99, 0.08)
 // (넓은 화면은 카드 오른쪽, 좁은 화면은 위쪽 진행 지도와 아래 카드 사이)
 function applyViewOffset() {
   const W = innerWidth, H = innerHeight, L = document.getElementById('left'), kid = S.mode === 'kid';
-  const dx = kid && W > 980 && L ? Math.max(0, L.getBoundingClientRect().right * 0.5 - 10) : 0;
-  const dy = kid && W <= 980 ? Math.max(0, H / 2 - (96 + H * 0.42) / 2) : 0;
+  const dx = 0, dy = kid ? Math.min(60, H * 0.06) : 0;   // 쉬운 모드: 위 안내 띠만큼 장면을 살짝 아래로
   if (dx > 0) { camera.aspect = (W + 2 * dx) / H; camera.setViewOffset(W + 2 * dx, H, 0, 0, W, H); }
-  else if (dy > 0) { camera.aspect = W / (H + 2 * dy); camera.setViewOffset(W, H + 2 * dy, 0, 2 * dy, W, H); }
+  else if (dy > 0) { camera.aspect = W / (H + 2 * dy); camera.setViewOffset(W, H + 2 * dy, 0, 0, W, H); }
   else { camera.aspect = W / H; camera.clearViewOffset(); }
   camera.updateProjectionMatrix();
 }
@@ -2753,6 +2794,7 @@ const KID_QUIZ = [
   { a: true, ko: ['물속에 넣은 물체는 물이 위로 밀어 올려요.', '이 힘이 부력이에요. 그래서 저울 눈금이 줄어요.'], en: ['Water pushes up on things put into it.', 'That push is buoyancy, so the scale reads less.'] },
 ];
 
+const AUTO_NEXT = 7;   // 성공 팝업이 떠 있는 시간(초). 지나면 저절로 다음 퀘스트
 const KID = {
   i: -1, done: [], hit: [], pick: [], cards: new Set(), score: 0, shown: 0, ctx: {}, passed: false,
   missions: [
@@ -2912,21 +2954,18 @@ const KID = {
   render() {
     const box = document.getElementById('kid'), M = this.missions, N = M.length;
     this.hud(); this.legend();
-    if (this.i >= N) { box.innerHTML = this.finalHTML(); box.querySelector('[data-k=again]').onclick = () => this.reset(); box.querySelector('[data-k=full]').onclick = () => setMode('full'); return; }
+    if (this.i >= N) { box.innerHTML = `<div class="kmodal"><div class="kbox">${this.finalHTML()}</div></div>`; box.querySelector('[data-k=again]').onclick = () => this.reset(); box.querySelector('[data-k=full]').onclick = () => setMode('full'); return; }
     const m = M[this.i], t = m.t[LANG] || m.t.ko, ph = this.phase(), tag = `${isEn() ? 'Step ' + m.stage : m.stage + '단계'} · ${(STAGE[LANG] || STAGE.ko)[m.stage]}`;
     let body = '';
-    if (m.quiz) body = this.quizHTML();
-    else if (ph === 'predict') { const p = m.pred[LANG] || m.pred.ko; body = `<div class="kpred"><div class="kq">${KT('predT')}<br><b>${p[0]}</b></div><div class="kopts n${p[1].length}">${p[1].map((o, k) => `<button class="kopt" data-p="${k}">${o}</button>`).join('')}</div></div>`; }
+    if (m.quiz) body = `<div class="kmodal kquizm"><div class="kbox">${this.quizHTML()}</div></div>`;
+    else if (ph === 'predict') { const p = m.pred[LANG] || m.pred.ko; body = `<div class="kmodal"><div class="kbox kpred"><div class="kpi">${m.icon}</div><div class="kq">${KT('predT')}<br><b>${p[0]}</b></div><div class="kopts n${p[1].length}">${p[1].map((o, k) => `<button class="kopt" data-p="${k}">${o}</button>`).join('')}</div></div></div>`; }
     else {
       const mine = m.pred ? `<div class="kmine">${KT('mine')}: <b>${(m.pred[LANG] || m.pred.ko)[1][this.pick[this.i]]}</b></div>` : '';
       const rocket = m.widget === 'rocket' ? `<div class="krocket"><span>🌍<br>${L2('지구', 'Earth')}</span><div class="krk"><b style="left:100%"></b><b class="mars" style="left:${(9.8 - 3.7) / 8.2 * 100}%"></b><i class="kr">🚀</i></div><span>🌙<br>${L2('달', 'Moon')}</span></div>` : '';
-      body = `${mine}${rocket}<div class="kmeterbox"></div><div class="know"><span>${KT('now')}</span><div class="knowtxt"></div></div>${m.reset ? `<button class="kreset">↺ ${L2('처음으로', 'Start again')}</button>` : ''}`;
+      body = `<div class="kfoot"><div class="know"><div class="knowtxt"></div></div><div class="krow">${mine}<div class="kmeterbox"></div>${m.reset ? `<button class="kreset">↺ ${L2('처음으로', 'Start again')}</button>` : ''}</div>${rocket}</div>`;
     }
-    box.innerHTML = `<div class="ktag${m.boss ? ' boss' : ''}">${tag}</div>
-      <div class="khead"><span class="kicon">${m.icon}</span><span class="ktitle">${t[0]}</span></div>
-      <p class="ksay">${t[1]}</p>${body}
-      <div class="kwin"><div class="kwhy"></div><div class="kwintxt"></div><div class="kgain"></div><button class="kbtn main kgo">${KT('next')}</button></div>
-      <button class="kskip">${KT('skip')} ›</button>`;
+    box.innerHTML = `<div class="kban"><div class="khead"><span class="kicon">${m.icon}</span><span class="ktag${m.boss ? ' boss' : ''}">${tag}</span><span class="ktitle">${t[0]}</span><button class="kskip">${KT('skip')} ›</button></div><p class="ksay">${t[1]}</p></div>${body}
+      <div class="kwin"><div class="kbox"><div class="kwhy"></div><div class="kwintxt"></div><div class="kgain"></div><div class="kauto"><i></i></div><button class="kbtn main kgo">${KT('next')}</button></div></div>`;
     box.querySelectorAll('[data-p]').forEach((el) => (el.onclick = () => { ensureAudio(); this.pick[this.i] = +el.dataset.p; sfx('pick'); this.render(); if (m.look) this.ring(2.2, false); }));
     box.querySelectorAll('[data-b]').forEach((el) => (el.onclick = () => { ensureAudio(); if (m.quiz) this.answer(+el.dataset.b === 0); }));
     const qn = box.querySelector('.kqnext'); if (qn) qn.onclick = () => { this.ctx.q++; this.render(); };
@@ -2947,6 +2986,7 @@ const KID = {
     const c = this.ctx, q = KID_QUIZ[c.q]; if (!q || c.ans[c.q] != null) return;
     const ok = yes === q.a; c.ans[c.q] = ok;
     if (ok) { this.add(50); sfx('ding'); this.burst(16); } else sfx('tick');
+    const q0 = c.q, i0 = this.i; if (c.q < KID_QUIZ.length - 1) this.after(2.6, () => { if (this.i === i0 && c.q === q0) { c.q++; this.render(); } });
     this.render();
   },
   finalHTML() {
@@ -2980,13 +3020,15 @@ const KID = {
       if (m.card && !this.cards.has(m.card)) { this.cards.add(m.card); this.after(0.7, () => this.cardPop(m.card)); }
     }
     sfx('win'); this.burst(m.boss ? 120 : 60); this.hud(); this.legend();
+    const i0 = this.i; this.after(AUTO_NEXT, () => { if (this.i === i0 && this.passed && S.mode === 'kid') this.go(this.i + 1); });
   },
   winText(m, w) {
     const quiz = m.quiz, nOk = quiz ? this.ctx.ans.filter(Boolean).length : 0, card = m.card && CARDS.find((c) => c.k === m.card);
     w.querySelector('.kwhy').innerHTML = quiz ? '' : m.pred ? (this.pick[this.i] === m.pred.ans ? `<b class="khit">${KT('hit')} +50</b>` : `<span class="kmiss">${KT('miss')}</span>`) : '';
     w.querySelector('.kwintxt').innerHTML = quiz ? L2(`퀴즈 ${nOk}/${KID_QUIZ.length} 정답! 마지막 문제: ${(KID_QUIZ.at(-1)[LANG] || KID_QUIZ.at(-1).ko)[1]}`, `Quiz: ${nOk}/${KID_QUIZ.length} correct! Last one: ${(KID_QUIZ.at(-1)[LANG] || KID_QUIZ.at(-1).ko)[1]}`) : '✅ ' + m.win();
     w.querySelector('.kgain').innerHTML = `<span>+100 ${KT('pts')}</span>${card ? `<span style="--c:${hex(card.col)}"><i></i>🃏 ${cardT(card)[0]}</span>` : ''}`;
-    w.querySelector('.kgo').textContent = this.i === this.missions.length - 1 ? L2('🏆 결과 보기', '🏆 See results') : KT('next');
+    w.querySelector('.kgo').textContent = this.i === this.missions.length - 1 ? L2('🏆 결과 보기', '🏆 See results') : L2('바로 다음 →', 'Next now →');
+    const bar = w.querySelector('.kauto i'); bar.style.animation = 'none'; void bar.offsetWidth; bar.style.animation = `kauto ${AUTO_NEXT}s linear forwards`;
   },
   cardPop(k) {
     const c = CARDS.find((q) => q.k === k), el = document.getElementById('kpop'); if (!el || !c || S.mode !== 'kid') return;
@@ -3135,6 +3177,7 @@ function KID_INTRO(on) {
   }
 }
 function initKid() {
+  document.body.appendChild(document.getElementById('kid'));
   document.getElementById('kidSub').innerHTML = KT('sub');
   document.getElementById('modeBtn').onclick = () => setMode(S.mode === 'kid' ? 'full' : 'kid');
   let m = QS.get('mode');
