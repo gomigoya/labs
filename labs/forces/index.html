@@ -7,7 +7,7 @@
 <meta name="theme-color" content="#1a1511">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;800&family=DM+Mono:wght@400;500&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Jua&family=Outfit:wght@600;800&family=DM+Mono:wght@400;500&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 :root{
   --warm:#ffb36b; --warm2:#ffcf9a; --cool:#7dd3fc; --cool2:#bae6fd; --violet:#c4b5fd; --green:#86efac; --red:#fca5a5; --yellow:#fde68a;
@@ -398,47 +398,198 @@ body.kid #modeBtn{top:auto;bottom:14px;left:286px;right:auto;transform:none;padd
   #kid .kskip{position:static;display:block;margin:8px 0 0 auto}
 }
 
-/* ===== 쉬운 모드: 장면 안 팝업 (마지막에 두어 앞 규칙을 덮는다) ===== */
+/* ===== 쉬운 모드: 게임 화면 (장면 위 팝업 층) ===== */
+:root{--ki:#160f3a;--kp1:#5b41d6;--kp2:#33208f;--ky1:#ffe066;--ky2:#ffb21e;--kg1:#5ef0a8;--kg2:#14b46c;--kr1:#ff8197;--kr2:#ee3a5c;--kb1:#6fd0ff;--kb2:#1e93e6;--kdisp:'Black Han Sans','Noto Sans KR',sans-serif;--kbody:'Jua','Noto Sans KR',sans-serif}
 body.kid #left{display:none!important}
-body.kid #kid{position:fixed!important;inset:0!important;left:0!important;right:0!important;bottom:0!important;max-height:none!important;overflow:visible!important;margin:0!important;padding:0;background:none;border:0;border-radius:0;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none;pointer-events:none;z-index:12}
+body.kid #kid{position:fixed!important;inset:0!important;max-height:none!important;overflow:visible!important;margin:0!important;padding:0;background:none;border:0;border-radius:0;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none;pointer-events:none;z-index:12;font-family:var(--kbody)}
 #kid>*{pointer-events:auto}
-#kid .kban{position:absolute;top:60px;left:50%;transform:translateX(-50%);width:min(680px,calc(100vw - 32px));background:rgba(24,20,17,.84);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.14);border-radius:16px;padding:10px 16px 10px;box-shadow:0 10px 30px rgba(0,0,0,.35);animation:kdrop .4s ease}
-#kid .kban .khead{margin:0;gap:8px;flex-wrap:wrap}
-#kid .kban .kicon{font-size:26px}
-#kid .kban .ktitle{font-size:20px}
-#kid .kban .ksay{margin:5px 0 0;font-size:15.5px}
-#kid .kban .kskip{position:static;margin-left:auto;padding:4px 6px}
-#kid .kfoot{position:absolute;left:50%;bottom:62px;transform:translateX(-50%);width:min(680px,calc(100vw - 32px));display:flex;flex-direction:column;gap:8px;align-items:center}
+#kid b{font-weight:400}
+/* 공통: 보라 게임 패널 */
+#kid .kbubble,#kid .kbox,#kidIntro .box{background:linear-gradient(180deg,var(--kp1),var(--kp2));border:3px solid var(--ki);border-radius:24px;box-shadow:inset 0 3px 0 rgba(255,255,255,.28),inset 0 -5px 0 rgba(0,0,0,.2),0 6px 0 var(--ki),0 18px 34px rgba(0,0,0,.35);color:#fff}
+/* 공통: 말랑한 3D 버튼 */
+body.kid .kbtn,#kidIntro .kbtn{font:400 20px/1.15 var(--kdisp);letter-spacing:.01em;color:var(--ki);background:linear-gradient(180deg,var(--ky1),var(--ky2));border:3px solid var(--ki);border-radius:18px;padding:13px 16px;box-shadow:inset 0 3px 0 rgba(255,255,255,.55),inset 0 -4px 0 rgba(0,0,0,.14),0 5px 0 var(--ki);cursor:pointer;transition:transform .08s,box-shadow .08s,filter .15s}
+body.kid .kbtn:hover,#kidIntro .kbtn:hover{filter:brightness(1.07);background:linear-gradient(180deg,var(--ky1),var(--ky2))}
+body.kid .kbtn:active,#kidIntro .kbtn:active{transform:translateY(4px);box-shadow:inset 0 3px 0 rgba(255,255,255,.55),0 1px 0 var(--ki)}
+/* 리본 제목 */
+#kid .kribbon{position:absolute;left:50%;top:-24px;transform:translateX(-50%) rotate(-2deg);white-space:nowrap;font:400 24px/1 var(--kdisp);color:#fff;background:linear-gradient(180deg,var(--kr1),var(--kr2));border:3px solid var(--ki);border-radius:12px;padding:9px 26px 10px;box-shadow:inset 0 3px 0 rgba(255,255,255,.4),0 5px 0 var(--ki);text-shadow:0 3px 0 var(--ki),2px 0 0 var(--ki),-2px 0 0 var(--ki),0 -2px 0 var(--ki);z-index:2}
+#kid .kribbon.gold{background:linear-gradient(180deg,var(--ky1),var(--ky2));animation:kribbon .5s cubic-bezier(.2,1.6,.4,1)}
+@keyframes kribbon{from{transform:translateX(-50%) scale(.3) rotate(-12deg)}to{transform:translateX(-50%) rotate(-2deg)}}
+/* 쿼카 */
+#kid .kmascot,#kidIntro .kmascot{flex:none;width:92px;height:92px;filter:drop-shadow(0 5px 0 rgba(22,15,58,.55));animation:kbounce 2.4s ease-in-out infinite}
+#kid .kmascot svg,#kidIntro .kmascot svg{width:100%;height:100%;display:block}
+#kid .kmascot.sm{width:70px;height:70px;margin:2px auto -2px}
+#kidIntro .kmascot.big{width:84px;height:84px;margin:-6px auto 2px}
+@keyframes kbounce{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-6px) rotate(3deg)}}
+
+/* ---- 위: 쿼카 + 말풍선 ---- */
+#kid .kban{position:absolute;top:66px;left:50%;transform:translateX(-50%);width:min(760px,calc(100vw - 32px));display:flex;align-items:flex-start;gap:10px;animation:kdrop .45s cubic-bezier(.2,1.4,.4,1)}
+#kid .kban .kmascot{margin-top:4px}
+#kid .kbubble{position:relative;flex:1;min-width:0;padding:11px 18px 13px}
+#kid .kbubble::before{content:"";position:absolute;left:-15px;top:30px;border:12px solid transparent;border-right:15px solid var(--ki);border-left:0}
+#kid .kbubble::after{content:"";position:absolute;left:-9px;top:33px;border:9px solid transparent;border-right:11px solid var(--kp1);border-left:0}
+#kid .kban .khead{display:flex;align-items:center;gap:8px;margin:0 0 4px}
+#kid .kstage{font:400 14px/1 var(--kdisp);letter-spacing:.06em;color:var(--ki);background:linear-gradient(180deg,var(--ky1),var(--ky2));border:2.5px solid var(--ki);border-radius:9px;padding:5px 9px 4px;transform:rotate(-3deg);box-shadow:0 3px 0 var(--ki)}
+#kid .kban.boss .kstage{background:linear-gradient(180deg,var(--kr1),var(--kr2));color:#fff}
+#kid .ktopic{font:400 14px/1 var(--kbody);color:#d9d0ff}
+#kid .kban .kskip{position:static;margin-left:auto;border:0;background:rgba(22,15,58,.35);color:#d9d0ff;border-radius:999px;padding:5px 10px;font:400 13px/1 var(--kbody);cursor:pointer}
+#kid .kban .kskip:hover{color:#fff;background:rgba(22,15,58,.6)}
+#kid .ktitle{display:flex;align-items:center;gap:8px;font:400 27px/1.15 var(--kdisp);color:#fff;text-shadow:0 3px 0 var(--ki),2px 0 0 var(--ki),-2px 0 0 var(--ki),0 -2px 0 var(--ki)}
+#kid .ktitle .kicon{font-size:26px;text-shadow:none}
+#kid .ksay{margin:6px 0 0;font:400 17px/1.45 var(--kbody);color:#f1edff}
+#kid .ksay b{color:var(--ky1)}
+
+/* ---- 아래: 지금 상태 + 계기 ---- */
+#kid .kfoot{position:absolute;left:50%;bottom:64px;transform:translateX(-50%);width:min(700px,calc(100vw - 32px));display:flex;flex-direction:column;gap:8px;align-items:center}
 #kid .kfoot .krow{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;width:100%}
-#kid .kfoot .kmeterbox{flex:0 1 auto}
-#kid .kfoot .kmeter,#kid .kfoot .kchk{margin:0;background:rgba(20,16,12,.8);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.12)}
+#kid .kfoot .know{margin:0;border:2.5px solid var(--ki);border-radius:999px;background:rgba(255,255,255,.94);color:var(--ki);padding:7px 16px;font:400 16px/1.35 var(--kbody);box-shadow:0 4px 0 var(--ki);text-align:center}
+#kid .kfoot .know b{color:#5b41d6!important}
+#kid .kfoot .kmeter,#kid .kfoot .kchk{margin:0;background:linear-gradient(180deg,var(--kp1),var(--kp2));border:3px solid var(--ki);border-radius:18px;box-shadow:inset 0 2px 0 rgba(255,255,255,.25),0 5px 0 var(--ki);font:400 16px/1.3 var(--kbody);color:#fff;padding:8px 14px}
 #kid .kfoot .kchk{margin-top:6px}
-#kid .kfoot .kmine{margin:0}
-#kid .kfoot .kreset{margin:0;background:rgba(20,16,12,.8)}
-#kid .kfoot .know{margin:0;align-self:center;background:rgba(20,16,12,.7);border-radius:999px;border-left:0;padding:6px 14px;font-size:14px}
-#kid .kfoot .krocket{width:min(440px,100%);margin:0;background:rgba(20,16,12,.8);border-radius:999px;padding:6px 12px}
-#kid .kmodal{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(10,8,7,.38)}
-#kid .kbox{width:min(480px,100%);max-height:calc(100vh - 140px);overflow:auto;background:rgba(28,23,19,.95);border:1px solid rgba(255,255,255,.16);border-radius:20px;padding:18px 18px 16px;box-shadow:0 24px 70px rgba(0,0,0,.55);animation:kpopin .35s cubic-bezier(.2,1.4,.4,1)}
-#kid .kpred{margin:0;background:linear-gradient(180deg,#2a2440,#1e1a2c);border-color:rgba(196,181,253,.5);text-align:center}
-#kid .kpi{font-size:44px;line-height:1;margin-bottom:6px}
-#kid .kpred .kq{font-size:15px}
-#kid .kpred .kq b{font-size:20px;margin-top:6px}
-#kid .kwin{display:none!important;position:absolute;left:50%;bottom:62px;transform:translateX(-50%);width:min(560px,calc(100vw - 32px));margin:0;padding:0;background:none;border:0}
+#kid .kn{font:400 28px/1 var(--kdisp);color:var(--ky1);text-shadow:0 2px 0 var(--ki)}
+#kid .keq{font:400 26px/1 var(--kdisp);color:var(--ky1)}
+#kid .kfoot .kmine{margin:0;font:400 15px/1 var(--kbody);color:#fff;background:linear-gradient(180deg,var(--kr1),var(--kr2));border:2.5px solid var(--ki);border-radius:999px;padding:8px 13px;box-shadow:0 4px 0 var(--ki)}
+#kid .kfoot .kmine b{color:#fff}
+#kid .kfoot .kreset{margin:0;font:400 15px/1 var(--kbody);color:var(--ki);background:#fff;border:2.5px solid var(--ki);border-radius:999px;padding:9px 14px;box-shadow:0 4px 0 var(--ki);cursor:pointer}
+#kid .kfoot .kreset:active{transform:translateY(3px);box-shadow:0 1px 0 var(--ki)}
+#kid .kfoot .krocket{width:min(460px,100%);margin:0;background:linear-gradient(180deg,var(--kp1),var(--kp2));border:3px solid var(--ki);border-radius:999px;padding:6px 14px;box-shadow:0 5px 0 var(--ki);font:400 13px/1.2 var(--kbody);color:#fff}
+#kid .krk{border:2.5px solid var(--ki)}
+#kid .kgauge{border:2px solid var(--ki);background:rgba(22,15,58,.5)}
+#kid .kgl,#kid .kgl2{font-family:var(--kbody)}
+
+/* ---- 가운데 팝업 (예상·퀴즈·결과) ---- */
+#kid .kmodal{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:16px;background:radial-gradient(circle at 50% 50%,rgba(22,15,58,.25),rgba(22,15,58,.62))}
+#kid .kbox{position:relative;width:min(500px,100%);max-height:calc(100vh - 120px);overflow:visible;padding:34px 22px 22px;text-align:center;animation:kpopin .45s cubic-bezier(.2,1.5,.4,1)}
+#kid .kpred{margin:0}
+#kid .kpred .kq{font:400 15px/1.4 var(--kbody);color:#d9d0ff;margin:4px 0 0}
+#kid .kpred .kq b{display:block;font:400 25px/1.25 var(--kdisp);color:#fff;margin-top:6px;text-shadow:0 3px 0 var(--ki)}
+#kid .kopts{display:grid;gap:12px;margin-top:16px;grid-template-columns:1fr}
+#kid .kopts.n2{grid-template-columns:1fr 1fr}
+#kid .kopt{display:flex;align-items:center;gap:10px;text-align:left;font:400 18px/1.25 var(--kbody);color:var(--ki);border:3px solid var(--ki);border-radius:18px;padding:13px 14px;background:linear-gradient(180deg,var(--kb1),var(--kb2));box-shadow:inset 0 3px 0 rgba(255,255,255,.5),0 5px 0 var(--ki);cursor:pointer;transition:transform .1s,box-shadow .1s}
+#kid .kopt:nth-child(2){background:linear-gradient(180deg,var(--kr1),var(--kr2))}
+#kid .kopt:nth-child(3){background:linear-gradient(180deg,var(--kg1),var(--kg2))}
+#kid .kopt:hover{transform:translateY(-3px) rotate(-1deg);box-shadow:inset 0 3px 0 rgba(255,255,255,.5),0 8px 0 var(--ki)}
+#kid .kopt:active{transform:translateY(4px);box-shadow:0 1px 0 var(--ki)}
+#kid .kopt em{flex:none;display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:#fff;border:2.5px solid var(--ki);font:400 18px/1 var(--kdisp);font-style:normal;color:var(--ki)}
+#kid .kopt span{color:#fff;text-shadow:0 2px 0 rgba(22,15,58,.7)}
+#kid .kpred.shake{animation:kshake .4s}
+
+/* ---- 미션 성공 ---- */
+#kid .kwin{display:none!important;position:absolute;left:50%;bottom:50px;transform:translateX(-50%);width:min(540px,calc(100vw - 32px));margin:0;padding:0;background:none;border:0}
 #kid .kwin.on{display:block!important}
-#kid .kwin .kbox{width:100%;background:rgba(18,40,28,.94);border-color:rgba(134,239,172,.6)}
+#kid .kwin .kbox{width:100%;padding-top:30px}
 #kid:has(.kwin.on) .kfoot{display:none}
-#kid .kauto{height:5px;border-radius:3px;background:rgba(255,255,255,.12);margin:2px 0 10px;overflow:hidden}
-#kid .kauto i{display:block;height:100%;width:0;background:#86efac}
+#kid .kwin .kmascot.sm{position:absolute;left:-26px;top:-46px;width:84px;height:84px;margin:0}
+#kid .kstars{display:flex;justify-content:center;align-items:flex-end;gap:6px;margin:4px 0 8px}
+#kid .kstars i{width:46px;height:46px;background:#2a1b72;clip-path:polygon(50% 0,63% 34%,100% 36%,71% 59%,81% 96%,50% 75%,19% 96%,29% 59%,0 36%,37% 34%);filter:drop-shadow(0 3px 0 var(--ki))}
+#kid .kstars i:nth-child(2){width:60px;height:60px;margin-bottom:8px}
+#kid .kstars i.on{background:linear-gradient(180deg,#fff6a8,var(--ky2));animation:kstar .5s cubic-bezier(.2,1.8,.4,1) both}
+@keyframes kstar{from{transform:scale(0) rotate(-90deg)}to{transform:none}}
+#kid .kwhy:empty{display:none}
+#kid .kwhy{margin:0 0 8px;font:400 15px/1.4 var(--kbody)}
+#kid .khit{display:inline-block;color:var(--ki);background:linear-gradient(180deg,var(--kg1),var(--kg2));border:2.5px solid var(--ki);border-radius:999px;padding:5px 12px;box-shadow:0 3px 0 var(--ki)}
+#kid .kmiss{color:#ffe7a6}
+#kid .kwintxt{font:400 16.5px/1.5 var(--kbody);color:#fff;margin:0 0 10px;text-align:left;background:rgba(22,15,58,.35);border-radius:14px;padding:10px 14px}
+#kid .kgain{display:flex;justify-content:center;flex-wrap:wrap;gap:8px;margin:0 0 12px}
+#kid .kgain span{display:inline-flex;align-items:center;gap:7px;font:400 17px/1 var(--kdisp);color:#fff;background:var(--ki);border-radius:999px;padding:5px 12px 5px 5px}
+#kid .kgain span i{width:14px;height:6px;border-radius:3px;background:var(--c);box-shadow:0 0 6px var(--c);margin-left:6px}
+#kid .kcoin,#kidhud .kcoin{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff6a8,var(--ky2) 70%);border:2.5px solid var(--ki);font-size:13px;line-height:1}
+#kid .kauto{display:flex;align-items:center;gap:10px;margin:0 0 12px;font:400 13px/1 var(--kbody);color:#d9d0ff;background:none;height:auto;overflow:visible}
+#kid .kauto div{flex:1;height:14px;border-radius:8px;background:rgba(22,15,58,.6);border:2.5px solid var(--ki);overflow:hidden}
+#kid .kauto div i{display:block;height:100%;width:0;background:repeating-linear-gradient(-45deg,var(--ky1) 0 8px,var(--ky2) 8px 16px)}
+#kid .kwin .kbtn{width:100%;color:var(--ki);background:linear-gradient(180deg,var(--kg1),var(--kg2))}
+
+/* ---- 퀴즈 ---- */
+#kid .kquiz{margin-top:0}
+#kid .kqd{display:flex;align-items:center;justify-content:center;gap:7px;margin:4px 0 12px;font:400 14px/1 var(--kdisp);color:#d9d0ff}
+#kid .kqd i{width:16px;height:16px;border-radius:50%;background:rgba(22,15,58,.5);border:2px solid var(--ki)}
+#kid .kqd i.cur{background:#fff;transform:scale(1.2)}
+#kid .kqd i.ok{background:var(--kg1)}
+#kid .kqd i.no{background:var(--kr1)}
+#kid .kqd span{margin-left:8px}
+#kid .kqq{font:400 22px/1.4 var(--kbody);color:var(--ki);background:#fff;border:3px solid var(--ki);border-radius:18px;padding:16px;margin-bottom:16px;box-shadow:0 5px 0 var(--ki)}
+#kid .kquiz .kbtns{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+#kid .kquiz .kbtn[data-b]{font-size:24px;padding:18px 8px;color:#fff;text-shadow:0 2px 0 var(--ki);background:linear-gradient(180deg,var(--kb1),var(--kb2))}
+#kid .kquiz .kbtn[data-b="1"]{background:linear-gradient(180deg,var(--kr1),var(--kr2))}
+#kid .kqfb{font:400 16px/1.45 var(--kbody);color:#fff;border:3px solid var(--ki);border-radius:16px;padding:12px 14px;margin-bottom:12px;text-align:left;box-shadow:0 4px 0 var(--ki)}
+#kid .kqfb.ok{background:linear-gradient(180deg,#2fc985,#15955c)}
+#kid .kqfb.no{background:linear-gradient(180deg,#f0904f,#d4652a)}
+#kid .kqfb b{font-family:var(--kdisp);font-size:19px}
+
+/* ---- 최종 결과 ---- */
+#kid .kfinal{text-align:center}
+#kid .ktro{position:relative;font-size:72px;line-height:1;margin:6px 0 4px;filter:drop-shadow(0 4px 0 var(--ki))}
+#kid .ktro::before{content:"";position:absolute;left:50%;top:50%;width:170px;height:170px;margin:-85px 0 0 -85px;border-radius:50%;background:repeating-conic-gradient(rgba(255,224,102,.35) 0 12deg,transparent 12deg 24deg);animation:kspin 8s linear infinite;z-index:-1}
+@keyframes kspin{to{transform:rotate(360deg)}}
+#kid .kfinal .ktitle{justify-content:center}
+#kid .krank{display:inline-block;margin:10px 0;font:400 22px/1 var(--kdisp);color:var(--ki);background:linear-gradient(180deg,var(--ky1),var(--ky2));border:3px solid var(--ki);border-radius:999px;padding:10px 20px;box-shadow:0 5px 0 var(--ki)}
+#kid .kfs{display:flex;justify-content:center;gap:8px;font:400 15px var(--kbody);color:#fff;margin:6px 0 12px;flex-wrap:wrap}
+#kid .kfs span{background:rgba(22,15,58,.45);border-radius:999px;padding:6px 12px}
+#kid .kfs b{color:var(--ky1);font:400 20px var(--kdisp)}
+#kid .kcards{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:6px 0 8px}
+#kid .kcard{border:2.5px solid var(--ki);border-radius:12px;padding:10px 4px 8px;background:#fff;color:var(--ki);font:400 13px/1.2 var(--kbody);box-shadow:0 3px 0 var(--ki)}
+#kid .kcard b{color:var(--ki)}
+#kid .kcard i{display:block;height:8px;width:70%;margin:0 auto 6px;border-radius:4px;background:var(--c)}
+#kid .kcard.off{opacity:1;background:repeating-linear-gradient(45deg,#3a249a 0 6px,#2c1d7a 6px 12px)}
+#kid .kcard.off b{color:#9d8ef0}
+#kid .kcard.off i{background:rgba(255,255,255,.2)}
+#kid .kfinal .ksay{text-align:center}
+#kid .kfinal .kbtns{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+#kid .kfinal .kbtn:not(.main){background:#fff}
+
+/* ---- 위 HUD: 레벨 지도 + 동전 ---- */
+body.kid #kidhud{left:50%;top:10px;display:flex;align-items:center;gap:8px;font-family:var(--kbody)}
+#kidhud .kmap{display:inline-flex;align-items:center;background:linear-gradient(180deg,var(--kp1),var(--kp2));border:3px solid var(--ki);border-radius:999px;padding:5px 10px;box-shadow:inset 0 2px 0 rgba(255,255,255,.25),0 4px 0 var(--ki);backdrop-filter:none;-webkit-backdrop-filter:none}
+#kidhud .kmap>i{width:8px;height:4px;border-radius:2px;background:rgba(22,15,58,.6)}
+#kidhud .kn2{position:relative;display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;font-size:15px;background:#2a1b72;border:2.5px solid var(--ki);filter:grayscale(.85);opacity:.7}
+#kidhud .kn2.done{filter:none;opacity:1;background:linear-gradient(180deg,var(--ky1),var(--ky2))}
+#kidhud .kn2.cur{filter:none;opacity:1;background:#fff;transform:scale(1.3);box-shadow:0 0 0 3px var(--ky1);animation:kbob 1.2s ease-in-out infinite;z-index:1}
+#kidhud .kn2.boss{width:34px;height:34px;font-size:17px}
+#kidhud .kn2 em{position:absolute;right:-6px;top:-8px;font:400 13px/1 var(--kdisp);font-style:normal;color:var(--ky1);-webkit-text-stroke:1.5px var(--ki);paint-order:stroke}
+#kidhud .kscore{display:inline-flex;align-items:center;gap:6px;margin:0;background:var(--ki);border:3px solid var(--ki);border-radius:999px;padding:3px 14px 3px 3px;box-shadow:0 4px 0 rgba(0,0,0,.35)}
+#kidhud .kscore .kcoin{width:30px;height:30px;font-size:15px}
+#kidhud .kscore b{font:400 21px/1 var(--kdisp);font-variant-numeric:tabular-nums;color:#fff;margin:0;min-width:2.2em}
+#kidhud .ksnd{margin:0;width:42px;height:42px;padding:0;display:grid;place-items:center;font-size:18px;border:3px solid var(--ki);background:#fff;border-radius:50%;box-shadow:0 4px 0 var(--ki);cursor:pointer}
+#kidhud .ksnd:active{transform:translateY(3px);box-shadow:0 1px 0 var(--ki)}
+
+/* ---- 새 힘 카드 (트레이딩 카드) ---- */
+#kpop{left:50%!important;top:20%!important}
+#kpop .kpcard{width:240px;background:linear-gradient(180deg,#fff,#f1ecff);border:4px solid var(--ki);border-radius:20px;padding:0 0 16px;overflow:hidden;box-shadow:0 7px 0 var(--ki),0 0 40px -4px var(--c)}
+#kpop small{display:block;margin:0 0 12px;padding:9px 0 8px;font:400 17px/1 var(--kdisp);letter-spacing:.02em;color:#fff;background:var(--ki)}
+#kpop i{height:50px;width:50px;border-radius:50%;margin:0 auto 10px;background:var(--c);border:3px solid var(--ki);box-shadow:0 0 0 6px rgba(22,15,58,.08)}
+#kpop b{font:400 23px/1.2 'Black Han Sans','Noto Sans KR',sans-serif;color:var(--ki);margin:0 12px 6px}
+#kpop span{font:400 14.5px/1.45 'Jua','Noto Sans KR',sans-serif;color:#3a2f6b;padding:0 14px}
+
+/* ---- 아래 카드 모음, 모드 버튼 ---- */
+body.kid #legend{background:var(--ki);border:3px solid var(--ki);border-radius:16px;font:400 13.5px/1.3 var(--kbody);box-shadow:0 4px 0 rgba(0,0,0,.35);backdrop-filter:none;-webkit-backdrop-filter:none}
+body.kid #legend b{color:var(--ky1);font-weight:400}
+body.kid #legend span.on{background:#fff;color:var(--ki);border-radius:8px;padding:3px 8px}
+body.kid #legend span.off{width:20px;height:26px;border-radius:5px;border:2px solid #6f5ad8;background:repeating-linear-gradient(45deg,#3a249a 0 4px,#2c1d7a 4px 8px);color:#c9bfff;font:400 12px/1 var(--kdisp)}
+body.kid #modeBtn{font:400 13px/1 var(--kbody);background:rgba(22,15,58,.8);border:2px solid rgba(255,255,255,.25);color:#e6e0ff}
+
+/* ---- 시작 화면 ---- */
+#kidIntro .box{position:relative;width:min(560px,100%);padding:18px 28px 20px;text-align:center;font-family:var(--kbody)}
+#kidIntro h2{font:400 46px/1.1 var(--kdisp);color:var(--ky1);margin:0 0 14px;text-shadow:0 4px 0 var(--ki),3px 0 0 var(--ki),-3px 0 0 var(--ki),0 -3px 0 var(--ki)}
+#kidIntro .kil{font:400 18px/1.45 var(--kbody);text-align:left;color:#fff;background:rgba(22,15,58,.3);border-radius:14px;padding:8px 12px;margin:8px 0}
+#kidIntro .kil b{color:var(--ky1);font-weight:400}
+#kidIntro .kimap{background:rgba(22,15,58,.45);border-radius:999px;border:2.5px solid var(--ki)}
+#kidIntro .kstart{width:100%;font-size:24px;padding:16px}
+#kidIntro .kfull{color:#d9d0ff;font-family:var(--kbody)}
+
 @keyframes kauto{from{width:0}to{width:100%}}
-@keyframes kpopin{from{transform:scale(.85);opacity:0}to{transform:none;opacity:1}}
-@keyframes kdrop{from{transform:translate(-50%,-14px);opacity:0}to{transform:translateX(-50%);opacity:1}}
-body.kid #kidhud{left:50%}
-#kpop{left:50%!important;top:24%!important}
+@keyframes kpopin{from{transform:scale(.6);opacity:0}to{transform:none;opacity:1}}
+@keyframes kdrop{from{transform:translate(-50%,-24px);opacity:0}to{transform:translateX(-50%);opacity:1}}
 @media (max-width:980px){
-  #kid .kban{top:88px;padding:8px 12px} #kid .kban .ksay{font-size:14px} #kid .kban .ktitle{font-size:17px}
+  #kid .kban{top:62px;gap:6px} #kid .kban .kmascot{width:58px;height:58px}
+  #kid .kbubble{padding:9px 12px 10px} #kid .kbubble::before,#kid .kbubble::after{top:18px}
+  #kid .ktitle{font-size:20px} #kid .ksay{font-size:14.5px}
   #kid .kfoot,#kid .kwin{bottom:12px}
-  body.kid #modeBtn{bottom:auto;top:52px;right:8px;display:none}
+  body.kid #kidhud{top:52px;gap:6px;left:8px;right:8px;transform:none;justify-content:center} #kidhud .kmap{padding:3px 6px;gap:2px} #kidhud .kn2{width:20px;height:20px;font-size:10px;border-width:2px} #kidhud .kn2.boss{width:23px;height:23px} #kidhud .kmap>i{display:none}
+  #kidhud .kscore{padding-right:10px} #kidhud .kscore .kcoin{width:24px;height:24px} #kidhud .kscore b{font-size:16px;min-width:1.6em} #kidhud .ksnd{display:none}
+  #kid .kban{top:96px}
+  #kid .kopts.n2{grid-template-columns:1fr}
+  body.kid #modeBtn{display:none}
 }
+
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 <script type="importmap">
@@ -2794,6 +2945,17 @@ const KID_QUIZ = [
   { a: true, ko: ['물속에 넣은 물체는 물이 위로 밀어 올려요.', '이 힘이 부력이에요. 그래서 저울 눈금이 줄어요.'], en: ['Water pushes up on things put into it.', 'That push is buoyancy, so the scale reads less.'] },
 ];
 
+// 길잡이 쿼카 (mood: '' 보통, 'win' 신남, 'think' 궁금)
+function quokka(mood = '') {
+  const ink = '#160f3a';
+  const eyes = mood === 'win' ? `<path d="M31 53q6-8 12 0M57 53q6-8 12 0" stroke="${ink}" stroke-width="4.5" fill="none" stroke-linecap="round"/>`
+    : mood === 'think' ? `<circle cx="38" cy="49" r="6" fill="${ink}"/><circle cx="64" cy="49" r="6" fill="${ink}"/><circle cx="40" cy="46.5" r="2.2" fill="#fff"/><circle cx="66" cy="46.5" r="2.2" fill="#fff"/>`
+    : `<circle cx="37" cy="53" r="6.2" fill="${ink}"/><circle cx="63" cy="53" r="6.2" fill="${ink}"/><circle cx="39.2" cy="50.6" r="2.3" fill="#fff"/><circle cx="65.2" cy="50.6" r="2.3" fill="#fff"/>`;
+  const mouth = mood === 'win' ? `<path d="M40 69q10 13 20 0z" fill="#ff5d73" stroke="${ink}" stroke-width="3.5" stroke-linejoin="round"/>`
+    : mood === 'think' ? `<ellipse cx="54" cy="72" rx="3.6" ry="4.2" fill="${ink}"/>`
+    : `<path d="M41 69q4.5 6 9 0q4.5 6 9 0" stroke="${ink}" stroke-width="3.5" fill="none" stroke-linecap="round"/>`;
+  return `<svg viewBox="0 0 100 100" aria-hidden="true"><g stroke="${ink}" stroke-width="4"><circle cx="23" cy="27" r="14" fill="#a8693c"/><circle cx="77" cy="27" r="14" fill="#a8693c"/></g><circle cx="23" cy="28" r="7" fill="#f0a98a"/><circle cx="77" cy="28" r="7" fill="#f0a98a"/><ellipse cx="50" cy="57" rx="38" ry="34" fill="#c98a55" stroke="${ink}" stroke-width="4"/><ellipse cx="50" cy="67" rx="24" ry="18" fill="#f6dcb4"/><circle cx="27" cy="65" r="6" fill="#ff8fa3" opacity=".75"/><circle cx="73" cy="65" r="6" fill="#ff8fa3" opacity=".75"/>${eyes}<ellipse cx="50" cy="62" rx="5.5" ry="3.8" fill="${ink}"/>${mouth}</svg>`;
+}
 const AUTO_NEXT = 7;   // 성공 팝업이 떠 있는 시간(초). 지나면 저절로 다음 퀘스트
 const KID = {
   i: -1, done: [], hit: [], pick: [], cards: new Set(), score: 0, shown: 0, ctx: {}, passed: false,
@@ -2942,9 +3104,9 @@ const KID = {
   phase() { const m = this.missions[this.i]; return m && m.pred && this.pick[this.i] == null ? 'predict' : 'play'; },
   hud() {
     const M = this.missions, el = document.getElementById('kidhud'); if (!el) return;
-    el.innerHTML = `<div class="kmap">${M.map((m, k) => `<span class="kn2${this.done[k] ? ' done' : ''}${k === this.i ? ' cur' : ''}${m.boss ? ' boss' : ''}" title="${(STAGE[LANG] || STAGE.ko)[m.stage]}">${m.icon}${this.hit[k] ? '<em>🎯</em>' : ''}</span>`).join('<i></i>')}</div>
-      <div class="kscore">⚡ <b id="kpts">${Math.round(this.shown)}</b><small>${KT('pts')}</small></div>
-      <button class="ksnd">${S.sound ? KT('soundOff') : KT('soundOn')}</button>`;
+    el.innerHTML = `<div class="kmap">${M.map((m, k) => `<span class="kn2${this.done[k] ? ' done' : ''}${k === this.i ? ' cur' : ''}${m.boss ? ' boss' : ''}" title="${(STAGE[LANG] || STAGE.ko)[m.stage]}">${m.icon}${this.done[k] ? '<em>★</em>' : ''}</span>`).join('<i></i>')}</div>
+      <div class="kscore"><span class="kcoin">⚡</span><b id="kpts">${Math.round(this.shown)}</b></div>
+      <button class="ksnd" title="${S.sound ? KT('soundOff') : KT('soundOn')}">${S.sound ? '🔊' : '🔇'}</button>`;
     el.querySelector('.ksnd').onclick = () => { setSound(!S.sound); ensureAudio(); this.hud(); };
   },
   legend() {
@@ -2954,18 +3116,18 @@ const KID = {
   render() {
     const box = document.getElementById('kid'), M = this.missions, N = M.length;
     this.hud(); this.legend();
-    if (this.i >= N) { box.innerHTML = `<div class="kmodal"><div class="kbox">${this.finalHTML()}</div></div>`; box.querySelector('[data-k=again]').onclick = () => this.reset(); box.querySelector('[data-k=full]').onclick = () => setMode('full'); return; }
-    const m = M[this.i], t = m.t[LANG] || m.t.ko, ph = this.phase(), tag = `${isEn() ? 'Step ' + m.stage : m.stage + '단계'} · ${(STAGE[LANG] || STAGE.ko)[m.stage]}`;
+    if (this.i >= N) { box.innerHTML = `<div class="kmodal"><div class="kbox"><div class="kribbon gold">${L2('최종 결과', 'Results')}</div>${this.finalHTML()}</div></div>`; box.querySelector('[data-k=again]').onclick = () => this.reset(); box.querySelector('[data-k=full]').onclick = () => setMode('full'); return; }
+    const m = M[this.i], t = m.t[LANG] || m.t.ko, ph = this.phase(), tag = '';
     let body = '';
-    if (m.quiz) body = `<div class="kmodal kquizm"><div class="kbox">${this.quizHTML()}</div></div>`;
-    else if (ph === 'predict') { const p = m.pred[LANG] || m.pred.ko; body = `<div class="kmodal"><div class="kbox kpred"><div class="kpi">${m.icon}</div><div class="kq">${KT('predT')}<br><b>${p[0]}</b></div><div class="kopts n${p[1].length}">${p[1].map((o, k) => `<button class="kopt" data-p="${k}">${o}</button>`).join('')}</div></div></div>`; }
+    if (m.quiz) body = `<div class="kmodal kquizm"><div class="kbox"><div class="kribbon">${L2('OX 퀴즈', 'O/X quiz')}</div>${this.quizHTML()}</div></div>`;
+    else if (ph === 'predict') { const p = m.pred[LANG] || m.pred.ko; body = `<div class="kmodal"><div class="kbox kpred"><div class="kribbon">${L2('어떻게 될까?', 'What will happen?')}</div><div class="kmascot sm">${quokka('think')}</div><div class="kq">${L2('실험하기 전에 먼저 골라 봐요!', 'Pick before you try!')}<b>${p[0]}</b></div><div class="kopts n${p[1].length}">${p[1].map((o, k) => `<button class="kopt" data-p="${k}"><em>${'ABC'[k]}</em><span>${o}</span></button>`).join('')}</div></div></div>`; }
     else {
       const mine = m.pred ? `<div class="kmine">${KT('mine')}: <b>${(m.pred[LANG] || m.pred.ko)[1][this.pick[this.i]]}</b></div>` : '';
       const rocket = m.widget === 'rocket' ? `<div class="krocket"><span>🌍<br>${L2('지구', 'Earth')}</span><div class="krk"><b style="left:100%"></b><b class="mars" style="left:${(9.8 - 3.7) / 8.2 * 100}%"></b><i class="kr">🚀</i></div><span>🌙<br>${L2('달', 'Moon')}</span></div>` : '';
       body = `<div class="kfoot"><div class="know"><div class="knowtxt"></div></div><div class="krow">${mine}<div class="kmeterbox"></div>${m.reset ? `<button class="kreset">↺ ${L2('처음으로', 'Start again')}</button>` : ''}</div>${rocket}</div>`;
     }
-    box.innerHTML = `<div class="kban"><div class="khead"><span class="kicon">${m.icon}</span><span class="ktag${m.boss ? ' boss' : ''}">${tag}</span><span class="ktitle">${t[0]}</span><button class="kskip">${KT('skip')} ›</button></div><p class="ksay">${t[1]}</p></div>${body}
-      <div class="kwin"><div class="kbox"><div class="kwhy"></div><div class="kwintxt"></div><div class="kgain"></div><div class="kauto"><i></i></div><button class="kbtn main kgo">${KT('next')}</button></div></div>`;
+    box.innerHTML = `<div class="kban${m.boss ? ' boss' : ''}"><div class="kmascot">${quokka()}</div><div class="kbubble"><div class="khead"><span class="kstage">${m.boss ? 'BOSS' : 'STAGE ' + m.stage}</span><span class="ktopic">${(STAGE[LANG] || STAGE.ko)[m.stage]}</span><button class="kskip">${KT('skip')} ›</button></div><div class="ktitle"><span class="kicon">${m.icon}</span>${t[0]}</div><p class="ksay">${t[1]}</p></div></div>${body}
+      <div class="kwin"><div class="kbox"><div class="kribbon gold">${L2('미션 성공!', 'Mission clear!')}</div><div class="kmascot sm">${quokka('win')}</div><div class="kstars"><i></i><i></i><i></i></div><div class="kwhy"></div><div class="kwintxt"></div><div class="kgain"></div><div class="kauto"><span>${L2('다음 미션까지', 'Next mission in')}</span><div><i></i></div></div><button class="kbtn main kgo">${KT('next')}</button></div></div>`;
     box.querySelectorAll('[data-p]').forEach((el) => (el.onclick = () => { ensureAudio(); this.pick[this.i] = +el.dataset.p; sfx('pick'); this.render(); if (m.look) this.ring(2.2, false); }));
     box.querySelectorAll('[data-b]').forEach((el) => (el.onclick = () => { ensureAudio(); if (m.quiz) this.answer(+el.dataset.b === 0); }));
     const qn = box.querySelector('.kqnext'); if (qn) qn.onclick = () => { this.ctx.q++; this.render(); };
@@ -3025,10 +3187,12 @@ const KID = {
   winText(m, w) {
     const quiz = m.quiz, nOk = quiz ? this.ctx.ans.filter(Boolean).length : 0, card = m.card && CARDS.find((c) => c.k === m.card);
     w.querySelector('.kwhy').innerHTML = quiz ? '' : m.pred ? (this.pick[this.i] === m.pred.ans ? `<b class="khit">${KT('hit')} +50</b>` : `<span class="kmiss">${KT('miss')}</span>`) : '';
-    w.querySelector('.kwintxt').innerHTML = quiz ? L2(`퀴즈 ${nOk}/${KID_QUIZ.length} 정답! 마지막 문제: ${(KID_QUIZ.at(-1)[LANG] || KID_QUIZ.at(-1).ko)[1]}`, `Quiz: ${nOk}/${KID_QUIZ.length} correct! Last one: ${(KID_QUIZ.at(-1)[LANG] || KID_QUIZ.at(-1).ko)[1]}`) : '✅ ' + m.win();
-    w.querySelector('.kgain').innerHTML = `<span>+100 ${KT('pts')}</span>${card ? `<span style="--c:${hex(card.col)}"><i></i>🃏 ${cardT(card)[0]}</span>` : ''}`;
+    w.querySelector('.kwintxt').innerHTML = quiz ? L2(`퀴즈 ${nOk}/${KID_QUIZ.length} 정답! 마지막 문제: ${(KID_QUIZ.at(-1)[LANG] || KID_QUIZ.at(-1).ko)[1]}`, `Quiz: ${nOk}/${KID_QUIZ.length} correct! Last one: ${(KID_QUIZ.at(-1)[LANG] || KID_QUIZ.at(-1).ko)[1]}`) : m.win();
+    const nStar = quiz ? (nOk >= KID_QUIZ.length - 1 ? 3 : nOk >= KID_QUIZ.length / 2 ? 2 : 1) : m.pred && this.pick[this.i] !== m.pred.ans ? 2 : 3;
+    w.querySelectorAll('.kstars i').forEach((el, k) => { el.className = k < nStar ? 'on' : ''; el.style.animationDelay = `${0.25 + k * 0.22}s`; });
+    w.querySelector('.kgain').innerHTML = `<span><b class="kcoin">⚡</b>+100</span>${card ? `<span style="--c:${hex(card.col)}"><i></i>🃏 ${cardT(card)[0]}</span>` : ''}`;
     w.querySelector('.kgo').textContent = this.i === this.missions.length - 1 ? L2('🏆 결과 보기', '🏆 See results') : L2('바로 다음 →', 'Next now →');
-    const bar = w.querySelector('.kauto i'); bar.style.animation = 'none'; void bar.offsetWidth; bar.style.animation = `kauto ${AUTO_NEXT}s linear forwards`;
+    const bar = w.querySelector('.kauto div i'); bar.style.animation = 'none'; void bar.offsetWidth; bar.style.animation = `kauto ${AUTO_NEXT}s linear forwards`;
   },
   cardPop(k) {
     const c = CARDS.find((q) => q.k === k), el = document.getElementById('kpop'); if (!el || !c || S.mode !== 'kid') return;
@@ -3042,11 +3206,11 @@ const KID = {
   after(sec, fn) { this.fx.later.push({ t: sec, fn }); },   // 시뮬레이션 시간 기준 지연 실행
   ring(dur, label) { this.fx.ring = { t: 0, dur, label }; },
   burst(n) {
-    const L = document.getElementById('kid').getBoundingClientRect(), cx = L.width ? L.left + L.width / 2 : innerWidth / 2, cy = L.width ? L.top + 110 : innerHeight / 3;
+    const cx = innerWidth / 2, cy = innerHeight * 0.5;
     const cols = ['#fde68a', '#ffb36b', '#86efac', '#7dd3fc', '#c4b5fd', '#fca5a5', '#ffffff'];
     for (let i = 0; i < n; i++) { const a = rr(-Math.PI * 0.92, -Math.PI * 0.08), sp = rr(5, 13); this.fx.parts.push({ x: cx + rr(-60, 60), y: cy, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, r: rr(0, 6.28), vr: rr(-0.3, 0.3), w: rr(6, 10), h: rr(3, 6), c: cols[i % cols.length], life: rr(1.4, 2.4) }); }
   },
-  float(txt) { const L = document.getElementById('kid').getBoundingClientRect(); this.fx.floats.push({ txt, x: L.width ? L.left + L.width * 0.72 : innerWidth / 2, y: L.width ? L.top + 44 : 120, t: 0 }); },
+  float(txt) { const L = document.querySelector('#kidhud .kscore')?.getBoundingClientRect(); this.fx.floats.push({ txt, x: L && L.width ? L.left + L.width / 2 : innerWidth / 2, y: L && L.width ? L.bottom + 26 : 120, t: 0 }); },
   frame(dt) {
     const cv = document.getElementById('kfx'); if (!cv) return;
     const W = innerWidth, H = innerHeight, F = this.fx, kid = S.mode === 'kid';
@@ -3058,7 +3222,7 @@ const KID = {
     const pe = document.getElementById('kpts'); if (pe && pe.textContent !== String(Math.round(this.shown))) pe.textContent = Math.round(this.shown);
     // 눈길 고리 (카메라가 다 날아간 뒤부터)
     const m = this.missions[this.i], R = F.ring;
-    if (R && m && m.look && !CAM.fly && !document.getElementById('kidIntro').classList.contains('on')) {
+    if (R && m && m.look && this.phase() !== 'predict' && !CAM.fly && !document.getElementById('kidIntro').classList.contains('on')) {
       R.t += dt;
       if (R.t > R.dur) F.ring = null;
       else {
@@ -3169,7 +3333,7 @@ function KID_INTRO(on) {
   el.classList.toggle('on', on);
   if (on) {
     const t = KT('intro');
-    el.querySelector('.box').innerHTML = `<h2>${t[0]}</h2>${t.slice(1, 5).map(([ic, tx]) => `<p class="kil"><span>${ic}</span><span>${tx}</span></p>`).join('')}
+    el.querySelector('.box').innerHTML = `<div class="kmascot big">${quokka('win')}</div><h2>${t[0]}</h2>${t.slice(1, 5).map(([ic, tx]) => `<p class="kil"><span>${ic}</span><span>${tx}</span></p>`).join('')}
       <div class="kimap">${KID.missions.map((m) => `<span class="${m.boss ? 'boss' : ''}">${m.icon}</span>`).join('<i></i>')}</div>
       <button class="kbtn main kstart">${t[5]} ▶</button><button class="kfull">${KT('full')}</button>`;
     el.querySelector('.kstart').onclick = () => { ensureAudio(); KID_INTRO(false); KID.go(0); };
