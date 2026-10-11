@@ -850,8 +850,8 @@ body.kid.kslow #labels{opacity:0}
 .klens .d{position:absolute;width:12px;height:12px;margin:-6px 0 0 -6px;border-radius:50%;background:var(--c);box-shadow:0 0 0 3px #fff,0 0 16px var(--c);animation:kcoDot .35s cubic-bezier(.2,1.7,.4,1) both}
 .klens .ln{position:absolute;height:2px;margin-top:-1px;transform-origin:0 50%;background:#fff;box-shadow:0 0 8px rgba(0,0,0,.5);transform:rotate(var(--a)) scaleX(0);animation:kcoLine .3s .15s cubic-bezier(.3,0,.2,1) forwards}
 .klens .lw{position:absolute;width:calc(var(--r) * 2);height:calc(var(--r) * 2);margin:calc(var(--r) * -1) 0 0 calc(var(--r) * -1);border-radius:50%;box-shadow:0 0 0 4px #fff,0 0 0 6px var(--c),0 24px 50px -12px rgba(0,0,0,.75);clip-path:circle(0% at 50% 50%);animation:klIris .55s .35s cubic-bezier(.2,.8,.2,1) forwards}
-.klens .lc{position:absolute;inset:0;border-radius:50%;overflow:hidden;background:#e9e3d8}
-.klens .lc img{width:100%;height:100%;object-fit:cover;transform:scale(1.22);animation:klZoom 4.2s .35s cubic-bezier(.2,.6,.2,1) forwards}
+.klens .lc{position:absolute;inset:0;border-radius:50%;overflow:hidden;background:#f8fafc}
+.klens .lc svg{display:block;width:100%;height:100%;transform:scale(1.22);animation:klZoom 4.2s .35s cubic-bezier(.2,.6,.2,1) forwards}
 .klens .lov{position:absolute;inset:0;width:100%;height:100%;opacity:0;animation:klFade .5s 1s forwards;filter:drop-shadow(0 1px 2px rgba(0,0,0,.6))}
 .klens .ltag{position:absolute;left:50%;top:-12px;transform:translateX(-50%);display:inline-flex;align-items:center;gap:4px;padding:4px 9px;border-radius:999px;background:#fff;color:var(--ktx);font:700 11px/1 var(--kfont);white-space:nowrap;box-shadow:0 4px 12px -4px rgba(0,0,0,.4)}
 .klens .ltag .ki{font-size:13px;color:var(--kacc)}
@@ -905,21 +905,8 @@ body.kcut #knote{opacity:0}
 .khlast{position:absolute;top:50%;width:2px;height:22px;margin:-11px 0 0 -1px;background:#fca5a5;border-radius:1px;box-shadow:0 0 6px rgba(252,165,165,.8)}
 .khlast em{position:absolute;bottom:100%;left:50%;transform:translateX(-50%);margin-bottom:3px;padding:2px 6px;border-radius:999px;background:rgba(12,14,22,.8);color:#fecaca;font:700 10px/1.2 var(--kfont);font-style:normal;white-space:nowrap}
 .khbar.flip .khlast em{transform:translateX(-50%) rotate(180deg)}
-/* 힘 카드·성공 띠·마지막 화면: 생활 속 그림 */
-#kpop .kpcard .kpimg{height:132px;overflow:hidden;background:#e9e3d8}
-#kpop .kpcard .kpimg img{width:100%;height:100%;object-fit:cover}
-#kid .kwlife{flex:none;width:56px;height:56px;padding:0;border:0;border-radius:14px;overflow:hidden;cursor:pointer;box-shadow:0 0 0 2px #fff,0 0 0 3.5px var(--kline)}
-#kid .kwlife img{width:100%;height:100%;object-fit:cover}
-#kid .kwfig{float:left;width:132px;margin:0 14px 6px 0}
-#kid .kwfig img{display:block;width:132px;height:132px;object-fit:cover;border-radius:12px}
-#kid .kwfig figcaption{margin-top:5px;font:600 11.5px/1 var(--kfont);color:var(--ksub);text-align:center}
-#kid .kwintxt::after{content:"";display:block;clear:both}
-#kid .kcard.on img{display:block;width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px;margin-bottom:6px}
 @media (max-width:980px){
   #knote{left:12px;width:min(268px,calc(100vw - 24px))}
-  #kid .kwfig{width:96px} #kid .kwfig img{width:96px;height:96px}
-  #kid .kwlife{width:46px;height:46px}
-  #kpop .kpcard .kpimg{height:110px}
   #khdock .kh{padding:0 3px}
   #khdock .khpick button,#khdock .khzoom button{min-width:42px;padding:5px 2px 4px;font-size:10.5px}
   #khdock .khzoom button .ki{font-size:19px}

@@ -1,28 +1,54 @@
 // ==== 13d 묘사 (쉬운 모드): 실험 과정·결과를 한눈에 ====
 // docs/experiment-depiction.md 의 원칙을 구현한다.
-//  · 돋보기 렌즈: 접촉면·물속 단면 그림(ChatGPT 이미지 생성)을 원형 렌즈로 열어 '보이지 않는 이유'를 보여 준다
+//  · 돋보기 렌즈: 접촉면·물속을 교과서식 단면 도해(코드로 그린 SVG)로 열어 '보이지 않는 이유'를 보여 준다
 //  · 실험 노트: 시행마다 조건(그림)과 잰 값(막대)을 한 줄씩 자동 기록 → 결과를 '비교'로 본다
 //    이번에 바꾼 조건만 테두리로 강조하고, 두 개 이상 바꾸면 공정한 실험 안내
-//  · 생활 속 그림: 힘 카드·성공 띠에 같은 개념의 일상 장면
-const GEN = (k) => `assets/gen/${k}.webp`;
-const CARD_IMG = { F: 'life-pull', net: 'life-balance', W: 'life-weight', T: 'life-spring', f: 'life-friction', B: 'life-buoyancy', N: 'life-normal' };
 const SURF_IMG = { glass: 'micro-glass', wood: 'micro-wood', sand: 'micro-sand' };
-function genPreload() { [...Object.values(CARD_IMG), ...Object.values(SURF_IMG), 'micro-water'].forEach((k) => { const i = new Image(); i.src = GEN(k); }); }
+
+// ---- 단면 도해: 모눈 위 선화 + 평면 채색 (실험실 계기판과 같은 시각 언어) ----
+function microSVG(k) {
+  const W = 200, pts = (f, x0 = -5, x1 = 205, st = 2) => { const a = []; for (let x = x0; st > 0 ? x <= x1 : x >= x1; x += st) a.push(`${x},${f(x).toFixed(1)}`); return a.join(' '); };
+  const bg = `<defs><pattern id="mg" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M10 0H0V10" fill="none" stroke="#e2e6ec" stroke-width=".7"/></pattern></defs><rect width="${W}" height="${W}" fill="#f8fafc"/><rect width="${W}" height="${W}" fill="url(#mg)"/>`;
+  const grain = (y0, y1, c) => Array.from({ length: 5 }, (_, i) => { const y = y0 + (i + 0.5) * (y1 - y0) / 5; return `<path d="M-5 ${y} C 50 ${y - 3} 120 ${y + 3} 205 ${y - 1}" stroke="${c}" stroke-width="1.2" fill="none"/>`; }).join('');
+  if (k === 'micro-water') {
+    const arrows = (d, l) => `<path d="${d}" stroke="#0284c7" stroke-width="${l}" stroke-linecap="round" fill="none" marker-end="url(#wa)"/>`;
+    return `<svg viewBox="0 0 ${W} ${W}" aria-hidden="true">${bg}<defs><linearGradient id="wg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#dbeffa"/><stop offset="1" stop-color="#7cc4ea"/></linearGradient>
+      <marker id="wa" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M0 0L6 3L0 6z" fill="#0284c7"/></marker></defs>
+      <rect x="20" y="58" width="160" height="150" fill="url(#wg)"/><path d="M20 58H180" stroke="#38a3d6" stroke-width="2"/>
+      <path d="M100 0V74" stroke="#64748b" stroke-width="1.6"/>
+      <rect x="80" y="74" width="40" height="56" rx="3" fill="#d6dae0" stroke="#64748b" stroke-width="2"/><path d="M86 80V124" stroke="#eef1f4" stroke-width="3"/>
+      ${arrows('M92 50V68', 2.4)}${arrows('M108 50V68', 2.4)}
+      ${arrows('M92 176V140', 3.6)}${arrows('M108 176V140', 3.6)}
+      ${arrows('M52 96H72', 2.6)}${arrows('M52 112H72', 2.6)}${arrows('M148 96H128', 2.6)}${arrows('M148 112H128', 2.6)}</svg>`;
+  }
+  // 위: 도막(나무), 아래: 바닥. 맞닿는 선의 모양이 마찰의 크기를 말해 준다
+  const blockTop = 24, line = { 'micro-glass': () => 104, 'micro-wood': (x) => 104 + 2.6 * Math.sin(x / 6.5) + 1.6 * Math.sin(x / 2.7 + 1) }[k];
+  const block = (f) => `<polygon points="-5,${blockTop} 205,${blockTop} ${pts(f, 205, -5, -2)}" fill="#ecd3ad" stroke="#9a6b3d" stroke-width="2"/>${grain(blockTop + 6, 96, '#d7b689')}`;
+  if (k === 'micro-sand') {
+    let grit = '';
+    for (let i = 0, x = 4; x < 205; i++, x += 19) {
+      const h = 24 + (i * 7) % 9, w = 17 + (i * 5) % 6, c = ['#8a7a6d', '#6f6259', '#a08b7b'][i % 3];
+      grit += `<polygon points="${x - w / 2},128 ${x + (i % 2 ? 2 : -2)},${128 - h} ${x + w / 2},128" fill="${c}" stroke="#463b33" stroke-width="1.6" stroke-linejoin="round"/>`;
+    }
+    // 알갱이 끝이 도막 밑면에 박힌다 (맞물림): 도막 밑면을 알갱이 끝보다 아래에 두고 알갱이를 위에 그린다
+    const f = () => 112;
+    return `<svg viewBox="0 0 ${W} ${W}" aria-hidden="true">${bg}<rect x="-5" y="128" width="210" height="22" fill="#c69a6b" stroke="#8a5f38" stroke-width="2"/><rect x="-5" y="150" width="210" height="60" fill="#e5e7eb"/>${block(f)}${grit}</svg>`;
+  }
+  const base = k === 'micro-glass'
+    ? `<rect x="-5" y="104" width="210" height="66" fill="#d5edf3" stroke="#6aa6b8" stroke-width="2"/><path d="M14 118H70M24 126H52" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>`
+    : `<polygon points="${pts(line)} 205,170 -5,170" fill="#c48b55" stroke="#7a4f27" stroke-width="2"/>${grain(112, 166, '#a7713f')}`;
+  return `<svg viewBox="0 0 ${W} ${W}" aria-hidden="true">${bg}${base}<rect x="-5" y="170" width="210" height="40" fill="#e5e7eb"/>${block(line)}</svg>`;
+}
 
 // ---- 돋보기 렌즈 ----
 const LENS = { cur: null };
-// 물속 단면 위에 겹치는 압력 화살표: 아래에서 미는 화살표가 위에서 누르는 것보다 길다 → 부력
-const LENS_WATER_SVG = `<svg class="lov" viewBox="0 0 100 100" aria-hidden="true"><defs><marker id="lah" markerWidth="5" markerHeight="5" refX="2.5" refY="2.5" orient="auto"><path d="M0 0L5 2.5L0 5z" fill="#7dd3fc"/></marker></defs>
-  <g stroke="#7dd3fc" stroke-width="2.4" stroke-linecap="round" marker-end="url(#lah)" fill="none">
-  <path d="M46.5 33v8"/><path d="M53.5 33v8"/>
-  <path d="M46.5 92V69"/><path d="M53.5 92V69"/>
-  <path d="M31 50h10"/><path d="M31 58h10"/><path d="M69 50H59"/><path d="M69 58H59"/></g></svg>`;
+const LENS_WATER_SVG = '';   // 물속 단면은 microSVG('micro-water') 안에 압력 화살표까지 그린다
 function dirLens(at, img, title, val, col, dur = 3.4, overlay = '') {
   if (!dirOn()) return;
   const L = dirLayer('kcall');
-  if (LENS.cur) LENS.cur.t = Math.max(LENS.cur.t, LENS.cur.dur);
+  if (LENS.cur) { const o = LENS.cur.el; o.classList.add('out'); setTimeout(() => o.remove(), 450); }   // 새 돋보기가 열리면 이전 것은 바로 닫는다
   const el = document.createElement('div'); el.className = 'klens'; el.style.setProperty('--c', col);
-  el.innerHTML = `<i class="ln"></i><i class="d"></i><div class="lw"><div class="lc"><img src="${GEN(img)}" alt=""></div>${overlay}<span class="ltag">${ico('eye')}${L2('가까이 보면', 'Up close')}</span></div><div class="lcap"><b>${title}</b><span></span></div>`;
+  el.innerHTML = `<i class="ln"></i><i class="d"></i><div class="lw"><div class="lc">${microSVG(img)}</div>${overlay}<span class="ltag">${ico('eye')}${L2('가까이 보면', 'Up close')}</span></div><div class="lcap"><b>${title}</b><span></span></div>`;
   L.appendChild(el);
   LENS.cur = { el, at, val, t: 0, dur, side: DIR.side = -DIR.side };
   sfx('whoosh');

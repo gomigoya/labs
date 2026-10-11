@@ -87,4 +87,4 @@
 
 ## 과정·결과 묘사 (`src/69-depict.js`)
 
-원칙은 [experiment-depiction.md](experiment-depiction.md). 구현: 돋보기 렌즈(접촉면·물속 단면 그림 + 압력 화살표), 실험 노트(시행 자동 기록 · 비교 막대 · 바꾼 조건 강조 · 공정한 실험 안내), 레일의 '지난번' 눈금, 힘 카드·성공 띠의 생활 속 그림. 그림은 `assets/gen/*.webp` (ChatGPT 이미지 생성, 글자 없는 그림 + HTML 글자).
+원칙은 [experiment-depiction.md](experiment-depiction.md). 구현: 돋보기 렌즈(접촉면·물속 단면 도해를 코드 SVG로 + 압력 화살표), 실험 노트(시행 자동 기록 · 비교 막대 · 바꾼 조건 강조 · 공정한 실험 안내), 레일의 '지난번' 눈금. 삽화·생성 그림은 쓰지 않는다.

@@ -850,8 +850,8 @@ body.kid.kslow #labels{opacity:0}
 .klens .d{position:absolute;width:12px;height:12px;margin:-6px 0 0 -6px;border-radius:50%;background:var(--c);box-shadow:0 0 0 3px #fff,0 0 16px var(--c);animation:kcoDot .35s cubic-bezier(.2,1.7,.4,1) both}
 .klens .ln{position:absolute;height:2px;margin-top:-1px;transform-origin:0 50%;background:#fff;box-shadow:0 0 8px rgba(0,0,0,.5);transform:rotate(var(--a)) scaleX(0);animation:kcoLine .3s .15s cubic-bezier(.3,0,.2,1) forwards}
 .klens .lw{position:absolute;width:calc(var(--r) * 2);height:calc(var(--r) * 2);margin:calc(var(--r) * -1) 0 0 calc(var(--r) * -1);border-radius:50%;box-shadow:0 0 0 4px #fff,0 0 0 6px var(--c),0 24px 50px -12px rgba(0,0,0,.75);clip-path:circle(0% at 50% 50%);animation:klIris .55s .35s cubic-bezier(.2,.8,.2,1) forwards}
-.klens .lc{position:absolute;inset:0;border-radius:50%;overflow:hidden;background:#e9e3d8}
-.klens .lc img{width:100%;height:100%;object-fit:cover;transform:scale(1.22);animation:klZoom 4.2s .35s cubic-bezier(.2,.6,.2,1) forwards}
+.klens .lc{position:absolute;inset:0;border-radius:50%;overflow:hidden;background:#f8fafc}
+.klens .lc svg{display:block;width:100%;height:100%;transform:scale(1.22);animation:klZoom 4.2s .35s cubic-bezier(.2,.6,.2,1) forwards}
 .klens .lov{position:absolute;inset:0;width:100%;height:100%;opacity:0;animation:klFade .5s 1s forwards;filter:drop-shadow(0 1px 2px rgba(0,0,0,.6))}
 .klens .ltag{position:absolute;left:50%;top:-12px;transform:translateX(-50%);display:inline-flex;align-items:center;gap:4px;padding:4px 9px;border-radius:999px;background:#fff;color:var(--ktx);font:700 11px/1 var(--kfont);white-space:nowrap;box-shadow:0 4px 12px -4px rgba(0,0,0,.4)}
 .klens .ltag .ki{font-size:13px;color:var(--kacc)}
@@ -905,21 +905,8 @@ body.kcut #knote{opacity:0}
 .khlast{position:absolute;top:50%;width:2px;height:22px;margin:-11px 0 0 -1px;background:#fca5a5;border-radius:1px;box-shadow:0 0 6px rgba(252,165,165,.8)}
 .khlast em{position:absolute;bottom:100%;left:50%;transform:translateX(-50%);margin-bottom:3px;padding:2px 6px;border-radius:999px;background:rgba(12,14,22,.8);color:#fecaca;font:700 10px/1.2 var(--kfont);font-style:normal;white-space:nowrap}
 .khbar.flip .khlast em{transform:translateX(-50%) rotate(180deg)}
-/* 힘 카드·성공 띠·마지막 화면: 생활 속 그림 */
-#kpop .kpcard .kpimg{height:132px;overflow:hidden;background:#e9e3d8}
-#kpop .kpcard .kpimg img{width:100%;height:100%;object-fit:cover}
-#kid .kwlife{flex:none;width:56px;height:56px;padding:0;border:0;border-radius:14px;overflow:hidden;cursor:pointer;box-shadow:0 0 0 2px #fff,0 0 0 3.5px var(--kline)}
-#kid .kwlife img{width:100%;height:100%;object-fit:cover}
-#kid .kwfig{float:left;width:132px;margin:0 14px 6px 0}
-#kid .kwfig img{display:block;width:132px;height:132px;object-fit:cover;border-radius:12px}
-#kid .kwfig figcaption{margin-top:5px;font:600 11.5px/1 var(--kfont);color:var(--ksub);text-align:center}
-#kid .kwintxt::after{content:"";display:block;clear:both}
-#kid .kcard.on img{display:block;width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px;margin-bottom:6px}
 @media (max-width:980px){
   #knote{left:12px;width:min(268px,calc(100vw - 24px))}
-  #kid .kwfig{width:96px} #kid .kwfig img{width:96px;height:96px}
-  #kid .kwlife{width:46px;height:46px}
-  #kpop .kpcard .kpimg{height:110px}
   #khdock .kh{padding:0 3px}
   #khdock .khpick button,#khdock .khzoom button{min-width:42px;padding:5px 2px 4px;font-size:10.5px}
   #khdock .khzoom button .ki{font-size:19px}
@@ -3562,7 +3549,7 @@ const KID = {
       body = `<div class="kfoot"><div class="know"><div class="knowtxt"></div></div><div class="krow">${mine}<div class="kmeterbox"></div>${m.shot !== 'hero' ? '<canvas class="ktele"></canvas>' : ''}${m.reset ? `<button class="kreset">${ico('reset')}<span>${L2('처음으로', 'Reset')}</span></button>` : ''}</div>${rocket}</div>`;
     }
     box.innerHTML = `<div class="kban${m.boss ? ' boss' : ''}"><div class="kav">${quokka()}</div><div class="kbtxt"><div class="keye">${m.boss ? L2('도전 과제', 'Challenge') : 'Step ' + m.stage}<i></i>${(STAGE[LANG] || STAGE.ko)[m.stage]}</div><div class="ktitle">${t[0]}${lis}</div><div class="ksteps">${kidSteps(m)}</div></div><button class="kskip">${KT('skip')}${ico('chevR')}</button></div>${body}
-      <div class="kwin"><div class="kbox"><div class="kwintxt"></div><div class="kwrow"><div class="kwok">${ico('check')}</div><button class="kwlife" aria-label="${L2('생활 속에서', 'In real life')}"></button><div class="kwmain"><div class="kwt">${L2('미션 성공', 'Mission clear')}<span class="kstars"><i>${ico('star')}</i><i>${ico('star')}</i><i>${ico('star')}</i></span></div><div class="kgain"></div></div><button class="kwhybtn">${ico('speaker')}<span>${L2('왜 그럴까?', 'Why?')}</span></button><button class="kbtn main kgo"></button></div><div class="kauto"><div><i></i></div></div></div></div>`;
+      <div class="kwin"><div class="kbox"><div class="kwintxt"></div><div class="kwrow"><div class="kwok">${ico('check')}</div><div class="kwmain"><div class="kwt">${L2('미션 성공', 'Mission clear')}<span class="kstars"><i>${ico('star')}</i><i>${ico('star')}</i><i>${ico('star')}</i></span></div><div class="kgain"></div></div><button class="kwhybtn">${ico('speaker')}<span>${L2('왜 그럴까?', 'Why?')}</span></button><button class="kbtn main kgo"></button></div><div class="kauto"><div><i></i></div></div></div></div>`;
     box.querySelectorAll('[data-p]').forEach((el) => (el.onclick = () => { ensureAudio(); this.pick[this.i] = +el.dataset.p; sfx('pick'); this.render(); if (m.look) this.ring(2.2, false); }));
     box.querySelectorAll('[data-b]').forEach((el) => (el.onclick = () => { ensureAudio(); if (m.quiz) this.answer(+el.dataset.b === 0); }));
     const qn = box.querySelector('.kqnext'); if (qn) qn.onclick = () => { this.ctx.q++; this.render(); };
@@ -3573,7 +3560,7 @@ const KID = {
     box.querySelectorAll('.kban .ksay2').forEach((b) => (b.onclick = () => speak(`${t[0]}. ${t[1]}`, true)));
     const pb = box.querySelector('.kpred .ksay2'); if (pb) pb.onclick = () => { const p = m.pred[LANG] || m.pred.ko; speak(`${p[0]} ${p[1].join(', ')}`, true); };
     const qb = box.querySelector('.kquiz .ksay2'); if (qb) qb.onclick = () => speak(this.quizSpeech(), true);
-    box.querySelector('.kwhybtn').onclick = box.querySelector('.kwlife').onclick = () => { box.querySelector('.kwin').classList.toggle('open'); speak(m.quiz ? '' : m.win(), true); };
+    box.querySelector('.kwhybtn').onclick = () => { box.querySelector('.kwin').classList.toggle('open'); speak(m.quiz ? '' : m.win(), true); };
     if (m.quiz) speakOnce(`${this.i}:q${this.ctx.q}:${this.ctx.ans[this.ctx.q] == null ? 'ask' : 'fb'}`, this.quizSpeech());
     else if (ph !== 'predict') speakOnce(`${this.i}:play`, `${t[0]}. ${t[1]}`);
     khBuild(); this.update(true);
@@ -3634,7 +3621,7 @@ const KID = {
     return `<div class="kfinal"><div class="ktro">${ico('trophy')}</div><div class="keye">${L2('최종 결과', 'Results')}</div><div class="ktitle">${L2('힘 탐험 완료!', 'Force quest complete!')}</div>
       <div class="krank">${rank}</div>
       <div class="kfs"><div><b>${this.score}</b><span>${L2('점수', 'Score')} / ${mx}</span></div><div><b>${nDone}/${this.missions.length}</b><span>${L2('완료한 퀘스트', 'Quests done')}</span></div><div><b>${nHit}/${this.missions.filter((m) => m.pred).length}</b><span>${L2('예상 적중', 'Good guesses')}</span></div></div>
-      <div class="kcards">${CARDS.map((c) => { const on = this.cards.has(c.k), t = cardT(c); return `<div class="kcard ${on ? 'on' : 'off'}" style="--c:${hex(c.col)}">${on ? `<img src="${GEN(CARD_IMG[c.k])}" alt="">` : ''}<i></i><b>${on ? t[0] : L2('잠김', 'Locked')}</b></div>`; }).join('')}</div>
+      <div class="kcards">${CARDS.map((c) => { const on = this.cards.has(c.k), t = cardT(c); return `<div class="kcard ${on ? 'on' : 'off'}" style="--c:${hex(c.col)}"><i></i><b>${on ? t[0] : L2('잠김', 'Locked')}</b></div>`; }).join('')}</div>
       <p class="ksay">${L2('힘이 비기면 그대로, 한쪽이 이기면 움직임이 바뀌어요!', 'Balanced forces change nothing; an unbalanced force changes the motion!')}</p>
       <div class="kbtns g3"><button class="kbtn main" data-k="free">${L2('자유 실험실', 'Free lab')}</button><button class="kbtn" data-k="again">${KT('again')}</button><button class="kbtn" data-k="full">${KT('full')}</button></div></div>`;
   },
@@ -3666,9 +3653,7 @@ const KID = {
   winText(m, w) {
     const quiz = m.quiz, nOk = quiz ? this.ctx.ans.filter(Boolean).length : 0, card = m.card && CARDS.find((c) => c.k === m.card);
     w.classList.remove('open'); speak(quiz ? w.querySelector('.kwintxt').textContent : `${L2('미션 성공!', 'Mission clear!')} ${m.win()}`);
-    const li = card ? `<figure class="kwfig"><img src="${GEN(CARD_IMG[card.k])}" alt=""><figcaption>${L2('생활 속에서', 'In real life')}</figcaption></figure>` : '';
-    const lb = w.querySelector('.kwlife'); lb.innerHTML = card ? `<img src="${GEN(CARD_IMG[card.k])}" alt="">` : ''; lb.style.display = card ? '' : 'none';
-    w.querySelector('.kwintxt').innerHTML = li + (quiz ? L2(`퀴즈 ${nOk}/${KID_QUIZ.length} 정답! 마지막 문제: ${(KID_QUIZ.at(-1)[LANG] || KID_QUIZ.at(-1).ko)[1]}`, `Quiz: ${nOk}/${KID_QUIZ.length} correct! Last one: ${(KID_QUIZ.at(-1)[LANG] || KID_QUIZ.at(-1).ko)[1]}`) : m.win());
+    w.querySelector('.kwintxt').innerHTML = (quiz ? L2(`퀴즈 ${nOk}/${KID_QUIZ.length} 정답! 마지막 문제: ${(KID_QUIZ.at(-1)[LANG] || KID_QUIZ.at(-1).ko)[1]}`, `Quiz: ${nOk}/${KID_QUIZ.length} correct! Last one: ${(KID_QUIZ.at(-1)[LANG] || KID_QUIZ.at(-1).ko)[1]}`) : m.win());
     const nStar = quiz ? (nOk >= KID_QUIZ.length - 1 ? 3 : nOk >= KID_QUIZ.length / 2 ? 2 : 1) : m.pred && this.pick[this.i] !== m.pred.ans ? 2 : 3;
     w.querySelectorAll('.kstars i').forEach((el, k) => { el.className = k < nStar ? 'on' : ''; el.style.animationDelay = `${0.2 + k * 0.15}s`; });
     const why = quiz || !m.pred ? '' : this.pick[this.i] === m.pred.ans ? `<span class="kchip ok">${ico('check')}${L2('예상 적중', 'Good guess')} +50</span>` : `<span class="kchip">${L2('예상과 달랐어요', 'Not what you guessed')}</span>`;
@@ -3679,7 +3664,7 @@ const KID = {
   cardPop(k) {
     const c = CARDS.find((q) => q.k === k), el = document.getElementById('kpop'); if (!el || !c || S.mode !== 'kid') return;
     const t = cardT(c);
-    el.innerHTML = `<div class="kpcard" style="--c:${hex(c.col)}"><div class="kpimg"><img src="${GEN(CARD_IMG[k])}" alt=""></div><small>${L2('새 힘 카드', 'New force card')}</small><b>${t[0]}</b><span>${t[1]}</span></div>`;
+    el.innerHTML = `<div class="kpcard" style="--c:${hex(c.col)}"><small>${L2('새 힘 카드', 'New force card')}</small><i></i><b>${t[0]}</b><span>${t[1]}</span></div>`;
     el.classList.remove('on'); void el.offsetWidth; el.classList.add('on'); sfx('pop');
     const id = (this._pid = (this._pid || 0) + 1); this.after(2.6, () => { if (this._pid === id) el.classList.remove('on'); });
   },
@@ -3828,7 +3813,6 @@ function KID_INTRO(on) {
   }
 }
 function initKid() {
-  genPreload();
   document.body.appendChild(document.getElementById('kid'));
   document.getElementById('kidSub').innerHTML = KT('sub');
   document.getElementById('modeBtn').onclick = () => setMode(S.mode === 'kid' ? 'full' : 'kid');
@@ -4466,29 +4450,55 @@ function dirFrame(dt) {
 
 // ==== 13d 묘사 (쉬운 모드): 실험 과정·결과를 한눈에 ====
 // docs/experiment-depiction.md 의 원칙을 구현한다.
-//  · 돋보기 렌즈: 접촉면·물속 단면 그림(ChatGPT 이미지 생성)을 원형 렌즈로 열어 '보이지 않는 이유'를 보여 준다
+//  · 돋보기 렌즈: 접촉면·물속을 교과서식 단면 도해(코드로 그린 SVG)로 열어 '보이지 않는 이유'를 보여 준다
 //  · 실험 노트: 시행마다 조건(그림)과 잰 값(막대)을 한 줄씩 자동 기록 → 결과를 '비교'로 본다
 //    이번에 바꾼 조건만 테두리로 강조하고, 두 개 이상 바꾸면 공정한 실험 안내
-//  · 생활 속 그림: 힘 카드·성공 띠에 같은 개념의 일상 장면
-const GEN = (k) => `assets/gen/${k}.webp`;
-const CARD_IMG = { F: 'life-pull', net: 'life-balance', W: 'life-weight', T: 'life-spring', f: 'life-friction', B: 'life-buoyancy', N: 'life-normal' };
 const SURF_IMG = { glass: 'micro-glass', wood: 'micro-wood', sand: 'micro-sand' };
-function genPreload() { [...Object.values(CARD_IMG), ...Object.values(SURF_IMG), 'micro-water'].forEach((k) => { const i = new Image(); i.src = GEN(k); }); }
+
+// ---- 단면 도해: 모눈 위 선화 + 평면 채색 (실험실 계기판과 같은 시각 언어) ----
+function microSVG(k) {
+  const W = 200, pts = (f, x0 = -5, x1 = 205, st = 2) => { const a = []; for (let x = x0; st > 0 ? x <= x1 : x >= x1; x += st) a.push(`${x},${f(x).toFixed(1)}`); return a.join(' '); };
+  const bg = `<defs><pattern id="mg" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M10 0H0V10" fill="none" stroke="#e2e6ec" stroke-width=".7"/></pattern></defs><rect width="${W}" height="${W}" fill="#f8fafc"/><rect width="${W}" height="${W}" fill="url(#mg)"/>`;
+  const grain = (y0, y1, c) => Array.from({ length: 5 }, (_, i) => { const y = y0 + (i + 0.5) * (y1 - y0) / 5; return `<path d="M-5 ${y} C 50 ${y - 3} 120 ${y + 3} 205 ${y - 1}" stroke="${c}" stroke-width="1.2" fill="none"/>`; }).join('');
+  if (k === 'micro-water') {
+    const arrows = (d, l) => `<path d="${d}" stroke="#0284c7" stroke-width="${l}" stroke-linecap="round" fill="none" marker-end="url(#wa)"/>`;
+    return `<svg viewBox="0 0 ${W} ${W}" aria-hidden="true">${bg}<defs><linearGradient id="wg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#dbeffa"/><stop offset="1" stop-color="#7cc4ea"/></linearGradient>
+      <marker id="wa" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M0 0L6 3L0 6z" fill="#0284c7"/></marker></defs>
+      <rect x="20" y="58" width="160" height="150" fill="url(#wg)"/><path d="M20 58H180" stroke="#38a3d6" stroke-width="2"/>
+      <path d="M100 0V74" stroke="#64748b" stroke-width="1.6"/>
+      <rect x="80" y="74" width="40" height="56" rx="3" fill="#d6dae0" stroke="#64748b" stroke-width="2"/><path d="M86 80V124" stroke="#eef1f4" stroke-width="3"/>
+      ${arrows('M92 50V68', 2.4)}${arrows('M108 50V68', 2.4)}
+      ${arrows('M92 176V140', 3.6)}${arrows('M108 176V140', 3.6)}
+      ${arrows('M52 96H72', 2.6)}${arrows('M52 112H72', 2.6)}${arrows('M148 96H128', 2.6)}${arrows('M148 112H128', 2.6)}</svg>`;
+  }
+  // 위: 도막(나무), 아래: 바닥. 맞닿는 선의 모양이 마찰의 크기를 말해 준다
+  const blockTop = 24, line = { 'micro-glass': () => 104, 'micro-wood': (x) => 104 + 2.6 * Math.sin(x / 6.5) + 1.6 * Math.sin(x / 2.7 + 1) }[k];
+  const block = (f) => `<polygon points="-5,${blockTop} 205,${blockTop} ${pts(f, 205, -5, -2)}" fill="#ecd3ad" stroke="#9a6b3d" stroke-width="2"/>${grain(blockTop + 6, 96, '#d7b689')}`;
+  if (k === 'micro-sand') {
+    let grit = '';
+    for (let i = 0, x = 4; x < 205; i++, x += 19) {
+      const h = 24 + (i * 7) % 9, w = 17 + (i * 5) % 6, c = ['#8a7a6d', '#6f6259', '#a08b7b'][i % 3];
+      grit += `<polygon points="${x - w / 2},128 ${x + (i % 2 ? 2 : -2)},${128 - h} ${x + w / 2},128" fill="${c}" stroke="#463b33" stroke-width="1.6" stroke-linejoin="round"/>`;
+    }
+    // 알갱이 끝이 도막 밑면에 박힌다 (맞물림): 도막 밑면을 알갱이 끝보다 아래에 두고 알갱이를 위에 그린다
+    const f = () => 112;
+    return `<svg viewBox="0 0 ${W} ${W}" aria-hidden="true">${bg}<rect x="-5" y="128" width="210" height="22" fill="#c69a6b" stroke="#8a5f38" stroke-width="2"/><rect x="-5" y="150" width="210" height="60" fill="#e5e7eb"/>${block(f)}${grit}</svg>`;
+  }
+  const base = k === 'micro-glass'
+    ? `<rect x="-5" y="104" width="210" height="66" fill="#d5edf3" stroke="#6aa6b8" stroke-width="2"/><path d="M14 118H70M24 126H52" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>`
+    : `<polygon points="${pts(line)} 205,170 -5,170" fill="#c48b55" stroke="#7a4f27" stroke-width="2"/>${grain(112, 166, '#a7713f')}`;
+  return `<svg viewBox="0 0 ${W} ${W}" aria-hidden="true">${bg}${base}<rect x="-5" y="170" width="210" height="40" fill="#e5e7eb"/>${block(line)}</svg>`;
+}
 
 // ---- 돋보기 렌즈 ----
 const LENS = { cur: null };
-// 물속 단면 위에 겹치는 압력 화살표: 아래에서 미는 화살표가 위에서 누르는 것보다 길다 → 부력
-const LENS_WATER_SVG = `<svg class="lov" viewBox="0 0 100 100" aria-hidden="true"><defs><marker id="lah" markerWidth="5" markerHeight="5" refX="2.5" refY="2.5" orient="auto"><path d="M0 0L5 2.5L0 5z" fill="#7dd3fc"/></marker></defs>
-  <g stroke="#7dd3fc" stroke-width="2.4" stroke-linecap="round" marker-end="url(#lah)" fill="none">
-  <path d="M46.5 33v8"/><path d="M53.5 33v8"/>
-  <path d="M46.5 92V69"/><path d="M53.5 92V69"/>
-  <path d="M31 50h10"/><path d="M31 58h10"/><path d="M69 50H59"/><path d="M69 58H59"/></g></svg>`;
+const LENS_WATER_SVG = '';   // 물속 단면은 microSVG('micro-water') 안에 압력 화살표까지 그린다
 function dirLens(at, img, title, val, col, dur = 3.4, overlay = '') {
   if (!dirOn()) return;
   const L = dirLayer('kcall');
-  if (LENS.cur) LENS.cur.t = Math.max(LENS.cur.t, LENS.cur.dur);
+  if (LENS.cur) { const o = LENS.cur.el; o.classList.add('out'); setTimeout(() => o.remove(), 450); }   // 새 돋보기가 열리면 이전 것은 바로 닫는다
   const el = document.createElement('div'); el.className = 'klens'; el.style.setProperty('--c', col);
-  el.innerHTML = `<i class="ln"></i><i class="d"></i><div class="lw"><div class="lc"><img src="${GEN(img)}" alt=""></div>${overlay}<span class="ltag">${ico('eye')}${L2('가까이 보면', 'Up close')}</span></div><div class="lcap"><b>${title}</b><span></span></div>`;
+  el.innerHTML = `<i class="ln"></i><i class="d"></i><div class="lw"><div class="lc">${microSVG(img)}</div>${overlay}<span class="ltag">${ico('eye')}${L2('가까이 보면', 'Up close')}</span></div><div class="lcap"><b>${title}</b><span></span></div>`;
   L.appendChild(el);
   LENS.cur = { el, at, val, t: 0, dur, side: DIR.side = -DIR.side };
   sfx('whoosh');
