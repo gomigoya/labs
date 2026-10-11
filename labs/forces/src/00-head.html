@@ -590,6 +590,62 @@ body.kid #modeBtn{font:400 13px/1 var(--kbody);background:rgba(22,15,58,.8);bord
   body.kid #modeBtn{display:none}
 }
 
+
+/* ===== 쉬운 모드: 글 대신 그림 ===== */
+#kid .ksay2{flex:none;display:inline-grid;place-items:center;width:38px;height:38px;margin-left:8px;border-radius:50%;border:2.5px solid var(--ki);background:#fff;font-size:18px;line-height:1;cursor:pointer;box-shadow:0 3px 0 var(--ki);text-shadow:none;vertical-align:middle}
+#kid .ksay2:active{transform:translateY(2px);box-shadow:0 1px 0 var(--ki)}
+#kid .ksteps{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin-top:8px}
+#kid .kstep{display:inline-flex;align-items:center;gap:4px;background:rgba(22,15,58,.4);border-radius:16px;padding:6px 12px}
+#kid .kstep i{font-style:normal;line-height:1}
+#kid .kobj{font-size:34px}
+#kid .kdir{font-size:30px}
+#kid .kbig{font-size:38px}
+#kid .kplus{font:400 24px/1 var(--kdisp);color:var(--ky1)}
+#kid .kges{font-size:32px;display:inline-block}
+#kid .kges.drag.r{animation:kdragr 1.4s ease-in-out infinite}
+#kid .kges.drag.l{animation:kdragl 1.4s ease-in-out infinite}
+#kid .kges.drag.d{animation:kdragd 1.4s ease-in-out infinite}
+#kid .kges.tap{animation:ktap 1s ease-in-out infinite}
+@keyframes kdragr{0%,15%{transform:translateX(-6px)}70%,100%{transform:translateX(16px)}}
+@keyframes kdragl{0%,15%{transform:translateX(6px) scaleX(-1)}70%,100%{transform:translateX(-16px) scaleX(-1)}}
+@keyframes kdragd{0%,15%{transform:translateY(-6px)}70%,100%{transform:translateY(10px)}}
+@keyframes ktap{0%,100%{transform:translateY(0) scale(1)}45%{transform:translateY(6px) scale(.88)}}
+#kid .kban .ksay{display:none}
+#kid .kfoot .know{display:none}
+/* 예상: 큰 그림 타일 */
+#kid .kpred .kq{display:flex;align-items:center;justify-content:center;gap:4px}
+#kid .kpred .kq b{margin:0}
+#kid .kopts,#kid .kopts.n2,#kid .kopts.n3{grid-template-columns:repeat(var(--n,3),1fr)}
+#kid .kopts.n2{--n:2}
+#kid .kopt{flex-direction:column;justify-content:center;text-align:center;gap:6px;padding:14px 6px 10px;min-height:118px}
+#kid .kopt>i{font-style:normal;font-size:52px;line-height:1;font-family:var(--kdisp);color:#fff;text-shadow:0 3px 0 var(--ki)}
+#kid .kopt span{font-size:14px;line-height:1.2;opacity:.95}
+#kid .kfoot .kmine b{font-size:22px;line-height:1;vertical-align:middle}
+/* 성공: 그림 위주, 설명은 접어 두고 읽어 주기 */
+#kid .kwin .kwintxt{display:none}
+#kid .kwin.open .kwintxt{display:block}
+#kid .kwhy{font-size:22px}
+#kid .kwhy .khit{font:400 20px/1 var(--kdisp)}
+#kid .kgain span{font-size:20px;padding:6px 14px 6px 6px}
+#kid .kgain .kgcard{background:#fff;color:var(--ki);border:3px solid var(--ki);box-shadow:0 4px 0 var(--ki);padding:8px 14px;font-size:19px;animation:kpopin .5s .5s both cubic-bezier(.2,1.6,.4,1)}
+#kid .kgain .kgcard i{width:22px;height:22px;border-radius:50%;margin:0;border:2.5px solid var(--ki);box-shadow:none}
+#kid .kwhybtn{display:inline-block;margin:0 0 12px;font:400 15px/1 var(--kbody);color:var(--ki);background:#fff;border:2.5px solid var(--ki);border-radius:999px;padding:8px 14px;box-shadow:0 3px 0 var(--ki);cursor:pointer}
+/* 퀴즈: 큰 ⭕ ❌ */
+#kid .kqq{display:flex;align-items:center;gap:6px;justify-content:center}
+#kid .kquiz .kbtn[data-b]{font-size:54px;line-height:1;padding:16px 8px}
+#kid .kqfb{display:flex;align-items:center;gap:10px}
+#kid .kqfb i{font-style:normal;font-size:40px;line-height:1}
+#kid .kqfb small{font:400 14px/1.4 var(--kbody);opacity:.95}
+/* 시작 화면: 그림 카드 */
+#kidIntro .kitiles{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:6px 0 10px}
+#kidIntro .kitile{display:flex;flex-direction:column;align-items:center;gap:6px;background:#fff;color:var(--ki);border:3px solid var(--ki);border-radius:18px;padding:12px 4px 10px;box-shadow:0 4px 0 var(--ki);font:400 14px/1.2 var(--kbody)}
+#kidIntro .kitile i{font-style:normal;font-size:34px;line-height:1;letter-spacing:-4px}
+#kidIntro .kilisten{display:inline-block;margin:0 0 12px;font:400 15px/1 var(--kbody);color:var(--ki);background:#fff;border:2.5px solid var(--ki);border-radius:999px;padding:8px 14px;box-shadow:0 3px 0 var(--ki);cursor:pointer}
+@media (max-width:980px){
+  #kid .kobj,#kid .kges{font-size:26px} #kid .kdir{font-size:22px} #kid .kstep{padding:4px 8px}
+  #kid .kopt{min-height:96px} #kid .kopt>i{font-size:40px} #kid .kopt span{font-size:12px}
+  #kidIntro .kitiles{grid-template-columns:repeat(2,1fr)}
+}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 <script type="importmap">

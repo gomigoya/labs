@@ -85,6 +85,34 @@ function quokka(mood = '') {
     : `<path d="M41 69q4.5 6 9 0q4.5 6 9 0" stroke="${ink}" stroke-width="3.5" fill="none" stroke-linecap="round"/>`;
   return `<svg viewBox="0 0 100 100" aria-hidden="true"><g stroke="${ink}" stroke-width="4"><circle cx="23" cy="27" r="14" fill="#a8693c"/><circle cx="77" cy="27" r="14" fill="#a8693c"/></g><circle cx="23" cy="28" r="7" fill="#f0a98a"/><circle cx="77" cy="28" r="7" fill="#f0a98a"/><ellipse cx="50" cy="57" rx="38" ry="34" fill="#c98a55" stroke="${ink}" stroke-width="4"/><ellipse cx="50" cy="67" rx="24" ry="18" fill="#f6dcb4"/><circle cx="27" cy="65" r="6" fill="#ff8fa3" opacity=".75"/><circle cx="73" cy="65" r="6" fill="#ff8fa3" opacity=".75"/>${eyes}<ellipse cx="50" cy="62" rx="5.5" ry="3.8" fill="${ink}"/>${mouth}</svg>`;
 }
+// 글 대신 그림: 예상 보기마다 큰 그림 하나
+const PRED_PIC = {
+  tug: ['⬅️', '✋', '➡️'], team: ['0', '1', '2'], moon: ['🔺', '🟰', '🔻'], weights: ['🟰', '✌️', '🤏'],
+  floor: ['🧊', '🟫', '🟰'], water: ['🔺', '🟰', '🔻'], float: ['⬇️', '🛶'], motion: ['⏩', '🐢', '🛑'],
+};
+// 만질 기구 그림
+const OBJ_PIC = { F1: '🟣', F2: '🟣', surface: '🟫', block: '📦', obj: '🔩', jack: '🛗' };
+const DIR_PIC = { '1,0': '➡️', '-1,0': '⬅️', '0,-1': '⬇️', '0,1': '⬆️' };
+// 할 일을 그림으로: [기구] + 손 동작(끌기 방향 / 톡 누르기)
+function kidSteps(m) {
+  if (m.quiz) return '<span class="kstep"><i class="kbig">⭕</i><i class="kbig">❌</i></span>';
+  if (m.widget === 'rocket') return '<span class="kstep"><i class="kobj">🌍</i><i class="kges drag r">👆</i><i class="kobj">🌙</i></span>';
+  return (m.hint || []).map(([k, g, dx, dy]) => g === 'drag'
+    ? `<span class="kstep"><i class="kobj">${OBJ_PIC[k] || '❓'}</i><i class="kges drag ${dx > 0 ? 'r' : dx < 0 ? 'l' : 'd'}">👆</i><i class="kdir">${DIR_PIC[`${dx},${dy}`] || ''}</i></span>`
+    : `<span class="kstep"><i class="kobj">${OBJ_PIC[k] || '❓'}</i><i class="kges tap">👆</i></span>`).join('<b class="kplus">+</b>');
+}
+// 읽어 주기 (글을 못 읽는 아이도 OK)
+const VOICE = { on: true, key: '' };
+function speak(html, force) {
+  try {
+    const sy = window.speechSynthesis; if (!sy || (!VOICE.on && !force) || S.mode !== 'kid') return;
+    const tx = String(html).replace(/<[^>]+>/g, ' ').replace(/[←→⏩⏪▶■·…]/g, ' ').replace(/\s+/g, ' ').trim(); if (!tx) return;
+    sy.cancel(); const u = new SpeechSynthesisUtterance(tx); u.lang = isEn() ? 'en-US' : 'ko-KR'; u.rate = 0.95; u.pitch = 1.15;
+    const v = sy.getVoices().find((q) => q.lang && q.lang.replace('_', '-').startsWith(u.lang)); if (v) u.voice = v;
+    sy.speak(u);
+  } catch (e) {}
+}
+function speakOnce(key, html) { if (VOICE.key === key) return; VOICE.key = key; speak(html); }
 const AUTO_NEXT = 7;   // 성공 팝업이 떠 있는 시간(초). 지나면 저절로 다음 퀘스트
 const KID = {
   i: -1, done: [], hit: [], pick: [], cards: new Set(), score: 0, shown: 0, ctx: {}, passed: false,
@@ -235,8 +263,8 @@ const KID = {
     const M = this.missions, el = document.getElementById('kidhud'); if (!el) return;
     el.innerHTML = `<div class="kmap">${M.map((m, k) => `<span class="kn2${this.done[k] ? ' done' : ''}${k === this.i ? ' cur' : ''}${m.boss ? ' boss' : ''}" title="${(STAGE[LANG] || STAGE.ko)[m.stage]}">${m.icon}${this.done[k] ? '<em>★</em>' : ''}</span>`).join('<i></i>')}</div>
       <div class="kscore"><span class="kcoin">⚡</span><b id="kpts">${Math.round(this.shown)}</b></div>
-      <button class="ksnd" title="${S.sound ? KT('soundOff') : KT('soundOn')}">${S.sound ? '🔊' : '🔇'}</button>`;
-    el.querySelector('.ksnd').onclick = () => { setSound(!S.sound); ensureAudio(); this.hud(); };
+      <button class="ksnd" title="${VOICE.on ? KT('soundOff') : KT('soundOn')}">${VOICE.on ? '🔊' : '🔇'}</button>`;
+    el.querySelector('.ksnd').onclick = () => { VOICE.on = !VOICE.on; setSound(VOICE.on); ensureAudio(); if (!VOICE.on) try { speechSynthesis.cancel(); } catch (e) {} this.hud(); };
   },
   legend() {
     const el = document.getElementById('legend'); if (!el) return;
@@ -249,14 +277,15 @@ const KID = {
     const m = M[this.i], t = m.t[LANG] || m.t.ko, ph = this.phase(), tag = '';
     let body = '';
     if (m.quiz) body = `<div class="kmodal kquizm"><div class="kbox"><div class="kribbon">${L2('OX 퀴즈', 'O/X quiz')}</div>${this.quizHTML()}</div></div>`;
-    else if (ph === 'predict') { const p = m.pred[LANG] || m.pred.ko; body = `<div class="kmodal"><div class="kbox kpred"><div class="kribbon">${L2('어떻게 될까?', 'What will happen?')}</div><div class="kmascot sm">${quokka('think')}</div><div class="kq">${L2('실험하기 전에 먼저 골라 봐요!', 'Pick before you try!')}<b>${p[0]}</b></div><div class="kopts n${p[1].length}">${p[1].map((o, k) => `<button class="kopt" data-p="${k}"><em>${'ABC'[k]}</em><span>${o}</span></button>`).join('')}</div></div></div>`; }
+    else if (ph === 'predict') { const p = m.pred[LANG] || m.pred.ko; const pic = PRED_PIC[m.id] || []; body = `<div class="kmodal"><div class="kbox kpred"><div class="kribbon">🤔 ?</div><div class="kmascot sm">${quokka('think')}</div><div class="kq"><b>${p[0]}</b><button class="ksay2" title="${L2('다시 듣기', 'Listen again')}">🔊</button></div><div class="kopts n${p[1].length}">${p[1].map((o, k) => `<button class="kopt" data-p="${k}"><i>${pic[k] || '❓'}</i><span>${o}</span></button>`).join('')}</div></div></div>`;
+      speakOnce(`${this.i}:pred`, `${p[0]} ${p[1].join(', ')}`); }
     else {
-      const mine = m.pred ? `<div class="kmine">${KT('mine')}: <b>${(m.pred[LANG] || m.pred.ko)[1][this.pick[this.i]]}</b></div>` : '';
+      const mine = m.pred ? `<div class="kmine">🤔 <b>${(PRED_PIC[m.id] || [])[this.pick[this.i]] || ''}</b></div>` : '';
       const rocket = m.widget === 'rocket' ? `<div class="krocket"><span>🌍<br>${L2('지구', 'Earth')}</span><div class="krk"><b style="left:100%"></b><b class="mars" style="left:${(9.8 - 3.7) / 8.2 * 100}%"></b><i class="kr">🚀</i></div><span>🌙<br>${L2('달', 'Moon')}</span></div>` : '';
       body = `<div class="kfoot"><div class="know"><div class="knowtxt"></div></div><div class="krow">${mine}<div class="kmeterbox"></div>${m.reset ? `<button class="kreset">↺ ${L2('처음으로', 'Start again')}</button>` : ''}</div>${rocket}</div>`;
     }
-    box.innerHTML = `<div class="kban${m.boss ? ' boss' : ''}"><div class="kmascot">${quokka()}</div><div class="kbubble"><div class="khead"><span class="kstage">${m.boss ? 'BOSS' : 'STAGE ' + m.stage}</span><span class="ktopic">${(STAGE[LANG] || STAGE.ko)[m.stage]}</span><button class="kskip">${KT('skip')} ›</button></div><div class="ktitle"><span class="kicon">${m.icon}</span>${t[0]}</div><p class="ksay">${t[1]}</p></div></div>${body}
-      <div class="kwin"><div class="kbox"><div class="kribbon gold">${L2('미션 성공!', 'Mission clear!')}</div><div class="kmascot sm">${quokka('win')}</div><div class="kstars"><i></i><i></i><i></i></div><div class="kwhy"></div><div class="kwintxt"></div><div class="kgain"></div><div class="kauto"><span>${L2('다음 미션까지', 'Next mission in')}</span><div><i></i></div></div><button class="kbtn main kgo">${KT('next')}</button></div></div>`;
+    box.innerHTML = `<div class="kban${m.boss ? ' boss' : ''}"><div class="kmascot">${quokka()}</div><div class="kbubble"><div class="khead"><span class="kstage">${m.boss ? 'BOSS' : 'STAGE ' + m.stage}</span><span class="ktopic">${(STAGE[LANG] || STAGE.ko)[m.stage]}</span><button class="kskip">${KT('skip')} ›</button></div><div class="ktitle"><span class="kicon">${m.icon}</span>${t[0]}<button class="ksay2" title="${L2('다시 듣기', 'Listen again')}">🔊</button></div><div class="ksteps">${kidSteps(m)}</div></div></div>${body}
+      <div class="kwin"><div class="kbox"><div class="kribbon gold">${L2('미션 성공!', 'Mission clear!')}</div><div class="kmascot sm">${quokka('win')}</div><div class="kstars"><i></i><i></i><i></i></div><div class="kwhy"></div><div class="kgain"></div><button class="kwhybtn">🔊 ${L2('왜 그럴까?', 'Why?')}</button><div class="kwintxt"></div><div class="kauto"><span>${L2('다음 미션까지', 'Next mission in')}</span><div><i></i></div></div><button class="kbtn main kgo">${KT('next')}</button></div></div>`;
     box.querySelectorAll('[data-p]').forEach((el) => (el.onclick = () => { ensureAudio(); this.pick[this.i] = +el.dataset.p; sfx('pick'); this.render(); if (m.look) this.ring(2.2, false); }));
     box.querySelectorAll('[data-b]').forEach((el) => (el.onclick = () => { ensureAudio(); if (m.quiz) this.answer(+el.dataset.b === 0); }));
     const qn = box.querySelector('.kqnext'); if (qn) qn.onclick = () => { this.ctx.q++; this.render(); };
@@ -264,14 +293,24 @@ const KID = {
     const rk = box.querySelector('.krk'); if (rk) this.rocket(rk);
     box.querySelector('.kgo').onclick = () => this.go(this.i + 1);
     box.querySelector('.kskip').onclick = () => this.go(this.i + 1);
+    box.querySelectorAll('.kban .ksay2').forEach((b) => (b.onclick = () => speak(`${t[0]}. ${t[1]}`, true)));
+    const pb = box.querySelector('.kpred .ksay2'); if (pb) pb.onclick = () => { const p = m.pred[LANG] || m.pred.ko; speak(`${p[0]} ${p[1].join(', ')}`, true); };
+    const qb = box.querySelector('.kquiz .ksay2'); if (qb) qb.onclick = () => speak(this.quizSpeech(), true);
+    box.querySelector('.kwhybtn').onclick = () => { box.querySelector('.kwin').classList.toggle('open'); speak(m.quiz ? '' : m.win(), true); };
+    if (m.quiz) speakOnce(`${this.i}:q${this.ctx.q}:${this.ctx.ans[this.ctx.q] == null ? 'ask' : 'fb'}`, this.quizSpeech());
+    else if (ph !== 'predict') speakOnce(`${this.i}:play`, `${t[0]}. ${t[1]}`);
     this.update(true);
   },
   quizHTML() {
     const c = this.ctx, n = KID_QUIZ.length, q = KID_QUIZ[Math.min(c.q, n - 1)], t = q[LANG] || q.ko, a = c.ans[c.q];
     const dots = KID_QUIZ.map((_, k) => `<i class="${c.ans[k] == null ? (k === c.q ? 'cur' : '') : c.ans[k] ? 'ok' : 'no'}"></i>`).join('');
-    const fb = a == null ? '' : `<div class="kqfb ${a ? 'ok' : 'no'}"><b>${a ? KT('right') : KT('wrong')}</b> ${L2('정답은', 'Answer:')} ${q.a ? '⭕' : '❌'} — ${t[1]}</div>${c.q < n - 1 ? `<button class="kbtn main wide kqnext">${KT('qNext')}</button>` : ''}`;
-    return `<div class="kquiz"><div class="kqd">${dots}<span>${Math.min(c.q + 1, n)} / ${n}</span></div><div class="kqq">${t[0]}</div>
-      ${a == null ? `<div class="kbtns"><button class="kbtn main" data-b="0">${KT('yes')}</button><button class="kbtn main" data-b="1">${KT('no')}</button></div>` : fb}</div>`;
+    const fb = a == null ? '' : `<div class="kqfb ${a ? 'ok' : 'no'}"><i>${a ? '🎉' : '🤔'}</i><i>${q.a ? '⭕' : '❌'}</i><small>${t[1]}</small></div>${c.q < n - 1 ? `<button class="kbtn main wide kqnext">${KT('qNext')}</button>` : ''}`;
+    return `<div class="kquiz"><div class="kqd">${dots}<span>${Math.min(c.q + 1, n)} / ${n}</span></div><div class="kqq">${t[0]}<button class="ksay2" title="${L2('다시 듣기', 'Listen again')}">🔊</button></div>
+      ${a == null ? `<div class="kbtns"><button class="kbtn main" data-b="0" aria-label="${KT('yes')}">⭕</button><button class="kbtn main" data-b="1" aria-label="${KT('no')}">❌</button></div>` : fb}</div>`;
+  },
+  quizSpeech() {
+    const c = this.ctx, q = KID_QUIZ[Math.min(c.q, KID_QUIZ.length - 1)], t = q[LANG] || q.ko, a = c.ans[c.q];
+    return a == null ? `${t[0]} ${L2('맞으면 동그라미, 아니면 엑스!', 'Circle for true, cross for false!')}` : `${a ? KT('right') : KT('wrong')} ${t[1]}`;
   },
   answer(yes) {
     const c = this.ctx, q = KID_QUIZ[c.q]; if (!q || c.ans[c.q] != null) return;
@@ -315,11 +354,12 @@ const KID = {
   },
   winText(m, w) {
     const quiz = m.quiz, nOk = quiz ? this.ctx.ans.filter(Boolean).length : 0, card = m.card && CARDS.find((c) => c.k === m.card);
-    w.querySelector('.kwhy').innerHTML = quiz ? '' : m.pred ? (this.pick[this.i] === m.pred.ans ? `<b class="khit">${KT('hit')} +50</b>` : `<span class="kmiss">${KT('miss')}</span>`) : '';
+    w.querySelector('.kwhy').innerHTML = quiz ? '' : m.pred ? (this.pick[this.i] === m.pred.ans ? `<b class="khit">🎯 +50</b>` : `<span class="kmiss">😮 🔄</span>`) : '';
+    w.classList.remove('open'); speak(quiz ? w.querySelector('.kwintxt').textContent : `${L2('미션 성공!', 'Mission clear!')} ${m.win()}`);
     w.querySelector('.kwintxt').innerHTML = quiz ? L2(`퀴즈 ${nOk}/${KID_QUIZ.length} 정답! 마지막 문제: ${(KID_QUIZ.at(-1)[LANG] || KID_QUIZ.at(-1).ko)[1]}`, `Quiz: ${nOk}/${KID_QUIZ.length} correct! Last one: ${(KID_QUIZ.at(-1)[LANG] || KID_QUIZ.at(-1).ko)[1]}`) : m.win();
     const nStar = quiz ? (nOk >= KID_QUIZ.length - 1 ? 3 : nOk >= KID_QUIZ.length / 2 ? 2 : 1) : m.pred && this.pick[this.i] !== m.pred.ans ? 2 : 3;
     w.querySelectorAll('.kstars i').forEach((el, k) => { el.className = k < nStar ? 'on' : ''; el.style.animationDelay = `${0.25 + k * 0.22}s`; });
-    w.querySelector('.kgain').innerHTML = `<span><b class="kcoin">⚡</b>+100</span>${card ? `<span style="--c:${hex(card.col)}"><i></i>🃏 ${cardT(card)[0]}</span>` : ''}`;
+    w.querySelector('.kgain').innerHTML = `<span><b class="kcoin">⚡</b>+100</span>${card ? `<span class="kgcard" style="--c:${hex(card.col)}"><i></i>🃏 ${cardT(card)[0]}</span>` : ''}`;
     w.querySelector('.kgo').textContent = this.i === this.missions.length - 1 ? L2('🏆 결과 보기', '🏆 See results') : L2('바로 다음 →', 'Next now →');
     const bar = w.querySelector('.kauto div i'); bar.style.animation = 'none'; void bar.offsetWidth; bar.style.animation = `kauto ${AUTO_NEXT}s linear forwards`;
   },
@@ -462,11 +502,13 @@ function KID_INTRO(on) {
   el.classList.toggle('on', on);
   if (on) {
     const t = KT('intro');
-    el.querySelector('.box').innerHTML = `<div class="kmascot big">${quokka('win')}</div><h2>${t[0]}</h2>${t.slice(1, 5).map(([ic, tx]) => `<p class="kil"><span>${ic}</span><span>${tx}</span></p>`).join('')}
+    const tiles = isEn() ? [['👀✨', 'Forces glow'], ['📏💪', 'Long = strong'], ['🤔👆', 'Guess, then touch'], ['⭐🃏', 'Stars & cards']] : [['👀✨', '힘이 빛나요'], ['📏💪', '길면 세요'], ['🤔👆', '고르고 만져요'], ['⭐🃏', '별과 카드']];
+    el.querySelector('.box').innerHTML = `<div class="kmascot big">${quokka('win')}</div><h2>${t[0]}</h2><div class="kitiles">${tiles.map(([ic, tx]) => `<div class="kitile"><i>${ic}</i><span>${tx}</span></div>`).join('')}</div><button class="ksay2 kilisten">🔊 ${L2('설명 듣기', 'Listen')}</button>
       <div class="kimap">${KID.missions.map((m) => `<span class="${m.boss ? 'boss' : ''}">${m.icon}</span>`).join('<i></i>')}</div>
       <button class="kbtn main kstart">${t[5]} ▶</button><button class="kfull">${KT('full')}</button>`;
-    el.querySelector('.kstart').onclick = () => { ensureAudio(); KID_INTRO(false); KID.go(0); };
+    el.querySelector('.kstart').onclick = () => { ensureAudio(); if (VOICE.on) setSound(true); VOICE.key = ''; KID_INTRO(false); KID.go(0); };
     el.querySelector('.kfull').onclick = () => { KID_INTRO(false); setMode('full'); };
+    el.querySelector('.kilisten').onclick = () => speak(t.slice(1, 5).map((q) => q[1]).join(' '), true);
   }
 }
 function initKid() {
