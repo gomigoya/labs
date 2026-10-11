@@ -302,7 +302,7 @@ function update(dt) {
   // --- HUD ---
   uiT += dt;
   if (uiT > 0.08) { uiT = 0; document.getElementById('caption').innerHTML = captionFor(); UI.updateChips(); lessonUpdate(); KID.update(); }
-  UI.updateLabels(); KID.frame(dt);
+  UI.updateLabels(); KID.frame(dt); updateTheme(dt);
   audioUpdate();
   // --- 카메라·렌더 ---
   keyMove(dt); hoverUpdate(dt);
@@ -367,13 +367,13 @@ window.__lab = {
     const r = await fetch(`/__save/${name}.jpg`, { method: 'POST', body: url });
     return r.ok ? `${name}.jpg` : `fail ${r.status}`;
   },
-  quality: setQuality, mode: (m) => setMode(m), kid: { go: (i) => KID.go(i), get i() { return KID.i; }, get passed() { return KID.passed; } },
+  quality: setQuality, mode: (m) => setMode(m), kid: { go: (i) => KID.go(i), get i() { return KID.i; }, get passed() { return KID.passed; }, at(k) { const v = KID_AT[k]().project(camera); return [(v.x + 1) / 2 * innerWidth, (1 - v.y) / 2 * innerHeight]; } },
   perf() { return { avg: PERF.last, pr: renderer.getPixelRatio(), ao: PIPE.gtao.enabled, bokeh: PIPE.bokeh.enabled, calls: renderer.info.render.calls, tris: renderer.info.render.triangles }; },
 };
 
 async function init() {
   try { await Promise.race([document.fonts.ready, new Promise((r) => setTimeout(r, 2500))]); } catch {}
-  buildRoom(); buildConsole(); buildHero(); buildOverlays(); buildLights(); buildStudio(); buildPipeline(); buildCamera();
+  buildRoom(); buildConsole(); buildHero(); buildOverlays(); buildLights(); buildStudio(); buildThemes(); buildPipeline(); buildCamera();
   setFluidLook(S.fluid); setSurfaceLook(S.surface);
   tagPickables();
   UI.init();

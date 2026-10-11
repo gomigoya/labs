@@ -39,6 +39,7 @@ function onPointerDown(e) {
   if (!hit) return;
   ensureAudio();
   const k = hit.kind;
+  if (S.mode === 'kid' && kidPointer(k)) return;
   if (HANG_KINDS.includes(k) && S.station !== 'hang') setStation('hang', false);
   if (TRACK_KINDS.includes(k) && S.station !== 'track') setStation('track', false);
   if (k === 'button') { togglePlay(); CONSOLE.button.press = 1; sfx('click'); return; }
@@ -75,7 +76,7 @@ function onPointerMove(e) {
   if (DRAG.kind) {
     const k = DRAG.kind, dy = -(e.clientY - DRAG.y0) * DRAG.wpp;
     if (k === 'jack') setParam('jack', DRAG.j0 + dy);
-    else if (k === 'F1' || k === 'F2') { const p = rayOnPlaneY(e, AXIS_Y); if (p) setParam(k, DRAG.F0 + DRAG.dir * (p.x - DRAG.px0) * 20); }
+    else if (k === 'F1' || k === 'F2') { const p = rayOnPlaneY(e, AXIS_Y); if (p) { const f = DRAG.F0 + DRAG.dir * (p.x - DRAG.px0) * 20; setParam(k, S.mode === 'kid' ? Math.round(f * 2) / 2 : f); } }
     else if (k === 'sF1' || k === 'sF2') sliderFromPointer(e, k);
     else if (k === 'dialG' || k === 'dialJ') {
       const a = Math.atan2(e.clientY - DRAG.c.y, e.clientX - DRAG.c.x);
@@ -92,7 +93,7 @@ let hoverQueue = null, hoverT = 0;
 function hoverUpdate(dt) {
   hoverT += dt; if (!hoverQueue || hoverT < 0.06 || DRAG.kind) return;
   hoverT = 0; const h = pickAt(hoverQueue.x, hoverQueue.y); hoverQueue = null;
-  canvas.style.cursor = h ? (['button', 'obj', 'block', 'surface', 'hscale'].includes(h.kind) ? 'pointer' : 'grab') : '';
+  canvas.style.cursor = h && (S.mode !== 'kid' || KID.missions[KID.i]?.allow?.includes(h.kind)) ? (['button', 'obj', 'block', 'surface', 'hscale'].includes(h.kind) ? 'pointer' : 'grab') : '';
 }
 function onPointerUp(e) {
   if (!DRAG.kind) return;

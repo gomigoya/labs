@@ -109,7 +109,7 @@ const SHOTS_VERTICAL = [
 const SHOT_IDX = { hero: 0, hang: 1, beaker: 2, track: 3, top: 4, console: 5 };
 const isPortrait = () => innerWidth / innerHeight < 0.9;
 const heroShot = () => (isPortrait() ? SHOTS_VERTICAL[0] : SHOTS[0]);
-const KID_SHOTS = { track: { pos: V3(0.45, 2.55, 1.3), tgt: V3(0.45, 0.99, 0.08), fov: 40 }, hang: { pos: V3(-0.64, 1.68, 1.66), tgt: V3(-1.1, 1.34, -0.2), fov: 38 }, hero: { pos: V3(0.3, 2.6, 3.3), tgt: V3(0.1, 1.05, -0.1), fov: 42 } };
+const KID_SHOTS = { track: { pos: V3(0.45, 2.3, 1.62), tgt: V3(0.45, 0.99, 0.08), fov: 40 }, hang: { pos: V3(-0.64, 1.68, 1.66), tgt: V3(-1.1, 1.34, -0.2), fov: 38 }, hero: { pos: V3(0.3, 2.6, 3.3), tgt: V3(0.1, 1.05, -0.1), fov: 42 } };
 // 쉬운 모드: 퀘스트 카드가 화면 일부를 덮으므로 화면 중심을 카드 바깥 빈 곳으로 옮긴다
 // (넓은 화면은 카드 오른쪽, 좁은 화면은 위쪽 진행 지도와 아래 카드 사이)
 function applyViewOffset() {
@@ -196,7 +196,7 @@ function updateFocus(dt) {
     const sx = F.p.x * 0.5 + 0.5, sy = F.p.y * 0.5 + 0.5;
     x0 = Math.min(x0, sx); x1 = Math.max(x1, sx); y0 = Math.min(y0, sy); y1 = Math.max(y1, sy);
   }
-  const want = ok < 4 || S.view === 'studio' || document.body.classList.contains('hide-ui') && !kid ? 0 : kid ? 0.88 : 0.65;
+  const want = ok < 4 || S.view === 'studio' || document.body.classList.contains('hide-ui') && !kid ? 0 : kid ? 0.5 : 0.65;
   const k = 1 - Math.exp(-dt * 5);
   F.s += (want - F.s) * k; u.uFS.value = F.s;
   if (ok >= 4) {

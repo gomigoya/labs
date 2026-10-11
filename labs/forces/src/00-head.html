@@ -312,6 +312,17 @@ body.kid #hook{font-size:40px;margin:4px 0 6px}
 #kid .kcard.off i{background:rgba(255,255,255,.3);box-shadow:none}
 #kid .kcard b{color:#fff;font-weight:700}
 #kid .kfinal .kbtns{margin-top:10px}
+#kid .kreset{margin-top:10px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.06);color:#efe6db;border-radius:999px;padding:7px 14px;font:600 13px/1 var(--sans);cursor:pointer}
+#kid .kreset:hover{background:rgba(255,255,255,.14)}
+#kid .kpred.shake{animation:kshake .4s}
+@keyframes kshake{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+#kid .krocket{display:flex;align-items:center;gap:10px;margin:2px 0 10px;font:700 12px/1.2 var(--sans);text-align:center;color:#efe6db}
+#kid .krocket>span{font-size:12px;width:34px}
+#kid .krk{position:relative;flex:1;height:46px;border-radius:23px;background:linear-gradient(90deg,#3b82f6,#1e1b4b 70%,#475569);cursor:grab;touch-action:none;box-shadow:inset 0 0 0 2px rgba(255,255,255,.15)}
+#kid .krk.drag{cursor:grabbing}
+#kid .krk b{position:absolute;top:50%;width:8px;height:8px;margin:-4px 0 0 -4px;border-radius:50%;background:rgba(255,255,255,.5)}
+#kid .krk b.mars{background:#f87171}
+#kid .krk .kr{position:absolute;top:50%;font-size:30px;font-style:normal;transform:translate(-50%,-50%) rotate(45deg);filter:drop-shadow(0 0 8px rgba(253,230,138,.7));pointer-events:none;transition:left .08s}
 @keyframes kpop{from{transform:scale(.95);opacity:0}to{transform:none;opacity:1}}
 /* 위쪽 진행 지도 + 점수 */
 #kidhud{position:fixed;top:12px;left:calc(50% + 200px);transform:translateX(-50%);z-index:11;white-space:nowrap}
