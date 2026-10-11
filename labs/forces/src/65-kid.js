@@ -91,14 +91,16 @@ const PRED_PIC = {
   floor: ['🧊', '🟫', '🟰'], water: ['🔺', '🟰', '🔻'], float: ['⬇️', '🛶'], motion: ['⏩', '🐢', '🛑'],
 };
 // 만질 기구 그림
-const OBJ_PIC = { F1: '🟣', F2: '🟣', surface: '🟫', block: '📦', obj: '🔩', jack: '🛗' };
-const DIR_PIC = { '1,0': '➡️', '-1,0': '⬅️', '0,-1': '⬇️', '0,1': '⬆️' };
+// 추 그림 (윈도에서 깨지는 이모지 대신 직접 그린다)
+const WEIGHT_SVG = '<svg class="kwsvg" viewBox="0 0 40 40" aria-hidden="true"><path d="M20 3v8" stroke="#160f3a" stroke-width="3" fill="none"/><circle cx="20" cy="6" r="3.5" fill="none" stroke="#160f3a" stroke-width="2.5"/><rect x="8" y="11" width="24" height="26" rx="5" fill="#e0a83a" stroke="#160f3a" stroke-width="3"/><rect x="12" y="15" width="5" height="17" rx="2.5" fill="#ffe08a"/></svg>';
+const OBJ_PIC = { F1: '🟣', F2: '🟣', surface: '🟫', block: '📦', obj: WEIGHT_SVG, jack: '🥛' };
+const DIR_PIC = { '1,0': '➡️', '-1,0': '⬅️', '0,-1': '⬆️', '0,1': '⬇️' };
 // 할 일을 그림으로: [기구] + 손 동작(끌기 방향 / 톡 누르기)
 function kidSteps(m) {
   if (m.quiz) return '<span class="kstep"><i class="kbig">⭕</i><i class="kbig">❌</i></span>';
   if (m.widget === 'rocket') return '<span class="kstep"><i class="kobj">🌍</i><i class="kges drag r">👆</i><i class="kobj">🌙</i></span>';
   return (m.hint || []).map(([k, g, dx, dy]) => g === 'drag'
-    ? `<span class="kstep"><i class="kobj">${OBJ_PIC[k] || '❓'}</i><i class="kges drag ${dx > 0 ? 'r' : dx < 0 ? 'l' : 'd'}">👆</i><i class="kdir">${DIR_PIC[`${dx},${dy}`] || ''}</i></span>`
+    ? `<span class="kstep"><i class="kobj">${OBJ_PIC[k] || '❓'}</i><i class="kges drag ${dx > 0 ? 'r' : dx < 0 ? 'l' : dy < 0 ? 'u' : 'd'}">👆</i><i class="kdir">${DIR_PIC[`${dx},${dy}`] || ''}</i></span>`
     : `<span class="kstep"><i class="kobj">${OBJ_PIC[k] || '❓'}</i><i class="kges tap">👆</i></span>`).join('<b class="kplus">+</b>');
 }
 // 읽어 주기 (글을 못 읽는 아이도 OK)
@@ -113,7 +115,7 @@ function speak(html, force) {
   } catch (e) {}
 }
 function speakOnce(key, html) { if (VOICE.key === key) return; VOICE.key = key; speak(html); }
-const AUTO_NEXT = 7;   // 성공 팝업이 떠 있는 시간(초). 지나면 저절로 다음 퀘스트
+const AUTO_NEXT = 7.5, WIN_DELAY = 1.4;   // 성공 뒤 결과를 1.4초 지켜본 다음 팝업   // 성공 팝업이 떠 있는 시간(초). 지나면 저절로 다음 퀘스트
 const KID = {
   i: -1, done: [], hit: [], pick: [], cards: new Set(), score: 0, shown: 0, ctx: {}, passed: false,
   missions: [
@@ -241,7 +243,7 @@ const KID = {
   max() { return this.missions.length * 100 + this.missions.filter((m) => m.pred).length * 50 + KID_QUIZ.length * 50; },
   go(i) {
     if (i >= this.missions.length) { this.i = this.missions.length; this.render(); this.burst(90); sfx('win'); return; }
-    this.i = Math.max(0, i); this.ctx = {}; this.passed = false;
+    this.i = Math.max(0, i); this.ctx = {}; this.passed = false; this.showWin = false;
     const m = this.missions[this.i];
     S.overlays.K = false; UI.syncButtons();
     m.enter && m.enter();
@@ -273,7 +275,7 @@ const KID = {
   render() {
     const box = document.getElementById('kid'), M = this.missions, N = M.length;
     this.hud(); this.legend();
-    if (this.i >= N) { box.innerHTML = `<div class="kmodal"><div class="kbox"><div class="kribbon gold">${L2('최종 결과', 'Results')}</div>${this.finalHTML()}</div></div>`; box.querySelector('[data-k=again]').onclick = () => this.reset(); box.querySelector('[data-k=full]').onclick = () => setMode('full'); return; }
+    if (this.i >= N) { khBuild(); box.innerHTML = `<div class="kmodal"><div class="kbox"><div class="kribbon gold">${L2('최종 결과', 'Results')}</div>${this.finalHTML()}</div></div>`; box.querySelector('[data-k=again]').onclick = () => this.reset(); box.querySelector('[data-k=full]').onclick = () => setMode('full'); return; }
     const m = M[this.i], t = m.t[LANG] || m.t.ko, ph = this.phase(), tag = '';
     let body = '';
     if (m.quiz) body = `<div class="kmodal kquizm"><div class="kbox"><div class="kribbon">${L2('OX 퀴즈', 'O/X quiz')}</div>${this.quizHTML()}</div></div>`;
@@ -299,7 +301,7 @@ const KID = {
     box.querySelector('.kwhybtn').onclick = () => { box.querySelector('.kwin').classList.toggle('open'); speak(m.quiz ? '' : m.win(), true); };
     if (m.quiz) speakOnce(`${this.i}:q${this.ctx.q}:${this.ctx.ans[this.ctx.q] == null ? 'ask' : 'fb'}`, this.quizSpeech());
     else if (ph !== 'predict') speakOnce(`${this.i}:play`, `${t[0]}. ${t[1]}`);
-    this.update(true);
+    khBuild(); this.update(true);
   },
   quizHTML() {
     const c = this.ctx, n = KID_QUIZ.length, q = KID_QUIZ[Math.min(c.q, n - 1)], t = q[LANG] || q.ko, a = c.ans[c.q];
@@ -340,7 +342,7 @@ const KID = {
     const kr = box.querySelector('.krk .kr'); if (kr) kr.style.left = `${clamp((9.8 - S.g.tgt) / 8.2, 0, 1) * 100}%`;
     const nt = box.querySelector('.knowtxt'); if (nt) { const h = kidCaption(); if (h !== nt._h) { nt.innerHTML = h; nt._h = h; } }
     const w = box.querySelector('.kwin');
-    if (w) { w.classList.toggle('on', this.passed); if (this.passed && (force || !w.dataset.f)) { w.dataset.f = '1'; this.winText(m, w); } }
+    if (w) { w.classList.toggle('on', this.passed && this.showWin); if (this.passed && this.showWin && (force || !w.dataset.f)) { w.dataset.f = '1'; this.winText(m, w); } }
   },
   win(m) {
     this.passed = true; const first = !this.done[this.i]; this.done[this.i] = true;
@@ -350,7 +352,8 @@ const KID = {
       if (m.card && !this.cards.has(m.card)) { this.cards.add(m.card); this.after(0.7, () => this.cardPop(m.card)); }
     }
     sfx('win'); this.burst(m.boss ? 120 : 60); this.hud(); this.legend();
-    const i0 = this.i; this.after(AUTO_NEXT, () => { if (this.i === i0 && this.passed && S.mode === 'kid') this.go(this.i + 1); });
+    const i0 = this.i; this.showWin = !!m.quiz; this.after(m.quiz ? 0 : WIN_DELAY, () => { if (this.i === i0) { this.showWin = true; this.update(true); } });
+    this.after(AUTO_NEXT, () => { if (this.i === i0 && this.passed && S.mode === 'kid') this.go(this.i + 1); });
   },
   winText(m, w) {
     const quiz = m.quiz, nOk = quiz ? this.ctx.ans.filter(Boolean).length : 0, card = m.card && CARDS.find((c) => c.k === m.card);
@@ -361,7 +364,7 @@ const KID = {
     w.querySelectorAll('.kstars i').forEach((el, k) => { el.className = k < nStar ? 'on' : ''; el.style.animationDelay = `${0.25 + k * 0.22}s`; });
     w.querySelector('.kgain').innerHTML = `<span><b class="kcoin">⚡</b>+100</span>${card ? `<span class="kgcard" style="--c:${hex(card.col)}"><i></i>🃏 ${cardT(card)[0]}</span>` : ''}`;
     w.querySelector('.kgo').textContent = this.i === this.missions.length - 1 ? L2('🏆 결과 보기', '🏆 See results') : L2('바로 다음 →', 'Next now →');
-    const bar = w.querySelector('.kauto div i'); bar.style.animation = 'none'; void bar.offsetWidth; bar.style.animation = `kauto ${AUTO_NEXT}s linear forwards`;
+    const bar = w.querySelector('.kauto div i'); bar.style.animation = 'none'; void bar.offsetWidth; bar.style.animation = `kauto ${AUTO_NEXT - (m.quiz ? 0 : WIN_DELAY)}s linear forwards`;
   },
   cardPop(k) {
     const c = CARDS.find((q) => q.k === k), el = document.getElementById('kpop'); if (!el || !c || S.mode !== 'kid') return;
@@ -410,7 +413,7 @@ const KID = {
     }
     // 손 힌트: 아직 조작하지 않았거나 한동안 가만히 있으면, 끌 곳·누를 곳을 손 모양으로 보여 준다
     this.idle = (this.idle || 0) + dt;
-    if (m && m.hint && !this.passed && this.phase() === 'play' && !CAM.fly && !DRAG.kind && (!this.ctx.acted || this.idle > 7)) {
+    if (m && m.hint && !KH.items.length && !this.passed && this.phase() === 'play' && !CAM.fly && !DRAG.kind && (!this.ctx.acted || this.idle > 7)) {
       const P = (this.hintT = (this.hintT || 0) + dt), hs = m.hint, h = hs[Math.floor(P / 2.2) % hs.length], ph = (P % 2.2) / 2.2;
       const v = KID_AT[h[0]]().project(camera), x0 = (v.x + 1) / 2 * W, y0 = (1 - v.y) / 2 * H;
       const al = Math.min(1, ph * 6, (1 - ph) * 5);

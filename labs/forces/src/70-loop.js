@@ -302,7 +302,7 @@ function update(dt) {
   // --- HUD ---
   uiT += dt;
   if (uiT > 0.08) { uiT = 0; document.getElementById('caption').innerHTML = captionFor(); UI.updateChips(); lessonUpdate(); KID.update(); }
-  UI.updateLabels(); KID.frame(dt); updateTheme(dt);
+  UI.updateLabels(); KID.frame(dt); khFrame(); updateTheme(dt);
   audioUpdate();
   // --- 카메라·렌더 ---
   keyMove(dt); hoverUpdate(dt);

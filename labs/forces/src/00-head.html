@@ -609,6 +609,9 @@ body.kid #modeBtn{font:400 13px/1 var(--kbody);background:rgba(22,15,58,.8);bord
 @keyframes kdragr{0%,15%{transform:translateX(-6px)}70%,100%{transform:translateX(16px)}}
 @keyframes kdragl{0%,15%{transform:translateX(6px) scaleX(-1)}70%,100%{transform:translateX(-16px) scaleX(-1)}}
 @keyframes kdragd{0%,15%{transform:translateY(-6px)}70%,100%{transform:translateY(10px)}}
+#kid .kges.drag.u{animation:kdragu 1.4s ease-in-out infinite}
+@keyframes kdragu{0%,15%{transform:translateY(6px)}70%,100%{transform:translateY(-10px)}}
+.kwsvg{width:1em;height:1em;display:inline-block;vertical-align:middle}
 @keyframes ktap{0%,100%{transform:translateY(0) scale(1)}45%{transform:translateY(6px) scale(.88)}}
 #kid .kban .ksay{display:none}
 #kid .kfoot .know{display:none}
@@ -646,6 +649,64 @@ body.kid #modeBtn{font:400 13px/1 var(--kbody);background:rgba(22,15,58,.8);bord
   #kid .kopt{min-height:96px} #kid .kopt>i{font-size:40px} #kid .kopt span{font-size:12px}
   #kidIntro .kitiles{grid-template-columns:repeat(2,1fr)}
 }
+
+/* ===== 쉬운 모드: 장면 속 손잡이 ===== */
+#khandles{position:fixed;inset:0;pointer-events:none;z-index:11;transition:opacity .25s}
+#khandles.off{opacity:0}
+#khandles.off *{pointer-events:none!important}
+body:not(.kid) #khandles{display:none}
+.kh{font-family:var(--kbody)}
+.khrail .khbar{position:absolute;height:16px;transform-origin:0 50%;border:3px solid var(--ki);border-radius:10px;background:rgba(255,255,255,.75);box-shadow:0 3px 0 rgba(22,15,58,.6)}
+.khrail .khfill{position:absolute;left:0;top:0;bottom:0;border-radius:6px;background:linear-gradient(180deg,#c4b5fd,#7c5cf0)}
+.khrail.water .khfill{background:linear-gradient(180deg,#7dd3fc,#1e93e6)}
+.khrail.water .khbar{height:14px}
+.khtick{position:absolute;top:100%;width:2px;height:7px;margin-left:-1px;background:var(--ki)}
+.khtick em{position:absolute;top:8px;left:50%;transform:translateX(-50%);font:400 13px/1 var(--kdisp);font-style:normal;color:#fff;text-shadow:0 1px 0 var(--ki),1px 0 0 var(--ki),-1px 0 0 var(--ki),0 -1px 0 var(--ki)}
+.khbar.flip .khtick em{transform:translateX(-50%) rotate(180deg)}
+.khgoal{position:absolute;bottom:100%;margin-left:-4px;font-size:22px;line-height:1;transform-origin:4px 100%}
+.khbar.flip .khgoal{transform:rotate(180deg) translateY(-100%)}
+.khknob{position:absolute;width:62px;height:62px;margin:-31px 0 0 -31px;border-radius:50%;border:4px solid var(--ki);background:radial-gradient(circle at 35% 30%,#fff,#e9e2ff 70%);box-shadow:0 5px 0 var(--ki),0 0 0 6px rgba(196,181,253,.45);font-size:30px;line-height:1;cursor:grab;touch-action:none;pointer-events:auto;padding:0;display:grid;place-items:center;transition:transform .12s}
+.khknob:hover{transform:scale(1.08)}
+.khrail.drag .khknob{cursor:grabbing;transform:scale(1.15);box-shadow:0 3px 0 var(--ki),0 0 0 10px rgba(255,224,102,.55)}
+.khrail.water .khknob{box-shadow:0 5px 0 var(--ki),0 0 0 6px rgba(125,211,252,.5)}
+#khandles.fresh .khknob,#khandles.fresh .khpick,#khandles.fresh .khstep{animation:khpulse 1.3s ease-in-out infinite}
+@keyframes khpulse{0%,100%{filter:none}50%{filter:drop-shadow(0 0 12px #ffe066) drop-shadow(0 0 4px #ffe066)}}
+.khval{position:absolute;transform:translate(-50%,-78px);font:400 24px/1 var(--kdisp);color:var(--ki);background:#fff;border:3px solid var(--ki);border-radius:12px;padding:5px 10px 4px;box-shadow:0 3px 0 var(--ki);white-space:nowrap;pointer-events:none}
+.khval:empty{display:none}
+.khrail.drag .khval{background:var(--ky1);transform:translate(-50%,-84px) scale(1.12)}
+.khpick,.khstep{position:absolute;transform:translate(-50%,-50%);display:flex;gap:6px;padding:6px;background:var(--ki);border-radius:20px;box-shadow:0 5px 0 rgba(0,0,0,.35);pointer-events:auto}
+.khpick button{display:flex;flex-direction:column;align-items:center;gap:2px;min-width:62px;padding:6px 6px 5px;border:3px solid transparent;border-radius:14px;background:#2c1d7a;color:#d9d0ff;font:400 12px/1 var(--kbody);cursor:pointer}
+.khpick button i{font-style:normal;font-size:28px;line-height:1}
+.khpick button.on{background:#fff;color:var(--ki);border-color:var(--ky2);transform:translateY(-3px)}
+.khstep button{width:46px;height:46px;border-radius:50%;border:3px solid var(--ki);background:linear-gradient(180deg,var(--ky1),var(--ky2));font-size:20px;line-height:1;cursor:pointer;box-shadow:inset 0 2px 0 rgba(255,255,255,.5)}
+.khstep button:active{transform:translateY(2px)}
+.khstep button:disabled{filter:grayscale(1);opacity:.4;cursor:default}
+.khcount{display:flex;align-items:center;gap:4px;padding:0 6px;color:#fff;font:400 24px/1 var(--kdisp)}
+.khcount i{font-style:normal;font-size:24px}
+.khghost{position:absolute;font-style:normal;font-size:34px;line-height:1;pointer-events:none;opacity:0;margin:-4px 0 0 -10px;filter:drop-shadow(0 3px 2px rgba(0,0,0,.5));z-index:2}
+#khandles.fresh .khghost{animation:khghost 1.8s ease-in-out infinite}
+.khrail.drag .khghost{display:none}
+@keyframes khghost{0%{opacity:0;transform:translate(0,0) scale(1.1)}15%{opacity:1;transform:translate(0,0) scale(.9)}75%{opacity:1;transform:translate(var(--gx),var(--gy)) scale(.9)}100%{opacity:0;transform:translate(var(--gx),var(--gy)) scale(1)}}
+@media (max-width:980px){.khknob{width:52px;height:52px;margin:-26px 0 0 -26px;font-size:24px}.khpick button{min-width:52px}}
+
+/* 미션 성공: 실험 장면을 가리지 않는 아래쪽 띠 */
+#kid .kwin{bottom:14px;width:min(820px,calc(100vw - 32px))}
+#kid .kwin .kbox{display:flex;align-items:center;flex-wrap:wrap;gap:10px 14px;padding:22px 18px 22px 96px;text-align:left;max-height:none}
+#kid .kwin .kribbon{left:96px;transform:rotate(-2deg);font-size:20px;padding:7px 18px 8px;top:-20px}
+#kid .kwin .kribbon.gold{animation:none}
+#kid .kwin .kmascot.sm{left:4px;top:-26px;width:84px;height:84px}
+#kid .kwin .kstars{margin:0;gap:3px}
+#kid .kwin .kstars i{width:34px;height:34px}
+#kid .kwin .kstars i:nth-child(2){width:44px;height:44px;margin-bottom:6px}
+#kid .kwin .kwhy{margin:0}
+#kid .kwin .kgain{margin:0}
+#kid .kwin .kwhybtn{margin:0}
+#kid .kwin .kgo{width:auto;margin-left:auto;padding:12px 22px}
+#kid .kwin .kauto{position:absolute;left:96px;right:18px;bottom:7px;margin:0}
+#kid .kwin .kauto span{display:none}
+#kid .kwin .kauto div{height:9px;border-width:2px}
+#kid .kwin .kwintxt{position:absolute;left:0;right:0;bottom:calc(100% + 34px);margin:0;background:#fff;color:var(--ki);border:3px solid var(--ki);box-shadow:0 5px 0 var(--ki)}
+@media (max-width:980px){#kid .kwin .kbox{padding:20px 12px 20px 74px}#kid .kwin .kmascot.sm{width:64px;height:64px;top:-18px}#kid .kwin .kribbon{left:74px}#kid .kwin .kauto{left:74px}#kid .kwin .kgo{margin-left:0;width:100%}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 <script type="importmap">
