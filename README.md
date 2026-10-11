@@ -31,7 +31,11 @@ node tools/serve.mjs --root dist
 
 `--all`을 붙이면 숨김 실험실과 `_demo`까지 빌드한다. 서버 기본 주소는 http://localhost:5180 이다.
 
-## 배포 (Cloudflare Pages)
+## 배포 (Cloudflare Pages + Worker)
+
+사이트 주소는 `https://quokkalabs.co.kr/education/`이다(`site.config.json`의 `domain` + `basePath`).
+빌드 결과는 `dist/education/`에 생기고, 로컬 서버도 `/education/` 아래에서 확인한다.
+메인 사이트(Railway)는 그대로 두고, `/education*` 요청만 Worker(`tools/edu-proxy/`)가 Pages로 넘긴다.
 
 처음 한 번만 사용자가 로그인한다.
 
@@ -39,14 +43,19 @@ node tools/serve.mjs --root dist
 npx wrangler login
 ```
 
-이후 배포는 아래 명령 하나로 끝난다.
+사이트를 올린다(`lumebench.pages.dev`).
 
 ```bash
 npm run deploy
 ```
 
-배포 후 Cloudflare 대시보드에서 Pages 프로젝트 `lumebench`에 구매한 도메인을 연결하고, `site.config.json`의 `domain`을 채운 뒤 한 번 더 배포한다.
-그래야 sitemap.xml과 canonical, 공유 미리보기 주소가 생긴다.
+처음 한 번, `/education` 경로를 Pages로 연결하는 Worker를 올린다.
+
+```bash
+npm run deploy:proxy
+```
+
+Worker 경로가 동작하려면 Cloudflare DNS에서 `quokkalabs.co.kr` 레코드가 프록시(주황 구름) 상태여야 한다.
 
 ## 새 실험실 추가
 
@@ -68,3 +77,4 @@ npm run deploy
 - 2026-10-11: 공통 메뉴는 데스크톱 왼쪽 아래, 모바일 오른쪽 위. 실험실 HUD 규칙에서 비어 있는 자리다.
 - 2026-10-11: 저사양 자동 판정은 deviceMemory ≤ 4GB만 쓴다. CPU 코어 수 기준은 일반 노트북까지 걸려서 뺐다.
 - 2026-10-11: 브랜드 가칭 Lumebench. 후보와 근거는 docs/brand-names.md.
+- 2026-10-11: 주소는 quokkalabs.co.kr/education. 메인 사이트(Railway)를 건드리지 않도록 /education*만 Worker로 Pages에 연결한다.

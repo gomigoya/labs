@@ -5,9 +5,10 @@
     "taglineKo": "보이지 않는 과학을, 손으로 돌려 보는 실험실",
     "taglineEn": "Hands-on labs that make invisible science visible"
   },
-  "domain": "",
+  "domain": "quokkalabs.co.kr",
+  "basePath": "/education",
   "cloudflareAnalyticsToken": "",
   "requestFormUrl": "",
   "waitlistFormUrl": "",
-  "contactEmail": ""
+  "contactEmail": "skue1004@gmail.com"
 }

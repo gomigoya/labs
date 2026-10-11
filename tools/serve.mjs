@@ -9,7 +9,7 @@ import path from 'node:path';
 const arg = (name, def) => { const i = process.argv.indexOf(`--${name}`); return i > 0 ? process.argv[i + 1] : def; };
 const ROOT = path.resolve(arg('root', 'dist'));
 const SHOTS = path.resolve(arg('shots', 'shots'));
-let port = Number(arg('port', 5180));
+let port = Number(arg('port', process.env.PORT || 5180));
 
 const TYPES = {
   '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.mjs': 'text/javascript; charset=utf-8',

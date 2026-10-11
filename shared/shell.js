@@ -80,13 +80,13 @@
       return b;
     };
 
-    btn(t('← 모든 실험실', '← All labs'), null, { href: '/', short: '←' });
+    btn(t('← 모든 실험실', '← All labs'), null, { href: (site.base || '') + '/', short: '←' });
     btn(t('공유', 'Share'), share);
     btn(t('저사양', 'Lite'), () => setLite(site.quality !== 'low'), { pressed: site.quality === 'low' });
     if (site.requestFormUrl) {
       // 폼의 숨은 필드(lab, lang)로 어느 실험실에서 왔는지 기록한다 (docs/forms.md)
       const u = new URL(site.requestFormUrl);
-      u.searchParams.set('lab', location.pathname.split('/').filter(Boolean)[0] || 'home');
+      u.searchParams.set('lab', location.pathname.slice((site.base || '').length).split('/').filter(Boolean)[0] || 'home');
       u.searchParams.set('lang', lang);
       btn(t('기관용 의뢰', 'For institutions'), null, { href: u.toString(), external: true, hideMobile: true });
     }

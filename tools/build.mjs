@@ -15,7 +15,11 @@ const SKIP = new Set(['shots', 'docs', 'node_modules', 'meta.json', 'src', 'tool
 const SKIP_EXT = new Set(['.ps1', '.md']);
 
 const cfg = JSON.parse(fs.readFileSync(path.join(ROOT, 'site.config.json'), 'utf8'));
-const origin = cfg.domain ? `https://${cfg.domain.replace(/^https?:\/\//, '').replace(/\/$/, '')}` : '';
+// basePath: 사이트가 도메인 하위 경로에 붙을 때('/education'). 산출물도 dist/<basePath>/에 만들어
+// 로컬 서버·Pages·도메인 어디서나 같은 주소 구조를 쓴다.
+const BASE = (cfg.basePath || '').replace(/\/+$/, '').replace(/^(?!\/|$)/, '/');
+const OUT = path.join(DIST, BASE);
+const origin = cfg.domain ? `https://${cfg.domain.replace(/^https?:\/\//, '').replace(/\/$/, '')}${BASE}` : '';
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 
 function copyDir(src, dst) {
@@ -31,6 +35,7 @@ function copyDir(src, dst) {
 // 사이트 전역 설정. 실험실 코드는 window.__SITE__.quality ('high' | 'low')를 읽어 AO·보케·블룸을 끈다.
 const publicCfg = {
   brand: cfg.brand,
+  base: BASE,
   requestFormUrl: cfg.requestFormUrl || '',
   waitlistFormUrl: cfg.waitlistFormUrl || '',
 };
@@ -57,12 +62,12 @@ function ogTags(meta, url, image) {
 
 function injectLab(html, meta, slug, hasThumb) {
   const url = origin ? `${origin}/${slug}/` : '';
-  const image = hasThumb ? (origin ? `${origin}/${slug}/thumb.jpg` : `/${slug}/thumb.jpg`) : '';
+  const image = hasThumb ? (origin ? `${origin}/${slug}/thumb.jpg` : `${BASE}/${slug}/thumb.jpg`) : '';
   const hasOg = /property=["']og:title["']/i.test(html);
   const head = headSnippet + (hasOg ? '' : '\n' + ogTags(meta, url, image));
   if (/<head[^>]*>/i.test(html)) html = html.replace(/<head[^>]*>/i, (m) => `${m}\n${head}`);
   else html = head + html;
-  const tail = `<script src="/_shared/shell.js" defer></script>${analytics}`;
+  const tail = `<script src="${BASE}/_shared/shell.js" defer></script>${analytics}`;
   if (/<\/body>/i.test(html)) html = html.replace(/<\/body>(?![\s\S]*<\/body>)/i, `${tail}\n</body>`);
   else html += tail;
   return html;
@@ -93,9 +98,9 @@ function galleryHtml(labs) {
   const cards = labs.map(({ meta, hasThumb }) => {
     const [sk, se] = SUBJECT[meta.subject] || [meta.subject, meta.subject];
     const thumb = hasThumb
-      ? `<img src="/${esc(meta.slug)}/thumb.jpg" alt="" loading="lazy">`
+      ? `<img src="${BASE}/${esc(meta.slug)}/thumb.jpg" alt="" loading="lazy">`
       : `<div class="ph" aria-hidden="true"></div>`;
-    return `<a class="card" href="/${esc(meta.slug)}/">
+    return `<a class="card" href="${BASE}/${esc(meta.slug)}/">
   <div class="thumb">${thumb}${meta.reviewed ? `<span class="badge" data-ko="검수 완료" data-en="Expert-reviewed">검수 완료</span>` : ''}</div>
   <div class="body">
     <div class="kicker"><span data-ko="${esc(sk)}" data-en="${esc(se)}">${esc(sk)}</span> · <span data-ko="${esc(meta.curriculumKo)}" data-en="${esc(meta.curriculumEn)}">${esc(meta.curriculumKo)}</span></div>
@@ -166,7 +171,7 @@ footer a{color:var(--quiet)}
 <body>
 <div class="wrap">
 <header>
-  <a class="logo" href="/">${esc(b.name.slice(0, 4))}<span>${esc(b.name.slice(4))}</span></a>
+  <a class="logo" href="${BASE}/">${esc(b.name.slice(0, 4))}<span>${esc(b.name.slice(4))}</span></a>
   <div class="lang" role="group" aria-label="Language">
     <button type="button" data-lang="ko" aria-pressed="true">KO</button>
     <button type="button" data-lang="en" aria-pressed="false">EN</button>
@@ -210,25 +215,27 @@ ${analytics}
 // ---- 빌드 ----
 fs.rmSync(DIST, { recursive: true, force: true });
 fs.mkdirSync(DIST, { recursive: true });
-copyDir(path.join(ROOT, 'shared'), path.join(DIST, '_shared'));
+copyDir(path.join(ROOT, 'shared'), path.join(OUT, '_shared'));
 
 const labs = readLabs();
 for (const { meta, dir, hasThumb } of labs) {
-  const out = path.join(DIST, meta.slug);
+  const out = path.join(OUT, meta.slug);
   copyDir(dir, out);
   const file = path.join(out, 'index.html');
   fs.writeFileSync(file, injectLab(fs.readFileSync(file, 'utf8'), meta, meta.slug, hasThumb));
-  console.log(`✓ /${meta.slug}/  ${meta.titleKo}${hasThumb ? '' : '  (thumb.jpg 없음)'}`);
+  console.log(`✓ ${BASE}/${meta.slug}/  ${meta.titleKo}${hasThumb ? '' : '  (thumb.jpg 없음)'}`);
 }
 
-fs.writeFileSync(path.join(DIST, 'index.html'), galleryHtml(labs));
-fs.writeFileSync(path.join(DIST, 'robots.txt'), `User-agent: *\nAllow: /\n${origin ? `Sitemap: ${origin}/sitemap.xml\n` : ''}`);
+fs.writeFileSync(path.join(OUT, 'index.html'), galleryHtml(labs));
+// 하위 경로 배포일 때 dist 루트(*.pages.dev 첫 화면, 로컬 서버 /)는 갤러리로 넘긴다
+if (BASE) fs.writeFileSync(path.join(DIST, 'index.html'), `<!doctype html><meta charset="utf-8"><meta http-equiv="refresh" content="0;url=${BASE}/"><link rel="canonical" href="${origin || BASE}/"><a href="${BASE}/">${esc(cfg.brand.name)}</a>\n`);
+fs.writeFileSync(path.join(OUT, 'robots.txt'), `User-agent: *\nAllow: /\n${origin ? `Sitemap: ${origin}/sitemap.xml\n` : ''}`);
 if (origin) {
   const today = new Date().toISOString().slice(0, 10);
   const urls = ['', ...labs.map((l) => `${l.meta.slug}/`)].map((p) => `  <url><loc>${origin}/${p}</loc><lastmod>${today}</lastmod></url>`).join('\n');
-  fs.writeFileSync(path.join(DIST, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`);
+  fs.writeFileSync(path.join(OUT, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`);
 } else {
   console.warn('! site.config.json의 domain이 비어 있어 sitemap.xml과 canonical을 만들지 않았습니다');
 }
-fs.writeFileSync(path.join(DIST, '_headers'), `/*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n/_shared/*\n  Cache-Control: public, max-age=3600\n`);
-console.log(`완료: 실험실 ${labs.length}개 → dist/`);
+fs.writeFileSync(path.join(DIST, '_headers'), `/*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n${BASE}/_shared/*\n  Cache-Control: public, max-age=3600\n`);
+console.log(`완료: 실험실 ${labs.length}개 → dist${BASE}/`);

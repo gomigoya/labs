@@ -6,6 +6,7 @@
     "build": "node tools/build.mjs",
     "build:all": "node tools/build.mjs --all",
     "serve": "node tools/serve.mjs --root dist",
-    "deploy": "node tools/build.mjs && npx wrangler pages deploy dist --project-name lumebench"
+    "deploy": "node tools/build.mjs && npx wrangler pages deploy dist --project-name lumebench",
+    "deploy:proxy": "npx wrangler deploy --config tools/edu-proxy/wrangler.toml"
   }
 }
