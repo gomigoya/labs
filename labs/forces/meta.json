@@ -1,0 +1,13 @@
+{
+  "slug": "forces",
+  "status": "live",
+  "order": 2,
+  "subject": "physics",
+  "titleKo": "힘의 작용",
+  "titleEn": "How Forces Act",
+  "hookKo": "보이지 않던 힘이 화살표로 보인다",
+  "hookEn": "Every invisible push and pull, drawn as glowing arrows",
+  "curriculumKo": "중1~3 과학 · 힘의 작용 (9과05-01~04)",
+  "curriculumEn": "Middle school science · Forces",
+  "reviewed": false
+}
