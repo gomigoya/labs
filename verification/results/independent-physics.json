@@ -1,0 +1,37 @@
+[
+  {
+    "name": "collinear balance",
+    "R": 4.898587196589413e-16,
+    "torque": 0,
+    "pass": true
+  },
+  {
+    "name": "couple",
+    "R": 4.898587196589413e-16,
+    "torque": -5.2,
+    "pass": true
+  },
+  {
+    "name": "3-4-5 triangle",
+    "R": 1.6011864169946886e-15,
+    "torque": 0,
+    "pass": true
+  },
+  {
+    "name": "moving equilibrium",
+    "x": 0.9999999999999989,
+    "vx": 1,
+    "pass": true
+  },
+  {
+    "name": "mass inverse acceleration",
+    "a2kg": 2,
+    "a4kg": 1,
+    "pass": true
+  },
+  {
+    "name": "rotated application points",
+    "torque": 0,
+    "pass": true
+  }
+]

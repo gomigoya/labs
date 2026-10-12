@@ -1,0 +1,75 @@
+{
+  "duration": 5012.300000190735,
+  "physics": {
+    "forces": [
+      {
+        "x": 8,
+        "y": 0,
+        "mag": 8,
+        "angle": 0,
+        "r": {
+          "x": 0,
+          "y": 0
+        }
+      },
+      {
+        "x": 8,
+        "y": 0,
+        "mag": 8,
+        "angle": 0,
+        "r": {
+          "x": 0,
+          "y": 0
+        }
+      },
+      {
+        "x": 8,
+        "y": 0,
+        "mag": 8,
+        "angle": 0,
+        "r": {
+          "x": 0,
+          "y": 0
+        }
+      }
+    ],
+    "R": {
+      "x": 24,
+      "y": 0
+    },
+    "resultant": 24,
+    "torque": 0,
+    "mass": 2,
+    "inertia": 1.2066666666666668,
+    "a": {
+      "x": 12,
+      "y": 0
+    },
+    "alpha": 0,
+    "equilibrium": false
+  },
+  "fps": 59.98200539838053,
+  "quality": "low",
+  "drawCalls": 316,
+  "triangles": 183971,
+  "ao": false,
+  "dof": false,
+  "pixelRatio": 1,
+  "bloom": [
+    360,
+    225
+  ],
+  "shadow": 1024,
+  "particles": 72,
+  "quest": {
+    "i": 0,
+    "passed": [],
+    "phase": "done",
+    "picked": null,
+    "elapsed": 0.387276,
+    "stable": 0,
+    "changed": true,
+    "observed": null
+  },
+  "errors": []
+}

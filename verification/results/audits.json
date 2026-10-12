@@ -1,0 +1,315 @@
+{
+  "results": [
+    {
+      "mode": "explore",
+      "i": 0,
+      "phases": [
+        {
+          "phase": "intro",
+          "words": []
+        },
+        {
+          "phase": "predict",
+          "words": []
+        },
+        {
+          "phase": "manipulate",
+          "words": []
+        },
+        {
+          "phase": "observe",
+          "words": []
+        },
+        {
+          "phase": "compare",
+          "words": []
+        },
+        {
+          "phase": "principle",
+          "words": []
+        }
+      ],
+      "passed": true
+    },
+    {
+      "mode": "explore",
+      "i": 1,
+      "phases": [
+        {
+          "phase": "intro",
+          "words": []
+        },
+        {
+          "phase": "predict",
+          "words": []
+        },
+        {
+          "phase": "manipulate",
+          "words": []
+        },
+        {
+          "phase": "observe",
+          "words": []
+        },
+        {
+          "phase": "compare",
+          "words": []
+        },
+        {
+          "phase": "principle",
+          "words": []
+        }
+      ],
+      "passed": true
+    },
+    {
+      "mode": "explore",
+      "i": 2,
+      "phases": [
+        {
+          "phase": "intro",
+          "words": []
+        },
+        {
+          "phase": "predict",
+          "words": []
+        },
+        {
+          "phase": "manipulate",
+          "words": []
+        },
+        {
+          "phase": "observe",
+          "words": []
+        },
+        {
+          "phase": "compare",
+          "words": []
+        },
+        {
+          "phase": "principle",
+          "words": []
+        }
+      ],
+      "passed": true
+    },
+    {
+      "mode": "explore",
+      "i": 3,
+      "phases": [
+        {
+          "phase": "intro",
+          "words": []
+        },
+        {
+          "phase": "predict",
+          "words": []
+        },
+        {
+          "phase": "manipulate",
+          "words": []
+        },
+        {
+          "phase": "observe",
+          "words": []
+        },
+        {
+          "phase": "compare",
+          "words": []
+        },
+        {
+          "phase": "principle",
+          "words": []
+        }
+      ],
+      "passed": true
+    },
+    {
+      "mode": "explore",
+      "i": 4,
+      "phases": [
+        {
+          "phase": "intro",
+          "words": []
+        },
+        {
+          "phase": "predict",
+          "words": []
+        },
+        {
+          "phase": "manipulate",
+          "words": []
+        },
+        {
+          "phase": "observe",
+          "words": []
+        },
+        {
+          "phase": "compare",
+          "words": []
+        },
+        {
+          "phase": "principle",
+          "words": []
+        }
+      ],
+      "passed": true
+    },
+    {
+      "mode": "present",
+      "i": 0,
+      "phases": [
+        {
+          "phase": "intro",
+          "words": []
+        },
+        {
+          "phase": "predict",
+          "words": []
+        },
+        {
+          "phase": "manipulate",
+          "words": []
+        },
+        {
+          "phase": "observe",
+          "words": []
+        },
+        {
+          "phase": "compare",
+          "words": []
+        },
+        {
+          "phase": "principle",
+          "words": []
+        }
+      ],
+      "passed": true
+    },
+    {
+      "mode": "present",
+      "i": 1,
+      "phases": [
+        {
+          "phase": "intro",
+          "words": []
+        },
+        {
+          "phase": "predict",
+          "words": []
+        },
+        {
+          "phase": "manipulate",
+          "words": []
+        },
+        {
+          "phase": "observe",
+          "words": []
+        },
+        {
+          "phase": "compare",
+          "words": []
+        },
+        {
+          "phase": "principle",
+          "words": []
+        }
+      ],
+      "passed": true
+    },
+    {
+      "mode": "present",
+      "i": 2,
+      "phases": [
+        {
+          "phase": "intro",
+          "words": []
+        },
+        {
+          "phase": "predict",
+          "words": []
+        },
+        {
+          "phase": "manipulate",
+          "words": []
+        },
+        {
+          "phase": "observe",
+          "words": []
+        },
+        {
+          "phase": "compare",
+          "words": []
+        },
+        {
+          "phase": "principle",
+          "words": []
+        }
+      ],
+      "passed": true
+    },
+    {
+      "mode": "present",
+      "i": 3,
+      "phases": [
+        {
+          "phase": "intro",
+          "words": []
+        },
+        {
+          "phase": "predict",
+          "words": []
+        },
+        {
+          "phase": "manipulate",
+          "words": []
+        },
+        {
+          "phase": "observe",
+          "words": []
+        },
+        {
+          "phase": "compare",
+          "words": []
+        },
+        {
+          "phase": "principle",
+          "words": []
+        }
+      ],
+      "passed": true
+    },
+    {
+      "mode": "present",
+      "i": 4,
+      "phases": [
+        {
+          "phase": "intro",
+          "words": []
+        },
+        {
+          "phase": "predict",
+          "words": []
+        },
+        {
+          "phase": "manipulate",
+          "words": []
+        },
+        {
+          "phase": "observe",
+          "words": []
+        },
+        {
+          "phase": "compare",
+          "words": []
+        },
+        {
+          "phase": "principle",
+          "words": []
+        }
+      ],
+      "passed": true
+    }
+  ],
+  "errors": []
+}
