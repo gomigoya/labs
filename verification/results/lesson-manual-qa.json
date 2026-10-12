@@ -1,0 +1,24 @@
+{
+  "date": "2026-10-13",
+  "browser": "Codex in-app browser Chromium",
+  "desktop": [
+    1050,
+    892
+  ],
+  "mobile": [
+    390,
+    844
+  ],
+  "checks": {
+    "manualDesktopButtons": "object → two arrows → predictions → three trials → evidence explanation",
+    "mobileCanvasDrag": "two drawn arrows checked correct",
+    "teacherImport": "English page imported synthetic JSON; all dimensions and trial values rendered",
+    "wordless": "all six stage snapshots returned no visible words",
+    "regression": "three controls practices and five original quests completed"
+  },
+  "limits": [
+    "Actual child usability study not performed",
+    "4 GB integrated-GPU hardware not available",
+    "Specific earlier publisher handbook edition not located"
+  ]
+}

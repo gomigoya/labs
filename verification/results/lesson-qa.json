@@ -1,0 +1,631 @@
+{
+  "checks": [
+    {
+      "name": "trial-1",
+      "pass": true,
+      "detail": {
+        "trial": {
+          "id": 1,
+          "magnitude": 1,
+          "fixedMagnitude": 2,
+          "mass": 1,
+          "angles": [
+            0,
+            180
+          ],
+          "applicationPoints": [
+            0,
+            0
+          ],
+          "initialVelocity": 0,
+          "prediction": 1,
+          "resultant": -1,
+          "observedDirection": -1,
+          "x": -0.7249999999999998,
+          "vx": -1.1999999999999982,
+          "elapsed": 1.1999999999999982,
+          "controlled": true
+        },
+        "expected": {
+          "R": -1,
+          "v": -1.1999999999999982,
+          "x": -0.7199999999999979
+        },
+        "forces": [
+          {
+            "mag": 1,
+            "angle": 0,
+            "attach": 0
+          },
+          {
+            "mag": 2,
+            "angle": 180,
+            "attach": 0
+          },
+          {
+            "mag": 0,
+            "angle": 0,
+            "attach": 0
+          }
+        ]
+      }
+    },
+    {
+      "name": "trial-2",
+      "pass": true,
+      "detail": {
+        "trial": {
+          "id": 2,
+          "magnitude": 2,
+          "fixedMagnitude": 2,
+          "mass": 1,
+          "angles": [
+            0,
+            180
+          ],
+          "applicationPoints": [
+            0,
+            0
+          ],
+          "initialVelocity": 0,
+          "prediction": 1,
+          "resultant": 0,
+          "observedDirection": 0,
+          "x": 0,
+          "vx": 0,
+          "elapsed": 1.1999999999999982,
+          "controlled": true
+        },
+        "expected": {
+          "R": 0,
+          "v": 0,
+          "x": 0
+        },
+        "forces": [
+          {
+            "mag": 2,
+            "angle": 0,
+            "attach": 0
+          },
+          {
+            "mag": 2,
+            "angle": 180,
+            "attach": 0
+          },
+          {
+            "mag": 0,
+            "angle": 0,
+            "attach": 0
+          }
+        ]
+      }
+    },
+    {
+      "name": "trial-4",
+      "pass": true,
+      "detail": {
+        "trial": {
+          "id": 3,
+          "magnitude": 4,
+          "fixedMagnitude": 2,
+          "mass": 1,
+          "angles": [
+            0,
+            180
+          ],
+          "applicationPoints": [
+            0,
+            0
+          ],
+          "initialVelocity": 0,
+          "prediction": 1,
+          "resultant": 2,
+          "observedDirection": 1,
+          "x": 1.4499999999999995,
+          "vx": 2.3999999999999964,
+          "elapsed": 1.1999999999999982,
+          "controlled": true
+        },
+        "expected": {
+          "R": 2,
+          "v": 2.3999999999999964,
+          "x": 1.4399999999999957
+        },
+        "forces": [
+          {
+            "mag": 4,
+            "angle": 0,
+            "attach": 0
+          },
+          {
+            "mag": 2,
+            "angle": 180,
+            "attach": 0
+          },
+          {
+            "mag": 0,
+            "angle": 0,
+            "attach": 0
+          }
+        ]
+      }
+    },
+    {
+      "name": "explanation-and-revision",
+      "pass": true,
+      "detail": [
+        {
+          "evidenceId": 1,
+          "reason": "no-forces",
+          "correct": {
+            "evidence": false,
+            "reason": false
+          }
+        },
+        {
+          "evidenceId": 2,
+          "reason": "equal-opposite",
+          "correct": {
+            "evidence": true,
+            "reason": true
+          }
+        }
+      ]
+    },
+    {
+      "name": "transfer-and-assessment",
+      "pass": true,
+      "detail": {
+        "kind": "proposed-formative-rubric",
+        "scale": [
+          0,
+          1,
+          2
+        ],
+        "predictionPenalized": false,
+        "scores": {
+          "body": 1,
+          "representation": 2,
+          "investigation": 2,
+          "explanation": 2,
+          "transfer": 2
+        },
+        "teacherExplanation": "학생의 마지막 응답과 실험 증거를 바탕으로 한 보조 점검. 구두 설명·실제 실험·교사의 관찰로 보완하며 공식 성취수준 판정이 아님."
+      }
+    },
+    {
+      "name": "unpenalized-prediction",
+      "pass": true,
+      "detail": {
+        "id": 1,
+        "magnitude": 1,
+        "fixedMagnitude": 2,
+        "mass": 1,
+        "angles": [
+          0,
+          180
+        ],
+        "applicationPoints": [
+          0,
+          0
+        ],
+        "initialVelocity": 0,
+        "prediction": 1,
+        "resultant": -1,
+        "observedDirection": -1,
+        "x": -0.7249999999999998,
+        "vx": -1.1999999999999982,
+        "elapsed": 1.1999999999999982,
+        "controlled": true
+      }
+    },
+    {
+      "name": "wordless",
+      "pass": true,
+      "detail": [
+        {
+          "stage": 1,
+          "words": []
+        },
+        {
+          "stage": 3,
+          "words": []
+        },
+        {
+          "stage": 3,
+          "words": []
+        },
+        {
+          "stage": 3,
+          "words": []
+        },
+        {
+          "stage": 4,
+          "words": []
+        },
+        {
+          "stage": 5,
+          "words": []
+        }
+      ]
+    },
+    {
+      "name": "reload-local-record",
+      "pass": true,
+      "detail": {
+        "stage": 5,
+        "completed": true
+      }
+    }
+  ],
+  "audits": [
+    {
+      "stage": 1,
+      "words": []
+    },
+    {
+      "stage": 3,
+      "words": []
+    },
+    {
+      "stage": 3,
+      "words": []
+    },
+    {
+      "stage": 3,
+      "words": []
+    },
+    {
+      "stage": 4,
+      "words": []
+    },
+    {
+      "stage": 5,
+      "words": []
+    }
+  ],
+  "report": {
+    "schema": "force-lab-learning-record",
+    "schemaVersion": 2,
+    "session": {
+      "schemaVersion": 2,
+      "id": "07ef4d3f-55f2-4b33-8dec-672c8442ec19",
+      "createdAt": "2026-10-12T23:15:45.639Z",
+      "curriculum": {
+        "id": "middle-parallel-forces-2022",
+        "standard": "9과05-01",
+        "related": [
+          "9과05-03"
+        ],
+        "scope": "2022 개정 중학교 과학: 힘의 표현과 나란한 힘의 평형을 위한 재구성 수업. 단원 전체 또는 특정 출판사 지도서의 원차시를 대체하지 않음.",
+        "durationMinutes": 45,
+        "minutes": [
+          5,
+          7,
+          4,
+          13,
+          8,
+          8
+        ],
+        "sources": [
+          "moe2022",
+          "goe2026"
+        ],
+        "alignment": "adapted",
+        "publisherEdition": null,
+        "exclusions": [
+          "중력·탄성력·마찰력·부력 단원 전체",
+          "대각선 벡터합",
+          "돌림힘의 동역학"
+        ]
+      },
+      "stage": 5,
+      "unlockedStage": 5,
+      "phase": "result",
+      "targetAttempts": [
+        "arrow",
+        "cart"
+      ],
+      "representations": [
+        {
+          "onBody": true,
+          "direction": 1,
+          "magnitude": 1
+        },
+        {
+          "onBody": true,
+          "direction": -1,
+          "magnitude": 2
+        }
+      ],
+      "representationAttempts": [
+        {
+          "representations": [
+            {
+              "onBody": true,
+              "direction": 1,
+              "magnitude": 1
+            },
+            {
+              "onBody": true,
+              "direction": -1,
+              "magnitude": 2
+            }
+          ],
+          "correct": [
+            true,
+            true
+          ]
+        }
+      ],
+      "magnitude": 4,
+      "prediction": 1,
+      "trials": [
+        {
+          "id": 1,
+          "magnitude": 1,
+          "fixedMagnitude": 2,
+          "mass": 1,
+          "angles": [
+            0,
+            180
+          ],
+          "applicationPoints": [
+            0,
+            0
+          ],
+          "initialVelocity": 0,
+          "prediction": 1,
+          "resultant": -1,
+          "observedDirection": -1,
+          "x": -0.7249999999999998,
+          "vx": -1.1999999999999982,
+          "elapsed": 1.1999999999999982,
+          "controlled": true
+        },
+        {
+          "id": 2,
+          "magnitude": 2,
+          "fixedMagnitude": 2,
+          "mass": 1,
+          "angles": [
+            0,
+            180
+          ],
+          "applicationPoints": [
+            0,
+            0
+          ],
+          "initialVelocity": 0,
+          "prediction": 1,
+          "resultant": 0,
+          "observedDirection": 0,
+          "x": 0,
+          "vx": 0,
+          "elapsed": 1.1999999999999982,
+          "controlled": true
+        },
+        {
+          "id": 3,
+          "magnitude": 4,
+          "fixedMagnitude": 2,
+          "mass": 1,
+          "angles": [
+            0,
+            180
+          ],
+          "applicationPoints": [
+            0,
+            0
+          ],
+          "initialVelocity": 0,
+          "prediction": 1,
+          "resultant": 2,
+          "observedDirection": 1,
+          "x": 1.4499999999999995,
+          "vx": 2.3999999999999964,
+          "elapsed": 1.1999999999999982,
+          "controlled": true
+        }
+      ],
+      "evidenceId": 2,
+      "reason": "equal-opposite",
+      "explanationAttempts": [
+        {
+          "evidenceId": 1,
+          "reason": "no-forces",
+          "correct": {
+            "evidence": false,
+            "reason": false
+          }
+        },
+        {
+          "evidenceId": 2,
+          "reason": "equal-opposite",
+          "correct": {
+            "evidence": true,
+            "reason": true
+          }
+        }
+      ],
+      "transfer": {
+        "magnitude": 3,
+        "direction": -1,
+        "prediction": 0
+      },
+      "transferAttempts": [
+        {
+          "magnitude": 2,
+          "direction": -1,
+          "prediction": 0,
+          "resultant": 1,
+          "balanced": false,
+          "predictionCorrect": false,
+          "goalUnderstood": true
+        },
+        {
+          "magnitude": 3,
+          "direction": -1,
+          "prediction": 0,
+          "resultant": 0,
+          "balanced": true,
+          "predictionCorrect": true,
+          "goalUnderstood": true
+        }
+      ],
+      "completed": true
+    },
+    "assessment": {
+      "kind": "proposed-formative-rubric",
+      "scale": [
+        0,
+        1,
+        2
+      ],
+      "predictionPenalized": false,
+      "scores": {
+        "body": 1,
+        "representation": 2,
+        "investigation": 2,
+        "explanation": 2,
+        "transfer": 2
+      },
+      "teacherExplanation": "학생의 마지막 응답과 실험 증거를 바탕으로 한 보조 점검. 구두 설명·실제 실험·교사의 관찰로 보완하며 공식 성취수준 판정이 아님."
+    },
+    "sources": [
+      {
+        "id": "moe2022",
+        "title": "교육부 고시 제2022-33호, 별책 9 과학과 교육과정",
+        "url": "https://www.moe.go.kr/boardCnts/viewRenew.do?boardID=141&boardSeq=93458&lev=0",
+        "locator": "초등 힘과 우리 생활 / 중학교 힘의 작용 / 선택 물리학 힘과 에너지",
+        "kind": "official-curriculum"
+      },
+      {
+        "id": "iscream3",
+        "title": "아이스크림미디어 과학 3-1 공개 지도서 수업 자료",
+        "url": "https://qrd.i-scream.co.kr/22USB/22SC301/ebook/Documents/index.html",
+        "locator": "1단원 1~12차시, 교과서 14~33쪽에 연결된 수업 목차",
+        "kind": "publisher-lesson-outline"
+      },
+      {
+        "id": "goe2026",
+        "title": "경기도교육청 하이러닝 활용 중학교 수업설계, 과학 17",
+        "url": "https://www.goe.go.kr/resource/goe/na/bbs_2675/2026/02/1be20e5d-8192-482d-ba22-68ada1632996.pdf#page=143",
+        "locator": "143~151쪽, 다양한 상황의 평형 / 헬륨 비행선 / 알짜힘과 운동",
+        "kind": "public-teaching-example"
+      }
+    ]
+  },
+  "diagnostics": {
+    "physics": {
+      "forces": [
+        {
+          "x": 3,
+          "y": 0,
+          "mag": 3,
+          "angle": 0,
+          "r": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        {
+          "x": -3,
+          "y": 3.6739403974420594e-16,
+          "mag": 3,
+          "angle": 180,
+          "r": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        {
+          "x": 0,
+          "y": 0,
+          "mag": 0,
+          "angle": 0,
+          "r": {
+            "x": 0,
+            "y": 0
+          }
+        }
+      ],
+      "R": {
+        "x": 0,
+        "y": 3.6739403974420594e-16
+      },
+      "resultant": 3.6739403974420594e-16,
+      "torque": 0,
+      "mass": 1,
+      "inertia": 0.6033333333333334,
+      "a": {
+        "x": 0,
+        "y": 3.6739403974420594e-16
+      },
+      "alpha": 0,
+      "equilibrium": true
+    },
+    "fps": 59.98200539838051,
+    "quality": "low",
+    "canvas": [
+      390,
+      844
+    ],
+    "viewport": [
+      0,
+      0,
+      390,
+      844
+    ],
+    "drawCalls": 316,
+    "triangles": 112596,
+    "ao": false,
+    "dof": false,
+    "pixelRatio": 1,
+    "bloom": [
+      98,
+      211
+    ],
+    "shadow": 1024,
+    "particles": 72,
+    "quest": {
+      "i": 0,
+      "passed": [],
+      "phase": "done",
+      "picked": null,
+      "elapsed": 0,
+      "stable": 0,
+      "changed": false,
+      "observed": null
+    },
+    "learn": {
+      "active": true,
+      "level": "intro",
+      "task": 0,
+      "phase": "practice",
+      "timer": 0,
+      "stable": 0,
+      "edits": 0,
+      "picked": null,
+      "voice": false,
+      "completed": [],
+      "observed": null,
+      "showSummary": false,
+      "beforeR": -1,
+      "cart": false,
+      "arrows": [
+        true,
+        true,
+        false
+      ],
+      "resultArrow": false,
+      "handles": [
+        false,
+        true,
+        false
+      ]
+    },
+    "errors": []
+  },
+  "errors": []
+}
