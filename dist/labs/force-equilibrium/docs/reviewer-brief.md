@@ -24,3 +24,6 @@
 5. __lab.textAudit()가 모든 기본 화면·퀘스트 단계에서 []인지 확인.
 
 참고: [OpenStax 12.1](https://openstax.org/books/university-physics-volume-1/pages/12-1-conditions-for-static-equilibrium).
+
+
+입문 화면(2026-10-12 개편)은 동일 PHYSICS를 사용한다. 질량 1 kg, 작용점 0, 목표 입력: (3 N 오른쪽, 2 N 왼쪽)→R=+1 N; (3 N 오른쪽, 2 N 오른쪽)→R=+5 N; (3 N 오른쪽, 3 N 왼쪽)→R=0 N. 세 경우 τ=0. 초기 속도는 모두 0이며, 관찰 종료는 물리 시간이 일시정지되어 내부 속도가 보존된다. 힘 크기만 정수로 조작하고 다른 입력은 잠긴다. 수레 바퀴와 양옆 화살표 시작점은 표시용이며 마찰·구름 관성은 추가하지 않는다.

@@ -1,14 +1,31 @@
 {
   "slug": "force-equilibrium",
-  "title": {"ko": "힘의 작용 실험실", "en": "Forces & Equilibrium Laboratory"},
-  "description": {"ko": "힘의 화살표와 작용점을 조작해 합력과 평형 조건을 발견합니다.", "en": "Discover resultant force and equilibrium by manipulating force arrows and application points."},
+  "title": {
+    "ko": "힘의 작용 실험실",
+    "en": "Forces & Equilibrium Laboratory"
+  },
+  "description": {
+    "ko": "노란 수레와 두 힘으로 시작해 합력과 평형을 발견하는 실험실.",
+    "en": "Start with a yellow cart and two forces, then explore resultant force and equilibrium."
+  },
   "category": "physics",
-  "topics": ["force", "vectors", "equilibrium", "torque"],
-  "languages": ["ko", "en"],
+  "topics": [
+    "force",
+    "vectors",
+    "equilibrium",
+    "torque"
+  ],
+  "languages": [
+    "ko",
+    "en"
+  ],
   "thumbnail": "thumb.jpg",
   "guide": "guide.html",
   "aspectRatio": "8:5",
-  "version": "1.0.0",
-  "qualityLevels": ["high", "low"],
+  "version": "1.1.0",
+  "qualityLevels": [
+    "high",
+    "low"
+  ],
   "wordless": true
 }

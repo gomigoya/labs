@@ -1,0 +1,508 @@
+{
+  "rows": [
+    {
+      "i": 0,
+      "stages": [
+        {
+          "phase": "practice",
+          "audit": []
+        },
+        {
+          "phase": "release",
+          "audit": []
+        },
+        {
+          "phase": "watch",
+          "audit": []
+        },
+        {
+          "phase": "result",
+          "audit": []
+        }
+      ],
+      "during": {
+        "active": true,
+        "level": "intro",
+        "task": 0,
+        "phase": "watch",
+        "timer": 0.3,
+        "stable": 0,
+        "edits": 1,
+        "picked": null,
+        "voice": false,
+        "completed": [
+          0,
+          1,
+          2
+        ],
+        "observed": null,
+        "showSummary": false,
+        "beforeR": -1,
+        "cart": true,
+        "arrows": [
+          true,
+          true,
+          false
+        ],
+        "resultArrow": false,
+        "handles": [
+          false,
+          false,
+          false
+        ],
+        "pinned": false,
+        "x": 0.04624999999999999
+      },
+      "learn": {
+        "active": true,
+        "level": "intro",
+        "task": 0,
+        "phase": "result",
+        "timer": 0.4833333333333333,
+        "stable": 0,
+        "edits": 1,
+        "picked": null,
+        "voice": false,
+        "completed": [
+          0,
+          1,
+          2
+        ],
+        "observed": {
+          "R": 1,
+          "torque": 0,
+          "x": 1.6577083333333307,
+          "vx": 1.8166666666666627,
+          "forces": [
+            {
+              "mag": 3,
+              "angle": 0,
+              "attach": 0
+            },
+            {
+              "mag": 2,
+              "angle": 180,
+              "attach": 0
+            },
+            {
+              "mag": 0,
+              "angle": 0,
+              "attach": 0
+            }
+          ]
+        },
+        "showSummary": false,
+        "beforeR": -1,
+        "cart": true,
+        "arrows": [
+          true,
+          true,
+          false
+        ],
+        "resultArrow": false,
+        "handles": [
+          false,
+          false,
+          false
+        ]
+      },
+      "physics": {
+        "forces": [
+          {
+            "x": 3,
+            "y": 0,
+            "mag": 3,
+            "angle": 0,
+            "r": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          {
+            "x": -2,
+            "y": 2.4492935982947064e-16,
+            "mag": 2,
+            "angle": 180,
+            "r": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "mag": 0,
+            "angle": 0,
+            "r": {
+              "x": 0,
+              "y": 0
+            }
+          }
+        ],
+        "R": {
+          "x": 1,
+          "y": 2.4492935982947064e-16
+        },
+        "resultant": 1,
+        "torque": 0,
+        "mass": 1,
+        "inertia": 0.6033333333333334,
+        "a": {
+          "x": 1,
+          "y": 2.4492935982947064e-16
+        },
+        "alpha": 0,
+        "equilibrium": false
+      },
+      "dynamics": {
+        "x": 1.6577083333333307,
+        "y": 4.060214408673121e-16,
+        "vx": 1.8166666666666627,
+        "vy": 4.449550036902043e-16,
+        "rotation": 0,
+        "omega": 0
+      },
+      "fixedForcePreserved": true,
+      "pass": true
+    },
+    {
+      "i": 1,
+      "stages": [
+        {
+          "phase": "predict",
+          "audit": []
+        },
+        {
+          "phase": "edit",
+          "audit": []
+        },
+        {
+          "phase": "release",
+          "audit": []
+        },
+        {
+          "phase": "watch",
+          "audit": []
+        },
+        {
+          "phase": "result",
+          "audit": []
+        }
+      ],
+      "during": {
+        "active": true,
+        "level": "intro",
+        "task": 1,
+        "phase": "watch",
+        "timer": 0.3,
+        "stable": 0,
+        "edits": 1,
+        "picked": -1,
+        "voice": false,
+        "completed": [
+          0,
+          1,
+          2
+        ],
+        "observed": null,
+        "showSummary": false,
+        "beforeR": 3,
+        "cart": true,
+        "arrows": [
+          true,
+          true,
+          false
+        ],
+        "resultArrow": false,
+        "handles": [
+          false,
+          false,
+          false
+        ],
+        "pinned": false,
+        "x": 0.23124999999999996
+      },
+      "learn": {
+        "active": true,
+        "level": "intro",
+        "task": 1,
+        "phase": "result",
+        "timer": 1.1500000000000008,
+        "stable": 0,
+        "edits": 1,
+        "picked": -1,
+        "voice": false,
+        "completed": [
+          0,
+          1,
+          2
+        ],
+        "observed": {
+          "R": 5,
+          "torque": 0,
+          "x": 3.330208333333333,
+          "vx": 5.750000000000006,
+          "forces": [
+            {
+              "mag": 3,
+              "angle": 0,
+              "attach": 0
+            },
+            {
+              "mag": 2,
+              "angle": 0,
+              "attach": 0
+            },
+            {
+              "mag": 0,
+              "angle": 0,
+              "attach": 0
+            }
+          ]
+        },
+        "showSummary": false,
+        "beforeR": 3,
+        "cart": true,
+        "arrows": [
+          true,
+          true,
+          false
+        ],
+        "resultArrow": false,
+        "handles": [
+          false,
+          false,
+          false
+        ]
+      },
+      "physics": {
+        "forces": [
+          {
+            "x": 3,
+            "y": 0,
+            "mag": 3,
+            "angle": 0,
+            "r": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          {
+            "x": 2,
+            "y": 0,
+            "mag": 2,
+            "angle": 0,
+            "r": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "mag": 0,
+            "angle": 0,
+            "r": {
+              "x": 0,
+              "y": 0
+            }
+          }
+        ],
+        "R": {
+          "x": 5,
+          "y": 0
+        },
+        "resultant": 5,
+        "torque": 0,
+        "mass": 1,
+        "inertia": 0.6033333333333334,
+        "a": {
+          "x": 5,
+          "y": 0
+        },
+        "alpha": 0,
+        "equilibrium": false
+      },
+      "dynamics": {
+        "x": 3.330208333333333,
+        "y": 0,
+        "vx": 5.750000000000006,
+        "vy": 0,
+        "rotation": 0,
+        "omega": 0
+      },
+      "fixedForcePreserved": true,
+      "pass": true
+    },
+    {
+      "i": 2,
+      "stages": [
+        {
+          "phase": "predict",
+          "audit": []
+        },
+        {
+          "phase": "edit",
+          "audit": []
+        },
+        {
+          "phase": "release",
+          "audit": []
+        },
+        {
+          "phase": "watch",
+          "audit": []
+        },
+        {
+          "phase": "result",
+          "audit": []
+        }
+      ],
+      "during": {
+        "active": true,
+        "level": "intro",
+        "task": 2,
+        "phase": "watch",
+        "timer": 0.3,
+        "stable": 0,
+        "edits": 1,
+        "picked": 1,
+        "voice": false,
+        "completed": [
+          0,
+          1,
+          2
+        ],
+        "observed": null,
+        "showSummary": false,
+        "beforeR": 2,
+        "cart": true,
+        "arrows": [
+          true,
+          true,
+          false
+        ],
+        "resultArrow": false,
+        "handles": [
+          false,
+          false,
+          false
+        ],
+        "pinned": false,
+        "x": 0
+      },
+      "learn": {
+        "active": true,
+        "level": "intro",
+        "task": 2,
+        "phase": "result",
+        "timer": 0.4833333333333333,
+        "stable": 0,
+        "edits": 1,
+        "picked": 1,
+        "voice": false,
+        "completed": [
+          0,
+          1,
+          2
+        ],
+        "observed": {
+          "R": 0,
+          "torque": 0,
+          "x": 0,
+          "vx": 0,
+          "forces": [
+            {
+              "mag": 3,
+              "angle": 0,
+              "attach": 0
+            },
+            {
+              "mag": 3,
+              "angle": 180,
+              "attach": 0
+            },
+            {
+              "mag": 0,
+              "angle": 0,
+              "attach": 0
+            }
+          ]
+        },
+        "showSummary": false,
+        "beforeR": 2,
+        "cart": true,
+        "arrows": [
+          true,
+          true,
+          false
+        ],
+        "resultArrow": false,
+        "handles": [
+          false,
+          false,
+          false
+        ]
+      },
+      "physics": {
+        "forces": [
+          {
+            "x": 3,
+            "y": 0,
+            "mag": 3,
+            "angle": 0,
+            "r": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          {
+            "x": -3,
+            "y": 3.6739403974420594e-16,
+            "mag": 3,
+            "angle": 180,
+            "r": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "mag": 0,
+            "angle": 0,
+            "r": {
+              "x": 0,
+              "y": 0
+            }
+          }
+        ],
+        "R": {
+          "x": 0,
+          "y": 3.6739403974420594e-16
+        },
+        "resultant": 3.6739403974420594e-16,
+        "torque": 0,
+        "mass": 1,
+        "inertia": 0.6033333333333334,
+        "a": {
+          "x": 0,
+          "y": 3.6739403974420594e-16
+        },
+        "alpha": 0,
+        "equilibrium": true
+      },
+      "dynamics": {
+        "x": 0,
+        "y": 6.09032161300968e-16,
+        "vx": 0,
+        "vy": 6.67432505535305e-16,
+        "rotation": 0,
+        "omega": 0
+      },
+      "fixedForcePreserved": true,
+      "pass": true
+    }
+  ],
+  "errors": []
+}

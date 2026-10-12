@@ -1,0 +1,143 @@
+{
+  "physics": {
+    "forces": [
+      {
+        "x": 1,
+        "y": 0,
+        "mag": 1,
+        "angle": 0,
+        "r": {
+          "x": 0,
+          "y": 0
+        }
+      },
+      {
+        "x": -2,
+        "y": 2.4492935982947064e-16,
+        "mag": 2,
+        "angle": 180,
+        "r": {
+          "x": 0,
+          "y": 0
+        }
+      },
+      {
+        "x": 0,
+        "y": 0,
+        "mag": 0,
+        "angle": 0,
+        "r": {
+          "x": 0,
+          "y": 0
+        }
+      }
+    ],
+    "R": {
+      "x": -1,
+      "y": 2.4492935982947064e-16
+    },
+    "resultant": 1,
+    "torque": 0,
+    "mass": 1,
+    "inertia": 0.6033333333333334,
+    "a": {
+      "x": -1,
+      "y": 2.4492935982947064e-16
+    },
+    "alpha": 0,
+    "equilibrium": false
+  },
+  "fps": 60,
+  "quality": "low",
+  "canvas": [
+    375,
+    812
+  ],
+  "viewport": [
+    0,
+    0,
+    375,
+    812
+  ],
+  "drawCalls": 389,
+  "triangles": 151536,
+  "ao": false,
+  "dof": false,
+  "pixelRatio": 1,
+  "bloom": [
+    94,
+    203
+  ],
+  "shadow": 1024,
+  "particles": 72,
+  "quest": {
+    "i": 0,
+    "passed": [],
+    "phase": "done",
+    "picked": null,
+    "elapsed": 0,
+    "stable": 0,
+    "changed": false,
+    "observed": null
+  },
+  "learn": {
+    "active": true,
+    "level": "intro",
+    "task": 0,
+    "phase": "practice",
+    "timer": 0.22713866666666663,
+    "stable": 0,
+    "edits": 0,
+    "picked": null,
+    "voice": false,
+    "completed": [],
+    "observed": null,
+    "showSummary": false,
+    "beforeR": -1,
+    "cart": true,
+    "arrows": [
+      true,
+      true,
+      false
+    ],
+    "resultArrow": false,
+    "handles": [
+      true,
+      false,
+      false
+    ]
+  },
+  "errors": [],
+  "audit": [],
+  "rects": [
+    {
+      "id": "learn-top",
+      "x": 82,
+      "y": 12,
+      "w": 167,
+      "h": 66
+    },
+    {
+      "id": "learn-panel",
+      "x": 12,
+      "y": 650,
+      "w": 351,
+      "h": 148
+    },
+    {
+      "id": "learn-help",
+      "x": 12,
+      "y": 12,
+      "w": 56,
+      "h": 56
+    },
+    {
+      "id": "learn-level",
+      "x": 307,
+      "y": 562,
+      "w": 56,
+      "h": 56
+    }
+  ],
+  "scroll": 0
+}
