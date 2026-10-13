@@ -260,7 +260,7 @@ const cartWheels=[];
 for(const x of [-.67,.67]){const axle=cyl(.045,1.75,mats.chrome,cart,x,.25,0,16);axle.rotation.x=Math.PI/2;for(const z of [-.82,.82]){const wheel=new THREE.Group();wheel.position.set(x,.25,z);cart.add(wheel);const tire=cyl(.31,.16,mats.rubber,wheel,0,0,0,32);tire.rotation.x=Math.PI/2;const hub=cyl(.15,.18,mats.ivory,wheel,0,0,0,24);hub.rotation.x=Math.PI/2;const cap=cyl(.055,.20,cartBlue,wheel,0,0,0,16);cap.rotation.x=Math.PI/2;for(let j=0;j<4;j++){const spoke=roundedPanel(.035,.39,.015,cartBlue,wheel,0,0,z>0?.095:-.095,.01);spoke.rotation.z=j*Math.PI/4}cartWheels.push(wheel)}}
 for(const x of [-1.12,1.12]){const eye=ring(.13,.032,mats.chrome,cart,x,.69,0);eye.rotation.x=0;}
 const learnClamp=new THREE.Group();hero.add(learnClamp);learnClamp.position.set(0,HERO_Y,-1.56);learnClamp.visible=false;
-roundedPanel(.15,.95,.18,mats.chrome,learnClamp,0,.42,0,.05);roundedPanel(1.9,.15,.25,cartBlue,learnClamp,0,1.05,.28,.06);
+roundedPanel(.15,1.2,.18,mats.chrome,learnClamp,0,.42,0,.05);roundedPanel(1.9,.15,.25,cartBlue,learnClamp,0,1.05,.28,.06);
 const clampMat=new THREE.MeshStandardMaterial({color:0xac603f,roughness:.65,metalness:.1});learnClamp.children[1].material=clampMat;
 const clampJaws=[];for(const side of [-1,1]){const jaw=new THREE.Group();learnClamp.add(jaw);jaw.position.set(side*.83,.76,.52);roundedPanel(.15,.6,.28,clampMat,jaw);roundedPanel(.23,.15,.3,mats.rubber,jaw,-side*.06,-.26,0,.05);clampJaws.push(jaw)}
 // The rail is only a positional reference. The simulation remains frictionless.
@@ -336,30 +336,6 @@ const fill=new THREE.DirectionalLight(0xb5dedc,1.1);fill.position.set(5,7,-5);sc
 practical(0x83c8bc,3,[0,3.3,-.6],hero,5);
 const area=new THREE.RectAreaLight(0xe8e5cb,2.5,8,4);area.position.set(0,7,7);area.lookAt(0,2,0);scene.add(area);
 
-
-const studioBench=new THREE.Group();hero.add(studioBench);studioBench.visible=false;
-const studioWhite=new THREE.MeshStandardMaterial({color:0xe8edf3,roughness:.72,metalness:.08});
-const studioEdge=new THREE.MeshStandardMaterial({color:0xb5c4d2,roughness:.52,metalness:.22});
-roundedPanel(8.7,.22,3.75,studioWhite,studioBench,0,2.50,-.6,.12);
-roundedPanel(8.8,.08,3.85,studioEdge,studioBench,0,2.35,-.6,.10);
-for(const x of [-3.55,3.55])roundedPanel(.32,1.1,2.4,studioWhite,studioBench,x,1.81,-.6,.08);
-const studioFloor=roundedPanel(100,.1,100,new THREE.MeshStandardMaterial({color:0xdfe8f1,roughness:1}),studioBench,0,1.15,0,.01);
-const studioGrid=new THREE.GridHelper(9,36,0xc1ceda,0xd5dee7);studioGrid.position.set(0,2.617,-.6);studioGrid.scale.z=.40;studioBench.add(studioGrid);
-let studioOn=false;
-function studioTheme(on){
- if(on===studioOn)return;studioOn=on;studioBench.visible=on;room.visible=consoleGroup.visible=airTable.visible=!on;
- scene.background.set(on?0xe8eef5:0x74786b);scene.fog.color.set(on?0xe8eef5:0x7a7c6c);
- hemi.color.set(on?0xf2f7ff:0xd9e6df);hemi.groundColor.set(on?0x8d9bad:0x48503d);key.color.set(on?0xffffff:0xffc28a);fill.color.set(on?0xdceaff:0xb5dedc);area.color.set(on?0xffffff:0xe8e5cb);
- renderer.toneMappingExposure=on?.85:.88;hemi.intensity=on?1:1.65;key.intensity=on?1.8:3.2;area.intensity=on?1:2.5;bloom.strength=on?.035:.23;mats.rubber.color.set(on?0x182d43:0x17231f);clampMat.color.set(on?0x596c7d:0xac603f);cartBlue.color.set(on?0x237c97:0x357c83);cartYellow.color.set(on?0xeba423:0xf3bf55);
- for(const handle of handles)handle.traverse(o=>{if(o.isMesh&&o.material.isMeshStandardMaterial){o.material.emissiveIntensity=on?.10:.6;o.material.roughness=on?.6:.28;}});if(!on)camera.clearViewOffset();
-}
-function studioCamera(){
- if(!studioOn){if(camera.view?.enabled)camera.clearViewOffset();return;}
- const w=innerWidth,h=innerHeight;
- if(w>980)camera.setViewOffset(w,h,Math.min(384,w*.30)/2,-18,w,h);
- else{const sceneHeight=Math.min(320,Math.max(250,h*.36));camera.setViewOffset(w,h,0,(h-sceneHeight-112)/2,w,h);}
-}
-
 // 10 · PIPELINE — AO / depth bokeh / bloom, quality independent of physics.
 composer=new EffectComposer(renderer);renderPass=new RenderPass(scene,camera);composer.addPass(renderPass);
 ao=new SSAOPass(scene,camera,innerWidth,innerHeight);ao.kernelRadius=5;ao.minDistance=.002;ao.maxDistance=.06;composer.addPass(ao);
@@ -384,17 +360,23 @@ const SHOTS_VERTICAL=[
  {name:'portrait-console',position:[2.4,16.5,18.5],target:[0,2.2,1.2],fov:37}
 ];
 let cameraTween=null,currentShot=0;
-function learnerShot(){if(studioOn)return {name:'studio-cart',position:innerWidth<=980?[.15,8.8,17]:[.15,6.9,11.4],target:[0,2.95,-.6],fov:35};const targetY=3.2;return innerWidth<=980&&innerHeight>innerWidth?{name:'learn-portrait',position:[.12,10.7,19.5],target:[0,targetY,-.6],fov:35}:{name:'learn-cart',position:[.12,7.6,10.8],target:[0,targetY,-.6],fov:35}}
+function lessonCamera(){
+ if(!lessonUI?.active||params.get('wordless')==='1'){if(camera.view?.enabled)camera.clearViewOffset();return;}
+ const w=innerWidth,h=innerHeight;
+ if(w>980)camera.setViewOffset(w,h,200,-18,w,h);
+ else{const sceneHeight=Math.min(320,Math.max(250,h*.36));camera.setViewOffset(w,h,0,(h-sceneHeight-112)/2-55,w,h);}
+}
+function learnerShot(){if(lessonUI?.active&&params.get('wordless')!=='1')return {name:'learn-cart',position:innerWidth<=980?[.12,10.7,18.5]:[.12,7.6,10.8],target:[0,2.5,-.6],fov:35};return innerWidth<=980&&innerHeight>innerWidth?{name:'learn-portrait',position:[.12,10.7,19.5],target:[0,3.2,-.6],fov:35}:{name:'learn-cart',position:[.12,7.6,10.8],target:[0,3.2,-.6],fov:35}}
 function chosenShot(i=0){if(learn.active&&i===0)return learnerShot();return innerWidth<=980&&innerHeight>innerWidth?SHOTS_VERTICAL[i%3]:SHOTS[i%6]}
-function applyShot(s){camera.position.fromArray(s.position);camera.fov=s.fov;controls.target.fromArray(s.target);camera.lookAt(controls.target);studioCamera();camera.updateProjectionMatrix();camera.updateMatrixWorld();controls.update();currentShot=s.name;updateFocus()}
+function applyShot(s){camera.position.fromArray(s.position);camera.fov=s.fov;controls.target.fromArray(s.target);camera.lookAt(controls.target);lessonCamera();camera.updateProjectionMatrix();camera.updateMatrixWorld();controls.update();currentShot=s.name;updateFocus()}
 function updateFocus(){if(bokeh)bokeh.uniforms.focus.value=camera.position.distanceTo(new THREE.Vector3(0,HERO_Y,-.6))}
 function shot(i){cameraTween=null;applyShot(typeof i==='string'?[...SHOTS,...SHOTS_VERTICAL].find(s=>s.name===i)||chosenShot(0):chosenShot(i));update(0);return currentShot}
 function flyTo(i){const s=typeof i==='string'?[...SHOTS,...SHOTS_VERTICAL].find(s=>s.name===i)||chosenShot(0):chosenShot(i);cameraTween={from:camera.position.clone(),to:new THREE.Vector3(...s.position),fromTarget:controls.target.clone(),target:new THREE.Vector3(...s.target),fov:s.fov,t:0};}
 function fitProjection(){const points=[[-4.95,HERO_Y,-.6],[4.95,HERO_Y,-.6],[0,HERO_Y,-5.5],[0,HERO_Y,4.3]];return points.map(p=>{const v=new THREE.Vector3(...p).project(camera);return {x:(v.x+1)*innerWidth/2,y:(1-v.y)*innerHeight/2}})}
 function fitArrowUnit(base){
  const portrait=innerWidth<=980&&innerHeight>innerWidth,bounds={left:24,right:innerWidth-(state.mode==='present'&&innerWidth>980?220:24),top:portrait?158:125,bottom:innerHeight-(portrait?200:130)};
- if(studioOn){bounds.right=innerWidth>980?innerWidth-Math.min(384,innerWidth*.30)-30:innerWidth-20;bounds.top=innerWidth>980?150:130;bounds.bottom=innerWidth>980?innerHeight-200:Math.min(320,Math.max(250,innerHeight*.36))+112;}
- const candidates=physical.forces.map((f,i)=>({f,origin:getOrigin(i),y:HERO_Y+(learn.active?(studioOn?.82:.72+i*.34):.32+i*.22)}));
+ if(lessonUI?.active&&params.get('wordless')!=='1'){bounds.right=innerWidth>980?innerWidth-424:innerWidth-20;bounds.top=innerWidth>980?155:140;bounds.bottom=innerWidth>980?innerHeight-160:Math.min(320,Math.max(250,innerHeight*.36))+112;}
+ const candidates=physical.forces.map((f,i)=>({f,origin:getOrigin(i),y:HERO_Y+(learn.active?(lessonUI?.active ? .82 :.72+i*.34):.32+i*.22)}));
  if(!learn.active)candidates.push({f:physical.R,origin:{x:state.dynamics.x*.35,z:-.6-state.dynamics.y*.35},y:HERO_Y+.95});
  const sf=PHYSICS.vector(8,state.forces[state.selected].angle);if(state.layers.limit)candidates.push({f:sf,origin:getOrigin(state.selected),y:HERO_Y+.35+state.selected*.22});
  let factor=1;for(const item of candidates){const a=new THREE.Vector3(item.origin.x,item.y,item.origin.z).project(camera),b=new THREE.Vector3(item.origin.x+item.f.x*base,item.y,item.origin.z-item.f.y*base).project(camera);const ax=(a.x+1)*innerWidth/2,ay=(1-a.y)*innerHeight/2,bx=(b.x+1)*innerWidth/2,by=(1-b.y)*innerHeight/2;
@@ -402,7 +384,7 @@ function fitArrowUnit(base){
  }
  return base*Math.max(.18,Math.min(1,factor));
 }
-function resize(){const w=innerWidth,h=innerHeight;camera.aspect=w/h;studioCamera();camera.updateProjectionMatrix();renderer.setSize(w,h,false);renderer.domElement.style.width='100%';renderer.domElement.style.height='100%';renderer.setViewport(0,0,w,h);composer.setPixelRatio(renderer.getPixelRatio());composer.setSize(w,h);if(state.quality==='low')bloom.setSize(Math.ceil(w*.5),Math.ceil(h*.5));fieldMat.uniforms.uPixel.value=renderer.getPixelRatio();updateFocus()}
+function resize(){const w=innerWidth,h=innerHeight;camera.aspect=w/h;lessonCamera();camera.updateProjectionMatrix();renderer.setSize(w,h,false);renderer.domElement.style.width='100%';renderer.domElement.style.height='100%';renderer.setViewport(0,0,w,h);composer.setPixelRatio(renderer.getPixelRatio());composer.setSize(w,h);if(state.quality==='low')bloom.setSize(Math.ceil(w*.5),Math.ceil(h*.5));fieldMat.uniforms.uPixel.value=renderer.getPixelRatio();updateFocus()}
 addEventListener('resize',()=>{resize();if(!state.attract)applyShot(chosenShot(0))});
 applyShot(chosenShot(0));quality(state.quality);
 
@@ -660,12 +642,12 @@ async function capture(name='capture'){
 function step(n,dt=1/60){n=Math.floor(PHYSICS.clamp(n,0,120));for(let i=0;i<n;i++)update(dt);return {frames:n,physics:physical,quest:quest.phase}}
 window.__lab={state,PHYSICS,set,preset,view,flyTo,SHOTS,SHOTS_VERTICAL,mode,quality,learn:{start:startLearn,set:learnSet,pick:learnPick,release:learnRelease,next:learnNext,level:level=>level==='intro'?startLearn(0):leaveLearn(level),get state(){return learn}},quest:{go:goQuest,pick,get i(){return quest.i},get passed(){return quest.passed},get phase(){return quest.phase},advance:advanceQuest},layer,textAudit,step,shot,capture,projection:fitProjection,diagnostics:()=>({physics:physical,fps:state.fps,quality:state.quality,canvas:[renderer.domElement.width,renderer.domElement.height],viewport:renderer.getViewport(new THREE.Vector4()).toArray(),drawCalls:renderer.info.render.calls,triangles:renderer.info.render.triangles,ao:ao.enabled,dof:bokeh.enabled,pixelRatio:renderer.getPixelRatio(),bloom:[bloom.renderTargetBright.width,bloom.renderTargetBright.height],shadow:key.shadow.mapSize.x,particles:fieldGeo.drawRange.count,quest:{...quest},learn:{...learn,cart:cart.visible,arrows:arrows.map(a=>a.visible),resultArrow:resultArrow.visible,handles:handles.map(h=>h.visible)},errors:[]}),pauseLoop:()=>cancelAnimationFrame(frameId),resumeLoop:()=>{cancelAnimationFrame(frameId);previousTime=performance.now();frameId=requestAnimationFrame(frame)},reset};
 lessonUI=createLesson({label,button:addButton,cart:miniCart,arrow:drawArrow2D,practice:()=>startLearn(0),advanced:()=>{leaveLearn('challenge');goQuest(3)},
- prepare({cyan,amber,angle,crate,observation}){studioTheme(params.get('wordless')!=='1');state.playing=false;state.pinned=true;state.time=0;state.speed=1;state.mass=state.massTarget=1;state.history=[];state.dynamics={x:0,y:0,vx:0,vy:0,rotation:0,omega:0};state.forces=[{mag:cyan,angle:0,attach:0},{mag:amber,angle,attach:0},{mag:0,angle:0,attach:0}];state.targets=structuredClone(state.forces);state.selected=crate?1:0;if(observation){state.dynamics.x=observation.x;state.dynamics.vx=observation.vx;state.time=observation.elapsed;state.pinned=false}physical=PHYSICS.solve(state);if(lessonUI?.active)applyShot(learnerShot());},
- restore(){studioTheme(false)},
+ prepare({cyan,amber,angle,crate,observation}){state.playing=false;state.pinned=true;state.time=0;state.speed=1;state.mass=state.massTarget=1;state.history=[];state.dynamics={x:0,y:0,vx:0,vy:0,rotation:0,omega:0};state.forces=[{mag:cyan,angle:0,attach:0},{mag:amber,angle,attach:0},{mag:0,angle:0,attach:0}];state.targets=structuredClone(state.forces);state.selected=crate?1:0;if(observation){state.dynamics.x=observation.x;state.dynamics.vx=observation.vx;state.time=observation.elapsed;state.pinned=false}physical=PHYSICS.solve(state);if(lessonUI?.active)applyShot(learnerShot());},
+ restore(){camera.clearViewOffset()},
  run(){state.pinned=false;state.playing=true},stop(){state.playing=false},observation:()=>({x:state.dynamics.x,vx:state.dynamics.vx,time:state.time}),
- view(v){tableDepth.visible=consoleDepth.visible=!studioOn;instrument.visible=false;cart.visible=v.stage!==5;transferCrate.visible=v.stage===5;learnRail.visible=learnClamp.visible=true;consoleTools.visible=diskSurface.visible=false;graphOne.group.visible=graphTwo.group.visible=false;forceKnob.group.visible=angleKnob.group.visible=massSlider.group.visible=false;
+ view(v){instrument.visible=false;cart.visible=v.stage!==5;transferCrate.visible=v.stage===5;learnRail.visible=learnClamp.visible=true;consoleTools.visible=diskSurface.visible=false;graphOne.group.visible=graphTwo.group.visible=false;forceKnob.group.visible=angleKnob.group.visible=massSlider.group.visible=false;
   for(let i=0;i<2;i++)clampJaws[i].position.x=(i===0?-1:1)*(.83+(['watch','result'].includes(v.phase)?.65:v.phase==='release'?Math.min(1,v.timer/.8)*.65:0));
-  for(let i=0;i<3;i++){attachHandles[i].visible=ghostArrows[i].visible=targetArrows[i].visible=false;handles[i].visible=false;if(i===2||!v.showArrows){arrows[i].visible=false;continue}const origin=getOrigin(i),y=HERO_Y+(studioOn?.82:.72+i*.34);setArrow(arrows[i],state.forces[i],origin,y);handles[i].position.set(origin.x+physical.forces[i].x*displayUnit,y+.025,origin.z-physical.forces[i].y*displayUnit);handles[i].visible=v.editing&&i===v.editable;handles[i].scale.setScalar(studioOn?1.25:1.8);arrows[i].material.uniforms.uOpacity.value=.96;arrows[i].material.blending=THREE.NormalBlending;arrows[i].material.uniforms.uColor.value.set(i===0?0x39b7ac:0xda863c)}
+  for(let i=0;i<3;i++){attachHandles[i].visible=ghostArrows[i].visible=targetArrows[i].visible=false;handles[i].visible=false;if(i===2||!v.showArrows){arrows[i].visible=false;continue}const origin=getOrigin(i),y=HERO_Y+.82;setArrow(arrows[i],state.forces[i],origin,y);handles[i].position.set(origin.x+physical.forces[i].x*displayUnit,y+.025,origin.z-physical.forces[i].y*displayUnit);handles[i].visible=v.editing&&i===v.editable;handles[i].scale.setScalar(1.8);arrows[i].material.uniforms.uOpacity.value=.96;arrows[i].material.blending=THREE.NormalBlending;arrows[i].material.uniforms.uColor.value.set(i===0?0x39b7ac:0xda863c)}
   resultArrow.visible=torqueGroup.visible=targetRing.visible=learnGoalRing.visible=false;equilibriumRing.visible=v.phase==='result'&&physical.equilibrium;equilibriumRing.position.set(bodyOffset.position.x,HERO_Y+.97,bodyOffset.position.z);equilibriumRing.scale.setScalar(1.5);medium.visible=particles.visible=v.phase==='watch';trailGroup.visible=false;for(const wheel of cartWheels)wheel.rotation.z=-state.dynamics.x*.35/.31;
  }});
 window.__lab.lesson=lessonUI;
