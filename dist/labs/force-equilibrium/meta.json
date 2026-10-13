@@ -5,8 +5,8 @@
     "en": "Forces & Equilibrium Laboratory"
   },
   "description": {
-    "ko": "물체 찾기·힘 표현·예상·비교 실험·증거 설명·새 물체 적용으로 평형을 발견하는 실험실.",
-    "en": "Discover equilibrium through identifying the body, representing forces, predicting, controlled trials, evidence and transfer."
+    "ko": "짧은 안내에 따라 힘을 바꾸고 수레의 움직임과 평형을 직접 확인하는 실험실.",
+    "en": "Change forces with clear instructions, predict motion, and discover how to keep the cart still."
   },
   "category": "physics",
   "topics": [
@@ -22,12 +22,12 @@
   "thumbnail": "thumb.jpg",
   "guide": "guide.html",
   "aspectRatio": "8:5",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "qualityLevels": [
     "high",
     "low"
   ],
-  "wordless": true,
+  "wordless": false,
   "curriculum": {
     "primary": "9과05-01",
     "related": [
@@ -36,5 +36,7 @@
     "alignment": "adapted",
     "map": "docs/curriculum-map.md"
   },
-  "teacherRecords": "teacher.html"
+  "teacherRecords": "teacher.html",
+  "wordlessMode": "?wordless=1",
+  "fullLesson": "?course=lesson"
 }
