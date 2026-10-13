@@ -3,7 +3,8 @@
 <iframe id="lab" title="Force laboratory"></iframe>
 <div id="panel"><textarea aria-label="Validation command">{"op":"status"}</textarea><button id="run">Run validation</button><button id="hide">Hide panel</button><output></output></div>
 <script>
-const p=new URLSearchParams(location.search);document.querySelector('iframe').src='/labs/force-equilibrium/?'+p.toString();
+const p=new URLSearchParams(location.search),frame=document.querySelector('iframe');frame.src='/labs/force-equilibrium/?'+p.toString();
+for(const axis of ['width','height']){const value=Number(p.get(axis));if(value>=320&&value<=2560)frame.style[axis]=value+'px'}
 let errors=[];document.querySelector('iframe').onload=()=>{const w=document.querySelector('iframe').contentWindow;w.addEventListener('error',e=>errors.push(e.message));const original=w.console.error.bind(w.console);w.console.error=(...a)=>{errors.push(a.map(String).join(' '));original(...a)}};
 document.getElementById('hide').onclick=()=>document.getElementById('panel').style.display='none';
 document.getElementById('run').onclick=async()=>{const out=document.querySelector('output');out.textContent='Running...';try{const command=JSON.parse(document.querySelector('textarea').value),w=document.querySelector('iframe').contentWindow,L=w.__lab;if(!L){out.textContent='Loading laboratory. Run again when controls appear.';return}let result;

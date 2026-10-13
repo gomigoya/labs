@@ -19,15 +19,19 @@ export function createLesson(a){
   const menu=el('div','lesson-menu');menu.className='glass';menu.setAttribute('role','dialog');menu.setAttribute('aria-modal','true');menu.setAttribute('aria-label',a.label('learnLevels'));
   const response=el('p','lesson-response',panel);panel.insertBefore(response,actions);
   const forceControls=el('div','lesson-force-controls',panel);panel.insertBefore(forceControls,prompt);
-  let empty,recordCount,sceneState;
+  let empty,recordCount,sceneState,recordPanel,stepCount,forceHeading,lastTrialCount=null;
   if(readable){
     const header=el('header','studio-header');
     const brand=el('div','studio-brand',header);brand.innerHTML='<svg viewBox="0 0 32 32" aria-hidden="true"><path d="M4 11h21m-5-5 5 5-5 5M28 23H7m5-5-5 5 5 5"/></svg><span></span>';brand.lastChild.textContent=a.label('studioTitle');
     header.append(nav,tools);instructions.className='';panel.prepend(instructions);
+    const instructionHeading=el('div','lesson-instruction-heading',instructions);instructions.prepend(instructionHeading);
+    const instructionName=el('span','lesson-instruction-name',instructionHeading);instructionName.textContent=a.label('studioInstructions');
+    stepCount=el('span','lesson-step-count',instructionHeading);
+    forceHeading=el('div','lesson-force-heading',panel);forceHeading.textContent=a.label('studioForces');panel.insertBefore(forceHeading,legend);
     const sceneHeading=el('div','studio-scene-heading');sceneHeading.textContent=a.label('studioObject');
     sceneState=el('span','studio-scene-state',sceneHeading);
-    const notebook=el('section','studio-notebook');notebook.setAttribute('aria-label',a.label('studioRecords'));
-    const nh=el('div','studio-notebook-heading',notebook);const h=el('h2','studio-record-title',nh);h.textContent=a.label('studioRecords');recordCount=el('span','studio-record-count',nh);
+    const notebook=el('details','studio-notebook');recordPanel=notebook;notebook.setAttribute('aria-label',a.label('studioRecords'));
+    const nh=el('summary','studio-notebook-heading',notebook);const h=el('h2','studio-record-title',nh);h.textContent=a.label('studioRecords');recordCount=el('span','studio-record-count',nh);
     empty=el('p','studio-empty-records',notebook);empty.textContent=a.label('studioEmptyRecords');notebook.append(records);
     const footer=el('footer','studio-footer');footer.textContent=a.label('studioModel');
   }
@@ -83,7 +87,7 @@ export function createLesson(a){
   function force(c,x,y,mag,dir,color,locked=false){a.arrow(c,x,y,dir*mag*24,0,color,7);c.strokeStyle=color;c.lineWidth=3;for(let i=1;i<=mag;i++){c.beginPath();c.moveTo(x+dir*(i-.5)*24,y-9);c.lineTo(x+dir*(i-.5)*24,y+9);c.stroke()}if(locked){c.strokeStyle='#74816c';c.lineWidth=3;c.strokeRect(x-9,y+18,18,14);c.beginPath();c.arc(x,y+18,7,Math.PI,0);c.stroke()}}
   function reasonPicture(c,w,h,reason){a.cart(c,w/2,h*.48,.8);if(reason!=='no-forces'){force(c,w/2-40,h*.38,2,-1,colors[1]);force(c,w/2+40,h*.62,reason==='equal-opposite'?2:3,1,colors[0])}}
   function recordPicture(c,w,h,t){force(c,w*.55,35,t.magnitude,1,colors[0]);force(c,w*.45,62,2,-1,colors[1]);motion(c,w/2,105,t.observedDirection)}
-  function render(){if(!active)return;const focus=document.activeElement?.id;panel.className='glass'+(feedback?' feedback-'+feedback:'');nav.replaceChildren();tools.replaceChildren();choices.replaceChildren();records.replaceChildren();actions.replaceChildren();forceControls.replaceChildren();
+  function render(){if(!active)return;const focus=document.activeElement?.id,recordScroll=records.scrollTop;panel.className='glass'+(feedback?' feedback-'+feedback:'');nav.replaceChildren();tools.replaceChildren();choices.replaceChildren();records.replaceChildren();actions.replaceChildren();forceControls.replaceChildren();
     nav.setAttribute('aria-label',a.label(full?'lessonSequence':'uiQuickSequence'));
     const stageIcons=['cart','force0','retry','play','note','q4'];
     STAGES.forEach((name,i)=>{if(!full&&i<2)return;const b=button(nav,'lessonStage'+i,stageIcons[i],()=>{if(i<=s.unlockedStage&&!['release','watch'].includes(s.phase))stage(i)},'lesson-stage-'+i);b.classList.toggle('current',i===s.stage);b.classList.toggle('done',i<s.stage);b.disabled=i>s.unlockedStage||['release','watch'].includes(s.phase);b.setAttribute('aria-current',i===s.stage?'step':'false');if(!full)b.setAttribute('aria-label',a.label('uiLessonStage'+i))});
@@ -112,12 +116,25 @@ export function createLesson(a){
     }
     if(s.stage===4){if(!readable)s.trials.forEach(t=>trialCard(records,t,true));for(const reason of ['equal-opposite','unequal-opposite','no-forces'])picture(choices,'lessonReason-'+reason,(c,w,h)=>reasonPicture(c,w,h,reason),()=>chooseReason(reason),s.reason===reason,'lesson-reason-'+reason);primary('lessonExplain','check',explain,s.evidenceId===null||s.reason===null,'lesson-explain');if(s.explanationAttempts.length)primary('next','next',()=>stage(5));}
     if(s.stage===5){predictionChoices();magnitudeControls();const b=button(actions,'lessonReverse','angle',()=>setDirection(-s.transfer.direction),'lesson-reverse');b.className='amber';primary('lessonCheckTransfer','check',transfer,s.transfer.prediction===null,'lesson-transfer');if(s.completed){button(actions,'lessonDownload','note',download,'lesson-download');primary('lessonTeacher','guide',()=>window.open('teacher.html'+(document.documentElement.lang==='en'?'?lang=en':''),'_blank','noopener'),false,'lesson-results')}}
-    if(readable){s.trials.forEach(t=>trialCard(records,t,s.stage===4));empty.hidden=s.trials.length>0;recordCount.textContent=s.trials.length+' / 12';document.querySelector('#studio-scene-heading').firstChild.textContent=a.label(s.stage===5?'studioCrate':'studioObject');sceneState.textContent=a.label(['release','watch'].includes(s.phase)?'studioObserving':s.phase==='result'?'studioRecorded':'studioAtRest');}
+    if(readable){s.trials.forEach(t=>trialCard(records,t,s.stage===4));empty.hidden=s.trials.length>0;recordCount.textContent=s.trials.length+' / 12';if(s.stage===4||(lastTrialCount!==null&&s.trials.length>lastTrialCount))recordPanel.open=true;lastTrialCount=s.trials.length;stepCount.textContent=String(full?s.stage+1:s.stage-1).padStart(2,'0')+' / '+(full?'06':'04');forceHeading.hidden=![2,3,5].includes(s.stage);document.querySelector('#studio-scene-heading').firstChild.textContent=a.label(s.stage===5?'studioCrate':'studioObject');sceneState.textContent=a.label(['release','watch'].includes(s.phase)?'studioObserving':s.phase==='result'?'studioRecorded':'studioAtRest');}
     cue.setAttribute('aria-label',a.label(s.stage===1?'lessonDrawArrows':'lessonSay'+s.stage));cue.setAttribute('role','img');cue.hidden=readable&&[2,3,5].includes(s.stage);renderInstructions();drawCue();
-    if(focus){const b=document.getElementById(focus);if(b&&!b.disabled)b.focus({preventScroll:true})}
+    records.scrollTop=recordScroll;if(focus){const b=document.getElementById(focus);if(b&&!b.disabled)b.focus({preventScroll:true})}
   }
   const motionLabel=d=>a.label(d<0?'uiLearnLeft':d>0?'uiLearnMoving':'uiLearnStill');
-  function trialCard(parent,t,selectable){const b=picture(parent,selectable?'lessonSelectTrial':'lessonTrial',(c,w,h)=>recordPicture(c,w,h,t),()=>{if(selectable)chooseEvidence(t.id)},selectable&&s.evidenceId===t.id,'lesson-'+(selectable?'evidence-':'trial-')+t.id);if(readable){b.querySelector('.lesson-label').textContent=a.label('uiTrial')+' '+t.id+' · '+motionLabel(t.observedDirection);b.setAttribute('aria-label',a.label(selectable?'lessonSelectTrial':'lessonTrial')+' '+t.id+' · '+motionLabel(t.observedDirection))}return b}
+  function trialCard(parent,t,selectable){
+    if(readable){
+      let table=parent.querySelector('table');
+      if(!table){table=document.createElement('table');table.setAttribute('aria-label',a.label('studioRecords'));const head=table.createTHead().insertRow();for(const key of ['studioTrialNumber','studioCyanN','studioAmberN','studioPrediction','studioObservation']){const th=document.createElement('th');th.scope='col';th.textContent=a.label(key);head.append(th)}table.createTBody();parent.append(table)}
+      const row=table.tBodies[0].insertRow();row.classList.toggle('selected',selectable&&s.evidenceId===t.id);
+      const number=row.insertCell(),id='lesson-'+(selectable?'evidence-':'trial-')+t.id;
+      if(selectable){const b=document.createElement('button');b.id=id;b.type='button';b.textContent=String(t.id).padStart(2,'0');b.setAttribute('aria-label',a.label('lessonSelectTrial')+' '+t.id+' · '+motionLabel(t.observedDirection));b.setAttribute('aria-pressed',String(s.evidenceId===t.id));b.onclick=()=>chooseEvidence(t.id);number.append(b)}else{number.id=id;number.textContent=String(t.id).padStart(2,'0')}
+      const cyan=row.insertCell();cyan.className='cyan';cyan.textContent=t.magnitude+' →';
+      const amber=row.insertCell();amber.className='amber';amber.textContent='← '+t.fixedMagnitude;
+      row.insertCell().textContent=motionLabel(t.prediction);row.insertCell().textContent=motionLabel(t.observedDirection);
+      return row;
+    }
+    return picture(parent,selectable?'lessonSelectTrial':'lessonTrial',(c,w,h)=>recordPicture(c,w,h,t),()=>{if(selectable)chooseEvidence(t.id)},selectable&&s.evidenceId===t.id,'lesson-'+(selectable?'evidence-':'trial-')+t.id);
+  }
   function renderInstructions(){
     title.textContent=a.label('uiTitle'+s.stage);instruction.textContent=a.label('uiInstruction'+s.stage);
     legend.replaceChildren();prompt.textContent='';response.textContent='';
