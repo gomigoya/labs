@@ -4,13 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#292d2b">
-<meta name="description" content="짧은 안내를 따라 두 힘을 바꾸고 수레의 움직임과 평형을 확인하는 3D 실험실.">
+<meta name="description" content="초등·중등·고등 과정을 선택하고 14가지 실험으로 힘과 평형을 탐구하는 3D 실험실.">
 <meta property="og:title" content="힘의 작용 실험실">
 <meta property="og:description" content="손으로 발견하는 힘의 합과 평형.">
 <meta property="og:image" content="https://force-equilibrium-lab.sungkue.chatgpt.site/labs/force-equilibrium/thumb.jpg">
 <title>힘의 작용 실험실</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='12' fill='%232b3332'/%3E%3Cpath d='M7 20h26m-7-7 7 7-7 7M14 13l-7 7 7 7' stroke='%238bddd0' stroke-width='3' fill='none'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="lesson.css">
+<link rel="stylesheet" href="curriculum.css">
 <style>
 @font-face{font-family:'DM Mono';src:url('https://cdn.jsdelivr.net/npm/@fontsource/dm-mono@5.2.7/files/dm-mono-latin-400-normal.woff2') format('woff2');font-display:swap}
 :root{color-scheme:light;--ink:#34433f;--glass:rgba(248,249,242,.91);--line:rgba(63,81,71,.13);--accent:#475f50;--cyan:#69d9d2;--amber:#efb36d;--violet:#bcb0ef;--target:56px}
@@ -82,6 +83,8 @@ Object.assign(window.__LAB_LABELS__.en,{"childLeft":"Left","childRight":"Right",
 <div id="loader" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 11a8 8 0 1 0-2 6M20 4v7h-7"/></svg></div>
 <script type="module">
 import {createLesson} from './lesson.js';
+import {createCurriculum} from './curriculum.js';
+import {createCurriculumRigs} from './curriculum-rigs.js';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
@@ -127,7 +130,7 @@ const label=k=>LABELS[english?'en':'ko'][k]||k;
 const state={forces:structuredClone(PHYSICS.presets[0]),targets:structuredClone(PHYSICS.presets[0]),mass:2,massTarget:2,selected:0,pinned:true,playing:false,speed:1,time:0,mode:'explore',guided:true,sound:false,quality:params.get('lite')==='1'?'low':(window.__SITE__?.quality==='low'?'low':'high'),layers:{segments:true,limit:true,trails:false,lens:false,note:false,ab:false,numeric:false},ab:null,section:0,sectionTarget:0,dynamics:{x:0,y:0,vx:0,vy:0,rotation:0,omega:0},records:[],history:[],attract:false,lastInput:performance.now(),fps:60,events:[],uiVisible:true};
 const quest={i:0,passed:[],phase:'intro',picked:null,elapsed:0,stable:0,changed:false,observed:null};
 const learn={active:false,level:'intro',task:0,phase:'practice',timer:0,stable:0,edits:0,picked:null,voice:false,completed:[],observed:null,showSummary:false};
-let lessonUI=null;
+let lessonUI=null,curriculumUI=null,curriculumDuration=1.2;
 let physical=PHYSICS.solve(state),renderer,composer,controls,ao,bokeh,bloom,renderPass,output,scene,camera;
 const COLORS=[0x69d9d2,0xefb36d,0xbcb0ef],CSS_COLORS=['#69d9d2','#efb36d','#bcb0ef'];
 const UNIT=.62,HERO_Y=2.72,TAU=Math.PI*2,reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -366,12 +369,12 @@ const SHOTS_VERTICAL=[
 ];
 let cameraTween=null,currentShot=0;
 function lessonCamera(){
- if(!lessonUI?.active||params.get('wordless')==='1'){if(camera.view?.enabled)camera.clearViewOffset();return;}
+ if((!lessonUI?.active&&!curriculumUI?.active)||params.get('wordless')==='1'){if(camera.view?.enabled)camera.clearViewOffset();return;}
  const w=innerWidth,h=innerHeight;
  if(w>980)camera.setViewOffset(w,h,200,-18,w,h);
  else{const sceneHeight=Math.min(320,Math.max(250,h*.36));camera.setViewOffset(w,h,0,(h-sceneHeight-112)/2-55,w,h);}
 }
-function learnerShot(){if(lessonUI?.active&&params.get('wordless')!=='1')return {name:'learn-cart',position:innerWidth<=980?[.12,10.7,18.5]:[.12,7.6,10.8],target:[0,2.5,-.6],fov:35};return innerWidth<=980&&innerHeight>innerWidth?{name:'learn-portrait',position:[.12,10.7,19.5],target:[0,3.2,-.6],fov:35}:{name:'learn-cart',position:[.12,7.6,10.8],target:[0,3.2,-.6],fov:35}}
+function learnerShot(){if((lessonUI?.active||curriculumUI?.active)&&params.get('wordless')!=='1')return {name:'learn-cart',position:innerWidth<=980?[.12,10.7,18.5]:[.12,7.6,10.8],target:[0,2.5,-.6],fov:35};return innerWidth<=980&&innerHeight>innerWidth?{name:'learn-portrait',position:[.12,10.7,19.5],target:[0,3.2,-.6],fov:35}:{name:'learn-cart',position:[.12,7.6,10.8],target:[0,3.2,-.6],fov:35}}
 function chosenShot(i=0){if(learn.active&&i===0)return learnerShot();return innerWidth<=980&&innerHeight>innerWidth?SHOTS_VERTICAL[i%3]:SHOTS[i%6]}
 function applyShot(s){camera.position.fromArray(s.position);camera.fov=s.fov;controls.target.fromArray(s.target);camera.lookAt(controls.target);lessonCamera();camera.updateProjectionMatrix();camera.updateMatrixWorld();controls.update();currentShot=s.name;updateFocus()}
 function updateFocus(){if(bokeh)bokeh.uniforms.focus.value=camera.position.distanceTo(new THREE.Vector3(0,HERO_Y,-.6))}
@@ -410,7 +413,7 @@ function set(name,v,immediate=true){
  quest.changed=true;quest.stable=0;physical=PHYSICS.solve(state,state.dynamics.rotation);syncButtons();if(learn.active)renderLearn();return physical;
 }
 function selectForce(i){state.selected=i;syncButtons()}
-function canManipulate(){if(lessonUI?.active)return lessonUI.canEdit();if(learn.active)return ['practice','edit'].includes(learn.phase);if(state.guided&&['intro','predict'].includes(quest.phase)){$('modal').classList.add('shake');setTimeout(()=>$('modal').classList.remove('shake'),400);return false}return true}
+function canManipulate(){if(curriculumUI?.active)return false;if(lessonUI?.active)return lessonUI.canEdit();if(learn.active)return ['practice','edit'].includes(learn.phase);if(state.guided&&['intro','predict'].includes(quest.phase)){$('modal').classList.add('shake');setTimeout(()=>$('modal').classList.remove('shake'),400);return false}return true}
 function dragForce(p,i){const f=state.targets[i],origin=getOrigin(i);let dx=p.x-origin.x,dy=-(p.z-origin.z),mag=Math.hypot(dx,dy)/displayUnit,angle=(Math.atan2(dy,dx)*180/Math.PI+360)%360;
  if(learn.active){learnSet(Math.round(Math.max(1,Math.abs(dx)/displayUnit)));return}
  if(learn.level==='middle'&&state.guided&&quest.i<3){set(i+'.mag',Math.round(mag));tickSound(Math.round(mag));return}
@@ -441,7 +444,7 @@ function tickSound(v){if(v!==lastTick){lastTick=v;tone(450+v*45,.04,.025)}}
 function startTone(){if(!state.sound)return;startAudio();osc=audio.createOscillator();const g=audio.createGain();g.gain.value=.013;osc.connect(g).connect(audio.destination);osc.frequency.value=180;osc.start()}
 function stopTone(){if(osc){osc.stop();osc=null}}
 function chord(){[261.63,329.63,392].forEach((f,i)=>setTimeout(()=>tone(f,.28,.025),i*80))}
-function togglePlay(){if(lessonUI?.active){lessonUI.release();return}if(learn.active){learnRelease();return}input();state.playing=!state.playing;if(state.playing&&state.pinned){state.pinned=false;state.dynamics={x:0,y:0,vx:0,vy:0,rotation:0,omega:0}}syncButtons()}
+function togglePlay(){if(curriculumUI?.active){curriculumUI.run();return}if(lessonUI?.active){lessonUI.release();return}if(learn.active){learnRelease();return}input();state.playing=!state.playing;if(state.playing&&state.pinned){state.pinned=false;state.dynamics={x:0,y:0,vx:0,vy:0,rotation:0,omega:0}}syncButtons()}
 
 // 13 · QUESTS — prediction, action, physical evidence, comparison, collection.
 const predictionSpec=[
@@ -519,8 +522,8 @@ const teacherActions={pin:()=>set('pinned',!state.pinned),stepBack:()=>{const h=
 for(const [k,fn] of Object.entries(teacherActions))addButton(teacher,k,k,()=>{fn();syncButtons()},'t-'+k);
 for(let i=0;i<5;i++){const b=addButton($('cards'),'q'+i,'q'+i,()=>{if(quest.passed.includes(i)){quest.i=i;quest.phase='principle';quest.observed={forces:structuredClone(correctEnds[i])};openModal('principle')}});b.setAttribute('aria-pressed','false')}
 $('scene').setAttribute('aria-label',label('scene'));$('scene').setAttribute('role','application');$('scene').tabIndex=0;$('modal').setAttribute('aria-label',label('modal'));$('retry').innerHTML=icon('retry');$('retry').setAttribute('aria-label',label('retry'));$('retry').onclick=()=>location.reload();$('hint').innerHTML=icon('hand');
-addEventListener('keydown',e=>{if(e.key==='/'){e.preventDefault();state.uiVisible=!state.uiVisible;$('ui').classList.toggle('hidden-ui',!state.uiVisible);window.__site?.setVisible(state.uiVisible)}if(e.key==='Escape'){release();if($('learn-levels').classList.contains('open')){$('learn-levels').classList.remove('open');$('learn-level').focus({preventScroll:true})}}if(e.key==='Tab'&&$('learn-levels').classList.contains('open')){const buttons=[...$('learn-levels').querySelectorAll('button')];if(e.shiftKey&&document.activeElement===buttons[0]){e.preventDefault();buttons.at(-1).focus()}else if(!e.shiftKey&&document.activeElement===buttons.at(-1)){e.preventDefault();buttons[0].focus()}}if(e.key===' '&&!['BUTTON','A'].includes(document.activeElement.tagName)){e.preventDefault();togglePlay()}if(e.key==='Tab'&&$('modal').classList.contains('open')){const all=[...$('modal').querySelectorAll('button')];if(e.shiftKey&&document.activeElement===all[0]){e.preventDefault();all.at(-1).focus()}else if(!e.shiftKey&&document.activeElement===all.at(-1)){e.preventDefault();all[0].focus()}}if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key)&&document.activeElement===$('scene')&&canManipulate()){e.preventDefault();if(lessonUI?.active){if(e.key==='ArrowUp'||e.key==='ArrowDown')lessonUI.setMagnitude((lessonUI.state.stage===5?lessonUI.state.transfer.magnitude:lessonUI.state.magnitude)+(e.key==='ArrowUp'?1:-1));return}if(e.key==='ArrowLeft'||e.key==='ArrowRight')set(state.selected+'.angle',(state.targets[state.selected].angle+(e.key==='ArrowLeft'?5:-5)+360)%360);else set(state.selected+'.mag',state.targets[state.selected].mag+(e.key==='ArrowUp'?.5:-.5))}});
-function reset(){if(lessonUI?.active){lessonUI.start(true);return}if(learn.active){startLearn(learn.task);return}preset(quest.i);state.ab=null;state.layers.ab=false;state.sectionTarget=0;layer('lens',false);quest.changed=false;quest.stable=0;if(state.guided){quest.phase='intro';quest.elapsed=0;closeModal()}updateProgress()}
+addEventListener('keydown',e=>{const typing=['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName)||document.activeElement.isContentEditable;if(e.key==='/'&&!typing){e.preventDefault();state.uiVisible=!state.uiVisible;$('ui').classList.toggle('hidden-ui',!state.uiVisible);window.__site?.setVisible(state.uiVisible)}if(e.key==='Escape'){release();if($('learn-levels').classList.contains('open')){$('learn-levels').classList.remove('open');$('learn-level').focus({preventScroll:true})}}if(e.key==='Tab'&&$('learn-levels').classList.contains('open')){const buttons=[...$('learn-levels').querySelectorAll('button')];if(e.shiftKey&&document.activeElement===buttons[0]){e.preventDefault();buttons.at(-1).focus()}else if(!e.shiftKey&&document.activeElement===buttons.at(-1)){e.preventDefault();buttons[0].focus()}}if(e.key===' '&&!typing&&!['BUTTON','A'].includes(document.activeElement.tagName)){e.preventDefault();togglePlay()}if(e.key==='Tab'&&$('modal').classList.contains('open')){const all=[...$('modal').querySelectorAll('button')];if(e.shiftKey&&document.activeElement===all[0]){e.preventDefault();all.at(-1).focus()}else if(!e.shiftKey&&document.activeElement===all.at(-1)){e.preventDefault();all[0].focus()}}if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key)&&document.activeElement===$('scene')&&canManipulate()){e.preventDefault();if(lessonUI?.active){if(e.key==='ArrowUp'||e.key==='ArrowDown')lessonUI.setMagnitude((lessonUI.state.stage===5?lessonUI.state.transfer.magnitude:lessonUI.state.magnitude)+(e.key==='ArrowUp'?1:-1));return}if(e.key==='ArrowLeft'||e.key==='ArrowRight')set(state.selected+'.angle',(state.targets[state.selected].angle+(e.key==='ArrowLeft'?5:-5)+360)%360);else set(state.selected+'.mag',state.targets[state.selected].mag+(e.key==='ArrowUp'?.5:-.5))}});
+function reset(){if(curriculumUI?.active){curriculumUI.reset();return}if(lessonUI?.active){lessonUI.start(true);return}if(learn.active){startLearn(learn.task);return}preset(quest.i);state.ab=null;state.layers.ab=false;state.sectionTarget=0;layer('lens',false);quest.changed=false;quest.stable=0;if(state.guided){quest.phase='intro';quest.elapsed=0;closeModal()}updateProgress()}
 async function share(){if(window.__site?.share)return window.__site.share();const u=new URL(location.href);u.searchParams.set('s',btoa(JSON.stringify({f:state.forces,m:state.mass})));if(navigator.share){try{await navigator.share({url:u.href});return}catch(e){if(e.name==='AbortError')return}}try{await navigator.clipboard.writeText(u.href);$('share').innerHTML=icon('check');setTimeout(()=>{$('share').innerHTML=icon('share')},1400)}catch{history.replaceState({},'',u.href);$('share').innerHTML=icon('check');setTimeout(()=>{$('share').innerHTML=icon('share')},1400)}}
 function textAudit(){const walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT),found=[];let n;while(n=walker.nextNode()){if(!n.parentElement||['SCRIPT','STYLE'].includes(n.parentElement.tagName))continue;const p=n.parentElement,style=getComputedStyle(p),r=p.getBoundingClientRect();if(style.display==='none'||style.visibility==='hidden'||style.opacity==='0'||style.clipPath==='inset(50%)'||!r.width||!r.height)continue;let hidden=false;for(let a=p;a&&a!==document.body;a=a.parentElement){const s=getComputedStyle(a);if(s.display==='none'||s.visibility==='hidden'||s.opacity==='0'){hidden=true;break}}if(!hidden&&/[\p{L}]{2,}/u.test(n.textContent))found.push({text:n.textContent.trim(),element:p.id||p.tagName})}return found}
 
@@ -530,6 +533,7 @@ function learnEditable(){return lessonUI?.active?lessonUI.editable:learn.task===
 function learnSay(key){if(!learn.voice||!('speechSynthesis'in window))return;speechSynthesis.cancel();const utterance=new SpeechSynthesisUtterance(label(key));utterance.lang=english?'en-US':'ko-KR';utterance.rate=.88;const voice=speechSynthesis.getVoices().find(v=>v.lang.toLowerCase().startsWith(english?'en':'ko'));if(voice)utterance.voice=voice;speechSynthesis.speak(utterance)}
 function learnGoal(){return Math.abs(state.forces[learnEditable()].mag-3)<.02}
 function startLearn(i=0){
+ curriculumUI?.deactivate();
  lessonUI?.deactivate();
  learn.active=true;learn.level='intro';learn.task=PHYSICS.clamp(Math.floor(i),0,2);learn.phase=learn.task===0?'practice':'predict';learn.timer=0;learn.stable=0;learn.edits=0;learn.picked=null;learn.observed=null;learn.showSummary=false;
  state.mode='explore';state.guided=false;quest.phase='done';state.attract=false;state.playing=false;state.pinned=true;state.mass=state.massTarget=1;state.speed=1;state.time=0;state.history=[];state.ab=null;state.section=state.sectionTarget=0;state.layers={segments:true,limit:false,trails:false,lens:false,note:false,ab:false,numeric:false};
@@ -539,6 +543,7 @@ function startLearn(i=0){
  return learn.phase;
 }
 function leaveLearn(level='middle'){
+ curriculumUI?.deactivate();
  lessonUI?.deactivate();
  learn.active=false;learn.level=level;learn.phase='off';state.layers={segments:true,limit:true,trails:false,lens:false,note:false,ab:false,numeric:false};document.body.classList.remove('learning','numeric');document.body.classList.toggle('middle',level==='middle');$('learn-levels').classList.remove('open');if('speechSynthesis'in window)speechSynthesis.cancel();controls.enableZoom=true;controls.minDistance=12;cart.visible=false;transferCrate.visible=false;instrument.visible=true;learnClamp.visible=learnRail.visible=learnGoalRing.visible=false;graphOne.group.visible=graphTwo.group.visible=true;forceKnob.group.visible=angleKnob.group.visible=massSlider.group.visible=true;learn.showSummary=false;consoleTools.visible=diskSurface.visible=true;medium.visible=particles.visible=true;attachHandles.forEach(o=>o.visible=true);arrows.forEach((o,i)=>{o.material.uniforms.uOpacity.value=.92;o.material.uniforms.uColor.value.set(COLORS[i]);o.material.blending=THREE.AdditiveBlending});equilibriumRing.position.set(0,HERO_Y+.48,-.6);applyShot(chosenShot(0));
 }
@@ -573,6 +578,7 @@ function renderLearn(){
  $('learn-help').setAttribute('aria-pressed',String(learn.voice));drawLearnCue();if(focused&&$(focused)&&!$(focused).disabled)$(focused).focus({preventScroll:true});
 }
 function updateLearn(dt){
+ if(curriculumUI?.active){curriculumUI.tick(dt);return}
  if(lessonUI?.active){lessonUI.tick(dt);return}
  if(!learn.active)return;
  learn.timer+=dt;const editing=canManipulate();if(editing&&learn.edits>0&&learnGoal()&&!drag){learn.stable+=dt;if(learn.stable>.9)learnRelease()}else learn.stable=0;
@@ -603,7 +609,7 @@ function updateGraphs(){const c=graphOne.ctx,w=graphOne.canvas.width,h=graphOne.
  if(state.layers.numeric){$('numeric').textContent=`${state.forces.map((f,i)=>`${i+1}: ${f.mag.toFixed(2)} N · ${f.angle.toFixed(1)}°`).join('   ')}\nΣ ${physical.resultant.toFixed(3)} N   τ ${physical.torque.toFixed(3)} N·m   ${state.mass.toFixed(1)} kg   ${state.time.toFixed(2)} s`}}
 function update(dt){dt=PHYSICS.clamp(dt,0,.12);nowTime+=dt;
  for(let i=0;i<3;i++)for(const k of ['mag','angle','attach'])state.forces[i][k]=damp(state.forces[i][k],state.targets[i][k],dt);state.mass=damp(state.mass,state.massTarget,dt);state.section=damp(state.section,state.sectionTarget,dt,5);
- const slow=performance.now()<eventSlowUntil?.25:1;const simulationDt=lessonUI?.active&&lessonUI.state.phase==='watch'?Math.min(dt,Math.max(0,1.2-state.time)):dt;advancePhysics(lessonUI?.active?simulationDt:dt*state.speed*slow);physical=PHYSICS.solve(state,state.dynamics.rotation);
+ const slow=performance.now()<eventSlowUntil?.25:1;const simulationDt=curriculumUI?.active?Math.min(dt,Math.max(0,curriculumDuration-state.time)):lessonUI?.active&&lessonUI.state.phase==='watch'?Math.min(dt,Math.max(0,1.2-state.time)):dt;advancePhysics(lessonUI?.active||curriculumUI?.active?simulationDt:dt*state.speed*slow);physical=PHYSICS.solve(state,state.dynamics.rotation);
  displayUnit=fitArrowUnit(UNIT*(innerWidth<=980&&innerHeight>innerWidth?.82:1)*Math.min(1,8/Math.max(8,physical.resultant)));
  bodyOffset.position.set(state.dynamics.x*.35,HERO_Y,-.6-state.dynamics.y*.35);body.rotation.y=state.dynamics.rotation;pin.visible=state.pinned;
  for(let i=0;i<3;i++){const f=state.forces[i],origin=getOrigin(i);setArrow(arrows[i],f,origin,HERO_Y+.32+i*.22);arrows[i].material.uniforms.uTime.value=nowTime;arrows[i].material.uniforms.uSegments.value=state.layers.segments?1:0;
@@ -656,7 +662,24 @@ lessonUI=createLesson({label,button:addButton,cart:miniCart,arrow:drawArrow2D,pr
   resultArrow.visible=torqueGroup.visible=targetRing.visible=learnGoalRing.visible=false;equilibriumRing.visible=v.phase==='result'&&physical.equilibrium;equilibriumRing.position.set(bodyOffset.position.x,HERO_Y+.97,bodyOffset.position.z);equilibriumRing.scale.setScalar(1.5);medium.visible=particles.visible=v.phase==='watch';trailGroup.visible=false;for(const wheel of cartWheels)wheel.rotation.z=-state.dynamics.x*.35/.31;
  }});
 window.__lab.lesson=lessonUI;
-if(!params.has('s')&&!['challenge','middle','practice'].includes(params.get('level')))lessonUI.start(params.get('restart')==='1');else if(params.get('level')==='practice')startLearn(0);else leaveLearn(params.get('level')==='middle'?'middle':'challenge');
+const curriculumRigs=createCurriculumRigs({THREE,hero,HERO_Y,mats,roundedPanel,cyl,cart});
+curriculumUI=createCurriculum({
+ enter(){startLearn(0);learn.voice=false;state.attract=false;},
+ exit(){curriculumRigs.hide();camera.clearViewOffset();},
+ prepare(r){state.playing=false;state.pinned=true;state.time=0;state.speed=1;state.mass=state.massTarget=r.mass;state.history=[];state.dynamics={x:0,y:0,vx:r.initialVelocity,vy:0,rotation:0,omega:0};state.forces=structuredClone(r.forces);state.targets=structuredClone(r.forces);state.selected=0;curriculumDuration=r.duration;physical=PHYSICS.solve(state);cameraTween=null;applyShot(r.dynamic?learnerShot():{...learnerShot(),target:[0,3.6,-.6]});},
+ run(){state.pinned=false;state.playing=true;},stop(){state.playing=false;},
+ limit(r){if(state.time>=r.duration-1e-8){state.playing=false;if(r.duration<1.2){state.dynamics.vx=0;state.forces[1].mag=state.targets[1].mag=0;}}},
+ view(id,p,r,progress,measured){
+  instrument.visible=transferCrate.visible=consoleTools.visible=diskSurface.visible=false;graphOne.group.visible=graphTwo.group.visible=false;forceKnob.group.visible=angleKnob.group.visible=massSlider.group.visible=false;
+  learnRail.visible=r.rig==='cart';learnClamp.visible=r.dynamic&&curriculumUI?.phase==='ready';pin.visible=false;learnGoalRing.visible=targetRing.visible=resultArrow.visible=torqueGroup.visible=false;equilibriumRing.visible=measured&&id==='parallel'&&physical.equilibrium;
+  for(let i=0;i<3;i++){attachHandles[i].visible=ghostArrows[i].visible=targetArrows[i].visible=handles[i].visible=false;arrows[i].visible=false;if(['parallel','vectors','friction','design'].includes(id)&&r.forces[i].mag>.001){setArrow(arrows[i],state.forces[i],getOrigin(i),HERO_Y+.82+i*.12);arrows[i].material.uniforms.uOpacity.value=.96;arrows[i].material.blending=THREE.NormalBlending;arrows[i].material.uniforms.uColor.value.set(i===0?0x39b7ac:0xda863c)}}
+  medium.visible=particles.visible=curriculumUI?.phase==='running'&&r.dynamic;trailGroup.visible=false;for(const wheel of cartWheels)wheel.rotation.z=-state.dynamics.x*.35/.31;
+  curriculumRigs.update(id,p,r,progress,measured);$('hint').style.opacity=0;
+ }
+});
+window.__lab.curriculum=curriculumUI;
+if(!params.has('s')&&!params.has('level')&&params.get('wordless')!=='1'&&!['lesson','legacy'].includes(params.get('course')))curriculumUI.start();
+else if(!params.has('s')&&!['challenge','middle','practice'].includes(params.get('level')))lessonUI.start(params.get('restart')==='1');else if(params.get('level')==='practice')startLearn(0);else leaveLearn(params.get('level')==='middle'?'middle':'challenge');
 try{const encoded=params.get('s');if(encoded){const v=JSON.parse(atob(encoded));if(v.f?.length===3){v.f.forEach((f,i)=>['mag','angle','attach'].forEach(k=>set(`${i}.${k}`,f[k])));set('mass',v.m);state.guided=false;quest.phase='done'}}}catch{}
 updateProgress();update(0);$('loader').style.opacity=0;setTimeout(()=>$('loader')?.remove(),650);frameId=requestAnimationFrame(frame);
 window.addEventListener('error',()=>{$('fallback').style.display='grid'});

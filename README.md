@@ -1,5 +1,15 @@
 # 힘의 작용 실험실
 
+## 2026-10-14 · 초중고 통합 과정 (v3.0.0)
+
+기본 화면에서 초등·중등·고등 과정을 선택한다. 초등 4개, 중등 6개, 고등 물리학 2개, 역학과 에너지 2개 실험을 제공한다. 기존 교실·실험대·수레 형상과 재질을 유지한다. 설명 패널은 현재 지시·조건·측정 결과, 기록은 접는 노트로 정리했다.
+
+`?course=elementary|middle|physics|mechanics`로 직접 진입한다. 과정·실험별 조건과 기록은 `force-lab-curriculum-v1`에 분리 저장한다. 전체 JSON 내보내기와 `teacher.html`에서 검증·불러오기·인쇄를 지원한다. 이전 중등 저장소와 `?course=lesson`, `?wordless=1`, `teacher-legacy.html`, `guide-legacy.html`은 보존한다.
+
+계획 매핑과 근사는 [과정 구현 범위](docs/curriculum-integration.md), 손계산은 [검수 요약](docs/reviewer-brief-curriculum.md)에 정리했다. 실행 검증: `node verification/validate-physics.mjs`, `node verification/validate-lesson.mjs`, `node verification/validate-curriculum.mjs`. 로컬 `/__curriculum_qa`는 실제 수레 동작을 포함한 14개 실험을 검사한다. `window.__lab.curriculum`에 과정·실험 전환, 조건 변경, 실행, 보고서 API를 노출한다.
+
+아래는 이전 버전의 변경 기록이다.
+
 ## 2026-10-13 · 바로 실험하고 문장으로 이해하기
 
 기본 경로는 힘 바꾸기 → 움직임 예상 → 실험하기 한 번으로 관찰한다. 화살표 그리기는 선택 활동으로 분리했고 이전 기록에서 그 단계에 머물렀으면 바로 실험으로 이동한다. 목표·버튼·결과를 ko/en 짧은 문장으로 표시한다. 여섯 단계 전체는 `?course=lesson`, 무글자 전시는 `?wordless=1`이다. 건너뛴 활동은 교사 화면에서 미실시로 표시하며 점수·응답을 만들어 넣지 않는다.

@@ -5,8 +5,8 @@
     "en": "Forces & Equilibrium Laboratory"
   },
   "description": {
-    "ko": "짧은 안내에 따라 힘을 바꾸고 수레의 움직임과 평형을 직접 확인하는 실험실.",
-    "en": "Change forces with clear instructions, predict motion, and discover how to keep the cart still."
+    "ko": "같은 실험대에서 초등·중등·고등 과정을 선택하고 14가지 실험의 조건과 결과를 비교합니다.",
+    "en": "Choose elementary, middle or high school on a shared workbench and compare conditions and results across 14 investigations."
   },
   "category": "physics",
   "topics": [
@@ -22,21 +22,41 @@
   "thumbnail": "thumb.jpg",
   "guide": "guide.html",
   "aspectRatio": "8:5",
-  "version": "2.3.0",
+  "version": "3.0.0",
   "qualityLevels": [
     "high",
     "low"
   ],
   "wordless": false,
   "curriculum": {
-    "primary": "9과05-01",
-    "related": [
-      "9과05-03"
+    "primary": [
+      "4과01-01",
+      "4과01-02",
+      "4과01-03",
+      "4과01-04",
+      "9과05-01",
+      "9과05-02",
+      "9과05-04",
+      "12물리01-01",
+      "12역학01-01"
     ],
     "alignment": "adapted",
-    "map": "docs/curriculum-map.md"
+    "map": "docs/curriculum-integration.md",
+    "labId": "L01"
   },
   "teacherRecords": "teacher.html",
   "wordlessMode": "?wordless=1",
-  "fullLesson": "?course=lesson"
+  "fullLesson": "?course=lesson",
+  "schoolBands": [
+    "elementary",
+    "middle",
+    "high"
+  ],
+  "courses": [
+    "elementary",
+    "middle",
+    "physics",
+    "mechanics"
+  ],
+  "legacyLesson": "?course=lesson"
 }

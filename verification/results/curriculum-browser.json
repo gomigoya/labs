@@ -1,0 +1,602 @@
+{
+  "checks": [
+    {
+      "name": "elementary/push",
+      "pass": true,
+      "detail": {
+        "metrics": [
+          {
+            "key": "displacement",
+            "value": 1.44,
+            "unit": "m"
+          }
+        ],
+        "dynamics": {
+          "x": 1.4499999999999995,
+          "y": 0,
+          "vx": 2.3999999999999964,
+          "vy": 0,
+          "rotation": 0,
+          "omega": 0
+        },
+        "time": 1.1999999999999982
+      }
+    },
+    {
+      "name": "cart-actual-displacement",
+      "pass": true,
+      "detail": {
+        "actual": 1.4499999999999995,
+        "expected": 1.44
+      }
+    },
+    {
+      "name": "elementary/balance",
+      "pass": true,
+      "detail": {
+        "metrics": [
+          {
+            "key": "leftLoad",
+            "value": 300,
+            "unit": "g"
+          },
+          {
+            "key": "rightLoad",
+            "value": 500,
+            "unit": "g"
+          }
+        ],
+        "dynamics": {
+          "x": 0,
+          "y": 0,
+          "vx": 0,
+          "vy": 0,
+          "rotation": 0,
+          "omega": 0
+        },
+        "time": 0
+      }
+    },
+    {
+      "name": "scale-needs-zero-and-load",
+      "pass": true
+    },
+    {
+      "name": "elementary/scale",
+      "pass": true,
+      "detail": {
+        "metrics": [
+          {
+            "key": "reading",
+            "value": 500,
+            "unit": "g"
+          },
+          {
+            "key": "object",
+            "value": 0.5,
+            "unit": "kg"
+          }
+        ],
+        "dynamics": {
+          "x": 0,
+          "y": 0,
+          "vx": 0,
+          "vy": 0,
+          "rotation": 0,
+          "omega": 0
+        },
+        "time": 0
+      }
+    },
+    {
+      "name": "elementary/tools",
+      "pass": true,
+      "detail": {
+        "metrics": [
+          {
+            "key": "direct",
+            "value": 1,
+            "unit": "relative"
+          },
+          {
+            "key": "withTool",
+            "value": 0.25,
+            "unit": "relative"
+          },
+          {
+            "key": "distance",
+            "value": 2,
+            "unit": "m"
+          }
+        ],
+        "dynamics": {
+          "x": 0,
+          "y": 0,
+          "vx": 0,
+          "vy": 0,
+          "rotation": 0,
+          "omega": 0
+        },
+        "time": 0
+      }
+    },
+    {
+      "name": "middle/parallel",
+      "pass": true,
+      "detail": {
+        "metrics": [
+          {
+            "key": "net",
+            "value": -1,
+            "unit": "N"
+          },
+          {
+            "key": "speed",
+            "value": -1.2,
+            "unit": "m/s"
+          }
+        ],
+        "dynamics": {
+          "x": -0.7249999999999998,
+          "y": 1.7757378587636644e-16,
+          "vx": -1.1999999999999982,
+          "vy": 2.9391523179536496e-16,
+          "rotation": 0,
+          "omega": 0
+        },
+        "time": 1.1999999999999982
+      }
+    },
+    {
+      "name": "middle/gravity",
+      "pass": true,
+      "detail": {
+        "metrics": [
+          {
+            "key": "massScience",
+            "value": 1,
+            "unit": "kg"
+          },
+          {
+            "key": "weight",
+            "value": 9.8,
+            "unit": "N"
+          },
+          {
+            "key": "extension",
+            "value": 19.6,
+            "unit": "cm"
+          }
+        ],
+        "dynamics": {
+          "x": 0,
+          "y": 0,
+          "vx": 0,
+          "vy": 0,
+          "rotation": 0,
+          "omega": 0
+        },
+        "time": 0
+      }
+    },
+    {
+      "name": "middle/elastic",
+      "pass": true,
+      "detail": {
+        "metrics": [
+          {
+            "key": "massScience",
+            "value": 0.5,
+            "unit": "kg"
+          },
+          {
+            "key": "weight",
+            "value": 4.9,
+            "unit": "N"
+          },
+          {
+            "key": "extension",
+            "value": 9.8,
+            "unit": "cm"
+          }
+        ],
+        "dynamics": {
+          "x": 0,
+          "y": 0,
+          "vx": 0,
+          "vy": 0,
+          "rotation": 0,
+          "omega": 0
+        },
+        "time": 0
+      }
+    },
+    {
+      "name": "middle/friction",
+      "pass": true,
+      "detail": {
+        "metrics": [
+          {
+            "key": "friction",
+            "value": 1.9600000000000002,
+            "unit": "N"
+          },
+          {
+            "key": "speed",
+            "value": 0,
+            "unit": "m/s"
+          },
+          {
+            "key": "displacement",
+            "value": 0.5739795918367346,
+            "unit": "m"
+          }
+        ],
+        "dynamics": {
+          "x": 0.5677388888888897,
+          "y": 7.105649268082705e-17,
+          "vx": 0,
+          "vy": 1.836970198721028e-16,
+          "rotation": 0,
+          "omega": 0
+        },
+        "time": 0.7653061224489796
+      }
+    },
+    {
+      "name": "friction-stop-no-reversal",
+      "pass": true
+    },
+    {
+      "name": "middle/buoyancy",
+      "pass": true,
+      "detail": {
+        "metrics": [
+          {
+            "key": "weight",
+            "value": 9.8,
+            "unit": "N"
+          },
+          {
+            "key": "buoyancy",
+            "value": 1.96,
+            "unit": "N"
+          },
+          {
+            "key": "scale",
+            "value": 7.840000000000001,
+            "unit": "N"
+          }
+        ],
+        "dynamics": {
+          "x": 0,
+          "y": 0,
+          "vx": 0,
+          "vy": 0,
+          "rotation": 0,
+          "omega": 0
+        },
+        "time": 0
+      }
+    },
+    {
+      "name": "middle/design",
+      "pass": true,
+      "detail": {
+        "metrics": [
+          {
+            "key": "friction",
+            "value": 0.49000000000000005,
+            "unit": "N"
+          },
+          {
+            "key": "speed",
+            "value": 0.9119999999999999,
+            "unit": "m/s"
+          },
+          {
+            "key": "displacement",
+            "value": 2.2959183673469385,
+            "unit": "m"
+          }
+        ],
+        "dynamics": {
+          "x": 1.44474999999999,
+          "y": 4.350557753970969e-17,
+          "vx": 0.9119999999999873,
+          "vy": 7.20092317898644e-17,
+          "rotation": 0,
+          "omega": 0
+        },
+        "time": 1.1999999999999982
+      }
+    },
+    {
+      "name": "physics/torque",
+      "pass": true,
+      "detail": {
+        "metrics": [
+          {
+            "key": "net",
+            "value": 0,
+            "unit": "N"
+          },
+          {
+            "key": "torque",
+            "value": 0,
+            "unit": "N·m"
+          },
+          {
+            "key": "reaction",
+            "value": 20,
+            "unit": "N"
+          }
+        ],
+        "dynamics": {
+          "x": 0,
+          "y": 0,
+          "vx": 0,
+          "vy": 0,
+          "rotation": 0,
+          "omega": 0
+        },
+        "time": 0
+      }
+    },
+    {
+      "name": "physics/stability",
+      "pass": true,
+      "detail": {
+        "metrics": [
+          {
+            "key": "offset",
+            "value": 0,
+            "unit": "m"
+          },
+          {
+            "key": "support",
+            "value": 1,
+            "unit": "m"
+          },
+          {
+            "key": "torque",
+            "value": 0,
+            "unit": "N·m"
+          }
+        ],
+        "dynamics": {
+          "x": 0,
+          "y": 0,
+          "vx": 0,
+          "vy": 0,
+          "rotation": 0,
+          "omega": 0
+        },
+        "time": 0
+      }
+    },
+    {
+      "name": "mechanics/vectors",
+      "pass": true,
+      "detail": {
+        "metrics": [
+          {
+            "key": "net",
+            "value": 5,
+            "unit": "N"
+          },
+          {
+            "key": "rx",
+            "value": 3.0000000000000004,
+            "unit": "N"
+          },
+          {
+            "key": "ry",
+            "value": 4,
+            "unit": "N"
+          },
+          {
+            "key": "accel",
+            "value": 5,
+            "unit": "m/s²"
+          }
+        ],
+        "dynamics": {
+          "x": 2.1749999999999967,
+          "y": 2.899999999999999,
+          "vx": 3.5999999999999917,
+          "vy": 4.799999999999993,
+          "rotation": 0,
+          "omega": 0
+        },
+        "time": 1.1999999999999982
+      }
+    },
+    {
+      "name": "vector-actual-velocity",
+      "pass": true
+    },
+    {
+      "name": "mechanics/incline",
+      "pass": true,
+      "detail": {
+        "metrics": [
+          {
+            "key": "tension",
+            "value": 4.8999999999999995,
+            "unit": "N"
+          },
+          {
+            "key": "normal",
+            "value": 8.4870489570875,
+            "unit": "N"
+          },
+          {
+            "key": "net",
+            "value": 0,
+            "unit": "N"
+          },
+          {
+            "key": "slopeForce",
+            "value": 4.8999999999999995,
+            "unit": "N"
+          },
+          {
+            "key": "friction",
+            "value": 0,
+            "unit": "N"
+          }
+        ],
+        "dynamics": {
+          "x": 0,
+          "y": 0,
+          "vx": 0,
+          "vy": 0,
+          "rotation": 0,
+          "omega": 0
+        },
+        "time": 0
+      }
+    },
+    {
+      "name": "actual-constant-velocity",
+      "pass": true
+    },
+    {
+      "name": "course-restores-inputs",
+      "pass": true
+    },
+    {
+      "name": "validated-export",
+      "pass": true
+    },
+    {
+      "name": "local-persistence",
+      "pass": true
+    },
+    {
+      "name": "notebook-initially-collapsed",
+      "pass": true
+    },
+    {
+      "name": "no-horizontal-overflow",
+      "pass": true
+    },
+    {
+      "name": "low-quality-settings",
+      "pass": true
+    }
+  ],
+  "pass": true,
+  "diagnostics": {
+    "physics": {
+      "forces": [
+        {
+          "x": 2,
+          "y": 0,
+          "mag": 2,
+          "angle": 0,
+          "r": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        {
+          "x": -2,
+          "y": 2.4492935982947064e-16,
+          "mag": 2,
+          "angle": 180,
+          "r": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        {
+          "x": 0,
+          "y": 0,
+          "mag": 0,
+          "angle": 0,
+          "r": {
+            "x": 0,
+            "y": 0
+          }
+        }
+      ],
+      "R": {
+        "x": 0,
+        "y": 2.4492935982947064e-16
+      },
+      "resultant": 2.4492935982947064e-16,
+      "torque": 0,
+      "mass": 1,
+      "inertia": 0.6033333333333334,
+      "a": {
+        "x": 0,
+        "y": 2.4492935982947064e-16
+      },
+      "alpha": 0,
+      "equilibrium": true
+    },
+    "fps": 60,
+    "quality": "low",
+    "canvas": [
+      335,
+      760
+    ],
+    "viewport": [
+      0,
+      0,
+      335,
+      760
+    ],
+    "drawCalls": 355,
+    "triangles": 137760,
+    "ao": false,
+    "dof": false,
+    "pixelRatio": 1,
+    "bloom": [
+      84,
+      190
+    ],
+    "shadow": 1024,
+    "particles": 72,
+    "quest": {
+      "i": 0,
+      "passed": [],
+      "phase": "done",
+      "picked": null,
+      "elapsed": 0,
+      "stable": 0,
+      "changed": false,
+      "observed": null
+    },
+    "learn": {
+      "active": true,
+      "level": "intro",
+      "task": 0,
+      "phase": "practice",
+      "timer": 0,
+      "stable": 0,
+      "edits": 0,
+      "picked": null,
+      "voice": false,
+      "completed": [],
+      "observed": null,
+      "showSummary": false,
+      "beforeR": -1,
+      "cart": true,
+      "arrows": [
+        true,
+        true,
+        false
+      ],
+      "resultArrow": false,
+      "handles": [
+        false,
+        false,
+        false
+      ]
+    },
+    "errors": []
+  }
+}

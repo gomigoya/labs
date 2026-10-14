@@ -1,0 +1,17 @@
+{
+  "version": "3.0.0",
+  "modelChecks": {"physics": 6, "legacyLesson": 10, "curriculum": 18, "passed": true},
+  "browserChecks": {"curriculum": 25, "legacyWordless": 8, "passed": true},
+  "manual": [
+    {"check": "Original room and yellow cart preserved", "passed": true},
+    {"check": "Elementary balance, middle cart, high subject selection", "passed": true},
+    {"check": "390x844 and 390x700 responsive iframe: no horizontal page overflow", "passed": true},
+    {"check": "Mobile notebook disclosure and explanation typing with Space", "passed": true},
+    {"check": "English laboratory and teacher guide", "passed": true},
+    {"check": "Teacher JSON file import: conditions, measurements, missing activities and explanation retained", "passed": true},
+    {"check": "Reload preserves per-course inputs and records", "passed": true},
+    {"check": "Thumbnail capture 1200x750", "passed": true}
+  ],
+  "evidenceDirectory": "outputs/curriculum",
+  "limits": ["4 GB Chromebook hardware FPS was not measured", "Instrument tilting, fluid levels and extension geometry are schematic; numerical layer is authoritative"]
+}

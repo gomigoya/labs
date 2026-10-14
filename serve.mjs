@@ -16,8 +16,8 @@ http.createServer(async(req,res)=>{
   else fs.writeFileSync(target,body);
   res.writeHead(200,{'Content-Type':'text/plain'});return res.end(target);
  }
- let file=url.pathname==='/__qa'?path.join(base,'verification/qa.html'):path.resolve(root,'.'+decodeURIComponent(url.pathname));
- if(url.pathname!=='/__qa'&&!file.startsWith(root+path.sep)&&file!==root){res.writeHead(403);return res.end()}
+ let file=url.pathname==='/__qa'?path.join(base,'verification/qa.html'):url.pathname==='/__curriculum_qa'?path.join(base,'verification/curriculum-qa.html'):path.resolve(root,'.'+decodeURIComponent(url.pathname));
+ if(!['/__qa','/__curriculum_qa'].includes(url.pathname)&&!file.startsWith(root+path.sep)&&file!==root){res.writeHead(403);return res.end()}
  if(fs.existsSync(file)&&fs.statSync(file).isDirectory())file=path.join(file,'index.html');
  if(!fs.existsSync(file)){res.writeHead(404);return res.end('Not found')}
  res.writeHead(200,{'Content-Type':types[path.extname(file)]||'application/octet-stream','Cache-Control':'no-store'});fs.createReadStream(file).pipe(res);
