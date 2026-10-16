@@ -1,5 +1,25 @@
 # 힘의 작용 실험실
 
+## 2026-10-16 · 지도서 순서·조작·학습 근거 (v4.0.0)
+
+확인한 교과서·지도서의 학생 목표를 초등 11개, 중등 17개, 고등 물리학 7개 활동으로 구현했다. 역학과 에너지 2개 확장을 더해 총 37개 활동·113개 안내 조건이다. 교실·실험대·기존 수레의 형상과 재질은 유지한다. 설명 패널은 준비 → 실험 → 정리 → 적용, 현재 지시와 바꿀 조건 중심으로 구성하고 실험 기록을 접어 둔다.
+
+영점·초기 위치 표시·눈높이·빈 봉투 영점·직접 눈금 읽기·학생 화살표·실제 측정점 그래프·지레 빈칸 해결을 포함한다. 계획, 처음 예상, 첫 답과 수정 답, 측정, 설명, 설계 수정, 조사 출처와 동료 의견을 저장한다. 자동 확인은 제출 근거를 뜻하며 발표·협력·실제 학습 습득은 교사가 검토한다.
+
+출처 범위와 과정은 [과정 구현](docs/curriculum-integration.md), 원문 쪽수별 45개 항목은 [지도서 대조표](docs/teacher-guide-coverage.md), 식·배율·대표 상태 손계산은 [검수 요약](docs/reviewer-brief.md)에 있다. guide.html과 teacher.html도 갱신했다. 기존 기록은 보존·변환하고 새 과정 완료와 구분한다.
+
+```powershell
+node serve.mjs 4173
+node verification/validate-physics.mjs
+node verification/validate-lesson.mjs
+node verification/validate-curriculum.mjs
+node verification/validate-teaching.mjs
+```
+
+로컬 주소 http://127.0.0.1:4173/labs/force-equilibrium/ . 전용 테스트 포트의 /__teaching_qa는 37개 활동·113개 조건, 적분·기구 좌표·저장 복원·저사양 계약을 검증한다. 테스트는 해당 포트의 기록만 초기화하므로 학생이 사용 중인 포트에서 실행하지 않는다. 실행 결과와 화면 증거는 verification/results와 verification/evidence에 보관한다. 실제 4GB Chromebook의 FPS와 학생 효과는 현장 검증 대상이다.
+
+---
+
 ## 2026-10-14 · 초중고 통합 과정 (v3.0.0)
 
 기본 화면에서 초등·중등·고등 과정을 선택한다. 초등 4개, 중등 6개, 고등 물리학 2개, 역학과 에너지 2개 실험을 제공한다. 기존 교실·실험대·수레 형상과 재질을 유지한다. 설명 패널은 현재 지시·조건·측정 결과, 기록은 접는 노트로 정리했다.

@@ -5,8 +5,8 @@
     "en": "Forces & Equilibrium Laboratory"
   },
   "description": {
-    "ko": "같은 실험대에서 초등·중등·고등 과정을 선택하고 14가지 실험의 조건과 결과를 비교합니다.",
-    "en": "Choose elementary, middle or high school on a shared workbench and compare conditions and results across 14 investigations."
+    "ko": "교과서·지도서 순서를 따라 초등·중등·고등의 37개 활동과 113개 안내 조건을 조작하고 관찰·설명·적용을 기록합니다.",
+    "en": "Follow source-guided elementary, middle and high-school courses with 37 activities, 113 guided conditions, and observation, explanation and transfer records."
   },
   "category": "physics",
   "topics": [
@@ -22,7 +22,7 @@
   "thumbnail": "thumb.jpg",
   "guide": "guide.html",
   "aspectRatio": "8:5",
-  "version": "3.0.0",
+  "version": "4.0.0",
   "qualityLevels": [
     "high",
     "low"
@@ -36,13 +36,18 @@
       "4과01-04",
       "9과05-01",
       "9과05-02",
+      "9과05-03",
       "9과05-04",
       "12물리01-01",
       "12역학01-01"
     ],
     "alignment": "adapted",
     "map": "docs/curriculum-integration.md",
-    "labId": "L01"
+    "labId": "L01",
+    "guideCoverage": "docs/teacher-guide-coverage.md",
+    "activities": 37,
+    "guidedConditions": 113,
+    "auditedObjectives": 45
   },
   "teacherRecords": "teacher.html",
   "wordlessMode": "?wordless=1",

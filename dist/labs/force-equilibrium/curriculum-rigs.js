@@ -1,3 +1,4 @@
+import {teachingApparatus} from './teaching-apparatus.js';
 // Additional instruments share the existing room, lighting and materials.
 export function createCurriculumRigs({THREE,hero,HERO_Y,mats,roundedPanel,cyl,cart}){
  const root=new THREE.Group();hero.add(root);root.position.set(0,HERO_Y,-.6);root.visible=false;
@@ -22,10 +23,12 @@ export function createCurriculumRigs({THREE,hero,HERO_Y,mats,roundedPanel,cyl,ca
  rigs.incline=ramp;
  const stability=group('stability');const base=roundedPanel(2,.3,1.3,teal,stability,0,.2,0,.05);const block=new THREE.Group();stability.add(block);block.position.y=.38;roundedPanel(1.1,1.8,1.1,yellow,block,0,.9,0,.08);const dot=cyl(.08,.03,mats.brass,block,0,1.84,0,16);
  const cargo=load(cart,0,.85);cargo.visible=false;
+ const teaching=teachingApparatus({THREE,root,mats,roundedPanel,cyl,cart});
  function update(activity,p,result,progress,measured){
   root.visible=true;for(const g of new Set(Object.values(rigs)))g.visible=false;
+  cart.visible=result.cart;cart.position.set(0,0,0);cart.rotation.z=0;cart.scale.setScalar(1);cargo.visible=false;
+  if(teaching.update(activity,p,result,progress,measured))return;
   const rig=rigs[result.rig];if(rig)rig.visible=true;
-  cart.visible=result.cart;cart.position.set(0,0,0);cart.rotation.z=0;cart.scale.setScalar(1);cargo.visible=activity==='push';cargo.scale.setScalar(.65+Math.cbrt(p.mass||1)*.25);
   if(result.rig==='balance'){const tilt=measured?Math.sign(p.left-p.right)*.16:0;beam.rotation.z=tilt;pans.forEach(pan=>pan.rotation.z=-tilt);left.scale.setScalar(Math.cbrt(p.left/400));right.scale.setScalar(Math.cbrt(p.right/400));}
   if(result.rig==='scale')scaleLoad.visible=p.placed;
   if(result.rig==='spring'){const extension=result.metrics.find(m=>m.key==='extension')?.value||0;coil.scale.y=measured?1+extension/40:1;springLoad.position.y=3.22-coil.scale.y-.55;springLoad.scale.setScalar(.7+Math.cbrt(p.mass||1)*.2);}
@@ -34,5 +37,5 @@ export function createCurriculumRigs({THREE,hero,HERO_Y,mats,roundedPanel,cyl,ca
   if(['ramp','incline'].includes(result.rig)){const angle=activity==='incline'?p.angle*Math.PI/180:Math.asin(.5/p.length),length=activity==='incline'?5:p.length*2;slope.scale.x=length/5;slope.rotation.z=angle;const span=Math.max(.12,length*Math.cos(angle)/2-.75),x=activity==='incline'?0:-span+progress*span*2;const support=ramp.children[1];support.position.x=length*Math.cos(angle)/2;support.scale.y=(.8+length*Math.sin(angle)/2)/1.5;support.position.y=(.8+length*Math.sin(angle)/2)/2;cart.position.set(x,.88+x*Math.tan(angle),0);cart.rotation.z=angle;cart.scale.setScalar(.65);}
   if(result.rig==='stability'){base.scale.x=p.width/2;block.position.x=p.offset;block.rotation.z=measured&&Math.abs(p.offset)>p.width/2?-Math.sign(p.offset)*.3:0;dot.visible=true;}
  }
- return {update,hide(){root.visible=false;cart.position.set(0,0,0);cart.rotation.z=0;cart.scale.setScalar(1);cargo.visible=false}};
+ return {update,diagnostics:teaching.diagnostics,hide(){teaching.hide();root.visible=false;cart.position.set(0,0,0);cart.rotation.z=0;cart.scale.setScalar(1);cargo.visible=false}};
 }

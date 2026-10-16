@@ -1,0 +1,281 @@
+{
+  "schema": "force-lab-curriculum",
+  "schemaVersion": 1,
+  "labId": "L01",
+  "course": "middle",
+  "courses": {
+    "elementary": {
+      "activity": "scale",
+      "experiments": {
+        "push": {
+          "inputs": {
+            "mass": 1,
+            "force": 2,
+            "direction": 1
+          },
+          "trials": [],
+          "note": "",
+          "zeroed": false,
+          "placed": false
+        },
+        "balance": {
+          "inputs": {
+            "left": 300,
+            "right": 500
+          },
+          "trials": [],
+          "note": "",
+          "zeroed": false,
+          "placed": false
+        },
+        "scale": {
+          "inputs": {
+            "grams": 500
+          },
+          "trials": [
+            {
+              "id": 1,
+              "at": "2026-10-16T09:45:59.271Z",
+              "labId": "L01",
+              "schoolBand": "elementary",
+              "courseId": "elementary",
+              "activityId": "scale",
+              "inputs": {
+                "grams": 500
+              },
+              "zeroed": true,
+              "placed": true,
+              "result": {
+                "metrics": [
+                  {
+                    "key": "reading",
+                    "value": 500,
+                    "unit": "g"
+                  },
+                  {
+                    "key": "object",
+                    "value": 0.5,
+                    "unit": "kg"
+                  }
+                ],
+                "forces": [
+                  {
+                    "mag": 0,
+                    "angle": 0,
+                    "attach": 0
+                  },
+                  {
+                    "mag": 0,
+                    "angle": 180,
+                    "attach": 0
+                  },
+                  {
+                    "mag": 0,
+                    "angle": 0,
+                    "attach": 0
+                  }
+                ],
+                "initialVelocity": 0,
+                "mass": 1,
+                "rig": "scale",
+                "cart": false,
+                "outcome": "reading",
+                "details": [],
+                "duration": 1.2,
+                "dynamic": false
+              }
+            }
+          ],
+          "note": "",
+          "zeroed": true,
+          "placed": true
+        },
+        "tools": {
+          "inputs": {
+            "mass": 1,
+            "tool": "ramp",
+            "length": 2
+          },
+          "trials": [],
+          "note": "",
+          "zeroed": false,
+          "placed": false
+        }
+      }
+    },
+    "middle": {
+      "activity": "parallel",
+      "experiments": {
+        "parallel": {
+          "inputs": {
+            "left": 2,
+            "right": 1,
+            "initial": 0
+          },
+          "trials": [
+            {
+              "id": 1,
+              "at": "2026-10-16T09:45:59.264Z",
+              "labId": "L01",
+              "schoolBand": "middle",
+              "courseId": "middle",
+              "activityId": "parallel",
+              "inputs": {
+                "left": 2,
+                "right": 1,
+                "initial": 0
+              },
+              "zeroed": false,
+              "placed": false,
+              "result": {
+                "metrics": [
+                  {
+                    "key": "net",
+                    "value": -1,
+                    "unit": "N"
+                  },
+                  {
+                    "key": "speed",
+                    "value": -1.2,
+                    "unit": "m/s"
+                  }
+                ],
+                "forces": [
+                  {
+                    "mag": 1,
+                    "angle": 0,
+                    "attach": 0
+                  },
+                  {
+                    "mag": 2,
+                    "angle": 180,
+                    "attach": 0
+                  },
+                  {
+                    "mag": 0,
+                    "angle": 0,
+                    "attach": 0
+                  }
+                ],
+                "initialVelocity": 0,
+                "mass": 1,
+                "rig": "cart",
+                "cart": true,
+                "outcome": "leftMoves",
+                "details": [
+                  "parallelHint"
+                ],
+                "duration": 1.2,
+                "dynamic": true
+              }
+            }
+          ],
+          "note": "",
+          "zeroed": false,
+          "placed": false
+        },
+        "gravity": {
+          "inputs": {
+            "mass": 1,
+            "planet": "earth"
+          },
+          "trials": [],
+          "note": "",
+          "zeroed": false,
+          "placed": false
+        },
+        "elastic": {
+          "inputs": {
+            "mass": 0.5,
+            "k": 50
+          },
+          "trials": [],
+          "note": "",
+          "zeroed": false,
+          "placed": false
+        },
+        "friction": {
+          "inputs": {
+            "mass": 1,
+            "surface": 0.05
+          },
+          "trials": [],
+          "note": "",
+          "zeroed": false,
+          "placed": false
+        },
+        "buoyancy": {
+          "inputs": {
+            "density": 1000,
+            "volume": 200
+          },
+          "trials": [],
+          "note": "",
+          "zeroed": false,
+          "placed": false
+        },
+        "design": {
+          "inputs": {
+            "surface": 0.05
+          },
+          "trials": [],
+          "note": "",
+          "zeroed": false,
+          "placed": false
+        }
+      }
+    },
+    "physics": {
+      "activity": "torque",
+      "experiments": {
+        "torque": {
+          "inputs": {
+            "effort": 10,
+            "arm": 1,
+            "loadArm": 1
+          },
+          "trials": [],
+          "note": "",
+          "zeroed": false,
+          "placed": false
+        },
+        "stability": {
+          "inputs": {
+            "width": 1,
+            "offset": 0
+          },
+          "trials": [],
+          "note": "",
+          "zeroed": false,
+          "placed": false
+        }
+      }
+    },
+    "mechanics": {
+      "activity": "vectors",
+      "experiments": {
+        "vectors": {
+          "inputs": {
+            "f1": 3,
+            "f2": 4,
+            "angle": 90
+          },
+          "trials": [],
+          "note": "",
+          "zeroed": false,
+          "placed": false
+        },
+        "incline": {
+          "inputs": {
+            "angle": 30,
+            "mu": 0
+          },
+          "trials": [],
+          "note": "",
+          "zeroed": false,
+          "placed": false
+        }
+      }
+    }
+  }
+}

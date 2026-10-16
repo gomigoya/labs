@@ -1,0 +1,14 @@
+{
+  "pass": true,
+  "date": "2026-10-16",
+  "checks": [
+    {"name":"Wrong scale reading blocks next condition; corrected reading enables it", "pass":true},
+    {"name":"High-school lever starts unsolved; changing the weight count creates matching evidence", "pass":true},
+    {"name":"Force drawing origin, length and direction enable measurement through keyboard controls", "pass":true},
+    {"name":"Teacher imports a v1 fixture and distinguishes earlier evidence from guided completion", "pass":true},
+    {"name":"English student UI and teacher guide render the selected language", "pass":true},
+    {"name":"Desktop scene and controls have no captured browser errors", "pass":true}
+  ],
+  "mobile": {"mode":"same-origin iframe viewport", "width":390, "height":680, "horizontalOverflow":false},
+  "limits": ["Not a physical Chromebook frame-rate measurement", "Not a student learning-effect study", "Presentation, source research and collaboration require teacher review"]
+}

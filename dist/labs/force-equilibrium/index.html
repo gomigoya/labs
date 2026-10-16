@@ -672,12 +672,13 @@ curriculumUI=createCurriculum({
  view(id,p,r,progress,measured){
   instrument.visible=transferCrate.visible=consoleTools.visible=diskSurface.visible=false;graphOne.group.visible=graphTwo.group.visible=false;forceKnob.group.visible=angleKnob.group.visible=massSlider.group.visible=false;
   learnRail.visible=r.rig==='cart';learnClamp.visible=r.dynamic&&curriculumUI?.phase==='ready';pin.visible=false;learnGoalRing.visible=targetRing.visible=resultArrow.visible=torqueGroup.visible=false;equilibriumRing.visible=measured&&id==='parallel'&&physical.equilibrium;
-  for(let i=0;i<3;i++){attachHandles[i].visible=ghostArrows[i].visible=targetArrows[i].visible=handles[i].visible=false;arrows[i].visible=false;if(['parallel','vectors','friction','design'].includes(id)&&r.forces[i].mag>.001){setArrow(arrows[i],state.forces[i],getOrigin(i),HERO_Y+.82+i*.12);arrows[i].material.uniforms.uOpacity.value=.96;arrows[i].material.blending=THREE.NormalBlending;arrows[i].material.uniforms.uColor.value.set(i===0?0x39b7ac:0xda863c)}}
+  for(let i=0;i<3;i++){attachHandles[i].visible=ghostArrows[i].visible=targetArrows[i].visible=handles[i].visible=false;arrows[i].visible=false;if(['represent','parallel','vectors','motion'].includes(id)&&r.forces[i].mag>.001){setArrow(arrows[i],state.forces[i],getOrigin(i),HERO_Y+.82+i*.12);arrows[i].material.uniforms.uOpacity.value=.96;arrows[i].material.blending=THREE.NormalBlending;arrows[i].material.uniforms.uColor.value.set(i===0?0x39b7ac:0xda863c)}}
   medium.visible=particles.visible=curriculumUI?.phase==='running'&&r.dynamic;trailGroup.visible=false;for(const wheel of cartWheels)wheel.rotation.z=-state.dynamics.x*.35/.31;
-  curriculumRigs.update(id,p,r,progress,measured);$('hint').style.opacity=0;
+  curriculumRigs.update(id,{...p,dynamics:state.dynamics},r,progress,measured);$('hint').style.opacity=0;
  }
 });
 window.__lab.curriculum=curriculumUI;
+window.__lab.apparatus=curriculumRigs.diagnostics;
 if(!params.has('s')&&!params.has('level')&&params.get('wordless')!=='1'&&!['lesson','legacy'].includes(params.get('course')))curriculumUI.start();
 else if(!params.has('s')&&!['challenge','middle','practice'].includes(params.get('level')))lessonUI.start(params.get('restart')==='1');else if(params.get('level')==='practice')startLearn(0);else leaveLearn(params.get('level')==='middle'?'middle':'challenge');
 try{const encoded=params.get('s');if(encoded){const v=JSON.parse(atob(encoded));if(v.f?.length===3){v.f.forEach((f,i)=>['mag','angle','attach'].forEach(k=>set(`${i}.${k}`,f[k])));set('mass',v.m);state.guided=false;quest.phase='done'}}}catch{}
