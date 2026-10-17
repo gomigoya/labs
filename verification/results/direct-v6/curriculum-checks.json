@@ -1,0 +1,74 @@
+[
+  {
+    "name": "37 activities map to 10 L01 standards, with high-school subjects separated",
+    "pass": true
+  },
+  {
+    "name": "Elementary controls exclude vectors, angles and torque",
+    "pass": true
+  },
+  {
+    "name": "Same push, heavier cart travels less",
+    "pass": true
+  },
+  {
+    "name": "Balance and scale have separate measurement procedures",
+    "pass": true
+  },
+  {
+    "name": "Tools trade force for distance at the same 0.5 m lift",
+    "pass": true
+  },
+  {
+    "name": "Zero net force preserves prior velocity",
+    "pass": true
+  },
+  {
+    "name": "Earth and Moon change weight, not mass",
+    "pass": true
+  },
+  {
+    "name": "Same suspended load: stiffness changes extension, not force",
+    "pass": true
+  },
+  {
+    "name": "Friction onset is a controlled static measurement",
+    "pass": true
+  },
+  {
+    "name": "Buoyancy and apparent weight sum to true weight",
+    "pass": true
+  },
+  {
+    "name": "Net force zero is insufficient when net torque is nonzero",
+    "pass": true
+  },
+  {
+    "name": "Support distinguishes inside, edge and outside",
+    "pass": true
+  },
+  {
+    "name": "3-4-5 vector composition",
+    "pass": true
+  },
+  {
+    "name": "Incline limiting friction, normal force and tension balance",
+    "pass": true
+  },
+  {
+    "name": "School and activity records do not alias",
+    "pass": true
+  },
+  {
+    "name": "Reload preserves conditions, notes and all course records",
+    "pass": true
+  },
+  {
+    "name": "Import recomputes measurements and rejects cross-course or invalid inputs",
+    "pass": true
+  },
+  {
+    "name": "Every activity default and boundary produces finite numeric measurements",
+    "pass": true
+  }
+]

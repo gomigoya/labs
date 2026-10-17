@@ -12,6 +12,7 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='12' fill='%232b3332'/%3E%3Cpath d='M7 20h26m-7-7 7 7-7 7M14 13l-7 7 7 7' stroke='%238bddd0' stroke-width='3' fill='none'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="lesson.css">
 <link rel="stylesheet" href="curriculum.css">
+<link rel="stylesheet" href="scene-interaction.css">
 <style>
 @font-face{font-family:'DM Mono';src:url('https://cdn.jsdelivr.net/npm/@fontsource/dm-mono@5.2.7/files/dm-mono-latin-400-normal.woff2') format('woff2');font-display:swap}
 :root{color-scheme:light;--ink:#34433f;--glass:rgba(248,249,242,.91);--line:rgba(63,81,71,.13);--accent:#475f50;--cyan:#69d9d2;--amber:#efb36d;--violet:#bcb0ef;--target:56px}
@@ -85,6 +86,7 @@ Object.assign(window.__LAB_LABELS__.en,{"childLeft":"Left","childRight":"Right",
 import {createLesson} from './lesson.js';
 import {createCurriculum} from './curriculum.js';
 import {createCurriculumRigs} from './curriculum-rigs.js';
+import {createSceneInteraction} from './scene-interaction.js';
 import {cartDisplayScale,teachingCameraHeight} from './teaching-geometry.js';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
@@ -131,7 +133,7 @@ const label=k=>LABELS[english?'en':'ko'][k]||k;
 const state={forces:structuredClone(PHYSICS.presets[0]),targets:structuredClone(PHYSICS.presets[0]),mass:2,massTarget:2,selected:0,pinned:true,playing:false,speed:1,time:0,mode:'explore',guided:true,sound:false,quality:params.get('lite')==='1'?'low':(window.__SITE__?.quality==='low'?'low':'high'),layers:{segments:true,limit:true,trails:false,lens:false,note:false,ab:false,numeric:false},ab:null,section:0,sectionTarget:0,dynamics:{x:0,y:0,vx:0,vy:0,rotation:0,omega:0},records:[],history:[],attract:false,lastInput:performance.now(),fps:60,events:[],uiVisible:true};
 const quest={i:0,passed:[],phase:'intro',picked:null,elapsed:0,stable:0,changed:false,observed:null};
 const learn={active:false,level:'intro',task:0,phase:'practice',timer:0,stable:0,edits:0,picked:null,voice:false,completed:[],observed:null,showSummary:false};
-let lessonUI=null,curriculumUI=null,curriculumDuration=1.2,curriculumPositionScale=.35,curriculumView={rig:'cart',dynamic:true};
+let lessonUI=null,curriculumUI=null,curriculumDuration=1.2,curriculumPositionScale=.35,curriculumView={rig:'cart',dynamic:true},sceneInput=null,curriculumOrigin={x:0,z:0},directCartPreview=null;
 let physical=PHYSICS.solve(state),renderer,composer,controls,ao,bokeh,bloom,renderPass,output,scene,camera;
 const COLORS=[0x69d9d2,0xefb36d,0xbcb0ef],CSS_COLORS=['#69d9d2','#efb36d','#bcb0ef'];
 const UNIT=.62,HERO_Y=2.72,TAU=Math.PI*2,reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -579,7 +581,7 @@ function renderLearn(){
  $('learn-help').setAttribute('aria-pressed',String(learn.voice));drawLearnCue();if(focused&&$(focused)&&!$(focused).disabled)$(focused).focus({preventScroll:true});
 }
 function updateLearn(dt){
- if(curriculumUI?.active){curriculumUI.tick(dt);return}
+ if(curriculumUI?.active){curriculumUI.tick(dt);sceneInput?.update();return}
  if(lessonUI?.active){lessonUI.tick(dt);return}
  if(!learn.active)return;
  learn.timer+=dt;const editing=canManipulate();if(editing&&learn.edits>0&&learnGoal()&&!drag){learn.stable+=dt;if(learn.stable>.9)learnRelease()}else learn.stable=0;
@@ -601,8 +603,9 @@ $('learn-return').setAttribute('aria-label',label('cart'));$('learn-return').inn
 
 // 17 · LOOP — frame schedules; update computes and renders without rAF.
 let nowTime=0,previousTime=performance.now(),lastGraph=0,frameId=0,accumulator=0;
+function curriculumOffset(){return curriculumUI?.active?(directCartPreview||curriculumOrigin):{x:0,z:0};}
 function displayPositionScale(){return curriculumUI?.active?curriculumPositionScale:.35;}
-function getOrigin(i){const f=physical.forces[i],d=state.dynamics;return{x:d.x*displayPositionScale()+f.r.x+(learn.active?(Math.cos(state.forces[i].angle*Math.PI/180)>0?1.12:-1.12):0),z:-.6-d.y*displayPositionScale()-f.r.y}}
+function getOrigin(i){const f=physical.forces[i],d=state.dynamics;return{x:curriculumOffset().x+d.x*displayPositionScale()+f.r.x+(learn.active?(Math.cos(state.forces[i].angle*Math.PI/180)>0?1.12:-1.12):0),z:-.6+curriculumOffset().z-d.y*displayPositionScale()-f.r.y}}
 function advancePhysics(dt,force=false){if(!state.playing&&!force)return;state.history.push({time:state.time,dynamics:{...state.dynamics}});if(state.history.length>600)state.history.shift();let rem=Math.min(dt,.12);while(rem>1e-8){const h=Math.min(rem,1/120);state.dynamics=PHYSICS.advance(state,state.dynamics,h);state.time+=h;rem-=h}if(!curriculumUI?.active&&Math.hypot(state.dynamics.x*displayPositionScale(),state.dynamics.y*displayPositionScale())>1.65){state.playing=false;state.pinned=true;state.dynamics={x:0,y:0,vx:0,vy:0,rotation:0,omega:0};physicalEvent('limit');syncButtons()}trailTimer+=dt;if(trailTimer>.12){trailTimer=0;trailDots.forEach((o,i)=>{if(i<trailDots.length-1){o.position.copy(trailDots[i+1].position);o.visible=trailDots[i+1].visible}});const o=trailDots.at(-1);o.position.set(state.dynamics.x*displayPositionScale(),2.74,-.6-state.dynamics.y*displayPositionScale());o.visible=true}}
 function graphGrid(ctx,w,h){ctx.fillStyle='#122d29';ctx.fillRect(0,0,w,h);ctx.strokeStyle='#35594d';ctx.lineWidth=1;for(let x=28;x<w;x+=40){ctx.beginPath();ctx.moveTo(x,20);ctx.lineTo(x,h-25);ctx.stroke()}for(let y=20;y<h;y+=35){ctx.beginPath();ctx.moveTo(28,y);ctx.lineTo(w-20,y);ctx.stroke()}ctx.strokeStyle='#789e85';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(28,18);ctx.lineTo(28,h-25);ctx.lineTo(w-16,h-25);ctx.stroke()}
 const graphSamples=[];
@@ -613,7 +616,7 @@ function update(dt){dt=PHYSICS.clamp(dt,0,.12);nowTime+=dt;
  for(let i=0;i<3;i++)for(const k of ['mag','angle','attach'])state.forces[i][k]=damp(state.forces[i][k],state.targets[i][k],dt);state.mass=damp(state.mass,state.massTarget,dt);state.section=damp(state.section,state.sectionTarget,dt,5);
  const slow=performance.now()<eventSlowUntil?.25:1;const simulationDt=curriculumUI?.active?Math.min(dt,Math.max(0,curriculumDuration-state.time)):lessonUI?.active&&lessonUI.state.phase==='watch'?Math.min(dt,Math.max(0,1.2-state.time)):dt;advancePhysics(lessonUI?.active||curriculumUI?.active?simulationDt:dt*state.speed*slow);physical=PHYSICS.solve(state,state.dynamics.rotation);
  displayUnit=fitArrowUnit(UNIT*(innerWidth<=980&&innerHeight>innerWidth?.82:1)*Math.min(1,8/Math.max(8,physical.resultant)));
- bodyOffset.position.set(state.dynamics.x*displayPositionScale(),HERO_Y,-.6-state.dynamics.y*displayPositionScale());body.rotation.y=state.dynamics.rotation;pin.visible=state.pinned;
+ bodyOffset.position.set(curriculumOffset().x+state.dynamics.x*displayPositionScale(),HERO_Y,-.6+curriculumOffset().z-state.dynamics.y*displayPositionScale());body.rotation.y=state.dynamics.rotation;pin.visible=state.pinned;
  for(let i=0;i<3;i++){const f=state.forces[i],origin=getOrigin(i);setArrow(arrows[i],f,origin,HERO_Y+.32+i*.22);arrows[i].material.uniforms.uTime.value=nowTime;arrows[i].material.uniforms.uSegments.value=state.layers.segments?1:0;
   handles[i].position.set(origin.x+physical.forces[i].x*displayUnit,HERO_Y+.36+i*.22,origin.z-physical.forces[i].y*displayUnit);handles[i].scale.setScalar((state.selected===i?1.18:1)*(state.mode==='present'?1.4:1));handles[i].visible=f.mag>.02||state.selected===i;
   attachHandles[i].position.z=-f.attach;
@@ -668,19 +671,24 @@ const curriculumRigs=createCurriculumRigs({THREE,hero,HERO_Y,mats,roundedPanel,c
 curriculumUI=createCurriculum({
  enter(){startLearn(0);learn.voice=false;state.attract=false;},
  exit(){curriculumRigs.hide();camera.clearViewOffset();},
- prepare(r){state.playing=false;state.pinned=true;state.time=0;state.speed=1;state.mass=state.massTarget=r.mass;state.history=[];state.dynamics={x:0,y:0,vx:r.initialVelocity,vy:0,rotation:0,omega:0};state.forces=structuredClone(r.forces);state.targets=structuredClone(r.forces);state.selected=0;curriculumDuration=r.duration;curriculumPositionScale=cartDisplayScale(r);physical=PHYSICS.solve(state);cameraTween=null;curriculumView={rig:r.rig,dynamic:r.dynamic};applyShot(learnerShot());},
+ prepare(r,keepOrigin=false){if(!keepOrigin)curriculumOrigin={x:0,z:0};directCartPreview=null;state.playing=false;state.pinned=true;state.time=0;state.speed=1;state.mass=state.massTarget=r.mass;state.history=[];state.dynamics={x:0,y:0,vx:r.initialVelocity,vy:0,rotation:0,omega:0};state.forces=structuredClone(r.forces);state.targets=structuredClone(r.forces);state.selected=0;curriculumDuration=r.duration;curriculumPositionScale=cartDisplayScale(r);physical=PHYSICS.solve(state);cameraTween=null;curriculumView={rig:r.rig,dynamic:r.dynamic};applyShot(learnerShot());},
+ gestureOrigin(p){curriculumOrigin={x:p.x||0,z:p.z||0};},
+ gestureSnapshot(){return {dynamics:structuredClone(state.dynamics),time:state.time,origin:{...curriculumOrigin}};},
+ gestureRestore(saved){if(!saved)return;state.dynamics=structuredClone(saved.dynamics);state.time=saved.time;curriculumOrigin={...saved.origin};directCartPreview=null;},
  run(){state.pinned=false;state.playing=true;},stop(){state.playing=false;},
  limit(r){if(state.time>=r.duration-1e-8){state.playing=false;if(r.duration<1.2){state.dynamics.vx=0;state.forces[1].mag=state.targets[1].mag=0;}}},
  view(id,p,r,progress,measured){
   instrument.visible=transferCrate.visible=consoleTools.visible=diskSurface.visible=false;graphOne.group.visible=graphTwo.group.visible=false;forceKnob.group.visible=angleKnob.group.visible=massSlider.group.visible=false;
   learnRail.visible=r.rig==='cart';learnClamp.visible=r.dynamic&&curriculumUI?.phase==='ready';pin.visible=false;learnGoalRing.visible=targetRing.visible=resultArrow.visible=torqueGroup.visible=false;equilibriumRing.visible=measured&&id==='parallel'&&physical.equilibrium;
-  for(let i=0;i<3;i++){attachHandles[i].visible=ghostArrows[i].visible=targetArrows[i].visible=handles[i].visible=false;arrows[i].visible=false;if(['represent','parallel','vectors','torque','turning'].includes(id)&&r.forces[i].mag>.001){setArrow(arrows[i],state.forces[i],getOrigin(i),HERO_Y+.82+i*.12);arrows[i].material.uniforms.uOpacity.value=.96;arrows[i].material.blending=THREE.NormalBlending;arrows[i].material.uniforms.uColor.value.set(i===0?0x39b7ac:0xda863c)}}
+  for(let i=0;i<3;i++){attachHandles[i].visible=ghostArrows[i].visible=targetArrows[i].visible=handles[i].visible=false;arrows[i].visible=false;if(['curling','push','represent','parallel','vectors','torque','turning'].includes(id)&&r.forces[i].mag>.001&&(id!=='represent'||p.drawing)){const drawn=id==='represent'?{mag:Math.hypot(p.drawing[2]-p.drawing[0],p.drawing[3]-p.drawing[1])/.075,angle:p.drawing[2]<p.drawing[0]?180:0,attach:0}:r.forces[i];setArrow(arrows[i],drawn,id==='represent'?{x:bodyOffset.position.x,z:bodyOffset.position.z}:getOrigin(i),HERO_Y+.82+i*.12);arrows[i].material.uniforms.uOpacity.value=.96;arrows[i].material.blending=THREE.NormalBlending;arrows[i].material.uniforms.uColor.value.set(i===0?0x39b7ac:0xda863c)}}
   medium.visible=particles.visible=curriculumUI?.phase==='running'&&r.dynamic;trailGroup.visible=false;for(const wheel of cartWheels)wheel.rotation.z=-state.dynamics.x*displayPositionScale()/.31;
   curriculumRigs.update(id,{...p,dynamics:state.dynamics},r,progress,measured);$('hint').style.opacity=0;
  }
 });
 window.__lab.curriculum=curriculumUI;
 window.__lab.apparatus=curriculumRigs.diagnostics;
+sceneInput=createSceneInteraction({THREE,curriculum:curriculumUI,targets:curriculumRigs.targets,camera,canvas:renderer.domElement,controls,forceUnit:()=>displayUnit,previewCart:p=>{directCartPreview=p;}});
+window.__lab.directInput=sceneInput.diagnostics;
 if(!params.has('s')&&!params.has('level')&&params.get('wordless')!=='1'&&!['lesson','legacy'].includes(params.get('course')))curriculumUI.start();
 else if(!params.has('s')&&!['challenge','middle','practice'].includes(params.get('level')))lessonUI.start(params.get('restart')==='1');else if(params.get('level')==='practice')startLearn(0);else leaveLearn(params.get('level')==='middle'?'middle':'challenge');
 try{const encoded=params.get('s');if(encoded){const v=JSON.parse(atob(encoded));if(v.f?.length===3){v.f.forEach((f,i)=>['mag','angle','attach'].forEach(k=>set(`${i}.${k}`,f[k])));set('mass',v.m);state.guided=false;quest.phase='done'}}}catch{}

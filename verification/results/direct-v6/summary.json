@@ -1,0 +1,10 @@
+{
+  "pass": true,
+  "activities": 37,
+  "guidedConditions": 117,
+  "desktopChecks": 452,
+  "mobileChecks": 452,
+  "interactionChecks": 21,
+  "desktopAndMobileApiChecks": true,
+  "actualPointerChecks": "pointer-checks.json"
+}

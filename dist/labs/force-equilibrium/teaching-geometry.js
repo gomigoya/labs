@@ -5,6 +5,10 @@ export function overflowPose(volume,progress){
  const fraction=Math.max(0,Math.min(1,volume/400))*progress;
  return {surface:2.1,bottom:2.1-.4*fraction,bodyHeight:.4,fraction,cupHeight:.8*fraction};
 }
+export function immersionPose(volume){
+ const v=Math.max(0,Math.min(400,volume)),lowering=v===0?0:v<=200?.2+.4*v/200:.8+.4*(v-200)/200;
+ return {surface:1.7,bodyHeight:.4,bottoms:[1.9-lowering,2.5-lowering]};
+}
 export function liftPose(method,length,progress){
  const theta=(-30+60*progress)*Math.PI/180,arm=.45;
  if(method==='lever')return {theta,loadX:arm*Math.cos(theta),loadY:1.6+arm*Math.sin(theta)-.5,effortX:-length*.9*Math.cos(theta),effortY:1.6-length*.9*Math.sin(theta)};

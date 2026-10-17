@@ -1,0 +1,6703 @@
+{
+  "pass": true,
+  "viewport": 390,
+  "activities": 37,
+  "guidedTrials": 117,
+  "checks": [
+    {
+      "name": "scene-targets-elementary/curling/gentle",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "cart",
+            "kind": "push",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "cart"
+        ]
+      }
+    },
+    {
+      "name": "elementary/curling/gentle",
+      "pass": true,
+      "detail": [
+        {
+          "key": "displacement",
+          "value": 0.72,
+          "unit": "m"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-1",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "integrated-motion-1",
+      "pass": true,
+      "detail": {
+        "actual": {
+          "x": 0.7249999999999998,
+          "y": 0,
+          "vx": 1.1999999999999982,
+          "vy": 0,
+          "rotation": 0,
+          "omega": 0
+        },
+        "fx": 1,
+        "fy": 0
+      }
+    },
+    {
+      "name": "scene-targets-elementary/curling/strong",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "cart",
+            "kind": "push",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "cart"
+        ]
+      }
+    },
+    {
+      "name": "elementary/curling/strong",
+      "pass": true,
+      "detail": [
+        {
+          "key": "displacement",
+          "value": 2.16,
+          "unit": "m"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-2",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "integrated-motion-2",
+      "pass": true,
+      "detail": {
+        "actual": {
+          "x": 2.1749999999999963,
+          "y": 0,
+          "vx": 3.599999999999991,
+          "vy": 0,
+          "rotation": 0,
+          "omega": 0
+        },
+        "fx": 3,
+        "fy": 0
+      }
+    },
+    {
+      "name": "scene-targets-elementary/curling/retry",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "cart",
+            "kind": "push",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "cart"
+        ]
+      }
+    },
+    {
+      "name": "elementary/curling/retry",
+      "pass": true,
+      "detail": [
+        {
+          "key": "displacement",
+          "value": 1.44,
+          "unit": "m"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-3",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "integrated-motion-3",
+      "pass": true,
+      "detail": {
+        "actual": {
+          "x": 1.4499999999999995,
+          "y": 0,
+          "vx": 2.3999999999999964,
+          "vy": 0,
+          "rotation": 0,
+          "omega": 0
+        },
+        "fx": 2,
+        "fy": 0
+      }
+    },
+    {
+      "name": "evidence-complete-elementary/curling",
+      "pass": true,
+      "detail": {
+        "measured": 3,
+        "required": 3,
+        "evidence": [
+          true,
+          true,
+          true
+        ],
+        "checked": 2,
+        "questions": 2,
+        "complete": true
+      }
+    },
+    {
+      "name": "export-validated-elementary/curling",
+      "pass": true
+    },
+    {
+      "name": "scene-targets-elementary/push/push-light",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "cart",
+            "kind": "push",
+            "valid": true
+          },
+          {
+            "id": "add-load",
+            "kind": "supply",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "cart",
+          "add-load"
+        ]
+      }
+    },
+    {
+      "name": "elementary/push/push-light",
+      "pass": true,
+      "detail": [
+        {
+          "key": "displacement",
+          "value": 0.72,
+          "unit": "m"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-4",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "integrated-motion-4",
+      "pass": true,
+      "detail": {
+        "actual": {
+          "x": 0.7249999999999998,
+          "y": 0,
+          "vx": 1.1999999999999982,
+          "vy": 0,
+          "rotation": 0,
+          "omega": 0
+        },
+        "fx": 1,
+        "fy": 0
+      }
+    },
+    {
+      "name": "scene-targets-elementary/push/push-heavy",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "cart",
+            "kind": "push",
+            "valid": true
+          },
+          {
+            "id": "remove-load",
+            "kind": "remove",
+            "valid": true
+          },
+          {
+            "id": "add-load",
+            "kind": "supply",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "cart",
+          "add-load",
+          "remove-load"
+        ]
+      }
+    },
+    {
+      "name": "elementary/push/push-heavy",
+      "pass": true,
+      "detail": [
+        {
+          "key": "displacement",
+          "value": 0.18,
+          "unit": "m"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-5",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "integrated-motion-5",
+      "pass": true,
+      "detail": {
+        "actual": {
+          "x": 0.18124999999999994,
+          "y": 0,
+          "vx": 0.29999999999999954,
+          "vy": 0,
+          "rotation": 0,
+          "omega": 0
+        },
+        "fx": 1,
+        "fy": 0
+      }
+    },
+    {
+      "name": "scene-targets-elementary/push/push-match",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "cart",
+            "kind": "push",
+            "valid": true
+          },
+          {
+            "id": "remove-load",
+            "kind": "remove",
+            "valid": true
+          },
+          {
+            "id": "add-load",
+            "kind": "supply",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "cart",
+          "add-load",
+          "remove-load"
+        ]
+      }
+    },
+    {
+      "name": "elementary/push/push-match",
+      "pass": true,
+      "detail": [
+        {
+          "key": "displacement",
+          "value": 0.72,
+          "unit": "m"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-6",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "integrated-motion-6",
+      "pass": true,
+      "detail": {
+        "actual": {
+          "x": 0.7249999999999998,
+          "y": 0,
+          "vx": 1.1999999999999982,
+          "vy": 0,
+          "rotation": 0,
+          "omega": 0
+        },
+        "fx": 4,
+        "fy": 0
+      }
+    },
+    {
+      "name": "scene-targets-elementary/push/pull-light",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "cart",
+            "kind": "push",
+            "valid": true
+          },
+          {
+            "id": "direction",
+            "kind": "choice",
+            "valid": true
+          },
+          {
+            "id": "add-load",
+            "kind": "supply",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "cart",
+          "add-load",
+          "direction"
+        ]
+      }
+    },
+    {
+      "name": "elementary/push/pull-light",
+      "pass": true,
+      "detail": [
+        {
+          "key": "displacement",
+          "value": 0.72,
+          "unit": "m"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-7",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "integrated-motion-7",
+      "pass": true,
+      "detail": {
+        "actual": {
+          "x": -0.7249999999999998,
+          "y": 8.878689293818322e-17,
+          "vx": -1.1999999999999982,
+          "vy": 1.4695761589768248e-16,
+          "rotation": 0,
+          "omega": 0
+        },
+        "fx": -1,
+        "fy": 1.2246467991473532e-16
+      }
+    },
+    {
+      "name": "scene-targets-elementary/push/pull-heavy",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "cart",
+            "kind": "push",
+            "valid": true
+          },
+          {
+            "id": "remove-load",
+            "kind": "remove",
+            "valid": true
+          },
+          {
+            "id": "add-load",
+            "kind": "supply",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "cart",
+          "add-load",
+          "remove-load"
+        ]
+      }
+    },
+    {
+      "name": "elementary/push/pull-heavy",
+      "pass": true,
+      "detail": [
+        {
+          "key": "displacement",
+          "value": 0.18,
+          "unit": "m"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-8",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "integrated-motion-8",
+      "pass": true,
+      "detail": {
+        "actual": {
+          "x": -0.18124999999999994,
+          "y": 2.2196723234545805e-17,
+          "vx": -0.29999999999999954,
+          "vy": 3.673940397442062e-17,
+          "rotation": 0,
+          "omega": 0
+        },
+        "fx": -1,
+        "fy": 1.2246467991473532e-16
+      }
+    },
+    {
+      "name": "scene-targets-elementary/push/pull-match",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "cart",
+            "kind": "push",
+            "valid": true
+          },
+          {
+            "id": "remove-load",
+            "kind": "remove",
+            "valid": true
+          },
+          {
+            "id": "add-load",
+            "kind": "supply",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "cart",
+          "add-load",
+          "remove-load"
+        ]
+      }
+    },
+    {
+      "name": "elementary/push/pull-match",
+      "pass": true,
+      "detail": [
+        {
+          "key": "displacement",
+          "value": 0.72,
+          "unit": "m"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-9",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "integrated-motion-9",
+      "pass": true,
+      "detail": {
+        "actual": {
+          "x": -0.7249999999999998,
+          "y": 8.878689293818322e-17,
+          "vx": -1.1999999999999982,
+          "vy": 1.4695761589768248e-16,
+          "rotation": 0,
+          "omega": 0
+        },
+        "fx": -4,
+        "fy": 4.898587196589413e-16
+      }
+    },
+    {
+      "name": "scene-targets-elementary/push/big-box",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "cart",
+            "kind": "push",
+            "valid": true
+          },
+          {
+            "id": "objectType",
+            "kind": "choice",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "cart",
+          "objectType"
+        ]
+      }
+    },
+    {
+      "name": "elementary/push/big-box",
+      "pass": true,
+      "detail": [
+        {
+          "key": "displacement",
+          "value": 0.72,
+          "unit": "m"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-10",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "integrated-motion-10",
+      "pass": true,
+      "detail": {
+        "actual": {
+          "x": 0.7249999999999998,
+          "y": 0,
+          "vx": 1.1999999999999982,
+          "vy": 0,
+          "rotation": 0,
+          "omega": 0
+        },
+        "fx": 1,
+        "fy": 0
+      }
+    },
+    {
+      "name": "scene-targets-elementary/push/small-metal",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "cart",
+            "kind": "push",
+            "valid": true
+          },
+          {
+            "id": "objectType",
+            "kind": "choice",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "cart",
+          "objectType"
+        ]
+      }
+    },
+    {
+      "name": "elementary/push/small-metal",
+      "pass": true,
+      "detail": [
+        {
+          "key": "displacement",
+          "value": 0.18,
+          "unit": "m"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-11",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "integrated-motion-11",
+      "pass": true,
+      "detail": {
+        "actual": {
+          "x": 0.18124999999999994,
+          "y": 0,
+          "vx": 0.29999999999999954,
+          "vy": 0,
+          "rotation": 0,
+          "omega": 0
+        },
+        "fx": 1,
+        "fy": 0
+      }
+    },
+    {
+      "name": "evidence-complete-elementary/push",
+      "pass": true,
+      "detail": {
+        "measured": 8,
+        "required": 8,
+        "evidence": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        "checked": 2,
+        "questions": 2,
+        "complete": true
+      }
+    },
+    {
+      "name": "export-validated-elementary/push",
+      "pass": true
+    },
+    {
+      "name": "scene-targets-elementary/balance/empty",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "empty-beam",
+            "kind": "observe",
+            "valid": true
+          },
+          {
+            "id": "supply-left",
+            "kind": "supply",
+            "valid": true
+          },
+          {
+            "id": "supply-right",
+            "kind": "supply",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "empty-beam",
+          "supply-left",
+          "supply-right"
+        ]
+      }
+    },
+    {
+      "name": "elementary/balance/empty",
+      "pass": true,
+      "detail": [
+        {
+          "key": "leftLoad",
+          "value": 0,
+          "unit": "g"
+        },
+        {
+          "key": "rightLoad",
+          "value": 0,
+          "unit": "g"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-12",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "scene-targets-elementary/balance/equal",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "leftPos",
+            "kind": "range",
+            "valid": true
+          },
+          {
+            "id": "rightPos",
+            "kind": "range",
+            "valid": true
+          },
+          {
+            "id": "supply-left",
+            "kind": "supply",
+            "valid": true
+          },
+          {
+            "id": "supply-right",
+            "kind": "supply",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "supply-left",
+          "supply-right",
+          "leftPos",
+          "rightPos"
+        ]
+      }
+    },
+    {
+      "name": "elementary/balance/equal",
+      "pass": true,
+      "detail": [
+        {
+          "key": "leftLoad",
+          "value": 300,
+          "unit": "g"
+        },
+        {
+          "key": "rightLoad",
+          "value": 300,
+          "unit": "g"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-13",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "scene-targets-elementary/balance/add",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "leftPos",
+            "kind": "range",
+            "valid": true
+          },
+          {
+            "id": "rightPos",
+            "kind": "range",
+            "valid": true
+          },
+          {
+            "id": "supply-left",
+            "kind": "supply",
+            "valid": true
+          },
+          {
+            "id": "supply-right",
+            "kind": "supply",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "supply-left",
+          "supply-right",
+          "leftPos",
+          "rightPos"
+        ]
+      }
+    },
+    {
+      "name": "elementary/balance/add",
+      "pass": true,
+      "detail": [
+        {
+          "key": "leftLoad",
+          "value": 600,
+          "unit": "g"
+        },
+        {
+          "key": "rightLoad",
+          "value": 300,
+          "unit": "g"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-14",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "scene-targets-elementary/balance/move",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "leftPos",
+            "kind": "range",
+            "valid": true
+          },
+          {
+            "id": "rightPos",
+            "kind": "range",
+            "valid": true
+          },
+          {
+            "id": "supply-left",
+            "kind": "supply",
+            "valid": true
+          },
+          {
+            "id": "supply-right",
+            "kind": "supply",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "supply-left",
+          "supply-right",
+          "leftPos",
+          "rightPos"
+        ]
+      }
+    },
+    {
+      "name": "elementary/balance/move",
+      "pass": true,
+      "detail": [
+        {
+          "key": "leftLoad",
+          "value": 600,
+          "unit": "g"
+        },
+        {
+          "key": "rightLoad",
+          "value": 300,
+          "unit": "g"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-15",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "evidence-complete-elementary/balance",
+      "pass": true,
+      "detail": {
+        "measured": 4,
+        "required": 4,
+        "evidence": [
+          true,
+          true,
+          true,
+          true
+        ],
+        "checked": 2,
+        "questions": 2,
+        "complete": true
+      }
+    },
+    {
+      "name": "export-validated-elementary/balance",
+      "pass": true
+    },
+    {
+      "name": "scene-targets-elementary/scale/a",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "sample-b",
+            "kind": "sample",
+            "valid": true
+          },
+          {
+            "id": "sample-c",
+            "kind": "sample",
+            "valid": true
+          },
+          {
+            "id": "sample-d",
+            "kind": "sample",
+            "valid": true
+          },
+          {
+            "id": "remove",
+            "kind": "remove-sample",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "sample-b",
+          "sample-c",
+          "sample-d",
+          "remove"
+        ]
+      }
+    },
+    {
+      "name": "elementary/scale/a",
+      "pass": true,
+      "detail": [
+        {
+          "key": "reading",
+          "value": 8,
+          "unit": "g"
+        },
+        {
+          "key": "unitTicks",
+          "value": 1,
+          "unit": "g"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-16",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "scene-targets-elementary/scale/b",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "sample-a",
+            "kind": "sample",
+            "valid": true
+          },
+          {
+            "id": "sample-c",
+            "kind": "sample",
+            "valid": true
+          },
+          {
+            "id": "sample-d",
+            "kind": "sample",
+            "valid": true
+          },
+          {
+            "id": "remove",
+            "kind": "remove-sample",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "sample-c",
+          "sample-d",
+          "remove",
+          "sample-a"
+        ]
+      }
+    },
+    {
+      "name": "elementary/scale/b",
+      "pass": true,
+      "detail": [
+        {
+          "key": "reading",
+          "value": 9,
+          "unit": "g"
+        },
+        {
+          "key": "unitTicks",
+          "value": 1,
+          "unit": "g"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-17",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "scene-targets-elementary/scale/c",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "sample-a",
+            "kind": "sample",
+            "valid": true
+          },
+          {
+            "id": "sample-b",
+            "kind": "sample",
+            "valid": true
+          },
+          {
+            "id": "sample-d",
+            "kind": "sample",
+            "valid": true
+          },
+          {
+            "id": "remove",
+            "kind": "remove-sample",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "sample-d",
+          "remove",
+          "sample-a",
+          "sample-b"
+        ]
+      }
+    },
+    {
+      "name": "elementary/scale/c",
+      "pass": true,
+      "detail": [
+        {
+          "key": "reading",
+          "value": 11,
+          "unit": "g"
+        },
+        {
+          "key": "unitTicks",
+          "value": 1,
+          "unit": "g"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-18",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "scene-targets-elementary/scale/d",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "sample-a",
+            "kind": "sample",
+            "valid": true
+          },
+          {
+            "id": "sample-b",
+            "kind": "sample",
+            "valid": true
+          },
+          {
+            "id": "sample-c",
+            "kind": "sample",
+            "valid": true
+          },
+          {
+            "id": "remove",
+            "kind": "remove-sample",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "remove",
+          "sample-a",
+          "sample-b",
+          "sample-c"
+        ]
+      }
+    },
+    {
+      "name": "elementary/scale/d",
+      "pass": true,
+      "detail": [
+        {
+          "key": "reading",
+          "value": 14,
+          "unit": "g"
+        },
+        {
+          "key": "unitTicks",
+          "value": 1,
+          "unit": "g"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-19",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "evidence-complete-elementary/scale",
+      "pass": true,
+      "detail": {
+        "measured": 4,
+        "required": 4,
+        "evidence": [
+          true,
+          true,
+          true,
+          true
+        ],
+        "checked": 3,
+        "questions": 3,
+        "complete": true
+      }
+    },
+    {
+      "name": "export-validated-elementary/scale",
+      "pass": true
+    },
+    {
+      "name": "scene-targets-elementary/spring-scale/apple",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "eye",
+            "kind": "range",
+            "valid": true
+          },
+          {
+            "id": "sample-milk",
+            "kind": "sample",
+            "valid": true
+          },
+          {
+            "id": "sample-eraser",
+            "kind": "sample",
+            "valid": true
+          },
+          {
+            "id": "remove",
+            "kind": "remove-sample",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "remove",
+          "eye",
+          "sample-milk",
+          "sample-eraser"
+        ]
+      }
+    },
+    {
+      "name": "elementary/spring-scale/apple",
+      "pass": true,
+      "detail": [
+        {
+          "key": "reading",
+          "value": 100,
+          "unit": "g"
+        },
+        {
+          "key": "unitTicks",
+          "value": 5,
+          "unit": "g"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-20",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "scene-targets-elementary/spring-scale/milk",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "eye",
+            "kind": "range",
+            "valid": true
+          },
+          {
+            "id": "sample-apple",
+            "kind": "sample",
+            "valid": true
+          },
+          {
+            "id": "sample-eraser",
+            "kind": "sample",
+            "valid": true
+          },
+          {
+            "id": "remove",
+            "kind": "remove-sample",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "remove",
+          "eye",
+          "sample-eraser",
+          "sample-apple"
+        ]
+      }
+    },
+    {
+      "name": "elementary/spring-scale/milk",
+      "pass": true,
+      "detail": [
+        {
+          "key": "reading",
+          "value": 175,
+          "unit": "g"
+        },
+        {
+          "key": "unitTicks",
+          "value": 5,
+          "unit": "g"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-21",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "scene-targets-elementary/spring-scale/eraser",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "eye",
+            "kind": "range",
+            "valid": true
+          },
+          {
+            "id": "sample-apple",
+            "kind": "sample",
+            "valid": true
+          },
+          {
+            "id": "sample-milk",
+            "kind": "sample",
+            "valid": true
+          },
+          {
+            "id": "remove",
+            "kind": "remove-sample",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "remove",
+          "eye",
+          "sample-apple",
+          "sample-milk"
+        ]
+      }
+    },
+    {
+      "name": "elementary/spring-scale/eraser",
+      "pass": true,
+      "detail": [
+        {
+          "key": "reading",
+          "value": 50,
+          "unit": "g"
+        },
+        {
+          "key": "unitTicks",
+          "value": 5,
+          "unit": "g"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-22",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "scene-targets-elementary/spring-scale/remove",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "sample-eraser",
+            "kind": "sample",
+            "valid": true
+          },
+          {
+            "id": "eye",
+            "kind": "range",
+            "valid": true
+          },
+          {
+            "id": "sample-apple",
+            "kind": "sample",
+            "valid": true
+          },
+          {
+            "id": "sample-milk",
+            "kind": "sample",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "eye",
+          "sample-apple",
+          "sample-milk",
+          "sample-eraser"
+        ]
+      }
+    },
+    {
+      "name": "elementary/spring-scale/remove",
+      "pass": true,
+      "detail": [
+        {
+          "key": "reading",
+          "value": 0,
+          "unit": "g"
+        },
+        {
+          "key": "unitTicks",
+          "value": 5,
+          "unit": "g"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-23",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "evidence-complete-elementary/spring-scale",
+      "pass": true,
+      "detail": {
+        "measured": 4,
+        "required": 4,
+        "evidence": [
+          true,
+          true,
+          true,
+          true
+        ],
+        "checked": 5,
+        "questions": 5,
+        "complete": true
+      }
+    },
+    {
+      "name": "export-validated-elementary/spring-scale",
+      "pass": true
+    },
+    {
+      "name": "scene-targets-elementary/tools/direct",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "lift",
+            "kind": "progress",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "lift"
+        ]
+      }
+    },
+    {
+      "name": "elementary/tools/direct",
+      "pass": true,
+      "detail": [
+        {
+          "key": "direct",
+          "value": 1,
+          "unit": "relative"
+        },
+        {
+          "key": "withTool",
+          "value": 1,
+          "unit": "relative"
+        },
+        {
+          "key": "distance",
+          "value": 0.5,
+          "unit": "m"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-24",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "scene-targets-elementary/tools/lever",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "press",
+            "kind": "progress",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "press"
+        ]
+      }
+    },
+    {
+      "name": "elementary/tools/lever",
+      "pass": true,
+      "detail": [
+        {
+          "key": "direct",
+          "value": 1,
+          "unit": "relative"
+        },
+        {
+          "key": "withTool",
+          "value": 0.25,
+          "unit": "relative"
+        },
+        {
+          "key": "distance",
+          "value": 2,
+          "unit": "m"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-25",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "evidence-complete-elementary/tools",
+      "pass": true,
+      "detail": {
+        "measured": 2,
+        "required": 2,
+        "evidence": [
+          true,
+          true
+        ],
+        "checked": 2,
+        "questions": 2,
+        "complete": true
+      }
+    },
+    {
+      "name": "export-validated-elementary/tools",
+      "pass": true
+    },
+    {
+      "name": "scene-targets-elementary/ramp-tools/direct",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "lift",
+            "kind": "progress",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "lift"
+        ]
+      }
+    },
+    {
+      "name": "elementary/ramp-tools/direct",
+      "pass": true,
+      "detail": [
+        {
+          "key": "direct",
+          "value": 1,
+          "unit": "relative"
+        },
+        {
+          "key": "withTool",
+          "value": 1,
+          "unit": "relative"
+        },
+        {
+          "key": "distance",
+          "value": 0.5,
+          "unit": "m"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-26",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "scene-targets-elementary/ramp-tools/ramp",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "lift",
+            "kind": "progress",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "lift"
+        ]
+      }
+    },
+    {
+      "name": "elementary/ramp-tools/ramp",
+      "pass": true,
+      "detail": [
+        {
+          "key": "direct",
+          "value": 1,
+          "unit": "relative"
+        },
+        {
+          "key": "withTool",
+          "value": 0.25,
+          "unit": "relative"
+        },
+        {
+          "key": "distance",
+          "value": 2,
+          "unit": "m"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-27",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "evidence-complete-elementary/ramp-tools",
+      "pass": true,
+      "detail": {
+        "measured": 2,
+        "required": 2,
+        "evidence": [
+          true,
+          true
+        ],
+        "checked": 2,
+        "questions": 2,
+        "complete": true
+      }
+    },
+    {
+      "name": "export-validated-elementary/ramp-tools",
+      "pass": true
+    },
+    {
+      "name": "scene-targets-elementary/daily-tools/lever",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "operate",
+            "kind": "progress",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "operate"
+        ]
+      }
+    },
+    {
+      "name": "elementary/daily-tools/lever",
+      "pass": true,
+      "detail": [
+        {
+          "key": "sample",
+          "value": 1,
+          "unit": ""
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-28",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "scene-targets-elementary/daily-tools/ramp",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "operate",
+            "kind": "progress",
+            "valid": true
+          },
+          {
+            "id": "example",
+            "kind": "choice",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "operate",
+          "example"
+        ]
+      }
+    },
+    {
+      "name": "elementary/daily-tools/ramp",
+      "pass": true,
+      "detail": [
+        {
+          "key": "sample",
+          "value": 1,
+          "unit": ""
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-29",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "scene-targets-elementary/daily-tools/loading",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "operate",
+            "kind": "progress",
+            "valid": true
+          },
+          {
+            "id": "example",
+            "kind": "choice",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "operate",
+          "example"
+        ]
+      }
+    },
+    {
+      "name": "elementary/daily-tools/loading",
+      "pass": true,
+      "detail": [
+        {
+          "key": "sample",
+          "value": 1,
+          "unit": ""
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-30",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "evidence-complete-elementary/daily-tools",
+      "pass": true,
+      "detail": {
+        "measured": 3,
+        "required": 3,
+        "evidence": [
+          true,
+          true,
+          true
+        ],
+        "checked": 2,
+        "questions": 2,
+        "complete": true,
+        "humanReview": true
+      }
+    },
+    {
+      "name": "export-validated-elementary/daily-tools",
+      "pass": true
+    },
+    {
+      "name": "scene-targets-elementary/mobile/before",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "leftPos",
+            "kind": "range",
+            "valid": true
+          },
+          {
+            "id": "rightPos",
+            "kind": "range",
+            "valid": true
+          },
+          {
+            "id": "supply-left",
+            "kind": "supply",
+            "valid": true
+          },
+          {
+            "id": "supply-right",
+            "kind": "supply",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "leftPos",
+          "rightPos",
+          "supply-left",
+          "supply-right"
+        ]
+      }
+    },
+    {
+      "name": "elementary/mobile/before",
+      "pass": true,
+      "detail": [
+        {
+          "key": "leftLoad",
+          "value": 200,
+          "unit": "g"
+        },
+        {
+          "key": "rightLoad",
+          "value": 400,
+          "unit": "g"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-31",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "scene-targets-elementary/mobile/weight-fix",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "leftPos",
+            "kind": "range",
+            "valid": true
+          },
+          {
+            "id": "rightPos",
+            "kind": "range",
+            "valid": true
+          },
+          {
+            "id": "supply-left",
+            "kind": "supply",
+            "valid": true
+          },
+          {
+            "id": "supply-right",
+            "kind": "supply",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "leftPos",
+          "rightPos",
+          "supply-left",
+          "supply-right"
+        ]
+      }
+    },
+    {
+      "name": "elementary/mobile/weight-fix",
+      "pass": true,
+      "detail": [
+        {
+          "key": "leftLoad",
+          "value": 400,
+          "unit": "g"
+        },
+        {
+          "key": "rightLoad",
+          "value": 400,
+          "unit": "g"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-32",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "scene-targets-elementary/mobile/position-fix",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "leftPos",
+            "kind": "range",
+            "valid": true
+          },
+          {
+            "id": "rightPos",
+            "kind": "range",
+            "valid": true
+          },
+          {
+            "id": "supply-left",
+            "kind": "supply",
+            "valid": true
+          },
+          {
+            "id": "supply-right",
+            "kind": "supply",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "leftPos",
+          "rightPos",
+          "supply-left",
+          "supply-right"
+        ]
+      }
+    },
+    {
+      "name": "elementary/mobile/position-fix",
+      "pass": true,
+      "detail": [
+        {
+          "key": "leftLoad",
+          "value": 200,
+          "unit": "g"
+        },
+        {
+          "key": "rightLoad",
+          "value": 400,
+          "unit": "g"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-33",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "evidence-complete-elementary/mobile",
+      "pass": true,
+      "detail": {
+        "measured": 3,
+        "required": 3,
+        "evidence": [
+          true,
+          true,
+          true
+        ],
+        "checked": 2,
+        "questions": 2,
+        "complete": true,
+        "humanReview": true
+      }
+    },
+    {
+      "name": "export-validated-elementary/mobile",
+      "pass": true
+    },
+    {
+      "name": "scene-targets-elementary/wearable/bare",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "lift",
+            "kind": "progress",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "lift"
+        ]
+      }
+    },
+    {
+      "name": "elementary/wearable/bare",
+      "pass": true,
+      "detail": [
+        {
+          "key": "forceComparison",
+          "value": 1,
+          "unit": "relative"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-34",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "scene-targets-elementary/wearable/assist",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "lift",
+            "kind": "progress",
+            "valid": true
+          },
+          {
+            "id": "method",
+            "kind": "choice",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "lift",
+          "method"
+        ]
+      }
+    },
+    {
+      "name": "elementary/wearable/assist",
+      "pass": true,
+      "detail": [
+        {
+          "key": "forceComparison",
+          "value": 0.3,
+          "unit": "relative"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-35",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "evidence-complete-elementary/wearable",
+      "pass": true,
+      "detail": {
+        "measured": 2,
+        "required": 2,
+        "evidence": [
+          true,
+          true
+        ],
+        "checked": 2,
+        "questions": 2,
+        "complete": true
+      }
+    },
+    {
+      "name": "export-validated-elementary/wearable",
+      "pass": true
+    },
+    {
+      "name": "scene-targets-elementary/review/compare-ab",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "observe",
+            "kind": "observe",
+            "valid": true
+          },
+          {
+            "id": "example",
+            "kind": "choice",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "observe",
+          "example"
+        ]
+      }
+    },
+    {
+      "name": "elementary/review/compare-ab",
+      "pass": true,
+      "detail": [
+        {
+          "key": "comparisons",
+          "value": 1,
+          "unit": ""
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-36",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "scene-targets-elementary/review/compare-bc",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "observe",
+            "kind": "observe",
+            "valid": true
+          },
+          {
+            "id": "example",
+            "kind": "choice",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "observe",
+          "example"
+        ]
+      }
+    },
+    {
+      "name": "elementary/review/compare-bc",
+      "pass": true,
+      "detail": [
+        {
+          "key": "comparisons",
+          "value": 1,
+          "unit": ""
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-37",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "evidence-complete-elementary/review",
+      "pass": true,
+      "detail": {
+        "measured": 2,
+        "required": 2,
+        "evidence": [
+          true,
+          true
+        ],
+        "checked": 7,
+        "questions": 7,
+        "complete": true,
+        "humanReview": true
+      }
+    },
+    {
+      "name": "export-validated-elementary/review",
+      "pass": true
+    },
+    {
+      "name": "scene-targets-middle/diver-intro/sink",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "volume",
+            "kind": "range",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "volume"
+        ]
+      }
+    },
+    {
+      "name": "middle/diver-intro/sink",
+      "pass": true,
+      "detail": [
+        {
+          "key": "weight",
+          "value": 9.8,
+          "unit": "N"
+        },
+        {
+          "key": "buoyancy",
+          "value": 8.82,
+          "unit": "N"
+        },
+        {
+          "key": "net",
+          "value": -0.9800000000000004,
+          "unit": "N"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-38",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "scene-targets-middle/diver-intro/rise",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "volume",
+            "kind": "range",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "volume"
+        ]
+      }
+    },
+    {
+      "name": "middle/diver-intro/rise",
+      "pass": true,
+      "detail": [
+        {
+          "key": "weight",
+          "value": 9.8,
+          "unit": "N"
+        },
+        {
+          "key": "buoyancy",
+          "value": 10.78,
+          "unit": "N"
+        },
+        {
+          "key": "net",
+          "value": 0.9799999999999986,
+          "unit": "N"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-39",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "evidence-complete-middle/diver-intro",
+      "pass": true,
+      "detail": {
+        "measured": 2,
+        "required": 2,
+        "evidence": [
+          true,
+          true
+        ],
+        "checked": 2,
+        "questions": 2,
+        "complete": true
+      }
+    },
+    {
+      "name": "export-validated-middle/diver-intro",
+      "pass": true
+    },
+    {
+      "name": "scene-targets-middle/represent/right",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "draw",
+            "kind": "draw",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "draw"
+        ]
+      }
+    },
+    {
+      "name": "middle/represent/right",
+      "pass": true,
+      "detail": [
+        {
+          "key": "force",
+          "value": 2,
+          "unit": "N"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-40",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "scene-targets-middle/represent/longer",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "draw",
+            "kind": "draw",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "draw"
+        ]
+      }
+    },
+    {
+      "name": "middle/represent/longer",
+      "pass": true,
+      "detail": [
+        {
+          "key": "force",
+          "value": 4,
+          "unit": "N"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-41",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "scene-targets-middle/represent/left",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "draw",
+            "kind": "draw",
+            "valid": true
+          },
+          {
+            "id": "direction",
+            "kind": "choice",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "draw",
+          "direction"
+        ]
+      }
+    },
+    {
+      "name": "middle/represent/left",
+      "pass": true,
+      "detail": [
+        {
+          "key": "force",
+          "value": 2,
+          "unit": "N"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-42",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "evidence-complete-middle/represent",
+      "pass": true,
+      "detail": {
+        "measured": 3,
+        "required": 3,
+        "evidence": [
+          true,
+          true,
+          true
+        ],
+        "checked": 3,
+        "questions": 3,
+        "complete": true
+      }
+    },
+    {
+      "name": "export-validated-middle/represent",
+      "pass": true
+    },
+    {
+      "name": "scene-targets-middle/parallel/same",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "cart",
+            "kind": "push",
+            "valid": true
+          },
+          {
+            "id": "left",
+            "kind": "range",
+            "valid": true
+          },
+          {
+            "id": "right",
+            "kind": "range",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "cart",
+          "left",
+          "right"
+        ]
+      }
+    },
+    {
+      "name": "middle/parallel/same",
+      "pass": true,
+      "detail": [
+        {
+          "key": "net",
+          "value": 3,
+          "unit": "N"
+        },
+        {
+          "key": "speed",
+          "value": 3.5999999999999996,
+          "unit": "m/s"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-43",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "integrated-motion-43",
+      "pass": true,
+      "detail": {
+        "actual": {
+          "x": 2.1749999999999963,
+          "y": 0,
+          "vx": 3.599999999999991,
+          "vy": 0,
+          "rotation": 0,
+          "omega": 0
+        },
+        "fx": 3,
+        "fy": 0
+      }
+    },
+    {
+      "name": "scene-targets-middle/parallel/opposite",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "cart",
+            "kind": "push",
+            "valid": true
+          },
+          {
+            "id": "arrangement",
+            "kind": "choice",
+            "valid": true
+          },
+          {
+            "id": "left",
+            "kind": "range",
+            "valid": true
+          },
+          {
+            "id": "right",
+            "kind": "range",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "cart",
+          "left",
+          "right",
+          "arrangement"
+        ]
+      }
+    },
+    {
+      "name": "middle/parallel/opposite",
+      "pass": true,
+      "detail": [
+        {
+          "key": "net",
+          "value": -1,
+          "unit": "N"
+        },
+        {
+          "key": "speed",
+          "value": -1.2,
+          "unit": "m/s"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-44",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "integrated-motion-44",
+      "pass": true,
+      "detail": {
+        "actual": {
+          "x": -0.7249999999999998,
+          "y": 1.7757378587636644e-16,
+          "vx": -1.1999999999999982,
+          "vy": 2.9391523179536496e-16,
+          "rotation": 0,
+          "omega": 0
+        },
+        "fx": -1,
+        "fy": 2.4492935982947064e-16
+      }
+    },
+    {
+      "name": "scene-targets-middle/parallel/rest",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "cart",
+            "kind": "push",
+            "valid": true
+          },
+          {
+            "id": "left",
+            "kind": "range",
+            "valid": true
+          },
+          {
+            "id": "right",
+            "kind": "range",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "cart",
+          "left",
+          "right"
+        ]
+      }
+    },
+    {
+      "name": "middle/parallel/rest",
+      "pass": true,
+      "detail": [
+        {
+          "key": "net",
+          "value": 0,
+          "unit": "N"
+        },
+        {
+          "key": "speed",
+          "value": 0,
+          "unit": "m/s"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-45",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "integrated-motion-45",
+      "pass": true,
+      "detail": {
+        "actual": {
+          "x": 0,
+          "y": 1.7757378587636644e-16,
+          "vx": 0,
+          "vy": 2.9391523179536496e-16,
+          "rotation": 0,
+          "omega": 0
+        },
+        "fx": 0,
+        "fy": 2.4492935982947064e-16
+      }
+    },
+    {
+      "name": "scene-targets-middle/parallel/moving",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "cart",
+            "kind": "push",
+            "valid": true
+          },
+          {
+            "id": "initial",
+            "kind": "choice",
+            "valid": true
+          },
+          {
+            "id": "left",
+            "kind": "range",
+            "valid": true
+          },
+          {
+            "id": "right",
+            "kind": "range",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "cart",
+          "left",
+          "right",
+          "initial"
+        ]
+      }
+    },
+    {
+      "name": "middle/parallel/moving",
+      "pass": true,
+      "detail": [
+        {
+          "key": "net",
+          "value": 0,
+          "unit": "N"
+        },
+        {
+          "key": "speed",
+          "value": 1,
+          "unit": "m/s"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-46",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "integrated-motion-46",
+      "pass": true,
+      "detail": {
+        "actual": {
+          "x": 1.1999999999999982,
+          "y": 1.7757378587636644e-16,
+          "vx": 1,
+          "vy": 2.9391523179536496e-16,
+          "rotation": 0,
+          "omega": 0
+        },
+        "fx": 0,
+        "fy": 2.4492935982947064e-16
+      }
+    },
+    {
+      "name": "evidence-complete-middle/parallel",
+      "pass": true,
+      "detail": {
+        "measured": 4,
+        "required": 4,
+        "evidence": [
+          true,
+          true,
+          true,
+          true
+        ],
+        "checked": 2,
+        "questions": 2,
+        "complete": true
+      }
+    },
+    {
+      "name": "export-validated-middle/parallel",
+      "pass": true
+    },
+    {
+      "name": "scene-targets-middle/gravity-direction/top",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "position",
+            "kind": "orbit",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "position"
+        ]
+      }
+    },
+    {
+      "name": "middle/gravity-direction/top",
+      "pass": true,
+      "detail": [
+        {
+          "key": "weight",
+          "value": 9.8,
+          "unit": "N"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-47",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "scene-targets-middle/gravity-direction/side",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "position",
+            "kind": "orbit",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "position"
+        ]
+      }
+    },
+    {
+      "name": "middle/gravity-direction/side",
+      "pass": true,
+      "detail": [
+        {
+          "key": "weight",
+          "value": 9.8,
+          "unit": "N"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-48",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "scene-targets-middle/gravity-direction/bottom",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "position",
+            "kind": "orbit",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "position"
+        ]
+      }
+    },
+    {
+      "name": "middle/gravity-direction/bottom",
+      "pass": true,
+      "detail": [
+        {
+          "key": "weight",
+          "value": 9.8,
+          "unit": "N"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-49",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "evidence-complete-middle/gravity-direction",
+      "pass": true,
+      "detail": {
+        "measured": 3,
+        "required": 3,
+        "evidence": [
+          true,
+          true,
+          true
+        ],
+        "checked": 2,
+        "questions": 2,
+        "complete": true
+      }
+    },
+    {
+      "name": "export-validated-middle/gravity-direction",
+      "pass": true
+    },
+    {
+      "name": "scene-targets-middle/gravity/earth",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "planet",
+            "kind": "choice",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "planet"
+        ]
+      }
+    },
+    {
+      "name": "middle/gravity/earth",
+      "pass": true,
+      "detail": [
+        {
+          "key": "massScience",
+          "value": 1,
+          "unit": "kg"
+        },
+        {
+          "key": "weight",
+          "value": 9.8,
+          "unit": "N"
+        },
+        {
+          "key": "extension",
+          "value": 19.6,
+          "unit": "cm"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-50",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "scene-targets-middle/gravity/moon",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "planet",
+            "kind": "choice",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "planet"
+        ]
+      }
+    },
+    {
+      "name": "middle/gravity/moon",
+      "pass": true,
+      "detail": [
+        {
+          "key": "massScience",
+          "value": 1,
+          "unit": "kg"
+        },
+        {
+          "key": "weight",
+          "value": 1.62,
+          "unit": "N"
+        },
+        {
+          "key": "extension",
+          "value": 3.2400000000000007,
+          "unit": "cm"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-51",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "evidence-complete-middle/gravity",
+      "pass": true,
+      "detail": {
+        "measured": 2,
+        "required": 2,
+        "evidence": [
+          true,
+          true
+        ],
+        "checked": 2,
+        "questions": 2,
+        "complete": true
+      }
+    },
+    {
+      "name": "export-validated-middle/gravity",
+      "pass": true
+    },
+    {
+      "name": "scene-targets-middle/elastic-shape/compress",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "deformation",
+            "kind": "range",
+            "valid": true
+          },
+          {
+            "id": "press",
+            "kind": "progress",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "deformation",
+          "press"
+        ]
+      }
+    },
+    {
+      "name": "middle/elastic-shape/compress",
+      "pass": true,
+      "detail": [
+        {
+          "key": "forceComparison",
+          "value": 1,
+          "unit": "relative"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-52",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "scene-targets-middle/elastic-shape/release",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "shape",
+            "kind": "choice",
+            "valid": true
+          },
+          {
+            "id": "press",
+            "kind": "progress",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "press",
+          "shape"
+        ]
+      }
+    },
+    {
+      "name": "middle/elastic-shape/release",
+      "pass": true,
+      "detail": [
+        {
+          "key": "forceComparison",
+          "value": 0,
+          "unit": "relative"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-53",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "scene-targets-middle/elastic-shape/stretch",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "shape",
+            "kind": "choice",
+            "valid": true
+          },
+          {
+            "id": "press",
+            "kind": "progress",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "press",
+          "shape"
+        ]
+      }
+    },
+    {
+      "name": "middle/elastic-shape/stretch",
+      "pass": true,
+      "detail": [
+        {
+          "key": "forceComparison",
+          "value": 1,
+          "unit": "relative"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-54",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "scene-targets-middle/elastic-shape/stretch-more",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "deformation",
+            "kind": "range",
+            "valid": true
+          },
+          {
+            "id": "press",
+            "kind": "progress",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "press",
+          "deformation"
+        ]
+      }
+    },
+    {
+      "name": "middle/elastic-shape/stretch-more",
+      "pass": true,
+      "detail": [
+        {
+          "key": "forceComparison",
+          "value": 2,
+          "unit": "relative"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-55",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "scene-targets-middle/elastic-shape/release-again",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "shape",
+            "kind": "choice",
+            "valid": true
+          },
+          {
+            "id": "press",
+            "kind": "progress",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "press",
+          "shape"
+        ]
+      }
+    },
+    {
+      "name": "middle/elastic-shape/release-again",
+      "pass": true,
+      "detail": [
+        {
+          "key": "forceComparison",
+          "value": 0,
+          "unit": "relative"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-56",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "evidence-complete-middle/elastic-shape",
+      "pass": true,
+      "detail": {
+        "measured": 5,
+        "required": 5,
+        "evidence": [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        "checked": 2,
+        "questions": 2,
+        "complete": true
+      }
+    },
+    {
+      "name": "export-validated-middle/elastic-shape",
+      "pass": true
+    },
+    {
+      "name": "scene-targets-middle/elastic/five",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "extension",
+            "kind": "range",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "extension"
+        ]
+      }
+    },
+    {
+      "name": "middle/elastic/five",
+      "pass": true,
+      "detail": [
+        {
+          "key": "extension",
+          "value": 5,
+          "unit": "cm"
+        },
+        {
+          "key": "springForce",
+          "value": 2.5,
+          "unit": "N"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-57",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "scene-targets-middle/elastic/ten",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "extension",
+            "kind": "range",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "extension"
+        ]
+      }
+    },
+    {
+      "name": "middle/elastic/ten",
+      "pass": true,
+      "detail": [
+        {
+          "key": "extension",
+          "value": 10,
+          "unit": "cm"
+        },
+        {
+          "key": "springForce",
+          "value": 5,
+          "unit": "N"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-58",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "scene-targets-middle/elastic/fifteen",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "extension",
+            "kind": "range",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "extension"
+        ]
+      }
+    },
+    {
+      "name": "middle/elastic/fifteen",
+      "pass": true,
+      "detail": [
+        {
+          "key": "extension",
+          "value": 15,
+          "unit": "cm"
+        },
+        {
+          "key": "springForce",
+          "value": 7.5,
+          "unit": "N"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-59",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "scene-targets-middle/elastic/twenty",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "extension",
+            "kind": "range",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "extension"
+        ]
+      }
+    },
+    {
+      "name": "middle/elastic/twenty",
+      "pass": true,
+      "detail": [
+        {
+          "key": "extension",
+          "value": 20,
+          "unit": "cm"
+        },
+        {
+          "key": "springForce",
+          "value": 10,
+          "unit": "N"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-60",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "scene-targets-middle/elastic/predict",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "extension",
+            "kind": "range",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "extension"
+        ]
+      }
+    },
+    {
+      "name": "middle/elastic/predict",
+      "pass": true,
+      "detail": [
+        {
+          "key": "extension",
+          "value": 25,
+          "unit": "cm"
+        },
+        {
+          "key": "springForce",
+          "value": 12.5,
+          "unit": "N"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-61",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "evidence-complete-middle/elastic",
+      "pass": true,
+      "detail": {
+        "measured": 5,
+        "required": 5,
+        "evidence": [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        "checked": 2,
+        "questions": 2,
+        "complete": true
+      }
+    },
+    {
+      "name": "export-validated-middle/elastic",
+      "pass": true
+    },
+    {
+      "name": "scene-targets-middle/friction/smooth",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "pull",
+            "kind": "observe",
+            "valid": true
+          },
+          {
+            "id": "surface",
+            "kind": "choice",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "pull",
+          "surface"
+        ]
+      }
+    },
+    {
+      "name": "middle/friction/smooth",
+      "pass": true,
+      "detail": [
+        {
+          "key": "startForce",
+          "value": 0.49000000000000005,
+          "unit": "N"
+        },
+        {
+          "key": "massScience",
+          "value": 1,
+          "unit": "kg"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-62",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "scene-targets-middle/friction/rough",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "pull",
+            "kind": "observe",
+            "valid": true
+          },
+          {
+            "id": "surface",
+            "kind": "choice",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "pull",
+          "surface"
+        ]
+      }
+    },
+    {
+      "name": "middle/friction/rough",
+      "pass": true,
+      "detail": [
+        {
+          "key": "startForce",
+          "value": 1.9600000000000002,
+          "unit": "N"
+        },
+        {
+          "key": "massScience",
+          "value": 1,
+          "unit": "kg"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-63",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "scene-targets-middle/friction/heavy",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "pull",
+            "kind": "observe",
+            "valid": true
+          },
+          {
+            "id": "surface",
+            "kind": "choice",
+            "valid": true
+          },
+          {
+            "id": "mass",
+            "kind": "supply",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "pull",
+          "surface",
+          "mass"
+        ]
+      }
+    },
+    {
+      "name": "middle/friction/heavy",
+      "pass": true,
+      "detail": [
+        {
+          "key": "startForce",
+          "value": 3.9200000000000004,
+          "unit": "N"
+        },
+        {
+          "key": "massScience",
+          "value": 2,
+          "unit": "kg"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-64",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "evidence-complete-middle/friction",
+      "pass": true,
+      "detail": {
+        "measured": 3,
+        "required": 3,
+        "evidence": [
+          true,
+          true,
+          true
+        ],
+        "checked": 3,
+        "questions": 3,
+        "complete": true
+      }
+    },
+    {
+      "name": "export-validated-middle/friction",
+      "pass": true
+    },
+    {
+      "name": "scene-targets-middle/buoyancy/air",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "volume",
+            "kind": "range",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "volume"
+        ]
+      }
+    },
+    {
+      "name": "middle/buoyancy/air",
+      "pass": true,
+      "detail": [
+        {
+          "key": "airScale",
+          "value": 9.8,
+          "unit": "N"
+        },
+        {
+          "key": "scale",
+          "value": 9.8,
+          "unit": "N"
+        },
+        {
+          "key": "difference",
+          "value": 0,
+          "unit": "N"
+        },
+        {
+          "key": "buoyancy",
+          "value": 0,
+          "unit": "N"
+        },
+        {
+          "key": "weight",
+          "value": 9.8,
+          "unit": "N"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-65",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "scene-targets-middle/buoyancy/one",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "volume",
+            "kind": "range",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "volume"
+        ]
+      }
+    },
+    {
+      "name": "middle/buoyancy/one",
+      "pass": true,
+      "detail": [
+        {
+          "key": "airScale",
+          "value": 9.8,
+          "unit": "N"
+        },
+        {
+          "key": "scale",
+          "value": 7.840000000000001,
+          "unit": "N"
+        },
+        {
+          "key": "difference",
+          "value": 1.96,
+          "unit": "N"
+        },
+        {
+          "key": "buoyancy",
+          "value": 1.96,
+          "unit": "N"
+        },
+        {
+          "key": "weight",
+          "value": 9.8,
+          "unit": "N"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-66",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "scene-targets-middle/buoyancy/two",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "volume",
+            "kind": "range",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "volume"
+        ]
+      }
+    },
+    {
+      "name": "middle/buoyancy/two",
+      "pass": true,
+      "detail": [
+        {
+          "key": "airScale",
+          "value": 9.8,
+          "unit": "N"
+        },
+        {
+          "key": "scale",
+          "value": 5.880000000000001,
+          "unit": "N"
+        },
+        {
+          "key": "difference",
+          "value": 3.92,
+          "unit": "N"
+        },
+        {
+          "key": "buoyancy",
+          "value": 3.92,
+          "unit": "N"
+        },
+        {
+          "key": "weight",
+          "value": 9.8,
+          "unit": "N"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-67",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "evidence-complete-middle/buoyancy",
+      "pass": true,
+      "detail": {
+        "measured": 3,
+        "required": 3,
+        "evidence": [
+          true,
+          true,
+          true
+        ],
+        "checked": 2,
+        "questions": 2,
+        "complete": true
+      }
+    },
+    {
+      "name": "export-validated-middle/buoyancy",
+      "pass": true
+    },
+    {
+      "name": "scene-targets-middle/overflow/empty",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "volume",
+            "kind": "range",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "volume"
+        ]
+      }
+    },
+    {
+      "name": "middle/overflow/empty",
+      "pass": true,
+      "detail": [
+        {
+          "key": "airScale",
+          "value": 9.8,
+          "unit": "N"
+        },
+        {
+          "key": "scale",
+          "value": 9.8,
+          "unit": "N"
+        },
+        {
+          "key": "emptyCup",
+          "value": 0.98,
+          "unit": "N"
+        },
+        {
+          "key": "fullCup",
+          "value": 0.98,
+          "unit": "N"
+        },
+        {
+          "key": "waterWeight",
+          "value": 0,
+          "unit": "N"
+        },
+        {
+          "key": "difference",
+          "value": 0,
+          "unit": "N"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-68",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "scene-targets-middle/overflow/water",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "volume",
+            "kind": "range",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "volume"
+        ]
+      }
+    },
+    {
+      "name": "middle/overflow/water",
+      "pass": true,
+      "detail": [
+        {
+          "key": "airScale",
+          "value": 9.8,
+          "unit": "N"
+        },
+        {
+          "key": "scale",
+          "value": 7.840000000000001,
+          "unit": "N"
+        },
+        {
+          "key": "emptyCup",
+          "value": 0.98,
+          "unit": "N"
+        },
+        {
+          "key": "fullCup",
+          "value": 2.94,
+          "unit": "N"
+        },
+        {
+          "key": "waterWeight",
+          "value": 1.96,
+          "unit": "N"
+        },
+        {
+          "key": "difference",
+          "value": 1.96,
+          "unit": "N"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-69",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "scene-targets-middle/overflow/more",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "volume",
+            "kind": "range",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "volume"
+        ]
+      }
+    },
+    {
+      "name": "middle/overflow/more",
+      "pass": true,
+      "detail": [
+        {
+          "key": "airScale",
+          "value": 9.8,
+          "unit": "N"
+        },
+        {
+          "key": "scale",
+          "value": 5.880000000000001,
+          "unit": "N"
+        },
+        {
+          "key": "emptyCup",
+          "value": 0.98,
+          "unit": "N"
+        },
+        {
+          "key": "fullCup",
+          "value": 4.9,
+          "unit": "N"
+        },
+        {
+          "key": "waterWeight",
+          "value": 3.92,
+          "unit": "N"
+        },
+        {
+          "key": "difference",
+          "value": 3.92,
+          "unit": "N"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-70",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "evidence-complete-middle/overflow",
+      "pass": true,
+      "detail": {
+        "measured": 3,
+        "required": 3,
+        "evidence": [
+          true,
+          true,
+          true
+        ],
+        "checked": 2,
+        "questions": 2,
+        "complete": true
+      }
+    },
+    {
+      "name": "export-validated-middle/overflow",
+      "pass": true
+    },
+    {
+      "name": "scene-targets-middle/motion/start",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "launch",
+            "kind": "observe",
+            "valid": true
+          },
+          {
+            "id": "mode",
+            "kind": "choice",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "launch",
+          "mode"
+        ]
+      }
+    },
+    {
+      "name": "middle/motion/start",
+      "pass": true,
+      "detail": [
+        {
+          "key": "speed",
+          "value": 0.72,
+          "unit": "m/s"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-71",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "integrated-motion-71",
+      "pass": true,
+      "detail": {
+        "actual": {
+          "x": 0.4350000000000002,
+          "y": 0,
+          "vx": 0.7200000000000005,
+          "vy": 0,
+          "rotation": 0,
+          "omega": 0
+        },
+        "fx": 0.6,
+        "fy": 0
+      }
+    },
+    {
+      "name": "scene-targets-middle/motion/speedup",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "launch",
+            "kind": "observe",
+            "valid": true
+          },
+          {
+            "id": "mode",
+            "kind": "choice",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "launch",
+          "mode"
+        ]
+      }
+    },
+    {
+      "name": "middle/motion/speedup",
+      "pass": true,
+      "detail": [
+        {
+          "key": "speed",
+          "value": 1.72,
+          "unit": "m/s"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-72",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "integrated-motion-72",
+      "pass": true,
+      "detail": {
+        "actual": {
+          "x": 1.6349999999999907,
+          "y": 0,
+          "vx": 1.7199999999999847,
+          "vy": 0,
+          "rotation": 0,
+          "omega": 0
+        },
+        "fx": 0.6,
+        "fy": 0
+      }
+    },
+    {
+      "name": "scene-targets-middle/motion/turn",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "launch",
+            "kind": "observe",
+            "valid": true
+          },
+          {
+            "id": "mode",
+            "kind": "choice",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "launch",
+          "mode"
+        ]
+      }
+    },
+    {
+      "name": "middle/motion/turn",
+      "pass": true,
+      "detail": [
+        {
+          "key": "speed",
+          "value": 1.2322337440599491,
+          "unit": "m/s"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-73",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "integrated-motion-73",
+      "pass": true,
+      "detail": {
+        "actual": {
+          "x": 1.1999999999999982,
+          "y": 0.4350000000000002,
+          "vx": 1,
+          "vy": 0.7200000000000005,
+          "rotation": 0,
+          "omega": 0
+        },
+        "fx": 3.6739403974420595e-17,
+        "fy": 0.6
+      }
+    },
+    {
+      "name": "scene-targets-middle/motion/slowdown",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "launch",
+            "kind": "observe",
+            "valid": true
+          },
+          {
+            "id": "mode",
+            "kind": "choice",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "launch",
+          "mode"
+        ]
+      }
+    },
+    {
+      "name": "middle/motion/slowdown",
+      "pass": true,
+      "detail": [
+        {
+          "key": "speed",
+          "value": 0.28,
+          "unit": "m/s"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-74",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "integrated-motion-74",
+      "pass": true,
+      "detail": {
+        "actual": {
+          "x": 0.7649999999999997,
+          "y": 5.3272135762909784e-17,
+          "vx": 0.27999999999999936,
+          "vy": 8.817456953860927e-17,
+          "rotation": 0,
+          "omega": 0
+        },
+        "fx": -0.6,
+        "fy": 7.347880794884119e-17
+      }
+    },
+    {
+      "name": "scene-targets-middle/motion/stop",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "launch",
+            "kind": "observe",
+            "valid": true
+          },
+          {
+            "id": "mode",
+            "kind": "choice",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "launch",
+          "mode"
+        ]
+      }
+    },
+    {
+      "name": "middle/motion/stop",
+      "pass": true,
+      "detail": [
+        {
+          "key": "speed",
+          "value": 1.2246467991473532e-16,
+          "unit": "m/s"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-75",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "integrated-motion-75",
+      "pass": true,
+      "detail": {
+        "actual": {
+          "x": 0.5958333333333355,
+          "y": 7.398907744848584e-17,
+          "vx": 2.5691254679216513e-15,
+          "vy": 1.2246467991473517e-16,
+          "rotation": 0,
+          "omega": 0
+        },
+        "fx": -0.8333333333333334,
+        "fy": 1.020538999289461e-16
+      }
+    },
+    {
+      "name": "evidence-complete-middle/motion",
+      "pass": true,
+      "detail": {
+        "measured": 5,
+        "required": 5,
+        "evidence": [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        "checked": 2,
+        "questions": 2,
+        "complete": true
+      }
+    },
+    {
+      "name": "export-validated-middle/motion",
+      "pass": true
+    },
+    {
+      "name": "scene-targets-middle/motion-classify/fall",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "launch",
+            "kind": "observe",
+            "valid": true
+          },
+          {
+            "id": "mode",
+            "kind": "choice",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "mode"
+        ]
+      }
+    },
+    {
+      "name": "middle/motion-classify/fall",
+      "pass": true,
+      "detail": [
+        {
+          "key": "speedChange",
+          "value": 1,
+          "unit": ""
+        },
+        {
+          "key": "directionChange",
+          "value": 0,
+          "unit": ""
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-76",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "scene-targets-middle/motion-classify/circle",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "launch",
+            "kind": "observe",
+            "valid": true
+          },
+          {
+            "id": "mode",
+            "kind": "choice",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "launch",
+          "mode"
+        ]
+      }
+    },
+    {
+      "name": "middle/motion-classify/circle",
+      "pass": true,
+      "detail": [
+        {
+          "key": "speedChange",
+          "value": 0,
+          "unit": ""
+        },
+        {
+          "key": "directionChange",
+          "value": 1,
+          "unit": ""
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-77",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "scene-targets-middle/motion-classify/throw",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "launch",
+            "kind": "observe",
+            "valid": true
+          },
+          {
+            "id": "mode",
+            "kind": "choice",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "launch",
+          "mode"
+        ]
+      }
+    },
+    {
+      "name": "middle/motion-classify/throw",
+      "pass": true,
+      "detail": [
+        {
+          "key": "speedChange",
+          "value": 1,
+          "unit": ""
+        },
+        {
+          "key": "directionChange",
+          "value": 1,
+          "unit": ""
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-78",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "evidence-complete-middle/motion-classify",
+      "pass": true,
+      "detail": {
+        "measured": 3,
+        "required": 3,
+        "evidence": [
+          true,
+          true,
+          true
+        ],
+        "checked": 3,
+        "questions": 3,
+        "complete": true
+      }
+    },
+    {
+      "name": "export-validated-middle/motion-classify",
+      "pass": true
+    },
+    {
+      "name": "scene-targets-middle/contact/hand",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "contact",
+            "kind": "choice",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "contact"
+        ]
+      }
+    },
+    {
+      "name": "middle/contact/hand",
+      "pass": true,
+      "detail": [
+        {
+          "key": "weight",
+          "value": 9.8,
+          "unit": "N"
+        },
+        {
+          "key": "normal",
+          "value": 9.8,
+          "unit": "N"
+        },
+        {
+          "key": "net",
+          "value": 0,
+          "unit": "N"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-79",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "scene-targets-middle/contact/floor",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "contact",
+            "kind": "choice",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "contact"
+        ]
+      }
+    },
+    {
+      "name": "middle/contact/floor",
+      "pass": true,
+      "detail": [
+        {
+          "key": "weight",
+          "value": 9.8,
+          "unit": "N"
+        },
+        {
+          "key": "normal",
+          "value": 9.8,
+          "unit": "N"
+        },
+        {
+          "key": "net",
+          "value": 0,
+          "unit": "N"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-80",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "evidence-complete-middle/contact",
+      "pass": true,
+      "detail": {
+        "measured": 2,
+        "required": 2,
+        "evidence": [
+          true,
+          true
+        ],
+        "checked": 2,
+        "questions": 2,
+        "complete": true
+      }
+    },
+    {
+      "name": "export-validated-middle/contact",
+      "pass": true
+    },
+    {
+      "name": "scene-targets-middle/applications/spring",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "operate",
+            "kind": "progress",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "operate"
+        ]
+      }
+    },
+    {
+      "name": "middle/applications/spring",
+      "pass": true,
+      "detail": [
+        {
+          "key": "sample",
+          "value": 1,
+          "unit": ""
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-81",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "scene-targets-middle/applications/balloon",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "operate",
+            "kind": "progress",
+            "valid": true
+          },
+          {
+            "id": "example",
+            "kind": "choice",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "operate",
+          "example"
+        ]
+      }
+    },
+    {
+      "name": "middle/applications/balloon",
+      "pass": true,
+      "detail": [
+        {
+          "key": "sample",
+          "value": 1,
+          "unit": ""
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-82",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "scene-targets-middle/applications/lever",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "operate",
+            "kind": "progress",
+            "valid": true
+          },
+          {
+            "id": "example",
+            "kind": "choice",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "operate",
+          "example"
+        ]
+      }
+    },
+    {
+      "name": "middle/applications/lever",
+      "pass": true,
+      "detail": [
+        {
+          "key": "sample",
+          "value": 1,
+          "unit": ""
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-83",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "evidence-complete-middle/applications",
+      "pass": true,
+      "detail": {
+        "measured": 3,
+        "required": 3,
+        "evidence": [
+          true,
+          true,
+          true
+        ],
+        "checked": 2,
+        "questions": 2,
+        "complete": true
+      }
+    },
+    {
+      "name": "export-validated-middle/applications",
+      "pass": true
+    },
+    {
+      "name": "scene-targets-middle/design/before",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "launch",
+            "kind": "observe",
+            "valid": true
+          },
+          {
+            "id": "surface",
+            "kind": "choice",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "launch",
+          "surface"
+        ]
+      }
+    },
+    {
+      "name": "middle/design/before",
+      "pass": true,
+      "detail": [
+        {
+          "key": "displacement",
+          "value": 2.2959183673469385,
+          "unit": "m"
+        },
+        {
+          "key": "forceComparison",
+          "value": 0.49000000000000005,
+          "unit": "N"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-84",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "scene-targets-middle/design/after",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "launch",
+            "kind": "observe",
+            "valid": true
+          },
+          {
+            "id": "surface",
+            "kind": "choice",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "launch",
+          "surface"
+        ]
+      }
+    },
+    {
+      "name": "middle/design/after",
+      "pass": true,
+      "detail": [
+        {
+          "key": "displacement",
+          "value": 0.5739795918367346,
+          "unit": "m"
+        },
+        {
+          "key": "forceComparison",
+          "value": 1.9600000000000002,
+          "unit": "N"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-85",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "scene-targets-middle/design/alternative",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "launch",
+            "kind": "observe",
+            "valid": true
+          },
+          {
+            "id": "device",
+            "kind": "choice",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "launch",
+          "device"
+        ]
+      }
+    },
+    {
+      "name": "middle/design/alternative",
+      "pass": true,
+      "detail": [
+        {
+          "key": "displacement",
+          "value": 0.6354101966249684,
+          "unit": "m"
+        },
+        {
+          "key": "forceComparison",
+          "value": 6.708203932499369,
+          "unit": "N"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-86",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "evidence-complete-middle/design",
+      "pass": true,
+      "detail": {
+        "measured": 3,
+        "required": 3,
+        "evidence": [
+          true,
+          true,
+          true
+        ],
+        "checked": 2,
+        "questions": 2,
+        "complete": true,
+        "humanReview": true
+      }
+    },
+    {
+      "name": "export-validated-middle/design",
+      "pass": true
+    },
+    {
+      "name": "scene-targets-middle/floating/diver",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "volume",
+            "kind": "range",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "volume"
+        ]
+      }
+    },
+    {
+      "name": "middle/floating/diver",
+      "pass": true,
+      "detail": [
+        {
+          "key": "weight",
+          "value": 9.8,
+          "unit": "N"
+        },
+        {
+          "key": "buoyancy",
+          "value": 10.78,
+          "unit": "N"
+        },
+        {
+          "key": "net",
+          "value": 0.9799999999999986,
+          "unit": "N"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-87",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "scene-targets-middle/floating/balloon",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "clips",
+            "kind": "range",
+            "valid": true
+          },
+          {
+            "id": "case",
+            "kind": "choice",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "clips",
+          "case"
+        ]
+      }
+    },
+    {
+      "name": "middle/floating/balloon",
+      "pass": true,
+      "detail": [
+        {
+          "key": "weight",
+          "value": 0.058800000000000005,
+          "unit": "N"
+        },
+        {
+          "key": "buoyancy",
+          "value": 0.0588,
+          "unit": "N"
+        },
+        {
+          "key": "net",
+          "value": -6.938893903907228e-18,
+          "unit": "N"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-88",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "scene-targets-middle/floating/submarine",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "fill",
+            "kind": "range",
+            "valid": true
+          },
+          {
+            "id": "case",
+            "kind": "choice",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "case",
+          "fill"
+        ]
+      }
+    },
+    {
+      "name": "middle/floating/submarine",
+      "pass": true,
+      "detail": [
+        {
+          "key": "weight",
+          "value": 49,
+          "unit": "N"
+        },
+        {
+          "key": "buoyancy",
+          "value": 39.2,
+          "unit": "N"
+        },
+        {
+          "key": "net",
+          "value": -9.799999999999997,
+          "unit": "N"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-89",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "evidence-complete-middle/floating",
+      "pass": true,
+      "detail": {
+        "measured": 3,
+        "required": 3,
+        "evidence": [
+          true,
+          true,
+          true
+        ],
+        "checked": 2,
+        "questions": 2,
+        "complete": true
+      }
+    },
+    {
+      "name": "export-validated-middle/floating",
+      "pass": true
+    },
+    {
+      "name": "scene-targets-middle/review-middle/before",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "volume",
+            "kind": "range",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "volume"
+        ]
+      }
+    },
+    {
+      "name": "middle/review-middle/before",
+      "pass": true,
+      "detail": [
+        {
+          "key": "weight",
+          "value": 9.8,
+          "unit": "N"
+        },
+        {
+          "key": "buoyancy",
+          "value": 8.82,
+          "unit": "N"
+        },
+        {
+          "key": "net",
+          "value": -0.9800000000000004,
+          "unit": "N"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-90",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "scene-targets-middle/review-middle/after",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "volume",
+            "kind": "range",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "volume"
+        ]
+      }
+    },
+    {
+      "name": "middle/review-middle/after",
+      "pass": true,
+      "detail": [
+        {
+          "key": "weight",
+          "value": 9.8,
+          "unit": "N"
+        },
+        {
+          "key": "buoyancy",
+          "value": 10.78,
+          "unit": "N"
+        },
+        {
+          "key": "net",
+          "value": 0.9799999999999986,
+          "unit": "N"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-91",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "evidence-complete-middle/review-middle",
+      "pass": true,
+      "detail": {
+        "measured": 2,
+        "required": 2,
+        "evidence": [
+          true,
+          true
+        ],
+        "checked": 5,
+        "questions": 5,
+        "complete": true,
+        "humanReview": true
+      }
+    },
+    {
+      "name": "export-validated-middle/review-middle",
+      "pass": true
+    },
+    {
+      "name": "scene-targets-physics/turning/review-sum",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "cart",
+            "kind": "push",
+            "valid": true
+          },
+          {
+            "id": "left",
+            "kind": "range",
+            "valid": true
+          },
+          {
+            "id": "right",
+            "kind": "range",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "cart",
+          "left",
+          "right"
+        ]
+      }
+    },
+    {
+      "name": "physics/turning/review-sum",
+      "pass": true,
+      "detail": [
+        {
+          "key": "net",
+          "value": 4,
+          "unit": "N"
+        },
+        {
+          "key": "speed",
+          "value": 4.8,
+          "unit": "m/s"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-92",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "integrated-motion-92",
+      "pass": true,
+      "detail": {
+        "actual": {
+          "x": 2.899999999999999,
+          "y": 0,
+          "vx": 4.799999999999993,
+          "vy": 0,
+          "rotation": 0,
+          "omega": 0
+        },
+        "fx": 4,
+        "fy": 0
+      }
+    },
+    {
+      "name": "scene-targets-physics/turning/review-zero",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "cart",
+            "kind": "push",
+            "valid": true
+          },
+          {
+            "id": "mode",
+            "kind": "choice",
+            "valid": true
+          },
+          {
+            "id": "left",
+            "kind": "range",
+            "valid": true
+          },
+          {
+            "id": "right",
+            "kind": "range",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "cart",
+          "left",
+          "right",
+          "mode"
+        ]
+      }
+    },
+    {
+      "name": "physics/turning/review-zero",
+      "pass": true,
+      "detail": [
+        {
+          "key": "net",
+          "value": 0,
+          "unit": "N"
+        },
+        {
+          "key": "speed",
+          "value": 0,
+          "unit": "m/s"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-93",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "integrated-motion-93",
+      "pass": true,
+      "detail": {
+        "actual": {
+          "x": 0,
+          "y": 1.7757378587636644e-16,
+          "vx": 0,
+          "vy": 2.9391523179536496e-16,
+          "rotation": 0,
+          "omega": 0
+        },
+        "fx": 0,
+        "fy": 2.4492935982947064e-16
+      }
+    },
+    {
+      "name": "scene-targets-physics/turning/near",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "effort",
+            "kind": "range",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "effort"
+        ]
+      }
+    },
+    {
+      "name": "physics/turning/near",
+      "pass": true,
+      "detail": [
+        {
+          "key": "torque",
+          "value": 2,
+          "unit": "N·m"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-94",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "scene-targets-physics/turning/far",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "reach",
+            "kind": "choice",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "reach"
+        ]
+      }
+    },
+    {
+      "name": "physics/turning/far",
+      "pass": true,
+      "detail": [
+        {
+          "key": "torque",
+          "value": 6,
+          "unit": "N·m"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-95",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "scene-targets-physics/turning/double-force",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "effort",
+            "kind": "range",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "effort"
+        ]
+      }
+    },
+    {
+      "name": "physics/turning/double-force",
+      "pass": true,
+      "detail": [
+        {
+          "key": "torque",
+          "value": 12,
+          "unit": "N·m"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-96",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "scene-targets-physics/turning/angle",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "angle",
+            "kind": "range",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "angle"
+        ]
+      }
+    },
+    {
+      "name": "physics/turning/angle",
+      "pass": true,
+      "detail": [
+        {
+          "key": "torque",
+          "value": 5.999999999999999,
+          "unit": "N·m"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-97",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "evidence-complete-physics/turning",
+      "pass": true,
+      "detail": {
+        "measured": 6,
+        "required": 6,
+        "evidence": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        "checked": 3,
+        "questions": 3,
+        "complete": true
+      }
+    },
+    {
+      "name": "export-validated-physics/turning",
+      "pass": true
+    },
+    {
+      "name": "scene-targets-physics/lever-counts/one",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "leftPos",
+            "kind": "range",
+            "valid": true
+          },
+          {
+            "id": "rightPos",
+            "kind": "range",
+            "valid": true
+          },
+          {
+            "id": "supply-left",
+            "kind": "supply",
+            "valid": true
+          },
+          {
+            "id": "supply-right",
+            "kind": "supply",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "leftPos",
+          "rightPos",
+          "supply-left",
+          "supply-right"
+        ]
+      }
+    },
+    {
+      "name": "physics/lever-counts/one",
+      "pass": true,
+      "detail": [
+        {
+          "key": "leftProduct",
+          "value": 2,
+          "unit": ""
+        },
+        {
+          "key": "rightProduct",
+          "value": 2,
+          "unit": ""
+        },
+        {
+          "key": "torque",
+          "value": 0,
+          "unit": "N·m"
+        },
+        {
+          "key": "net",
+          "value": 0,
+          "unit": "N"
+        },
+        {
+          "key": "reaction",
+          "value": 2.94,
+          "unit": "N"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-98",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "scene-targets-physics/lever-counts/two",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "leftPos",
+            "kind": "range",
+            "valid": true
+          },
+          {
+            "id": "rightPos",
+            "kind": "range",
+            "valid": true
+          },
+          {
+            "id": "supply-left",
+            "kind": "supply",
+            "valid": true
+          },
+          {
+            "id": "supply-right",
+            "kind": "supply",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "leftPos",
+          "rightPos",
+          "supply-left",
+          "supply-right"
+        ]
+      }
+    },
+    {
+      "name": "physics/lever-counts/two",
+      "pass": true,
+      "detail": [
+        {
+          "key": "leftProduct",
+          "value": 6,
+          "unit": ""
+        },
+        {
+          "key": "rightProduct",
+          "value": 6,
+          "unit": ""
+        },
+        {
+          "key": "torque",
+          "value": 0,
+          "unit": "N·m"
+        },
+        {
+          "key": "net",
+          "value": 0,
+          "unit": "N"
+        },
+        {
+          "key": "reaction",
+          "value": 4.9,
+          "unit": "N"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-99",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "scene-targets-physics/lever-counts/three",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "leftPos",
+            "kind": "range",
+            "valid": true
+          },
+          {
+            "id": "rightPos",
+            "kind": "range",
+            "valid": true
+          },
+          {
+            "id": "supply-left",
+            "kind": "supply",
+            "valid": true
+          },
+          {
+            "id": "supply-right",
+            "kind": "supply",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "leftPos",
+          "rightPos",
+          "supply-left",
+          "supply-right"
+        ]
+      }
+    },
+    {
+      "name": "physics/lever-counts/three",
+      "pass": true,
+      "detail": [
+        {
+          "key": "leftProduct",
+          "value": 8,
+          "unit": ""
+        },
+        {
+          "key": "rightProduct",
+          "value": 8,
+          "unit": ""
+        },
+        {
+          "key": "torque",
+          "value": 0,
+          "unit": "N·m"
+        },
+        {
+          "key": "net",
+          "value": 0,
+          "unit": "N"
+        },
+        {
+          "key": "reaction",
+          "value": 5.88,
+          "unit": "N"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-100",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "evidence-complete-physics/lever-counts",
+      "pass": true,
+      "detail": {
+        "measured": 3,
+        "required": 3,
+        "evidence": [
+          true,
+          true,
+          true
+        ],
+        "checked": 2,
+        "questions": 2,
+        "complete": true
+      }
+    },
+    {
+      "name": "export-validated-physics/lever-counts",
+      "pass": true
+    },
+    {
+      "name": "scene-targets-physics/torque/balanced",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "effort",
+            "kind": "range",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "effort"
+        ]
+      }
+    },
+    {
+      "name": "physics/torque/balanced",
+      "pass": true,
+      "detail": [
+        {
+          "key": "net",
+          "value": 0,
+          "unit": "N"
+        },
+        {
+          "key": "torque",
+          "value": 0,
+          "unit": "N·m"
+        },
+        {
+          "key": "reaction",
+          "value": 20,
+          "unit": "N"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-101",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "scene-targets-physics/torque/rotate",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "arm",
+            "kind": "range",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "arm"
+        ]
+      }
+    },
+    {
+      "name": "physics/torque/rotate",
+      "pass": true,
+      "detail": [
+        {
+          "key": "net",
+          "value": 0,
+          "unit": "N"
+        },
+        {
+          "key": "torque",
+          "value": 10,
+          "unit": "N·m"
+        },
+        {
+          "key": "reaction",
+          "value": 20,
+          "unit": "N"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-102",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "scene-targets-physics/torque/restore",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "loadArm",
+            "kind": "range",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "loadArm"
+        ]
+      }
+    },
+    {
+      "name": "physics/torque/restore",
+      "pass": true,
+      "detail": [
+        {
+          "key": "net",
+          "value": 0,
+          "unit": "N"
+        },
+        {
+          "key": "torque",
+          "value": 0,
+          "unit": "N·m"
+        },
+        {
+          "key": "reaction",
+          "value": 20,
+          "unit": "N"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-103",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "evidence-complete-physics/torque",
+      "pass": true,
+      "detail": {
+        "measured": 3,
+        "required": 3,
+        "evidence": [
+          true,
+          true,
+          true
+        ],
+        "checked": 2,
+        "questions": 2,
+        "complete": true
+      }
+    },
+    {
+      "name": "export-validated-physics/torque",
+      "pass": true
+    },
+    {
+      "name": "scene-targets-physics/couple/same-line",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "line",
+            "kind": "choice",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "line"
+        ]
+      }
+    },
+    {
+      "name": "physics/couple/same-line",
+      "pass": true,
+      "detail": [
+        {
+          "key": "net",
+          "value": 0,
+          "unit": "N"
+        },
+        {
+          "key": "torque",
+          "value": 0,
+          "unit": "N·m"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-104",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "scene-targets-physics/couple/different-lines",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "line",
+            "kind": "choice",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "line"
+        ]
+      }
+    },
+    {
+      "name": "physics/couple/different-lines",
+      "pass": true,
+      "detail": [
+        {
+          "key": "net",
+          "value": 0,
+          "unit": "N"
+        },
+        {
+          "key": "torque",
+          "value": -4,
+          "unit": "N·m"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-105",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "evidence-complete-physics/couple",
+      "pass": true,
+      "detail": {
+        "measured": 2,
+        "required": 2,
+        "evidence": [
+          true,
+          true
+        ],
+        "checked": 2,
+        "questions": 2,
+        "complete": true
+      }
+    },
+    {
+      "name": "export-validated-physics/couple",
+      "pass": true
+    },
+    {
+      "name": "scene-targets-physics/stability/small-tilt",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "tilt",
+            "kind": "range",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "tilt"
+        ]
+      }
+    },
+    {
+      "name": "physics/stability/small-tilt",
+      "pass": true,
+      "detail": [
+        {
+          "key": "projection",
+          "value": 0.18124430116082632,
+          "unit": "m"
+        },
+        {
+          "key": "support",
+          "value": 1,
+          "unit": "m"
+        },
+        {
+          "key": "gravityMoment",
+          "value": 3.123805848623902,
+          "unit": "N·m"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-106",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "scene-targets-physics/stability/tip",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "tilt",
+            "kind": "range",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "tilt"
+        ]
+      }
+    },
+    {
+      "name": "physics/stability/tip",
+      "pass": true,
+      "detail": [
+        {
+          "key": "projection",
+          "value": 0.7597653881270503,
+          "unit": "m"
+        },
+        {
+          "key": "support",
+          "value": 1,
+          "unit": "m"
+        },
+        {
+          "key": "gravityMoment",
+          "value": -2.545700803645093,
+          "unit": "N·m"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-107",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "scene-targets-physics/stability/wider",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "width",
+            "kind": "range",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "width"
+        ]
+      }
+    },
+    {
+      "name": "physics/stability/wider",
+      "pass": true,
+      "detail": [
+        {
+          "key": "projection",
+          "value": 0.8767431665675612,
+          "unit": "m"
+        },
+        {
+          "key": "support",
+          "value": 2,
+          "unit": "m"
+        },
+        {
+          "key": "gravityMoment",
+          "value": 1.2079169676379,
+          "unit": "N·m"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-108",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "scene-targets-physics/stability/lower",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "height",
+            "kind": "range",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "height"
+        ]
+      }
+    },
+    {
+      "name": "physics/stability/lower",
+      "pass": true,
+      "detail": [
+        {
+          "key": "projection",
+          "value": 0.5553493617242916,
+          "unit": "m"
+        },
+        {
+          "key": "support",
+          "value": 2,
+          "unit": "m"
+        },
+        {
+          "key": "gravityMoment",
+          "value": 4.357576255101942,
+          "unit": "N·m"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-109",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "evidence-complete-physics/stability",
+      "pass": true,
+      "detail": {
+        "measured": 4,
+        "required": 4,
+        "evidence": [
+          true,
+          true,
+          true,
+          true
+        ],
+        "checked": 2,
+        "questions": 2,
+        "complete": true
+      }
+    },
+    {
+      "name": "export-validated-physics/stability",
+      "pass": true
+    },
+    {
+      "name": "scene-targets-physics/shelf/reference",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "position",
+            "kind": "range",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "position"
+        ]
+      }
+    },
+    {
+      "name": "physics/shelf/reference",
+      "pass": true,
+      "detail": [
+        {
+          "key": "wallReaction",
+          "value": 40,
+          "unit": "N"
+        },
+        {
+          "key": "ropeForce",
+          "value": 80,
+          "unit": "N"
+        },
+        {
+          "key": "net",
+          "value": 0,
+          "unit": "N"
+        },
+        {
+          "key": "torque",
+          "value": 0,
+          "unit": "N·m"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-110",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "scene-targets-physics/shelf/near-wall",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "position",
+            "kind": "range",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "position"
+        ]
+      }
+    },
+    {
+      "name": "physics/shelf/near-wall",
+      "pass": true,
+      "detail": [
+        {
+          "key": "wallReaction",
+          "value": 80,
+          "unit": "N"
+        },
+        {
+          "key": "ropeForce",
+          "value": 40,
+          "unit": "N"
+        },
+        {
+          "key": "net",
+          "value": 0,
+          "unit": "N"
+        },
+        {
+          "key": "torque",
+          "value": 0,
+          "unit": "N·m"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-111",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "evidence-complete-physics/shelf",
+      "pass": true,
+      "detail": {
+        "measured": 2,
+        "required": 2,
+        "evidence": [
+          true,
+          true
+        ],
+        "checked": 2,
+        "questions": 2,
+        "complete": true
+      }
+    },
+    {
+      "name": "export-validated-physics/shelf",
+      "pass": true
+    },
+    {
+      "name": "scene-targets-physics/review-high/crane",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "leftPos",
+            "kind": "range",
+            "valid": true
+          },
+          {
+            "id": "rightPos",
+            "kind": "range",
+            "valid": true
+          },
+          {
+            "id": "supply-left",
+            "kind": "supply",
+            "valid": true
+          },
+          {
+            "id": "supply-right",
+            "kind": "supply",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "leftPos",
+          "rightPos",
+          "supply-left",
+          "supply-right"
+        ]
+      }
+    },
+    {
+      "name": "physics/review-high/crane",
+      "pass": true,
+      "detail": [
+        {
+          "key": "leftProduct",
+          "value": 6,
+          "unit": ""
+        },
+        {
+          "key": "rightProduct",
+          "value": 6,
+          "unit": ""
+        },
+        {
+          "key": "torque",
+          "value": 0,
+          "unit": "N·m"
+        },
+        {
+          "key": "net",
+          "value": 0,
+          "unit": "N"
+        },
+        {
+          "key": "reaction",
+          "value": 4.9,
+          "unit": "N"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-112",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "scene-targets-physics/review-high/move-load",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "leftPos",
+            "kind": "range",
+            "valid": true
+          },
+          {
+            "id": "rightPos",
+            "kind": "range",
+            "valid": true
+          },
+          {
+            "id": "supply-left",
+            "kind": "supply",
+            "valid": true
+          },
+          {
+            "id": "supply-right",
+            "kind": "supply",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "leftPos",
+          "rightPos",
+          "supply-left",
+          "supply-right"
+        ]
+      }
+    },
+    {
+      "name": "physics/review-high/move-load",
+      "pass": true,
+      "detail": [
+        {
+          "key": "leftProduct",
+          "value": 9,
+          "unit": ""
+        },
+        {
+          "key": "rightProduct",
+          "value": 6,
+          "unit": ""
+        },
+        {
+          "key": "torque",
+          "value": 0.29400000000000004,
+          "unit": "N·m"
+        },
+        {
+          "key": "net",
+          "value": 0,
+          "unit": "N"
+        },
+        {
+          "key": "reaction",
+          "value": 4.9,
+          "unit": "N"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-113",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "evidence-complete-physics/review-high",
+      "pass": true,
+      "detail": {
+        "measured": 2,
+        "required": 2,
+        "evidence": [
+          true,
+          true
+        ],
+        "checked": 3,
+        "questions": 3,
+        "complete": true
+      }
+    },
+    {
+      "name": "export-validated-physics/review-high",
+      "pass": true
+    },
+    {
+      "name": "scene-targets-mechanics/vectors/right-angle",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "cart",
+            "kind": "push",
+            "valid": true
+          },
+          {
+            "id": "f1",
+            "kind": "range",
+            "valid": true
+          },
+          {
+            "id": "force-vector",
+            "kind": "vector",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "cart",
+          "f1",
+          "force-vector"
+        ]
+      }
+    },
+    {
+      "name": "mechanics/vectors/right-angle",
+      "pass": true,
+      "detail": [
+        {
+          "key": "net",
+          "value": 5,
+          "unit": "N"
+        },
+        {
+          "key": "rx",
+          "value": 3.0000000000000004,
+          "unit": "N"
+        },
+        {
+          "key": "ry",
+          "value": 4,
+          "unit": "N"
+        },
+        {
+          "key": "accel",
+          "value": 5,
+          "unit": "m/s²"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-114",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "integrated-motion-114",
+      "pass": true,
+      "detail": {
+        "actual": {
+          "x": 2.1749999999999967,
+          "y": 2.899999999999999,
+          "vx": 3.5999999999999917,
+          "vy": 4.799999999999993,
+          "rotation": 0,
+          "omega": 0
+        },
+        "fx": 3.0000000000000004,
+        "fy": 4
+      }
+    },
+    {
+      "name": "scene-targets-mechanics/vectors/opposite",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "force-vector",
+            "kind": "vector",
+            "valid": true
+          },
+          {
+            "id": "cart",
+            "kind": "push",
+            "valid": true
+          },
+          {
+            "id": "f1",
+            "kind": "range",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "cart",
+          "f1",
+          "force-vector"
+        ]
+      }
+    },
+    {
+      "name": "mechanics/vectors/opposite",
+      "pass": true,
+      "detail": [
+        {
+          "key": "net",
+          "value": 3.6739403974420594e-16,
+          "unit": "N"
+        },
+        {
+          "key": "rx",
+          "value": 0,
+          "unit": "N"
+        },
+        {
+          "key": "ry",
+          "value": 3.6739403974420594e-16,
+          "unit": "N"
+        },
+        {
+          "key": "accel",
+          "value": 3.6739403974420594e-16,
+          "unit": "m/s²"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-115",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "integrated-motion-115",
+      "pass": true,
+      "detail": {
+        "actual": {
+          "x": 0,
+          "y": 2.6636067881454966e-16,
+          "vx": 0,
+          "vy": 4.408728476930478e-16,
+          "rotation": 0,
+          "omega": 0
+        },
+        "fx": 0,
+        "fy": 3.6739403974420594e-16
+      }
+    },
+    {
+      "name": "evidence-complete-mechanics/vectors",
+      "pass": true,
+      "detail": {
+        "measured": 2,
+        "required": 2,
+        "evidence": [
+          true,
+          true
+        ],
+        "checked": 2,
+        "questions": 2,
+        "complete": true
+      }
+    },
+    {
+      "name": "export-validated-mechanics/vectors",
+      "pass": true
+    },
+    {
+      "name": "scene-targets-mechanics/incline/no-friction",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "angle",
+            "kind": "range",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "angle"
+        ]
+      }
+    },
+    {
+      "name": "mechanics/incline/no-friction",
+      "pass": true,
+      "detail": [
+        {
+          "key": "tension",
+          "value": 4.8999999999999995,
+          "unit": "N"
+        },
+        {
+          "key": "normal",
+          "value": 8.4870489570875,
+          "unit": "N"
+        },
+        {
+          "key": "net",
+          "value": 0,
+          "unit": "N"
+        },
+        {
+          "key": "slopeForce",
+          "value": 4.8999999999999995,
+          "unit": "N"
+        },
+        {
+          "key": "friction",
+          "value": 0,
+          "unit": "N"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-116",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "scene-targets-mechanics/incline/friction",
+      "pass": true,
+      "detail": {
+        "dragging": false,
+        "targets": [
+          {
+            "id": "mu",
+            "kind": "range",
+            "valid": true
+          }
+        ],
+        "visible": [
+          "mu"
+        ]
+      }
+    },
+    {
+      "name": "mechanics/incline/friction",
+      "pass": true,
+      "detail": [
+        {
+          "key": "tension",
+          "value": 4.051295104291249,
+          "unit": "N"
+        },
+        {
+          "key": "normal",
+          "value": 8.4870489570875,
+          "unit": "N"
+        },
+        {
+          "key": "net",
+          "value": 0,
+          "unit": "N"
+        },
+        {
+          "key": "slopeForce",
+          "value": 4.8999999999999995,
+          "unit": "N"
+        },
+        {
+          "key": "friction",
+          "value": 0.8487048957087501,
+          "unit": "N"
+        }
+      ]
+    },
+    {
+      "name": "finite-apparatus-117",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "evidence-complete-mechanics/incline",
+      "pass": true,
+      "detail": {
+        "measured": 2,
+        "required": 2,
+        "evidence": [
+          true,
+          true
+        ],
+        "checked": 2,
+        "questions": 2,
+        "complete": true
+      }
+    },
+    {
+      "name": "export-validated-mechanics/incline",
+      "pass": true
+    },
+    {
+      "name": "low-quality-contract",
+      "pass": true,
+      "detail": {
+        "physics": {
+          "forces": [
+            {
+              "x": 0,
+              "y": 0,
+              "mag": 0,
+              "angle": 0,
+              "r": {
+                "x": 0,
+                "y": 0
+              }
+            },
+            {
+              "x": 0,
+              "y": 0,
+              "mag": 0,
+              "angle": 180,
+              "r": {
+                "x": 0,
+                "y": 0
+              }
+            },
+            {
+              "x": 0,
+              "y": 0,
+              "mag": 0,
+              "angle": 0,
+              "r": {
+                "x": 0,
+                "y": 0
+              }
+            }
+          ],
+          "R": {
+            "x": 0,
+            "y": 0
+          },
+          "resultant": 0,
+          "torque": 0,
+          "mass": 1,
+          "inertia": 0.6033333333333334,
+          "a": {
+            "x": 0,
+            "y": 0
+          },
+          "alpha": 0,
+          "equilibrium": true
+        },
+        "fps": 60,
+        "quality": "low",
+        "canvas": [
+          390,
+          680
+        ],
+        "viewport": [
+          0,
+          0,
+          390,
+          680
+        ],
+        "drawCalls": 306,
+        "triangles": 116378,
+        "ao": false,
+        "dof": false,
+        "pixelRatio": 1,
+        "bloom": [
+          98,
+          170
+        ],
+        "shadow": 1024,
+        "particles": 72,
+        "quest": {
+          "i": 0,
+          "passed": [],
+          "phase": "done",
+          "picked": null,
+          "elapsed": 0,
+          "stable": 0,
+          "changed": false,
+          "observed": null
+        },
+        "learn": {
+          "active": true,
+          "level": "intro",
+          "task": 0,
+          "phase": "practice",
+          "timer": 0,
+          "stable": 0,
+          "edits": 0,
+          "picked": null,
+          "voice": false,
+          "completed": [],
+          "observed": null,
+          "showSummary": false,
+          "beforeR": -1,
+          "cart": true,
+          "arrows": [
+            false,
+            false,
+            false
+          ],
+          "resultArrow": false,
+          "handles": [
+            false,
+            false,
+            false
+          ]
+        },
+        "errors": []
+      }
+    },
+    {
+      "name": "no-horizontal-overflow",
+      "pass": true
+    },
+    {
+      "name": "notebook-collapsed",
+      "pass": true
+    }
+  ],
+  "diagnostics": {
+    "physics": {
+      "forces": [
+        {
+          "x": 0,
+          "y": 0,
+          "mag": 0,
+          "angle": 0,
+          "r": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        {
+          "x": 0,
+          "y": 0,
+          "mag": 0,
+          "angle": 180,
+          "r": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        {
+          "x": 0,
+          "y": 0,
+          "mag": 0,
+          "angle": 0,
+          "r": {
+            "x": 0,
+            "y": 0
+          }
+        }
+      ],
+      "R": {
+        "x": 0,
+        "y": 0
+      },
+      "resultant": 0,
+      "torque": 0,
+      "mass": 1,
+      "inertia": 0.6033333333333334,
+      "a": {
+        "x": 0,
+        "y": 0
+      },
+      "alpha": 0,
+      "equilibrium": true
+    },
+    "fps": 60,
+    "quality": "low",
+    "canvas": [
+      390,
+      680
+    ],
+    "viewport": [
+      0,
+      0,
+      390,
+      680
+    ],
+    "drawCalls": 306,
+    "triangles": 116378,
+    "ao": false,
+    "dof": false,
+    "pixelRatio": 1,
+    "bloom": [
+      98,
+      170
+    ],
+    "shadow": 1024,
+    "particles": 72,
+    "quest": {
+      "i": 0,
+      "passed": [],
+      "phase": "done",
+      "picked": null,
+      "elapsed": 0,
+      "stable": 0,
+      "changed": false,
+      "observed": null
+    },
+    "learn": {
+      "active": true,
+      "level": "intro",
+      "task": 0,
+      "phase": "practice",
+      "timer": 0,
+      "stable": 0,
+      "edits": 0,
+      "picked": null,
+      "voice": false,
+      "completed": [],
+      "observed": null,
+      "showSummary": false,
+      "beforeR": -1,
+      "cart": true,
+      "arrows": [
+        false,
+        false,
+        false
+      ],
+      "resultArrow": false,
+      "handles": [
+        false,
+        false,
+        false
+      ]
+    },
+    "errors": []
+  }
+}

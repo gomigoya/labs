@@ -1,5 +1,5 @@
 import {OBJECTS} from './curriculum-extension.js';
-import {overflowPose,liftPose,wrenchPose,floatingPose,designPose} from './teaching-geometry.js';
+import {overflowPose,immersionPose,liftPose,wrenchPose,floatingPose,designPose} from './teaching-geometry.js';
 // Procedural teaching instruments, using the existing room's materials.
 export function teachingApparatus({THREE,root,mats,roundedPanel,cyl,cart}){
  const groups={},g=id=>{const o=new THREE.Group();root.add(o);groups[id]=o;return o;};
@@ -26,7 +26,7 @@ export function teachingApparatus({THREE,root,mats,roundedPanel,cyl,cart}){
  sphere(hangingSamples.apple,.27,orange,0,.26);line(hangingSamples.apple,[0,.48,0],[.03,.6,0],mats.wood,.025);const leaf=sphere(hangingSamples.apple,.09,teal,.12,.53);leaf.scale.set(1,.35,.6);
  box(hangingSamples.milk,.4,.58,.32,mats.ivory,0,.29);box(hangingSamples.milk,.41,.2,.33,teal,0,.24);box(hangingSamples.milk,.38,.12,.3,mats.ivory,0,.64).rotation.z=.1;
  box(hangingSamples.eraser,.48,.2,.3,mat(0xd99180),0,.12);box(hangingSamples.eraser,.25,.21,.31,mats.ivory,0,.12);
- const tank=g('tank');box(tank,3.1,2.6,1.5,glass,0,1.5);box(tank,3.3,.15,1.7,mats.brass,0,.15);const liquid=box(tank,2.9,1,1.35,water,0,.8),tankWeights=[weight(tank,-.5,1.25),weight(tank,.5,1.9)];line(tank,[-.5,1.73,0],[-.5,3.2,0]);line(tank,[.5,2.38,0],[.5,3.2,0]);box(tank,2.5,.12,.2,teal,0,3.2);const tankLabel=label(tank,0,3.65,4),tankArrows=[arrow(tank,0x39b7ac),arrow(tank,0xda863c)];
+ const tank=g('tank');box(tank,3.1,2.6,1.5,glass,0,1.5);box(tank,3.3,.15,1.7,mats.brass,0,.15);const liquid=box(tank,2.9,1.42,1.35,water,0,.99),tankWeights=[weight(tank,-.5,1.9),weight(tank,.5,2.5)],tankRopes=[line(tank,[-.5,2.38,0],[-.5,3.2,0]),line(tank,[.5,2.98,0],[.5,3.2,0])];box(tank,2.5,.12,.2,teal,0,3.2);const tankLabel=label(tank,0,3.65,4),tankArrows=[arrow(tank,0x39b7ac),arrow(tank,0xda863c)];
  const overflow=g('overflow');box(overflow,2.4,2.2,1.6,glass,-.8,1.3);box(overflow,2.2,1.8,1.4,water,-.8,1.2);const dippedWeight=weight(overflow,-.8,2.1),overflowRope=line(overflow,[-.8,2.58,0],[-.8,3.2,0]);box(overflow,1.5,.1,.2,teal,-.8,3.2);line(overflow,[.5,2.1,0],[1.2,2,0]);box(overflow,1.1,.2,1,teal,1.8,.2);box(overflow,1,1.4,.9,glass,1.8,1);const cupWater=box(overflow,.9,.1,.8,blue,1.8,.45),stream=line(overflow,[1.2,1.9,0],[1.8,.6,0],blue,.04),overflowLabel=label(overflow,0,3.7,4.4);
  const lever=g('lever');stand(lever,2.3);const leverBoard=beam(lever,2.65),leverWeights=[[],[]];for(const side of leverWeights)for(let i=0;i<6;i++)side.push(weight(leverBoard,0,-.65-i*.42));const effortPad=box(leverBoard,.4,.12,.6,teal,-1,.15),leverLabel=label(lever,0,3,4.2),leverArrows=[arrow(lever,0x39b7ac),arrow(lever,0xda863c),arrow(lever,0xd9e1b7)];groups.beam=groups['beam-counts']=lever;
  const direct=g('direct');const directWeight=weight(direct,0,.3);line(direct,[0,.8,0],[0,2.2,0]);const directLabel=label(direct,0,2.6,3.2);
@@ -41,7 +41,7 @@ export function teachingApparatus({THREE,root,mats,roundedPanel,cyl,cart}){
  const ballForce=arrow(moving,0x39b7ac);
  const classify=g('motion-classify'),classBall=sphere(classify,.22,yellow),classDots=Array.from({length:11},()=>sphere(classify,.045,teal)),classLabel=label(classify,0,3.4,4);
  const classGravity=arrow(classify,0xda863c);
- const contact=g('support'),floor=box(contact,3,.15,1.5,mats.wood,0,1),hand=box(contact,1.6,.2,.7,mats.ivory,0,.95);box(contact,1,1,.65,teal,0,1.6);const contactArrows=[arrow(contact,0x39b7ac),arrow(contact,0xda863c)],contactLabel=label(contact,0,3,3.8);
+ const contact=g('support'),floor=box(contact,3,.15,1.5,mats.wood,0,1),hand=box(contact,1.6,.2,.7,mats.ivory,0,.95);const contactBag=box(contact,1,1,.65,teal,0,1.6);const contactArrows=[arrow(contact,0x39b7ac),arrow(contact,0xda863c)],contactLabel=label(contact,0,3,3.8);
  const couple=g('couple'),phone=new THREE.Group();couple.add(phone);phone.position.y=1.7;box(phone,1.25,2.5,.18,mats.graphite);box(phone,1.1,2.25,.03,teal,0,0,.13);const coupleArrows=[arrow(couple,0x39b7ac),arrow(couple,0xda863c)],coupleLabel=label(couple,0,3.5,4);
  const turning=g('turning'),wrench=new THREE.Group();turning.add(wrench);wrench.position.y=1.2;box(wrench,2,.18,.35,mats.chrome,1);cyl(.24,.3,mats.brass,turning,0,1.2,0,6);const wrenchArrow=arrow(turning,0x39b7ac),wrenchLabel=label(turning,0,3,3.5);
  const floating=g('floating'),floatTank=box(floating,4,2.8,2,glass,0,1.5),floatWater=box(floating,3.8,1.7,1.8,water,0,.95);const diver=new THREE.Group();floating.add(diver);cyl(.23,1,teal,diver);sphere(diver,.25,yellow,0,.7);const airbag=sphere(diver,.3,blue,.34,.1),balloon=new THREE.Group();floating.add(balloon);sphere(balloon,.65,yellow,0,.6);line(balloon,[0,0,0],[0,-1.2,0]);const clips=Array.from({length:4},(_,i)=>box(balloon,.12,.2,.1,mats.brass,(i-1.5)*.18,-1.2)),submarine=new THREE.Group();floating.add(submarine);const hull=cyl(.45,1.8,teal,submarine);hull.rotation.z=Math.PI/2;sphere(submarine,.45,teal,-.9);sphere(submarine,.45,teal,.9);box(submarine,.7,.3,.5,mats.brass,0,.4);const ballast=box(submarine,1.3,.3,.65,blue,0,0,.35),floatArrows=[arrow(floating,0x39b7ac),arrow(floating,0xda863c)],floatLabel=label(floating,0,3.5,4.5);
@@ -66,6 +66,8 @@ export function teachingApparatus({THREE,root,mats,roundedPanel,cyl,cart}){
  const springHandle=box(spring,.45,.16,.3,teal,.2,1.9);
  const visibleCoil=coil.clone();springScale.add(visibleCoil);visibleCoil.position.set(.2,3.3,.3);visibleCoil.scale.y=.5;
  line(springScale,[.2,.5,0],[.2,.8,0]);
+ const supply=new THREE.Group();root.add(supply);const spareBlock=box(supply,.4,.3,.5,yellow,-2.8,.3,.7),spareMass=weight(supply,-2.8,.2,.7),spareBag=bag.clone();springScale.add(spareBag);spareBag.position.set(-2,.5,.3);const springSamples={};for(const [i,id]of ['apple','milk','eraser'].entries()){const o=hangingSamples[id].clone();springScale.add(o);o.position.set(-2.8+i*.65,.2,.2);springSamples[id]=o;}
+ const setupKnobs={};for(const id of ['scale','spring-scale','spring','lever','lever-lift','direct','ramp','tank','overflow']){const owner=groups[id];if(!owner)continue;const o=cyl(.09,.08,mats.brass,owner,.85,.25,.62,16);o.rotation.x=Math.PI/2;setupKnobs[id]=o;}setupKnobs.beam=setupKnobs['beam-counts']=setupKnobs.lever;
  // Results belong in the reading panel; keep the apparatus clear of floating cards.
  for(const l of [balanceLabel,springLabel,springScaleLabel,tankLabel,overflowLabel,leverLabel,directLabel,rampLabel,mobileLabel,stabilityLabel,classLabel,contactLabel,coupleLabel,wrenchLabel,floatLabel,exampleLabel,assistLabel,designLabel,frictionLabel,shelfLabel,craneLabel])l.mesh.visible=false;
  const val=(r,k)=>r.metrics.find(m=>m.key===k)?.value??0;
@@ -73,15 +75,16 @@ export function teachingApparatus({THREE,root,mats,roundedPanel,cyl,cart}){
  function update(id,p,r,progress,measured){
   for(const o of new Set(Object.values(groups)))o.visible=false;cargo.forEach((o,i)=>o.visible=id==='push'&&(p.objectType||'cart')==='cart'&&i<(p.mass||1));largeCargo.visible=id==='push'&&p.objectType==='box';smallCargo.visible=id==='push'&&p.objectType==='metal';
   const o=groups[r.rig];if(!o&&r.rig!=='cart')return false;if(o)o.visible=true;cartTarget.visible=id==='curling';
+  supply.visible=['push','balance','mobile','lever-counts','review-high','friction'].includes(id);spareBlock.visible=['push','balance','mobile'].includes(id);spareMass.visible=!spareBlock.visible;spareBag.visible=id==='spring-scale'&&!p.bag;for(const [key,object]of Object.entries(springSamples))object.visible=id==='spring-scale'&&(!p.placed||p.object!==key);
   const en=p.lang==='en',elem=p.schoolBand==='elementary',s=measured?1:progress,grams=OBJECTS[p.object]??p.grams;
   if(id==='curling')text(targetLabel,en?'Target':'목표선');
   springHandle.visible=r.rig==='spring'&&id==='elastic'&&p.springMode==='stretch';springRuler.visible=id==='elastic';
   ballTarget.visible=id==='motion'&&p.mode==='stop';
   if(r.rig==='balance'){board.rotation.z=Math.sign(p.left*p.leftPos-p.right*p.rightPos)*.12*s;for(const [side,amount,pos,sign]of [[blocks[0],p.left,p.leftPos,-1],[blocks[1],p.right,p.rightPos,1]])side.forEach((v,i)=>{v.visible=i<Math.ceil(amount/300);v.position.x=sign*pos*.43;v.scale.y=amount%300&&i===Math.ceil(amount/300)-1?(amount%300)/300:1;});text(balanceLabel,measured?status(r,en):(en?'Place the objects':'물체 놓기'));}
   if(r.rig==='scale'){scaleWeight.visible=p.placed&&p.object==='custom';scaleSamples.forEach((v,i)=>v.visible=p.placed&&p.object===String.fromCharCode(97+i));sampleWeights.forEach((v,i)=>v.visible=!(p.placed&&p.object===String.fromCharCode(97+i)));text(digital,!p.preparation?.power?(en?'OFF':'전원 꺼짐'):!p.zeroed?'—':p.placed&&measured?grams+' g':'0 g');}
-  if(r.rig==='spring'){const ext=val(r,'extension'),force=val(r,id==='elastic'&&p.springMode==='stretch'?'springForce':'weight');coil.scale.y=1+ext*(id==='elastic'?.048:.02)*s;springLoad.position.y=3.3-coil.scale.y-.45;springLoad.visible=!(id==='elastic'&&p.springMode==='stretch');baseline.visible=id==='elastic'&&p.preparation?.baseline;springArrows.forEach(a=>a.visible=!elem);arr(springArrows[0],.2,springLoad.position.y+.45,force*.06);arr(springArrows[1],.2,springLoad.position.y+.2,force*.06,0,-1);if(elem)springArrows.forEach(a=>a.visible=false);text(springLabel,measured?(id==='gravity'?(p.planet==='moon'?(en?'Moon ':'달 '):(en?'Earth ':'지구 '))+force.toFixed(2)+' N':ext+' cm · '+force.toFixed(2)+' N'):(p.preparation?.baseline?(en?'Initial position marked':'처음 위치 표시됨'):(en?'Initial position':'처음 위치')));}
+  if(r.rig==='spring'){const ext=val(r,'extension'),force=val(r,id==='elastic'&&p.springMode==='stretch'?'springForce':'weight');coil.scale.y=1+ext*(id==='elastic'?.048:.02)*s;springHandle.position.y=3.3-coil.scale.y;springLoad.position.y=3.3-coil.scale.y-.45;springLoad.visible=!(id==='elastic'&&p.springMode==='stretch');baseline.visible=id==='elastic'&&p.preparation?.baseline;springArrows.forEach(a=>a.visible=!elem);arr(springArrows[0],.2,springLoad.position.y+.45,force*.06);arr(springArrows[1],.2,springLoad.position.y+.2,force*.06,0,-1);if(elem)springArrows.forEach(a=>a.visible=false);text(springLabel,measured?(id==='gravity'?(p.planet==='moon'?(en?'Moon ':'달 '):(en?'Earth ':'지구 '))+force.toFixed(2)+' N':ext+' cm · '+force.toFixed(2)+' N'):(p.preparation?.baseline?(en?'Initial position marked':'처음 위치 표시됨'):(en?'Initial position':'처음 위치')));}
   if(r.rig==='spring-scale'){const value=p.zeroed?(p.placed?grams:0):20;needle.position.y=3.2-value*.0086+(measured?0:Math.sin(progress*22)*(1-progress)*.1);springScaleWeight.visible=false;for(const[key,object]of Object.entries(hangingSamples))object.visible=p.placed&&p.object===key;bag.visible=!!p.bag;text(springScaleLabel,measured&&p.eye===1?(en?'25 / 5 g divisions':'큰 25 / 작은 5 g'):!p.zeroed?(en?'Zero first':'0 맞추기'):p.eye===1?'0 g':(en?'Eye level':'눈높이 맞추기'));eyeBall.position.y=eyePupil.position.y=needle.position.y+(p.eye===1?0:.45);setLine(eyeRay,[1.6,eyeBall.position.y,.8],[.2,needle.position.y,.28]);springPartLabel.mesh.visible=p.showParts;text(springPartLabel,en?'Zero adjuster':'영점 조절');}
-  if(r.rig==='tank'){const level=p.volume<=200?.9+.9*p.volume/200:1.8+.6*(p.volume-200)/200;liquid.scale.y=level-.28;liquid.position.y=.28+(level-.28)/2;liquid.material.color.set(p.density===1200?0x96bda2:0x75bdb4);text(tankLabel,measured?(en?'Sensor ':'센서 ')+val(r,'scale').toFixed(2)+' N':(en?'Air → 1 → 2 weights submerged':'물 밖 → 추 1개 → 추 2개'));tankArrows.forEach(a=>a.visible=!elem);arr(tankArrows[0],-1.8,.7,val(r,'buoyancy')*.14);arr(tankArrows[1],1.8,2.5,val(r,'weight')*.14,0,-1);}
+  if(r.rig==='tank'){const pose=immersionPose(p.volume);tankWeights.forEach((w,i)=>{w.position.y=pose.bottoms[i];const x=i?.5:-.5;setLine(tankRopes[i],[x,pose.bottoms[i]+.48,0],[x,3.2,0]);});liquid.material.color.set(p.density===1200?0x96bda2:0x75bdb4);text(tankLabel,measured?(en?'Sensor ':'센서 ')+val(r,'scale').toFixed(2)+' N':(en?'Air → 1 → 2 weights submerged':'물 밖 → 추 1개 → 추 2개'));tankArrows.forEach(a=>a.visible=!elem);arr(tankArrows[0],-1.8,.7,val(r,'buoyancy')*.14);arr(tankArrows[1],1.8,2.5,val(r,'weight')*.14,0,-1);}
   if(r.rig==='overflow'){const pose=overflowPose(p.volume,s);dippedWeight.position.y=pose.bottom;setLine(overflowRope,[-.8,pose.bottom+.48,0],[-.8,3.2,0]);cupWater.visible=pose.fraction>0;cupWater.scale.y=Math.max(.001,pose.cupHeight/.1);cupWater.position.y=.4+pose.cupHeight/2;stream.visible=progress>0&&progress<1&&p.volume>0;}
   if(['lever','beam','beam-counts'].includes(r.rig)){const count=id==='lever-counts',torque=val(r,'torque');leverBoard.rotation.z=count||id==='torque'?Math.sign(torque)*.12*s:progress*.12;const positions=count?[-p.leftPos*.43,p.rightPos*.43]:[-(p.arm||p.length||2)*.8,(p.loadArm||.5)*.8];leverWeights.forEach((side,index)=>side.forEach((v,i)=>{v.visible=(id!=='lever-counts'||p.zeroed)&&i<(count?(index===0?p.leftCount:p.rightCount):(index===1?1:0));v.position.x=positions[index];}));effortPad.visible=!count;effortPad.position.x=positions[0];leverArrows.forEach(a=>a.visible=!elem&&id==='torque');if(id==='torque'){arr(leverArrows[0],positions[0],3,p.effort*.05,0,-1);arr(leverArrows[1],positions[1],3,.5,0,-1);arr(leverArrows[2],0,.4,(p.effort+10)*.05);}text(leverLabel,count?val(r,'leftProduct')+' : '+val(r,'rightProduct'):id==='torque'?'ΣF = 0 · Στ = '+torque+' N·m':(en?'Effort ':'힘 눈금 ')+val(r,'withTool').toFixed(2));}
   if(r.rig==='direct'){directWeight.position.y=liftPose('direct',2,s).y;directWeight.scale.setScalar(Math.cbrt(p.mass||1));}
@@ -108,5 +111,82 @@ export function teachingApparatus({THREE,root,mats,roundedPanel,cyl,cart}){
   if(r.rig==='spring-scale')visibleCoil.scale.y=Math.max(.1,3.3-needle.position.y);
   return true;
  }
- return {update,hide(){for(const o of new Set(Object.values(groups)))o.visible=false;cargo.forEach(o=>o.visible=false);largeCargo.visible=smallCargo.visible=false;},diagnostics(){const invalid=[];root.traverse(o=>{if([o.position.x,o.position.y,o.position.z,o.scale.x,o.scale.y,o.scale.z,o.quaternion.x,o.quaternion.y,o.quaternion.z,o.quaternion.w].some(n=>!Number.isFinite(n)))invalid.push(o.type);});return {rigs:Object.keys(groups),labels:labels.length,invalid,visible:Object.entries(groups).filter(([,o])=>o.visible).map(([id])=>id)};}};
+ function targets(ctx){
+  const {id,inputs:p,result:r,frame:f,lesson:l}=ctx,out=[];
+  const add=(name,object,extra={})=>{if(object)out.push({id:name,object,offset:[0,0,0],plane:'front',...extra});};
+  const range=(key,object,extra={})=>add(key,object,{kind:ctx.activity.controls.find(c=>c.key===key)?.options?'choice':'range',key,...extra});
+  const primary=(key)=>f.variable.includes(key);
+  const owner=groups[r.rig];
+  if(l.setup?.includes('level')&&!ctx.preparation.level)add('level',owner,{kind:'action',action:'level',offset:[-.8,.25,.7]});
+  else if(l.setup?.includes('power')&&!ctx.preparation.power)add('power',digital.mesh,{kind:'action',action:'power'});
+  else if(l.zero&&!ctx.zeroed)add('zero',setupKnobs[r.rig]||owner,{kind:'action',action:'zero'});
+  else if(l.setup?.includes('baseline')&&!ctx.preparation.baseline)add('baseline',baseline,{kind:'action',action:'baseline'});
+  if(ctx.stage==='prepare')return out;
+  if(r.rig==='cart'){
+   if(id==='represent')add('draw',cart,{kind:'draw',plane:'table',offset:[0,.85,0]});
+   else add('cart',cart,{kind:'push',plane:'table',offset:[0,.85,0]});
+   if(id==='push'&&(p.objectType||'cart')==='cart'){
+    add('add-load',spareBlock,{kind:'supply',key:'mass',amount:1,dragObject:true,dropObject:cart,dropOffset:[0,.9,0],radius:1});
+    if(p.mass>1)add('remove-load',cargo[Math.min(3,Math.ceil(p.mass)-1)],{kind:'remove',key:'mass',amount:1,dragObject:true,dropObject:cart,dropOffset:[0,.9,0],radius:1});
+   }
+   for(const key of f.variable.filter(k=>!['mass','force','left','right','magnitude'].includes(k))){const c=ctx.activity.controls.find(c=>c.key===key);if(c?.options)range(key,cart,{offset:[0,1.4,0]});}
+   if(['parallel','torque','turning','vectors'].includes(id))for(const [key,side]of [[id==='vectors'?'f1':'left',-1],[id==='vectors'?'f2':'right',1]])if(id==='vectors'&&key==='f2')add('force-vector',cart,{kind:'vector',key:'f2',angleKey:'angle',plane:'table',coordinateObject:cart,unit:.3,offset:[p.f2*.3*Math.cos(p.angle*Math.PI/180),.85,-p.f2*.3*Math.sin(p.angle*Math.PI/180)]});else range(key,cart,{plane:'table',offset:[side*1.2,.85,0],sign:side,unit:.62});
+  }else if(r.rig==='balance'||r.rig==='mobile'||r.rig==='beam-counts'||r.rig==='crane'){
+   const mobileRig=r.rig==='mobile',count=['beam-counts','crane'].includes(r.rig),beamObject=mobileRig?mobileBoard:r.rig==='balance'?board:r.rig==='crane'?craneAssembly:leverBoard;
+   const loads=mobileRig?[hangLeft,hangRight]:r.rig==='balance'?[blocks[0].find(o=>o.visible),blocks[1].find(o=>o.visible)]:r.rig==='crane'?craneWeights:[leverWeights[0][0],leverWeights[1][0]];
+   for(const [i,side]of ['left','right'].entries()){
+    const massKey=count?side+'Count':side,positionKey=side+'Pos',sign=i?1:-1;
+    if(loads[i]&&p[massKey]>0)range(positionKey,loads[i],{kind:'range',axis:'x',sign,unit:.43,absolute:true,origin:0,coordinateObject:beamObject,removeKey:massKey,removeAmount:count?1:mobileRig?200:300,offset:mobileRig?[0,-1.95,0]:[0,.15,0]});
+    add('supply-'+side,count?spareMass:spareBlock,{kind:'supply',key:massKey,amount:count?1:mobileRig?200:300,dragObject:true,dropObject:beamObject,dropOffset:[sign*(p[positionKey]||2)*.43,mobileRig?-1.5:0,0],radius:1,side,offset:[i*.5,0,0]});
+   }
+   if(r.rig==='balance'&&f.id==='empty'&&p.left===0&&p.right===0){add('empty-beam',board,{kind:'observe',offset:[0,.1,.1]});out.unshift(out.pop());}
+  }else if(r.rig==='scale'){
+   for(const [i,key]of ['a','b','c','d'].entries())if(sampleWeights[i].visible)add('sample-'+key,sampleWeights[i],{kind:'sample',value:key,dragObject:true,dropObject:scale,dropOffset:[0,.65,0],radius:.85});
+   if(ctx.placed)add('remove',p.object==='custom'?scaleWeight:scaleSamples[['a','b','c','d'].indexOf(p.object)],{kind:'remove-sample',dragObject:true,dropObject:scale,dropOffset:[0,.65,0],radius:.85});
+  }else if(r.rig==='spring-scale'){
+   if(f.requiresBag&&!ctx.bag)add('bag',spareBag,{kind:'bag',dragObject:true,dropObject:springScale,dropOffset:[.2,.5,0],radius:1});
+   else for(const [key,o]of Object.entries(springSamples))if(o.visible)add('sample-'+key,o,{kind:'sample',value:key,dragObject:true,dropObject:springScale,dropOffset:[.2,.6,0],radius:1});
+   if(ctx.placed)add('remove',hangingSamples[p.object],{kind:'remove-sample',dragObject:true,dropObject:springScale,dropOffset:[.2,.6,0],radius:.85});
+   range('eye',eyeBall,{axis:'y',sign:-1,unit:.45,offset:[0,0,.1]});
+  }else if(r.rig==='spring'){
+   if(id==='gravity')range('planet',springLoad,{unit:.8,offset:[0,.25,0]});
+   else range(p.springMode==='hanging'?'mass':'extension',p.springMode==='hanging'?springLoad:springHandle,{kind:'range',axis:'y',sign:-1,unit:p.springMode==='hanging'?.4:.048,absolute:p.springMode!=='hanging',origin:2.3,coordinateObject:spring,offset:[0,0,.1],progress:1});
+  }else if(r.rig==='tank')range('volume',tankWeights[0],{kind:'range',axis:'y',sign:-1,guideTravel:f.inputs.volume===0?.3:-1,unit:.003,offset:[0,.2,0],progress:1});
+  else if(r.rig==='overflow')range('volume',dippedWeight,{kind:'range',axis:'y',sign:-1,unit:.001,offset:[0,.2,0],progress:1});
+  else if(r.rig==='direct')add('lift',directWeight,{kind:'progress',axis:'y',travel:.45,offset:[0,.25,0]});
+  else if(r.rig==='lever-lift')add('press',liftPad,{kind:'progress',axis:'y',travel:-p.length*.9});
+  else if(r.rig==='ramp')add('lift',cart,{kind:'progress',axis:'x',travel:p.length*.9*Math.cos(Math.asin(.5/p.length)),offset:[0,.7,0]});
+  else if(r.rig==='incline'){range(primary('mu')?'mu':'angle',primary('mu')?slope:cart,{axis:primary('mu')?'x':'y',unit:primary('mu')?5:.025,offset:primary('mu')?[0,.1,.5]:[0,.7,0]});}
+  else if(r.rig==='beam'){
+   const key=primary('loadArm')?'loadArm':primary('arm')?'arm':'effort';range(key,key==='loadArm'?leverWeights[1][0]:effortPad,{axis:key==='effort'?'y':'x',sign:key==='arm'||key==='effort'?-1:1,unit:key==='effort'?.06:.8,offset:[0,.15,0]});
+  }else if(r.rig==='turning'){
+   const key=primary('angle')?'angle':primary('reach')?'reach':'effort';range(key,wrench,{offset:[p.reach,0,.25],axis:key==='reach'?'x':'y',sign:key==='reach'?1:-1,unit:key==='reach'?.6:key==='angle'?.012:.07});
+  }else if(r.rig==='stability'){
+   const key=primary('width')?'width':primary('height')?'height':'tilt';range(key,tower,{axis:key==='width'?'x':'y',sign:key==='height'?1:-1,unit:key==='tilt'?.025:.8,offset:[0,.9,.55],progress:0});
+  }else if(r.rig==='shelf')range('position',shelfWeight,{kind:'range',absolute:true,coordinateObject:shelf,origin:-1.6,axis:'x',unit:3.2/p.length,offset:[0,.25,0]});
+  else if(r.rig==='globe')range('position',satellite,{kind:'orbit',coordinateObject:globe,offset:[0,0,.2]});
+  else if(r.rig==='floating'){
+   const key=p.case==='diver'?'volume':p.case==='balloon'?'clips':'fill',object=p.case==='diver'?airbag:p.case==='balloon'?balloon:submarine;
+   range(key,object,{axis:key==='volume'?'x':'y',sign:key==='volume'?1:-1,unit:key==='volume'?.003:.25,offset:[0,0,.2]});
+   if(primary('case'))range('case',object,{offset:[0,.85,.3],unit:.8});
+  }else if(r.rig==='deform'){
+   const object=p.body==='rubber'?rubber:deformCoil;if(primary('shape'))range('shape',object,{offset:[0,.2,.2],unit:.65});else range('deformation',object,{kind:'range',axis:p.body==='rubber'?'y':'x',sign:p.body==='rubber'?-1:1,unit:.4,offset:[0,.2,.2],progress:1});
+   add('press',object,{kind:'progress',axis:p.body==='rubber'?'y':'x',travel:p.body==='rubber'?-.5:.8,offset:[0,.5,.3]});
+  }else if(r.rig==='ball'){add('launch',movingBall,{kind:'observe',plane:'table',dragObject:true});range('mode',fan,{offset:[-1.5,.8,0],unit:.65});}
+  else if(r.rig==='motion-classify'){add('launch',classBall,{kind:'observe',dragObject:true,offset:[0,.5,0]});range('mode',classBall,{unit:.7});}
+  else if(r.rig==='support')range('contact',contactBag,{unit:1,offset:[0,.25,.4]});
+  else if(r.rig==='couple')range('line',phone,{axis:'y',sign:-1,unit:.6,offset:[.5,.8,.2]});
+  else if(r.rig==='friction'){
+   add('pull',woodBlock,{kind:'observe',dragObject:true,axis:'x',offset:[.4,.15,.2]});range('surface',surface,{unit:.8,offset:[0,0,.6]});
+   if(primary('mass'))add('mass',spareMass,{kind:'supply',key:'mass',amount:1,dragObject:true,dropObject:woodBlock,dropOffset:[0,.3,0],radius:1});
+  }else if(r.rig==='design'){
+   add('launch',sled,{kind:'observe',dragObject:true,axis:'x',offset:[0,.2,.3]});const key=primary('device')?'device':'surface';range(key,key==='device'?bumper:brake,{unit:.8,offset:[0,.3,.5]});
+  }else if(r.rig==='examples'){
+   const object=p.example==='bottle'?opener:p.example==='spring'?toyBall:p.example==='balloon'?exampleBalloon:crate;add('operate',object,{kind:'progress',axis:p.example==='bottle'?'y':'x',travel:p.example==='bottle'?-.6:1,offset:[0,.15,.2]});if(primary('example'))range('example',object,{offset:[0,.7,.3],unit:.75});
+  }else if(r.rig==='assist'){add('lift',handJoint,{kind:'progress',axis:'y',travel:.9,offset:[0,0,.2]});if(primary('method'))range('method',brace,{unit:.8,offset:[0,.5,.2]});}
+  else if(r.rig==='inference'){const v=inferenceRigs[p.example==='stairs'?1:0];add('observe',v.board,{kind:'observe',offset:[0,.2,.3]});range('example',v.left,{unit:.7,offset:[0,.5,.3]});}
+  const priority=s=>s.kind==='vector'?-2:s.kind==='action'?-5:s.kind==='bag'?-4:s.kind==='remove-sample'?(f.empty?-3:4):s.kind==='sample'?(s.value===p.object&&!ctx.placed?-3:3):s.kind==='supply'?(p[s.key]<(f.inputs[s.key]??p[s.key])?-3:3):s.angleKey&&f.variable.includes(s.angleKey)?-2:s.key&&f.variable.includes(s.key)&&p[s.key]!==f.inputs[s.key]?-2:0;
+  return out.sort((a,b)=>priority(a)-priority(b));
+ }
+ return {update,targets,hide(){supply.visible=false;for(const o of new Set(Object.values(groups)))o.visible=false;cargo.forEach(o=>o.visible=false);largeCargo.visible=smallCargo.visible=false;},diagnostics(){const invalid=[];root.traverse(o=>{if([o.position.x,o.position.y,o.position.z,o.scale.x,o.scale.y,o.scale.z,o.quaternion.x,o.quaternion.y,o.quaternion.z,o.quaternion.w].some(n=>!Number.isFinite(n)))invalid.push(o.type);});return {rigs:Object.keys(groups),labels:labels.length,invalid,visible:Object.entries(groups).filter(([,o])=>o.visible).map(([id])=>id)};}};
 }

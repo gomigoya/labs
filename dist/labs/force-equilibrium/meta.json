@@ -5,8 +5,8 @@
     "en": "Forces & Equilibrium Laboratory"
   },
   "description": {
-    "ko": "교과서·지도서 순서를 따라 초등·중등·고등의 37개 활동과 117개 안내 조건을 조작하고 관찰·설명·적용을 기록합니다.",
-    "en": "Follow source-guided elementary, middle and high-school courses with 37 activities, 117 guided conditions, and observation, explanation and transfer records."
+    "ko": "교과서·지도서 순서를 따라 초등·중등·고등의 37개 활동과 117개 안내 조건에서 물체를 직접 끌어 조작하고 관찰·설명·적용을 기록합니다.",
+    "en": "Follow source-guided elementary, middle and high-school courses with 37 activities, 117 guided conditions, direct scene manipulation, and observation, explanation and transfer records."
   },
   "category": "physics",
   "topics": [
@@ -22,7 +22,7 @@
   "thumbnail": "thumb.jpg",
   "guide": "guide.html",
   "aspectRatio": "8:5",
-  "version": "5.0.0",
+  "version": "6.0.0",
   "qualityLevels": [
     "high",
     "low"

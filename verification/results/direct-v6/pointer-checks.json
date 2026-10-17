@@ -1,0 +1,117 @@
+[
+  {
+    "name": "Cart drag",
+    "pass": true,
+    "result": "Right, 0.72 m"
+  },
+  {
+    "name": "Balance pointer sequence",
+    "pass": true,
+    "result": "왼쪽 물체 600 g · 오른쪽 물체 300 g · 왼쪽 칸 2 · 오른쪽 칸 4"
+  },
+  {
+    "name": "Digital scale pointer preparation and sample drop",
+    "pass": true,
+    "result": "이번 관찰\n저울 눈금\n저울 눈금\n? g\n작은 눈금\n1 g"
+  },
+  {
+    "name": "Spring scale sample and eye level drag",
+    "pass": true,
+    "result": "이번 관찰\n저울 눈금\n저울 눈금\n100 g\n작은 눈금\n5 g"
+  },
+  {
+    "name": "Bag → tare → eraser → eye → removal pointer sequence",
+    "pass": true,
+    "result": "4/4 guided readings, 100/175/50/0 g"
+  },
+  {
+    "name": "Lift requires full travel, no record on short gesture",
+    "pass": true,
+    "result": "이번 관찰\n같은 높이까지 올림\n그냥 들어 올릴 때\n100 칸\n도구를 쓸 때\n100 칸\n힘 비교 눈금 · 같은 물체를 비교합니다."
+  },
+  {
+    "name": "Lever pressing gesture",
+    "pass": true,
+    "result": "이번 관찰\n같은 높이까지 올림\n그냥 들어 올릴 때\n100 칸\n도구를 쓸 때\n25 칸\n힘 비교 눈금 · 같은 물체를 비교합니다."
+  },
+  {
+    "name": "Ramp cart pulled to upper marker",
+    "pass": true,
+    "result": "이번 관찰\n같은 높이까지 올림\n그냥 들어 올릴 때\n100 칸\n도구를 쓸 때\n25 칸\n힘 비교 눈금 · 같은 물체를 비교합니다."
+  },
+  {
+    "name": "Spring end dragged from initial mark to 10 cm",
+    "pass": true,
+    "result": "이번 관찰\n용수철 힘: 위 / 중력: 아래\n늘어난 길이\n10 cm\n당기는 힘\n5 N"
+  },
+  {
+    "name": "Weight lowered into fixed water level",
+    "pass": true,
+    "result": "이번 관찰\n부력: 위 / 중력: 아래\n물 밖 저울 값\n9.80 N\n용수철저울 값\n7.84 N\n줄어든 저울 값\n1.96 N"
+  },
+  {
+    "name": "Keyboard Escape restores positions without recording",
+    "pass": true,
+    "result": "왼쪽 추 개수 1 · 오른쪽 추 개수 1 · 왼쪽 칸 1 · 오른쪽 칸 2"
+  },
+  {
+    "name": "High-school weight addition by pointer",
+    "pass": true,
+    "result": "이번 관찰\n수평 유지\n왼쪽 개수 × 칸\n2\n오른쪽 개수 × 칸\n2\n알짜 돌림힘\n0 N·m"
+  },
+  {
+    "name": "Keyboard release records changed position",
+    "pass": true,
+    "result": "왼쪽 추 개수 2 · 오른쪽 추 개수 1 · 왼쪽 칸 1 · 오른쪽 칸 3"
+  },
+  {
+    "name": "Wrong drop restores weight and makes no trial",
+    "pass": true,
+    "result": "내 실험 기록\n2회"
+  },
+  {
+    "name": "390px mobile pointer cart drag",
+    "pass": true,
+    "hitSize": 44,
+    "result": "이번 관찰\n오른쪽으로 움직임\n이동 거리\n0.72 m"
+  },
+  {
+    "name": "Cart cancellation restores previously observed scene position",
+    "pass": true,
+    "result": {
+      "before": {
+        "x": 460.875,
+        "y": 261.375
+      },
+      "after": {
+        "x": 460.875,
+        "y": 261.375
+      }
+    }
+  },
+  {
+    "name": "Collapsed alternative controls still run a measured trial",
+    "pass": true,
+    "result": "이번 관찰\n오른쪽으로 움직임\n이동 거리\n1.44 m"
+  },
+  {
+    "name": "Teacher view distinguishes direct input from alternative-button trial",
+    "pass": true,
+    "result": "컬링 놀이 · 2회 · 진행 중/미실시\n4과01-01 · 지도서 쪽 110–113\n\n안내 측정 1/3 · 확인 질문 0/2\n\n✓ 살살 밀고 도착 위치 보기\n○ 세게 밀어 위치 비교\n○ 중간 세기로 다시 시도\n학생 설명\n\n미작성\n\n처음 예상 gentle: 살살 밀면 목표선 앞에 도착할 것 같다.\n\n회·안내 행\t바꾼 조건\t관찰한 결과\n1 · gentle\t미는 힘: 살살 · 방향: 오른쪽\t이동 거리: 0.72 m조작: 장면 직접 조작영점 false · 물체 false · 봉투 false\n2 · free\t미는 힘: 보통 · 방향: 오른쪽\t이동 거리: 1.44 m영점 false · 물체 false · 봉투 false\n첫 답과 수정 답 기록"
+  },
+  {
+    "name": "Planar force endpoint pointer changes direction and magnitude",
+    "pass": true,
+    "result": "첫 번째 힘 3 N · 두 번째 힘 5 N · 두 번째 힘의 각도 60 °"
+  },
+  {
+    "name": "English teacher guide includes gesture and keyboard instructions",
+    "pass": true,
+    "result": "esponses.\nApply: explain a new case and compare with the initial prediction. Save plans, revisions, presentations, feedback and optional extensions.\n\nDo not attempt a complete route in one lesson. Split activities using the elementary 12-lesson unit and middle-school lesson structure, with physical apparatus and group presentation.\n\nManipulate the scene\n\nDashed rings and arrows mark where to grab and move. Push and release the cart, place or slide beam loads, pull the spring end, lower suspended weights, press the lever and pull up the ramp. Drag samples onto scales and read the instrument yourself. Instrument markers operate zero, level and power.\n\nKeyboard: focus a marker, grab with Space or Enter, move with arrows, release with Enter, or cancel with Esc. Expand Use values and buttons for alternative controls. Invalid drops, cancellation and incomplete lifts make no measurement record."
+  },
+  {
+    "name": "English scene aria label",
+    "pass": true,
+    "result": "Push or pull the cart · Space to grab · arrows to move · Enter to release · Esc to cancel"
+  }
+]

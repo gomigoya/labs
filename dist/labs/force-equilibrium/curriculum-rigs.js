@@ -37,5 +37,5 @@ export function createCurriculumRigs({THREE,hero,HERO_Y,mats,roundedPanel,cyl,ca
   if(['ramp','incline'].includes(result.rig)){const angle=activity==='incline'?p.angle*Math.PI/180:Math.asin(.5/p.length),length=activity==='incline'?5:p.length*2;slope.scale.x=length/5;slope.rotation.z=angle;const span=Math.max(.12,length*Math.cos(angle)/2-.75),x=activity==='incline'?0:-span+progress*span*2;const support=ramp.children[1];support.position.x=length*Math.cos(angle)/2;support.scale.y=(.8+length*Math.sin(angle)/2)/1.5;support.position.y=(.8+length*Math.sin(angle)/2)/2;cart.position.set(x,.88+x*Math.tan(angle),0);cart.rotation.z=angle;cart.scale.setScalar(.65);}
   if(result.rig==='stability'){base.scale.x=p.width/2;block.position.x=p.offset;block.rotation.z=measured&&Math.abs(p.offset)>p.width/2?-Math.sign(p.offset)*.3:0;dot.visible=true;}
  }
- return {update,diagnostics:teaching.diagnostics,hide(){teaching.hide();root.visible=false;cart.position.set(0,0,0);cart.rotation.z=0;cart.scale.setScalar(1);cargo.visible=false}};
+ return {update,targets:teaching.targets,diagnostics:teaching.diagnostics,hide(){teaching.hide();root.visible=false;cart.position.set(0,0,0);cart.rotation.z=0;cart.scale.setScalar(1);cargo.visible=false}};
 }

@@ -1,5 +1,5 @@
 body.curriculum{--course-width:min(390px,30vw);font-family:system-ui,-apple-system,'Segoe UI',sans-serif;color:#304b3a;touch-action:manipulation}
-body.curriculum #ui> :not(#curriculum):not([data-site-slot]){display:none!important}
+body.curriculum #ui> :not(#curriculum):not(#scene-interaction):not([data-site-slot]){display:none!important}
 #curriculum[hidden]{display:none}#curriculum{position:absolute;inset:0;pointer-events:none;font-size:17px;line-height:1.55;letter-spacing:-.35px}
 #curriculum button,#curriculum select,#curriculum textarea,#curriculum summary{touch-action:manipulation;font:inherit;letter-spacing:inherit}
 #curriculum button{display:flex;align-items:center;justify-content:center;width:auto;height:auto;min-height:48px;gap:8px;padding:10px 15px;border-radius:8px;box-shadow:none;border:1px solid #c5cebc;background:#f4f5ed;color:#36563f}
