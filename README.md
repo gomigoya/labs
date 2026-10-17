@@ -1,5 +1,23 @@
 # 힘의 작용 실험실
 
+## 2026-10-17 · 학생 경로 직접 검수 (v5.0.0)
+
+초등·중등·고등 37개 활동의 117개 안내 조건을 빈 테스트 기록부터 실제 UI로 진행했다. 큰 상자/작은 금속, 두 수평대 추론, 저울 제거·눈높이·봉투 영점, 동일 추·높이의 도구 비교, 고등 알짜힘 복습과 장면·계산의 불일치를 보완했다. 기존 교실·실험대·수레는 유지한다.
+
+학생에게 현재 조작 1–2개와 관찰할 내용을 먼저 보여 준다. 전체 순서·보조 조건·기록은 접어 두며 입력을 가리던 버튼을 고쳤다. 예상·측정·설명·돌아보기의 제출 근거를 확인하고, 실제 습득과 발표·협력·설명 질은 교사가 평가한다.
+
+[검수·수정 보고서](docs/teaching-audit-2026-10-17.md), [45개 목표·활동 순서](docs/teacher-guide-coverage.md), [계산·배율·손계산](docs/reviewer-brief.md). UI 37활동/117조건, 통합 335검사와 회귀 결과는 verification/results의 v5 파일에 보관한다.
+
+```powershell
+$env:TEMP='D:\CodexWork\Temp'
+$env:TMP='D:\CodexWork\Temp'
+node serve.mjs 4173
+```
+
+다른 터미널에서 `node verification/validate-teaching.mjs`, `node verification/validate-teaching-geometry.mjs`와 기존 validate-physics/lesson/curriculum.mjs를 실행한다. 별도 테스트 포트의 `/__teaching_qa`를 사용한다. 학생이 기록 중인 포트에서는 초기화 검사를 실행하지 않는다. `node verification/update-teaching-coverage.mjs`는 구현 데이터에서 지도서 대조 문서를 갱신한다.
+
+아래는 이전 버전의 변경 기록이다.
+
 ## 2026-10-16 · 지도서 순서·조작·학습 근거 (v4.0.0)
 
 확인한 교과서·지도서의 학생 목표를 초등 11개, 중등 17개, 고등 물리학 7개 활동으로 구현했다. 역학과 에너지 2개 확장을 더해 총 37개 활동·113개 안내 조건이다. 교실·실험대·기존 수레의 형상과 재질은 유지한다. 설명 패널은 준비 → 실험 → 정리 → 적용, 현재 지시와 바꿀 조건 중심으로 구성하고 실험 기록을 접어 둔다.

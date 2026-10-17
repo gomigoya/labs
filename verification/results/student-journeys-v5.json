@@ -1,0 +1,947 @@
+{
+  "date": "2026-10-17",
+  "pass": true,
+  "activities": 37,
+  "guidedConditions": 117,
+  "method": "Actual student DOM buttons, selections, drawing, readings, prediction, explanation and reflection; each test activity reset through its notebook UI before replay. No curriculum API setters used.",
+  "runs": [
+    {
+      "course": "elementary",
+      "id": "curling",
+      "title": "컬링 놀이",
+      "frames": [
+        {
+          "frame": "gentle",
+          "advance": true,
+          "output": "이번 관찰오른쪽으로 움직임이동 거리0.72 m"
+        },
+        {
+          "frame": "strong",
+          "advance": true,
+          "output": "이번 관찰오른쪽으로 움직임이동 거리2.16 m"
+        },
+        {
+          "frame": "retry",
+          "advance": true,
+          "output": "이번 관찰오른쪽으로 움직임이동 거리1.44 m"
+        }
+      ],
+      "complete": true,
+      "pass": true
+    },
+    {
+      "course": "elementary",
+      "id": "push",
+      "title": "수레 밀고 당기기",
+      "frames": [
+        {
+          "frame": "push-light",
+          "advance": true,
+          "output": "이번 관찰오른쪽으로 움직임이동 거리0.72 m"
+        },
+        {
+          "frame": "push-heavy",
+          "advance": true,
+          "output": "이번 관찰오른쪽으로 움직임이동 거리0.18 m"
+        },
+        {
+          "frame": "push-match",
+          "advance": true,
+          "output": "이번 관찰오른쪽으로 움직임이동 거리0.72 m"
+        },
+        {
+          "frame": "pull-light",
+          "advance": true,
+          "output": "이번 관찰왼쪽으로 움직임이동 거리0.72 m"
+        },
+        {
+          "frame": "pull-heavy",
+          "advance": true,
+          "output": "이번 관찰왼쪽으로 움직임이동 거리0.18 m"
+        },
+        {
+          "frame": "pull-match",
+          "advance": true,
+          "output": "이번 관찰왼쪽으로 움직임이동 거리0.72 m"
+        },
+        {
+          "frame": "big-box",
+          "advance": true,
+          "output": "이번 관찰오른쪽으로 움직임이동 거리0.72 m"
+        },
+        {
+          "frame": "small-metal",
+          "advance": true,
+          "output": "이번 관찰오른쪽으로 움직임이동 거리0.18 m"
+        }
+      ],
+      "complete": true,
+      "pass": true
+    },
+    {
+      "course": "elementary",
+      "id": "balance",
+      "title": "수평대의 균형",
+      "frames": [
+        {
+          "frame": "empty",
+          "advance": true,
+          "output": "이번 관찰양쪽 높이가 같음왼쪽 물체0 g오른쪽 물체0 g"
+        },
+        {
+          "frame": "equal",
+          "advance": true,
+          "output": "이번 관찰양쪽 높이가 같음왼쪽 물체300 g오른쪽 물체300 g"
+        },
+        {
+          "frame": "add",
+          "advance": true,
+          "output": "이번 관찰왼쪽이 내려감왼쪽 물체600 g오른쪽 물체300 g"
+        },
+        {
+          "frame": "move",
+          "advance": true,
+          "output": "이번 관찰양쪽 높이가 같음왼쪽 물체600 g오른쪽 물체300 g"
+        }
+      ],
+      "complete": true,
+      "pass": true
+    },
+    {
+      "course": "elementary",
+      "id": "scale",
+      "title": "전자저울로 비교",
+      "frames": [
+        {
+          "frame": "a",
+          "advance": true,
+          "output": "이번 관찰저울 눈금저울 눈금8 g작은 눈금1 g"
+        },
+        {
+          "frame": "b",
+          "advance": true,
+          "output": "이번 관찰저울 눈금저울 눈금9 g작은 눈금1 g"
+        },
+        {
+          "frame": "c",
+          "advance": true,
+          "output": "이번 관찰저울 눈금저울 눈금11 g작은 눈금1 g"
+        },
+        {
+          "frame": "d",
+          "advance": true,
+          "output": "이번 관찰저울 눈금저울 눈금14 g작은 눈금1 g"
+        }
+      ],
+      "complete": true,
+      "pass": true
+    },
+    {
+      "course": "elementary",
+      "id": "spring-scale",
+      "title": "용수철저울 읽기",
+      "frames": [
+        {
+          "frame": "apple",
+          "advance": true,
+          "output": "이번 관찰저울 눈금저울 눈금100 g작은 눈금5 g"
+        },
+        {
+          "frame": "milk",
+          "advance": true,
+          "output": "이번 관찰저울 눈금저울 눈금175 g작은 눈금5 g"
+        },
+        {
+          "frame": "eraser",
+          "advance": true,
+          "output": "이번 관찰저울 눈금저울 눈금50 g작은 눈금5 g"
+        },
+        {
+          "frame": "remove",
+          "advance": true,
+          "output": "이번 관찰영점 조정 완료저울 눈금0 g작은 눈금5 g"
+        }
+      ],
+      "complete": true,
+      "pass": true
+    },
+    {
+      "course": "elementary",
+      "id": "tools",
+      "title": "지레로 들어 올리기",
+      "frames": [
+        {
+          "frame": "direct",
+          "advance": true,
+          "output": "이번 관찰같은 높이까지 올림그냥 들어 올릴 때100 칸도구를 쓸 때100 칸힘 비교 눈금 · 같은 물체를 비교합니다."
+        },
+        {
+          "frame": "lever",
+          "advance": true,
+          "output": "이번 관찰같은 높이까지 올림그냥 들어 올릴 때100 칸도구를 쓸 때25 칸힘 비교 눈금 · 같은 물체를 비교합니다."
+        }
+      ],
+      "complete": true,
+      "pass": true
+    },
+    {
+      "course": "elementary",
+      "id": "ramp-tools",
+      "title": "빗면으로 끌어 올리기",
+      "frames": [
+        {
+          "frame": "direct",
+          "advance": true,
+          "output": "이번 관찰같은 높이까지 올림그냥 들어 올릴 때100 칸도구를 쓸 때100 칸힘 비교 눈금 · 같은 물체를 비교합니다."
+        },
+        {
+          "frame": "ramp",
+          "advance": true,
+          "output": "이번 관찰같은 높이까지 올림그냥 들어 올릴 때100 칸도구를 쓸 때25 칸힘 비교 눈금 · 같은 물체를 비교합니다."
+        }
+      ],
+      "complete": true,
+      "pass": true
+    },
+    {
+      "course": "elementary",
+      "id": "daily-tools",
+      "title": "생활 속 도구 찾기",
+      "frames": [
+        {
+          "frame": "lever",
+          "advance": true,
+          "output": "이번 관찰관찰 사례"
+        },
+        {
+          "frame": "ramp",
+          "advance": true,
+          "output": "이번 관찰관찰 사례"
+        },
+        {
+          "frame": "loading",
+          "advance": true,
+          "output": "이번 관찰관찰 사례"
+        }
+      ],
+      "complete": true,
+      "pass": true
+    },
+    {
+      "course": "elementary",
+      "id": "mobile",
+      "title": "균형 잡힌 모빌 만들기",
+      "frames": [
+        {
+          "frame": "before",
+          "advance": true,
+          "output": "이번 관찰오른쪽이 내려감왼쪽 물체200 g오른쪽 물체400 g오른쪽 장식 개수는 같은 총무게를 나눠 매다는 수입니다."
+        },
+        {
+          "frame": "weight-fix",
+          "advance": true,
+          "output": "이번 관찰양쪽 높이가 같음왼쪽 물체400 g오른쪽 물체400 g오른쪽 장식 개수는 같은 총무게를 나눠 매다는 수입니다."
+        },
+        {
+          "frame": "position-fix",
+          "advance": true,
+          "output": "이번 관찰양쪽 높이가 같음왼쪽 물체200 g오른쪽 물체400 g오른쪽 장식 개수는 같은 총무게를 나눠 매다는 수입니다."
+        }
+      ],
+      "complete": true,
+      "pass": true
+    },
+    {
+      "course": "elementary",
+      "id": "wearable",
+      "title": "힘을 돕는 장치",
+      "frames": [
+        {
+          "frame": "bare",
+          "advance": true,
+          "output": "이번 관찰같은 높이까지 올림필요한 힘 눈금100 칸힘 비교 눈금 · 같은 물체를 비교합니다."
+        },
+        {
+          "frame": "assist",
+          "advance": true,
+          "output": "이번 관찰같은 높이까지 올림필요한 힘 눈금30 칸힘 비교 눈금 · 같은 물체를 비교합니다."
+        }
+      ],
+      "complete": true,
+      "pass": true
+    },
+    {
+      "course": "elementary",
+      "id": "review",
+      "title": "힘과 생활 정리",
+      "frames": [
+        {
+          "frame": "compare-ab",
+          "advance": true,
+          "output": "이번 관찰같은 거리에서 A쪽이 내려감"
+        },
+        {
+          "frame": "compare-bc",
+          "advance": true,
+          "output": "이번 관찰B를 중심 가까이 놓으니 수평"
+        }
+      ],
+      "complete": true,
+      "pass": true
+    },
+    {
+      "course": "middle",
+      "id": "diver-intro",
+      "title": "잠수부는 어떻게 뜰까",
+      "frames": [
+        {
+          "frame": "sink",
+          "advance": true,
+          "output": "이번 관찰아래쪽중력9.80 N부력8.82 N"
+        },
+        {
+          "frame": "rise",
+          "advance": true,
+          "output": "이번 관찰위쪽중력9.80 N부력10.78 N"
+        }
+      ],
+      "complete": true,
+      "pass": true
+    },
+    {
+      "course": "middle",
+      "id": "represent",
+      "title": "힘을 화살표로 표현",
+      "frames": [
+        {
+          "frame": "right",
+          "advance": true,
+          "output": "이번 관찰힘 화살표힘2 N"
+        },
+        {
+          "frame": "longer",
+          "advance": true,
+          "output": "이번 관찰힘 화살표힘4 N"
+        },
+        {
+          "frame": "left",
+          "advance": true,
+          "output": "이번 관찰힘 화살표힘2 N"
+        }
+      ],
+      "complete": true,
+      "pass": true
+    },
+    {
+      "course": "middle",
+      "id": "parallel",
+      "title": "두 힘의 평형",
+      "frames": [
+        {
+          "frame": "same",
+          "advance": true,
+          "output": "이번 관찰오른쪽으로 움직임알짜힘3 N속도3.60 m/s"
+        },
+        {
+          "frame": "opposite",
+          "advance": true,
+          "output": "이번 관찰왼쪽으로 움직임알짜힘-1 N속도-1.20 m/s"
+        },
+        {
+          "frame": "rest",
+          "advance": true,
+          "output": "이번 관찰그대로 멈춤알짜힘0 N속도0 m/s"
+        },
+        {
+          "frame": "moving",
+          "advance": true,
+          "output": "이번 관찰같은 속도 유지알짜힘0 N속도1 m/s"
+        }
+      ],
+      "complete": true,
+      "pass": true
+    },
+    {
+      "course": "middle",
+      "id": "gravity-direction",
+      "title": "중력의 방향",
+      "frames": [
+        {
+          "frame": "top",
+          "advance": true,
+          "output": "이번 관찰지구 중심을 향함중력9.80 N"
+        },
+        {
+          "frame": "side",
+          "advance": true,
+          "output": "이번 관찰지구 중심을 향함중력9.80 N"
+        },
+        {
+          "frame": "bottom",
+          "advance": true,
+          "output": "이번 관찰지구 중심을 향함중력9.80 N"
+        }
+      ],
+      "complete": true,
+      "pass": true
+    },
+    {
+      "course": "middle",
+      "id": "gravity",
+      "title": "질량과 중력 비교",
+      "frames": [
+        {
+          "frame": "earth",
+          "advance": true,
+          "output": "이번 관찰용수철 힘: 위 / 중력: 아래질량1 kg중력9.80 N"
+        },
+        {
+          "frame": "moon",
+          "advance": true,
+          "output": "이번 관찰용수철 힘: 위 / 중력: 아래질량1 kg중력1.62 N"
+        }
+      ],
+      "complete": true,
+      "pass": true
+    },
+    {
+      "course": "middle",
+      "id": "elastic-shape",
+      "title": "눌렀다 놓는 탄성",
+      "frames": [
+        {
+          "frame": "compress",
+          "advance": true,
+          "output": "이번 관찰모양이 달라짐필요한 힘 눈금1 칸"
+        },
+        {
+          "frame": "release",
+          "advance": true,
+          "output": "이번 관찰반대 방향으로 되돌아감필요한 힘 눈금0 칸"
+        },
+        {
+          "frame": "stretch",
+          "advance": true,
+          "output": "이번 관찰모양이 달라짐필요한 힘 눈금1 칸"
+        },
+        {
+          "frame": "stretch-more",
+          "advance": true,
+          "output": "이번 관찰모양이 달라짐필요한 힘 눈금2 칸"
+        },
+        {
+          "frame": "release-again",
+          "advance": true,
+          "output": "이번 관찰반대 방향으로 되돌아감필요한 힘 눈금0 칸"
+        }
+      ],
+      "complete": true,
+      "pass": true
+    },
+    {
+      "course": "middle",
+      "id": "elastic",
+      "title": "용수철 측정과 그래프",
+      "frames": [
+        {
+          "frame": "five",
+          "advance": true,
+          "output": "이번 관찰용수철 힘: 위 / 중력: 아래늘어난 길이5 cm당기는 힘2.50 N"
+        },
+        {
+          "frame": "ten",
+          "advance": true,
+          "output": "이번 관찰용수철 힘: 위 / 중력: 아래늘어난 길이10 cm당기는 힘5 N"
+        },
+        {
+          "frame": "fifteen",
+          "advance": true,
+          "output": "이번 관찰용수철 힘: 위 / 중력: 아래늘어난 길이15 cm당기는 힘7.50 N"
+        },
+        {
+          "frame": "twenty",
+          "advance": true,
+          "output": "이번 관찰용수철 힘: 위 / 중력: 아래늘어난 길이20 cm당기는 힘10 N"
+        },
+        {
+          "frame": "predict",
+          "advance": true,
+          "output": "이번 관찰용수철 힘: 위 / 중력: 아래늘어난 길이25 cm당기는 힘12.50 N"
+        }
+      ],
+      "startedAt": "2026-10-17T01:39:36.877Z",
+      "complete": true,
+      "pass": true
+    },
+    {
+      "course": "middle",
+      "id": "friction",
+      "title": "움직이기 시작하는 힘",
+      "frames": [
+        {
+          "frame": "smooth",
+          "advance": true,
+          "output": "이번 관찰움직이기 시작함움직이기 시작한 힘0.49 N질량1 kg"
+        },
+        {
+          "frame": "rough",
+          "advance": true,
+          "output": "이번 관찰움직이기 시작함움직이기 시작한 힘1.96 N질량1 kg"
+        },
+        {
+          "frame": "heavy",
+          "advance": true,
+          "output": "이번 관찰움직이기 시작함움직이기 시작한 힘3.92 N질량2 kg"
+        }
+      ],
+      "startedAt": "2026-10-17T01:39:50.647Z",
+      "complete": true,
+      "pass": true
+    },
+    {
+      "course": "middle",
+      "id": "buoyancy",
+      "title": "물속에서 가벼워지는 까닭",
+      "frames": [
+        {
+          "frame": "air",
+          "advance": true,
+          "output": "이번 관찰부력: 위 / 중력: 아래물 밖 저울 값9.80 N용수철저울 값9.80 N줄어든 저울 값0 N"
+        },
+        {
+          "frame": "one",
+          "advance": true,
+          "output": "이번 관찰부력: 위 / 중력: 아래물 밖 저울 값9.80 N용수철저울 값7.84 N줄어든 저울 값1.96 N"
+        },
+        {
+          "frame": "two",
+          "advance": true,
+          "output": "이번 관찰부력: 위 / 중력: 아래물 밖 저울 값9.80 N용수철저울 값5.88 N줄어든 저울 값3.92 N"
+        }
+      ],
+      "startedAt": "2026-10-17T01:40:00.652Z",
+      "complete": true,
+      "pass": true
+    },
+    {
+      "course": "middle",
+      "id": "overflow",
+      "title": "넘친 물과 부력 비교",
+      "frames": [
+        {
+          "frame": "empty",
+          "advance": true,
+          "output": "이번 관찰부력: 위 / 중력: 아래물 밖 저울 값9.80 N용수철저울 값9.80 N빈 그릇 무게0.98 N물을 받은 그릇 무게0.98 N넘친 물의 무게0 N줄어든 저울 값0 N"
+        },
+        {
+          "frame": "water",
+          "advance": true,
+          "output": "이번 관찰부력: 위 / 중력: 아래물 밖 저울 값9.80 N용수철저울 값7.84 N빈 그릇 무게0.98 N물을 받은 그릇 무게2.94 N넘친 물의 무게1.96 N줄어든 저울 값1.96 N"
+        },
+        {
+          "frame": "more",
+          "advance": true,
+          "output": "이번 관찰부력: 위 / 중력: 아래물 밖 저울 값9.80 N용수철저울 값5.88 N빈 그릇 무게0.98 N물을 받은 그릇 무게4.90 N넘친 물의 무게3.92 N줄어든 저울 값3.92 N"
+        }
+      ],
+      "startedAt": "2026-10-17T01:40:54.490Z",
+      "complete": true,
+      "pass": true
+    },
+    {
+      "course": "middle",
+      "id": "motion",
+      "title": "힘과 운동 변화",
+      "frames": [
+        {
+          "frame": "start",
+          "advance": true,
+          "output": "이번 관찰빠르게 하기속도0.72 m/s"
+        },
+        {
+          "frame": "speedup",
+          "advance": true,
+          "output": "이번 관찰빠르게 하기속도1.72 m/s"
+        },
+        {
+          "frame": "turn",
+          "advance": true,
+          "output": "이번 관찰방향 바꾸기속도1.23 m/s"
+        },
+        {
+          "frame": "slowdown",
+          "advance": true,
+          "output": "이번 관찰느리게 하기속도0.28 m/s"
+        },
+        {
+          "frame": "stop",
+          "advance": true,
+          "output": "이번 관찰그대로 멈춤속도0 m/s"
+        }
+      ],
+      "startedAt": "2026-10-17T01:41:04.690Z",
+      "complete": true,
+      "pass": true
+    },
+    {
+      "course": "middle",
+      "id": "motion-classify",
+      "title": "운동 변화 분류",
+      "frames": [
+        {
+          "frame": "fall",
+          "advance": true,
+          "output": "이번 관찰빠르기만 변함빠르기 변화변함방향 변화그대로"
+        },
+        {
+          "frame": "circle",
+          "advance": true,
+          "output": "이번 관찰방향만 변함빠르기 변화그대로방향 변화변함"
+        },
+        {
+          "frame": "throw",
+          "advance": true,
+          "output": "이번 관찰빠르기와 방향이 변함빠르기 변화변함방향 변화변함"
+        }
+      ],
+      "startedAt": "2026-10-17T01:41:16.645Z",
+      "complete": true,
+      "pass": true
+    },
+    {
+      "course": "middle",
+      "id": "contact",
+      "title": "손과 바닥이 받치는 힘",
+      "frames": [
+        {
+          "frame": "hand",
+          "advance": true,
+          "output": "이번 관찰받치는 힘과 중력이 평형중력9.80 N받치는 힘9.80 N"
+        },
+        {
+          "frame": "floor",
+          "advance": true,
+          "output": "이번 관찰받치는 힘과 중력이 평형중력9.80 N받치는 힘9.80 N"
+        }
+      ],
+      "startedAt": "2026-10-17T01:42:03.269Z",
+      "complete": true,
+      "pass": true
+    },
+    {
+      "course": "middle",
+      "id": "applications",
+      "title": "놀이와 생활 속 힘",
+      "frames": [
+        {
+          "frame": "spring",
+          "advance": true,
+          "output": "이번 관찰관찰 사례"
+        },
+        {
+          "frame": "balloon",
+          "advance": true,
+          "output": "이번 관찰관찰 사례"
+        },
+        {
+          "frame": "lever",
+          "advance": true,
+          "output": "이번 관찰관찰 사례"
+        }
+      ],
+      "startedAt": "2026-10-17T01:42:10.230Z",
+      "complete": true,
+      "pass": true
+    },
+    {
+      "course": "middle",
+      "id": "design",
+      "title": "힘을 이용한 장치 설계",
+      "frames": [
+        {
+          "frame": "before",
+          "advance": true,
+          "output": "이번 관찰목표선을 지나감이동 거리2.30 m필요한 힘 눈금0.49 N"
+        },
+        {
+          "frame": "after",
+          "advance": true,
+          "output": "이번 관찰목표선 앞에서 멈춤이동 거리0.57 m필요한 힘 눈금1.96 N"
+        },
+        {
+          "frame": "alternative",
+          "advance": true,
+          "output": "이번 관찰목표선 앞에서 멈춤이동 거리0.64 m필요한 힘 눈금6.71 N"
+        }
+      ],
+      "startedAt": "2026-10-17T01:42:19.050Z",
+      "complete": true,
+      "pass": true
+    },
+    {
+      "course": "middle",
+      "id": "floating",
+      "title": "잠수부·풍선·잠수함",
+      "frames": [
+        {
+          "frame": "diver",
+          "advance": true,
+          "output": "이번 관찰위쪽중력9.80 N부력10.78 N"
+        },
+        {
+          "frame": "balloon",
+          "advance": true,
+          "output": "이번 관찰그대로 멈춤중력0.059 N부력0.059 N"
+        },
+        {
+          "frame": "submarine",
+          "advance": true,
+          "output": "이번 관찰아래쪽중력49 N부력39.20 N"
+        }
+      ],
+      "startedAt": "2026-10-17T01:42:27.735Z",
+      "complete": true,
+      "pass": true
+    },
+    {
+      "course": "middle",
+      "id": "review-middle",
+      "title": "힘의 작용 정리",
+      "frames": [
+        {
+          "frame": "before",
+          "advance": true,
+          "output": "이번 관찰아래쪽중력9.80 N부력8.82 N"
+        },
+        {
+          "frame": "after",
+          "advance": true,
+          "output": "이번 관찰위쪽중력9.80 N부력10.78 N"
+        }
+      ],
+      "startedAt": "2026-10-17T01:43:38.805Z",
+      "complete": true,
+      "pass": true
+    },
+    {
+      "course": "physics",
+      "id": "turning",
+      "title": "힘의 합과 돌리는 힘",
+      "frames": [
+        {
+          "frame": "review-sum",
+          "advance": true,
+          "output": "이번 관찰오른쪽으로 움직임알짜힘4 N속도4.80 m/s"
+        },
+        {
+          "frame": "review-zero",
+          "advance": true,
+          "output": "이번 관찰그대로 멈춤알짜힘0 N속도0 m/s"
+        },
+        {
+          "frame": "near",
+          "advance": true,
+          "output": "이번 관찰제자리에서 회전알짜 돌림힘2 N·m"
+        },
+        {
+          "frame": "far",
+          "advance": true,
+          "output": "이번 관찰제자리에서 회전알짜 돌림힘6 N·m"
+        },
+        {
+          "frame": "double-force",
+          "advance": true,
+          "output": "이번 관찰제자리에서 회전알짜 돌림힘12 N·m"
+        },
+        {
+          "frame": "angle",
+          "advance": true,
+          "output": "이번 관찰제자리에서 회전알짜 돌림힘6.00 N·m"
+        }
+      ],
+      "startedAt": "2026-10-17T01:43:48.195Z",
+      "complete": true,
+      "pass": true
+    },
+    {
+      "course": "physics",
+      "id": "lever-counts",
+      "title": "추로 지레의 규칙 찾기",
+      "frames": [
+        {
+          "frame": "one",
+          "advance": true,
+          "output": "이번 관찰수평 유지왼쪽 개수 × 칸2오른쪽 개수 × 칸2알짜 돌림힘0 N·m"
+        },
+        {
+          "frame": "two",
+          "advance": true,
+          "output": "이번 관찰수평 유지왼쪽 개수 × 칸6오른쪽 개수 × 칸6알짜 돌림힘0 N·m"
+        },
+        {
+          "frame": "three",
+          "advance": true,
+          "output": "이번 관찰수평 유지왼쪽 개수 × 칸8오른쪽 개수 × 칸8알짜 돌림힘0 N·m"
+        }
+      ],
+      "startedAt": "2026-10-17T01:44:03.601Z",
+      "complete": true,
+      "pass": true
+    },
+    {
+      "course": "physics",
+      "id": "torque",
+      "title": "힘과 돌림힘의 평형",
+      "frames": [
+        {
+          "frame": "balanced",
+          "advance": true,
+          "output": "이번 관찰수평 유지알짜힘0 N알짜 돌림힘0 N·m받침이 받치는 힘20 N"
+        },
+        {
+          "frame": "rotate",
+          "advance": true,
+          "output": "이번 관찰반시계 방향으로 기울어짐알짜힘0 N알짜 돌림힘10 N·m받침이 받치는 힘20 N"
+        },
+        {
+          "frame": "restore",
+          "advance": true,
+          "output": "이번 관찰수평 유지알짜힘0 N알짜 돌림힘0 N·m받침이 받치는 힘20 N"
+        }
+      ],
+      "startedAt": "2026-10-17T01:44:47.237Z",
+      "complete": true,
+      "pass": true
+    },
+    {
+      "course": "physics",
+      "id": "couple",
+      "title": "합력이 0인데 회전하는 경우",
+      "frames": [
+        {
+          "frame": "same-line",
+          "advance": true,
+          "output": "이번 관찰그대로 멈춤알짜힘0 N알짜 돌림힘0 N·m"
+        },
+        {
+          "frame": "different-lines",
+          "advance": true,
+          "output": "이번 관찰제자리에서 회전알짜힘0 N알짜 돌림힘-4 N·m"
+        }
+      ],
+      "startedAt": "2026-10-17T01:44:57.587Z",
+      "complete": true,
+      "pass": true
+    },
+    {
+      "course": "physics",
+      "id": "stability",
+      "title": "받침과 안정성",
+      "frames": [
+        {
+          "frame": "small-tilt",
+          "advance": true,
+          "output": "이번 관찰받침 안쪽 · 안정놓기 전 중심 수직선 위치0.18 m받침 폭1 m놓기 전 모서리 기준 중력 돌림힘3.12 N·m"
+        },
+        {
+          "frame": "tip",
+          "advance": true,
+          "output": "이번 관찰받침 바깥 · 넘어짐놓기 전 중심 수직선 위치0.76 m받침 폭1 m놓기 전 모서리 기준 중력 돌림힘-2.55 N·m"
+        },
+        {
+          "frame": "wider",
+          "advance": true,
+          "output": "이번 관찰받침 안쪽 · 안정놓기 전 중심 수직선 위치0.88 m받침 폭2 m놓기 전 모서리 기준 중력 돌림힘1.21 N·m"
+        },
+        {
+          "frame": "lower",
+          "advance": true,
+          "output": "이번 관찰받침 안쪽 · 안정놓기 전 중심 수직선 위치0.56 m받침 폭2 m놓기 전 모서리 기준 중력 돌림힘4.36 N·m"
+        }
+      ],
+      "startedAt": "2026-10-17T01:45:04.607Z",
+      "complete": true,
+      "pass": true
+    },
+    {
+      "course": "physics",
+      "id": "shelf",
+      "title": "선반의 받침힘과 줄힘",
+      "frames": [
+        {
+          "frame": "reference",
+          "advance": true,
+          "output": "이번 관찰받치는 힘과 중력이 평형벽 쪽 받침힘40 N줄이 받치는 힘80 N알짜힘0 N"
+        },
+        {
+          "frame": "near-wall",
+          "advance": true,
+          "output": "이번 관찰받치는 힘과 중력이 평형벽 쪽 받침힘80 N줄이 받치는 힘40 N알짜힘0 N"
+        }
+      ],
+      "startedAt": "2026-10-17T01:45:17.928Z",
+      "complete": true,
+      "pass": true
+    },
+    {
+      "course": "physics",
+      "id": "review-high",
+      "title": "평형과 안정성 적용",
+      "frames": [
+        {
+          "frame": "crane",
+          "advance": true,
+          "output": "이번 관찰수평 유지왼쪽 개수 × 칸6오른쪽 개수 × 칸6알짜 돌림힘0 N·m"
+        },
+        {
+          "frame": "move-load",
+          "advance": true,
+          "output": "이번 관찰반시계 방향으로 기울어짐왼쪽 개수 × 칸9오른쪽 개수 × 칸6알짜 돌림힘0.29 N·m"
+        }
+      ],
+      "startedAt": "2026-10-17T01:46:18.418Z",
+      "complete": true,
+      "pass": true
+    },
+    {
+      "course": "mechanics",
+      "id": "vectors",
+      "title": "평면에서 힘 합성",
+      "frames": [
+        {
+          "frame": "right-angle",
+          "advance": true,
+          "output": "이번 관찰알짜힘알짜힘5 N합력 x3.00 N합력 y4 N"
+        },
+        {
+          "frame": "opposite",
+          "advance": true,
+          "output": "이번 관찰그대로 멈춤알짜힘0 N합력 x0 N합력 y0 N"
+        }
+      ],
+      "startedAt": "2026-10-17T01:46:26.219Z",
+      "complete": true,
+      "pass": true
+    },
+    {
+      "course": "mechanics",
+      "id": "incline",
+      "title": "빗면의 장력과 수직항력",
+      "frames": [
+        {
+          "frame": "no-friction",
+          "advance": true,
+          "output": "이번 관찰물체를 잡고 평형 측정줄의 장력4.90 N받치는 힘8.49 N알짜힘0 N"
+        },
+        {
+          "frame": "friction",
+          "advance": true,
+          "output": "이번 관찰물체를 잡고 평형 측정줄의 장력4.05 N받치는 힘8.49 N알짜힘0 N"
+        }
+      ],
+      "startedAt": "2026-10-17T01:46:35.204Z",
+      "complete": true,
+      "pass": true
+    }
+  ]
+}

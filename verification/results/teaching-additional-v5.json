@@ -1,0 +1,8 @@
+{
+  "pass": true,
+  "extensions": {
+    "moon": "검수용 기록: 달에서는 질량이 같은 물체의 중력이 작다. 용수철을 당겨 저항을 만드는 운동 장치를 설계하고 지구·달 조건에서 늘어난 길이와 힘을 비교한다.",
+    "building": "검수용 기록: 기울어진 건물의 중심 수직선이 받침 안에 있으면 넘어지지 않는다. 받침을 넓히거나 중심 높이를 낮추어 더 안정하게 만들 수 있다."
+  },
+  "revisit": "Wrong up-ball answer opens projectile scenario in investigate; run completed; answer corrected."
+}

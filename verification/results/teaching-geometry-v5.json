@@ -1,0 +1,49 @@
+{
+  "pass": true,
+  "tests": [
+    {
+      "name": "Overflow immersion equals the displaced fraction at zero, half and full volume",
+      "pass": true
+    },
+    {
+      "name": "Direct lifting, lever and ramp raise the same load by the same 0.5 m display height",
+      "pass": true
+    },
+    {
+      "name": "Balanced floating objects cannot drift from floating point residue",
+      "pass": true
+    },
+    {
+      "name": "Wrench force stays on its moving endpoint and scales linearly with force",
+      "pass": true
+    },
+    {
+      "name": "One metre marker and bumper contact share the sled displacement scale",
+      "pass": true
+    },
+    {
+      "name": "Largest permitted parallel force stays visible without altering physical travel",
+      "pass": true
+    },
+    {
+      "name": "Guided tasks retain the previous adjustable condition so learners must solve it",
+      "pass": true
+    },
+    {
+      "name": "Same-load design revision and lower-centre comparison change one relevant condition",
+      "pass": true
+    },
+    {
+      "name": "Spring and lever evidence require predictions made before each recorded trial",
+      "pass": true
+    },
+    {
+      "name": "Every activity starts with visible valid manipulation keys instead of hiding all controls",
+      "pass": true
+    },
+    {
+      "name": "High-school introduction reviews resultants before wrench and lever investigations",
+      "pass": true
+    }
+  ]
+}

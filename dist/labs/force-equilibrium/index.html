@@ -85,6 +85,7 @@ Object.assign(window.__LAB_LABELS__.en,{"childLeft":"Left","childRight":"Right",
 import {createLesson} from './lesson.js';
 import {createCurriculum} from './curriculum.js';
 import {createCurriculumRigs} from './curriculum-rigs.js';
+import {cartDisplayScale,teachingCameraHeight} from './teaching-geometry.js';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
@@ -130,7 +131,7 @@ const label=k=>LABELS[english?'en':'ko'][k]||k;
 const state={forces:structuredClone(PHYSICS.presets[0]),targets:structuredClone(PHYSICS.presets[0]),mass:2,massTarget:2,selected:0,pinned:true,playing:false,speed:1,time:0,mode:'explore',guided:true,sound:false,quality:params.get('lite')==='1'?'low':(window.__SITE__?.quality==='low'?'low':'high'),layers:{segments:true,limit:true,trails:false,lens:false,note:false,ab:false,numeric:false},ab:null,section:0,sectionTarget:0,dynamics:{x:0,y:0,vx:0,vy:0,rotation:0,omega:0},records:[],history:[],attract:false,lastInput:performance.now(),fps:60,events:[],uiVisible:true};
 const quest={i:0,passed:[],phase:'intro',picked:null,elapsed:0,stable:0,changed:false,observed:null};
 const learn={active:false,level:'intro',task:0,phase:'practice',timer:0,stable:0,edits:0,picked:null,voice:false,completed:[],observed:null,showSummary:false};
-let lessonUI=null,curriculumUI=null,curriculumDuration=1.2;
+let lessonUI=null,curriculumUI=null,curriculumDuration=1.2,curriculumPositionScale=.35,curriculumView={rig:'cart',dynamic:true};
 let physical=PHYSICS.solve(state),renderer,composer,controls,ao,bokeh,bloom,renderPass,output,scene,camera;
 const COLORS=[0x69d9d2,0xefb36d,0xbcb0ef],CSS_COLORS=['#69d9d2','#efb36d','#bcb0ef'];
 const UNIT=.62,HERO_Y=2.72,TAU=Math.PI*2,reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -374,7 +375,7 @@ function lessonCamera(){
  if(w>980)camera.setViewOffset(w,h,200,-18,w,h);
  else{const sceneHeight=Math.min(320,Math.max(250,h*.36));camera.setViewOffset(w,h,0,(h-sceneHeight-112)/2-55,w,h);}
 }
-function learnerShot(){if((lessonUI?.active||curriculumUI?.active)&&params.get('wordless')!=='1')return {name:'learn-cart',position:innerWidth<=980?[.12,10.7,18.5]:[.12,7.6,10.8],target:[0,2.5,-.6],fov:35};return innerWidth<=980&&innerHeight>innerWidth?{name:'learn-portrait',position:[.12,10.7,19.5],target:[0,3.2,-.6],fov:35}:{name:'learn-cart',position:[.12,7.6,10.8],target:[0,3.2,-.6],fov:35}}
+function learnerShot(){if((lessonUI?.active||curriculumUI?.active)&&params.get('wordless')!=='1')return {name:'learn-cart',position:innerWidth<=980?[.12,10.7,18.5]:[.12,7.6,10.8],target:[0,curriculumUI?.active?teachingCameraHeight(curriculumView.rig,curriculumView.dynamic,innerWidth):2.5,-.6],fov:35};return innerWidth<=980&&innerHeight>innerWidth?{name:'learn-portrait',position:[.12,10.7,19.5],target:[0,3.2,-.6],fov:35}:{name:'learn-cart',position:[.12,7.6,10.8],target:[0,3.2,-.6],fov:35}}
 function chosenShot(i=0){if(learn.active&&i===0)return learnerShot();return innerWidth<=980&&innerHeight>innerWidth?SHOTS_VERTICAL[i%3]:SHOTS[i%6]}
 function applyShot(s){camera.position.fromArray(s.position);camera.fov=s.fov;controls.target.fromArray(s.target);camera.lookAt(controls.target);lessonCamera();camera.updateProjectionMatrix();camera.updateMatrixWorld();controls.update();currentShot=s.name;updateFocus()}
 function updateFocus(){if(bokeh)bokeh.uniforms.focus.value=camera.position.distanceTo(new THREE.Vector3(0,HERO_Y,-.6))}
@@ -385,7 +386,7 @@ function fitArrowUnit(base){
  const portrait=innerWidth<=980&&innerHeight>innerWidth,bounds={left:24,right:innerWidth-(state.mode==='present'&&innerWidth>980?220:24),top:portrait?158:125,bottom:innerHeight-(portrait?200:130)};
  if(lessonUI?.active&&params.get('wordless')!=='1'){bounds.right=innerWidth>980?innerWidth-424:innerWidth-20;bounds.top=innerWidth>980?155:140;bounds.bottom=innerWidth>980?innerHeight-160:Math.min(320,Math.max(250,innerHeight*.36))+112;}
  const candidates=physical.forces.map((f,i)=>({f,origin:getOrigin(i),y:HERO_Y+(learn.active?(lessonUI?.active ? .82 :.72+i*.34):.32+i*.22)}));
- if(!learn.active)candidates.push({f:physical.R,origin:{x:state.dynamics.x*.35,z:-.6-state.dynamics.y*.35},y:HERO_Y+.95});
+ if(!learn.active)candidates.push({f:physical.R,origin:{x:state.dynamics.x*displayPositionScale(),z:-.6-state.dynamics.y*displayPositionScale()},y:HERO_Y+.95});
  const sf=PHYSICS.vector(8,state.forces[state.selected].angle);if(state.layers.limit)candidates.push({f:sf,origin:getOrigin(state.selected),y:HERO_Y+.35+state.selected*.22});
  let factor=1;for(const item of candidates){const a=new THREE.Vector3(item.origin.x,item.y,item.origin.z).project(camera),b=new THREE.Vector3(item.origin.x+item.f.x*base,item.y,item.origin.z-item.f.y*base).project(camera);const ax=(a.x+1)*innerWidth/2,ay=(1-a.y)*innerHeight/2,bx=(b.x+1)*innerWidth/2,by=(1-b.y)*innerHeight/2;
   if(bx>bounds.right&&bx>ax)factor=Math.min(factor,(bounds.right-ax)/(bx-ax));if(bx<bounds.left&&bx<ax)factor=Math.min(factor,(bounds.left-ax)/(bx-ax));if(by<bounds.top&&by<ay)factor=Math.min(factor,(bounds.top-ay)/(by-ay));if(by>bounds.bottom&&by>ay)factor=Math.min(factor,(bounds.bottom-ay)/(by-ay));
@@ -589,7 +590,7 @@ function updateLearn(dt){
  graphOne.group.visible=graphTwo.group.visible=false;forceKnob.group.visible=angleKnob.group.visible=massSlider.group.visible=false;
  for(let i=0;i<3;i++){attachHandles[i].visible=false;ghostArrows[i].visible=false;targetArrows[i].visible=false;if(i===2){arrows[i].visible=handles[i].visible=false;continue}const origin=getOrigin(i),f=state.forces[i],y=HERO_Y+.72+i*.34;setArrow(arrows[i],f,origin,y);handles[i].position.set(origin.x+physical.forces[i].x*displayUnit,y+.025,origin.z-physical.forces[i].y*displayUnit);handles[i].visible=i===learnEditable()&&editing;handles[i].scale.setScalar(1.8+(reduced?0:Math.sin(nowTime*4)*.12));arrows[i].material.uniforms.uOpacity.value=.96;arrows[i].material.blending=THREE.NormalBlending;arrows[i].material.uniforms.uColor.value.set(i===0?0x39b7ac:0xda863c)}
  resultArrow.visible=torqueGroup.visible=targetRing.visible=false;equilibriumRing.visible=learn.phase==='result'&&physical.equilibrium;equilibriumRing.position.set(bodyOffset.position.x,HERO_Y+.97,bodyOffset.position.z);equilibriumRing.scale.setScalar(1.5);
- medium.visible=particles.visible=learn.phase==='watch';trailGroup.visible=false;for(const wheel of cartWheels)wheel.rotation.z=-state.dynamics.x*.35/.31;
+ medium.visible=particles.visible=learn.phase==='watch';trailGroup.visible=false;for(const wheel of cartWheels)wheel.rotation.z=-state.dynamics.x*displayPositionScale()/.31;
  learnGoalRing.visible=editing;if(editing){const i=learnEditable(),origin=getOrigin(i),v=PHYSICS.vector(3,state.forces[i].angle);learnGoalRing.position.set(origin.x+v.x*displayUnit,HERO_Y+.74+i*.34,origin.z-v.y*displayUnit);const a=handles[i].position.clone().project(camera),b=learnGoalRing.position.clone().project(camera),u=reduced?0:(nowTime*.45)%1,p=a.lerp(b,u);$('hint').innerHTML=icon('hand');$('hint').style.left=(p.x+1)*innerWidth*.5+'px';$('hint').style.top=(1-p.y)*innerHeight*.5+16+'px';$('hint').style.opacity=reduced?'1':String(Math.min(1,u*7,(1-u)*7))}else $('hint').style.opacity=0;
  drawLearnCue();for(const c of $('learn-predictions').querySelectorAll('canvas'))drawLearnPrediction(c,+c.dataset.direction,nowTime);
 }
@@ -600,8 +601,9 @@ $('learn-return').setAttribute('aria-label',label('cart'));$('learn-return').inn
 
 // 17 · LOOP — frame schedules; update computes and renders without rAF.
 let nowTime=0,previousTime=performance.now(),lastGraph=0,frameId=0,accumulator=0;
-function getOrigin(i){const f=physical.forces[i],d=state.dynamics;return{x:d.x*.35+f.r.x+(learn.active?(Math.cos(state.forces[i].angle*Math.PI/180)>0?1.12:-1.12):0),z:-.6-d.y*.35-f.r.y}}
-function advancePhysics(dt,force=false){if(!state.playing&&!force)return;state.history.push({time:state.time,dynamics:{...state.dynamics}});if(state.history.length>600)state.history.shift();let rem=Math.min(dt,.12);while(rem>1e-8){const h=Math.min(rem,1/120);state.dynamics=PHYSICS.advance(state,state.dynamics,h);state.time+=h;rem-=h}if(Math.hypot(state.dynamics.x*.35,state.dynamics.y*.35)>1.65){state.playing=false;state.pinned=true;state.dynamics={x:0,y:0,vx:0,vy:0,rotation:0,omega:0};physicalEvent('limit');syncButtons()}trailTimer+=dt;if(trailTimer>.12){trailTimer=0;trailDots.forEach((o,i)=>{if(i<trailDots.length-1){o.position.copy(trailDots[i+1].position);o.visible=trailDots[i+1].visible}});const o=trailDots.at(-1);o.position.set(state.dynamics.x*.35,2.74,-.6-state.dynamics.y*.35);o.visible=true}}
+function displayPositionScale(){return curriculumUI?.active?curriculumPositionScale:.35;}
+function getOrigin(i){const f=physical.forces[i],d=state.dynamics;return{x:d.x*displayPositionScale()+f.r.x+(learn.active?(Math.cos(state.forces[i].angle*Math.PI/180)>0?1.12:-1.12):0),z:-.6-d.y*displayPositionScale()-f.r.y}}
+function advancePhysics(dt,force=false){if(!state.playing&&!force)return;state.history.push({time:state.time,dynamics:{...state.dynamics}});if(state.history.length>600)state.history.shift();let rem=Math.min(dt,.12);while(rem>1e-8){const h=Math.min(rem,1/120);state.dynamics=PHYSICS.advance(state,state.dynamics,h);state.time+=h;rem-=h}if(!curriculumUI?.active&&Math.hypot(state.dynamics.x*displayPositionScale(),state.dynamics.y*displayPositionScale())>1.65){state.playing=false;state.pinned=true;state.dynamics={x:0,y:0,vx:0,vy:0,rotation:0,omega:0};physicalEvent('limit');syncButtons()}trailTimer+=dt;if(trailTimer>.12){trailTimer=0;trailDots.forEach((o,i)=>{if(i<trailDots.length-1){o.position.copy(trailDots[i+1].position);o.visible=trailDots[i+1].visible}});const o=trailDots.at(-1);o.position.set(state.dynamics.x*displayPositionScale(),2.74,-.6-state.dynamics.y*displayPositionScale());o.visible=true}}
 function graphGrid(ctx,w,h){ctx.fillStyle='#122d29';ctx.fillRect(0,0,w,h);ctx.strokeStyle='#35594d';ctx.lineWidth=1;for(let x=28;x<w;x+=40){ctx.beginPath();ctx.moveTo(x,20);ctx.lineTo(x,h-25);ctx.stroke()}for(let y=20;y<h;y+=35){ctx.beginPath();ctx.moveTo(28,y);ctx.lineTo(w-20,y);ctx.stroke()}ctx.strokeStyle='#789e85';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(28,18);ctx.lineTo(28,h-25);ctx.lineTo(w-16,h-25);ctx.stroke()}
 const graphSamples=[];
 function updateGraphs(){const c=graphOne.ctx,w=graphOne.canvas.width,h=graphOne.canvas.height;graphGrid(c,w,h);graphSamples.push({r:physical.resultant,t:physical.torque});if(graphSamples.length>110)graphSamples.shift();c.strokeStyle='#c3d4a2';c.lineWidth=3;c.beginPath();graphSamples.forEach((p,i)=>{const x=28+i*5.25,y=h-25-Math.min(24,p.r)*8;if(i===0)c.moveTo(x,y);else c.lineTo(x,y)});c.stroke();c.strokeStyle='#b7a0d6';c.beginPath();graphSamples.forEach((p,i)=>{const x=28+i*5.25,y=h/2-Math.max(-12,Math.min(12,p.t))*7;if(!i)c.moveTo(x,y);else c.lineTo(x,y)});c.stroke();const x=28+(graphSamples.length-1)*5.25;c.strokeStyle='#d9e7c4';c.setLineDash([4,5]);c.beginPath();c.moveTo(x,20);c.lineTo(x,h-25);c.stroke();c.setLineDash([]);drawArrow2D(c,10,42,0,-25,'#c4d8a9',2);c.beginPath();c.arc(w-30,h-25,9,0,TAU);c.moveTo(w-30,h-25);c.lineTo(w-30,h-32);c.stroke();graphOne.texture.needsUpdate=true;
@@ -611,7 +613,7 @@ function update(dt){dt=PHYSICS.clamp(dt,0,.12);nowTime+=dt;
  for(let i=0;i<3;i++)for(const k of ['mag','angle','attach'])state.forces[i][k]=damp(state.forces[i][k],state.targets[i][k],dt);state.mass=damp(state.mass,state.massTarget,dt);state.section=damp(state.section,state.sectionTarget,dt,5);
  const slow=performance.now()<eventSlowUntil?.25:1;const simulationDt=curriculumUI?.active?Math.min(dt,Math.max(0,curriculumDuration-state.time)):lessonUI?.active&&lessonUI.state.phase==='watch'?Math.min(dt,Math.max(0,1.2-state.time)):dt;advancePhysics(lessonUI?.active||curriculumUI?.active?simulationDt:dt*state.speed*slow);physical=PHYSICS.solve(state,state.dynamics.rotation);
  displayUnit=fitArrowUnit(UNIT*(innerWidth<=980&&innerHeight>innerWidth?.82:1)*Math.min(1,8/Math.max(8,physical.resultant)));
- bodyOffset.position.set(state.dynamics.x*.35,HERO_Y,-.6-state.dynamics.y*.35);body.rotation.y=state.dynamics.rotation;pin.visible=state.pinned;
+ bodyOffset.position.set(state.dynamics.x*displayPositionScale(),HERO_Y,-.6-state.dynamics.y*displayPositionScale());body.rotation.y=state.dynamics.rotation;pin.visible=state.pinned;
  for(let i=0;i<3;i++){const f=state.forces[i],origin=getOrigin(i);setArrow(arrows[i],f,origin,HERO_Y+.32+i*.22);arrows[i].material.uniforms.uTime.value=nowTime;arrows[i].material.uniforms.uSegments.value=state.layers.segments?1:0;
   handles[i].position.set(origin.x+physical.forces[i].x*displayUnit,HERO_Y+.36+i*.22,origin.z-physical.forces[i].y*displayUnit);handles[i].scale.setScalar((state.selected===i?1.18:1)*(state.mode==='present'?1.4:1));handles[i].visible=f.mag>.02||state.selected===i;
   attachHandles[i].position.z=-f.attach;
@@ -620,7 +622,7 @@ function update(dt){dt=PHYSICS.clamp(dt,0,.12);nowTime+=dt;
   else if(!state.guided&&state.layers.limit&&i===state.selected){setArrow(targetArrows[i],{...f,mag:8},origin,HERO_Y+.35+i*.22);targetArrows[i].material.uniforms.uOpacity.value=.13}
   else targetArrows[i].visible=false;
  }
- const ra={mag:physical.resultant,angle:Math.atan2(physical.R.y,physical.R.x)*180/Math.PI};setArrow(resultArrow,ra,{x:state.dynamics.x*.35,z:-.6-state.dynamics.y*.35},HERO_Y+.95);resultArrow.material.uniforms.uTime.value=nowTime;resultArrow.material.uniforms.uSegments.value=state.layers.segments?1:0;
+ const ra={mag:physical.resultant,angle:Math.atan2(physical.R.y,physical.R.x)*180/Math.PI};setArrow(resultArrow,ra,{x:state.dynamics.x*displayPositionScale(),z:-.6-state.dynamics.y*displayPositionScale()},HERO_Y+.95);resultArrow.material.uniforms.uTime.value=nowTime;resultArrow.material.uniforms.uSegments.value=state.layers.segments?1:0;
  // The resultant uses a uniform visual compression above 8 N, with an engraved expand marker.
  
  torqueGroup.visible=Math.abs(physical.torque)>.12;torqueGroup.rotation.y=Math.sign(physical.torque)*nowTime*.35;torqueGroup.scale.setScalar(.72+Math.min(Math.abs(physical.torque),8)*.045);
@@ -659,21 +661,21 @@ lessonUI=createLesson({label,button:addButton,cart:miniCart,arrow:drawArrow2D,pr
  view(v){instrument.visible=false;cart.visible=v.stage!==5;transferCrate.visible=v.stage===5;learnRail.visible=learnClamp.visible=true;consoleTools.visible=diskSurface.visible=false;graphOne.group.visible=graphTwo.group.visible=false;forceKnob.group.visible=angleKnob.group.visible=massSlider.group.visible=false;
   for(let i=0;i<2;i++)clampJaws[i].position.x=(i===0?-1:1)*(.83+(['watch','result'].includes(v.phase)?.65:v.phase==='release'?Math.min(1,v.timer/.8)*.65:0));
   for(let i=0;i<3;i++){attachHandles[i].visible=ghostArrows[i].visible=targetArrows[i].visible=false;handles[i].visible=false;if(i===2||!v.showArrows){arrows[i].visible=false;continue}const origin=getOrigin(i),y=HERO_Y+.82;setArrow(arrows[i],state.forces[i],origin,y);handles[i].position.set(origin.x+physical.forces[i].x*displayUnit,y+.025,origin.z-physical.forces[i].y*displayUnit);handles[i].visible=v.editing&&i===v.editable;handles[i].scale.setScalar(1.8);arrows[i].material.uniforms.uOpacity.value=.96;arrows[i].material.blending=THREE.NormalBlending;arrows[i].material.uniforms.uColor.value.set(i===0?0x39b7ac:0xda863c)}
-  resultArrow.visible=torqueGroup.visible=targetRing.visible=learnGoalRing.visible=false;equilibriumRing.visible=v.phase==='result'&&physical.equilibrium;equilibriumRing.position.set(bodyOffset.position.x,HERO_Y+.97,bodyOffset.position.z);equilibriumRing.scale.setScalar(1.5);medium.visible=particles.visible=v.phase==='watch';trailGroup.visible=false;for(const wheel of cartWheels)wheel.rotation.z=-state.dynamics.x*.35/.31;
+  resultArrow.visible=torqueGroup.visible=targetRing.visible=learnGoalRing.visible=false;equilibriumRing.visible=v.phase==='result'&&physical.equilibrium;equilibriumRing.position.set(bodyOffset.position.x,HERO_Y+.97,bodyOffset.position.z);equilibriumRing.scale.setScalar(1.5);medium.visible=particles.visible=v.phase==='watch';trailGroup.visible=false;for(const wheel of cartWheels)wheel.rotation.z=-state.dynamics.x*displayPositionScale()/.31;
  }});
 window.__lab.lesson=lessonUI;
 const curriculumRigs=createCurriculumRigs({THREE,hero,HERO_Y,mats,roundedPanel,cyl,cart});
 curriculumUI=createCurriculum({
  enter(){startLearn(0);learn.voice=false;state.attract=false;},
  exit(){curriculumRigs.hide();camera.clearViewOffset();},
- prepare(r){state.playing=false;state.pinned=true;state.time=0;state.speed=1;state.mass=state.massTarget=r.mass;state.history=[];state.dynamics={x:0,y:0,vx:r.initialVelocity,vy:0,rotation:0,omega:0};state.forces=structuredClone(r.forces);state.targets=structuredClone(r.forces);state.selected=0;curriculumDuration=r.duration;physical=PHYSICS.solve(state);cameraTween=null;applyShot(r.dynamic?learnerShot():{...learnerShot(),target:[0,3.6,-.6]});},
+ prepare(r){state.playing=false;state.pinned=true;state.time=0;state.speed=1;state.mass=state.massTarget=r.mass;state.history=[];state.dynamics={x:0,y:0,vx:r.initialVelocity,vy:0,rotation:0,omega:0};state.forces=structuredClone(r.forces);state.targets=structuredClone(r.forces);state.selected=0;curriculumDuration=r.duration;curriculumPositionScale=cartDisplayScale(r);physical=PHYSICS.solve(state);cameraTween=null;curriculumView={rig:r.rig,dynamic:r.dynamic};applyShot(learnerShot());},
  run(){state.pinned=false;state.playing=true;},stop(){state.playing=false;},
  limit(r){if(state.time>=r.duration-1e-8){state.playing=false;if(r.duration<1.2){state.dynamics.vx=0;state.forces[1].mag=state.targets[1].mag=0;}}},
  view(id,p,r,progress,measured){
   instrument.visible=transferCrate.visible=consoleTools.visible=diskSurface.visible=false;graphOne.group.visible=graphTwo.group.visible=false;forceKnob.group.visible=angleKnob.group.visible=massSlider.group.visible=false;
   learnRail.visible=r.rig==='cart';learnClamp.visible=r.dynamic&&curriculumUI?.phase==='ready';pin.visible=false;learnGoalRing.visible=targetRing.visible=resultArrow.visible=torqueGroup.visible=false;equilibriumRing.visible=measured&&id==='parallel'&&physical.equilibrium;
-  for(let i=0;i<3;i++){attachHandles[i].visible=ghostArrows[i].visible=targetArrows[i].visible=handles[i].visible=false;arrows[i].visible=false;if(['represent','parallel','vectors','motion'].includes(id)&&r.forces[i].mag>.001){setArrow(arrows[i],state.forces[i],getOrigin(i),HERO_Y+.82+i*.12);arrows[i].material.uniforms.uOpacity.value=.96;arrows[i].material.blending=THREE.NormalBlending;arrows[i].material.uniforms.uColor.value.set(i===0?0x39b7ac:0xda863c)}}
-  medium.visible=particles.visible=curriculumUI?.phase==='running'&&r.dynamic;trailGroup.visible=false;for(const wheel of cartWheels)wheel.rotation.z=-state.dynamics.x*.35/.31;
+  for(let i=0;i<3;i++){attachHandles[i].visible=ghostArrows[i].visible=targetArrows[i].visible=handles[i].visible=false;arrows[i].visible=false;if(['represent','parallel','vectors','torque','turning'].includes(id)&&r.forces[i].mag>.001){setArrow(arrows[i],state.forces[i],getOrigin(i),HERO_Y+.82+i*.12);arrows[i].material.uniforms.uOpacity.value=.96;arrows[i].material.blending=THREE.NormalBlending;arrows[i].material.uniforms.uColor.value.set(i===0?0x39b7ac:0xda863c)}}
+  medium.visible=particles.visible=curriculumUI?.phase==='running'&&r.dynamic;trailGroup.visible=false;for(const wheel of cartWheels)wheel.rotation.z=-state.dynamics.x*displayPositionScale()/.31;
   curriculumRigs.update(id,{...p,dynamics:state.dynamics},r,progress,measured);$('hint').style.opacity=0;
  }
 });
