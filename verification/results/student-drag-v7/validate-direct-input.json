@@ -1,0 +1,65 @@
+{
+  "pass": true,
+  "tests": [
+    {
+      "name": "Pointer input respects every numeric range and step",
+      "pass": true
+    },
+    {
+      "name": "Choice dragging clamps both ends without wrapping apparatus",
+      "pass": true
+    },
+    {
+      "name": "Both sides of the beam snap to numbered positions",
+      "pass": true
+    },
+    {
+      "name": "Spring endpoint uses extension from the initial mark",
+      "pass": true
+    },
+    {
+      "name": "Cart dragging changes applied force and direction, retaining mass",
+      "pass": true
+    },
+    {
+      "name": "Drop zones accept nearby placements and reject distant releases",
+      "pass": true
+    },
+    {
+      "name": "Planar force endpoint changes both magnitude and angle",
+      "pass": true
+    },
+    {
+      "name": "Lowering weights gives the selected submerged volume at a fixed surface",
+      "pass": true
+    },
+    {
+      "name": "Empty apparatus and removal instructions describe the actual action",
+      "pass": true
+    },
+    {
+      "name": "Pointer and keyboard provenance survives record export and restoration",
+      "pass": true
+    },
+    {
+      "name": "Malformed or unbounded manipulation records are rejected",
+      "pass": true
+    },
+    {
+      "name": "Weak and strong cart guides use different actual input distances",
+      "pass": true
+    },
+    {
+      "name": "Absolute spring guide endpoints select every taught extension",
+      "pass": true
+    },
+    {
+      "name": "Guide planning never changes selected inputs or supplies the hidden lever answer",
+      "pass": true
+    },
+    {
+      "name": "Hanging mobile and crane loads remain attached at their normal heights",
+      "pass": true
+    }
+  ]
+}

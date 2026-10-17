@@ -22,7 +22,7 @@
   "thumbnail": "thumb.jpg",
   "guide": "guide.html",
   "aspectRatio": "8:5",
-  "version": "6.0.0",
+  "version": "6.1.0",
   "qualityLevels": [
     "high",
     "low"

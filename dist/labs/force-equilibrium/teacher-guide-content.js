@@ -25,3 +25,6 @@ el('p',$('models'),say('추 개수 실험의 수치 모형은 추 1개 100 g, �
 
 const auditLink=el('a',$('sources'),say('2026-10-17 학생 경로 검수·수정 내역','Student-journey audit and repairs, 2026-10-17'));auditLink.href='docs/teaching-audit-2026-10-17.md';
 el('p',$('models'),say('직접 들기·지레·빗면은 같은 추의 0.5 m 상승을 비교합니다. 초등의 힘 비교 눈금은 직접 들기 100칸을 기준으로 하며 N 단위 측정이 아닙니다. 모빌은 구슬·별·마름모를 선택하고 무게와 위치를 수정합니다. 오른쪽 장식 개수는 같은 총무게를 나누는 수입니다.','Direct, lever and ramp methods compare the same load rising 0.5 m. Elementary effort uses 100 relative units for direct lifting, rather than a reading in N. Mobile builders select beads, stars or diamonds and revise load and position; right-hand count divides the same total load.'));
+
+el('p',$('flow'),say('점선 원을 잡고 화살표 끝까지 끌어 놓습니다. 현재 조작할 대상 하나를 먼저 강조합니다. 준비된 기준 조건은 원 표시를 눌러 관찰합니다. 새 조건에 예상이 필요하면 먼저 예상 적기를 눌러 작성한 뒤 조작합니다. 모바일에서는 실험대 보기로 장면에 돌아옵니다.','Grab the dotted marker and drag to the arrow endpoint. One current target is emphasized. Tap the circle to observe a prepared reference condition. When a new condition requires a prediction, use the prediction prompt before manipulating. On small screens, Back to apparatus returns to the scene.'));
+const dragAudit=el('a',$('sources'),say('화살표·드래그 전 과정 검수 (37활동·117조건)','Arrow and drag audit (37 activities, 117 conditions)'));dragAudit.href='docs/student-drag-audit-2026-10-17.md';

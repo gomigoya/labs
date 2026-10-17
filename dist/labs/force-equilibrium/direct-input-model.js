@@ -1,7 +1,7 @@
 // Gesture lengths are interface scales, not measurements of a pupil's physical force.
 export const DIRECT_LABELS={
- ko:{'force-vector':'둘째 힘 끝 옮기기',grab:'잡고 끌기',drop:'이곳에 놓기',release:'놓으면 관찰',cancel:'조작 취소',keyboard:'Space로 잡기 · 방향키로 옮기기 · Enter로 놓기 · Esc 취소',fallback:'숫자·버튼으로 조작',observed:'직접 조작한 조건으로 관찰합니다.',need:'준비 조건을 먼저 확인하세요.',object:'물체',zero:'빈 기구 0 맞추기',level:'수평 맞추기',power:'저울 전원',baseline:'처음 위치 표시',bag:'빈 봉투 걸기',eye:'눈높이 맞추기',load:'추를 끌어 놓기',remove:'물체 빼기',cart:'수레 밀기·당기기',draw:'수레에서 힘 화살표 그리기',lift:'잡고 들어 올리기',pull:'끝을 잡고 당기기',lower:'추를 물속으로 내리기',move:'물체 위치 바꾸기',press:'잡고 눌러 보기',tilt:'기울였다 놓기',observe:'기구를 움직여 관찰',left:'왼쪽',right:'오른쪽'},
- en:{'force-vector':'Move second-force endpoint',grab:'Grab and drag',drop:'Drop here',release:'Release to observe',cancel:'Gesture cancelled',keyboard:'Space to grab · arrows to move · Enter to release · Esc to cancel',fallback:'Use values and buttons',observed:'Observing your manipulated conditions.',need:'Complete the preparation first.',object:'Object',zero:'Zero empty instrument',level:'Level instrument',power:'Scale power',baseline:'Mark initial position',bag:'Attach empty bag',eye:'Align eye level',load:'Drag a weight into place',remove:'Remove the load',cart:'Push or pull the cart',draw:'Draw a force from the cart',lift:'Grab and lift',pull:'Grab and pull the end',lower:'Lower the weight into water',move:'Move the object',press:'Grab and press',tilt:'Tilt and release',observe:'Manipulate the apparatus',left:'Left',right:'Right'}
+ ko:{predictionFirst:'먼저 예상 적기 ↓',observeReady:'놓고 관찰하기',tapObserve:'표시를 눌러 준비된 조건을 관찰하세요. 값을 바꾸려면 물체를 끌어 보세요.','force-vector':'둘째 힘 끝 옮기기',grab:'잡고 끌기',drop:'이곳에 놓기',release:'놓으면 관찰',cancel:'조작 취소',keyboard:'Space로 잡기 · 방향키로 옮기기 · Enter로 놓기 · Esc 취소',fallback:'숫자·버튼으로 조작',observed:'직접 조작한 조건으로 관찰합니다.',need:'준비 조건을 먼저 확인하세요.',object:'물체',zero:'빈 기구 0 맞추기',level:'수평 맞추기',power:'저울 전원',baseline:'처음 위치 표시',bag:'빈 봉투 걸기',eye:'눈높이 맞추기',load:'추를 끌어 놓기',remove:'물체 빼기',cart:'수레 밀기·당기기',draw:'수레에서 힘 화살표 그리기',lift:'잡고 들어 올리기',pull:'끝을 잡고 당기기',lower:'추를 물속으로 내리기',move:'물체 위치 바꾸기',press:'잡고 눌러 보기',tilt:'기울였다 놓기',observe:'기구를 움직여 관찰',left:'왼쪽',right:'오른쪽'},
+ en:{predictionFirst:'Predict first ↓',observeReady:'Release and observe',tapObserve:'Select the marker to observe the prepared conditions. Drag the object to explore other values.','force-vector':'Move second-force endpoint',grab:'Grab and drag',drop:'Drop here',release:'Release to observe',cancel:'Gesture cancelled',keyboard:'Space to grab · arrows to move · Enter to release · Esc to cancel',fallback:'Use values and buttons',observed:'Observing your manipulated conditions.',need:'Complete the preparation first.',object:'Object',zero:'Zero empty instrument',level:'Level instrument',power:'Scale power',baseline:'Mark initial position',bag:'Attach empty bag',eye:'Align eye level',load:'Drag a weight into place',remove:'Remove the load',cart:'Push or pull the cart',draw:'Draw a force from the cart',lift:'Grab and lift',pull:'Grab and pull the end',lower:'Lower the weight into water',move:'Move the object',press:'Grab and press',tilt:'Tilt and release',observe:'Manipulate the apparatus',left:'Left',right:'Right'}
 };
 const H={
  cart:['수레를 화살표 쪽으로 끌고 놓으세요. 힘 화살표의 길이가 바뀝니다.','Drag the cart in the arrow direction, then release.'],
@@ -27,14 +27,14 @@ const H={
  assist:['손의 표시를 잡아 위로 올려 보세요.','Grab the hand marker and lift it upward.'],
  shelf:['선반 위 추를 좌우로 옮기고 두 받치는 힘을 비교하세요.','Slide the shelf load left or right and compare the two supporting forces.'],
  inference:['수평대 가운데 표시를 누르고 두 장면의 높이와 거리를 비교하세요.','Select the centre beam marker and compare heights and distances in both scenes.'],
- couple:['휴대전화 옆 힘 표시를 아래로 끌어 두 힘의 작용선을 바꾸세요.','Drag the force marker beside the phone down to change the lines of action.'],
+ couple:['휴대전화 왼쪽 힘 표시를 위로 끌어 두 힘의 작용선을 어긋나게 하세요.','Drag the left force marker up to separate the lines of action.'],
  support:['가방 표시를 좌우로 끌어 손과 바닥이 받치는 모습을 비교하세요.','Drag the bag marker left or right to compare hand and floor support.'],
  examples:['표시된 도구를 화살표 방향으로 움직여 작동시켜 보세요.','Move the marked tool along the guide arrow to operate it.'],
  floating:['장치의 표시를 화살표 방향으로 끌어 크기나 물·추의 양을 바꾸세요.','Drag the device marker along the arrow to change volume, ballast or payload.']
 };
 export function directHint(id,rig,lang='ko',context={}){
  if(id==='vectors')return lang==='en'?'Drag the second-force marker to change both direction and length. Release to observe.':'둘째 힘 표시를 끌어 방향과 길이를 바꾸세요. 놓으면 수레의 움직임을 관찰합니다.';
- if(id==='gravity')return lang==='en'?'Drag the hanging-load marker left or right to compare Earth and Moon.':'매단 물체의 표시를 좌우로 끌어 지구와 달에서 비교하세요.';
+ if(id==='gravity')return lang==='en'?'Pull and release the hanging weight. Compare readings on Earth and Moon.':'매단 추를 당겼다 놓고 지구와 달에서의 눈금을 비교하세요.';
  if(rig==='tank'&&context.frame?.inputs?.volume===0)return lang==='en'?'Lift the suspended weight slightly and read the value in air.':'매단 추를 조금 위로 끌고 놓아 물 밖의 값을 읽으세요.';
  if(rig==='balance'&&context.frame?.id==='empty')return lang==='en'?'Compare both ends of the empty beam, then select its centre marker.':'빈 판의 양쪽 높이를 보고 가운데 표시를 눌러 관찰하세요.';
  if(rig==='spring-scale'&&context.frame?.empty)return lang==='en'?'Drag the hanging load away from the hook. Watch the pointer return.':'매단 물체를 고리 밖으로 끌어 빼고 표시자가 올라가는지 보세요.';
@@ -51,6 +51,7 @@ export function gestureValue(spec,control,inputs,start,end){
  const delta=(end[spec.axis||'x']-start[spec.axis||'x'])*(spec.sign??1);
  if(spec.kind==='choice')return shiftedChoice(control,inputs[spec.key],Math.round(delta/(spec.unit||.65)));
  if(spec.absolute){const value=(end[spec.axis||'x']-spec.origin)*(spec.sign??1)/(spec.unit||1);return quantize(control,value);}
+ if(spec.fromZero)return quantize(control,delta/(spec.unit||1));
  return quantize(control,inputs[spec.key]+delta/(spec.unit||1));
 }
 export function forceGesture(id,controls,inputs,dx,dz=0,unit=.62){
@@ -60,3 +61,17 @@ export function forceGesture(id,controls,inputs,dx,dz=0,unit=.62){
 export function withinDrop(point,target,radius=.8){return Math.hypot(point.x-target.x,point.y-target.y,point.z-target.z)<radius;}
 export function validInteraction(value){return !!value&&typeof value==='object'&&!Array.isArray(value)&&Object.keys(value).length===3&&['pointer','keyboard'].includes(value.method)&&typeof value.target==='string'&&value.target.length>0&&value.target.length<=80&&typeof value.action==='string'&&value.action.length>0&&value.action.length<=40;}
 export function vectorGesture(magnitudeControl,angleControl,x,z,unit=.3){return {magnitude:quantize(magnitudeControl,Math.hypot(x,z)/unit),angle:quantize(angleControl,(Math.atan2(-z,x)*180/Math.PI+360)%360)};}
+export function loadIsOutside(point,floor=-1.4){return Math.abs(point.x)>2.6||point.y<floor;}
+// A guide names an input condition, never changes it. Only pointer/keyboard input does.
+export function guidePoint(spec,control,inputs,goal,start,forceUnit=.62,{unknown=false}={}){
+ const end={...start},axis=spec.axis||'x',sign=spec.sign??1,target=goal[spec.key]??inputs[spec.key];
+ if(spec.kind==='progress'){end[axis]+=spec.travel;if(spec.guideRise)end.y+=spec.guideRise;return end;}
+ if(spec.kind==='push'||spec.kind==='draw'){const key=spec.kind==='draw'?'magnitude':Object.hasOwn(inputs,'force')?'force':Object.hasOwn(inputs,'f1')?'f1':'right';end.x+=(goal[key]??inputs[key])*forceUnit*(goal.direction??inputs.direction??1);return end;}
+ if(spec.kind==='vector'){const a=(goal[spec.angleKey]??inputs[spec.angleKey])*Math.PI/180;end.x=target*spec.unit*Math.cos(a);end.z=-target*spec.unit*Math.sin(a);}
+ else if(spec.kind==='parallel-vector')end.x=target*spec.unit*((goal[spec.directionKey]??inputs[spec.directionKey])==='same'?1:-1);
+ else if(spec.kind==='orbit'){const a=target*Math.PI/180,r=Math.hypot(start.x,start.y-1.6);end.x=r*Math.cos(a);end.y=1.6+r*Math.sin(a);}
+ else if(control){let difference=control.options?control.options.findIndex(([v])=>v===target)-control.options.findIndex(([v])=>v===inputs[spec.key]):target-inputs[spec.key];if(unknown&&difference)difference=Math.sign(difference)*(control.options?1:control.step);if(spec.kind==='choice')end[axis]+=difference*(spec.unit||.65)/sign;else if(spec.absolute&&!unknown)end[axis]=spec.origin+target*(spec.unit||1)/sign;else end[axis]+=(spec.fromZero?target:difference)*(spec.unit||1)/sign;}
+ else end[axis]+=(spec.sign??1)*.35;
+ if(Math.hypot(end.x-start.x,end.y-start.y,end.z-start.z)<.025){const lower=control?.options?control.options[0][0]:control?.min;if(control&&target===lower&&!spec.absolute)end[axis]-=.35/sign;else{const unit=control?.step?(control.step*(spec.unit||1)):.4;end[axis]+=(spec.guideTravel?Math.sign(spec.guideTravel):sign)*Math.min(.1,unit*.3);}}
+ return end;
+}

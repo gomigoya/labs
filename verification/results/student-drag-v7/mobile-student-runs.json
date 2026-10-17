@@ -1,0 +1,1034 @@
+[
+  {
+    "course": "elementary",
+    "id": "curling",
+    "title": "컬링 놀이",
+    "pass": true,
+    "frames": [
+      {
+        "id": "gentle",
+        "title": "살살 밀고 도착 위치 보기",
+        "pass": true,
+        "actions": [
+          {
+            "cue": "수레 밀기·당기기",
+            "from": [
+              187.5,
+              183.921875
+            ],
+            "gesture": "drag",
+            "id": "scene-handle-cart",
+            "to": [
+              213.3892021963965,
+              183.99446285695888
+            ],
+            "visible": true
+          }
+        ],
+        "result": {
+          "activity": "curling",
+          "next": true,
+          "notebook": "내 실험 기록\n1회",
+          "notice": "",
+          "outcome": "이번 관찰\n오른쪽으로 움직임\n이동 거리\n0.72 m",
+          "primary": "scene-handle-cart",
+          "progress": "안내 실험 1 / 31 / 3 기록됨",
+          "title": "살살 밀고 도착 위치 보기",
+          "values": "미는 힘 살살 · 방향 오른쪽"
+        }
+      },
+      {
+        "id": "strong",
+        "title": "세게 밀어 위치 비교",
+        "pass": true,
+        "actions": [
+          {
+            "cue": "수레 밀기·당기기",
+            "from": [
+              187.5,
+              183.921875
+            ],
+            "gesture": "drag",
+            "id": "scene-handle-cart",
+            "to": [
+              265.1900044277126,
+              184.1129695984089
+            ],
+            "visible": true
+          }
+        ],
+        "result": {
+          "activity": "curling",
+          "next": true,
+          "notebook": "내 실험 기록\n2회",
+          "notice": "",
+          "outcome": "이번 관찰\n오른쪽으로 움직임\n이동 거리\n2.16 m",
+          "primary": "scene-handle-cart",
+          "progress": "안내 실험 2 / 32 / 3 기록됨",
+          "title": "세게 밀어 위치 비교",
+          "values": "미는 힘 세게 · 방향 오른쪽"
+        }
+      },
+      {
+        "id": "retry",
+        "title": "중간 세기로 다시 시도",
+        "pass": true,
+        "actions": [
+          {
+            "cue": "수레 밀기·당기기",
+            "from": [
+              187.5,
+              183.921875
+            ],
+            "gesture": "drag",
+            "id": "scene-handle-cart",
+            "to": [
+              239.28586926260516,
+              184.05370768515144
+            ],
+            "visible": true
+          }
+        ],
+        "result": {
+          "activity": "curling",
+          "next": true,
+          "notebook": "내 실험 기록\n3회",
+          "notice": "",
+          "outcome": "이번 관찰\n오른쪽으로 움직임\n이동 거리\n1.44 m",
+          "primary": "scene-handle-cart",
+          "progress": "안내 실험 3 / 33 / 3 기록됨",
+          "title": "중간 세기로 다시 시도",
+          "values": "미는 힘 보통 · 방향 오른쪽"
+        }
+      }
+    ]
+  },
+  {
+    "course": "elementary",
+    "id": "balance",
+    "title": "수평대의 균형",
+    "pass": true,
+    "frames": [
+      {
+        "id": "empty",
+        "title": "빈 판을 수평으로 놓기",
+        "pass": true,
+        "actions": [
+          {
+            "cue": "기구를 움직여 관찰",
+            "from": [
+              187.453125,
+              221.09375
+            ],
+            "gesture": "tap",
+            "id": "scene-handle-empty-beam",
+            "to": [
+              205.74352385438897,
+              221.13372039754512
+            ],
+            "visible": false
+          }
+        ],
+        "result": {
+          "activity": "balance",
+          "next": true,
+          "notebook": "내 실험 기록\n1회",
+          "notice": "",
+          "outcome": "이번 관찰\n양쪽 높이가 같음\n왼쪽 물체\n0 g\n오른쪽 물체\n0 g",
+          "primary": "scene-handle-empty-beam",
+          "progress": "안내 실험 1 / 41 / 4 기록됨",
+          "title": "빈 판을 수평으로 놓기",
+          "values": "왼쪽 물체 0 g · 오른쪽 물체 0 g · 왼쪽 칸 2 · 오른쪽 칸 2"
+        }
+      },
+      {
+        "id": "equal",
+        "title": "양쪽 2번 칸에 물체 1개씩",
+        "pass": true,
+        "actions": [
+          {
+            "cue": "추를 끌어 놓기 · 왼쪽 물체 0 g",
+            "from": [
+              41.234375,
+              328.890625
+            ],
+            "gesture": "drag",
+            "id": "scene-handle-supply-left",
+            "to": [
+              142.89106883558674,
+              224.60560334094035
+            ],
+            "visible": true
+          },
+          {
+            "cue": "추를 끌어 놓기 · 오른쪽 물체 0 g",
+            "from": [
+              41.234375,
+              328.890625
+            ],
+            "gesture": "drag",
+            "id": "scene-handle-supply-right",
+            "to": [
+              231.88044488797817,
+              219.45721391314893
+            ],
+            "visible": true
+          }
+        ],
+        "result": {
+          "activity": "balance",
+          "next": true,
+          "notebook": "내 실험 기록\n3회",
+          "notice": "",
+          "outcome": "이번 관찰\n양쪽 높이가 같음\n왼쪽 물체\n300 g\n오른쪽 물체\n300 g",
+          "primary": "scene-handle-leftPos",
+          "progress": "안내 실험 2 / 42 / 4 기록됨",
+          "title": "양쪽 2번 칸에 물체 1개씩",
+          "values": "왼쪽 물체 300 g · 오른쪽 물체 300 g · 왼쪽 칸 2 · 오른쪽 칸 2"
+        }
+      },
+      {
+        "id": "add",
+        "title": "왼쪽에 같은 물체 1개 더 놓기",
+        "pass": true,
+        "actions": [
+          {
+            "cue": "추를 끌어 놓기 · 왼쪽 물체 300 g",
+            "from": [
+              41.234375,
+              328.890625
+            ],
+            "gesture": "drag",
+            "id": "scene-handle-supply-left",
+            "to": [
+              142.89106883558674,
+              224.60560334094035
+            ],
+            "visible": true
+          }
+        ],
+        "result": {
+          "activity": "balance",
+          "next": true,
+          "notebook": "내 실험 기록\n4회",
+          "notice": "",
+          "outcome": "이번 관찰\n왼쪽이 내려감\n왼쪽 물체\n600 g\n오른쪽 물체\n300 g",
+          "primary": "scene-handle-leftPos",
+          "progress": "안내 실험 3 / 43 / 4 기록됨",
+          "title": "왼쪽에 같은 물체 1개 더 놓기",
+          "values": "왼쪽 물체 600 g · 오른쪽 물체 300 g · 왼쪽 칸 2 · 오른쪽 칸 2"
+        }
+      },
+      {
+        "id": "move",
+        "title": "오른쪽 물체를 4번 칸으로 옮기기",
+        "pass": true,
+        "actions": [
+          {
+            "cue": "잡고 끌기 · 오른쪽 칸 2",
+            "from": [
+              232.359375,
+              206.609375
+            ],
+            "gesture": "drag",
+            "id": "scene-handle-rightPos",
+            "to": [
+              277.2653744130162,
+              206.70658168749264
+            ],
+            "visible": true
+          }
+        ],
+        "result": {
+          "activity": "balance",
+          "next": true,
+          "notebook": "내 실험 기록\n5회",
+          "notice": "",
+          "outcome": "이번 관찰\n양쪽 높이가 같음\n왼쪽 물체\n600 g\n오른쪽 물체\n300 g",
+          "primary": "scene-handle-leftPos",
+          "progress": "안내 실험 4 / 44 / 4 기록됨",
+          "title": "오른쪽 물체를 4번 칸으로 옮기기",
+          "values": "왼쪽 물체 600 g · 오른쪽 물체 300 g · 왼쪽 칸 2 · 오른쪽 칸 4"
+        }
+      }
+    ]
+  },
+  {
+    "course": "elementary",
+    "id": "scale",
+    "title": "전자저울로 비교",
+    "pass": true,
+    "frames": [
+      {
+        "id": "a",
+        "title": "물체 A를 올려 읽기",
+        "pass": true,
+        "actions": [
+          {
+            "cue": "물체 A · 잡고 끌어 놓기",
+            "from": [
+              70.1875,
+              275.046875
+            ],
+            "gesture": "drag",
+            "id": "scene-handle-sample-a",
+            "to": [
+              187.5,
+              247.36392752647103
+            ],
+            "visible": true
+          }
+        ],
+        "result": {
+          "activity": "scale",
+          "next": true,
+          "notebook": "내 실험 기록\n1회",
+          "notice": "읽은 값이 눈금과 같습니다.",
+          "outcome": "이번 관찰\n저울 눈금\n저울 눈금\n8 g\n작은 눈금\n1 g",
+          "primary": "scene-handle-sample-b",
+          "progress": "안내 실험 1 / 41 / 4 기록됨",
+          "title": "물체 A를 올려 읽기",
+          "values": "올릴 물체 물체 A"
+        }
+      },
+      {
+        "id": "b",
+        "title": "물체 B를 올려 읽기",
+        "pass": true,
+        "actions": [
+          {
+            "cue": "물체 B · 잡고 끌어 놓기",
+            "from": [
+              95.65625,
+              275.109375
+            ],
+            "gesture": "drag",
+            "id": "scene-handle-sample-b",
+            "to": [
+              187.5,
+              247.36392752647103
+            ],
+            "visible": true
+          }
+        ],
+        "result": {
+          "activity": "scale",
+          "next": true,
+          "notebook": "내 실험 기록\n2회",
+          "notice": "읽은 값이 눈금과 같습니다.",
+          "outcome": "이번 관찰\n저울 눈금\n저울 눈금\n9 g\n작은 눈금\n1 g",
+          "primary": "scene-handle-sample-a",
+          "progress": "안내 실험 2 / 42 / 4 기록됨",
+          "title": "물체 B를 올려 읽기",
+          "values": "올릴 물체 물체 B"
+        }
+      },
+      {
+        "id": "c",
+        "title": "물체 C를 올려 읽기",
+        "pass": true,
+        "actions": [
+          {
+            "cue": "물체 C · 잡고 끌어 놓기",
+            "from": [
+              121.125,
+              275.171875
+            ],
+            "gesture": "drag",
+            "id": "scene-handle-sample-c",
+            "to": [
+              187.5,
+              247.36392752647103
+            ],
+            "visible": true
+          }
+        ],
+        "result": {
+          "activity": "scale",
+          "next": true,
+          "notebook": "내 실험 기록\n3회",
+          "notice": "읽은 값이 눈금과 같습니다.",
+          "outcome": "이번 관찰\n저울 눈금\n저울 눈금\n11 g\n작은 눈금\n1 g",
+          "primary": "scene-handle-sample-a",
+          "progress": "안내 실험 3 / 43 / 4 기록됨",
+          "title": "물체 C를 올려 읽기",
+          "values": "올릴 물체 물체 C"
+        }
+      },
+      {
+        "id": "d",
+        "title": "물체 D를 올려 읽기",
+        "pass": true,
+        "actions": [
+          {
+            "cue": "물체 D · 잡고 끌어 놓기",
+            "from": [
+              146.609375,
+              275.234375
+            ],
+            "gesture": "drag",
+            "id": "scene-handle-sample-d",
+            "to": [
+              187.5,
+              247.36392752647103
+            ],
+            "visible": true
+          }
+        ],
+        "result": {
+          "activity": "scale",
+          "next": true,
+          "notebook": "내 실험 기록\n4회",
+          "notice": "읽은 값이 눈금과 같습니다.",
+          "outcome": "이번 관찰\n저울 눈금\n저울 눈금\n14 g\n작은 눈금\n1 g",
+          "primary": "scene-handle-sample-a",
+          "progress": "안내 실험 4 / 44 / 4 기록됨",
+          "title": "물체 D를 올려 읽기",
+          "values": "올릴 물체 물체 D"
+        }
+      }
+    ]
+  },
+  {
+    "course": "elementary",
+    "id": "spring-scale",
+    "title": "용수철저울 읽기",
+    "pass": true,
+    "frames": [
+      {
+        "id": "apple",
+        "title": "사과를 걸고 눈높이 맞춰 읽기",
+        "pass": true,
+        "actions": [
+          {
+            "cue": "사과 · 잡고 끌어 놓기",
+            "from": [
+              45.03125,
+              323.578125
+            ],
+            "gesture": "drag",
+            "id": "scene-handle-sample-apple",
+            "to": [
+              197.64576628325295,
+              300.3506891396072
+            ],
+            "visible": true
+          },
+          {
+            "cue": "눈높이 맞추기 · 눈금 보는 높이 0",
+            "from": [
+              274.921875,
+              202.34375
+            ],
+            "gesture": "drag",
+            "id": "scene-handle-eye",
+            "to": [
+              274.3040652797763,
+              226.8643950563171
+            ],
+            "visible": true
+          }
+        ],
+        "result": {
+          "activity": "spring-scale",
+          "next": true,
+          "notebook": "내 실험 기록\n1회",
+          "notice": "읽은 값이 눈금과 같습니다.",
+          "outcome": "이번 관찰\n저울 눈금\n저울 눈금\n100 g\n작은 눈금\n5 g",
+          "primary": "scene-handle-eye",
+          "progress": "안내 실험 1 / 41 / 4 기록됨",
+          "title": "사과를 걸고 눈높이 맞춰 읽기",
+          "values": "올릴 물체 사과 · 눈금 보는 높이 눈높이 맞춤"
+        }
+      },
+      {
+        "id": "milk",
+        "title": "우유로 바꾸어 읽기",
+        "pass": true,
+        "actions": [
+          {
+            "cue": "우유 · 잡고 끌어 놓기",
+            "from": [
+              78.0625,
+              323.65625
+            ],
+            "gesture": "drag",
+            "id": "scene-handle-sample-milk",
+            "to": [
+              197.64576628325295,
+              300.3506891396072
+            ],
+            "visible": true
+          },
+          {
+            "cue": "눈높이 맞추기 · 눈금 보는 높이 0",
+            "from": [
+              274.03125,
+              237.375
+            ],
+            "gesture": "drag",
+            "id": "scene-handle-eye",
+            "to": [
+              273.4187684834775,
+              261.3939515006218
+            ],
+            "visible": true
+          }
+        ],
+        "result": {
+          "activity": "spring-scale",
+          "next": true,
+          "notebook": "내 실험 기록\n2회",
+          "notice": "읽은 값이 눈금과 같습니다.",
+          "outcome": "이번 관찰\n저울 눈금\n저울 눈금\n175 g\n작은 눈금\n5 g",
+          "primary": "scene-handle-eye",
+          "progress": "안내 실험 2 / 42 / 4 기록됨",
+          "title": "우유로 바꾸어 읽기",
+          "values": "올릴 물체 우유 · 눈금 보는 높이 눈높이 맞춤"
+        }
+      },
+      {
+        "id": "eraser",
+        "title": "지우개를 봉투에 넣어 읽기",
+        "pass": true,
+        "actions": [
+          {
+            "cue": "빈 봉투 걸기",
+            "from": [
+              84.71875,
+              310.84375
+            ],
+            "gesture": "drag",
+            "id": "scene-handle-bag",
+            "to": [
+              197.63068711857335,
+              305.2734001250763
+            ],
+            "visible": true
+          },
+          {
+            "cue": "누르기 · 빈 기구 0 맞추기",
+            "from": [
+              231.46875,
+              330.203125
+            ],
+            "gesture": "tap",
+            "id": "scene-handle-zero",
+            "to": [
+              249.66770840102848,
+              330.2532580048083
+            ],
+            "visible": false
+          },
+          {
+            "cue": "지우개 · 잡고 끌어 놓기",
+            "from": [
+              111.109375,
+              323.734375
+            ],
+            "gesture": "drag",
+            "id": "scene-handle-sample-eraser",
+            "to": [
+              197.64576628325295,
+              300.3506891396072
+            ],
+            "visible": true
+          },
+          {
+            "cue": "눈높이 맞추기 · 눈금 보는 높이 0",
+            "from": [
+              275.53125,
+              178.578125
+            ],
+            "gesture": "drag",
+            "id": "scene-handle-eye",
+            "to": [
+              274.9044687971459,
+              203.4466359171841
+            ],
+            "visible": true
+          }
+        ],
+        "result": {
+          "activity": "spring-scale",
+          "next": true,
+          "notebook": "내 실험 기록\n3회",
+          "notice": "읽은 값이 눈금과 같습니다.",
+          "outcome": "이번 관찰\n저울 눈금\n저울 눈금\n50 g\n작은 눈금\n5 g",
+          "primary": "scene-handle-eye",
+          "progress": "안내 실험 3 / 43 / 4 기록됨",
+          "title": "지우개를 봉투에 넣어 읽기",
+          "values": "올릴 물체 지우개 · 눈금 보는 높이 눈높이 맞춤"
+        }
+      },
+      {
+        "id": "remove",
+        "title": "물체를 빼고 표시자 이동 보기",
+        "pass": true,
+        "actions": [
+          {
+            "cue": "물체 빼기",
+            "from": [
+              197.625,
+              313.109375
+            ],
+            "gesture": "drag",
+            "id": "scene-handle-remove",
+            "to": [
+              121.31020001571504,
+              305.543657157846
+            ],
+            "visible": true
+          }
+        ],
+        "result": {
+          "activity": "spring-scale",
+          "next": true,
+          "notebook": "내 실험 기록\n4회",
+          "notice": "읽은 값이 눈금과 같습니다.",
+          "outcome": "이번 관찰\n영점 조정 완료\n저울 눈금\n0 g\n작은 눈금\n5 g",
+          "primary": "scene-handle-sample-eraser",
+          "progress": "안내 실험 4 / 44 / 4 기록됨",
+          "title": "물체를 빼고 표시자 이동 보기",
+          "values": "올릴 물체 지우개 · 눈금 보는 높이 눈높이 맞춤"
+        }
+      }
+    ]
+  },
+  {
+    "course": "middle",
+    "id": "elastic-shape",
+    "title": "눌렀다 놓는 탄성",
+    "pass": true,
+    "frames": [
+      {
+        "id": "compress",
+        "title": "고무공 누르기",
+        "pass": true,
+        "actions": [
+          {
+            "cue": "잡고 눌러 보기",
+            "from": [
+              187.390625,
+              202.421875
+            ],
+            "gesture": "drag",
+            "id": "scene-handle-press",
+            "to": [
+              187.40229658353476,
+              227.99117288278825
+            ],
+            "visible": true
+          }
+        ],
+        "result": {
+          "activity": "elastic-shape",
+          "next": true,
+          "notebook": "내 실험 기록\n1회",
+          "notice": "",
+          "outcome": "이번 관찰\n모양이 달라짐\n필요한 힘 눈금\n1 칸",
+          "primary": "scene-handle-press",
+          "progress": "안내 실험 1 / 51 / 5 기록됨",
+          "title": "고무공 누르기",
+          "values": "변형 누르기 · 변형할 물체 고무공 · 변형한 정도 1"
+        }
+      },
+      {
+        "id": "release",
+        "title": "손을 놓아 복원 관찰",
+        "pass": true,
+        "actions": [
+          {
+            "cue": "잡고 눌러 보기",
+            "from": [
+              187.390625,
+              208.453125
+            ],
+            "gesture": "drag",
+            "id": "scene-handle-press",
+            "to": [
+              187.40077028300448,
+              182.54808439330216
+            ],
+            "visible": true
+          }
+        ],
+        "result": {
+          "activity": "elastic-shape",
+          "next": true,
+          "notebook": "내 실험 기록\n2회",
+          "notice": "",
+          "outcome": "이번 관찰\n반대 방향으로 되돌아감\n필요한 힘 눈금\n0 칸",
+          "primary": "scene-handle-press",
+          "progress": "안내 실험 2 / 52 / 5 기록됨",
+          "title": "손을 놓아 복원 관찰",
+          "values": "변형 놓기 · 변형할 물체 고무공 · 변형한 정도 1"
+        }
+      },
+      {
+        "id": "stretch",
+        "title": "용수철 당기기",
+        "pass": true,
+        "actions": [
+          {
+            "cue": "잡고 눌러 보기",
+            "from": [
+              208.015625,
+              233.75
+            ],
+            "gesture": "drag",
+            "id": "scene-handle-press",
+            "to": [
+              228.6141264332782,
+              233.80271269085108
+            ],
+            "visible": true
+          }
+        ],
+        "result": {
+          "activity": "elastic-shape",
+          "next": true,
+          "notebook": "내 실험 기록\n3회",
+          "notice": "",
+          "outcome": "이번 관찰\n모양이 달라짐\n필요한 힘 눈금\n1 칸",
+          "primary": "scene-handle-press",
+          "progress": "안내 실험 3 / 53 / 5 기록됨",
+          "title": "용수철 당기기",
+          "values": "변형 당기기 · 변형할 물체 용수철 · 변형한 정도 1"
+        }
+      },
+      {
+        "id": "stretch-more",
+        "title": "같은 용수철을 더 크게 늘리기",
+        "pass": true,
+        "actions": [
+          {
+            "cue": "잡고 끌기 · 변형한 정도 1",
+            "from": [
+              208.015625,
+              233.75
+            ],
+            "gesture": "drag",
+            "id": "scene-handle-deformation",
+            "to": [
+              249.21074548919236,
+              233.849335692021
+            ],
+            "visible": true
+          }
+        ],
+        "result": {
+          "activity": "elastic-shape",
+          "next": true,
+          "notebook": "내 실험 기록\n4회",
+          "notice": "",
+          "outcome": "이번 관찰\n모양이 달라짐\n필요한 힘 눈금\n2 칸",
+          "primary": "scene-handle-deformation",
+          "progress": "안내 실험 4 / 54 / 5 기록됨",
+          "title": "같은 용수철을 더 크게 늘리기",
+          "values": "변형 당기기 · 변형할 물체 용수철 · 변형한 정도 2"
+        }
+      },
+      {
+        "id": "release-again",
+        "title": "다시 놓아 방향 비교",
+        "pass": true,
+        "actions": [
+          {
+            "cue": "잡고 눌러 보기",
+            "from": [
+              249.203125,
+              233.84375
+            ],
+            "gesture": "drag",
+            "id": "scene-handle-press",
+            "to": [
+              208.02232395731684,
+              233.75610059260725
+            ],
+            "visible": true
+          }
+        ],
+        "result": {
+          "activity": "elastic-shape",
+          "next": true,
+          "notebook": "내 실험 기록\n5회",
+          "notice": "",
+          "outcome": "이번 관찰\n반대 방향으로 되돌아감\n필요한 힘 눈금\n0 칸",
+          "primary": "scene-handle-press",
+          "progress": "안내 실험 5 / 55 / 5 기록됨",
+          "title": "다시 놓아 방향 비교",
+          "values": "변형 놓기 · 변형할 물체 용수철 · 변형한 정도 2"
+        }
+      }
+    ]
+  },
+  {
+    "course": "physics",
+    "id": "lever-counts",
+    "title": "추로 지레의 규칙 찾기",
+    "pass": true,
+    "frames": [
+      {
+        "id": "one",
+        "title": "실험 1 · 왼쪽 1칸에 추 몇 개? 오른쪽은 2칸 1개",
+        "pass": true,
+        "actions": [
+          {
+            "cue": "추를 끌어 놓기 · 왼쪽 추 개수 1",
+            "from": [
+              46.421875,
+              319.578125
+            ],
+            "gesture": "drag",
+            "id": "scene-handle-supply-left",
+            "to": [
+              165.00433035212387,
+              196.04604431952777
+            ],
+            "visible": true
+          }
+        ],
+        "result": {
+          "activity": "lever-counts",
+          "next": true,
+          "notebook": "내 실험 기록\n1회",
+          "notice": "",
+          "outcome": "이번 관찰\n수평 유지\n왼쪽 개수 × 칸\n2\n오른쪽 개수 × 칸\n2\n알짜 돌림힘\n0 N·m",
+          "primary": "scene-handle-leftPos",
+          "progress": "안내 실험 1 / 31 / 3 기록됨",
+          "title": "실험 1 · 왼쪽 1칸에 추 몇 개? 오른쪽은 2칸 1개",
+          "values": "왼쪽 추 개수 2 · 오른쪽 추 개수 1 · 왼쪽 칸 1 · 오른쪽 칸 2"
+        }
+      },
+      {
+        "id": "two",
+        "title": "실험 2 · 왼쪽 2칸 3개와 맞는 오른쪽 추 개수 찾기",
+        "pass": true,
+        "actions": [
+          {
+            "cue": "추를 끌어 놓기 · 오른쪽 추 개수 1",
+            "from": [
+              46.421875,
+              319.578125
+            ],
+            "gesture": "drag",
+            "id": "scene-handle-supply-right",
+            "to": [
+              255.02207925800263,
+              196.20424514207872
+            ],
+            "visible": true
+          }
+        ],
+        "result": {
+          "activity": "lever-counts",
+          "next": true,
+          "notebook": "내 실험 기록\n2회",
+          "notice": "",
+          "outcome": "이번 관찰\n수평 유지\n왼쪽 개수 × 칸\n6\n오른쪽 개수 × 칸\n6\n알짜 돌림힘\n0 N·m",
+          "primary": "scene-handle-leftPos",
+          "progress": "안내 실험 2 / 32 / 3 기록됨",
+          "title": "실험 2 · 왼쪽 2칸 3개와 맞는 오른쪽 추 개수 찾기",
+          "values": "왼쪽 추 개수 3 · 오른쪽 추 개수 2 · 왼쪽 칸 2 · 오른쪽 칸 3"
+        }
+      },
+      {
+        "id": "three",
+        "title": "실험 3 · 왼쪽 추 2개를 어느 칸에 놓을까?",
+        "pass": true,
+        "actions": [
+          {
+            "cue": "잡고 끌기 · 왼쪽 칸 1",
+            "from": [
+              165.171875,
+              222.0625
+            ],
+            "gesture": "drag",
+            "id": "scene-handle-leftPos",
+            "to": [
+              142.85709619302,
+              222.02548673425136
+            ],
+            "visible": true
+          },
+          {
+            "cue": "잡고 끌기 · 왼쪽 칸 2",
+            "from": [
+              139.984375,
+              216.5
+            ],
+            "gesture": "drag",
+            "id": "scene-handle-leftPos",
+            "to": [
+              117.75222400358004,
+              213.79865260473
+            ],
+            "visible": true
+          },
+          {
+            "cue": "잡고 끌기 · 왼쪽 칸 3",
+            "from": [
+              117.75,
+              213.796875
+            ],
+            "gesture": "drag",
+            "id": "scene-handle-leftPos",
+            "to": [
+              95.4805173542095,
+              211.0847505694819
+            ],
+            "visible": true
+          }
+        ],
+        "result": {
+          "activity": "lever-counts",
+          "next": true,
+          "notebook": "내 실험 기록\n5회",
+          "notice": "",
+          "outcome": "이번 관찰\n수평 유지\n왼쪽 개수 × 칸\n8\n오른쪽 개수 × 칸\n8\n알짜 돌림힘\n0 N·m",
+          "primary": "scene-handle-leftPos",
+          "progress": "안내 실험 3 / 33 / 3 기록됨",
+          "title": "실험 3 · 왼쪽 추 2개를 어느 칸에 놓을까?",
+          "values": "왼쪽 추 개수 2 · 오른쪽 추 개수 4 · 왼쪽 칸 4 · 오른쪽 칸 2"
+        }
+      }
+    ]
+  },
+  {
+    "course": "physics",
+    "id": "stability",
+    "title": "받침과 안정성",
+    "pass": true,
+    "frames": [
+      {
+        "id": "small-tilt",
+        "title": "조금 기울였다 놓기",
+        "pass": true,
+        "actions": [
+          {
+            "cue": "놓고 관찰하기",
+            "from": [
+              202.4375,
+              187.171875
+            ],
+            "gesture": "tap",
+            "id": "scene-handle-tilt",
+            "to": [
+              202.42621042927163,
+              190.34127794517013
+            ],
+            "visible": false
+          }
+        ],
+        "result": {
+          "activity": "stability",
+          "next": true,
+          "notebook": "내 실험 기록\n1회",
+          "notice": "",
+          "outcome": "이번 관찰\n받침 안쪽 · 안정\n놓기 전 중심 수직선 위치\n0.18 m\n받침 폭\n1 m\n놓기 전 모서리 기준 중력 돌림힘\n3.12 N·m",
+          "primary": "scene-handle-tilt",
+          "progress": "안내 실험 1 / 41 / 4 기록됨",
+          "title": "조금 기울였다 놓기",
+          "values": "받침 폭 1 m · 물체 중심 위치 0 m · 물체 높이 2 m · 기울인 각도 10 °"
+        }
+      },
+      {
+        "id": "tip",
+        "title": "더 기울였다 놓기",
+        "pass": true,
+        "actions": [
+          {
+            "cue": "기울였다 놓기 · 기울인 각도 10 °",
+            "from": [
+              202.4375,
+              187.171875
+            ],
+            "gesture": "drag",
+            "id": "scene-handle-tilt",
+            "to": [
+              202.12796976187155,
+              249.21747279606583
+            ],
+            "visible": true
+          }
+        ],
+        "result": {
+          "activity": "stability",
+          "next": true,
+          "notebook": "내 실험 기록\n2회",
+          "notice": "",
+          "outcome": "이번 관찰\n받침 바깥 · 넘어짐\n놓기 전 중심 수직선 위치\n0.76 m\n받침 폭\n1 m\n놓기 전 모서리 기준 중력 돌림힘\n-2.55 N·m",
+          "primary": "scene-handle-tilt",
+          "progress": "안내 실험 2 / 42 / 4 기록됨",
+          "title": "더 기울였다 놓기",
+          "values": "받침 폭 1 m · 물체 중심 위치 0 m · 물체 높이 2 m · 기울인 각도 40 °"
+        }
+      },
+      {
+        "id": "wider",
+        "title": "같은 기울기에서 받침 넓히기",
+        "pass": true,
+        "actions": [
+          {
+            "cue": "잡고 끌기 · 받침 폭 1 m",
+            "from": [
+              207.953125,
+              280.515625
+            ],
+            "gesture": "drag",
+            "id": "scene-handle-width",
+            "to": [
+              228.60157311810832,
+              280.58322435760624
+            ],
+            "visible": true
+          }
+        ],
+        "result": {
+          "activity": "stability",
+          "next": true,
+          "notebook": "내 실험 기록\n3회",
+          "notice": "",
+          "outcome": "이번 관찰\n받침 안쪽 · 안정\n놓기 전 중심 수직선 위치\n0.88 m\n받침 폭\n2 m\n놓기 전 모서리 기준 중력 돌림힘\n1.21 N·m",
+          "primary": "scene-handle-width",
+          "progress": "안내 실험 3 / 43 / 4 기록됨",
+          "title": "같은 기울기에서 받침 넓히기",
+          "values": "받침 폭 2 m · 물체 중심 위치 0 m · 물체 높이 2 m · 기울인 각도 40 °"
+        }
+      },
+      {
+        "id": "lower",
+        "title": "같은 넓은 받침에서 중심 높이만 낮추기",
+        "pass": true,
+        "actions": [
+          {
+            "cue": "잡고 끌기 · 물체 높이 2 m",
+            "from": [
+              252.203125,
+              182.25
+            ],
+            "gesture": "drag",
+            "id": "scene-handle-height",
+            "to": [
+              224.3476075989088,
+              214.33313572122069
+            ],
+            "visible": true
+          }
+        ],
+        "result": {
+          "activity": "stability",
+          "next": true,
+          "notebook": "내 실험 기록\n4회",
+          "notice": "",
+          "outcome": "이번 관찰\n받침 안쪽 · 안정\n놓기 전 중심 수직선 위치\n0.56 m\n받침 폭\n2 m\n놓기 전 모서리 기준 중력 돌림힘\n4.36 N·m",
+          "primary": "scene-handle-height",
+          "progress": "안내 실험 4 / 44 / 4 기록됨",
+          "title": "같은 넓은 받침에서 중심 높이만 낮추기",
+          "values": "받침 폭 2 m · 물체 중심 위치 0 m · 물체 높이 1 m · 기울인 각도 40 °"
+        }
+      }
+    ]
+  }
+]

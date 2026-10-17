@@ -1,0 +1,29 @@
+{
+  "desktop": {
+    "activities": 37,
+    "conditions": 117,
+    "pass": true,
+    "allConditionsHavePointerProvenance": true
+  },
+  "mobile": {
+    "viewport": [
+      390,
+      680
+    ],
+    "activities": 7,
+    "conditions": 27,
+    "pass": true
+  },
+  "apiRegression": {
+    "activities": 37,
+    "conditions": 117,
+    "checks": 452,
+    "pass": true
+  },
+  "unitChecks": 81,
+  "limitations": [
+    "No child participant usability study",
+    "No physical touch device test",
+    "No 4GB Chromebook performance certification"
+  ]
+}

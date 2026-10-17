@@ -1,0 +1,42 @@
+[
+  {
+    "name": "Unsubmitted work is not assessed",
+    "pass": true
+  },
+  {
+    "name": "All three arrow properties matter",
+    "pass": true
+  },
+  {
+    "name": "Wrong target can be revised",
+    "pass": true
+  },
+  {
+    "name": "Three trial classes, same mass and initial rest",
+    "pass": true
+  },
+  {
+    "name": "Wrong predictions are retained without penalty",
+    "pass": true
+  },
+  {
+    "name": "Evidence requires an actual balanced trial",
+    "pass": true
+  },
+  {
+    "name": "Transfer cannot reuse the two-newton answer",
+    "pass": true
+  },
+  {
+    "name": "Rubric uses submitted evidence, not unsubmitted edits",
+    "pass": true
+  },
+  {
+    "name": "JSON round trip recomputes imported scores",
+    "pass": true
+  },
+  {
+    "name": "Malformed imports rejected",
+    "pass": true
+  }
+]
