@@ -123,7 +123,7 @@ export function teachingApparatus({THREE,root,mats,roundedPanel,cyl,cart}){
   if(ctx.stage==='prepare')return out;
   if(r.rig==='cart'){
    if(id==='represent')add('draw',cart,{kind:'draw',plane:'table',offset:[0,.85,0]});
-   else add('cart',cart,{kind:'push',plane:'table',offset:[0,.85,0]});
+   else add('cart',cart,{kind:'push',plane:'table',offset:[0,.45,.5]});
    if(id==='push'&&(p.objectType||'cart')==='cart'){
     add('add-load',spareBlock,{kind:'supply',key:'mass',amount:1,dragObject:true,dropObject:cart,dropOffset:[0,.9,0],radius:1});
     if(p.mass>1)add('remove-load',cargo[Math.min(3,Math.ceil(p.mass)-1)],{kind:'remove',key:'mass',amount:1,dragObject:true,dropObject:cart,dropOffset:[0,.9,0],radius:1});
@@ -135,7 +135,7 @@ export function teachingApparatus({THREE,root,mats,roundedPanel,cyl,cart}){
    const loads=mobileRig?[hangLeft,hangRight]:r.rig==='balance'?[blocks[0].find(o=>o.visible),blocks[1].find(o=>o.visible)]:r.rig==='crane'?craneWeights:[leverWeights[0][0],leverWeights[1][0]];
    for(const [i,side]of ['left','right'].entries()){
     const massKey=count?side+'Count':side,positionKey=side+'Pos',sign=i?1:-1;
-    if(loads[i]&&p[massKey]>0)range(positionKey,loads[i],{kind:'range',axis:'x',sign,unit:.43,absolute:true,origin:0,coordinateObject:beamObject,freezeObject:beamObject,removeKey:massKey,removeAmount:count?1:mobileRig?200:300,removeFloor:mobileRig||r.rig==='crane'?-2.7:-1.4,offset:mobileRig?[0,-1.95,0]:[0,.15,0]});
+    if(loads[i]&&p[massKey]>0)range(positionKey,loads[i],{kind:'range',axis:'x',sign,unit:.43,absolute:true,origin:0,coordinateObject:beamObject,freezeObject:beamObject,removeKey:massKey,removeAmount:count?1:mobileRig?200:300,feedbackObjects:r.rig==='balance'?blocks[i].filter(o=>o.visible):r.rig==='beam-counts'?leverWeights[i].filter(o=>o.visible):[loads[i]],removeFloor:mobileRig||r.rig==='crane'?-2.7:-1.4,offset:mobileRig?[0,-1.95,0]:[0,.15,0]});
     add('supply-'+side,count?spareMass:spareBlock,{kind:'supply',key:massKey,amount:count?1:mobileRig?200:300,dragObject:true,dropObject:beamObject,dropOffset:[sign*(p[positionKey]||2)*.43,mobileRig?-1.5:0,0],radius:1,side,positionKey,slotUnit:.43,freezeObject:beamObject});
    }
    if(r.rig==='balance'&&f.id==='empty'&&p.left===0&&p.right===0){add('empty-beam',board,{kind:'observe',offset:[0,.1,.1]});out.unshift(out.pop());}

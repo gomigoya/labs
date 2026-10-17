@@ -1,0 +1,28 @@
+{
+  "before": {
+    "activity": "push",
+    "next": true,
+    "notebook": "내 실험 기록\n10회",
+    "notice": "",
+    "outcome": "",
+    "primary": "scene-handle-cart",
+    "progress": "안내 실험 2 / 88 / 8 기록됨",
+    "title": "짐 4개를 같은 세기로 밀기",
+    "values": "실은 무게 4 kg · 미는 힘 세게 · 방향 오른쪽 · 비교할 짐 같은 짐 쌓기"
+  },
+  "after": {
+    "activity": "push",
+    "next": false,
+    "notebook": "내 실험 기록\n10회",
+    "notice": "",
+    "outcome": "같은 세기로 밀었을 때 움직인 거리와 짐의 모양을 비교하세요.",
+    "primary": "scene-handle-cart",
+    "progress": "안내 실험 2 / 88 / 8 기록됨",
+    "title": "짐 4개를 같은 세기로 밀기",
+    "values": "실은 무게 3 kg · 미는 힘 세게 · 방향 오른쪽 · 비교할 짐 같은 짐 쌓기"
+  },
+  "point": [
+    200.284,
+    168.968
+  ]
+}

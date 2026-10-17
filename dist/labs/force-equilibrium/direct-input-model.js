@@ -1,10 +1,10 @@
 // Gesture lengths are interface scales, not measurements of a pupil's physical force.
 export const DIRECT_LABELS={
- ko:{predictionFirst:'먼저 예상 적기 ↓',observeReady:'놓고 관찰하기',tapObserve:'표시를 눌러 준비된 조건을 관찰하세요. 값을 바꾸려면 물체를 끌어 보세요.','force-vector':'둘째 힘 끝 옮기기',grab:'잡고 끌기',drop:'이곳에 놓기',release:'놓으면 관찰',cancel:'조작 취소',keyboard:'Space로 잡기 · 방향키로 옮기기 · Enter로 놓기 · Esc 취소',fallback:'숫자·버튼으로 조작',observed:'직접 조작한 조건으로 관찰합니다.',need:'준비 조건을 먼저 확인하세요.',object:'물체',zero:'빈 기구 0 맞추기',level:'수평 맞추기',power:'저울 전원',baseline:'처음 위치 표시',bag:'빈 봉투 걸기',eye:'눈높이 맞추기',load:'추를 끌어 놓기',remove:'물체 빼기',cart:'수레 밀기·당기기',draw:'수레에서 힘 화살표 그리기',lift:'잡고 들어 올리기',pull:'끝을 잡고 당기기',lower:'추를 물속으로 내리기',move:'물체 위치 바꾸기',press:'잡고 눌러 보기',tilt:'기울였다 놓기',observe:'기구를 움직여 관찰',left:'왼쪽',right:'오른쪽'},
- en:{predictionFirst:'Predict first ↓',observeReady:'Release and observe',tapObserve:'Select the marker to observe the prepared conditions. Drag the object to explore other values.','force-vector':'Move second-force endpoint',grab:'Grab and drag',drop:'Drop here',release:'Release to observe',cancel:'Gesture cancelled',keyboard:'Space to grab · arrows to move · Enter to release · Esc to cancel',fallback:'Use values and buttons',observed:'Observing your manipulated conditions.',need:'Complete the preparation first.',object:'Object',zero:'Zero empty instrument',level:'Level instrument',power:'Scale power',baseline:'Mark initial position',bag:'Attach empty bag',eye:'Align eye level',load:'Drag a weight into place',remove:'Remove the load',cart:'Push or pull the cart',draw:'Draw a force from the cart',lift:'Grab and lift',pull:'Grab and pull the end',lower:'Lower the weight into water',move:'Move the object',press:'Grab and press',tilt:'Tilt and release',observe:'Manipulate the apparatus',left:'Left',right:'Right'}
+ ko:{predictionFirst:'먼저 예상 적기 ↓',observeReady:'놓고 관찰하기',tapObserve:'준비된 물체를 눌러 관찰하세요. 값을 바꾸려면 물체를 끌어 보세요.','force-vector':'둘째 힘 끝 옮기기',grab:'잡고 끌기',drop:'이곳에 놓기',release:'놓으면 관찰',cancel:'조작 취소',keyboard:'Space로 잡기 · 방향키로 옮기기 · Enter로 놓기 · Esc 취소',fallback:'숫자·버튼으로 조작',observed:'직접 조작한 조건으로 관찰합니다.',need:'준비 조건을 먼저 확인하세요.',object:'물체',zero:'빈 기구 0 맞추기',level:'수평 맞추기',power:'저울 전원',baseline:'처음 위치 표시',bag:'빈 봉투 걸기',eye:'눈높이 맞추기',load:'추를 끌어 놓기',remove:'물체 빼기',cart:'수레 밀기·당기기',draw:'수레에서 힘 화살표 그리기',lift:'잡고 들어 올리기',pull:'끝을 잡고 당기기',lower:'추를 물속으로 내리기',move:'물체 위치 바꾸기',press:'잡고 눌러 보기',tilt:'기울였다 놓기',observe:'기구를 움직여 관찰',left:'왼쪽',right:'오른쪽'},
+ en:{predictionFirst:'Predict first ↓',observeReady:'Release and observe',tapObserve:'Select the object to observe the prepared conditions. Drag the object to explore other values.','force-vector':'Move second-force endpoint',grab:'Grab and drag',drop:'Drop here',release:'Release to observe',cancel:'Gesture cancelled',keyboard:'Space to grab · arrows to move · Enter to release · Esc to cancel',fallback:'Use values and buttons',observed:'Observing your manipulated conditions.',need:'Complete the preparation first.',object:'Object',zero:'Zero empty instrument',level:'Level instrument',power:'Scale power',baseline:'Mark initial position',bag:'Attach empty bag',eye:'Align eye level',load:'Drag a weight into place',remove:'Remove the load',cart:'Push or pull the cart',draw:'Draw a force from the cart',lift:'Grab and lift',pull:'Grab and pull the end',lower:'Lower the weight into water',move:'Move the object',press:'Grab and press',tilt:'Tilt and release',observe:'Manipulate the apparatus',left:'Left',right:'Right'}
 };
 const H={
- cart:['수레를 화살표 쪽으로 끌고 놓으세요. 힘 화살표의 길이가 바뀝니다.','Drag the cart in the arrow direction, then release.'],
+ cart:['수레 몸통을 잡고 끌어 놓으세요. 더 멀리 끌면 미는 힘이 커집니다.','Grab the cart body, drag and release. A longer drag applies a stronger push.'],
  balance:['추를 끌어 수평대의 칸에 놓으세요. 놓인 추도 옮길 수 있습니다.','Drag weights onto numbered positions; move placed weights too.'],
  scale:['왼쪽 물체를 저울 접시로 끌어 놓으세요.','Drag a sample from the left onto the scale pan.'],
  'spring-scale':['물체를 고리에 끌어 놓고, 눈 표시를 눈금 높이에 맞추세요.','Drag a sample to the hook; align the eye with the pointer.'],
@@ -36,7 +36,7 @@ export function directHint(id,rig,lang='ko',context={}){
  if(id==='vectors')return lang==='en'?'Drag the second-force marker to change both direction and length. Release to observe.':'둘째 힘 표시를 끌어 방향과 길이를 바꾸세요. 놓으면 수레의 움직임을 관찰합니다.';
  if(id==='gravity')return lang==='en'?'Pull and release the hanging weight. Compare readings on Earth and Moon.':'매단 추를 당겼다 놓고 지구와 달에서의 눈금을 비교하세요.';
  if(rig==='tank'&&context.frame?.inputs?.volume===0)return lang==='en'?'Lift the suspended weight slightly and read the value in air.':'매단 추를 조금 위로 끌고 놓아 물 밖의 값을 읽으세요.';
- if(rig==='balance'&&context.frame?.id==='empty')return lang==='en'?'Compare both ends of the empty beam, then select its centre marker.':'빈 판의 양쪽 높이를 보고 가운데 표시를 눌러 관찰하세요.';
+ if(rig==='balance'&&context.frame?.id==='empty')return lang==='en'?'Compare both ends of the empty beam, then select its centre marker.':'빈 판의 양쪽 높이를 보고 판을 눌러 관찰하세요.';
  if(rig==='spring-scale'&&context.frame?.empty)return lang==='en'?'Drag the hanging load away from the hook. Watch the pointer return.':'매단 물체를 고리 밖으로 끌어 빼고 표시자가 올라가는지 보세요.';
  if(rig==='spring-scale'&&context.frame?.requiresBag&&!context.bag)return lang==='en'?'Drag the empty bag to the hook, then zero the scale.':'빈 봉투를 고리로 끌어 건 뒤 0을 맞추세요.';
  if(id==='represent')return lang==='en'?'Drag from the cart in the force direction. Match the arrow length.':'수레에서 힘 방향으로 끌어 화살표를 그리세요. 길이를 맞추세요.';
@@ -75,3 +75,13 @@ export function guidePoint(spec,control,inputs,goal,start,forceUnit=.62,{unknown
  if(Math.hypot(end.x-start.x,end.y-start.y,end.z-start.z)<.025){const lower=control?.options?control.options[0][0]:control?.min;if(control&&target===lower&&!spec.absolute)end[axis]-=.35/sign;else{const unit=control?.step?(control.step*(spec.unit||1)):.4;end[axis]+=(spec.guideTravel?Math.sign(spec.guideTravel):sign)*Math.min(.1,unit*.3);}}
  return end;
 }
+
+// Decorative only: zero at entry/settling, never an input to the solver.
+export function hoverMotion(elapsed,{reduced=false,dragging=false}={}){
+ if(reduced||dragging||!Number.isFinite(elapsed)||elapsed<=0||elapsed>=.72)return {roll:0,lift:0};
+ const t=elapsed/.72,envelope=Math.sin(Math.PI*t)**2;
+ return {roll:Math.sin(t*Math.PI*4)*envelope*.022,lift:envelope*.015};
+}
+
+// Specific parts stay clickable above a larger apparatus. Primary breaks ties.
+export function hitPriority(width,height,primary=false){return Math.max(1,Math.round(200000/Math.max(1,width*height)))*2+(primary?1:0);}

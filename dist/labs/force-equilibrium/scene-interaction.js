@@ -1,13 +1,26 @@
 import {WORDS,text} from './curriculum-model.js';
-import {DIRECT_LABELS,gestureValue,forceGesture,vectorGesture,guidePoint,loadIsOutside,quantize,withinDrop} from './direct-input-model.js';
+import {DIRECT_LABELS,gestureValue,forceGesture,vectorGesture,guidePoint,hoverMotion,hitPriority,loadIsOutside,quantize,withinDrop} from './direct-input-model.js';
 
 export function createSceneInteraction({THREE,curriculum,targets,camera,canvas,controls,forceUnit,previewCart}){
  const language=document.documentElement.lang==='en'?'en':'ko',L=DIRECT_LABELS[language],root=document.createElement('div');
  root.id='scene-interaction';root.setAttribute('aria-label',language==='en'?'Manipulate the apparatus':'장면에서 기구 조작');document.getElementById('ui').append(root);
- const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');svg.classList.add('scene-guides');svg.setAttribute('aria-hidden','true');svg.innerHTML='<defs><marker id="gesture-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 8 4 0 8" fill="#477658"/></marker></defs><path class="gesture-path" marker-end="url(#gesture-arrow)"/><circle class="gesture-drop" r="25"/>';root.append(svg);
- const path=svg.querySelector('path.gesture-path'),drop=svg.querySelector('circle'),prompt=document.createElement('div');prompt.className='scene-gesture-prompt';prompt.setAttribute('role','status');root.append(prompt);
+ const drop=document.createElement('div');drop.className='scene-drop-hint';drop.textContent=L.drop;drop.hidden=true;root.append(drop);
+ const prompt=document.createElement('div');prompt.className='scene-gesture-prompt';prompt.setAttribute('role','status');root.append(prompt);
  const predictionJump=document.createElement('button');predictionJump.type='button';predictionJump.className='scene-jump';predictionJump.id='scene-prediction-first';predictionJump.textContent=L.predictionFirst;predictionJump.hidden=true;predictionJump.onclick=()=>document.getElementById('course-frame-prediction')?.focus();root.append(predictionJump);
  const nodes=new Map(),ray=new THREE.Raycaster(),pointer=new THREE.Vector2();let drag=null,current=[],signature='',lastHint='',keyboard=null;
+ const reducedMotion=matchMedia('(prefers-reduced-motion: reduce)'),boundsCache=new WeakMap();let hovered=null,hoverSince=0,hoverPose=[];
+ function restoreHover(){for(const p of hoverPose){p.object.position.copy(p.position);p.object.quaternion.copy(p.quaternion);p.object.updateMatrixWorld(true);}hoverPose=[];}
+ function clearHover(){restoreHover();hovered=null;root.removeAttribute('data-hover-target');}
+ function enterHover(id){if(drag||hovered===id)return;restoreHover();hovered=id;hoverSince=performance.now();root.dataset.hoverTarget=id;}
+ function animateHover(){const s=current.find(s=>s.id===hovered);if(!s)return;const motion=hoverMotion((performance.now()-hoverSince)/1000,{reduced:reducedMotion.matches,dragging:!!drag});if(!motion.roll&&!motion.lift)return;const objects=[...new Set(s.feedbackObjects||[s.object])];for(const object of objects){hoverPose.push({object,position:object.position.clone(),quaternion:object.quaternion.clone()});object.position.y+=motion.lift;object.rotateZ(motion.roll);object.updateMatrixWorld(true);}}
+ function hitSize(s,anchor){
+  if(s.kind==='action'||s.kind==='vector'||s.kind==='parallel-vector'||s.plane==='table'&&s.key)return {width:44,height:44,x:anchor.x,y:anchor.y};
+  const object=s.object,stamp=performance.now();let cached=boundsCache.get(object);
+  if(!cached||stamp-cached.stamp>180){const box=new THREE.Box3(),inverse=object.matrixWorld.clone().invert();for(const target of s.feedbackObjects||[object])target.traverseVisible(child=>{if(!(child.isMesh||child.isLine)||child.geometry.type==='PlaneGeometry')return;if(!child.geometry.boundingBox)child.geometry.computeBoundingBox();const transform=inverse.clone().multiply(child.matrixWorld);box.union(child.geometry.boundingBox.clone().applyMatrix4(transform));});cached={stamp,box};boundsCache.set(object,cached);}
+  if(cached.box.isEmpty())return {width:44,height:44,x:anchor.x,y:anchor.y};
+  const pixels=[];for(const x of [cached.box.min.x,cached.box.max.x])for(const y of [cached.box.min.y,cached.box.max.y])for(const z of [cached.box.min.z,cached.box.max.z])pixels.push(project(new THREE.Vector3(x,y,z).applyMatrix4(object.matrixWorld)));
+  const left=Math.min(...pixels.map(p=>p.x)),right=Math.max(...pixels.map(p=>p.x)),top=Math.min(...pixels.map(p=>p.y)),bottom=Math.max(...pixels.map(p=>p.y));return {x:(left+right)/2,y:(top+bottom)/2,width:Math.max(44,Math.min(300,right-left+10)),height:Math.max(44,Math.min(230,bottom-top+10))};
+ }
  const vec=a=>new THREE.Vector3(...a),world=s=>s.object.localToWorld(vec(s.offset||[0,0,0])),destination=s=>s.dropObject?.localToWorld(vec(s.dropOffset||[0,0,0]));
  function project(v){const rect=canvas.getBoundingClientRect(),p=v.clone().project(camera);return {x:rect.left+(p.x+1)*rect.width/2,y:rect.top+(1-p.y)*rect.height/2,z:p.z};}
  function point(event,d){const rect=canvas.getBoundingClientRect();pointer.set((event.clientX-rect.left)/rect.width*2-1,1-(event.clientY-rect.top)/rect.height*2);ray.setFromCamera(pointer,camera);const normal=d.spec.plane==='table'?new THREE.Vector3(0,1,0):new THREE.Vector3(0,0,1),plane=new THREE.Plane().setFromNormalAndCoplanarPoint(normal,d.anchor);return ray.ray.intersectPlane(plane,new THREE.Vector3());}
@@ -19,7 +32,7 @@ export function createSceneInteraction({THREE,curriculum,targets,camera,canvas,c
  function hint(s,c){if(needsRemoval(s,c))return L.remove;const control=c.activity.controls.find(x=>x.key===s.key),value=s.key?c.inputs[s.key]:null;const shown=control?.options?text(WORDS[control.options.find(([v])=>v===value)?.[1]]||String(value),language):value;return (s.kind==='action'?(language==='en'?'Tap · ':'누르기 · '):'')+name(s)+(value!==null?' · '+text(WORDS[control.label]||control.label,language)+' '+shown+(control?.unit?' '+control.unit:''):'');}
  function restorePreview(d){if(d.frozen){d.spec.freezeObject.quaternion.copy(d.frozen);d.spec.freezeObject.updateMatrixWorld(true);}if(d.original&&d.spec.object.parent){d.spec.object.position.copy(d.original);d.spec.object.updateMatrixWorld();}previewCart(null);}
  function begin(s,event,method='pointer'){
-  if(drag||!curriculum.directBegin())return;event?.preventDefault();event?.stopPropagation();const anchor=world(s),snapshot=curriculum.directContext();
+  if(drag)return;clearHover();if(!curriculum.directBegin())return;event?.preventDefault();event?.stopPropagation();const anchor=world(s),snapshot=curriculum.directContext();
   drag={tapObservation:nodes.get(s.id)?.dataset.observe==='true'&&snapshot.ready,frozen:s.freezeObject?.quaternion.clone(),spec:s,anchor,ctx:snapshot,inputs:{...snapshot.inputs},start:anchor.clone(),end:anchor.clone(),startClient:event?{x:event.clientX,y:event.clientY}:project(anchor),lastClient:event?{x:event.clientX,y:event.clientY}:project(anchor),pointerId:event?.pointerId,method,moved:false,original:s.dragObject?s.object.position.clone():null,objectWorld:s.dragObject?s.object.getWorldPosition(new THREE.Vector3()):null,progress:0,changes:{}};
   if(event){const p=point(event,drag);if(p)drag.start.copy(p);nodes.get(s.id)?.setPointerCapture?.(event.pointerId);}
   controls.enabled=false;document.body.classList.add('scene-dragging');nodes.get(s.id)?.setAttribute('aria-grabbed','true');prompt.textContent=L.release;
@@ -55,7 +68,7 @@ export function createSceneInteraction({THREE,curriculum,targets,camera,canvas,c
   }else if(s.kind==='progress')accepted=d.progress>=.85;
   else if(s.removeKey&&loadIsOutside(local(d.end,s),s.removeFloor)){const c=ctx.activity.controls.find(c=>c.key===s.removeKey);curriculum.directSet({[s.key]:d.inputs[s.key],[s.removeKey]:quantize(c,d.inputs[s.removeKey]-s.removeAmount)});}
   else if(s.kind==='push')origin={x:Math.max(-.22,Math.min(.22,d.end.x-d.start.x)),z:Math.max(-.15,Math.min(.15,d.end.z-d.start.z))};
-  if(!accepted){curriculum.directCancel();prompt.textContent=s.kind==='progress'?(language==='en'?'Move to the guide endpoint.':'화살표 끝까지 움직여 보세요.'):L.drop;return;}
+  if(!accepted){curriculum.directCancel();prompt.textContent=s.kind==='progress'?(language==='en'?'Move the object a little farther before releasing.':'물체를 조금 더 움직인 뒤 놓아 보세요.'):L.drop;return;}
   const recorded=curriculum.directEnd({target:s.id,action:s.kind,method:d.method},instant,origin);prompt.textContent=recorded?'':L.need;
  }
  root.addEventListener('pointermove',e=>{if(!drag||e.pointerId!==drag.pointerId)return;e.preventDefault();moveTo(point(e,drag),{x:e.clientX,y:e.clientY});});
@@ -74,26 +87,27 @@ export function createSceneInteraction({THREE,curriculum,targets,camera,canvas,c
  }
  function update(){
   const c=curriculum.directContext(),mobile=innerWidth<=980,sceneBottom=112+Math.min(320,Math.max(250,innerHeight*.36));
+  const panelRect=document.querySelector('.course-panel')?.getBoundingClientRect(),right=mobile?0:Math.max(0,innerWidth-(panelRect?.left??innerWidth-384));root.style.clipPath=`inset(${mobile?112:68}px ${right}px ${mobile?Math.max(0,innerHeight-sceneBottom):0}px 0)`;
   if(drag&&!c.dragging)end(true);
   root.hidden=!c.active||!['prepare','investigate'].includes(c.stage)||c.phase==='running'||document.getElementById('ui').classList.contains('hidden-ui')||(mobile&&scrollY>80);
-  if(root.hidden){if(drag)end(true);return;}
-  predictionJump.hidden=c.stage!=="investigate"||c.predictionReady!==false;
-  const next=c.course+'/'+c.id+'/'+c.frame.id;if(next!==signature){if(drag)end(true);signature=next;lastHint='';prompt.textContent='';}
-  if(drag){if(drag.frozen){drag.spec.freezeObject.quaternion.copy(drag.frozen);drag.spec.freezeObject.updateMatrixWorld(true);}if(drag.spec.dragObject&&drag.objectWorld){const next=drag.objectWorld.clone().add(drag.end.clone().sub(drag.start));drag.spec.object.parent.worldToLocal(next);drag.spec.object.position.copy(next);}const b=nodes.get(drag.spec.id);if(b){b.style.left=drag.lastClient.x+'px';b.style.top=drag.lastClient.y+'px';}return;}
+  const predictionField=document.getElementById('course-frame-prediction');predictionJump.hidden=c.stage!=='investigate'||c.predictionReady!==false;if(predictionField&&predictionJump.parentNode!==predictionField.parentNode)predictionField.before(predictionJump);
+  if(root.hidden){clearHover();if(drag)end(true);drop.hidden=true;return;}
+  const next=c.course+'/'+c.id+'/'+c.frame.id;if(next!==signature){if(drag)end(true);signature=next;clearHover();lastHint='';prompt.textContent='';}
+  if(drag){const landing=destination(drag.spec);drop.hidden=!landing||!['sample','bag','supply'].includes(drag.spec.kind);if(landing){const q=project(landing);drop.style.left=q.x+'px';drop.style.top=(q.y+32)+'px';}if(drag.frozen){drag.spec.freezeObject.quaternion.copy(drag.frozen);drag.spec.freezeObject.updateMatrixWorld(true);}if(drag.spec.dragObject&&drag.objectWorld){const next=drag.objectWorld.clone().add(drag.end.clone().sub(drag.start));drag.spec.object.parent.worldToLocal(next);drag.spec.object.position.copy(next);}const b=nodes.get(drag.spec.id);if(b){b.style.left=drag.lastClient.x+'px';b.style.top=drag.lastClient.y+'px';}return;}
   current=targets(c).sort((a,b)=>priority(a,c)-priority(b,c));const keep=new Set(current.map(s=>s.id));for(const [id,node]of nodes)if(!keep.has(id)){node.remove();nodes.delete(id);}
   let first=null;
   for(const [index,s]of current.entries()){
-   const p=project(world(s));let b=nodes.get(s.id);if(!b){b=document.createElement('button');b.type='button';b.className='scene-handle';b.id='scene-handle-'+s.id;b.dataset.sceneTarget=s.id;b.innerHTML='<span aria-hidden="true">↔</span><span class="scene-target-label"></span>';root.append(b);nodes.set(s.id,b);b.onpointerdown=e=>{if(e.button!==0)return;const active=current.find(x=>x.id===s.id);if(active)begin(active,e);};b.onkeydown=e=>{const active=current.find(x=>x.id===s.id);if(active)key(e,active);};}
+   const p=project(world(s));let b=nodes.get(s.id);if(!b){b=document.createElement('button');b.type='button';b.className='scene-handle';b.id='scene-handle-'+s.id;b.dataset.sceneTarget=s.id;b.innerHTML='<span class="scene-target-label"></span>';b.onpointerenter=e=>{if(e.pointerType!=='touch')enterHover(s.id);};b.onpointerleave=()=>{if(hovered===s.id)clearHover();};b.onfocus=()=>enterHover(s.id);b.onblur=()=>{if(hovered===s.id)clearHover();};root.append(b);nodes.set(s.id,b);b.onpointerdown=e=>{if(e.button!==0)return;const active=current.find(x=>x.id===s.id);if(active)begin(active,e);};b.onkeydown=e=>{const active=current.find(x=>x.id===s.id);if(active)key(e,active);};}
    const duplicateSupply=s.kind==='supply'&&current.slice(0,index).some(t=>t.kind==='supply'&&t.object===s.object);b.hidden=c.stage==="investigate"&&c.predictionReady===false||duplicateSupply||p.z< -1||p.z>1||p.x<22||p.x>innerWidth-22||p.y< (mobile?112:75)||p.y>(mobile?sceneBottom-12:innerHeight-100)||(!mobile&&p.x>innerWidth-420);
    const endpoint=project(guideEnd(s,c)),observing=c.ready&&['range','choice','orbit','vector','parallel-vector'].includes(s.kind)&&Object.entries(c.frame.inputs).every(([k,v])=>c.inputs[k]===v)&&(s.observePrepared||world(s).distanceTo(guideEnd(s,c))<.15&&Math.hypot(endpoint.x-p.x,endpoint.y-p.y)<20);b.dataset.observe=String(observing);
-   b.style.left=p.x+'px';b.style.top=p.y+'px';b.dataset.gesture=observing||s.kind==='action'||s.kind==='observe'&&!s.dragObject?'tap':'drag';const label=observing?L.observeReady:hint(s,c);b.setAttribute('aria-label',label+' · '+L.keyboard);b.querySelector('.scene-target-label').textContent=label;b.classList.remove('scene-primary');b.querySelector('span').textContent=b.dataset.gesture==='tap'?'○':s.kind==='sample'||s.kind==='supply'?'↗':s.axis==='y'?'↕':'↔';if(!first&&!b.hidden)first={s,p};
+   const size=hitSize(s,p);b.style.transform=`translate(${size.x-p.x-size.width/2}px,${size.y-p.y-size.height/2}px)`;b.style.zIndex=String(hitPriority(size.width,size.height));b.style.width=size.width+'px';b.style.height=size.height+'px';b.style.left=p.x+'px';b.style.top=p.y+'px';b.dataset.gesture=observing||s.kind==='action'||s.kind==='observe'&&!s.dragObject?'tap':'drag';const label=observing?L.observeReady:hint(s,c);b.setAttribute('aria-label',label+' · '+L.keyboard);b.querySelector('.scene-target-label').textContent=label;b.classList.remove('scene-primary');if(!first&&!b.hidden)first={s,p};
   }
-  if(!first)prompt.textContent='';path.style.display=first?'':'none';drop.style.display=first?'':'none';
-  if(first){const {s,p}=first;nodes.get(s.id).classList.add('scene-primary');const q=project(guideEnd(s,c)),tap=nodes.get(s.id).dataset.gesture==='tap';drop.setAttribute('cx',q.x);drop.setAttribute('cy',q.y);drop.style.display=tap?'none':'';path.style.display=tap?'none':'';
-   path.setAttribute('d',`M${p.x} ${p.y} Q${(p.x+q.x)/2} ${Math.min(p.y,q.y)-24} ${q.x} ${q.y}`);
-   const observing=nodes.get(s.id).dataset.observe==='true',line=observing?L.observeReady:hint(s,c),hintKey=signature+'/'+line;if(lastHint!==hintKey){prompt.textContent=line;lastHint=hintKey;}const instruction=document.querySelector('.lesson-direct-instruction');if(instruction){if(!instruction.dataset.original)instruction.dataset.original=instruction.textContent;const next=observing?L.tapObserve:instruction.dataset.original;if(instruction.textContent!==next)instruction.textContent=next;}
-   prompt.style.left=(mobile?22:28)+'px';prompt.style.top=(mobile?180:156)+'px';if(c.phase==='result'&&Object.entries(c.frame.inputs).every(([key,value])=>c.inputs[key]===value)&&(!c.frame.empty||!c.placed)){prompt.textContent='';path.style.display=drop.style.display='none';}
-  }
+  drop.hidden=true;
+  if(first){const {s}=first;nodes.get(s.id).classList.add('scene-primary');nodes.get(s.id).style.zIndex=String(+nodes.get(s.id).style.zIndex+1);const active=current.find(s=>s.id===hovered)||s,observing=nodes.get(active.id)?.dataset.observe==='true',line=observing?L.observeReady:hint(active,c);prompt.textContent=hovered?line:'';
+   const instruction=document.querySelector('.lesson-direct-instruction');if(instruction){if(!instruction.dataset.original)instruction.dataset.original=instruction.textContent;const next=observing?L.tapObserve:instruction.dataset.original;if(instruction.textContent!==next)instruction.textContent=next;}
+   prompt.style.left=(mobile?22:28)+'px';prompt.style.top=(mobile?180:156)+'px';
+  }else prompt.textContent='';
+  animateHover();
  }
- return {update,cancel:()=>end(true),get dragging(){return !!drag;},diagnostics(){const available=targets(curriculum.directContext());return {dragging:!!drag,targets:available.map(s=>({id:s.id,kind:s.kind,valid:!!s.object?.isObject3D&&(!s.dropObject||!!s.dropObject.isObject3D)})),visible:[...nodes.values()].filter(n=>!n.hidden&&!root.hidden).map(n=>n.dataset.sceneTarget)};}};
+ return {update,restoreHover,cancel:()=>{clearHover();end(true);},get dragging(){return !!drag;},diagnostics(){const available=targets(curriculum.directContext());return {dragging:!!drag,feedback:{target:hovered,moving:hoverPose.length>0,reduced:reducedMotion.matches},targets:available.map(s=>({id:s.id,kind:s.kind,valid:!!s.object?.isObject3D&&(!s.dropObject||!!s.dropObject.isObject3D)})),visible:[...nodes.values()].filter(n=>!n.hidden&&!root.hidden).map(n=>n.dataset.sceneTarget)};}};
 }

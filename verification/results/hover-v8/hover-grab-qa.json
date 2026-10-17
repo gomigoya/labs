@@ -1,0 +1,434 @@
+{
+  "pass": true,
+  "moving": 5,
+  "settled": 1,
+  "samples": [
+    {
+      "time": 6000.0999999940395,
+      "target": null,
+      "moving": false,
+      "reduced": false,
+      "dragging": false
+    },
+    {
+      "time": 6002.9000000059605,
+      "target": null,
+      "moving": false,
+      "reduced": false,
+      "dragging": false
+    },
+    {
+      "time": 6019.5999999940395,
+      "target": null,
+      "moving": false,
+      "reduced": false,
+      "dragging": false
+    },
+    {
+      "time": 6036.300000011921,
+      "target": null,
+      "moving": false,
+      "reduced": false,
+      "dragging": false
+    },
+    {
+      "time": 6052.9000000059605,
+      "target": null,
+      "moving": false,
+      "reduced": false,
+      "dragging": false
+    },
+    {
+      "time": 6070.300000011921,
+      "target": null,
+      "moving": false,
+      "reduced": false,
+      "dragging": false
+    },
+    {
+      "time": 6086.699999988079,
+      "target": null,
+      "moving": false,
+      "reduced": false,
+      "dragging": false
+    },
+    {
+      "time": 6103.0999999940395,
+      "target": null,
+      "moving": false,
+      "reduced": false,
+      "dragging": false
+    },
+    {
+      "time": 6119.699999988079,
+      "target": null,
+      "moving": false,
+      "reduced": false,
+      "dragging": false
+    },
+    {
+      "time": 6136.300000011921,
+      "target": null,
+      "moving": false,
+      "reduced": false,
+      "dragging": false
+    },
+    {
+      "time": 6153,
+      "target": null,
+      "moving": false,
+      "reduced": false,
+      "dragging": false
+    },
+    {
+      "time": 6169.5999999940395,
+      "target": null,
+      "moving": false,
+      "reduced": false,
+      "dragging": false
+    },
+    {
+      "time": 6186.199999988079,
+      "target": null,
+      "moving": false,
+      "reduced": false,
+      "dragging": false
+    },
+    {
+      "time": 6203,
+      "target": null,
+      "moving": false,
+      "reduced": false,
+      "dragging": false
+    },
+    {
+      "time": 6219.699999988079,
+      "target": null,
+      "moving": false,
+      "reduced": false,
+      "dragging": false
+    },
+    {
+      "time": 6236.5,
+      "target": null,
+      "moving": false,
+      "reduced": false,
+      "dragging": false
+    },
+    {
+      "time": 6253.199999988079,
+      "target": null,
+      "moving": false,
+      "reduced": false,
+      "dragging": false
+    },
+    {
+      "time": 6269.800000011921,
+      "target": null,
+      "moving": false,
+      "reduced": false,
+      "dragging": false
+    },
+    {
+      "time": 6286.4000000059605,
+      "target": null,
+      "moving": false,
+      "reduced": false,
+      "dragging": false
+    },
+    {
+      "time": 6303.5,
+      "target": null,
+      "moving": false,
+      "reduced": false,
+      "dragging": false
+    },
+    {
+      "time": 6319.699999988079,
+      "target": null,
+      "moving": false,
+      "reduced": false,
+      "dragging": false
+    },
+    {
+      "time": 6336.699999988079,
+      "target": null,
+      "moving": false,
+      "reduced": false,
+      "dragging": false
+    },
+    {
+      "time": 6353.4000000059605,
+      "target": null,
+      "moving": false,
+      "reduced": false,
+      "dragging": false
+    },
+    {
+      "time": 6370,
+      "target": null,
+      "moving": false,
+      "reduced": false,
+      "dragging": false
+    },
+    {
+      "time": 6386.699999988079,
+      "target": null,
+      "moving": false,
+      "reduced": false,
+      "dragging": false
+    },
+    {
+      "time": 6403.4000000059605,
+      "target": null,
+      "moving": false,
+      "reduced": false,
+      "dragging": false
+    },
+    {
+      "time": 6420,
+      "target": null,
+      "moving": false,
+      "reduced": false,
+      "dragging": false
+    },
+    {
+      "time": 6443.4000000059605,
+      "target": "rightPos",
+      "moving": false,
+      "reduced": false,
+      "dragging": false
+    },
+    {
+      "time": 6453.5,
+      "target": "rightPos",
+      "moving": true,
+      "reduced": false,
+      "dragging": false
+    },
+    {
+      "time": 6470.300000011921,
+      "target": "rightPos",
+      "moving": true,
+      "reduced": false,
+      "dragging": false
+    },
+    {
+      "time": 6486.800000011921,
+      "target": "rightPos",
+      "moving": true,
+      "reduced": false,
+      "dragging": false
+    },
+    {
+      "time": 6503.5,
+      "target": "rightPos",
+      "moving": true,
+      "reduced": false,
+      "dragging": false
+    },
+    {
+      "time": 6520.0999999940395,
+      "target": "rightPos",
+      "moving": true,
+      "reduced": false,
+      "dragging": false
+    },
+    {
+      "time": 6537.9000000059605,
+      "target": null,
+      "moving": false,
+      "reduced": false,
+      "dragging": true
+    },
+    {
+      "time": 6553.9000000059605,
+      "target": null,
+      "moving": false,
+      "reduced": false,
+      "dragging": true
+    },
+    {
+      "time": 6570.5,
+      "target": null,
+      "moving": false,
+      "reduced": false,
+      "dragging": true
+    },
+    {
+      "time": 6586.9000000059605,
+      "target": null,
+      "moving": false,
+      "reduced": false,
+      "dragging": true
+    },
+    {
+      "time": 6603.9000000059605,
+      "target": null,
+      "moving": false,
+      "reduced": false,
+      "dragging": true
+    },
+    {
+      "time": 6620.5,
+      "target": null,
+      "moving": false,
+      "reduced": false,
+      "dragging": true
+    },
+    {
+      "time": 6637.199999988079,
+      "target": null,
+      "moving": false,
+      "reduced": false,
+      "dragging": true
+    },
+    {
+      "time": 6653.699999988079,
+      "target": null,
+      "moving": false,
+      "reduced": false,
+      "dragging": true
+    },
+    {
+      "time": 6670.5,
+      "target": null,
+      "moving": false,
+      "reduced": false,
+      "dragging": true
+    },
+    {
+      "time": 6687.199999988079,
+      "target": null,
+      "moving": false,
+      "reduced": false,
+      "dragging": true
+    },
+    {
+      "time": 6703.800000011921,
+      "target": null,
+      "moving": false,
+      "reduced": false,
+      "dragging": true
+    },
+    {
+      "time": 6727.9000000059605,
+      "target": null,
+      "moving": false,
+      "reduced": false,
+      "dragging": false
+    },
+    {
+      "time": 6737,
+      "target": null,
+      "moving": false,
+      "reduced": false,
+      "dragging": false
+    },
+    {
+      "time": 6753.5,
+      "target": null,
+      "moving": false,
+      "reduced": false,
+      "dragging": false
+    },
+    {
+      "time": 6770.0999999940395,
+      "target": null,
+      "moving": false,
+      "reduced": false,
+      "dragging": false
+    },
+    {
+      "time": 6786.800000011921,
+      "target": null,
+      "moving": false,
+      "reduced": false,
+      "dragging": false
+    },
+    {
+      "time": 6803.4000000059605,
+      "target": null,
+      "moving": false,
+      "reduced": false,
+      "dragging": false
+    },
+    {
+      "time": 6820.199999988079,
+      "target": null,
+      "moving": false,
+      "reduced": false,
+      "dragging": false
+    },
+    {
+      "time": 6836.800000011921,
+      "target": null,
+      "moving": false,
+      "reduced": false,
+      "dragging": false
+    },
+    {
+      "time": 6853.4000000059605,
+      "target": null,
+      "moving": false,
+      "reduced": false,
+      "dragging": false
+    },
+    {
+      "time": 6870.199999988079,
+      "target": null,
+      "moving": false,
+      "reduced": false,
+      "dragging": false
+    },
+    {
+      "time": 6886.9000000059605,
+      "target": null,
+      "moving": false,
+      "reduced": false,
+      "dragging": false
+    },
+    {
+      "time": 6903.699999988079,
+      "target": null,
+      "moving": false,
+      "reduced": false,
+      "dragging": false
+    },
+    {
+      "time": 6920.300000011921,
+      "target": null,
+      "moving": false,
+      "reduced": false,
+      "dragging": false
+    },
+    {
+      "time": 6937,
+      "target": null,
+      "moving": false,
+      "reduced": false,
+      "dragging": false
+    },
+    {
+      "time": 6953.4000000059605,
+      "target": null,
+      "moving": false,
+      "reduced": false,
+      "dragging": false
+    },
+    {
+      "time": 6970.199999988079,
+      "target": null,
+      "moving": false,
+      "reduced": false,
+      "dragging": false
+    },
+    {
+      "time": 6987.199999988079,
+      "target": null,
+      "moving": false,
+      "reduced": false,
+      "dragging": false
+    }
+  ]
+}

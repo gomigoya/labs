@@ -1,0 +1,91 @@
+{
+  "pass": true,
+  "activities": 37,
+  "guidedTrials": 117,
+  "tests": [
+    {
+      "name": "Every activity has source pages, concrete frames, explanation and transfer questions",
+      "pass": true
+    },
+    {
+      "name": "Every source-guided condition is achievable and all measured values are finite",
+      "pass": true
+    },
+    {
+      "name": "Elementary balance changes distance as well as weight",
+      "pass": true
+    },
+    {
+      "name": "Same movement can require a larger push or pull for a heavier load",
+      "pass": true
+    },
+    {
+      "name": "Digital objects have distinct similar weights and cannot be read before zeroing",
+      "pass": true
+    },
+    {
+      "name": "Spring scale readings are within capacity and on 5 g divisions",
+      "pass": true
+    },
+    {
+      "name": "A scale trial requires the student reading; incorrect attempts and bag tare remain inspectable",
+      "pass": true
+    },
+    {
+      "name": "Elementary lever and ramp comparisons preserve load and reference lift",
+      "pass": true
+    },
+    {
+      "name": "Spring graph uses extension and supports a 25 cm prediction",
+      "pass": true
+    },
+    {
+      "name": "Friction investigation starts from rest and independently varies surface and load",
+      "pass": true
+    },
+    {
+      "name": "Air, one submerged weight, two submerged weights give correct buoyancy differences",
+      "pass": true
+    },
+    {
+      "name": "Diver volume, balloon payload and submarine ballast are different causal controls",
+      "pass": true
+    },
+    {
+      "name": "Exact high-school three-row lever experiment balances in each row",
+      "pass": true
+    },
+    {
+      "name": "A couple can have zero resultant and nonzero torque",
+      "pass": true
+    },
+    {
+      "name": "Tilted structures use the support edge, centre height and base width together",
+      "pass": true
+    },
+    {
+      "name": "A 3 m shelf with 120 N at 2 m gives 40 N wall support and 80 N tension",
+      "pass": true
+    },
+    {
+      "name": "Drawing assessment checks body, magnitude and direction rather than answer clicks",
+      "pass": true
+    },
+    {
+      "name": "Completion requires actual measurements, answers, explanation, prediction and reflection",
+      "pass": true
+    },
+    {
+      "name": "Old v1 records are preserved as earlier evidence; new guided completion is not invented",
+      "pass": true
+    },
+    {
+      "name": "Earlier v2 cart, ornament and wrench records migrate without inventing resultant-review trials",
+      "pass": true
+    },
+    {
+      "name": "Export/import keeps predictions, first and corrected answers, plans and separated school records",
+      "pass": true
+    }
+  ]
+}

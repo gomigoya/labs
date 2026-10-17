@@ -1,0 +1,41 @@
+{
+  "desktop": {
+    "pass": true,
+    "activities": 37,
+    "conditions": 117,
+    "allConditionsHavePointerEvidence": true
+  },
+  "mobile": {
+    "pass": true,
+    "activities": 7,
+    "conditions": 27,
+    "viewport": [
+      390,
+      680
+    ]
+  },
+  "hover": {
+    "normalMotionThenSettles": true,
+    "reducedMotionSuppressed": true,
+    "dragFrames": 11,
+    "noDecorativeMotionDuringDrag": true
+  },
+  "unitChecks": 84,
+  "apiChecks": 452,
+  "inputStrategy": "Native CUA pointer drags; previous verified gesture distances replayed against live target anchors; native keyboard navigation for Next. No simulation run/set API in pointer runner.",
+  "apiRegression": {
+    "desktop": {
+      "pass": true,
+      "checks": 452,
+      "activities": 37,
+      "conditions": 117
+    },
+    "mobile": {
+      "pass": true,
+      "checks": 452,
+      "activities": 37,
+      "conditions": 117,
+      "viewport": 390
+    }
+  }
+}

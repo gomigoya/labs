@@ -1,0 +1,36 @@
+{
+  "pass": true,
+  "before": {
+    "activity": "balance",
+    "next": true,
+    "notebook": "내 실험 기록\n6회",
+    "notice": "",
+    "outcome": "",
+    "primary": "scene-handle-rightPos",
+    "progress": "안내 실험 4 / 44 / 4 기록됨",
+    "title": "오른쪽 물체를 4번 칸으로 옮기기",
+    "values": "왼쪽 물체 600 g · 오른쪽 물체 300 g · 왼쪽 칸 2 · 오른쪽 칸 3"
+  },
+  "wrongDrop": {
+    "activity": "balance",
+    "next": true,
+    "notebook": "내 실험 기록\n6회",
+    "notice": "",
+    "outcome": "",
+    "primary": "scene-handle-rightPos",
+    "progress": "안내 실험 4 / 44 / 4 기록됨",
+    "title": "오른쪽 물체를 4번 칸으로 옮기기",
+    "values": "왼쪽 물체 600 g · 오른쪽 물체 300 g · 왼쪽 칸 2 · 오른쪽 칸 3"
+  },
+  "cancel": {
+    "activity": "balance",
+    "next": true,
+    "notebook": "내 실험 기록\n6회",
+    "notice": "",
+    "outcome": "",
+    "primary": "scene-handle-rightPos",
+    "progress": "안내 실험 4 / 44 / 4 기록됨",
+    "title": "오른쪽 물체를 4번 칸으로 옮기기",
+    "values": "왼쪽 물체 600 g · 오른쪽 물체 300 g · 왼쪽 칸 2 · 오른쪽 칸 3"
+  }
+}

@@ -16,6 +16,11 @@ http.createServer(async(req,res)=>{
   else fs.writeFileSync(target,body);
   res.writeHead(200,{'Content-Type':'text/plain'});return res.end(target);
  }
+ // Test-only iframe media fixture. Does not alter the user's browser or shipped assets.
+ if(url.pathname==='/__motion_qa_frame'){
+  const html=fs.readFileSync(path.join(root,'labs/force-equilibrium/index.html'),'utf8').replace('<head>','<head><base href="/labs/force-equilibrium/"><script>const nativeMedia=window.matchMedia.bind(window);window.matchMedia=q=>{const m=nativeMedia(q);if(q==="(prefers-reduced-motion: reduce)")Object.defineProperty(m,"matches",{value:false});return m;};</script>');
+  res.writeHead(200,{'Content-Type':'text/html; charset=utf-8','Cache-Control':'no-store'});return res.end(html);
+ }
  let file=url.pathname==='/__student_audit'?path.join(base,'verification/student-audit.html'):url.pathname==='/__qa'?path.join(base,'verification/qa.html'):url.pathname==='/__curriculum_qa'?path.join(base,'verification/curriculum-qa.html'):url.pathname==='/__teaching_qa'?path.join(base,'verification/teaching-qa.html'):path.resolve(root,'.'+decodeURIComponent(url.pathname));
  if(!['/__qa','/__curriculum_qa','/__teaching_qa','/__student_audit'].includes(url.pathname)&&!file.startsWith(root+path.sep)&&file!==root){res.writeHead(403);return res.end()}
  if(fs.existsSync(file)&&fs.statSync(file).isDirectory())file=path.join(file,'index.html');
