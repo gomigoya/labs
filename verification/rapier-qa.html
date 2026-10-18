@@ -1,0 +1,8 @@
+<!doctype html><html lang="ko"><meta charset="utf-8"><title>Rapier instrument QA</title><h1>Rapier 브라우저 검수</h1><button id="run">수치 검수 실행</button><output id="out">모듈 로딩 중</output><script>
+window.addEventListener('error',e=>document.querySelector('#out').textContent=e.message);window.addEventListener('unhandledrejection',e=>document.querySelector('#out').textContent=e.reason?.stack||e.reason);
+</script><script type="module">
+import {createInstrumentPhysics} from '/labs/force-equilibrium/instrument-physics.js';
+import {solve} from '/labs/force-equilibrium/curriculum-model.js';
+const out=document.querySelector('#out');out.textContent='모듈 준비됨';
+document.querySelector('#run').onclick=async()=>{try{const sim=await createInstrumentPhysics(),p={mass:.5,k:50,springMode:'hanging'};sim.prepare('elastic',p,solve('elastic',p));sim.start();for(let i=0;i<720;i++)sim.advance(1/120);out.textContent=JSON.stringify(sim.observation());sim.dispose();}catch(e){out.textContent=e.stack;}};
+</script></html>

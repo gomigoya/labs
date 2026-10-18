@@ -1,0 +1,11 @@
+import {validate} from '/labs/force-equilibrium/curriculum-model.js';
+const tools=document.createElement('div');tools.id='rapier-qa-tools';tools.style.cssText='position:fixed;left:12px;bottom:12px;z-index:500;background:#fff;padding:6px;font:14px system-ui';
+const b=document.createElement('button'),out=document.createElement('output');b.id='rapier-audit-save';b.textContent='현재 조작 검수·저장';b.style.cssText='font:14px system-ui;width:auto;height:auto;border-radius:4px;padding:8px';tools.append(b,out);document.body.append(tools);
+b.onclick=async()=>{try{
+ const L=window.__lab,C=L.curriculum,ctx=C.directContext(),report=C.report(),tr=report.courses[ctx.course].experiments[ctx.id].trials.at(-1),o=L.physics.observation(),scene=L.physics.scene(),near=(a,b,t=1e-5)=>Math.abs(a-b)<t;
+ if(C.phase!=='result'||!o?.complete||!tr?.simulation)throw Error('Finish a physics trial first');
+ const graph=document.querySelector('.physics-trace'),s=o.final,plot=o.kind==='cart'?Math.hypot(s.x,s.z):o.kind==='beam'?s.angle*180/Math.PI:ctx.id==='spring-scale'?s.reading:s.extension*100;
+ const checks={pointer:tr.interaction?.method==='pointer',storedState:JSON.stringify(tr.simulation)===JSON.stringify(o),restored:JSON.stringify(validate(report))===JSON.stringify(report),graph:near(Number(graph?.dataset.final),plot)&&near(Number(graph?.dataset.time),s.time),pose:o.kind==='cart'?near(scene.cartX,s.x*scene.scale)&&near(scene.cartZ,s.z*scene.scale)&&near(scene.wheelAngle,-s.x*scene.scale/.31):o.kind==='beam'?near(ctx.id==='balance'?scene.beamAngle:scene.leverAngle,s.angle):ctx.id==='spring-scale'?near(scene.scaleReading,s.reading):near(scene.springExtension,s.extension,1e-4)};
+ const data={pass:Object.values(checks).every(Boolean),checks,course:ctx.course,id:ctx.id,phase:C.phase,viewport:[innerWidth,innerHeight],scene,observation:o,trial:tr,quality:L.diagnostics().quality,output:document.querySelector('#course-output')?.innerText};
+ const filename='rapier-pointer-'+ctx.course+'-'+ctx.id+'-'+innerWidth+'.json';await fetch('/__save/'+filename,{method:'POST',body:JSON.stringify(data,null,2)});out.textContent=(data.pass?' PASS ':' FAIL ')+ctx.id+' '+s.time.toFixed(2)+'s';
+ }catch(e){out.textContent=e.message;}};

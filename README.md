@@ -186,3 +186,17 @@ Fᵢ=fᵢ(cosθᵢ,sinθᵢ), R=ΣFᵢ, τ=Σrᵢ×Fᵢ, a=R/m, α=τ/I, I=m(2²
 1. 4GB 크롬북·내장 GPU에서 장시간 프레임/발열 측정.
 2. 실제 초등학생과 무음 5초 관찰·터치 사용성 테스트.
 3. 모 사이트의 실제 meta 스키마·공통 셸·갤러리 빌드와 통합 검사.
+
+## v6.3.0 — Rapier 기구 반응
+
+수레·수평대·용수철에 Rapier를 연결했습니다. 물리 엔진 파일은 저장소에 포함돼 있어 추가 패키지 설치 없이 실행합니다. 기존 배경·수레 모델은 유지합니다. [구현·검수 범위](docs/rapier-implementation-2026-10-18.md), [물리 검수 요약](docs/reviewer-brief.md).
+
+노트북의 기존 `force-equilibrium-lab` 체크아웃에서 로컬 변경이 없는 상태라면 다음처럼 갱신합니다.
+
+```powershell
+git switch force-equilibrium-lab
+git pull --ff-only
+node serve.mjs
+```
+
+브라우저에서 `http://127.0.0.1:4173/labs/force-equilibrium/?lite=1`을 열거나 새로고침합니다.

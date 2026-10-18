@@ -1,0 +1,54 @@
+[
+  {
+    "name": "Rapier cart: force, mass, inertia and exact sampling time",
+    "pass": true
+  },
+  {
+    "name": "Zero net force does not stop an already moving cart",
+    "pass": true
+  },
+  {
+    "name": "Opposite and same-direction forces use the curriculum vectors",
+    "pass": true
+  },
+  {
+    "name": "Vector and leftward motion report speed magnitude consistently with the live readout",
+    "pass": true
+  },
+  {
+    "name": "Spring settles to mg/k; force and scale share actual extension",
+    "pass": true
+  },
+  {
+    "name": "Spring stretch has a transient and agrees with the final gauge",
+    "pass": true
+  },
+  {
+    "name": "Elementary spring scale: no load, 50, 100 and 175 g",
+    "pass": true
+  },
+  {
+    "name": "Beam: equal moments stay level; imbalance changes dynamics, not a staged sign angle",
+    "pass": true
+  },
+  {
+    "name": "A block leaving the beam lands on the stage and is not counted as a supported moment",
+    "pass": true
+  },
+  {
+    "name": "Fixed-step results are independent of rendering frame rate",
+    "pass": true
+  },
+  {
+    "name": "Removing a load preserves the initial spring extension and recoils to zero",
+    "pass": true
+  },
+  {
+    "name": "Cancelling a drag restores the actual world and observation, including the trace",
+    "pass": true
+  },
+  {
+    "name": "Measurements survive validation and storage without accepting malformed traces",
+    "pass": true
+  }
+]

@@ -1,0 +1,2 @@
+# Preserve the official embedded-WASM distribution byte-for-byte on Windows.
+dist/labs/force-equilibrium/vendor/rapier/rapier.mjs -text
