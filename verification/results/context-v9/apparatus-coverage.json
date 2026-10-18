@@ -1,0 +1,5698 @@
+[
+  {
+    "course": "elementary",
+    "activity": "curling",
+    "condition": "gentle",
+    "rig": "cart",
+    "lang": "ko",
+    "name": "수레 · 레일"
+  },
+  {
+    "course": "elementary",
+    "activity": "curling",
+    "condition": "gentle",
+    "rig": "cart",
+    "lang": "en",
+    "name": "Cart · track"
+  },
+  {
+    "course": "elementary",
+    "activity": "curling",
+    "condition": "strong",
+    "rig": "cart",
+    "lang": "ko",
+    "name": "수레 · 레일"
+  },
+  {
+    "course": "elementary",
+    "activity": "curling",
+    "condition": "strong",
+    "rig": "cart",
+    "lang": "en",
+    "name": "Cart · track"
+  },
+  {
+    "course": "elementary",
+    "activity": "curling",
+    "condition": "retry",
+    "rig": "cart",
+    "lang": "ko",
+    "name": "수레 · 레일"
+  },
+  {
+    "course": "elementary",
+    "activity": "curling",
+    "condition": "retry",
+    "rig": "cart",
+    "lang": "en",
+    "name": "Cart · track"
+  },
+  {
+    "course": "elementary",
+    "activity": "curling",
+    "condition": "free:force:1",
+    "rig": "cart",
+    "lang": "ko",
+    "name": "수레 · 레일"
+  },
+  {
+    "course": "elementary",
+    "activity": "curling",
+    "condition": "free:force:1",
+    "rig": "cart",
+    "lang": "en",
+    "name": "Cart · track"
+  },
+  {
+    "course": "elementary",
+    "activity": "curling",
+    "condition": "free:force:2",
+    "rig": "cart",
+    "lang": "ko",
+    "name": "수레 · 레일"
+  },
+  {
+    "course": "elementary",
+    "activity": "curling",
+    "condition": "free:force:2",
+    "rig": "cart",
+    "lang": "en",
+    "name": "Cart · track"
+  },
+  {
+    "course": "elementary",
+    "activity": "curling",
+    "condition": "free:force:3",
+    "rig": "cart",
+    "lang": "ko",
+    "name": "수레 · 레일"
+  },
+  {
+    "course": "elementary",
+    "activity": "curling",
+    "condition": "free:force:3",
+    "rig": "cart",
+    "lang": "en",
+    "name": "Cart · track"
+  },
+  {
+    "course": "elementary",
+    "activity": "curling",
+    "condition": "free:direction:-1",
+    "rig": "cart",
+    "lang": "ko",
+    "name": "수레 · 레일"
+  },
+  {
+    "course": "elementary",
+    "activity": "curling",
+    "condition": "free:direction:-1",
+    "rig": "cart",
+    "lang": "en",
+    "name": "Cart · track"
+  },
+  {
+    "course": "elementary",
+    "activity": "curling",
+    "condition": "free:direction:1",
+    "rig": "cart",
+    "lang": "ko",
+    "name": "수레 · 레일"
+  },
+  {
+    "course": "elementary",
+    "activity": "curling",
+    "condition": "free:direction:1",
+    "rig": "cart",
+    "lang": "en",
+    "name": "Cart · track"
+  },
+  {
+    "course": "elementary",
+    "activity": "push",
+    "condition": "push-light",
+    "rig": "cart",
+    "lang": "ko",
+    "name": "수레 · 짐 · 레일"
+  },
+  {
+    "course": "elementary",
+    "activity": "push",
+    "condition": "push-light",
+    "rig": "cart",
+    "lang": "en",
+    "name": "Cart · cargo · track"
+  },
+  {
+    "course": "elementary",
+    "activity": "push",
+    "condition": "push-heavy",
+    "rig": "cart",
+    "lang": "ko",
+    "name": "수레 · 짐 · 레일"
+  },
+  {
+    "course": "elementary",
+    "activity": "push",
+    "condition": "push-heavy",
+    "rig": "cart",
+    "lang": "en",
+    "name": "Cart · cargo · track"
+  },
+  {
+    "course": "elementary",
+    "activity": "push",
+    "condition": "push-match",
+    "rig": "cart",
+    "lang": "ko",
+    "name": "수레 · 짐 · 레일"
+  },
+  {
+    "course": "elementary",
+    "activity": "push",
+    "condition": "push-match",
+    "rig": "cart",
+    "lang": "en",
+    "name": "Cart · cargo · track"
+  },
+  {
+    "course": "elementary",
+    "activity": "push",
+    "condition": "pull-light",
+    "rig": "cart",
+    "lang": "ko",
+    "name": "수레 · 짐 · 레일"
+  },
+  {
+    "course": "elementary",
+    "activity": "push",
+    "condition": "pull-light",
+    "rig": "cart",
+    "lang": "en",
+    "name": "Cart · cargo · track"
+  },
+  {
+    "course": "elementary",
+    "activity": "push",
+    "condition": "pull-heavy",
+    "rig": "cart",
+    "lang": "ko",
+    "name": "수레 · 짐 · 레일"
+  },
+  {
+    "course": "elementary",
+    "activity": "push",
+    "condition": "pull-heavy",
+    "rig": "cart",
+    "lang": "en",
+    "name": "Cart · cargo · track"
+  },
+  {
+    "course": "elementary",
+    "activity": "push",
+    "condition": "pull-match",
+    "rig": "cart",
+    "lang": "ko",
+    "name": "수레 · 짐 · 레일"
+  },
+  {
+    "course": "elementary",
+    "activity": "push",
+    "condition": "pull-match",
+    "rig": "cart",
+    "lang": "en",
+    "name": "Cart · cargo · track"
+  },
+  {
+    "course": "elementary",
+    "activity": "push",
+    "condition": "big-box",
+    "rig": "cart",
+    "lang": "ko",
+    "name": "수레 · 큰 빈 상자"
+  },
+  {
+    "course": "elementary",
+    "activity": "push",
+    "condition": "big-box",
+    "rig": "cart",
+    "lang": "en",
+    "name": "Cart · large empty box"
+  },
+  {
+    "course": "elementary",
+    "activity": "push",
+    "condition": "small-metal",
+    "rig": "cart",
+    "lang": "ko",
+    "name": "수레 · 작은 금속 덩어리"
+  },
+  {
+    "course": "elementary",
+    "activity": "push",
+    "condition": "small-metal",
+    "rig": "cart",
+    "lang": "en",
+    "name": "Cart · small metal block"
+  },
+  {
+    "course": "elementary",
+    "activity": "push",
+    "condition": "free:mass:0.5",
+    "rig": "cart",
+    "lang": "ko",
+    "name": "수레 · 짐 · 레일"
+  },
+  {
+    "course": "elementary",
+    "activity": "push",
+    "condition": "free:mass:0.5",
+    "rig": "cart",
+    "lang": "en",
+    "name": "Cart · cargo · track"
+  },
+  {
+    "course": "elementary",
+    "activity": "push",
+    "condition": "free:mass:4",
+    "rig": "cart",
+    "lang": "ko",
+    "name": "수레 · 짐 · 레일"
+  },
+  {
+    "course": "elementary",
+    "activity": "push",
+    "condition": "free:mass:4",
+    "rig": "cart",
+    "lang": "en",
+    "name": "Cart · cargo · track"
+  },
+  {
+    "course": "elementary",
+    "activity": "push",
+    "condition": "free:force:1",
+    "rig": "cart",
+    "lang": "ko",
+    "name": "수레 · 짐 · 레일"
+  },
+  {
+    "course": "elementary",
+    "activity": "push",
+    "condition": "free:force:1",
+    "rig": "cart",
+    "lang": "en",
+    "name": "Cart · cargo · track"
+  },
+  {
+    "course": "elementary",
+    "activity": "push",
+    "condition": "free:force:2",
+    "rig": "cart",
+    "lang": "ko",
+    "name": "수레 · 짐 · 레일"
+  },
+  {
+    "course": "elementary",
+    "activity": "push",
+    "condition": "free:force:2",
+    "rig": "cart",
+    "lang": "en",
+    "name": "Cart · cargo · track"
+  },
+  {
+    "course": "elementary",
+    "activity": "push",
+    "condition": "free:force:4",
+    "rig": "cart",
+    "lang": "ko",
+    "name": "수레 · 짐 · 레일"
+  },
+  {
+    "course": "elementary",
+    "activity": "push",
+    "condition": "free:force:4",
+    "rig": "cart",
+    "lang": "en",
+    "name": "Cart · cargo · track"
+  },
+  {
+    "course": "elementary",
+    "activity": "push",
+    "condition": "free:direction:-1",
+    "rig": "cart",
+    "lang": "ko",
+    "name": "수레 · 짐 · 레일"
+  },
+  {
+    "course": "elementary",
+    "activity": "push",
+    "condition": "free:direction:-1",
+    "rig": "cart",
+    "lang": "en",
+    "name": "Cart · cargo · track"
+  },
+  {
+    "course": "elementary",
+    "activity": "push",
+    "condition": "free:direction:1",
+    "rig": "cart",
+    "lang": "ko",
+    "name": "수레 · 짐 · 레일"
+  },
+  {
+    "course": "elementary",
+    "activity": "push",
+    "condition": "free:direction:1",
+    "rig": "cart",
+    "lang": "en",
+    "name": "Cart · cargo · track"
+  },
+  {
+    "course": "elementary",
+    "activity": "push",
+    "condition": "free:objectType:cart",
+    "rig": "cart",
+    "lang": "ko",
+    "name": "수레 · 짐 · 레일"
+  },
+  {
+    "course": "elementary",
+    "activity": "push",
+    "condition": "free:objectType:cart",
+    "rig": "cart",
+    "lang": "en",
+    "name": "Cart · cargo · track"
+  },
+  {
+    "course": "elementary",
+    "activity": "push",
+    "condition": "free:objectType:box",
+    "rig": "cart",
+    "lang": "ko",
+    "name": "수레 · 큰 빈 상자"
+  },
+  {
+    "course": "elementary",
+    "activity": "push",
+    "condition": "free:objectType:box",
+    "rig": "cart",
+    "lang": "en",
+    "name": "Cart · large empty box"
+  },
+  {
+    "course": "elementary",
+    "activity": "push",
+    "condition": "free:objectType:metal",
+    "rig": "cart",
+    "lang": "ko",
+    "name": "수레 · 작은 금속 덩어리"
+  },
+  {
+    "course": "elementary",
+    "activity": "push",
+    "condition": "free:objectType:metal",
+    "rig": "cart",
+    "lang": "en",
+    "name": "Cart · small metal block"
+  },
+  {
+    "course": "elementary",
+    "activity": "balance",
+    "condition": "empty",
+    "rig": "balance",
+    "lang": "ko",
+    "name": "수평대 · 네모 추"
+  },
+  {
+    "course": "elementary",
+    "activity": "balance",
+    "condition": "empty",
+    "rig": "balance",
+    "lang": "en",
+    "name": "Numbered beam · block weights"
+  },
+  {
+    "course": "elementary",
+    "activity": "balance",
+    "condition": "equal",
+    "rig": "balance",
+    "lang": "ko",
+    "name": "수평대 · 네모 추"
+  },
+  {
+    "course": "elementary",
+    "activity": "balance",
+    "condition": "equal",
+    "rig": "balance",
+    "lang": "en",
+    "name": "Numbered beam · block weights"
+  },
+  {
+    "course": "elementary",
+    "activity": "balance",
+    "condition": "add",
+    "rig": "balance",
+    "lang": "ko",
+    "name": "수평대 · 네모 추"
+  },
+  {
+    "course": "elementary",
+    "activity": "balance",
+    "condition": "add",
+    "rig": "balance",
+    "lang": "en",
+    "name": "Numbered beam · block weights"
+  },
+  {
+    "course": "elementary",
+    "activity": "balance",
+    "condition": "move",
+    "rig": "balance",
+    "lang": "ko",
+    "name": "수평대 · 네모 추"
+  },
+  {
+    "course": "elementary",
+    "activity": "balance",
+    "condition": "move",
+    "rig": "balance",
+    "lang": "en",
+    "name": "Numbered beam · block weights"
+  },
+  {
+    "course": "elementary",
+    "activity": "balance",
+    "condition": "free:left:0",
+    "rig": "balance",
+    "lang": "ko",
+    "name": "수평대 · 네모 추"
+  },
+  {
+    "course": "elementary",
+    "activity": "balance",
+    "condition": "free:left:0",
+    "rig": "balance",
+    "lang": "en",
+    "name": "Numbered beam · block weights"
+  },
+  {
+    "course": "elementary",
+    "activity": "balance",
+    "condition": "free:left:1000",
+    "rig": "balance",
+    "lang": "ko",
+    "name": "수평대 · 네모 추"
+  },
+  {
+    "course": "elementary",
+    "activity": "balance",
+    "condition": "free:left:1000",
+    "rig": "balance",
+    "lang": "en",
+    "name": "Numbered beam · block weights"
+  },
+  {
+    "course": "elementary",
+    "activity": "balance",
+    "condition": "free:right:0",
+    "rig": "balance",
+    "lang": "ko",
+    "name": "수평대 · 네모 추"
+  },
+  {
+    "course": "elementary",
+    "activity": "balance",
+    "condition": "free:right:0",
+    "rig": "balance",
+    "lang": "en",
+    "name": "Numbered beam · block weights"
+  },
+  {
+    "course": "elementary",
+    "activity": "balance",
+    "condition": "free:right:1000",
+    "rig": "balance",
+    "lang": "ko",
+    "name": "수평대 · 네모 추"
+  },
+  {
+    "course": "elementary",
+    "activity": "balance",
+    "condition": "free:right:1000",
+    "rig": "balance",
+    "lang": "en",
+    "name": "Numbered beam · block weights"
+  },
+  {
+    "course": "elementary",
+    "activity": "balance",
+    "condition": "free:leftPos:1",
+    "rig": "balance",
+    "lang": "ko",
+    "name": "수평대 · 네모 추"
+  },
+  {
+    "course": "elementary",
+    "activity": "balance",
+    "condition": "free:leftPos:1",
+    "rig": "balance",
+    "lang": "en",
+    "name": "Numbered beam · block weights"
+  },
+  {
+    "course": "elementary",
+    "activity": "balance",
+    "condition": "free:leftPos:5",
+    "rig": "balance",
+    "lang": "ko",
+    "name": "수평대 · 네모 추"
+  },
+  {
+    "course": "elementary",
+    "activity": "balance",
+    "condition": "free:leftPos:5",
+    "rig": "balance",
+    "lang": "en",
+    "name": "Numbered beam · block weights"
+  },
+  {
+    "course": "elementary",
+    "activity": "balance",
+    "condition": "free:rightPos:1",
+    "rig": "balance",
+    "lang": "ko",
+    "name": "수평대 · 네모 추"
+  },
+  {
+    "course": "elementary",
+    "activity": "balance",
+    "condition": "free:rightPos:1",
+    "rig": "balance",
+    "lang": "en",
+    "name": "Numbered beam · block weights"
+  },
+  {
+    "course": "elementary",
+    "activity": "balance",
+    "condition": "free:rightPos:5",
+    "rig": "balance",
+    "lang": "ko",
+    "name": "수평대 · 네모 추"
+  },
+  {
+    "course": "elementary",
+    "activity": "balance",
+    "condition": "free:rightPos:5",
+    "rig": "balance",
+    "lang": "en",
+    "name": "Numbered beam · block weights"
+  },
+  {
+    "course": "elementary",
+    "activity": "scale",
+    "condition": "a",
+    "rig": "scale",
+    "lang": "ko",
+    "name": "전자저울 · 비교할 물체"
+  },
+  {
+    "course": "elementary",
+    "activity": "scale",
+    "condition": "a",
+    "rig": "scale",
+    "lang": "en",
+    "name": "Digital scale · sample objects"
+  },
+  {
+    "course": "elementary",
+    "activity": "scale",
+    "condition": "b",
+    "rig": "scale",
+    "lang": "ko",
+    "name": "전자저울 · 비교할 물체"
+  },
+  {
+    "course": "elementary",
+    "activity": "scale",
+    "condition": "b",
+    "rig": "scale",
+    "lang": "en",
+    "name": "Digital scale · sample objects"
+  },
+  {
+    "course": "elementary",
+    "activity": "scale",
+    "condition": "c",
+    "rig": "scale",
+    "lang": "ko",
+    "name": "전자저울 · 비교할 물체"
+  },
+  {
+    "course": "elementary",
+    "activity": "scale",
+    "condition": "c",
+    "rig": "scale",
+    "lang": "en",
+    "name": "Digital scale · sample objects"
+  },
+  {
+    "course": "elementary",
+    "activity": "scale",
+    "condition": "d",
+    "rig": "scale",
+    "lang": "ko",
+    "name": "전자저울 · 비교할 물체"
+  },
+  {
+    "course": "elementary",
+    "activity": "scale",
+    "condition": "d",
+    "rig": "scale",
+    "lang": "en",
+    "name": "Digital scale · sample objects"
+  },
+  {
+    "course": "elementary",
+    "activity": "scale",
+    "condition": "free:object:a",
+    "rig": "scale",
+    "lang": "ko",
+    "name": "전자저울 · 비교할 물체"
+  },
+  {
+    "course": "elementary",
+    "activity": "scale",
+    "condition": "free:object:a",
+    "rig": "scale",
+    "lang": "en",
+    "name": "Digital scale · sample objects"
+  },
+  {
+    "course": "elementary",
+    "activity": "scale",
+    "condition": "free:object:b",
+    "rig": "scale",
+    "lang": "ko",
+    "name": "전자저울 · 비교할 물체"
+  },
+  {
+    "course": "elementary",
+    "activity": "scale",
+    "condition": "free:object:b",
+    "rig": "scale",
+    "lang": "en",
+    "name": "Digital scale · sample objects"
+  },
+  {
+    "course": "elementary",
+    "activity": "scale",
+    "condition": "free:object:c",
+    "rig": "scale",
+    "lang": "ko",
+    "name": "전자저울 · 비교할 물체"
+  },
+  {
+    "course": "elementary",
+    "activity": "scale",
+    "condition": "free:object:c",
+    "rig": "scale",
+    "lang": "en",
+    "name": "Digital scale · sample objects"
+  },
+  {
+    "course": "elementary",
+    "activity": "scale",
+    "condition": "free:object:d",
+    "rig": "scale",
+    "lang": "ko",
+    "name": "전자저울 · 비교할 물체"
+  },
+  {
+    "course": "elementary",
+    "activity": "scale",
+    "condition": "free:object:d",
+    "rig": "scale",
+    "lang": "en",
+    "name": "Digital scale · sample objects"
+  },
+  {
+    "course": "elementary",
+    "activity": "scale",
+    "condition": "free:object:custom",
+    "rig": "scale",
+    "lang": "ko",
+    "name": "전자저울 · 비교할 물체"
+  },
+  {
+    "course": "elementary",
+    "activity": "scale",
+    "condition": "free:object:custom",
+    "rig": "scale",
+    "lang": "en",
+    "name": "Digital scale · sample objects"
+  },
+  {
+    "course": "elementary",
+    "activity": "scale",
+    "condition": "free:grams:1",
+    "rig": "scale",
+    "lang": "ko",
+    "name": "전자저울 · 비교할 물체"
+  },
+  {
+    "course": "elementary",
+    "activity": "scale",
+    "condition": "free:grams:1",
+    "rig": "scale",
+    "lang": "en",
+    "name": "Digital scale · sample objects"
+  },
+  {
+    "course": "elementary",
+    "activity": "scale",
+    "condition": "free:grams:2000",
+    "rig": "scale",
+    "lang": "ko",
+    "name": "전자저울 · 비교할 물체"
+  },
+  {
+    "course": "elementary",
+    "activity": "scale",
+    "condition": "free:grams:2000",
+    "rig": "scale",
+    "lang": "en",
+    "name": "Digital scale · sample objects"
+  },
+  {
+    "course": "elementary",
+    "activity": "spring-scale",
+    "condition": "apple",
+    "rig": "spring-scale",
+    "lang": "ko",
+    "name": "용수철저울 · 물체 · 봉투"
+  },
+  {
+    "course": "elementary",
+    "activity": "spring-scale",
+    "condition": "apple",
+    "rig": "spring-scale",
+    "lang": "en",
+    "name": "Spring scale · objects · bag"
+  },
+  {
+    "course": "elementary",
+    "activity": "spring-scale",
+    "condition": "milk",
+    "rig": "spring-scale",
+    "lang": "ko",
+    "name": "용수철저울 · 물체 · 봉투"
+  },
+  {
+    "course": "elementary",
+    "activity": "spring-scale",
+    "condition": "milk",
+    "rig": "spring-scale",
+    "lang": "en",
+    "name": "Spring scale · objects · bag"
+  },
+  {
+    "course": "elementary",
+    "activity": "spring-scale",
+    "condition": "eraser",
+    "rig": "spring-scale",
+    "lang": "ko",
+    "name": "용수철저울 · 물체 · 봉투"
+  },
+  {
+    "course": "elementary",
+    "activity": "spring-scale",
+    "condition": "eraser",
+    "rig": "spring-scale",
+    "lang": "en",
+    "name": "Spring scale · objects · bag"
+  },
+  {
+    "course": "elementary",
+    "activity": "spring-scale",
+    "condition": "remove",
+    "rig": "spring-scale",
+    "lang": "ko",
+    "name": "용수철저울 · 물체 · 봉투"
+  },
+  {
+    "course": "elementary",
+    "activity": "spring-scale",
+    "condition": "remove",
+    "rig": "spring-scale",
+    "lang": "en",
+    "name": "Spring scale · objects · bag"
+  },
+  {
+    "course": "elementary",
+    "activity": "spring-scale",
+    "condition": "free:object:apple",
+    "rig": "spring-scale",
+    "lang": "ko",
+    "name": "용수철저울 · 물체 · 봉투"
+  },
+  {
+    "course": "elementary",
+    "activity": "spring-scale",
+    "condition": "free:object:apple",
+    "rig": "spring-scale",
+    "lang": "en",
+    "name": "Spring scale · objects · bag"
+  },
+  {
+    "course": "elementary",
+    "activity": "spring-scale",
+    "condition": "free:object:milk",
+    "rig": "spring-scale",
+    "lang": "ko",
+    "name": "용수철저울 · 물체 · 봉투"
+  },
+  {
+    "course": "elementary",
+    "activity": "spring-scale",
+    "condition": "free:object:milk",
+    "rig": "spring-scale",
+    "lang": "en",
+    "name": "Spring scale · objects · bag"
+  },
+  {
+    "course": "elementary",
+    "activity": "spring-scale",
+    "condition": "free:object:eraser",
+    "rig": "spring-scale",
+    "lang": "ko",
+    "name": "용수철저울 · 물체 · 봉투"
+  },
+  {
+    "course": "elementary",
+    "activity": "spring-scale",
+    "condition": "free:object:eraser",
+    "rig": "spring-scale",
+    "lang": "en",
+    "name": "Spring scale · objects · bag"
+  },
+  {
+    "course": "elementary",
+    "activity": "spring-scale",
+    "condition": "free:eye:0",
+    "rig": "spring-scale",
+    "lang": "ko",
+    "name": "용수철저울 · 물체 · 봉투"
+  },
+  {
+    "course": "elementary",
+    "activity": "spring-scale",
+    "condition": "free:eye:0",
+    "rig": "spring-scale",
+    "lang": "en",
+    "name": "Spring scale · objects · bag"
+  },
+  {
+    "course": "elementary",
+    "activity": "spring-scale",
+    "condition": "free:eye:1",
+    "rig": "spring-scale",
+    "lang": "ko",
+    "name": "용수철저울 · 물체 · 봉투"
+  },
+  {
+    "course": "elementary",
+    "activity": "spring-scale",
+    "condition": "free:eye:1",
+    "rig": "spring-scale",
+    "lang": "en",
+    "name": "Spring scale · objects · bag"
+  },
+  {
+    "course": "elementary",
+    "activity": "tools",
+    "condition": "direct",
+    "rig": "direct",
+    "lang": "ko",
+    "name": "물체 · 들어 올리는 줄"
+  },
+  {
+    "course": "elementary",
+    "activity": "tools",
+    "condition": "direct",
+    "rig": "direct",
+    "lang": "en",
+    "name": "Load · lifting cord"
+  },
+  {
+    "course": "elementary",
+    "activity": "tools",
+    "condition": "lever",
+    "rig": "lever-lift",
+    "lang": "ko",
+    "name": "지레 · 받침점 · 물체"
+  },
+  {
+    "course": "elementary",
+    "activity": "tools",
+    "condition": "lever",
+    "rig": "lever-lift",
+    "lang": "en",
+    "name": "Lever · pivot · load"
+  },
+  {
+    "course": "elementary",
+    "activity": "tools",
+    "condition": "free:mass:0.5",
+    "rig": "direct",
+    "lang": "ko",
+    "name": "물체 · 들어 올리는 줄"
+  },
+  {
+    "course": "elementary",
+    "activity": "tools",
+    "condition": "free:mass:0.5",
+    "rig": "direct",
+    "lang": "en",
+    "name": "Load · lifting cord"
+  },
+  {
+    "course": "elementary",
+    "activity": "tools",
+    "condition": "free:mass:3",
+    "rig": "direct",
+    "lang": "ko",
+    "name": "물체 · 들어 올리는 줄"
+  },
+  {
+    "course": "elementary",
+    "activity": "tools",
+    "condition": "free:mass:3",
+    "rig": "direct",
+    "lang": "en",
+    "name": "Load · lifting cord"
+  },
+  {
+    "course": "elementary",
+    "activity": "tools",
+    "condition": "free:tool:direct",
+    "rig": "direct",
+    "lang": "ko",
+    "name": "물체 · 들어 올리는 줄"
+  },
+  {
+    "course": "elementary",
+    "activity": "tools",
+    "condition": "free:tool:direct",
+    "rig": "direct",
+    "lang": "en",
+    "name": "Load · lifting cord"
+  },
+  {
+    "course": "elementary",
+    "activity": "tools",
+    "condition": "free:tool:lever",
+    "rig": "lever-lift",
+    "lang": "ko",
+    "name": "지레 · 받침점 · 물체"
+  },
+  {
+    "course": "elementary",
+    "activity": "tools",
+    "condition": "free:tool:lever",
+    "rig": "lever-lift",
+    "lang": "en",
+    "name": "Lever · pivot · load"
+  },
+  {
+    "course": "elementary",
+    "activity": "tools",
+    "condition": "free:tool:ramp",
+    "rig": "ramp",
+    "lang": "ko",
+    "name": "빗면 · 물체 · 당기는 줄"
+  },
+  {
+    "course": "elementary",
+    "activity": "tools",
+    "condition": "free:tool:ramp",
+    "rig": "ramp",
+    "lang": "en",
+    "name": "Ramp · load · pulling cord"
+  },
+  {
+    "course": "elementary",
+    "activity": "tools",
+    "condition": "free:length:1",
+    "rig": "direct",
+    "lang": "ko",
+    "name": "물체 · 들어 올리는 줄"
+  },
+  {
+    "course": "elementary",
+    "activity": "tools",
+    "condition": "free:length:1",
+    "rig": "direct",
+    "lang": "en",
+    "name": "Load · lifting cord"
+  },
+  {
+    "course": "elementary",
+    "activity": "tools",
+    "condition": "free:length:3",
+    "rig": "direct",
+    "lang": "ko",
+    "name": "물체 · 들어 올리는 줄"
+  },
+  {
+    "course": "elementary",
+    "activity": "tools",
+    "condition": "free:length:3",
+    "rig": "direct",
+    "lang": "en",
+    "name": "Load · lifting cord"
+  },
+  {
+    "course": "elementary",
+    "activity": "ramp-tools",
+    "condition": "direct",
+    "rig": "direct",
+    "lang": "ko",
+    "name": "물체 · 들어 올리는 줄"
+  },
+  {
+    "course": "elementary",
+    "activity": "ramp-tools",
+    "condition": "direct",
+    "rig": "direct",
+    "lang": "en",
+    "name": "Load · lifting cord"
+  },
+  {
+    "course": "elementary",
+    "activity": "ramp-tools",
+    "condition": "ramp",
+    "rig": "ramp",
+    "lang": "ko",
+    "name": "빗면 · 물체 · 당기는 줄"
+  },
+  {
+    "course": "elementary",
+    "activity": "ramp-tools",
+    "condition": "ramp",
+    "rig": "ramp",
+    "lang": "en",
+    "name": "Ramp · load · pulling cord"
+  },
+  {
+    "course": "elementary",
+    "activity": "ramp-tools",
+    "condition": "free:mass:0.5",
+    "rig": "direct",
+    "lang": "ko",
+    "name": "물체 · 들어 올리는 줄"
+  },
+  {
+    "course": "elementary",
+    "activity": "ramp-tools",
+    "condition": "free:mass:0.5",
+    "rig": "direct",
+    "lang": "en",
+    "name": "Load · lifting cord"
+  },
+  {
+    "course": "elementary",
+    "activity": "ramp-tools",
+    "condition": "free:mass:3",
+    "rig": "direct",
+    "lang": "ko",
+    "name": "물체 · 들어 올리는 줄"
+  },
+  {
+    "course": "elementary",
+    "activity": "ramp-tools",
+    "condition": "free:mass:3",
+    "rig": "direct",
+    "lang": "en",
+    "name": "Load · lifting cord"
+  },
+  {
+    "course": "elementary",
+    "activity": "ramp-tools",
+    "condition": "free:tool:direct",
+    "rig": "direct",
+    "lang": "ko",
+    "name": "물체 · 들어 올리는 줄"
+  },
+  {
+    "course": "elementary",
+    "activity": "ramp-tools",
+    "condition": "free:tool:direct",
+    "rig": "direct",
+    "lang": "en",
+    "name": "Load · lifting cord"
+  },
+  {
+    "course": "elementary",
+    "activity": "ramp-tools",
+    "condition": "free:tool:ramp",
+    "rig": "ramp",
+    "lang": "ko",
+    "name": "빗면 · 물체 · 당기는 줄"
+  },
+  {
+    "course": "elementary",
+    "activity": "ramp-tools",
+    "condition": "free:tool:ramp",
+    "rig": "ramp",
+    "lang": "en",
+    "name": "Ramp · load · pulling cord"
+  },
+  {
+    "course": "elementary",
+    "activity": "ramp-tools",
+    "condition": "free:length:1",
+    "rig": "direct",
+    "lang": "ko",
+    "name": "물체 · 들어 올리는 줄"
+  },
+  {
+    "course": "elementary",
+    "activity": "ramp-tools",
+    "condition": "free:length:1",
+    "rig": "direct",
+    "lang": "en",
+    "name": "Load · lifting cord"
+  },
+  {
+    "course": "elementary",
+    "activity": "ramp-tools",
+    "condition": "free:length:3",
+    "rig": "direct",
+    "lang": "ko",
+    "name": "물체 · 들어 올리는 줄"
+  },
+  {
+    "course": "elementary",
+    "activity": "ramp-tools",
+    "condition": "free:length:3",
+    "rig": "direct",
+    "lang": "en",
+    "name": "Load · lifting cord"
+  },
+  {
+    "course": "elementary",
+    "activity": "daily-tools",
+    "condition": "lever",
+    "rig": "examples",
+    "lang": "ko",
+    "name": "병따개 · 병"
+  },
+  {
+    "course": "elementary",
+    "activity": "daily-tools",
+    "condition": "lever",
+    "rig": "examples",
+    "lang": "en",
+    "name": "Bottle opener · bottle"
+  },
+  {
+    "course": "elementary",
+    "activity": "daily-tools",
+    "condition": "ramp",
+    "rig": "examples",
+    "lang": "ko",
+    "name": "빗면 · 상자"
+  },
+  {
+    "course": "elementary",
+    "activity": "daily-tools",
+    "condition": "ramp",
+    "rig": "examples",
+    "lang": "en",
+    "name": "Ramp · box"
+  },
+  {
+    "course": "elementary",
+    "activity": "daily-tools",
+    "condition": "loading",
+    "rig": "examples",
+    "lang": "ko",
+    "name": "경사로 · 짐"
+  },
+  {
+    "course": "elementary",
+    "activity": "daily-tools",
+    "condition": "loading",
+    "rig": "examples",
+    "lang": "en",
+    "name": "Loading ramp · cargo"
+  },
+  {
+    "course": "elementary",
+    "activity": "daily-tools",
+    "condition": "free:example:bottle",
+    "rig": "examples",
+    "lang": "ko",
+    "name": "병따개 · 병"
+  },
+  {
+    "course": "elementary",
+    "activity": "daily-tools",
+    "condition": "free:example:bottle",
+    "rig": "examples",
+    "lang": "en",
+    "name": "Bottle opener · bottle"
+  },
+  {
+    "course": "elementary",
+    "activity": "daily-tools",
+    "condition": "free:example:stairs",
+    "rig": "examples",
+    "lang": "ko",
+    "name": "빗면 · 상자"
+  },
+  {
+    "course": "elementary",
+    "activity": "daily-tools",
+    "condition": "free:example:stairs",
+    "rig": "examples",
+    "lang": "en",
+    "name": "Ramp · box"
+  },
+  {
+    "course": "elementary",
+    "activity": "daily-tools",
+    "condition": "free:example:forklift",
+    "rig": "examples",
+    "lang": "ko",
+    "name": "경사로 · 짐"
+  },
+  {
+    "course": "elementary",
+    "activity": "daily-tools",
+    "condition": "free:example:forklift",
+    "rig": "examples",
+    "lang": "en",
+    "name": "Loading ramp · cargo"
+  },
+  {
+    "course": "elementary",
+    "activity": "mobile",
+    "condition": "before",
+    "rig": "mobile",
+    "lang": "ko",
+    "name": "모빌 막대 · 줄 · 장식 추"
+  },
+  {
+    "course": "elementary",
+    "activity": "mobile",
+    "condition": "before",
+    "rig": "mobile",
+    "lang": "en",
+    "name": "Mobile rods · strings · ornaments"
+  },
+  {
+    "course": "elementary",
+    "activity": "mobile",
+    "condition": "weight-fix",
+    "rig": "mobile",
+    "lang": "ko",
+    "name": "모빌 막대 · 줄 · 장식 추"
+  },
+  {
+    "course": "elementary",
+    "activity": "mobile",
+    "condition": "weight-fix",
+    "rig": "mobile",
+    "lang": "en",
+    "name": "Mobile rods · strings · ornaments"
+  },
+  {
+    "course": "elementary",
+    "activity": "mobile",
+    "condition": "position-fix",
+    "rig": "mobile",
+    "lang": "ko",
+    "name": "모빌 막대 · 줄 · 장식 추"
+  },
+  {
+    "course": "elementary",
+    "activity": "mobile",
+    "condition": "position-fix",
+    "rig": "mobile",
+    "lang": "en",
+    "name": "Mobile rods · strings · ornaments"
+  },
+  {
+    "course": "elementary",
+    "activity": "mobile",
+    "condition": "free:left:100",
+    "rig": "mobile",
+    "lang": "ko",
+    "name": "모빌 막대 · 줄 · 장식 추"
+  },
+  {
+    "course": "elementary",
+    "activity": "mobile",
+    "condition": "free:left:100",
+    "rig": "mobile",
+    "lang": "en",
+    "name": "Mobile rods · strings · ornaments"
+  },
+  {
+    "course": "elementary",
+    "activity": "mobile",
+    "condition": "free:left:600",
+    "rig": "mobile",
+    "lang": "ko",
+    "name": "모빌 막대 · 줄 · 장식 추"
+  },
+  {
+    "course": "elementary",
+    "activity": "mobile",
+    "condition": "free:left:600",
+    "rig": "mobile",
+    "lang": "en",
+    "name": "Mobile rods · strings · ornaments"
+  },
+  {
+    "course": "elementary",
+    "activity": "mobile",
+    "condition": "free:right:100",
+    "rig": "mobile",
+    "lang": "ko",
+    "name": "모빌 막대 · 줄 · 장식 추"
+  },
+  {
+    "course": "elementary",
+    "activity": "mobile",
+    "condition": "free:right:100",
+    "rig": "mobile",
+    "lang": "en",
+    "name": "Mobile rods · strings · ornaments"
+  },
+  {
+    "course": "elementary",
+    "activity": "mobile",
+    "condition": "free:right:600",
+    "rig": "mobile",
+    "lang": "ko",
+    "name": "모빌 막대 · 줄 · 장식 추"
+  },
+  {
+    "course": "elementary",
+    "activity": "mobile",
+    "condition": "free:right:600",
+    "rig": "mobile",
+    "lang": "en",
+    "name": "Mobile rods · strings · ornaments"
+  },
+  {
+    "course": "elementary",
+    "activity": "mobile",
+    "condition": "free:leftPos:1",
+    "rig": "mobile",
+    "lang": "ko",
+    "name": "모빌 막대 · 줄 · 장식 추"
+  },
+  {
+    "course": "elementary",
+    "activity": "mobile",
+    "condition": "free:leftPos:1",
+    "rig": "mobile",
+    "lang": "en",
+    "name": "Mobile rods · strings · ornaments"
+  },
+  {
+    "course": "elementary",
+    "activity": "mobile",
+    "condition": "free:leftPos:4",
+    "rig": "mobile",
+    "lang": "ko",
+    "name": "모빌 막대 · 줄 · 장식 추"
+  },
+  {
+    "course": "elementary",
+    "activity": "mobile",
+    "condition": "free:leftPos:4",
+    "rig": "mobile",
+    "lang": "en",
+    "name": "Mobile rods · strings · ornaments"
+  },
+  {
+    "course": "elementary",
+    "activity": "mobile",
+    "condition": "free:rightPos:1",
+    "rig": "mobile",
+    "lang": "ko",
+    "name": "모빌 막대 · 줄 · 장식 추"
+  },
+  {
+    "course": "elementary",
+    "activity": "mobile",
+    "condition": "free:rightPos:1",
+    "rig": "mobile",
+    "lang": "en",
+    "name": "Mobile rods · strings · ornaments"
+  },
+  {
+    "course": "elementary",
+    "activity": "mobile",
+    "condition": "free:rightPos:4",
+    "rig": "mobile",
+    "lang": "ko",
+    "name": "모빌 막대 · 줄 · 장식 추"
+  },
+  {
+    "course": "elementary",
+    "activity": "mobile",
+    "condition": "free:rightPos:4",
+    "rig": "mobile",
+    "lang": "en",
+    "name": "Mobile rods · strings · ornaments"
+  },
+  {
+    "course": "elementary",
+    "activity": "mobile",
+    "condition": "free:branch:1",
+    "rig": "mobile",
+    "lang": "ko",
+    "name": "모빌 막대 · 줄 · 장식 추"
+  },
+  {
+    "course": "elementary",
+    "activity": "mobile",
+    "condition": "free:branch:1",
+    "rig": "mobile",
+    "lang": "en",
+    "name": "Mobile rods · strings · ornaments"
+  },
+  {
+    "course": "elementary",
+    "activity": "mobile",
+    "condition": "free:branch:3",
+    "rig": "mobile",
+    "lang": "ko",
+    "name": "모빌 막대 · 줄 · 장식 추"
+  },
+  {
+    "course": "elementary",
+    "activity": "mobile",
+    "condition": "free:branch:3",
+    "rig": "mobile",
+    "lang": "en",
+    "name": "Mobile rods · strings · ornaments"
+  },
+  {
+    "course": "elementary",
+    "activity": "mobile",
+    "condition": "free:ornament:round",
+    "rig": "mobile",
+    "lang": "ko",
+    "name": "모빌 막대 · 줄 · 장식 추"
+  },
+  {
+    "course": "elementary",
+    "activity": "mobile",
+    "condition": "free:ornament:round",
+    "rig": "mobile",
+    "lang": "en",
+    "name": "Mobile rods · strings · ornaments"
+  },
+  {
+    "course": "elementary",
+    "activity": "mobile",
+    "condition": "free:ornament:star",
+    "rig": "mobile",
+    "lang": "ko",
+    "name": "모빌 막대 · 줄 · 장식 추"
+  },
+  {
+    "course": "elementary",
+    "activity": "mobile",
+    "condition": "free:ornament:star",
+    "rig": "mobile",
+    "lang": "en",
+    "name": "Mobile rods · strings · ornaments"
+  },
+  {
+    "course": "elementary",
+    "activity": "mobile",
+    "condition": "free:ornament:diamond",
+    "rig": "mobile",
+    "lang": "ko",
+    "name": "모빌 막대 · 줄 · 장식 추"
+  },
+  {
+    "course": "elementary",
+    "activity": "mobile",
+    "condition": "free:ornament:diamond",
+    "rig": "mobile",
+    "lang": "en",
+    "name": "Mobile rods · strings · ornaments"
+  },
+  {
+    "course": "elementary",
+    "activity": "wearable",
+    "condition": "bare",
+    "rig": "assist",
+    "lang": "ko",
+    "name": "보조 장치 · 물체"
+  },
+  {
+    "course": "elementary",
+    "activity": "wearable",
+    "condition": "bare",
+    "rig": "assist",
+    "lang": "en",
+    "name": "Assistive device · load"
+  },
+  {
+    "course": "elementary",
+    "activity": "wearable",
+    "condition": "assist",
+    "rig": "assist",
+    "lang": "ko",
+    "name": "보조 장치 · 물체"
+  },
+  {
+    "course": "elementary",
+    "activity": "wearable",
+    "condition": "assist",
+    "rig": "assist",
+    "lang": "en",
+    "name": "Assistive device · load"
+  },
+  {
+    "course": "elementary",
+    "activity": "wearable",
+    "condition": "free:mass:0.5",
+    "rig": "assist",
+    "lang": "ko",
+    "name": "보조 장치 · 물체"
+  },
+  {
+    "course": "elementary",
+    "activity": "wearable",
+    "condition": "free:mass:0.5",
+    "rig": "assist",
+    "lang": "en",
+    "name": "Assistive device · load"
+  },
+  {
+    "course": "elementary",
+    "activity": "wearable",
+    "condition": "free:mass:3",
+    "rig": "assist",
+    "lang": "ko",
+    "name": "보조 장치 · 물체"
+  },
+  {
+    "course": "elementary",
+    "activity": "wearable",
+    "condition": "free:mass:3",
+    "rig": "assist",
+    "lang": "en",
+    "name": "Assistive device · load"
+  },
+  {
+    "course": "elementary",
+    "activity": "wearable",
+    "condition": "free:method:bare",
+    "rig": "assist",
+    "lang": "ko",
+    "name": "보조 장치 · 물체"
+  },
+  {
+    "course": "elementary",
+    "activity": "wearable",
+    "condition": "free:method:bare",
+    "rig": "assist",
+    "lang": "en",
+    "name": "Assistive device · load"
+  },
+  {
+    "course": "elementary",
+    "activity": "wearable",
+    "condition": "free:method:robot",
+    "rig": "assist",
+    "lang": "ko",
+    "name": "보조 장치 · 물체"
+  },
+  {
+    "course": "elementary",
+    "activity": "wearable",
+    "condition": "free:method:robot",
+    "rig": "assist",
+    "lang": "en",
+    "name": "Assistive device · load"
+  },
+  {
+    "course": "elementary",
+    "activity": "review",
+    "condition": "compare-ab",
+    "rig": "inference",
+    "lang": "ko",
+    "name": "수평대 · 비교할 물체"
+  },
+  {
+    "course": "elementary",
+    "activity": "review",
+    "condition": "compare-ab",
+    "rig": "inference",
+    "lang": "en",
+    "name": "Balance beams · objects"
+  },
+  {
+    "course": "elementary",
+    "activity": "review",
+    "condition": "compare-bc",
+    "rig": "inference",
+    "lang": "ko",
+    "name": "수평대 · 비교할 물체"
+  },
+  {
+    "course": "elementary",
+    "activity": "review",
+    "condition": "compare-bc",
+    "rig": "inference",
+    "lang": "en",
+    "name": "Balance beams · objects"
+  },
+  {
+    "course": "elementary",
+    "activity": "review",
+    "condition": "free:example:bottle",
+    "rig": "inference",
+    "lang": "ko",
+    "name": "수평대 · 비교할 물체"
+  },
+  {
+    "course": "elementary",
+    "activity": "review",
+    "condition": "free:example:bottle",
+    "rig": "inference",
+    "lang": "en",
+    "name": "Balance beams · objects"
+  },
+  {
+    "course": "elementary",
+    "activity": "review",
+    "condition": "free:example:stairs",
+    "rig": "inference",
+    "lang": "ko",
+    "name": "수평대 · 비교할 물체"
+  },
+  {
+    "course": "elementary",
+    "activity": "review",
+    "condition": "free:example:stairs",
+    "rig": "inference",
+    "lang": "en",
+    "name": "Balance beams · objects"
+  },
+  {
+    "course": "elementary",
+    "activity": "review",
+    "condition": "free:example:forklift",
+    "rig": "inference",
+    "lang": "ko",
+    "name": "수평대 · 비교할 물체"
+  },
+  {
+    "course": "elementary",
+    "activity": "review",
+    "condition": "free:example:forklift",
+    "rig": "inference",
+    "lang": "en",
+    "name": "Balance beams · objects"
+  },
+  {
+    "course": "middle",
+    "activity": "diver-intro",
+    "condition": "sink",
+    "rig": "floating",
+    "lang": "ko",
+    "name": "잠수부 모형 · 공기주머니 · 수조"
+  },
+  {
+    "course": "middle",
+    "activity": "diver-intro",
+    "condition": "sink",
+    "rig": "floating",
+    "lang": "en",
+    "name": "Diver model · air pocket · water tank"
+  },
+  {
+    "course": "middle",
+    "activity": "diver-intro",
+    "condition": "rise",
+    "rig": "floating",
+    "lang": "ko",
+    "name": "잠수부 모형 · 공기주머니 · 수조"
+  },
+  {
+    "course": "middle",
+    "activity": "diver-intro",
+    "condition": "rise",
+    "rig": "floating",
+    "lang": "en",
+    "name": "Diver model · air pocket · water tank"
+  },
+  {
+    "course": "middle",
+    "activity": "diver-intro",
+    "condition": "free:case:diver",
+    "rig": "floating",
+    "lang": "ko",
+    "name": "잠수부 모형 · 공기주머니 · 수조"
+  },
+  {
+    "course": "middle",
+    "activity": "diver-intro",
+    "condition": "free:case:diver",
+    "rig": "floating",
+    "lang": "en",
+    "name": "Diver model · air pocket · water tank"
+  },
+  {
+    "course": "middle",
+    "activity": "diver-intro",
+    "condition": "free:case:balloon",
+    "rig": "floating",
+    "lang": "ko",
+    "name": "풍선 · 클립"
+  },
+  {
+    "course": "middle",
+    "activity": "diver-intro",
+    "condition": "free:case:balloon",
+    "rig": "floating",
+    "lang": "en",
+    "name": "Balloon · clips"
+  },
+  {
+    "course": "middle",
+    "activity": "diver-intro",
+    "condition": "free:case:submarine",
+    "rig": "floating",
+    "lang": "ko",
+    "name": "잠수함 모형 · 수조"
+  },
+  {
+    "course": "middle",
+    "activity": "diver-intro",
+    "condition": "free:case:submarine",
+    "rig": "floating",
+    "lang": "en",
+    "name": "Submarine model · water tank"
+  },
+  {
+    "course": "middle",
+    "activity": "diver-intro",
+    "condition": "free:volume:0",
+    "rig": "floating",
+    "lang": "ko",
+    "name": "잠수부 모형 · 공기주머니 · 수조"
+  },
+  {
+    "course": "middle",
+    "activity": "diver-intro",
+    "condition": "free:volume:0",
+    "rig": "floating",
+    "lang": "en",
+    "name": "Diver model · air pocket · water tank"
+  },
+  {
+    "course": "middle",
+    "activity": "diver-intro",
+    "condition": "free:volume:400",
+    "rig": "floating",
+    "lang": "ko",
+    "name": "잠수부 모형 · 공기주머니 · 수조"
+  },
+  {
+    "course": "middle",
+    "activity": "diver-intro",
+    "condition": "free:volume:400",
+    "rig": "floating",
+    "lang": "en",
+    "name": "Diver model · air pocket · water tank"
+  },
+  {
+    "course": "middle",
+    "activity": "diver-intro",
+    "condition": "free:clips:0",
+    "rig": "floating",
+    "lang": "ko",
+    "name": "잠수부 모형 · 공기주머니 · 수조"
+  },
+  {
+    "course": "middle",
+    "activity": "diver-intro",
+    "condition": "free:clips:0",
+    "rig": "floating",
+    "lang": "en",
+    "name": "Diver model · air pocket · water tank"
+  },
+  {
+    "course": "middle",
+    "activity": "diver-intro",
+    "condition": "free:clips:4",
+    "rig": "floating",
+    "lang": "ko",
+    "name": "잠수부 모형 · 공기주머니 · 수조"
+  },
+  {
+    "course": "middle",
+    "activity": "diver-intro",
+    "condition": "free:clips:4",
+    "rig": "floating",
+    "lang": "en",
+    "name": "Diver model · air pocket · water tank"
+  },
+  {
+    "course": "middle",
+    "activity": "diver-intro",
+    "condition": "free:fill:0",
+    "rig": "floating",
+    "lang": "ko",
+    "name": "잠수부 모형 · 공기주머니 · 수조"
+  },
+  {
+    "course": "middle",
+    "activity": "diver-intro",
+    "condition": "free:fill:0",
+    "rig": "floating",
+    "lang": "en",
+    "name": "Diver model · air pocket · water tank"
+  },
+  {
+    "course": "middle",
+    "activity": "diver-intro",
+    "condition": "free:fill:4",
+    "rig": "floating",
+    "lang": "ko",
+    "name": "잠수부 모형 · 공기주머니 · 수조"
+  },
+  {
+    "course": "middle",
+    "activity": "diver-intro",
+    "condition": "free:fill:4",
+    "rig": "floating",
+    "lang": "en",
+    "name": "Diver model · air pocket · water tank"
+  },
+  {
+    "course": "middle",
+    "activity": "represent",
+    "condition": "right",
+    "rig": "cart",
+    "lang": "ko",
+    "name": "수레 · 레일"
+  },
+  {
+    "course": "middle",
+    "activity": "represent",
+    "condition": "right",
+    "rig": "cart",
+    "lang": "en",
+    "name": "Cart · track"
+  },
+  {
+    "course": "middle",
+    "activity": "represent",
+    "condition": "longer",
+    "rig": "cart",
+    "lang": "ko",
+    "name": "수레 · 레일"
+  },
+  {
+    "course": "middle",
+    "activity": "represent",
+    "condition": "longer",
+    "rig": "cart",
+    "lang": "en",
+    "name": "Cart · track"
+  },
+  {
+    "course": "middle",
+    "activity": "represent",
+    "condition": "left",
+    "rig": "cart",
+    "lang": "ko",
+    "name": "수레 · 레일"
+  },
+  {
+    "course": "middle",
+    "activity": "represent",
+    "condition": "left",
+    "rig": "cart",
+    "lang": "en",
+    "name": "Cart · track"
+  },
+  {
+    "course": "middle",
+    "activity": "represent",
+    "condition": "free:magnitude:1",
+    "rig": "cart",
+    "lang": "ko",
+    "name": "수레 · 레일"
+  },
+  {
+    "course": "middle",
+    "activity": "represent",
+    "condition": "free:magnitude:1",
+    "rig": "cart",
+    "lang": "en",
+    "name": "Cart · track"
+  },
+  {
+    "course": "middle",
+    "activity": "represent",
+    "condition": "free:magnitude:4",
+    "rig": "cart",
+    "lang": "ko",
+    "name": "수레 · 레일"
+  },
+  {
+    "course": "middle",
+    "activity": "represent",
+    "condition": "free:magnitude:4",
+    "rig": "cart",
+    "lang": "en",
+    "name": "Cart · track"
+  },
+  {
+    "course": "middle",
+    "activity": "represent",
+    "condition": "free:direction:-1",
+    "rig": "cart",
+    "lang": "ko",
+    "name": "수레 · 레일"
+  },
+  {
+    "course": "middle",
+    "activity": "represent",
+    "condition": "free:direction:-1",
+    "rig": "cart",
+    "lang": "en",
+    "name": "Cart · track"
+  },
+  {
+    "course": "middle",
+    "activity": "represent",
+    "condition": "free:direction:1",
+    "rig": "cart",
+    "lang": "ko",
+    "name": "수레 · 레일"
+  },
+  {
+    "course": "middle",
+    "activity": "represent",
+    "condition": "free:direction:1",
+    "rig": "cart",
+    "lang": "en",
+    "name": "Cart · track"
+  },
+  {
+    "course": "middle",
+    "activity": "parallel",
+    "condition": "same",
+    "rig": "cart",
+    "lang": "ko",
+    "name": "수레 · 레일"
+  },
+  {
+    "course": "middle",
+    "activity": "parallel",
+    "condition": "same",
+    "rig": "cart",
+    "lang": "en",
+    "name": "Cart · track"
+  },
+  {
+    "course": "middle",
+    "activity": "parallel",
+    "condition": "opposite",
+    "rig": "cart",
+    "lang": "ko",
+    "name": "수레 · 레일"
+  },
+  {
+    "course": "middle",
+    "activity": "parallel",
+    "condition": "opposite",
+    "rig": "cart",
+    "lang": "en",
+    "name": "Cart · track"
+  },
+  {
+    "course": "middle",
+    "activity": "parallel",
+    "condition": "rest",
+    "rig": "cart",
+    "lang": "ko",
+    "name": "수레 · 레일"
+  },
+  {
+    "course": "middle",
+    "activity": "parallel",
+    "condition": "rest",
+    "rig": "cart",
+    "lang": "en",
+    "name": "Cart · track"
+  },
+  {
+    "course": "middle",
+    "activity": "parallel",
+    "condition": "moving",
+    "rig": "cart",
+    "lang": "ko",
+    "name": "수레 · 레일"
+  },
+  {
+    "course": "middle",
+    "activity": "parallel",
+    "condition": "moving",
+    "rig": "cart",
+    "lang": "en",
+    "name": "Cart · track"
+  },
+  {
+    "course": "middle",
+    "activity": "parallel",
+    "condition": "free:left:0",
+    "rig": "cart",
+    "lang": "ko",
+    "name": "수레 · 레일"
+  },
+  {
+    "course": "middle",
+    "activity": "parallel",
+    "condition": "free:left:0",
+    "rig": "cart",
+    "lang": "en",
+    "name": "Cart · track"
+  },
+  {
+    "course": "middle",
+    "activity": "parallel",
+    "condition": "free:left:4",
+    "rig": "cart",
+    "lang": "ko",
+    "name": "수레 · 레일"
+  },
+  {
+    "course": "middle",
+    "activity": "parallel",
+    "condition": "free:left:4",
+    "rig": "cart",
+    "lang": "en",
+    "name": "Cart · track"
+  },
+  {
+    "course": "middle",
+    "activity": "parallel",
+    "condition": "free:right:0",
+    "rig": "cart",
+    "lang": "ko",
+    "name": "수레 · 레일"
+  },
+  {
+    "course": "middle",
+    "activity": "parallel",
+    "condition": "free:right:0",
+    "rig": "cart",
+    "lang": "en",
+    "name": "Cart · track"
+  },
+  {
+    "course": "middle",
+    "activity": "parallel",
+    "condition": "free:right:4",
+    "rig": "cart",
+    "lang": "ko",
+    "name": "수레 · 레일"
+  },
+  {
+    "course": "middle",
+    "activity": "parallel",
+    "condition": "free:right:4",
+    "rig": "cart",
+    "lang": "en",
+    "name": "Cart · track"
+  },
+  {
+    "course": "middle",
+    "activity": "parallel",
+    "condition": "free:initial:0",
+    "rig": "cart",
+    "lang": "ko",
+    "name": "수레 · 레일"
+  },
+  {
+    "course": "middle",
+    "activity": "parallel",
+    "condition": "free:initial:0",
+    "rig": "cart",
+    "lang": "en",
+    "name": "Cart · track"
+  },
+  {
+    "course": "middle",
+    "activity": "parallel",
+    "condition": "free:initial:1",
+    "rig": "cart",
+    "lang": "ko",
+    "name": "수레 · 레일"
+  },
+  {
+    "course": "middle",
+    "activity": "parallel",
+    "condition": "free:initial:1",
+    "rig": "cart",
+    "lang": "en",
+    "name": "Cart · track"
+  },
+  {
+    "course": "middle",
+    "activity": "parallel",
+    "condition": "free:arrangement:opposite",
+    "rig": "cart",
+    "lang": "ko",
+    "name": "수레 · 레일"
+  },
+  {
+    "course": "middle",
+    "activity": "parallel",
+    "condition": "free:arrangement:opposite",
+    "rig": "cart",
+    "lang": "en",
+    "name": "Cart · track"
+  },
+  {
+    "course": "middle",
+    "activity": "parallel",
+    "condition": "free:arrangement:same",
+    "rig": "cart",
+    "lang": "ko",
+    "name": "수레 · 레일"
+  },
+  {
+    "course": "middle",
+    "activity": "parallel",
+    "condition": "free:arrangement:same",
+    "rig": "cart",
+    "lang": "en",
+    "name": "Cart · track"
+  },
+  {
+    "course": "middle",
+    "activity": "gravity-direction",
+    "condition": "top",
+    "rig": "globe",
+    "lang": "ko",
+    "name": "지구 모형 · 물체"
+  },
+  {
+    "course": "middle",
+    "activity": "gravity-direction",
+    "condition": "top",
+    "rig": "globe",
+    "lang": "en",
+    "name": "Globe · object"
+  },
+  {
+    "course": "middle",
+    "activity": "gravity-direction",
+    "condition": "side",
+    "rig": "globe",
+    "lang": "ko",
+    "name": "지구 모형 · 물체"
+  },
+  {
+    "course": "middle",
+    "activity": "gravity-direction",
+    "condition": "side",
+    "rig": "globe",
+    "lang": "en",
+    "name": "Globe · object"
+  },
+  {
+    "course": "middle",
+    "activity": "gravity-direction",
+    "condition": "bottom",
+    "rig": "globe",
+    "lang": "ko",
+    "name": "지구 모형 · 물체"
+  },
+  {
+    "course": "middle",
+    "activity": "gravity-direction",
+    "condition": "bottom",
+    "rig": "globe",
+    "lang": "en",
+    "name": "Globe · object"
+  },
+  {
+    "course": "middle",
+    "activity": "gravity-direction",
+    "condition": "free:position:90",
+    "rig": "globe",
+    "lang": "ko",
+    "name": "지구 모형 · 물체"
+  },
+  {
+    "course": "middle",
+    "activity": "gravity-direction",
+    "condition": "free:position:90",
+    "rig": "globe",
+    "lang": "en",
+    "name": "Globe · object"
+  },
+  {
+    "course": "middle",
+    "activity": "gravity-direction",
+    "condition": "free:position:0",
+    "rig": "globe",
+    "lang": "ko",
+    "name": "지구 모형 · 물체"
+  },
+  {
+    "course": "middle",
+    "activity": "gravity-direction",
+    "condition": "free:position:0",
+    "rig": "globe",
+    "lang": "en",
+    "name": "Globe · object"
+  },
+  {
+    "course": "middle",
+    "activity": "gravity-direction",
+    "condition": "free:position:270",
+    "rig": "globe",
+    "lang": "ko",
+    "name": "지구 모형 · 물체"
+  },
+  {
+    "course": "middle",
+    "activity": "gravity-direction",
+    "condition": "free:position:270",
+    "rig": "globe",
+    "lang": "en",
+    "name": "Globe · object"
+  },
+  {
+    "course": "middle",
+    "activity": "gravity-direction",
+    "condition": "free:position:180",
+    "rig": "globe",
+    "lang": "ko",
+    "name": "지구 모형 · 물체"
+  },
+  {
+    "course": "middle",
+    "activity": "gravity-direction",
+    "condition": "free:position:180",
+    "rig": "globe",
+    "lang": "en",
+    "name": "Globe · object"
+  },
+  {
+    "course": "middle",
+    "activity": "gravity",
+    "condition": "earth",
+    "rig": "spring",
+    "lang": "ko",
+    "name": "용수철 · 스탠드 · 물체"
+  },
+  {
+    "course": "middle",
+    "activity": "gravity",
+    "condition": "earth",
+    "rig": "spring",
+    "lang": "en",
+    "name": "Spring · stand · object"
+  },
+  {
+    "course": "middle",
+    "activity": "gravity",
+    "condition": "moon",
+    "rig": "spring",
+    "lang": "ko",
+    "name": "용수철 · 스탠드 · 물체"
+  },
+  {
+    "course": "middle",
+    "activity": "gravity",
+    "condition": "moon",
+    "rig": "spring",
+    "lang": "en",
+    "name": "Spring · stand · object"
+  },
+  {
+    "course": "middle",
+    "activity": "gravity",
+    "condition": "free:mass:0.5",
+    "rig": "spring",
+    "lang": "ko",
+    "name": "용수철 · 스탠드 · 물체"
+  },
+  {
+    "course": "middle",
+    "activity": "gravity",
+    "condition": "free:mass:0.5",
+    "rig": "spring",
+    "lang": "en",
+    "name": "Spring · stand · object"
+  },
+  {
+    "course": "middle",
+    "activity": "gravity",
+    "condition": "free:mass:3",
+    "rig": "spring",
+    "lang": "ko",
+    "name": "용수철 · 스탠드 · 물체"
+  },
+  {
+    "course": "middle",
+    "activity": "gravity",
+    "condition": "free:mass:3",
+    "rig": "spring",
+    "lang": "en",
+    "name": "Spring · stand · object"
+  },
+  {
+    "course": "middle",
+    "activity": "gravity",
+    "condition": "free:planet:earth",
+    "rig": "spring",
+    "lang": "ko",
+    "name": "용수철 · 스탠드 · 물체"
+  },
+  {
+    "course": "middle",
+    "activity": "gravity",
+    "condition": "free:planet:earth",
+    "rig": "spring",
+    "lang": "en",
+    "name": "Spring · stand · object"
+  },
+  {
+    "course": "middle",
+    "activity": "gravity",
+    "condition": "free:planet:moon",
+    "rig": "spring",
+    "lang": "ko",
+    "name": "용수철 · 스탠드 · 물체"
+  },
+  {
+    "course": "middle",
+    "activity": "gravity",
+    "condition": "free:planet:moon",
+    "rig": "spring",
+    "lang": "en",
+    "name": "Spring · stand · object"
+  },
+  {
+    "course": "middle",
+    "activity": "elastic-shape",
+    "condition": "compress",
+    "rig": "deform",
+    "lang": "ko",
+    "name": "고무공"
+  },
+  {
+    "course": "middle",
+    "activity": "elastic-shape",
+    "condition": "compress",
+    "rig": "deform",
+    "lang": "en",
+    "name": "Rubber ball"
+  },
+  {
+    "course": "middle",
+    "activity": "elastic-shape",
+    "condition": "release",
+    "rig": "deform",
+    "lang": "ko",
+    "name": "고무공"
+  },
+  {
+    "course": "middle",
+    "activity": "elastic-shape",
+    "condition": "release",
+    "rig": "deform",
+    "lang": "en",
+    "name": "Rubber ball"
+  },
+  {
+    "course": "middle",
+    "activity": "elastic-shape",
+    "condition": "stretch",
+    "rig": "deform",
+    "lang": "ko",
+    "name": "용수철"
+  },
+  {
+    "course": "middle",
+    "activity": "elastic-shape",
+    "condition": "stretch",
+    "rig": "deform",
+    "lang": "en",
+    "name": "Spring"
+  },
+  {
+    "course": "middle",
+    "activity": "elastic-shape",
+    "condition": "stretch-more",
+    "rig": "deform",
+    "lang": "ko",
+    "name": "용수철"
+  },
+  {
+    "course": "middle",
+    "activity": "elastic-shape",
+    "condition": "stretch-more",
+    "rig": "deform",
+    "lang": "en",
+    "name": "Spring"
+  },
+  {
+    "course": "middle",
+    "activity": "elastic-shape",
+    "condition": "release-again",
+    "rig": "deform",
+    "lang": "ko",
+    "name": "용수철"
+  },
+  {
+    "course": "middle",
+    "activity": "elastic-shape",
+    "condition": "release-again",
+    "rig": "deform",
+    "lang": "en",
+    "name": "Spring"
+  },
+  {
+    "course": "middle",
+    "activity": "elastic-shape",
+    "condition": "free:shape:compress",
+    "rig": "deform",
+    "lang": "ko",
+    "name": "고무공"
+  },
+  {
+    "course": "middle",
+    "activity": "elastic-shape",
+    "condition": "free:shape:compress",
+    "rig": "deform",
+    "lang": "en",
+    "name": "Rubber ball"
+  },
+  {
+    "course": "middle",
+    "activity": "elastic-shape",
+    "condition": "free:shape:stretch",
+    "rig": "deform",
+    "lang": "ko",
+    "name": "고무공"
+  },
+  {
+    "course": "middle",
+    "activity": "elastic-shape",
+    "condition": "free:shape:stretch",
+    "rig": "deform",
+    "lang": "en",
+    "name": "Rubber ball"
+  },
+  {
+    "course": "middle",
+    "activity": "elastic-shape",
+    "condition": "free:shape:release",
+    "rig": "deform",
+    "lang": "ko",
+    "name": "고무공"
+  },
+  {
+    "course": "middle",
+    "activity": "elastic-shape",
+    "condition": "free:shape:release",
+    "rig": "deform",
+    "lang": "en",
+    "name": "Rubber ball"
+  },
+  {
+    "course": "middle",
+    "activity": "elastic-shape",
+    "condition": "free:body:rubber",
+    "rig": "deform",
+    "lang": "ko",
+    "name": "고무공"
+  },
+  {
+    "course": "middle",
+    "activity": "elastic-shape",
+    "condition": "free:body:rubber",
+    "rig": "deform",
+    "lang": "en",
+    "name": "Rubber ball"
+  },
+  {
+    "course": "middle",
+    "activity": "elastic-shape",
+    "condition": "free:body:spring",
+    "rig": "deform",
+    "lang": "ko",
+    "name": "용수철"
+  },
+  {
+    "course": "middle",
+    "activity": "elastic-shape",
+    "condition": "free:body:spring",
+    "rig": "deform",
+    "lang": "en",
+    "name": "Spring"
+  },
+  {
+    "course": "middle",
+    "activity": "elastic-shape",
+    "condition": "free:deformation:1",
+    "rig": "deform",
+    "lang": "ko",
+    "name": "고무공"
+  },
+  {
+    "course": "middle",
+    "activity": "elastic-shape",
+    "condition": "free:deformation:1",
+    "rig": "deform",
+    "lang": "en",
+    "name": "Rubber ball"
+  },
+  {
+    "course": "middle",
+    "activity": "elastic-shape",
+    "condition": "free:deformation:2",
+    "rig": "deform",
+    "lang": "ko",
+    "name": "고무공"
+  },
+  {
+    "course": "middle",
+    "activity": "elastic-shape",
+    "condition": "free:deformation:2",
+    "rig": "deform",
+    "lang": "en",
+    "name": "Rubber ball"
+  },
+  {
+    "course": "middle",
+    "activity": "elastic",
+    "condition": "five",
+    "rig": "spring",
+    "lang": "ko",
+    "name": "용수철 · 스탠드"
+  },
+  {
+    "course": "middle",
+    "activity": "elastic",
+    "condition": "five",
+    "rig": "spring",
+    "lang": "en",
+    "name": "Spring · stand"
+  },
+  {
+    "course": "middle",
+    "activity": "elastic",
+    "condition": "ten",
+    "rig": "spring",
+    "lang": "ko",
+    "name": "용수철 · 스탠드"
+  },
+  {
+    "course": "middle",
+    "activity": "elastic",
+    "condition": "ten",
+    "rig": "spring",
+    "lang": "en",
+    "name": "Spring · stand"
+  },
+  {
+    "course": "middle",
+    "activity": "elastic",
+    "condition": "fifteen",
+    "rig": "spring",
+    "lang": "ko",
+    "name": "용수철 · 스탠드"
+  },
+  {
+    "course": "middle",
+    "activity": "elastic",
+    "condition": "fifteen",
+    "rig": "spring",
+    "lang": "en",
+    "name": "Spring · stand"
+  },
+  {
+    "course": "middle",
+    "activity": "elastic",
+    "condition": "twenty",
+    "rig": "spring",
+    "lang": "ko",
+    "name": "용수철 · 스탠드"
+  },
+  {
+    "course": "middle",
+    "activity": "elastic",
+    "condition": "twenty",
+    "rig": "spring",
+    "lang": "en",
+    "name": "Spring · stand"
+  },
+  {
+    "course": "middle",
+    "activity": "elastic",
+    "condition": "predict",
+    "rig": "spring",
+    "lang": "ko",
+    "name": "용수철 · 스탠드"
+  },
+  {
+    "course": "middle",
+    "activity": "elastic",
+    "condition": "predict",
+    "rig": "spring",
+    "lang": "en",
+    "name": "Spring · stand"
+  },
+  {
+    "course": "middle",
+    "activity": "elastic",
+    "condition": "free:mass:0.5",
+    "rig": "spring",
+    "lang": "ko",
+    "name": "용수철 · 스탠드"
+  },
+  {
+    "course": "middle",
+    "activity": "elastic",
+    "condition": "free:mass:0.5",
+    "rig": "spring",
+    "lang": "en",
+    "name": "Spring · stand"
+  },
+  {
+    "course": "middle",
+    "activity": "elastic",
+    "condition": "free:mass:3",
+    "rig": "spring",
+    "lang": "ko",
+    "name": "용수철 · 스탠드"
+  },
+  {
+    "course": "middle",
+    "activity": "elastic",
+    "condition": "free:mass:3",
+    "rig": "spring",
+    "lang": "en",
+    "name": "Spring · stand"
+  },
+  {
+    "course": "middle",
+    "activity": "elastic",
+    "condition": "free:k:50",
+    "rig": "spring",
+    "lang": "ko",
+    "name": "용수철 · 스탠드"
+  },
+  {
+    "course": "middle",
+    "activity": "elastic",
+    "condition": "free:k:50",
+    "rig": "spring",
+    "lang": "en",
+    "name": "Spring · stand"
+  },
+  {
+    "course": "middle",
+    "activity": "elastic",
+    "condition": "free:k:100",
+    "rig": "spring",
+    "lang": "ko",
+    "name": "용수철 · 스탠드"
+  },
+  {
+    "course": "middle",
+    "activity": "elastic",
+    "condition": "free:k:100",
+    "rig": "spring",
+    "lang": "en",
+    "name": "Spring · stand"
+  },
+  {
+    "course": "middle",
+    "activity": "elastic",
+    "condition": "free:springMode:stretch",
+    "rig": "spring",
+    "lang": "ko",
+    "name": "용수철 · 스탠드"
+  },
+  {
+    "course": "middle",
+    "activity": "elastic",
+    "condition": "free:springMode:stretch",
+    "rig": "spring",
+    "lang": "en",
+    "name": "Spring · stand"
+  },
+  {
+    "course": "middle",
+    "activity": "elastic",
+    "condition": "free:springMode:hanging",
+    "rig": "spring",
+    "lang": "ko",
+    "name": "용수철 · 스탠드 · 추"
+  },
+  {
+    "course": "middle",
+    "activity": "elastic",
+    "condition": "free:springMode:hanging",
+    "rig": "spring",
+    "lang": "en",
+    "name": "Spring · stand · weights"
+  },
+  {
+    "course": "middle",
+    "activity": "elastic",
+    "condition": "free:extension:5",
+    "rig": "spring",
+    "lang": "ko",
+    "name": "용수철 · 스탠드"
+  },
+  {
+    "course": "middle",
+    "activity": "elastic",
+    "condition": "free:extension:5",
+    "rig": "spring",
+    "lang": "en",
+    "name": "Spring · stand"
+  },
+  {
+    "course": "middle",
+    "activity": "elastic",
+    "condition": "free:extension:25",
+    "rig": "spring",
+    "lang": "ko",
+    "name": "용수철 · 스탠드"
+  },
+  {
+    "course": "middle",
+    "activity": "elastic",
+    "condition": "free:extension:25",
+    "rig": "spring",
+    "lang": "en",
+    "name": "Spring · stand"
+  },
+  {
+    "course": "middle",
+    "activity": "friction",
+    "condition": "smooth",
+    "rig": "friction",
+    "lang": "ko",
+    "name": "나무토막 · 표면판 · 추"
+  },
+  {
+    "course": "middle",
+    "activity": "friction",
+    "condition": "smooth",
+    "rig": "friction",
+    "lang": "en",
+    "name": "Wooden block · surface · weights"
+  },
+  {
+    "course": "middle",
+    "activity": "friction",
+    "condition": "rough",
+    "rig": "friction",
+    "lang": "ko",
+    "name": "나무토막 · 표면판 · 추"
+  },
+  {
+    "course": "middle",
+    "activity": "friction",
+    "condition": "rough",
+    "rig": "friction",
+    "lang": "en",
+    "name": "Wooden block · surface · weights"
+  },
+  {
+    "course": "middle",
+    "activity": "friction",
+    "condition": "heavy",
+    "rig": "friction",
+    "lang": "ko",
+    "name": "나무토막 · 표면판 · 추"
+  },
+  {
+    "course": "middle",
+    "activity": "friction",
+    "condition": "heavy",
+    "rig": "friction",
+    "lang": "en",
+    "name": "Wooden block · surface · weights"
+  },
+  {
+    "course": "middle",
+    "activity": "friction",
+    "condition": "free:mass:0.5",
+    "rig": "friction",
+    "lang": "ko",
+    "name": "나무토막 · 표면판 · 추"
+  },
+  {
+    "course": "middle",
+    "activity": "friction",
+    "condition": "free:mass:0.5",
+    "rig": "friction",
+    "lang": "en",
+    "name": "Wooden block · surface · weights"
+  },
+  {
+    "course": "middle",
+    "activity": "friction",
+    "condition": "free:mass:3",
+    "rig": "friction",
+    "lang": "ko",
+    "name": "나무토막 · 표면판 · 추"
+  },
+  {
+    "course": "middle",
+    "activity": "friction",
+    "condition": "free:mass:3",
+    "rig": "friction",
+    "lang": "en",
+    "name": "Wooden block · surface · weights"
+  },
+  {
+    "course": "middle",
+    "activity": "friction",
+    "condition": "free:surface:0.05",
+    "rig": "friction",
+    "lang": "ko",
+    "name": "나무토막 · 표면판 · 추"
+  },
+  {
+    "course": "middle",
+    "activity": "friction",
+    "condition": "free:surface:0.05",
+    "rig": "friction",
+    "lang": "en",
+    "name": "Wooden block · surface · weights"
+  },
+  {
+    "course": "middle",
+    "activity": "friction",
+    "condition": "free:surface:0.2",
+    "rig": "friction",
+    "lang": "ko",
+    "name": "나무토막 · 표면판 · 추"
+  },
+  {
+    "course": "middle",
+    "activity": "friction",
+    "condition": "free:surface:0.2",
+    "rig": "friction",
+    "lang": "en",
+    "name": "Wooden block · surface · weights"
+  },
+  {
+    "course": "middle",
+    "activity": "buoyancy",
+    "condition": "air",
+    "rig": "tank",
+    "lang": "ko",
+    "name": "수조 · 추 · 힘 센서"
+  },
+  {
+    "course": "middle",
+    "activity": "buoyancy",
+    "condition": "air",
+    "rig": "tank",
+    "lang": "en",
+    "name": "Water tank · weights · force sensor"
+  },
+  {
+    "course": "middle",
+    "activity": "buoyancy",
+    "condition": "one",
+    "rig": "tank",
+    "lang": "ko",
+    "name": "수조 · 추 · 힘 센서"
+  },
+  {
+    "course": "middle",
+    "activity": "buoyancy",
+    "condition": "one",
+    "rig": "tank",
+    "lang": "en",
+    "name": "Water tank · weights · force sensor"
+  },
+  {
+    "course": "middle",
+    "activity": "buoyancy",
+    "condition": "two",
+    "rig": "tank",
+    "lang": "ko",
+    "name": "수조 · 추 · 힘 센서"
+  },
+  {
+    "course": "middle",
+    "activity": "buoyancy",
+    "condition": "two",
+    "rig": "tank",
+    "lang": "en",
+    "name": "Water tank · weights · force sensor"
+  },
+  {
+    "course": "middle",
+    "activity": "buoyancy",
+    "condition": "free:density:1000",
+    "rig": "tank",
+    "lang": "ko",
+    "name": "수조 · 추 · 힘 센서"
+  },
+  {
+    "course": "middle",
+    "activity": "buoyancy",
+    "condition": "free:density:1000",
+    "rig": "tank",
+    "lang": "en",
+    "name": "Water tank · weights · force sensor"
+  },
+  {
+    "course": "middle",
+    "activity": "buoyancy",
+    "condition": "free:density:1200",
+    "rig": "tank",
+    "lang": "ko",
+    "name": "수조 · 추 · 힘 센서"
+  },
+  {
+    "course": "middle",
+    "activity": "buoyancy",
+    "condition": "free:density:1200",
+    "rig": "tank",
+    "lang": "en",
+    "name": "Water tank · weights · force sensor"
+  },
+  {
+    "course": "middle",
+    "activity": "buoyancy",
+    "condition": "free:volume:0",
+    "rig": "tank",
+    "lang": "ko",
+    "name": "수조 · 추 · 힘 센서"
+  },
+  {
+    "course": "middle",
+    "activity": "buoyancy",
+    "condition": "free:volume:0",
+    "rig": "tank",
+    "lang": "en",
+    "name": "Water tank · weights · force sensor"
+  },
+  {
+    "course": "middle",
+    "activity": "buoyancy",
+    "condition": "free:volume:400",
+    "rig": "tank",
+    "lang": "ko",
+    "name": "수조 · 추 · 힘 센서"
+  },
+  {
+    "course": "middle",
+    "activity": "buoyancy",
+    "condition": "free:volume:400",
+    "rig": "tank",
+    "lang": "en",
+    "name": "Water tank · weights · force sensor"
+  },
+  {
+    "course": "middle",
+    "activity": "overflow",
+    "condition": "empty",
+    "rig": "overflow",
+    "lang": "ko",
+    "name": "넘침 수조 · 추 · 컵 · 저울"
+  },
+  {
+    "course": "middle",
+    "activity": "overflow",
+    "condition": "empty",
+    "rig": "overflow",
+    "lang": "en",
+    "name": "Overflow tank · weight · cup · scale"
+  },
+  {
+    "course": "middle",
+    "activity": "overflow",
+    "condition": "water",
+    "rig": "overflow",
+    "lang": "ko",
+    "name": "넘침 수조 · 추 · 컵 · 저울"
+  },
+  {
+    "course": "middle",
+    "activity": "overflow",
+    "condition": "water",
+    "rig": "overflow",
+    "lang": "en",
+    "name": "Overflow tank · weight · cup · scale"
+  },
+  {
+    "course": "middle",
+    "activity": "overflow",
+    "condition": "more",
+    "rig": "overflow",
+    "lang": "ko",
+    "name": "넘침 수조 · 추 · 컵 · 저울"
+  },
+  {
+    "course": "middle",
+    "activity": "overflow",
+    "condition": "more",
+    "rig": "overflow",
+    "lang": "en",
+    "name": "Overflow tank · weight · cup · scale"
+  },
+  {
+    "course": "middle",
+    "activity": "overflow",
+    "condition": "free:volume:0",
+    "rig": "overflow",
+    "lang": "ko",
+    "name": "넘침 수조 · 추 · 컵 · 저울"
+  },
+  {
+    "course": "middle",
+    "activity": "overflow",
+    "condition": "free:volume:0",
+    "rig": "overflow",
+    "lang": "en",
+    "name": "Overflow tank · weight · cup · scale"
+  },
+  {
+    "course": "middle",
+    "activity": "overflow",
+    "condition": "free:volume:400",
+    "rig": "overflow",
+    "lang": "ko",
+    "name": "넘침 수조 · 추 · 컵 · 저울"
+  },
+  {
+    "course": "middle",
+    "activity": "overflow",
+    "condition": "free:volume:400",
+    "rig": "overflow",
+    "lang": "en",
+    "name": "Overflow tank · weight · cup · scale"
+  },
+  {
+    "course": "middle",
+    "activity": "motion",
+    "condition": "start",
+    "rig": "ball",
+    "lang": "ko",
+    "name": "공 · 선풍기"
+  },
+  {
+    "course": "middle",
+    "activity": "motion",
+    "condition": "start",
+    "rig": "ball",
+    "lang": "en",
+    "name": "Ball · fan"
+  },
+  {
+    "course": "middle",
+    "activity": "motion",
+    "condition": "speedup",
+    "rig": "ball",
+    "lang": "ko",
+    "name": "공 · 선풍기"
+  },
+  {
+    "course": "middle",
+    "activity": "motion",
+    "condition": "speedup",
+    "rig": "ball",
+    "lang": "en",
+    "name": "Ball · fan"
+  },
+  {
+    "course": "middle",
+    "activity": "motion",
+    "condition": "turn",
+    "rig": "ball",
+    "lang": "ko",
+    "name": "공 · 선풍기"
+  },
+  {
+    "course": "middle",
+    "activity": "motion",
+    "condition": "turn",
+    "rig": "ball",
+    "lang": "en",
+    "name": "Ball · fan"
+  },
+  {
+    "course": "middle",
+    "activity": "motion",
+    "condition": "slowdown",
+    "rig": "ball",
+    "lang": "ko",
+    "name": "공 · 선풍기"
+  },
+  {
+    "course": "middle",
+    "activity": "motion",
+    "condition": "slowdown",
+    "rig": "ball",
+    "lang": "en",
+    "name": "Ball · fan"
+  },
+  {
+    "course": "middle",
+    "activity": "motion",
+    "condition": "stop",
+    "rig": "ball",
+    "lang": "ko",
+    "name": "공 · 선풍기"
+  },
+  {
+    "course": "middle",
+    "activity": "motion",
+    "condition": "stop",
+    "rig": "ball",
+    "lang": "en",
+    "name": "Ball · fan"
+  },
+  {
+    "course": "middle",
+    "activity": "motion",
+    "condition": "free:mode:speedup",
+    "rig": "ball",
+    "lang": "ko",
+    "name": "공 · 선풍기"
+  },
+  {
+    "course": "middle",
+    "activity": "motion",
+    "condition": "free:mode:speedup",
+    "rig": "ball",
+    "lang": "en",
+    "name": "Ball · fan"
+  },
+  {
+    "course": "middle",
+    "activity": "motion",
+    "condition": "free:mode:slowdown",
+    "rig": "ball",
+    "lang": "ko",
+    "name": "공 · 선풍기"
+  },
+  {
+    "course": "middle",
+    "activity": "motion",
+    "condition": "free:mode:slowdown",
+    "rig": "ball",
+    "lang": "en",
+    "name": "Ball · fan"
+  },
+  {
+    "course": "middle",
+    "activity": "motion",
+    "condition": "free:mode:turn",
+    "rig": "ball",
+    "lang": "ko",
+    "name": "공 · 선풍기"
+  },
+  {
+    "course": "middle",
+    "activity": "motion",
+    "condition": "free:mode:turn",
+    "rig": "ball",
+    "lang": "en",
+    "name": "Ball · fan"
+  },
+  {
+    "course": "middle",
+    "activity": "motion",
+    "condition": "free:mode:stop",
+    "rig": "ball",
+    "lang": "ko",
+    "name": "공 · 선풍기"
+  },
+  {
+    "course": "middle",
+    "activity": "motion",
+    "condition": "free:mode:stop",
+    "rig": "ball",
+    "lang": "en",
+    "name": "Ball · fan"
+  },
+  {
+    "course": "middle",
+    "activity": "motion",
+    "condition": "free:initial:0",
+    "rig": "ball",
+    "lang": "ko",
+    "name": "공 · 선풍기"
+  },
+  {
+    "course": "middle",
+    "activity": "motion",
+    "condition": "free:initial:0",
+    "rig": "ball",
+    "lang": "en",
+    "name": "Ball · fan"
+  },
+  {
+    "course": "middle",
+    "activity": "motion",
+    "condition": "free:initial:1",
+    "rig": "ball",
+    "lang": "ko",
+    "name": "공 · 선풍기"
+  },
+  {
+    "course": "middle",
+    "activity": "motion",
+    "condition": "free:initial:1",
+    "rig": "ball",
+    "lang": "en",
+    "name": "Ball · fan"
+  },
+  {
+    "course": "middle",
+    "activity": "motion-classify",
+    "condition": "fall",
+    "rig": "motion-classify",
+    "lang": "ko",
+    "name": "공 · 이동 경로"
+  },
+  {
+    "course": "middle",
+    "activity": "motion-classify",
+    "condition": "fall",
+    "rig": "motion-classify",
+    "lang": "en",
+    "name": "Ball · motion path"
+  },
+  {
+    "course": "middle",
+    "activity": "motion-classify",
+    "condition": "circle",
+    "rig": "motion-classify",
+    "lang": "ko",
+    "name": "공 · 이동 경로"
+  },
+  {
+    "course": "middle",
+    "activity": "motion-classify",
+    "condition": "circle",
+    "rig": "motion-classify",
+    "lang": "en",
+    "name": "Ball · motion path"
+  },
+  {
+    "course": "middle",
+    "activity": "motion-classify",
+    "condition": "throw",
+    "rig": "motion-classify",
+    "lang": "ko",
+    "name": "공 · 이동 경로"
+  },
+  {
+    "course": "middle",
+    "activity": "motion-classify",
+    "condition": "throw",
+    "rig": "motion-classify",
+    "lang": "en",
+    "name": "Ball · motion path"
+  },
+  {
+    "course": "middle",
+    "activity": "motion-classify",
+    "condition": "free:mode:falling",
+    "rig": "motion-classify",
+    "lang": "ko",
+    "name": "공 · 이동 경로"
+  },
+  {
+    "course": "middle",
+    "activity": "motion-classify",
+    "condition": "free:mode:falling",
+    "rig": "motion-classify",
+    "lang": "en",
+    "name": "Ball · motion path"
+  },
+  {
+    "course": "middle",
+    "activity": "motion-classify",
+    "condition": "free:mode:circle",
+    "rig": "motion-classify",
+    "lang": "ko",
+    "name": "공 · 이동 경로"
+  },
+  {
+    "course": "middle",
+    "activity": "motion-classify",
+    "condition": "free:mode:circle",
+    "rig": "motion-classify",
+    "lang": "en",
+    "name": "Ball · motion path"
+  },
+  {
+    "course": "middle",
+    "activity": "motion-classify",
+    "condition": "free:mode:projectile",
+    "rig": "motion-classify",
+    "lang": "ko",
+    "name": "공 · 이동 경로"
+  },
+  {
+    "course": "middle",
+    "activity": "motion-classify",
+    "condition": "free:mode:projectile",
+    "rig": "motion-classify",
+    "lang": "en",
+    "name": "Ball · motion path"
+  },
+  {
+    "course": "middle",
+    "activity": "contact",
+    "condition": "hand",
+    "rig": "support",
+    "lang": "ko",
+    "name": "가방 · 받치는 손"
+  },
+  {
+    "course": "middle",
+    "activity": "contact",
+    "condition": "hand",
+    "rig": "support",
+    "lang": "en",
+    "name": "Bag · supporting hand"
+  },
+  {
+    "course": "middle",
+    "activity": "contact",
+    "condition": "floor",
+    "rig": "support",
+    "lang": "ko",
+    "name": "가방 · 받침판"
+  },
+  {
+    "course": "middle",
+    "activity": "contact",
+    "condition": "floor",
+    "rig": "support",
+    "lang": "en",
+    "name": "Bag · support surface"
+  },
+  {
+    "course": "middle",
+    "activity": "contact",
+    "condition": "free:contact:hand",
+    "rig": "support",
+    "lang": "ko",
+    "name": "가방 · 받치는 손"
+  },
+  {
+    "course": "middle",
+    "activity": "contact",
+    "condition": "free:contact:hand",
+    "rig": "support",
+    "lang": "en",
+    "name": "Bag · supporting hand"
+  },
+  {
+    "course": "middle",
+    "activity": "contact",
+    "condition": "free:contact:floor",
+    "rig": "support",
+    "lang": "ko",
+    "name": "가방 · 받침판"
+  },
+  {
+    "course": "middle",
+    "activity": "contact",
+    "condition": "free:contact:floor",
+    "rig": "support",
+    "lang": "en",
+    "name": "Bag · support surface"
+  },
+  {
+    "course": "middle",
+    "activity": "contact",
+    "condition": "free:mass:0.5",
+    "rig": "support",
+    "lang": "ko",
+    "name": "가방 · 받치는 손"
+  },
+  {
+    "course": "middle",
+    "activity": "contact",
+    "condition": "free:mass:0.5",
+    "rig": "support",
+    "lang": "en",
+    "name": "Bag · supporting hand"
+  },
+  {
+    "course": "middle",
+    "activity": "contact",
+    "condition": "free:mass:3",
+    "rig": "support",
+    "lang": "ko",
+    "name": "가방 · 받치는 손"
+  },
+  {
+    "course": "middle",
+    "activity": "contact",
+    "condition": "free:mass:3",
+    "rig": "support",
+    "lang": "en",
+    "name": "Bag · supporting hand"
+  },
+  {
+    "course": "middle",
+    "activity": "applications",
+    "condition": "spring",
+    "rig": "examples",
+    "lang": "ko",
+    "name": "용수철 장난감"
+  },
+  {
+    "course": "middle",
+    "activity": "applications",
+    "condition": "spring",
+    "rig": "examples",
+    "lang": "en",
+    "name": "Spring toy"
+  },
+  {
+    "course": "middle",
+    "activity": "applications",
+    "condition": "balloon",
+    "rig": "examples",
+    "lang": "ko",
+    "name": "풍선"
+  },
+  {
+    "course": "middle",
+    "activity": "applications",
+    "condition": "balloon",
+    "rig": "examples",
+    "lang": "en",
+    "name": "Balloon"
+  },
+  {
+    "course": "middle",
+    "activity": "applications",
+    "condition": "lever",
+    "rig": "examples",
+    "lang": "ko",
+    "name": "병따개 · 병"
+  },
+  {
+    "course": "middle",
+    "activity": "applications",
+    "condition": "lever",
+    "rig": "examples",
+    "lang": "en",
+    "name": "Bottle opener · bottle"
+  },
+  {
+    "course": "middle",
+    "activity": "applications",
+    "condition": "free:example:spring",
+    "rig": "examples",
+    "lang": "ko",
+    "name": "용수철 장난감"
+  },
+  {
+    "course": "middle",
+    "activity": "applications",
+    "condition": "free:example:spring",
+    "rig": "examples",
+    "lang": "en",
+    "name": "Spring toy"
+  },
+  {
+    "course": "middle",
+    "activity": "applications",
+    "condition": "free:example:balloon",
+    "rig": "examples",
+    "lang": "ko",
+    "name": "풍선"
+  },
+  {
+    "course": "middle",
+    "activity": "applications",
+    "condition": "free:example:balloon",
+    "rig": "examples",
+    "lang": "en",
+    "name": "Balloon"
+  },
+  {
+    "course": "middle",
+    "activity": "applications",
+    "condition": "free:example:bottle",
+    "rig": "examples",
+    "lang": "ko",
+    "name": "병따개 · 병"
+  },
+  {
+    "course": "middle",
+    "activity": "applications",
+    "condition": "free:example:bottle",
+    "rig": "examples",
+    "lang": "en",
+    "name": "Bottle opener · bottle"
+  },
+  {
+    "course": "middle",
+    "activity": "design",
+    "condition": "before",
+    "rig": "design",
+    "lang": "ko",
+    "name": "수레 · 마찰 브레이크"
+  },
+  {
+    "course": "middle",
+    "activity": "design",
+    "condition": "before",
+    "rig": "design",
+    "lang": "en",
+    "name": "Cart · friction brake"
+  },
+  {
+    "course": "middle",
+    "activity": "design",
+    "condition": "after",
+    "rig": "design",
+    "lang": "ko",
+    "name": "수레 · 마찰 브레이크"
+  },
+  {
+    "course": "middle",
+    "activity": "design",
+    "condition": "after",
+    "rig": "design",
+    "lang": "en",
+    "name": "Cart · friction brake"
+  },
+  {
+    "course": "middle",
+    "activity": "design",
+    "condition": "alternative",
+    "rig": "design",
+    "lang": "ko",
+    "name": "수레 · 탄성 완충 장치"
+  },
+  {
+    "course": "middle",
+    "activity": "design",
+    "condition": "alternative",
+    "rig": "design",
+    "lang": "en",
+    "name": "Cart · elastic bumper"
+  },
+  {
+    "course": "middle",
+    "activity": "design",
+    "condition": "free:surface:0.05",
+    "rig": "design",
+    "lang": "ko",
+    "name": "수레 · 마찰 브레이크"
+  },
+  {
+    "course": "middle",
+    "activity": "design",
+    "condition": "free:surface:0.05",
+    "rig": "design",
+    "lang": "en",
+    "name": "Cart · friction brake"
+  },
+  {
+    "course": "middle",
+    "activity": "design",
+    "condition": "free:surface:0.2",
+    "rig": "design",
+    "lang": "ko",
+    "name": "수레 · 마찰 브레이크"
+  },
+  {
+    "course": "middle",
+    "activity": "design",
+    "condition": "free:surface:0.2",
+    "rig": "design",
+    "lang": "en",
+    "name": "Cart · friction brake"
+  },
+  {
+    "course": "middle",
+    "activity": "design",
+    "condition": "free:device:brake",
+    "rig": "design",
+    "lang": "ko",
+    "name": "수레 · 마찰 브레이크"
+  },
+  {
+    "course": "middle",
+    "activity": "design",
+    "condition": "free:device:brake",
+    "rig": "design",
+    "lang": "en",
+    "name": "Cart · friction brake"
+  },
+  {
+    "course": "middle",
+    "activity": "design",
+    "condition": "free:device:bumper",
+    "rig": "design",
+    "lang": "ko",
+    "name": "수레 · 탄성 완충 장치"
+  },
+  {
+    "course": "middle",
+    "activity": "design",
+    "condition": "free:device:bumper",
+    "rig": "design",
+    "lang": "en",
+    "name": "Cart · elastic bumper"
+  },
+  {
+    "course": "middle",
+    "activity": "design",
+    "condition": "free:mass:0.5",
+    "rig": "design",
+    "lang": "ko",
+    "name": "수레 · 마찰 브레이크"
+  },
+  {
+    "course": "middle",
+    "activity": "design",
+    "condition": "free:mass:0.5",
+    "rig": "design",
+    "lang": "en",
+    "name": "Cart · friction brake"
+  },
+  {
+    "course": "middle",
+    "activity": "design",
+    "condition": "free:mass:3",
+    "rig": "design",
+    "lang": "ko",
+    "name": "수레 · 마찰 브레이크"
+  },
+  {
+    "course": "middle",
+    "activity": "design",
+    "condition": "free:mass:3",
+    "rig": "design",
+    "lang": "en",
+    "name": "Cart · friction brake"
+  },
+  {
+    "course": "middle",
+    "activity": "design",
+    "condition": "free:speed:0.5",
+    "rig": "design",
+    "lang": "ko",
+    "name": "수레 · 마찰 브레이크"
+  },
+  {
+    "course": "middle",
+    "activity": "design",
+    "condition": "free:speed:0.5",
+    "rig": "design",
+    "lang": "en",
+    "name": "Cart · friction brake"
+  },
+  {
+    "course": "middle",
+    "activity": "design",
+    "condition": "free:speed:2",
+    "rig": "design",
+    "lang": "ko",
+    "name": "수레 · 마찰 브레이크"
+  },
+  {
+    "course": "middle",
+    "activity": "design",
+    "condition": "free:speed:2",
+    "rig": "design",
+    "lang": "en",
+    "name": "Cart · friction brake"
+  },
+  {
+    "course": "middle",
+    "activity": "design",
+    "condition": "free:k:20",
+    "rig": "design",
+    "lang": "ko",
+    "name": "수레 · 마찰 브레이크"
+  },
+  {
+    "course": "middle",
+    "activity": "design",
+    "condition": "free:k:20",
+    "rig": "design",
+    "lang": "en",
+    "name": "Cart · friction brake"
+  },
+  {
+    "course": "middle",
+    "activity": "design",
+    "condition": "free:k:80",
+    "rig": "design",
+    "lang": "ko",
+    "name": "수레 · 마찰 브레이크"
+  },
+  {
+    "course": "middle",
+    "activity": "design",
+    "condition": "free:k:80",
+    "rig": "design",
+    "lang": "en",
+    "name": "Cart · friction brake"
+  },
+  {
+    "course": "middle",
+    "activity": "floating",
+    "condition": "diver",
+    "rig": "floating",
+    "lang": "ko",
+    "name": "잠수부 모형 · 공기주머니 · 수조"
+  },
+  {
+    "course": "middle",
+    "activity": "floating",
+    "condition": "diver",
+    "rig": "floating",
+    "lang": "en",
+    "name": "Diver model · air pocket · water tank"
+  },
+  {
+    "course": "middle",
+    "activity": "floating",
+    "condition": "balloon",
+    "rig": "floating",
+    "lang": "ko",
+    "name": "풍선 · 클립"
+  },
+  {
+    "course": "middle",
+    "activity": "floating",
+    "condition": "balloon",
+    "rig": "floating",
+    "lang": "en",
+    "name": "Balloon · clips"
+  },
+  {
+    "course": "middle",
+    "activity": "floating",
+    "condition": "submarine",
+    "rig": "floating",
+    "lang": "ko",
+    "name": "잠수함 모형 · 수조"
+  },
+  {
+    "course": "middle",
+    "activity": "floating",
+    "condition": "submarine",
+    "rig": "floating",
+    "lang": "en",
+    "name": "Submarine model · water tank"
+  },
+  {
+    "course": "middle",
+    "activity": "floating",
+    "condition": "free:case:diver",
+    "rig": "floating",
+    "lang": "ko",
+    "name": "잠수부 모형 · 공기주머니 · 수조"
+  },
+  {
+    "course": "middle",
+    "activity": "floating",
+    "condition": "free:case:diver",
+    "rig": "floating",
+    "lang": "en",
+    "name": "Diver model · air pocket · water tank"
+  },
+  {
+    "course": "middle",
+    "activity": "floating",
+    "condition": "free:case:balloon",
+    "rig": "floating",
+    "lang": "ko",
+    "name": "풍선 · 클립"
+  },
+  {
+    "course": "middle",
+    "activity": "floating",
+    "condition": "free:case:balloon",
+    "rig": "floating",
+    "lang": "en",
+    "name": "Balloon · clips"
+  },
+  {
+    "course": "middle",
+    "activity": "floating",
+    "condition": "free:case:submarine",
+    "rig": "floating",
+    "lang": "ko",
+    "name": "잠수함 모형 · 수조"
+  },
+  {
+    "course": "middle",
+    "activity": "floating",
+    "condition": "free:case:submarine",
+    "rig": "floating",
+    "lang": "en",
+    "name": "Submarine model · water tank"
+  },
+  {
+    "course": "middle",
+    "activity": "floating",
+    "condition": "free:volume:0",
+    "rig": "floating",
+    "lang": "ko",
+    "name": "잠수부 모형 · 공기주머니 · 수조"
+  },
+  {
+    "course": "middle",
+    "activity": "floating",
+    "condition": "free:volume:0",
+    "rig": "floating",
+    "lang": "en",
+    "name": "Diver model · air pocket · water tank"
+  },
+  {
+    "course": "middle",
+    "activity": "floating",
+    "condition": "free:volume:400",
+    "rig": "floating",
+    "lang": "ko",
+    "name": "잠수부 모형 · 공기주머니 · 수조"
+  },
+  {
+    "course": "middle",
+    "activity": "floating",
+    "condition": "free:volume:400",
+    "rig": "floating",
+    "lang": "en",
+    "name": "Diver model · air pocket · water tank"
+  },
+  {
+    "course": "middle",
+    "activity": "floating",
+    "condition": "free:clips:0",
+    "rig": "floating",
+    "lang": "ko",
+    "name": "잠수부 모형 · 공기주머니 · 수조"
+  },
+  {
+    "course": "middle",
+    "activity": "floating",
+    "condition": "free:clips:0",
+    "rig": "floating",
+    "lang": "en",
+    "name": "Diver model · air pocket · water tank"
+  },
+  {
+    "course": "middle",
+    "activity": "floating",
+    "condition": "free:clips:4",
+    "rig": "floating",
+    "lang": "ko",
+    "name": "잠수부 모형 · 공기주머니 · 수조"
+  },
+  {
+    "course": "middle",
+    "activity": "floating",
+    "condition": "free:clips:4",
+    "rig": "floating",
+    "lang": "en",
+    "name": "Diver model · air pocket · water tank"
+  },
+  {
+    "course": "middle",
+    "activity": "floating",
+    "condition": "free:fill:0",
+    "rig": "floating",
+    "lang": "ko",
+    "name": "잠수부 모형 · 공기주머니 · 수조"
+  },
+  {
+    "course": "middle",
+    "activity": "floating",
+    "condition": "free:fill:0",
+    "rig": "floating",
+    "lang": "en",
+    "name": "Diver model · air pocket · water tank"
+  },
+  {
+    "course": "middle",
+    "activity": "floating",
+    "condition": "free:fill:4",
+    "rig": "floating",
+    "lang": "ko",
+    "name": "잠수부 모형 · 공기주머니 · 수조"
+  },
+  {
+    "course": "middle",
+    "activity": "floating",
+    "condition": "free:fill:4",
+    "rig": "floating",
+    "lang": "en",
+    "name": "Diver model · air pocket · water tank"
+  },
+  {
+    "course": "middle",
+    "activity": "review-middle",
+    "condition": "before",
+    "rig": "floating",
+    "lang": "ko",
+    "name": "잠수부 모형 · 공기주머니 · 수조"
+  },
+  {
+    "course": "middle",
+    "activity": "review-middle",
+    "condition": "before",
+    "rig": "floating",
+    "lang": "en",
+    "name": "Diver model · air pocket · water tank"
+  },
+  {
+    "course": "middle",
+    "activity": "review-middle",
+    "condition": "after",
+    "rig": "floating",
+    "lang": "ko",
+    "name": "잠수부 모형 · 공기주머니 · 수조"
+  },
+  {
+    "course": "middle",
+    "activity": "review-middle",
+    "condition": "after",
+    "rig": "floating",
+    "lang": "en",
+    "name": "Diver model · air pocket · water tank"
+  },
+  {
+    "course": "middle",
+    "activity": "review-middle",
+    "condition": "free:case:diver",
+    "rig": "floating",
+    "lang": "ko",
+    "name": "잠수부 모형 · 공기주머니 · 수조"
+  },
+  {
+    "course": "middle",
+    "activity": "review-middle",
+    "condition": "free:case:diver",
+    "rig": "floating",
+    "lang": "en",
+    "name": "Diver model · air pocket · water tank"
+  },
+  {
+    "course": "middle",
+    "activity": "review-middle",
+    "condition": "free:case:balloon",
+    "rig": "floating",
+    "lang": "ko",
+    "name": "풍선 · 클립"
+  },
+  {
+    "course": "middle",
+    "activity": "review-middle",
+    "condition": "free:case:balloon",
+    "rig": "floating",
+    "lang": "en",
+    "name": "Balloon · clips"
+  },
+  {
+    "course": "middle",
+    "activity": "review-middle",
+    "condition": "free:case:submarine",
+    "rig": "floating",
+    "lang": "ko",
+    "name": "잠수함 모형 · 수조"
+  },
+  {
+    "course": "middle",
+    "activity": "review-middle",
+    "condition": "free:case:submarine",
+    "rig": "floating",
+    "lang": "en",
+    "name": "Submarine model · water tank"
+  },
+  {
+    "course": "middle",
+    "activity": "review-middle",
+    "condition": "free:volume:0",
+    "rig": "floating",
+    "lang": "ko",
+    "name": "잠수부 모형 · 공기주머니 · 수조"
+  },
+  {
+    "course": "middle",
+    "activity": "review-middle",
+    "condition": "free:volume:0",
+    "rig": "floating",
+    "lang": "en",
+    "name": "Diver model · air pocket · water tank"
+  },
+  {
+    "course": "middle",
+    "activity": "review-middle",
+    "condition": "free:volume:400",
+    "rig": "floating",
+    "lang": "ko",
+    "name": "잠수부 모형 · 공기주머니 · 수조"
+  },
+  {
+    "course": "middle",
+    "activity": "review-middle",
+    "condition": "free:volume:400",
+    "rig": "floating",
+    "lang": "en",
+    "name": "Diver model · air pocket · water tank"
+  },
+  {
+    "course": "middle",
+    "activity": "review-middle",
+    "condition": "free:clips:0",
+    "rig": "floating",
+    "lang": "ko",
+    "name": "잠수부 모형 · 공기주머니 · 수조"
+  },
+  {
+    "course": "middle",
+    "activity": "review-middle",
+    "condition": "free:clips:0",
+    "rig": "floating",
+    "lang": "en",
+    "name": "Diver model · air pocket · water tank"
+  },
+  {
+    "course": "middle",
+    "activity": "review-middle",
+    "condition": "free:clips:4",
+    "rig": "floating",
+    "lang": "ko",
+    "name": "잠수부 모형 · 공기주머니 · 수조"
+  },
+  {
+    "course": "middle",
+    "activity": "review-middle",
+    "condition": "free:clips:4",
+    "rig": "floating",
+    "lang": "en",
+    "name": "Diver model · air pocket · water tank"
+  },
+  {
+    "course": "middle",
+    "activity": "review-middle",
+    "condition": "free:fill:0",
+    "rig": "floating",
+    "lang": "ko",
+    "name": "잠수부 모형 · 공기주머니 · 수조"
+  },
+  {
+    "course": "middle",
+    "activity": "review-middle",
+    "condition": "free:fill:0",
+    "rig": "floating",
+    "lang": "en",
+    "name": "Diver model · air pocket · water tank"
+  },
+  {
+    "course": "middle",
+    "activity": "review-middle",
+    "condition": "free:fill:4",
+    "rig": "floating",
+    "lang": "ko",
+    "name": "잠수부 모형 · 공기주머니 · 수조"
+  },
+  {
+    "course": "middle",
+    "activity": "review-middle",
+    "condition": "free:fill:4",
+    "rig": "floating",
+    "lang": "en",
+    "name": "Diver model · air pocket · water tank"
+  },
+  {
+    "course": "physics",
+    "activity": "turning",
+    "condition": "review-sum",
+    "rig": "cart",
+    "lang": "ko",
+    "name": "수레 · 레일"
+  },
+  {
+    "course": "physics",
+    "activity": "turning",
+    "condition": "review-sum",
+    "rig": "cart",
+    "lang": "en",
+    "name": "Cart · track"
+  },
+  {
+    "course": "physics",
+    "activity": "turning",
+    "condition": "review-zero",
+    "rig": "cart",
+    "lang": "ko",
+    "name": "수레 · 레일"
+  },
+  {
+    "course": "physics",
+    "activity": "turning",
+    "condition": "review-zero",
+    "rig": "cart",
+    "lang": "en",
+    "name": "Cart · track"
+  },
+  {
+    "course": "physics",
+    "activity": "turning",
+    "condition": "near",
+    "rig": "turning",
+    "lang": "ko",
+    "name": "스패너 · 회전축"
+  },
+  {
+    "course": "physics",
+    "activity": "turning",
+    "condition": "near",
+    "rig": "turning",
+    "lang": "en",
+    "name": "Spanner · pivot"
+  },
+  {
+    "course": "physics",
+    "activity": "turning",
+    "condition": "far",
+    "rig": "turning",
+    "lang": "ko",
+    "name": "스패너 · 회전축"
+  },
+  {
+    "course": "physics",
+    "activity": "turning",
+    "condition": "far",
+    "rig": "turning",
+    "lang": "en",
+    "name": "Spanner · pivot"
+  },
+  {
+    "course": "physics",
+    "activity": "turning",
+    "condition": "double-force",
+    "rig": "turning",
+    "lang": "ko",
+    "name": "스패너 · 회전축"
+  },
+  {
+    "course": "physics",
+    "activity": "turning",
+    "condition": "double-force",
+    "rig": "turning",
+    "lang": "en",
+    "name": "Spanner · pivot"
+  },
+  {
+    "course": "physics",
+    "activity": "turning",
+    "condition": "angle",
+    "rig": "turning",
+    "lang": "ko",
+    "name": "스패너 · 회전축"
+  },
+  {
+    "course": "physics",
+    "activity": "turning",
+    "condition": "angle",
+    "rig": "turning",
+    "lang": "en",
+    "name": "Spanner · pivot"
+  },
+  {
+    "course": "physics",
+    "activity": "turning",
+    "condition": "free:reach:0.5",
+    "rig": "cart",
+    "lang": "ko",
+    "name": "수레 · 레일"
+  },
+  {
+    "course": "physics",
+    "activity": "turning",
+    "condition": "free:reach:0.5",
+    "rig": "cart",
+    "lang": "en",
+    "name": "Cart · track"
+  },
+  {
+    "course": "physics",
+    "activity": "turning",
+    "condition": "free:reach:1.5",
+    "rig": "cart",
+    "lang": "ko",
+    "name": "수레 · 레일"
+  },
+  {
+    "course": "physics",
+    "activity": "turning",
+    "condition": "free:reach:1.5",
+    "rig": "cart",
+    "lang": "en",
+    "name": "Cart · track"
+  },
+  {
+    "course": "physics",
+    "activity": "turning",
+    "condition": "free:angle:30",
+    "rig": "cart",
+    "lang": "ko",
+    "name": "수레 · 레일"
+  },
+  {
+    "course": "physics",
+    "activity": "turning",
+    "condition": "free:angle:30",
+    "rig": "cart",
+    "lang": "en",
+    "name": "Cart · track"
+  },
+  {
+    "course": "physics",
+    "activity": "turning",
+    "condition": "free:angle:90",
+    "rig": "cart",
+    "lang": "ko",
+    "name": "수레 · 레일"
+  },
+  {
+    "course": "physics",
+    "activity": "turning",
+    "condition": "free:angle:90",
+    "rig": "cart",
+    "lang": "en",
+    "name": "Cart · track"
+  },
+  {
+    "course": "physics",
+    "activity": "turning",
+    "condition": "free:effort:2",
+    "rig": "cart",
+    "lang": "ko",
+    "name": "수레 · 레일"
+  },
+  {
+    "course": "physics",
+    "activity": "turning",
+    "condition": "free:effort:2",
+    "rig": "cart",
+    "lang": "en",
+    "name": "Cart · track"
+  },
+  {
+    "course": "physics",
+    "activity": "turning",
+    "condition": "free:effort:10",
+    "rig": "cart",
+    "lang": "ko",
+    "name": "수레 · 레일"
+  },
+  {
+    "course": "physics",
+    "activity": "turning",
+    "condition": "free:effort:10",
+    "rig": "cart",
+    "lang": "en",
+    "name": "Cart · track"
+  },
+  {
+    "course": "physics",
+    "activity": "turning",
+    "condition": "free:mode:same",
+    "rig": "cart",
+    "lang": "ko",
+    "name": "수레 · 레일"
+  },
+  {
+    "course": "physics",
+    "activity": "turning",
+    "condition": "free:mode:same",
+    "rig": "cart",
+    "lang": "en",
+    "name": "Cart · track"
+  },
+  {
+    "course": "physics",
+    "activity": "turning",
+    "condition": "free:mode:opposite",
+    "rig": "cart",
+    "lang": "ko",
+    "name": "수레 · 레일"
+  },
+  {
+    "course": "physics",
+    "activity": "turning",
+    "condition": "free:mode:opposite",
+    "rig": "cart",
+    "lang": "en",
+    "name": "Cart · track"
+  },
+  {
+    "course": "physics",
+    "activity": "turning",
+    "condition": "free:mode:wrench",
+    "rig": "turning",
+    "lang": "ko",
+    "name": "스패너 · 회전축"
+  },
+  {
+    "course": "physics",
+    "activity": "turning",
+    "condition": "free:mode:wrench",
+    "rig": "turning",
+    "lang": "en",
+    "name": "Spanner · pivot"
+  },
+  {
+    "course": "physics",
+    "activity": "turning",
+    "condition": "free:left:0",
+    "rig": "cart",
+    "lang": "ko",
+    "name": "수레 · 레일"
+  },
+  {
+    "course": "physics",
+    "activity": "turning",
+    "condition": "free:left:0",
+    "rig": "cart",
+    "lang": "en",
+    "name": "Cart · track"
+  },
+  {
+    "course": "physics",
+    "activity": "turning",
+    "condition": "free:left:4",
+    "rig": "cart",
+    "lang": "ko",
+    "name": "수레 · 레일"
+  },
+  {
+    "course": "physics",
+    "activity": "turning",
+    "condition": "free:left:4",
+    "rig": "cart",
+    "lang": "en",
+    "name": "Cart · track"
+  },
+  {
+    "course": "physics",
+    "activity": "turning",
+    "condition": "free:right:0",
+    "rig": "cart",
+    "lang": "ko",
+    "name": "수레 · 레일"
+  },
+  {
+    "course": "physics",
+    "activity": "turning",
+    "condition": "free:right:0",
+    "rig": "cart",
+    "lang": "en",
+    "name": "Cart · track"
+  },
+  {
+    "course": "physics",
+    "activity": "turning",
+    "condition": "free:right:4",
+    "rig": "cart",
+    "lang": "ko",
+    "name": "수레 · 레일"
+  },
+  {
+    "course": "physics",
+    "activity": "turning",
+    "condition": "free:right:4",
+    "rig": "cart",
+    "lang": "en",
+    "name": "Cart · track"
+  },
+  {
+    "course": "physics",
+    "activity": "lever-counts",
+    "condition": "one",
+    "rig": "beam-counts",
+    "lang": "ko",
+    "name": "수평 막대 · 받침점 · 추"
+  },
+  {
+    "course": "physics",
+    "activity": "lever-counts",
+    "condition": "one",
+    "rig": "beam-counts",
+    "lang": "en",
+    "name": "Beam · pivot · weights"
+  },
+  {
+    "course": "physics",
+    "activity": "lever-counts",
+    "condition": "two",
+    "rig": "beam-counts",
+    "lang": "ko",
+    "name": "수평 막대 · 받침점 · 추"
+  },
+  {
+    "course": "physics",
+    "activity": "lever-counts",
+    "condition": "two",
+    "rig": "beam-counts",
+    "lang": "en",
+    "name": "Beam · pivot · weights"
+  },
+  {
+    "course": "physics",
+    "activity": "lever-counts",
+    "condition": "three",
+    "rig": "beam-counts",
+    "lang": "ko",
+    "name": "수평 막대 · 받침점 · 추"
+  },
+  {
+    "course": "physics",
+    "activity": "lever-counts",
+    "condition": "three",
+    "rig": "beam-counts",
+    "lang": "en",
+    "name": "Beam · pivot · weights"
+  },
+  {
+    "course": "physics",
+    "activity": "lever-counts",
+    "condition": "free:leftCount:1",
+    "rig": "beam-counts",
+    "lang": "ko",
+    "name": "수평 막대 · 받침점 · 추"
+  },
+  {
+    "course": "physics",
+    "activity": "lever-counts",
+    "condition": "free:leftCount:1",
+    "rig": "beam-counts",
+    "lang": "en",
+    "name": "Beam · pivot · weights"
+  },
+  {
+    "course": "physics",
+    "activity": "lever-counts",
+    "condition": "free:leftCount:6",
+    "rig": "beam-counts",
+    "lang": "ko",
+    "name": "수평 막대 · 받침점 · 추"
+  },
+  {
+    "course": "physics",
+    "activity": "lever-counts",
+    "condition": "free:leftCount:6",
+    "rig": "beam-counts",
+    "lang": "en",
+    "name": "Beam · pivot · weights"
+  },
+  {
+    "course": "physics",
+    "activity": "lever-counts",
+    "condition": "free:rightCount:1",
+    "rig": "beam-counts",
+    "lang": "ko",
+    "name": "수평 막대 · 받침점 · 추"
+  },
+  {
+    "course": "physics",
+    "activity": "lever-counts",
+    "condition": "free:rightCount:1",
+    "rig": "beam-counts",
+    "lang": "en",
+    "name": "Beam · pivot · weights"
+  },
+  {
+    "course": "physics",
+    "activity": "lever-counts",
+    "condition": "free:rightCount:6",
+    "rig": "beam-counts",
+    "lang": "ko",
+    "name": "수평 막대 · 받침점 · 추"
+  },
+  {
+    "course": "physics",
+    "activity": "lever-counts",
+    "condition": "free:rightCount:6",
+    "rig": "beam-counts",
+    "lang": "en",
+    "name": "Beam · pivot · weights"
+  },
+  {
+    "course": "physics",
+    "activity": "lever-counts",
+    "condition": "free:leftPos:1",
+    "rig": "beam-counts",
+    "lang": "ko",
+    "name": "수평 막대 · 받침점 · 추"
+  },
+  {
+    "course": "physics",
+    "activity": "lever-counts",
+    "condition": "free:leftPos:1",
+    "rig": "beam-counts",
+    "lang": "en",
+    "name": "Beam · pivot · weights"
+  },
+  {
+    "course": "physics",
+    "activity": "lever-counts",
+    "condition": "free:leftPos:5",
+    "rig": "beam-counts",
+    "lang": "ko",
+    "name": "수평 막대 · 받침점 · 추"
+  },
+  {
+    "course": "physics",
+    "activity": "lever-counts",
+    "condition": "free:leftPos:5",
+    "rig": "beam-counts",
+    "lang": "en",
+    "name": "Beam · pivot · weights"
+  },
+  {
+    "course": "physics",
+    "activity": "lever-counts",
+    "condition": "free:rightPos:1",
+    "rig": "beam-counts",
+    "lang": "ko",
+    "name": "수평 막대 · 받침점 · 추"
+  },
+  {
+    "course": "physics",
+    "activity": "lever-counts",
+    "condition": "free:rightPos:1",
+    "rig": "beam-counts",
+    "lang": "en",
+    "name": "Beam · pivot · weights"
+  },
+  {
+    "course": "physics",
+    "activity": "lever-counts",
+    "condition": "free:rightPos:5",
+    "rig": "beam-counts",
+    "lang": "ko",
+    "name": "수평 막대 · 받침점 · 추"
+  },
+  {
+    "course": "physics",
+    "activity": "lever-counts",
+    "condition": "free:rightPos:5",
+    "rig": "beam-counts",
+    "lang": "en",
+    "name": "Beam · pivot · weights"
+  },
+  {
+    "course": "physics",
+    "activity": "torque",
+    "condition": "balanced",
+    "rig": "beam",
+    "lang": "ko",
+    "name": "수평 막대 · 받침점 · 추"
+  },
+  {
+    "course": "physics",
+    "activity": "torque",
+    "condition": "balanced",
+    "rig": "beam",
+    "lang": "en",
+    "name": "Beam · pivot · weights"
+  },
+  {
+    "course": "physics",
+    "activity": "torque",
+    "condition": "rotate",
+    "rig": "beam",
+    "lang": "ko",
+    "name": "수평 막대 · 받침점 · 추"
+  },
+  {
+    "course": "physics",
+    "activity": "torque",
+    "condition": "rotate",
+    "rig": "beam",
+    "lang": "en",
+    "name": "Beam · pivot · weights"
+  },
+  {
+    "course": "physics",
+    "activity": "torque",
+    "condition": "restore",
+    "rig": "beam",
+    "lang": "ko",
+    "name": "수평 막대 · 받침점 · 추"
+  },
+  {
+    "course": "physics",
+    "activity": "torque",
+    "condition": "restore",
+    "rig": "beam",
+    "lang": "en",
+    "name": "Beam · pivot · weights"
+  },
+  {
+    "course": "physics",
+    "activity": "torque",
+    "condition": "free:effort:2",
+    "rig": "beam",
+    "lang": "ko",
+    "name": "수평 막대 · 받침점 · 추"
+  },
+  {
+    "course": "physics",
+    "activity": "torque",
+    "condition": "free:effort:2",
+    "rig": "beam",
+    "lang": "en",
+    "name": "Beam · pivot · weights"
+  },
+  {
+    "course": "physics",
+    "activity": "torque",
+    "condition": "free:effort:20",
+    "rig": "beam",
+    "lang": "ko",
+    "name": "수평 막대 · 받침점 · 추"
+  },
+  {
+    "course": "physics",
+    "activity": "torque",
+    "condition": "free:effort:20",
+    "rig": "beam",
+    "lang": "en",
+    "name": "Beam · pivot · weights"
+  },
+  {
+    "course": "physics",
+    "activity": "torque",
+    "condition": "free:arm:0.5",
+    "rig": "beam",
+    "lang": "ko",
+    "name": "수평 막대 · 받침점 · 추"
+  },
+  {
+    "course": "physics",
+    "activity": "torque",
+    "condition": "free:arm:0.5",
+    "rig": "beam",
+    "lang": "en",
+    "name": "Beam · pivot · weights"
+  },
+  {
+    "course": "physics",
+    "activity": "torque",
+    "condition": "free:arm:2",
+    "rig": "beam",
+    "lang": "ko",
+    "name": "수평 막대 · 받침점 · 추"
+  },
+  {
+    "course": "physics",
+    "activity": "torque",
+    "condition": "free:arm:2",
+    "rig": "beam",
+    "lang": "en",
+    "name": "Beam · pivot · weights"
+  },
+  {
+    "course": "physics",
+    "activity": "torque",
+    "condition": "free:loadArm:0.5",
+    "rig": "beam",
+    "lang": "ko",
+    "name": "수평 막대 · 받침점 · 추"
+  },
+  {
+    "course": "physics",
+    "activity": "torque",
+    "condition": "free:loadArm:0.5",
+    "rig": "beam",
+    "lang": "en",
+    "name": "Beam · pivot · weights"
+  },
+  {
+    "course": "physics",
+    "activity": "torque",
+    "condition": "free:loadArm:2",
+    "rig": "beam",
+    "lang": "ko",
+    "name": "수평 막대 · 받침점 · 추"
+  },
+  {
+    "course": "physics",
+    "activity": "torque",
+    "condition": "free:loadArm:2",
+    "rig": "beam",
+    "lang": "en",
+    "name": "Beam · pivot · weights"
+  },
+  {
+    "course": "physics",
+    "activity": "torque",
+    "condition": "free:mode:same",
+    "rig": "cart",
+    "lang": "ko",
+    "name": "수레 · 레일"
+  },
+  {
+    "course": "physics",
+    "activity": "torque",
+    "condition": "free:mode:same",
+    "rig": "cart",
+    "lang": "en",
+    "name": "Cart · track"
+  },
+  {
+    "course": "physics",
+    "activity": "torque",
+    "condition": "free:mode:opposite",
+    "rig": "cart",
+    "lang": "ko",
+    "name": "수레 · 레일"
+  },
+  {
+    "course": "physics",
+    "activity": "torque",
+    "condition": "free:mode:opposite",
+    "rig": "cart",
+    "lang": "en",
+    "name": "Cart · track"
+  },
+  {
+    "course": "physics",
+    "activity": "torque",
+    "condition": "free:mode:beam",
+    "rig": "beam",
+    "lang": "ko",
+    "name": "수평 막대 · 받침점 · 추"
+  },
+  {
+    "course": "physics",
+    "activity": "torque",
+    "condition": "free:mode:beam",
+    "rig": "beam",
+    "lang": "en",
+    "name": "Beam · pivot · weights"
+  },
+  {
+    "course": "physics",
+    "activity": "torque",
+    "condition": "free:left:0",
+    "rig": "beam",
+    "lang": "ko",
+    "name": "수평 막대 · 받침점 · 추"
+  },
+  {
+    "course": "physics",
+    "activity": "torque",
+    "condition": "free:left:0",
+    "rig": "beam",
+    "lang": "en",
+    "name": "Beam · pivot · weights"
+  },
+  {
+    "course": "physics",
+    "activity": "torque",
+    "condition": "free:left:4",
+    "rig": "beam",
+    "lang": "ko",
+    "name": "수평 막대 · 받침점 · 추"
+  },
+  {
+    "course": "physics",
+    "activity": "torque",
+    "condition": "free:left:4",
+    "rig": "beam",
+    "lang": "en",
+    "name": "Beam · pivot · weights"
+  },
+  {
+    "course": "physics",
+    "activity": "torque",
+    "condition": "free:right:0",
+    "rig": "beam",
+    "lang": "ko",
+    "name": "수평 막대 · 받침점 · 추"
+  },
+  {
+    "course": "physics",
+    "activity": "torque",
+    "condition": "free:right:0",
+    "rig": "beam",
+    "lang": "en",
+    "name": "Beam · pivot · weights"
+  },
+  {
+    "course": "physics",
+    "activity": "torque",
+    "condition": "free:right:4",
+    "rig": "beam",
+    "lang": "ko",
+    "name": "수평 막대 · 받침점 · 추"
+  },
+  {
+    "course": "physics",
+    "activity": "torque",
+    "condition": "free:right:4",
+    "rig": "beam",
+    "lang": "en",
+    "name": "Beam · pivot · weights"
+  },
+  {
+    "course": "physics",
+    "activity": "couple",
+    "condition": "same-line",
+    "rig": "couple",
+    "lang": "ko",
+    "name": "휴대전화 모형"
+  },
+  {
+    "course": "physics",
+    "activity": "couple",
+    "condition": "same-line",
+    "rig": "couple",
+    "lang": "en",
+    "name": "Phone model"
+  },
+  {
+    "course": "physics",
+    "activity": "couple",
+    "condition": "different-lines",
+    "rig": "couple",
+    "lang": "ko",
+    "name": "휴대전화 모형"
+  },
+  {
+    "course": "physics",
+    "activity": "couple",
+    "condition": "different-lines",
+    "rig": "couple",
+    "lang": "en",
+    "name": "Phone model"
+  },
+  {
+    "course": "physics",
+    "activity": "couple",
+    "condition": "free:line:collinear",
+    "rig": "couple",
+    "lang": "ko",
+    "name": "휴대전화 모형"
+  },
+  {
+    "course": "physics",
+    "activity": "couple",
+    "condition": "free:line:collinear",
+    "rig": "couple",
+    "lang": "en",
+    "name": "Phone model"
+  },
+  {
+    "course": "physics",
+    "activity": "couple",
+    "condition": "free:line:separated",
+    "rig": "couple",
+    "lang": "ko",
+    "name": "휴대전화 모형"
+  },
+  {
+    "course": "physics",
+    "activity": "couple",
+    "condition": "free:line:separated",
+    "rig": "couple",
+    "lang": "en",
+    "name": "Phone model"
+  },
+  {
+    "course": "physics",
+    "activity": "couple",
+    "condition": "free:effort:2",
+    "rig": "couple",
+    "lang": "ko",
+    "name": "휴대전화 모형"
+  },
+  {
+    "course": "physics",
+    "activity": "couple",
+    "condition": "free:effort:2",
+    "rig": "couple",
+    "lang": "en",
+    "name": "Phone model"
+  },
+  {
+    "course": "physics",
+    "activity": "couple",
+    "condition": "free:effort:10",
+    "rig": "couple",
+    "lang": "ko",
+    "name": "휴대전화 모형"
+  },
+  {
+    "course": "physics",
+    "activity": "couple",
+    "condition": "free:effort:10",
+    "rig": "couple",
+    "lang": "en",
+    "name": "Phone model"
+  },
+  {
+    "course": "physics",
+    "activity": "stability",
+    "condition": "small-tilt",
+    "rig": "stability",
+    "lang": "ko",
+    "name": "받침대 · 블록"
+  },
+  {
+    "course": "physics",
+    "activity": "stability",
+    "condition": "small-tilt",
+    "rig": "stability",
+    "lang": "en",
+    "name": "Support base · block"
+  },
+  {
+    "course": "physics",
+    "activity": "stability",
+    "condition": "tip",
+    "rig": "stability",
+    "lang": "ko",
+    "name": "받침대 · 블록"
+  },
+  {
+    "course": "physics",
+    "activity": "stability",
+    "condition": "tip",
+    "rig": "stability",
+    "lang": "en",
+    "name": "Support base · block"
+  },
+  {
+    "course": "physics",
+    "activity": "stability",
+    "condition": "wider",
+    "rig": "stability",
+    "lang": "ko",
+    "name": "받침대 · 블록"
+  },
+  {
+    "course": "physics",
+    "activity": "stability",
+    "condition": "wider",
+    "rig": "stability",
+    "lang": "en",
+    "name": "Support base · block"
+  },
+  {
+    "course": "physics",
+    "activity": "stability",
+    "condition": "lower",
+    "rig": "stability",
+    "lang": "ko",
+    "name": "받침대 · 블록"
+  },
+  {
+    "course": "physics",
+    "activity": "stability",
+    "condition": "lower",
+    "rig": "stability",
+    "lang": "en",
+    "name": "Support base · block"
+  },
+  {
+    "course": "physics",
+    "activity": "stability",
+    "condition": "free:width:0.5",
+    "rig": "stability",
+    "lang": "ko",
+    "name": "받침대 · 블록"
+  },
+  {
+    "course": "physics",
+    "activity": "stability",
+    "condition": "free:width:0.5",
+    "rig": "stability",
+    "lang": "en",
+    "name": "Support base · block"
+  },
+  {
+    "course": "physics",
+    "activity": "stability",
+    "condition": "free:width:2",
+    "rig": "stability",
+    "lang": "ko",
+    "name": "받침대 · 블록"
+  },
+  {
+    "course": "physics",
+    "activity": "stability",
+    "condition": "free:width:2",
+    "rig": "stability",
+    "lang": "en",
+    "name": "Support base · block"
+  },
+  {
+    "course": "physics",
+    "activity": "stability",
+    "condition": "free:offset:-1.5",
+    "rig": "stability",
+    "lang": "ko",
+    "name": "받침대 · 블록"
+  },
+  {
+    "course": "physics",
+    "activity": "stability",
+    "condition": "free:offset:-1.5",
+    "rig": "stability",
+    "lang": "en",
+    "name": "Support base · block"
+  },
+  {
+    "course": "physics",
+    "activity": "stability",
+    "condition": "free:offset:1.5",
+    "rig": "stability",
+    "lang": "ko",
+    "name": "받침대 · 블록"
+  },
+  {
+    "course": "physics",
+    "activity": "stability",
+    "condition": "free:offset:1.5",
+    "rig": "stability",
+    "lang": "en",
+    "name": "Support base · block"
+  },
+  {
+    "course": "physics",
+    "activity": "stability",
+    "condition": "free:height:1",
+    "rig": "stability",
+    "lang": "ko",
+    "name": "받침대 · 블록"
+  },
+  {
+    "course": "physics",
+    "activity": "stability",
+    "condition": "free:height:1",
+    "rig": "stability",
+    "lang": "en",
+    "name": "Support base · block"
+  },
+  {
+    "course": "physics",
+    "activity": "stability",
+    "condition": "free:height:3",
+    "rig": "stability",
+    "lang": "ko",
+    "name": "받침대 · 블록"
+  },
+  {
+    "course": "physics",
+    "activity": "stability",
+    "condition": "free:height:3",
+    "rig": "stability",
+    "lang": "en",
+    "name": "Support base · block"
+  },
+  {
+    "course": "physics",
+    "activity": "stability",
+    "condition": "free:tilt:0",
+    "rig": "stability",
+    "lang": "ko",
+    "name": "받침대 · 블록"
+  },
+  {
+    "course": "physics",
+    "activity": "stability",
+    "condition": "free:tilt:0",
+    "rig": "stability",
+    "lang": "en",
+    "name": "Support base · block"
+  },
+  {
+    "course": "physics",
+    "activity": "stability",
+    "condition": "free:tilt:45",
+    "rig": "stability",
+    "lang": "ko",
+    "name": "받침대 · 블록"
+  },
+  {
+    "course": "physics",
+    "activity": "stability",
+    "condition": "free:tilt:45",
+    "rig": "stability",
+    "lang": "en",
+    "name": "Support base · block"
+  },
+  {
+    "course": "physics",
+    "activity": "shelf",
+    "condition": "reference",
+    "rig": "shelf",
+    "lang": "ko",
+    "name": "선반 · 지지 줄 · 짐"
+  },
+  {
+    "course": "physics",
+    "activity": "shelf",
+    "condition": "reference",
+    "rig": "shelf",
+    "lang": "en",
+    "name": "Shelf · support rope · load"
+  },
+  {
+    "course": "physics",
+    "activity": "shelf",
+    "condition": "near-wall",
+    "rig": "shelf",
+    "lang": "ko",
+    "name": "선반 · 지지 줄 · 짐"
+  },
+  {
+    "course": "physics",
+    "activity": "shelf",
+    "condition": "near-wall",
+    "rig": "shelf",
+    "lang": "en",
+    "name": "Shelf · support rope · load"
+  },
+  {
+    "course": "physics",
+    "activity": "shelf",
+    "condition": "free:length:3",
+    "rig": "shelf",
+    "lang": "ko",
+    "name": "선반 · 지지 줄 · 짐"
+  },
+  {
+    "course": "physics",
+    "activity": "shelf",
+    "condition": "free:length:3",
+    "rig": "shelf",
+    "lang": "en",
+    "name": "Shelf · support rope · load"
+  },
+  {
+    "course": "physics",
+    "activity": "shelf",
+    "condition": "free:length:3",
+    "rig": "shelf",
+    "lang": "ko",
+    "name": "선반 · 지지 줄 · 짐"
+  },
+  {
+    "course": "physics",
+    "activity": "shelf",
+    "condition": "free:length:3",
+    "rig": "shelf",
+    "lang": "en",
+    "name": "Shelf · support rope · load"
+  },
+  {
+    "course": "physics",
+    "activity": "shelf",
+    "condition": "free:position:0.5",
+    "rig": "shelf",
+    "lang": "ko",
+    "name": "선반 · 지지 줄 · 짐"
+  },
+  {
+    "course": "physics",
+    "activity": "shelf",
+    "condition": "free:position:0.5",
+    "rig": "shelf",
+    "lang": "en",
+    "name": "Shelf · support rope · load"
+  },
+  {
+    "course": "physics",
+    "activity": "shelf",
+    "condition": "free:position:2.5",
+    "rig": "shelf",
+    "lang": "ko",
+    "name": "선반 · 지지 줄 · 짐"
+  },
+  {
+    "course": "physics",
+    "activity": "shelf",
+    "condition": "free:position:2.5",
+    "rig": "shelf",
+    "lang": "en",
+    "name": "Shelf · support rope · load"
+  },
+  {
+    "course": "physics",
+    "activity": "shelf",
+    "condition": "free:load:60",
+    "rig": "shelf",
+    "lang": "ko",
+    "name": "선반 · 지지 줄 · 짐"
+  },
+  {
+    "course": "physics",
+    "activity": "shelf",
+    "condition": "free:load:60",
+    "rig": "shelf",
+    "lang": "en",
+    "name": "Shelf · support rope · load"
+  },
+  {
+    "course": "physics",
+    "activity": "shelf",
+    "condition": "free:load:180",
+    "rig": "shelf",
+    "lang": "ko",
+    "name": "선반 · 지지 줄 · 짐"
+  },
+  {
+    "course": "physics",
+    "activity": "shelf",
+    "condition": "free:load:180",
+    "rig": "shelf",
+    "lang": "en",
+    "name": "Shelf · support rope · load"
+  },
+  {
+    "course": "physics",
+    "activity": "review-high",
+    "condition": "crane",
+    "rig": "crane",
+    "lang": "ko",
+    "name": "기중기 모형 · 짐"
+  },
+  {
+    "course": "physics",
+    "activity": "review-high",
+    "condition": "crane",
+    "rig": "crane",
+    "lang": "en",
+    "name": "Crane model · load"
+  },
+  {
+    "course": "physics",
+    "activity": "review-high",
+    "condition": "move-load",
+    "rig": "crane",
+    "lang": "ko",
+    "name": "기중기 모형 · 짐"
+  },
+  {
+    "course": "physics",
+    "activity": "review-high",
+    "condition": "move-load",
+    "rig": "crane",
+    "lang": "en",
+    "name": "Crane model · load"
+  },
+  {
+    "course": "physics",
+    "activity": "review-high",
+    "condition": "free:leftCount:1",
+    "rig": "crane",
+    "lang": "ko",
+    "name": "기중기 모형 · 짐"
+  },
+  {
+    "course": "physics",
+    "activity": "review-high",
+    "condition": "free:leftCount:1",
+    "rig": "crane",
+    "lang": "en",
+    "name": "Crane model · load"
+  },
+  {
+    "course": "physics",
+    "activity": "review-high",
+    "condition": "free:leftCount:6",
+    "rig": "crane",
+    "lang": "ko",
+    "name": "기중기 모형 · 짐"
+  },
+  {
+    "course": "physics",
+    "activity": "review-high",
+    "condition": "free:leftCount:6",
+    "rig": "crane",
+    "lang": "en",
+    "name": "Crane model · load"
+  },
+  {
+    "course": "physics",
+    "activity": "review-high",
+    "condition": "free:rightCount:1",
+    "rig": "crane",
+    "lang": "ko",
+    "name": "기중기 모형 · 짐"
+  },
+  {
+    "course": "physics",
+    "activity": "review-high",
+    "condition": "free:rightCount:1",
+    "rig": "crane",
+    "lang": "en",
+    "name": "Crane model · load"
+  },
+  {
+    "course": "physics",
+    "activity": "review-high",
+    "condition": "free:rightCount:6",
+    "rig": "crane",
+    "lang": "ko",
+    "name": "기중기 모형 · 짐"
+  },
+  {
+    "course": "physics",
+    "activity": "review-high",
+    "condition": "free:rightCount:6",
+    "rig": "crane",
+    "lang": "en",
+    "name": "Crane model · load"
+  },
+  {
+    "course": "physics",
+    "activity": "review-high",
+    "condition": "free:leftPos:1",
+    "rig": "crane",
+    "lang": "ko",
+    "name": "기중기 모형 · 짐"
+  },
+  {
+    "course": "physics",
+    "activity": "review-high",
+    "condition": "free:leftPos:1",
+    "rig": "crane",
+    "lang": "en",
+    "name": "Crane model · load"
+  },
+  {
+    "course": "physics",
+    "activity": "review-high",
+    "condition": "free:leftPos:5",
+    "rig": "crane",
+    "lang": "ko",
+    "name": "기중기 모형 · 짐"
+  },
+  {
+    "course": "physics",
+    "activity": "review-high",
+    "condition": "free:leftPos:5",
+    "rig": "crane",
+    "lang": "en",
+    "name": "Crane model · load"
+  },
+  {
+    "course": "physics",
+    "activity": "review-high",
+    "condition": "free:rightPos:1",
+    "rig": "crane",
+    "lang": "ko",
+    "name": "기중기 모형 · 짐"
+  },
+  {
+    "course": "physics",
+    "activity": "review-high",
+    "condition": "free:rightPos:1",
+    "rig": "crane",
+    "lang": "en",
+    "name": "Crane model · load"
+  },
+  {
+    "course": "physics",
+    "activity": "review-high",
+    "condition": "free:rightPos:5",
+    "rig": "crane",
+    "lang": "ko",
+    "name": "기중기 모형 · 짐"
+  },
+  {
+    "course": "physics",
+    "activity": "review-high",
+    "condition": "free:rightPos:5",
+    "rig": "crane",
+    "lang": "en",
+    "name": "Crane model · load"
+  },
+  {
+    "course": "mechanics",
+    "activity": "vectors",
+    "condition": "right-angle",
+    "rig": "cart",
+    "lang": "ko",
+    "name": "수레 · 레일"
+  },
+  {
+    "course": "mechanics",
+    "activity": "vectors",
+    "condition": "right-angle",
+    "rig": "cart",
+    "lang": "en",
+    "name": "Cart · track"
+  },
+  {
+    "course": "mechanics",
+    "activity": "vectors",
+    "condition": "opposite",
+    "rig": "cart",
+    "lang": "ko",
+    "name": "수레 · 레일"
+  },
+  {
+    "course": "mechanics",
+    "activity": "vectors",
+    "condition": "opposite",
+    "rig": "cart",
+    "lang": "en",
+    "name": "Cart · track"
+  },
+  {
+    "course": "mechanics",
+    "activity": "vectors",
+    "condition": "free:f1:0",
+    "rig": "cart",
+    "lang": "ko",
+    "name": "수레 · 레일"
+  },
+  {
+    "course": "mechanics",
+    "activity": "vectors",
+    "condition": "free:f1:0",
+    "rig": "cart",
+    "lang": "en",
+    "name": "Cart · track"
+  },
+  {
+    "course": "mechanics",
+    "activity": "vectors",
+    "condition": "free:f1:5",
+    "rig": "cart",
+    "lang": "ko",
+    "name": "수레 · 레일"
+  },
+  {
+    "course": "mechanics",
+    "activity": "vectors",
+    "condition": "free:f1:5",
+    "rig": "cart",
+    "lang": "en",
+    "name": "Cart · track"
+  },
+  {
+    "course": "mechanics",
+    "activity": "vectors",
+    "condition": "free:f2:0",
+    "rig": "cart",
+    "lang": "ko",
+    "name": "수레 · 레일"
+  },
+  {
+    "course": "mechanics",
+    "activity": "vectors",
+    "condition": "free:f2:0",
+    "rig": "cart",
+    "lang": "en",
+    "name": "Cart · track"
+  },
+  {
+    "course": "mechanics",
+    "activity": "vectors",
+    "condition": "free:f2:5",
+    "rig": "cart",
+    "lang": "ko",
+    "name": "수레 · 레일"
+  },
+  {
+    "course": "mechanics",
+    "activity": "vectors",
+    "condition": "free:f2:5",
+    "rig": "cart",
+    "lang": "en",
+    "name": "Cart · track"
+  },
+  {
+    "course": "mechanics",
+    "activity": "vectors",
+    "condition": "free:angle:0",
+    "rig": "cart",
+    "lang": "ko",
+    "name": "수레 · 레일"
+  },
+  {
+    "course": "mechanics",
+    "activity": "vectors",
+    "condition": "free:angle:0",
+    "rig": "cart",
+    "lang": "en",
+    "name": "Cart · track"
+  },
+  {
+    "course": "mechanics",
+    "activity": "vectors",
+    "condition": "free:angle:360",
+    "rig": "cart",
+    "lang": "ko",
+    "name": "수레 · 레일"
+  },
+  {
+    "course": "mechanics",
+    "activity": "vectors",
+    "condition": "free:angle:360",
+    "rig": "cart",
+    "lang": "en",
+    "name": "Cart · track"
+  },
+  {
+    "course": "mechanics",
+    "activity": "incline",
+    "condition": "no-friction",
+    "rig": "incline",
+    "lang": "ko",
+    "name": "빗면 · 물체 · 지지 줄"
+  },
+  {
+    "course": "mechanics",
+    "activity": "incline",
+    "condition": "no-friction",
+    "rig": "incline",
+    "lang": "en",
+    "name": "Inclined plane · load · support rope"
+  },
+  {
+    "course": "mechanics",
+    "activity": "incline",
+    "condition": "friction",
+    "rig": "incline",
+    "lang": "ko",
+    "name": "빗면 · 물체 · 지지 줄"
+  },
+  {
+    "course": "mechanics",
+    "activity": "incline",
+    "condition": "friction",
+    "rig": "incline",
+    "lang": "en",
+    "name": "Inclined plane · load · support rope"
+  },
+  {
+    "course": "mechanics",
+    "activity": "incline",
+    "condition": "free:angle:15",
+    "rig": "incline",
+    "lang": "ko",
+    "name": "빗면 · 물체 · 지지 줄"
+  },
+  {
+    "course": "mechanics",
+    "activity": "incline",
+    "condition": "free:angle:15",
+    "rig": "incline",
+    "lang": "en",
+    "name": "Inclined plane · load · support rope"
+  },
+  {
+    "course": "mechanics",
+    "activity": "incline",
+    "condition": "free:angle:45",
+    "rig": "incline",
+    "lang": "ko",
+    "name": "빗면 · 물체 · 지지 줄"
+  },
+  {
+    "course": "mechanics",
+    "activity": "incline",
+    "condition": "free:angle:45",
+    "rig": "incline",
+    "lang": "en",
+    "name": "Inclined plane · load · support rope"
+  },
+  {
+    "course": "mechanics",
+    "activity": "incline",
+    "condition": "free:mu:0",
+    "rig": "incline",
+    "lang": "ko",
+    "name": "빗면 · 물체 · 지지 줄"
+  },
+  {
+    "course": "mechanics",
+    "activity": "incline",
+    "condition": "free:mu:0",
+    "rig": "incline",
+    "lang": "en",
+    "name": "Inclined plane · load · support rope"
+  },
+  {
+    "course": "mechanics",
+    "activity": "incline",
+    "condition": "free:mu:0.2",
+    "rig": "incline",
+    "lang": "ko",
+    "name": "빗면 · 물체 · 지지 줄"
+  },
+  {
+    "course": "mechanics",
+    "activity": "incline",
+    "condition": "free:mu:0.2",
+    "rig": "incline",
+    "lang": "en",
+    "name": "Inclined plane · load · support rope"
+  }
+]

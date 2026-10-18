@@ -1,0 +1,335 @@
+[
+  {
+    "apparatus": "수레 · 레일",
+    "course": "초등 3–4학년",
+    "scene": "초등 · 실험 1컬링 놀이기구: 수레 · 레일같은 바닥 · 관찰 시간 1.2초",
+    "switcherOpen": false,
+    "title": "컬링 놀이",
+    "id": "elementary/curling",
+    "pass": true
+  },
+  {
+    "apparatus": "수레 · 짐 · 레일",
+    "course": "초등 3–4학년",
+    "scene": "초등 · 실험 2수레 밀고 당기기기구: 수레 · 짐 · 레일",
+    "switcherOpen": false,
+    "title": "수레 밀고 당기기",
+    "id": "elementary/push",
+    "pass": true
+  },
+  {
+    "apparatus": "수평대 · 네모 추",
+    "course": "초등 3–4학년",
+    "scene": "초등 · 실험 3수평대의 균형기구: 수평대 · 네모 추",
+    "switcherOpen": false,
+    "title": "수평대의 균형",
+    "id": "elementary/balance",
+    "pass": true
+  },
+  {
+    "apparatus": "전자저울 · 비교할 물체",
+    "course": "초등 3–4학년",
+    "scene": "초등 · 실험 4전자저울로 비교기구: 전자저울 · 비교할 물체",
+    "switcherOpen": false,
+    "title": "전자저울로 비교",
+    "id": "elementary/scale",
+    "pass": true
+  },
+  {
+    "apparatus": "용수철저울 · 물체 · 봉투",
+    "course": "초등 3–4학년",
+    "scene": "초등 · 실험 5용수철저울 읽기기구: 용수철저울 · 물체 · 봉투",
+    "switcherOpen": false,
+    "title": "용수철저울 읽기",
+    "id": "elementary/spring-scale",
+    "pass": true
+  },
+  {
+    "apparatus": "물체 · 들어 올리는 줄",
+    "course": "초등 3–4학년",
+    "scene": "초등 · 실험 6지레로 들어 올리기기구: 물체 · 들어 올리는 줄",
+    "switcherOpen": false,
+    "title": "지레로 들어 올리기",
+    "id": "elementary/tools",
+    "pass": true
+  },
+  {
+    "apparatus": "물체 · 들어 올리는 줄",
+    "course": "초등 3–4학년",
+    "scene": "초등 · 실험 7빗면으로 끌어 올리기기구: 물체 · 들어 올리는 줄",
+    "switcherOpen": false,
+    "title": "빗면으로 끌어 올리기",
+    "id": "elementary/ramp-tools",
+    "pass": true
+  },
+  {
+    "apparatus": "병따개 · 병",
+    "course": "초등 3–4학년",
+    "scene": "초등 · 실험 8생활 속 도구 찾기기구: 병따개 · 병",
+    "switcherOpen": false,
+    "title": "생활 속 도구 찾기",
+    "id": "elementary/daily-tools",
+    "pass": true
+  },
+  {
+    "apparatus": "모빌 막대 · 줄 · 장식 추",
+    "course": "초등 3–4학년",
+    "scene": "초등 · 실험 9균형 잡힌 모빌 만들기기구: 모빌 막대 · 줄 · 장식 추",
+    "switcherOpen": false,
+    "title": "균형 잡힌 모빌 만들기",
+    "id": "elementary/mobile",
+    "pass": true
+  },
+  {
+    "apparatus": "보조 장치 · 물체",
+    "course": "초등 3–4학년",
+    "scene": "초등 · 실험 10힘을 돕는 장치기구: 보조 장치 · 물체",
+    "switcherOpen": false,
+    "title": "힘을 돕는 장치",
+    "id": "elementary/wearable",
+    "pass": true
+  },
+  {
+    "apparatus": "수평대 · 비교할 물체",
+    "course": "초등 3–4학년",
+    "scene": "초등 · 실험 11힘과 생활 정리기구: 수평대 · 비교할 물체",
+    "switcherOpen": false,
+    "title": "힘과 생활 정리",
+    "id": "elementary/review",
+    "pass": true
+  },
+  {
+    "apparatus": "잠수부 모형 · 공기주머니 · 수조",
+    "course": "중학교 · 힘의 작용",
+    "scene": "중등 · 실험 1잠수부는 어떻게 뜰까기구: 잠수부 모형 · 공기주머니 · 수조",
+    "switcherOpen": false,
+    "title": "잠수부는 어떻게 뜰까",
+    "id": "middle/diver-intro",
+    "pass": true
+  },
+  {
+    "apparatus": "수레 · 레일",
+    "course": "중학교 · 힘의 작용",
+    "scene": "중등 · 실험 2힘을 화살표로 표현기구: 수레 · 레일시작점 · 방향 · 길이",
+    "switcherOpen": false,
+    "title": "힘을 화살표로 표현",
+    "id": "middle/represent",
+    "pass": true
+  },
+  {
+    "apparatus": "수레 · 레일",
+    "course": "중학교 · 힘의 작용",
+    "scene": "중등 · 실험 3두 힘의 평형기구: 수레 · 레일",
+    "switcherOpen": false,
+    "title": "두 힘의 평형",
+    "id": "middle/parallel",
+    "pass": true
+  },
+  {
+    "apparatus": "지구 모형 · 물체",
+    "course": "중학교 · 힘의 작용",
+    "scene": "중등 · 실험 4중력의 방향기구: 지구 모형 · 물체",
+    "switcherOpen": false,
+    "title": "중력의 방향",
+    "id": "middle/gravity-direction",
+    "pass": true
+  },
+  {
+    "apparatus": "용수철 · 스탠드 · 물체",
+    "course": "중학교 · 힘의 작용",
+    "scene": "중등 · 실험 5질량과 중력 비교기구: 용수철 · 스탠드 · 물체",
+    "switcherOpen": false,
+    "title": "질량과 중력 비교",
+    "id": "middle/gravity",
+    "pass": true
+  },
+  {
+    "apparatus": "고무공",
+    "course": "중학교 · 힘의 작용",
+    "scene": "중등 · 실험 6눌렀다 놓는 탄성기구: 고무공",
+    "switcherOpen": false,
+    "title": "눌렀다 놓는 탄성",
+    "id": "middle/elastic-shape",
+    "pass": true
+  },
+  {
+    "apparatus": "용수철 · 스탠드",
+    "course": "중학교 · 힘의 작용",
+    "scene": "중등 · 실험 7용수철 측정과 그래프기구: 용수철 · 스탠드",
+    "switcherOpen": false,
+    "title": "용수철 측정과 그래프",
+    "id": "middle/elastic",
+    "pass": true
+  },
+  {
+    "apparatus": "나무토막 · 표면판 · 추",
+    "course": "중학교 · 힘의 작용",
+    "scene": "중등 · 실험 8움직이기 시작하는 힘기구: 나무토막 · 표면판 · 추",
+    "switcherOpen": false,
+    "title": "움직이기 시작하는 힘",
+    "id": "middle/friction",
+    "pass": true
+  },
+  {
+    "apparatus": "수조 · 추 · 힘 센서",
+    "course": "중학교 · 힘의 작용",
+    "scene": "중등 · 실험 9물속에서 가벼워지는 까닭기구: 수조 · 추 · 힘 센서",
+    "switcherOpen": false,
+    "title": "물속에서 가벼워지는 까닭",
+    "id": "middle/buoyancy",
+    "pass": true
+  },
+  {
+    "apparatus": "넘침 수조 · 추 · 컵 · 저울",
+    "course": "중학교 · 힘의 작용",
+    "scene": "중등 · 실험 10넘친 물과 부력 비교기구: 넘침 수조 · 추 · 컵 · 저울",
+    "switcherOpen": false,
+    "title": "넘친 물과 부력 비교",
+    "id": "middle/overflow",
+    "pass": true
+  },
+  {
+    "apparatus": "공 · 선풍기",
+    "course": "중학교 · 힘의 작용",
+    "scene": "중등 · 실험 11힘과 운동 변화기구: 공 · 선풍기",
+    "switcherOpen": false,
+    "title": "힘과 운동 변화",
+    "id": "middle/motion",
+    "pass": true
+  },
+  {
+    "apparatus": "공 · 이동 경로",
+    "course": "중학교 · 힘의 작용",
+    "scene": "중등 · 실험 12운동 변화 분류기구: 공 · 이동 경로",
+    "switcherOpen": false,
+    "title": "운동 변화 분류",
+    "id": "middle/motion-classify",
+    "pass": true
+  },
+  {
+    "apparatus": "가방 · 받치는 손",
+    "course": "중학교 · 힘의 작용",
+    "scene": "중등 · 실험 13손과 바닥이 받치는 힘기구: 가방 · 받치는 손",
+    "switcherOpen": false,
+    "title": "손과 바닥이 받치는 힘",
+    "id": "middle/contact",
+    "pass": true
+  },
+  {
+    "apparatus": "용수철 장난감",
+    "course": "중학교 · 힘의 작용",
+    "scene": "중등 · 실험 14놀이와 생활 속 힘기구: 용수철 장난감",
+    "switcherOpen": false,
+    "title": "놀이와 생활 속 힘",
+    "id": "middle/applications",
+    "pass": true
+  },
+  {
+    "apparatus": "수레 · 마찰 브레이크",
+    "course": "중학교 · 힘의 작용",
+    "scene": "중등 · 실험 15힘을 이용한 장치 설계기구: 수레 · 마찰 브레이크",
+    "switcherOpen": false,
+    "title": "힘을 이용한 장치 설계",
+    "id": "middle/design",
+    "pass": true
+  },
+  {
+    "apparatus": "잠수부 모형 · 공기주머니 · 수조",
+    "course": "중학교 · 힘의 작용",
+    "scene": "중등 · 실험 16잠수부·풍선·잠수함기구: 잠수부 모형 · 공기주머니 · 수조",
+    "switcherOpen": false,
+    "title": "잠수부·풍선·잠수함",
+    "id": "middle/floating",
+    "pass": true
+  },
+  {
+    "apparatus": "잠수부 모형 · 공기주머니 · 수조",
+    "course": "중학교 · 힘의 작용",
+    "scene": "중등 · 실험 17힘의 작용 정리기구: 잠수부 모형 · 공기주머니 · 수조",
+    "switcherOpen": false,
+    "title": "힘의 작용 정리",
+    "id": "middle/review-middle",
+    "pass": true
+  },
+  {
+    "apparatus": "수레 · 레일",
+    "course": "고등 · 물리학",
+    "scene": "고등 · 실험 1힘의 합과 돌리는 힘기구: 수레 · 레일",
+    "switcherOpen": false,
+    "title": "힘의 합과 돌리는 힘",
+    "id": "physics/turning",
+    "pass": true
+  },
+  {
+    "apparatus": "수평 막대 · 받침점 · 추",
+    "course": "고등 · 물리학",
+    "scene": "고등 · 실험 2추로 지레의 규칙 찾기기구: 수평 막대 · 받침점 · 추",
+    "switcherOpen": false,
+    "title": "추로 지레의 규칙 찾기",
+    "id": "physics/lever-counts",
+    "pass": true
+  },
+  {
+    "apparatus": "수평 막대 · 받침점 · 추",
+    "course": "고등 · 물리학",
+    "scene": "고등 · 실험 3힘과 돌림힘의 평형기구: 수평 막대 · 받침점 · 추",
+    "switcherOpen": false,
+    "title": "힘과 돌림힘의 평형",
+    "id": "physics/torque",
+    "pass": true
+  },
+  {
+    "apparatus": "휴대전화 모형",
+    "course": "고등 · 물리학",
+    "scene": "고등 · 실험 4합력이 0인데 회전하는 경우기구: 휴대전화 모형",
+    "switcherOpen": false,
+    "title": "합력이 0인데 회전하는 경우",
+    "id": "physics/couple",
+    "pass": true
+  },
+  {
+    "apparatus": "받침대 · 블록",
+    "course": "고등 · 물리학",
+    "scene": "고등 · 실험 5받침과 안정성기구: 받침대 · 블록",
+    "switcherOpen": false,
+    "title": "받침과 안정성",
+    "id": "physics/stability",
+    "pass": true
+  },
+  {
+    "apparatus": "선반 · 지지 줄 · 짐",
+    "course": "고등 · 물리학",
+    "scene": "고등 · 실험 6선반의 받침힘과 줄힘기구: 선반 · 지지 줄 · 짐",
+    "switcherOpen": false,
+    "title": "선반의 받침힘과 줄힘",
+    "id": "physics/shelf",
+    "pass": true
+  },
+  {
+    "apparatus": "기중기 모형 · 짐",
+    "course": "고등 · 물리학",
+    "scene": "고등 · 실험 7평형과 안정성 적용기구: 기중기 모형 · 짐",
+    "switcherOpen": false,
+    "title": "평형과 안정성 적용",
+    "id": "physics/review-high",
+    "pass": true
+  },
+  {
+    "apparatus": "수레 · 레일",
+    "course": "고등 · 역학과 에너지",
+    "scene": "고등 · 실험 1평면에서 힘 합성기구: 수레 · 레일",
+    "switcherOpen": false,
+    "title": "평면에서 힘 합성",
+    "id": "mechanics/vectors",
+    "pass": true
+  },
+  {
+    "apparatus": "빗면 · 물체 · 지지 줄",
+    "course": "고등 · 역학과 에너지",
+    "scene": "고등 · 실험 2빗면의 장력과 수직항력기구: 빗면 · 물체 · 지지 줄",
+    "switcherOpen": false,
+    "title": "빗면의 장력과 수직항력",
+    "id": "mechanics/incline",
+    "pass": true
+  }
+]

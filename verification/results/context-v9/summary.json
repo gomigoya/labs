@@ -1,0 +1,45 @@
+{
+  "date": "2026-10-18",
+  "version": "6.2.1",
+  "activities": 37,
+  "activityLabelsPass": true,
+  "apparatusLabels": 712,
+  "suites": [
+    {
+      "name": "physics",
+      "checks": 6,
+      "pass": true
+    },
+    {
+      "name": "curriculum",
+      "checks": 18,
+      "pass": true
+    },
+    {
+      "name": "lesson",
+      "checks": 10,
+      "pass": true
+    },
+    {
+      "name": "teaching",
+      "checks": 21,
+      "pass": true
+    },
+    {
+      "name": "teaching-geometry",
+      "checks": 11,
+      "pass": true
+    },
+    {
+      "name": "direct-input",
+      "checks": 18,
+      "pass": true
+    }
+  ],
+  "checks": 84,
+  "publication": {
+    "pushed": false,
+    "deployed": false,
+    "reason": "Sites get_site and credential creation returned project_not_found"
+  }
+}
