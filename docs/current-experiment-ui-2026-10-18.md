@@ -30,4 +30,6 @@
 - `verification/evidence/context-v9/mobile-middle.jpg`
 - `verification/evidence/context-v9/english-mobile.jpg`
 
-기존 Sites 프로젝트 ID는 유지했다. 현재 Sites 연결의 프로젝트 조회와 쓰기 자격 증명 발급이 모두 `project_not_found`를 반환하여 원격 푸시 및 배포는 수행할 수 없었다. 로컬 커밋과 검수 자료를 보존한다.
+기존 Sites 프로젝트 ID는 유지했다. Sites 연결의 프로젝트 조회와 쓰기 자격 증명 발급은 모두 `project_not_found`를 반환했다.
+
+이후 Git CLI 연결을 따로 확인했다. GitHub 앱은 `sungkue`, Git Credential Manager는 `gomigoya` 계정이었다. CLI 계정의 기존 `gomigoya/labs` 저장소에 독립 실행 실험실 전체를 `force-equilibrium-lab` 브랜치로 푸시했고, 새 폴더에서 같은 브랜치를 다시 clone하여 UI 커밋 `9c50589` 포함을 확인했다. GitHub의 기존 `main`은 유지했다. 노트북 실행 방법은 루트 README에 있다. 기존 ChatGPT Sites 주소로의 배포는 프로젝트 조회 오류로 아직 수행하지 못했다.
