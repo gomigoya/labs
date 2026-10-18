@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import {COURSES,defaults,solve,fresh,record} from '../dist/labs/force-equilibrium/curriculum-model.js';
 import {lessonFor,frameEvidence} from '../dist/labs/force-equilibrium/lesson-content.js';
 import {guidedStart,observeHint,manipulationKeys} from '../dist/labs/force-equilibrium/lesson-guidance.js';
-import {overflowPose,liftPose,floatingPose,wrenchPose,designPose,cartDisplayScale} from '../dist/labs/force-equilibrium/teaching-geometry.js';
+import {overflowPose,liftPose,createFluidMotion,stepFluidMotion,wrenchPose,designPose,cartDisplayScale,frictionPose,liftingReading,shelfPose,curlingTarget} from '../dist/labs/force-equilibrium/teaching-geometry.js';
 const tests=[],check=(name,fn)=>{fn();tests.push({name,pass:true});},near=(a,b)=>assert.ok(Math.abs(a-b)<1e-8,`${a} != ${b}`);
 check('Overflow immersion equals the displaced fraction at zero, half and full volume',()=>{
  for(const volume of [0,200,400]){const p=overflowPose(volume,1);near((p.surface-p.bottom)/p.bodyHeight,volume/400);near(p.cupHeight/.8,volume/400);}
@@ -11,8 +11,8 @@ check('Direct lifting, lever and ramp raise the same load by the same 0.5 m disp
  for(const length of [1,2,3])for(const method of ['direct','lever','ramp']){const a=liftPose(method,length,0),b=liftPose(method,length,1);near((b.loadY??b.y)-(a.loadY??a.y),.45);}
 });
 check('Balanced floating objects cannot drift from floating point residue',()=>{
- for(const progress of [0,.25,.75,1])near(floatingPose('still',-6.9e-18,progress).y,1.5);
- assert.ok(floatingPose('up',1,1).y>1.5);assert.ok(floatingPose('down',-1,1).y<1.5);
+ const neutral=createFluidMotion({case:'diver',volume:100});for(let i=0;i<120;i++){stepFluidMotion(neutral,1/60);near(neutral.y,neutral.start);}
+ const up=createFluidMotion({case:'diver',volume:400}),down=createFluidMotion({case:'diver',volume:0});stepFluidMotion(up,1);stepFluidMotion(down,1);assert.ok(up.y>up.start);assert.ok(down.y<down.start);
 });
 check('Wrench force stays on its moving endpoint and scales linearly with force',()=>{
  for(const angle of [30,90])for(const reach of [.5,1]){const p=wrenchPose(reach,angle,12,1);near(Math.hypot(p.x,p.y-1.2),reach);near(Math.atan2(p.dy,p.dx),p.rotation-angle*Math.PI/180);near(p.length,1.2);}
@@ -46,5 +46,18 @@ check('Every activity starts with visible valid manipulation keys instead of hid
 check('High-school introduction reviews resultants before wrench and lever investigations',()=>{
  const first=COURSES.physics.activities[0],l=lessonFor('physics',first.id);assert.equal(first.id,'turning');assert.deepEqual(l.frames.slice(0,3).map(f=>f.inputs.mode),['same','opposite','wrench']);
  for(const [i,net]of [[0,4],[1,0]])near(solve(first.id,{...defaults(first),...l.frames[i].inputs}).metrics.find(m=>m.key==='net').value,net);
+});
+check('Pull rises against static friction before the block slips at the recorded force',()=>{
+ const activity=COURSES.middle.activities.find(a=>a.id==='friction');
+ for(const surface of [.05,.2])for(const mass of [.5,1,2,3]){const r=solve('friction',{...defaults(activity),mass,surface}),threshold=r.metrics.find(m=>m.key==='startForce').value,start=frictionPose(threshold,0),held=frictionPose(threshold,.4),onset=frictionPose(threshold,.65),slide=frictionPose(threshold,1);near(held.blockX,start.blockX);assert.ok(held.reading>0&&held.reading<threshold);near(onset.reading,threshold);near(onset.blockX,start.blockX);assert.ok(onset.slipping);assert.ok(slide.blockX>onset.blockX+.8);near(slide.reading,threshold);assert.ok(slide.scaleX>held.scaleX);}
+});
+check('Longer effort arms and ramps reduce the actual force while keeping the same lift height',()=>{
+ for(const [id,tool]of [['tools','lever'],['ramp-tools','ramp']]){const a=COURSES.elementary.activities.find(a=>a.id===id),forces=[];for(const length of [1,2,3]){const r=solve(id,{...defaults(a),mass:1,tool,length}),reading=liftingReading(r,1);near(reading.force,reading.directForce*.5/length);near(reading.units,r.metrics.find(m=>m.key==='withTool').value*100);assert.ok(reading.force<reading.directForce);forces.push(reading.force);}assert.ok(forces[0]>forces[1]&&forces[1]>forces[2]);}
+});
+check('Shelf tie ends at its overhead wall bracket and support arrows equal the solved forces',()=>{
+ const a=COURSES.physics.activities.find(a=>a.id==='shelf');for(const position of [.5,1.5,2.5])for(const load of [60,120,180]){const p={...defaults(a),position,load},r=solve('shelf',p),pose=shelfPose(p.length,position,load);near(pose.tie[0],pose.anchor[0]);assert.ok(pose.anchor[1]>pose.tie[1]);near(pose.reaction+pose.tension,load);near(pose.tension*p.length,load*position);near(pose.tension,r.metrics.find(m=>m.key==='ropeForce').value);near(pose.reaction,r.metrics.find(m=>m.key==='wallReaction').value);near(pose.loadX,-1.6+position/p.length*3.2);}
+});
+check('Curling medium push target uses its frictional stopping distance',()=>{
+ const a=COURSES.elementary.activities.find(a=>a.id==='curling'),r=solve('curling',{...defaults(a),force:2});near(curlingTarget(r),2.301020408163265*.35);
 });
 console.log(JSON.stringify({pass:true,tests},null,2));

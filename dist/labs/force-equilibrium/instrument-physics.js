@@ -1,7 +1,7 @@
 import RAPIER from './vendor/rapier/rapier.mjs';
 
-import {MODEL,STEP,instrumentKind} from './instrument-measurements.js';
-export {MODEL,STEP,instrumentKind,measuredResult,validateObservation} from './instrument-measurements.js';
+import {MODEL,STEP,instrumentKind,cartSettings} from './instrument-measurements.js';
+export {MODEL,STEP,instrumentKind,cartSettings,measuredResult,validateObservation} from './instrument-measurements.js';
 export const CART_SCALE=.35,BEAM_SCALE=4.3,SPRING_SCALE=2.4;
 const V=(x=0,y=0,z=0)=>({x,y,z}),Q={x:0,y:0,z:0,w:1};
 const clone=v=>structuredClone(v);
@@ -15,13 +15,13 @@ export async function createInstrumentPhysics(){
  function dispose(){world?.free();world=null;body=null;loads=[];cfg=null;running=false;}
  function prepare(id,p,r,flags={},initial=null){
   dispose();const kind=instrumentKind(id,p,r);if(!kind)return false;
-  cfg={id,kind,p:clone(p),r:clone(r),flags:clone(flags),k:0,mass:r.mass||1,g:0,target:0};
+  cfg={id,kind,cart:cartSettings(id),p:clone(p),r:clone(r),flags:clone(flags),k:0,mass:r.mass||1,g:0,target:0};
   time=accumulator=stableFor=0;trace=[];quietPoses=[];settled=done=false;ax=az=lastVy=lastAy=0;
   world=new RAPIER.World(V(0,kind==='cart'?-9.8:kind==='beam'?-9.8:0));world.timestep=STEP;world.numSolverIterations=12;
   if(kind==='cart'){
    body=world.createRigidBody(RAPIER.RigidBodyDesc.dynamic().setTranslation(0,.21,0).setAdditionalMass(cfg.mass).enabledRotations(false,false,false).setCanSleep(false).setLinvel(r.initialVelocity||0,0,0));
-   world.createCollider(RAPIER.ColliderDesc.cuboid(.3,.2,.18).setDensity(0).setFriction(0).setRestitution(0),body);
-   world.createCollider(RAPIER.ColliderDesc.cuboid(100,.05,100).setTranslation(0,-.05,0).setFriction(0).setRestitution(0));
+   world.createCollider(RAPIER.ColliderDesc.cuboid(.3,.2,.18).setDensity(0).setFriction(cfg.cart.friction).setRestitution(0),body);
+   world.createCollider(RAPIER.ColliderDesc.cuboid(100,.05,100).setTranslation(0,-.05,0).setFriction(cfg.cart.friction).setRestitution(0));
    for(const f of r.forces){const a=f.angle*Math.PI/180;ax+=f.mag*Math.cos(a)/cfg.mass;az-=f.mag*Math.sin(a)/cfg.mass;}
   }else if(kind==='spring'){
    const scale=id==='spring-scale',stretch=id==='elastic'&&p.springMode==='stretch';
@@ -63,20 +63,20 @@ export async function createInstrumentPhysics(){
   const angle=2*Math.atan2(q.z,q.w),extension=cfg.kind==='spring'?-pos.y:0,force=cfg.kind==='spring'?cfg.k*extension:0;
   const supported=l=>{if(cfg.id!=='balance')return true;const p=l.body.translation(),x=(p.x-pos.x)*Math.cos(angle)+(p.y-pos.y)*Math.sin(angle),y=-(p.x-pos.x)*Math.sin(angle)+(p.y-pos.y)*Math.cos(angle);return Math.abs(x)<=cfg.beamLength+.015&&y>-.015;};
   const leftMoment=loads.filter(l=>l.side==='left'&&supported(l)).reduce((s,l)=>s+Math.abs(l.body.translation().x)*l.mass*9.8,0),rightMoment=loads.filter(l=>l.side==='right'&&supported(l)).reduce((s,l)=>s+Math.abs(l.body.translation().x)*l.mass*9.8,0),fallen=loads.filter(l=>!supported(l)).length;
-  return {time,x:pos.x,z:pos.z,vx:v.x,vy:v.y,vz:v.z,ax,az,angle,omega:body.angvel().z,extension,force,reading:cfg.id==='spring-scale'?(cfg.flags.zeroed?force/9.8*1000:20+force/9.8*1000):0,leftMoment,rightMoment,fallen,loads:loads.map(l=>({side:l.side,index:l.index,x:l.body.translation().x,y:l.body.translation().y,angle:2*Math.atan2(l.body.rotation().z,l.body.rotation().w)}))};
+  return {time,x:pos.x,z:pos.z,vx:v.x,vy:v.y,vz:v.z,ax:cfg.cartAx??ax,az:cfg.cartAz??az,angle,omega:body.angvel().z,extension,force,reading:cfg.id==='spring-scale'?(cfg.flags.zeroed?force/9.8*1000:20+force/9.8*1000):0,leftMoment,rightMoment,fallen,loads:loads.map(l=>({side:l.side,index:l.index,x:l.body.translation().x,y:l.body.translation().y,angle:2*Math.atan2(l.body.rotation().z,l.body.rotation().w)}))};
  }
  function sample(){const s=snapshot();return Object.fromEntries(samplesKeys.map(k=>[k,s[k]]));}
  function start(){if(cfg){running=true;done=false;}}
  function stop(){running=false;}
  function step(){
-  const kind=cfg.kind;
-  if(kind==='cart'){body.resetForces(true);body.addForce(V(ax*cfg.mass,0,az*cfg.mass),true);}
+  const kind=cfg.kind,before=kind==='cart'?body.linvel():null;
+  if(kind==='cart'){const driven=time<cfg.cart.pushDuration-1e-8;body.resetForces(true);body.addForce(V(driven?ax*cfg.mass:0,0,driven?az*cfg.mass:0),true);}
   if(kind==='spring'){
    const ext=-body.translation().y,vy=body.linvel().y;
    const load=cfg.empty?0:cfg.mass*cfg.g+cfg.k*cfg.target;
    body.resetForces(true);body.addForce(V(0,cfg.k*ext-load-cfg.c*vy,0),true);
   }
-  world.step();time=Math.round((time+STEP)/STEP)*STEP;
+  world.step();if(before){const v=body.linvel();cfg.cartAx=(v.x-before.x)/STEP||0;cfg.cartAz=(v.z-before.z)/STEP||0;}time=Math.round((time+STEP)/STEP)*STEP;
   if(kind==='spring'){const vy=body.linvel().y;lastAy=(vy-lastVy)/STEP;lastVy=vy;}
   let quiet=false;
   if(kind==='beam'){
@@ -84,10 +84,11 @@ export async function createInstrumentPhysics(){
    // Require a whole 0.35 s window of angle and load-position stability.
    const q=body.rotation(),pose=[2*Math.atan2(q.z,q.w),...loads.flatMap(l=>{const p=l.body.translation();return [p.x,p.y];})];quietPoses.push(pose);if(quietPoses.length>42)quietPoses.shift();
    quiet=quietPoses.length===42&&pose.every((_,i)=>Math.max(...quietPoses.map(p=>p[i]))-Math.min(...quietPoses.map(p=>p[i]))<(i===0?.001:.001));
-  }else if(kind==='spring')quiet=Math.abs(lastVy)<.0005&&Math.abs(lastAy)<.005;
+  }else if(kind==='cart')quiet=cfg.cart.stopAtRest&&time>=cfg.cart.pushDuration&&Math.hypot(body.linvel().x,body.linvel().z)<.001;
+  else if(kind==='spring')quiet=Math.abs(lastVy)<.0005&&Math.abs(lastAy)<.005;
   stableFor=quiet?stableFor+STEP:0;settled=stableFor>=.35&&time>=.5;
   if(Math.round(time/STEP)%4===0)trace.push(sample());
-  done=kind==='cart'?time>=cfg.r.duration-1e-8:settled||time>=6-1e-8;
+  done=kind==='cart'?(cfg.cart.stopAtRest?settled||time>=cfg.cart.maxDuration-1e-8:time>=cfg.cart.maxDuration-1e-8):settled||time>=6-1e-8;
   if(done)running=false;
  }
  function advance(dt){if(!running||!cfg)return;accumulator+=Math.min(.25,Math.max(0,dt));while(running&&accumulator>=STEP-1e-10){accumulator=Math.max(0,accumulator-STEP);step();}}
@@ -95,6 +96,6 @@ export async function createInstrumentPhysics(){
  function capture(){return cfg?{bytes:world.takeSnapshot(),body:body.handle,loads:loads.map(l=>({...l,body:l.body.handle})),cfg:clone(cfg),running,accumulator,time,trace:clone(trace),quietPoses:clone(quietPoses),stableFor,settled,done,ax,az,lastVy,lastAy}:null;}
  function restore(s){if(!s){dispose();return;}dispose();world=RAPIER.World.restoreSnapshot(s.bytes);body=world.getRigidBody(s.body);loads=s.loads.map(l=>({...l,body:world.getRigidBody(l.body)}));cfg=clone(s.cfg);({running,accumulator,time,stableFor,settled,done,ax,az,lastVy,lastAy}=s);trace=clone(s.trace);quietPoses=clone(s.quietPoses);}
  function pull(extension){if(cfg?.kind==='spring'&&cfg.id==='elastic'&&cfg.p.springMode==='stretch'&&cfg.target!==extension/100){cfg.target=extension/100;time=0;trace=[sample()];running=true;done=settled=false;stableFor=0;}}
- return {prepare,start,stop,advance,snapshot,observation,capture,restore,pull,dispose,get active(){return !!cfg;},get done(){return done;},get running(){return running;}};
+ return {prepare,start,stop,advance,snapshot,observation,capture,restore,pull,dispose,get settings(){return cfg?.cart;},get active(){return !!cfg;},get done(){return done;},get running(){return running;}};
 }
 

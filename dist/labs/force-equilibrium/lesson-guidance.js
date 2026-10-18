@@ -48,6 +48,20 @@ export function guidedStart(lesson,index,defaults){
  const previous=index?{...defaults,...lesson.frames[index-1].inputs}:defaults,start={...defaults,...f.inputs};
  for(const key of f.variable)if(Object.hasOwn(previous,key))start[key]=previous[key];
  if(start.objectType&&start.objectType!=='cart')start.mass=start.objectType==='box'?1:4;
+ if(index===0&&lesson.graph&&start.springMode==='stretch')start.extension=0;
  return start;
 }
 export function controlText(c,value,lang){return c.options?text(WORDS[c.options.find(([v])=>v===value)?.[1]]||String(value),lang):String(value)+(c.unit?' '+c.unit:'');}
+export function guidedValues(id,frame,inputs,controls){return [...new Set([...manipulationKeys(id,frame,inputs),...Object.keys(frame.inputs)])].filter(key=>Object.hasOwn(frame.inputs,key)&&controls.some(c=>c.key===key)).map(key=>({key,target:frame.inputs[key],current:inputs[key],matched:frame.inputs[key]===inputs[key],difference:typeof frame.inputs[key]==='number'?frame.inputs[key]-inputs[key]:null}));}
+export function preparationSteps(lesson,frame,e,id){
+ const steps=[],add=(key,done)=>steps.push({key,done:!!done});
+ if(lesson.framePrediction)add('prediction',e.learning.predictions[frame.id]?.trim());
+ for(const key of ['level','power'])if(lesson.setup?.includes(key))add(key,e.learning.preparation[key]);
+ if(frame.requiresBag)add('bag',e.learning.bag);
+ if(lesson.zero)add('zero',e.zeroed);
+ if(lesson.setup?.includes('baseline'))add('baseline',e.learning.preparation.baseline);
+ if(['scale','spring-scale'].includes(id))add('place',frame.empty?!e.placed:e.placed);
+ if(id==='spring-scale')add('eye',e.inputs.eye===1);
+ add('manipulate',e.trials.some(tr=>!tr.legacy&&tr.frameId===frame.id&&Object.entries(frame.inputs).every(([k,v])=>tr.inputs[k]===v)));return steps;
+}
+export function revealFeedback(question,learning){return learning.answers[question.id]===question.correct||learning.attempts.filter(a=>a.id===question.id&&a.value!==question.correct).length>=2;}
