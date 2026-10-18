@@ -26,8 +26,8 @@ const H={
  contact:['가방은 멈춰 있어도 아래 힘과 위 힘이 작용합니다.','The stationary bag has downward and upward forces.'],
  applications:['장치의 어떤 부분에 어떤 힘이 작용하는지 찾으세요.','Identify the part receiving each force.'],
  design:['출발점에서 목표선까지와 수정 뒤 이동 거리를 비교하세요.','Compare travel with the target before and after revision.'],
- floating:['공기 속 풍선과 물속 장치에서 바뀌는 양을 구별하세요.','Distinguish the changed variable in air and water.'],
- 'review-middle':['위로 미는 힘과 아래로 당기는 힘의 크기를 비교하세요.','Compare upward and downward force magnitudes.'],
+ floating:['풍선의 클립과 잠수함의 탱크 물이 늘리는 질량을 구별하고 중력·부력을 비교하세요.','Distinguish balloon payload mass from submarine ballast mass; compare gravity and buoyancy.'],
+ 'review-middle':['잠수함의 탱크 물 0·2에서 중력·부력을 비교하고 알짜힘이 0인 조건을 찾으세요.','Compare gravity and buoyancy at submarine ballast 0 and 2; find zero net force.'],
  turning:['힘 화살표의 길이·주는 곳·각도와 회전을 비교하세요.','Compare force length, location, angle and turning effect.'],
  'lever-counts':['추를 직접 조절해 수평을 찾고 개수와 칸을 기록하세요.','Adjust weights to find balance; record counts and positions.'],
  torque:['반력까지 합한 힘과 돌림힘을 따로 확인하세요.','Check force including support separately from torque.'],
@@ -40,7 +40,7 @@ const H={
 };
 export function observeHint(id,lang){return text(H[id],lang);}
 export function manipulationKeys(id,frame,inputs){
- const first={curling:['force'],push:['mass','force'],balance:['left','right'],scale:['object'],'spring-scale':['object','eye'],tools:['tool'],'ramp-tools':['tool'],'daily-tools':['example'],mobile:['left','leftPos'],wearable:['method'],review:['example'],'diver-intro':['volume'],represent:['magnitude','direction'],parallel:['arrangement','left'],'gravity-direction':['position'],gravity:['planet'],'elastic-shape':['body','shape'],elastic:['extension'],friction:['surface'],buoyancy:['volume'],overflow:['volume'],motion:['initial','mode'],'motion-classify':['mode'],contact:['contact'],applications:['example'],design:['device','surface'],floating:['case','clips'],'review-middle':['volume'],turning:['reach','effort'],'lever-counts':['rightCount'],torque:inputs.mode==='beam'?['effort','arm']:['left','right'],couple:['line'],stability:['tilt'],shelf:['position'],'review-high':['rightPos'],vectors:['f1','f2'],incline:['angle','mu']};
+ const first={curling:['force'],push:['mass','force'],balance:['left','right'],scale:['object'],'spring-scale':['object','eye'],tools:['tool'],'ramp-tools':['tool'],'daily-tools':['example'],mobile:['left','leftPos'],wearable:['method'],review:['example'],'diver-intro':['volume'],represent:['magnitude','direction'],parallel:['arrangement','left'],'gravity-direction':['position'],gravity:['planet'],'elastic-shape':['body','shape'],elastic:['extension'],friction:['surface'],buoyancy:['volume'],overflow:['volume'],motion:['initial','mode'],'motion-classify':['mode'],contact:['contact'],applications:['example'],design:['device','surface'],floating:['case','clips'],'review-middle':['fill'],turning:['reach','effort'],'lever-counts':['rightCount'],torque:inputs.mode==='beam'?['effort','arm']:['left','right'],couple:['line'],stability:['tilt'],shelf:['position'],'review-high':['rightPos'],vectors:['f1','f2'],incline:['angle','mu']};
  return frame.variable.length?frame.variable:first[id]||[];
 }
 export function guidedStart(lesson,index,defaults){

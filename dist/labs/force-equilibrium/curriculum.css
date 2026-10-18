@@ -71,4 +71,9 @@ body.curriculum{--context-ink:#254b35;--context-muted:#53674f;--context-tint:#e4
 #curriculum #course-frame-prediction:focus{outline:3px solid #537c5f;outline-offset:2px;background:#fffef7}
 #curriculum .scene-jump[hidden]{display:none}
 @media(max-width:980px){.lesson-target{min-height:60px}.lesson-action-area{position:sticky;bottom:0;z-index:3;padding:10px 0;border-top:1px solid #c8d1bf}.lesson-checklist{scroll-margin-top:64px}}
-@media(max-width:980px){.course-context h1{font-size:27px}.course-scene-label{top:120px;left:22px;right:22px;max-width:none;grid-template-columns:max-content minmax(0,1fr);align-items:baseline;gap:0 10px}.course-scene-label strong{font-size:18px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.course-scene-label .course-scene-course{font-size:14px;white-space:nowrap}.course-scene-label .course-scene-kit{display:none}.course-scene-label .course-scene-caption{grid-column:1/-1;font-size:12px;max-width:100%}.course-apparatus strong{font-size:18px}}
+@media(max-width:980px){.course-context h1{font-size:27px}/* The stacked panel below repeats the title; keep tall rigs clear. */.course-scene-label{display:none}/* Pin the cart readout to the bottom edge of the scene band, above the panel and below the rigs' force arrows. */#cart-replay{position:absolute!important;bottom:auto!important;top:calc(104px + var(--course-scene));transform:translateY(-100%)}.course-apparatus strong{font-size:18px}}
+
+.course-challenge{margin:10px 0 0;padding:9px 11px;border:1px solid #cbd4bd;border-radius:8px;background:#eef1e5;color:#52654b;font-size:14px;line-height:1.5}
+.course-challenge.achieved{color:#655322;background:#f5efd9;border-color:#d6c996;animation:challenge-fade .3s ease-out}
+@keyframes challenge-fade{from{opacity:.5}to{opacity:1}}
+@media(prefers-reduced-motion:reduce){.course-challenge.achieved{animation:none}}

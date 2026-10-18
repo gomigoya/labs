@@ -696,6 +696,7 @@ curriculumUI=createCurriculum({
  run(){state.pinned=false;state.playing=true;instrumentPhysics.start();},stop(){state.playing=false;instrumentPhysics.stop();},
  physicsActive:()=>instrumentPhysics.active,physicsDone:()=>instrumentPhysics.done,physicsTime:()=>instrumentPhysics.snapshot()?.time||0,live:()=>instrumentPhysics.snapshot(),
  observation:()=>instrumentPhysics.active?instrumentPhysics.observation():null,
+ captureGhost:()=>structuredClone(curriculumRigs.diagnostics().pose.teaching.ghost),
  measured:r=>instrumentPhysics.active?measuredResult(r,instrumentPhysics.observation()):r,
  preview:p=>instrumentPhysics.pull(p.extension),previewStart:()=>instrumentPhysics.start(),
  limit(r){if(instrumentPhysics.active)return;if(state.time>=r.duration-1e-8){state.playing=false;if(r.duration<1.2){state.dynamics.vx=0;state.forces[1].mag=state.targets[1].mag=0;}}},
@@ -712,7 +713,7 @@ curriculumUI=createCurriculum({
   if(o){const distance=Math.hypot(o.final.x,o.final.z).toFixed(2),direction=((Math.atan2(-o.final.z,o.final.x)*180/Math.PI+360)%360).toFixed(1);replayStatus.textContent=settings.stopAtRest?(english?'Stopped · ':'정지 거리 · ')+distance+' m':(cartReplay.active?(english?'Replay 0.5× · ':'느린 재생 0.5× · '):(english?'Observation · ':'관찰 기록 · '))+o.final.time.toFixed(2)+' s'+(settings.planar?' · '+physical.resultant.toFixed(2)+' N · '+direction+'°':'');}
   if(cartObservation){if(settings.planar){const kit=document.querySelector('#course-apparatus'),sceneKit=document.querySelector('.course-scene-kit');if(kit)kit.textContent=english?'Cart · air table':'수레 · 공기 테이블';if(sceneKit)sceneKit.textContent=english?'Apparatus: cart · air table':'기구: 수레 · 공기 테이블';}const caption=document.querySelector('.course-scene-caption'),text=settings.stopAtRest?(english?'Surface friction · brief push · observe until rest (max 9 s)':'표면 마찰 · 0.5초 밀기 · 멈출 때까지 관찰 (최대 9초)'):settings.planar?(english?'Air table · free motion in the plane':'공기 테이블 · 평면에서 자유롭게 이동'):(english?'Frictionless · observation + slow replay':'무마찰 · 관찰 후 느리게 다시 보기');if(caption&&caption.textContent!==text)caption.textContent=text;const note=document.querySelector('#course-output > small');if(measured&&settings.stopAtRest&&note){const text=(english?'At rest · stopping distance ':'멈춤 확인 · 정지 거리 ')+Math.hypot(o.final.x,o.final.z).toFixed(2)+' m · '+o.final.time.toFixed(2)+' s';if(note.textContent!==text)note.textContent=text;}}
   medium.visible=particles.visible=curriculumUI?.phase==='running'&&r.dynamic;for(const wheel of cartWheels)wheel.rotation.z=-state.dynamics.x*displayPositionScale()/.31;
-  curriculumRigs.update(id,{...p,dynamics:state.dynamics,physics:instrumentPhysics.snapshot(),sceneOrigin:curriculumOrigin},r,cartReplay.active?1:progress,measured);$('hint').style.opacity=0;
+  curriculumRigs.update(id,{...p,dynamics:state.dynamics,physics:instrumentPhysics.snapshot(),sceneOrigin:curriculumOrigin,positionScale:curriculumPositionScale},r,cartReplay.active?1:progress,measured);$('hint').style.opacity=0;
  }
 });
 document.getElementById('curriculum').append(replayControls);

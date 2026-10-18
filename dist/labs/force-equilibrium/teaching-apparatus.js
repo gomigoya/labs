@@ -1,5 +1,6 @@
 import {BEAM_SCALE,SPRING_SCALE} from './instrument-physics.js';
 import {OBJECTS} from './curriculum-extension.js';
+import {CURLING_HOUSE_RADIUS} from './challenge-goals.js';
 import {overflowPose,immersionPose,displacedWaterRise,liftPose,wrenchPose,createFluidMotion,stepFluidMotion,fluidForces,elasticPose,gravityPose,designPose,frictionPose,liftingReading,shelfPose,curlingTarget} from './teaching-geometry.js';
 // Procedural teaching instruments, using the existing room's materials.
 export function teachingApparatus({THREE,root,mats,roundedPanel,cyl,cart}){
@@ -75,7 +76,7 @@ export function teachingApparatus({THREE,root,mats,roundedPanel,cyl,cart}){
  const exampleTruck=new THREE.Group();examples.add(exampleTruck);box(exampleTruck,1.4,.35,.8,teal,1.9,.55);box(exampleTruck,.5,.6,.75,yellow,2.4,.9);for(const x of [1.4,2.3])for(const z of [-.45,.45]){const wheel=cyl(.2,.1,mats.rubber,exampleTruck,x,.25,z,16);wheel.rotation.x=Math.PI/2;}
  const opener=new THREE.Group();bottle.add(opener);opener.position.set(-.75,.85,0);bottle.children[0].visible=false;box(opener,2,.12,.35,mats.chrome,.75);const openerPivot=sphere(bottle,.08,teal,-.75,.85,.2);
  const shoulder=sphere(assist,.14,mats.ivory,-.7,1.8),elbow=sphere(assist,.12,mats.ivory,-.2,1),handJoint=sphere(assist,.12,mats.ivory,1,.75),upperArm=line(assist,[-.7,1.8,0],[-.2,1,0],mats.ivory,.11),forearm=line(assist,[-.2,1,0],[1,.75,0],mats.ivory,.09),brace=line(assist,[-.2,1,.13],[1,.75,.13],teal,.14);box(assist,.5,1.3,.5,teal,-.85,1.25);
- const cartTarget=g('cart-target');for(const [radius,material]of [[.45,teal],[.33,mats.ivory],[.22,orange],[.1,mats.ivory]])cyl(radius,.008,material,cartTarget,0,.035+( .65-radius)*.018,0,64);line(cartTarget,[-.65,.055,0],[.65,.055,0],mats.chrome,.008);line(cartTarget,[0,.055,-.65],[0,.055,.65],mats.chrome,.008);const targetLabel=label(cartTarget,.28,.22,1.6,-.85);
+ const cartTarget=g('cart-target');for(const [i,[radius,color]]of [[CURLING_HOUSE_RADIUS,0x357c83],[.33,0xf2f1df],[.22,0xda863c],[.1,0xf2f1df]].entries()){const disc=new THREE.Mesh(new THREE.CircleGeometry(radius,64),new THREE.MeshBasicMaterial({color,transparent:true,opacity:.42,depthWrite:false,side:THREE.DoubleSide}));disc.rotation.x=-Math.PI/2;disc.position.y=.035+i*.002;cartTarget.add(disc);}line(cartTarget,[0,.055,-.65],[0,.055,.65],mats.chrome,.008);
  const ballTarget=cyl(.36,.02,orange,moving,.42,.08,0,32);
  const springHandle=box(spring,.45,.16,.3,teal,.2,1.9);
  const visibleCoil=coil.clone();visibleCoil.geometry=coil.geometry.clone();springScale.add(visibleCoil);visibleCoil.position.set(.2,3.3,.3);visibleCoil.scale.y=.5;
@@ -89,6 +90,25 @@ export function teachingApparatus({THREE,root,mats,roundedPanel,cyl,cart}){
  const val=(r,k)=>r.metrics.find(m=>m.key===k)?.value??0;
  const status=(r,en)=>({balanced:en?'Level':'수평',leftHeavy:en?'Left lowers':'왼쪽이 내려감',rightHeavy:en?'Right lowers':'오른쪽이 내려감',level:en?'Level':'수평',counter:en?'Left lowers':'왼쪽이 내려감',clockwise:en?'Right lowers':'오른쪽이 내려감',stable:en?'Returns upright':'다시 서 있음',tips:en?'Tips':'넘어짐',edge:en?'At support edge':'받침 경계',up:en?'Rises':'위로 뜸',down:en?'Sinks':'가라앉음',still:en?'Balanced':'평형'}[r.outcome]||'');
  let motion={id:null,key:null,stamp:0,time:0,fluid:null},lastPose={},releasedPress=false;
+ const ghostLayer=new THREE.Group();root.add(ghostLayer);
+ const ghostSources={cart,diver,balloon,submarine,ball:movingBall,friction:woodBlock};
+ let ghostKey='';
+ function showGhosts(id,history=[]){
+  const key=JSON.stringify([id,history]);if(key===ghostKey)return;ghostKey=key;
+  for(const child of [...ghostLayer.children]){child.traverse(o=>{for(const m of Array.isArray(o.material)?o.material:[o.material])m?.dispose();});ghostLayer.remove(child);}
+  for(const [i,pose]of history.entries()){
+   const source=ghostSources[pose.rig];if(!source)continue;
+   const ghost=source.clone(true),p=pose.inputs,part=o=>ghost.children[source.children.indexOf(o)];
+   if(pose.rig==='diver'){part(diverShell).scale.set(Math.sqrt((900+p.volume)/900),1,Math.sqrt((900+p.volume)/900));part(airbag).scale.setScalar(Math.cbrt(p.volume/400));}
+   if(pose.rig==='balloon')clips.forEach((v,j)=>part(v).visible=j<p.clips);
+   if(pose.rig==='submarine')part(ballast).scale.y=.1+p.fill/4;
+   if(pose.rig==='cart'){cargo.forEach((v,j)=>part(v).visible=id==='push'&&p.objectType==='cart'&&j<p.mass);part(largeCargo).visible=id==='push'&&p.objectType==='box';part(smallCargo).visible=id==='push'&&p.objectType==='metal';}
+   // Narrow floating devices share one vertical line; step older runs aside so heights stay comparable.
+   const aside={diver:.62,balloon:1.25}[pose.rig]||0;ghost.position.set(pose.x-aside*(history.length-i),pose.y,pose.z);ghost.rotation.set(0,0,pose.angle);ghost.scale.set(pose.sx,pose.sy,pose.sz);ghost.visible=true;
+   ghost.traverse(o=>{o.raycast=()=>{};o.castShadow=o.receiveShadow=false;if(o.material){const make=m=>new THREE.MeshBasicMaterial({color:m.color||0x85aaa1,transparent:true,opacity:.25-(history.length-1-i)*.065,depthWrite:false});o.material=Array.isArray(o.material)?o.material.map(make):make(o.material);}});
+   ghostLayer.add(ghost);
+  }
+ }
  function update(id,p,r,progress,measured){
   for(const o of new Set(Object.values(groups)))o.visible=false;cargo.forEach((o,i)=>o.visible=id==='push'&&(p.objectType||'cart')==='cart'&&i<(p.mass||1));largeCargo.visible=id==='push'&&p.objectType==='box';smallCargo.visible=id==='push'&&p.objectType==='metal';
   const o=groups[r.rig];if(!o&&r.rig!=='cart')return false;if(o)o.visible=true;cartTarget.visible=id==='curling';
@@ -97,7 +117,7 @@ export function teachingApparatus({THREE,root,mats,roundedPanel,cyl,cart}){
   const key=JSON.stringify([p.case,p.volume,p.clips,p.fill,p.position,p.shape,p.body,p.deformation]),now=performance.now(),held=['ready','drag'].includes(p.interactionPhase),restart=motion.id!==id||motion.key!==key||held;
   if(motion.id!==id||motion.key!==key)releasedPress=false;if(r.rig==='deform'&&p.interactionPhase==='drag'&&progress>=.85)releasedPress=true;
   if(restart)motion={id,key,stamp:now,time:0,fluid:r.rig==='floating'?createFluidMotion(p):null};else{const dt=Math.max(0,(now-motion.stamp)/1000);motion.time+=dt;if(motion.fluid)stepFluidMotion(motion.fluid,dt);motion.stamp=now;}
-  cartTarget.position.x=(p.sceneOrigin?.x||0)+1.05+curlingTarget(r);if(id==='curling')text(targetLabel,en?'Target':'목표선');
+  cartTarget.position.x=(p.sceneOrigin?.x||0)+1.05+curlingTarget();cartTarget.position.z=p.sceneOrigin?.z||0;
   springHandle.visible=r.rig==='spring'&&id==='elastic'&&p.springMode==='stretch';springRuler.visible=r.rig==='spring';
   ballTarget.visible=id==='motion'&&p.mode==='stop';
   if(r.rig==='balance'){board.rotation.z=phys?phys.angle:0;for(const [side,amount,pos,sign]of [[blocks[0],p.left,p.leftPos,-1],[blocks[1],p.right,p.rightPos,1]])side.forEach((v,i)=>{v.visible=i<Math.ceil(amount/300);v.position.set(sign*pos*.43,.2+i*.24,0);v.rotation.z=0;v.scale.y=amount%300&&i===Math.ceil(amount/300)-1?(amount%300)/300:1;});if(phys&&p.interactionPhase!=='drag')for(const l of phys.loads){const v=blocks[l.side==='left'?0:1][l.index];if(!v)continue;const x=l.x*BEAM_SCALE,y=l.y*BEAM_SCALE,a=board.rotation.z;v.position.set(x*Math.cos(a)+y*Math.sin(a),-x*Math.sin(a)+y*Math.cos(a),0);v.rotation.z=l.angle-a;}text(balanceLabel,measured?status(r,en):(en?'Place the objects':'물체 놓기'));}
@@ -127,8 +147,9 @@ export function teachingApparatus({THREE,root,mats,roundedPanel,cyl,cart}){
   if(r.rig==='friction'){const pose=frictionPose(val(r,'startForce'),s),range=Math.max(1,Math.ceil(pose.onsetForce));surface.material=p.surface===.2?mats.rubber:smoothSurface;surfacePatterns.forEach((v,i)=>v.visible=i===(p.surface===.2?1:0));extraWeight.visible=p.mass>1;woodBlock.position.x=extraWeight.position.x=pose.blockX;frictionMeter.group.position.x=pose.scaleX;setLine(frictionRope,[pose.blockX+.4,.54,.23],[pose.scaleX-.95,.54,.23]);meterValue(frictionMeter,pose.reading,range,en);text(frictionStateLabel,pose.slipping?(en?'Slip · ':'움직이기 시작함 ')+pose.onsetForce.toFixed(2)+' N':(en?'Static · pull slowly':'정지 · 천천히 당기기'));arr(frictionArrows[0],pose.blockX+.4,.9,pose.reading*.2,1,0);arr(frictionArrows[1],pose.blockX-.4,.9,pose.reading*.2,-1,0);lastPose={rig:'friction',...pose};}
   if(r.rig==='shelf'){const pose=shelfPose(p.length,p.position,p.load);shelfWeight.position.x=pose.loadX;arr(shelfArrows[0],...pose.hinge,pose.reaction*pose.arrowScale);arr(shelfArrows[1],...pose.tie,pose.tension*pose.arrowScale);arr(shelfArrows[2],pose.loadX,1.32,p.load*pose.arrowScale,0,-1);text(shelfLabel,'R = '+pose.reaction.toFixed(0)+' N · T = '+pose.tension.toFixed(0)+' N');lastPose={rig:'shelf',...pose};}
   if(r.rig==='crane'){const tilt=Math.sign(val(r,'torque'))*.1*s;craneAssembly.rotation.z=tilt;craneWeights.forEach((v,i)=>{const x=(i?p.rightPos:-p.leftPos)*.43,scale=Math.cbrt(i?p.rightCount:p.leftCount)*.7;v.scale.setScalar(scale);v.rotation.z=-tilt;v.position.set(x-1.1*Math.sin(tilt),-1.1*Math.cos(tilt),0);setLine(craneRopes[i],[x,0,0],[v.position.x+.48*scale*Math.sin(tilt),v.position.y+.48*scale*Math.cos(tilt),0]);});text(craneLabel,'ΣF = 0 · Στ = '+val(r,'torque').toFixed(2)+' N·m');}
-
-
+  const ghostRig=r.rig==='floating'?p.case:r.rig==='ball'?'ball':r.rig==='friction'?'friction':r.rig==='cart'&&r.dynamic?'cart':null;
+  if(ghostRig){const object=ghostSources[ghostRig],d=p.dynamics,origin=p.sceneOrigin||{x:0,z:0},scale=p.positionScale;lastPose.ghost={rig:ghostRig,x:ghostRig==='cart'?origin.x+d.x*scale:object.position.x,y:ghostRig==='cart'?0:object.position.y,z:ghostRig==='cart'?origin.z-d.y*scale:object.position.z,angle:object.rotation.z,sx:object.scale.x,sy:object.scale.y,sz:object.scale.z};}
+  showGhosts(id,p.ghosts);
   return true;
  }
  function targets(ctx){
@@ -208,5 +229,5 @@ export function teachingApparatus({THREE,root,mats,roundedPanel,cyl,cart}){
   const priority=s=>s.kind==='vector'?-2:s.kind==='action'?-5:s.kind==='bag'?-4:s.kind==='remove-sample'?(f.empty?-3:4):s.kind==='sample'?(s.value===p.object&&!ctx.placed?-3:3):s.kind==='supply'?(p[s.key]<(f.inputs[s.key]??p[s.key])?-3:3):s.angleKey&&f.variable.includes(s.angleKey)?-2:s.key&&f.variable.includes(s.key)&&p[s.key]!==f.inputs[s.key]?-2:0;
   return out.sort((a,b)=>priority(a)-priority(b));
  }
- return {update,targets,hide(){supply.visible=false;for(const o of new Set(Object.values(groups)))o.visible=false;cargo.forEach(o=>o.visible=false);largeCargo.visible=smallCargo.visible=false;},diagnostics(){const invalid=[];root.traverse(o=>{if([o.position.x,o.position.y,o.position.z,o.scale.x,o.scale.y,o.scale.z,o.quaternion.x,o.quaternion.y,o.quaternion.z,o.quaternion.w].some(n=>!Number.isFinite(n)))invalid.push(o.type);});return {rigs:Object.keys(groups),labels:labels.length,invalid,visible:Object.entries(groups).filter(([,o])=>o.visible).map(([id])=>id),pose:{beamAngle:board.rotation.z,leverAngle:leverBoard.rotation.z,springExtension:(2.3-springHandle.position.y)/SPRING_SCALE,scaleReading:(3.2-needle.position.y)/.0086,teaching:lastPose}};}};
+ return {update,targets,hide(){supply.visible=false;for(const o of new Set(Object.values(groups)))o.visible=false;cargo.forEach(o=>o.visible=false);largeCargo.visible=smallCargo.visible=false;},diagnostics(){const invalid=[];root.traverse(o=>{if([o.position.x,o.position.y,o.position.z,o.scale.x,o.scale.y,o.scale.z,o.quaternion.x,o.quaternion.y,o.quaternion.z,o.quaternion.w].some(n=>!Number.isFinite(n)))invalid.push(o.type);});return {rigs:Object.keys(groups),labels:labels.length,invalid,visible:Object.entries(groups).filter(([,o])=>o.visible).map(([id])=>id),pose:{beamAngle:board.rotation.z,leverAngle:leverBoard.rotation.z,springExtension:(2.3-springHandle.position.y)/SPRING_SCALE,scaleReading:(3.2-needle.position.y)/.0086,teaching:lastPose,ghosts:ghostLayer.children.map(o=>({position:o.position.toArray(),opacity:o.children[0]?.material?.opacity??o.material?.opacity})),house:{visible:cartTarget.visible,x:cartTarget.position.x,z:cartTarget.position.z,radius:CURLING_HOUSE_RADIUS}}};}};
 }
