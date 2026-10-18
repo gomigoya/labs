@@ -1,5 +1,25 @@
 # 힘의 작용 실험실
 
+## 2026-10-18 · 현재 학년·실험·기구 표시 (v6.2.1)
+
+설명 패널 위에 현재 학년, 실험 번호와 이름, 사용 기구를 모았다. 실험 선택 메뉴는 ‘다른 실험 선택’으로 접고, 조건에 따라 실제 기구 이름을 갱신한다. 모바일 장면에는 학년·실험 이름을 한 줄로 표시해 물체를 가리지 않는다. 배경과 수레 디자인은 유지한다.
+
+37개 활동의 UI 전환, 390px 화면, 수평대 양쪽 추 드래그, 기존 검증 84개를 확인했다. [변경·검수 기록](docs/current-experiment-ui-2026-10-18.md).
+
+## 노트북에서 받아서 수정하기
+
+최신 독립 실행 실험실은 `https://github.com/gomigoya/labs`의 `force-equilibrium-lab` 브랜치에 있다. 이 브랜치는 이 README와 `serve.mjs`, `dist/`가 프로젝트 루트에 있는 구조다. 저장소의 `main` 브랜치는 다른 실험실을 모으는 기존 사이트 구조를 유지한다.
+
+```powershell
+git clone --branch force-equilibrium-lab --single-branch https://github.com/gomigoya/labs.git force-equilibrium-lab
+cd force-equilibrium-lab
+node serve.mjs
+```
+
+브라우저에서 `http://127.0.0.1:4173/labs/force-equilibrium/?lite=1`을 연다. Node.js와 Git이 필요하며 추가 패키지 설치는 없다. 소스는 `dist/labs/force-equilibrium/`에 있고, 저장 후 브라우저를 새로 고치면 바뀐 화면을 확인할 수 있다. 초등·중등·고등 기록은 브라우저별로 저장되며 Git에 올리지 않는다.
+
+이미 이 브랜치를 받은 노트북에서는 `git pull --ff-only`로 갱신한다. 작업 후 `git add`, `git commit`, `git push`로 같은 브랜치에 올린다. GitHub 푸시와 기존 ChatGPT Sites 주소로의 배포는 별도 과정이다. `.openai/hosting.json`의 기존 프로젝트 ID는 유지한다.
+
 ## 2026-10-17 · 물체 호버 반응·가림 제거 (v6.2.0)
 
 물체를 가리는 원·조작 화살표를 제거했다. 마우스를 올린 물체만 잠깐 작게 흔들리고, 잡는 순간 원래 자세로 복원한 뒤 드래그한다. 실제 물체 크기에 맞춘 보이지 않는 입력 영역, 작은 부품 우선, 장면 밖 UI 가림 방지를 적용했다. 이동 줄이기 선호를 존중하며 배경·수레·기구 디자인은 유지한다.
