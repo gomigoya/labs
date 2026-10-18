@@ -25,11 +25,11 @@
 2. [x] Wire `index.html`, `teaching-ui.js`, `curriculum-model.js` to authoritative measurements; retain old record compatibility; add trace plot and clear observation timing.
 3. [x] Drive existing apparatus poses, spring pitch, pointer and ruler from snapshots. Preserve direct manipulation and cancel behavior.
 4. [x] Run numerical and curriculum regression suites; manually drag all three instrument families in desktop/mobile low quality; compare scene, displayed values, traces and saved observations. Write evidence and reviewer brief.
-5. [ ] Review diff, commit and push `force-equilibrium-lab`; verify GitHub branch SHA equals local HEAD.
+5. [x] Review diff, commit and push `force-equilibrium-lab`; verify GitHub branch SHA equals local HEAD.
 
 ## Execution ledger
 
 - Baseline: clean dedicated branch `force-equilibrium-lab`, HEAD `b7961d3`; origin is `gomigoya/labs`. User has already authorized implementation, testing and pushing. No redundant design approval is needed.
 - Official npm registry verified Rapier compat 0.21.0, Apache-2.0. No application framework migration.
 
-- Implementation and read-only fresh code review complete. Review findings fixed with regression coverage. Native pointer scene/plot/record audit passed for all three families and the high-school hanging beam; 390px iframe spring drag passed. Current full browser report: 533/533, 37 activities/117 conditions. Commit/push remains the final task.
+- Implementation and read-only fresh code review complete. Review findings fixed with regression coverage. Native pointer scene/plot/record audit passed for all three families and the high-school hanging beam; 390px iframe spring drag passed. Current full browser report: 533/533, 37 activities/117 conditions. Implementation commit adcf9c05b087ad6f744a8eb241fd07c4ba00dbd4 was pushed to origin/force-equilibrium-lab and verified with git ls-remote.
