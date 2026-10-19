@@ -14,9 +14,19 @@ check('Balanced floating objects cannot drift from floating point residue',()=>{
  const neutral=createFluidMotion({case:'diver',volume:100});for(let i=0;i<120;i++){stepFluidMotion(neutral,1/60);near(neutral.y,neutral.start);}
  const up=createFluidMotion({case:'diver',volume:400}),down=createFluidMotion({case:'diver',volume:0});stepFluidMotion(up,1);stepFluidMotion(down,1);assert.ok(up.y>up.start);assert.ok(down.y<down.start);
 });
-check('Wrench force stays on its moving endpoint and scales linearly with force',()=>{
- for(const angle of [30,90])for(const reach of [.5,1]){const p=wrenchPose(reach,angle,12,1);near(Math.hypot(p.x,p.y-1.2),reach);near(Math.atan2(p.dy,p.dx),p.rotation-angle*Math.PI/180);near(p.length,1.2);}
- near(wrenchPose(1,90,6,1).length,wrenchPose(1,90,12,1).length/2);
+check('Torsion wrench deflection is proportional to 2, 6 and 12 N·m without saturation',()=>{
+ const poses=[[.5,90,4],[1.5,90,4],[1.5,90,8]].map(args=>wrenchPose(...args,1));
+ near(poses[0].rotation,-Math.PI/18);near(poses[1].rotation,3*poses[0].rotation);near(poses[2].rotation,6*poses[0].rotation);near(poses[2].rotation,-Math.PI/3);
+ near(wrenchPose(1.5,30,8,1).rotation,poses[1].rotation);near(wrenchPose(1.5,90,10,1).rotation,poses[2].rotation*10/8);
+ for(const args of [[.5,90,4],[1.5,90,4],[1.5,90,8],[1.5,30,8]])near(wrenchPose(...args,.5).rotation,wrenchPose(...args,1).rotation/2);
+});
+check('Wrench force, line of action and perpendicular arm remain attached throughout rotation',()=>{
+ near(wrenchPose(1.5,90,4,1).length*2,wrenchPose(1.5,90,8,1).length);
+ near(wrenchPose(1.5,30,8,1).momentArm,.75);
+ for(const angle of [30,60,90])for(const reach of [.5,1.5])for(const effort of [2,4,8,10])for(const progress of [0,.5,1]){
+  const p=wrenchPose(reach,angle,effort,progress);near(Math.hypot(p.x,p.y),reach);near(p.x,reach*Math.cos(p.rotation));near(p.y,reach*Math.sin(p.rotation));near(p.dx,Math.cos(p.rotation-angle*Math.PI/180));near(p.dy,Math.sin(p.rotation-angle*Math.PI/180));near(p.length,effort*.1);near(Math.hypot(p.tipX-p.x,p.tipY-p.y),p.length);
+  near(p.momentArm,reach*Math.sin(angle*Math.PI/180));near(Math.hypot(p.footX,p.footY),p.momentArm);near(p.footX*p.dx+p.footY*p.dy,0);near((p.x-p.footX)*p.dy-(p.y-p.footY)*p.dx,0);
+ }
 });
 check('One metre marker and bumper contact share the sled displacement scale',()=>{
  const origin=designPose(0,1),target=designPose(1,1);near(target.x,target.targetX);

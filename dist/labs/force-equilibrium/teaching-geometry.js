@@ -20,8 +20,9 @@ export function liftPose(method,length,progress){
  return {x:0,y:.3+LIFT_DISPLAY*progress};
 }
 export function wrenchPose(reach,angle,effort,progress){
- const magnitude=effort*reach*Math.sin(angle*Math.PI/180),rotation=-progress*Math.min(.6,magnitude/12),direction=rotation-angle*Math.PI/180;
- return {rotation,x:reach*Math.cos(rotation),y:1.2+reach*Math.sin(rotation),dx:Math.cos(direction),dy:Math.sin(direction),length:effort*.1};
+ // A torsion bolt: 12 N·m deflects 60 degrees. All coordinates are relative to its pivot.
+ const theta=angle*Math.PI/180,momentArm=reach*Math.sin(theta),torque=effort*momentArm,rotation=-progress*torque*Math.PI/36,direction=rotation-theta,x=reach*Math.cos(rotation),y=reach*Math.sin(rotation),dx=Math.cos(direction),dy=Math.sin(direction),along=x*dx+y*dy,length=effort*.1;
+ return {rotation,x,y,dx,dy,length,momentArm,torque,footX:x-along*dx,footY:y-along*dy,tipX:x+length*dx,tipY:y+length*dy};
 }
 export function createFluidMotion(p){
  const balloon=p.case==='balloon',sub=p.case==='submarine',height=balloon?2.6:1.1,start=balloon?1.6:1.2;
