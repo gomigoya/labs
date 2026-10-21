@@ -126,13 +126,13 @@ function buildRoom() {
   // 벽걸이 큰 힘 측정기 눈금판
   const clock = new THREE.Group();
   const cr = new THREE.Mesh(new THREE.CylinderGeometry(0.17, 0.17, 0.05, 48).rotateX(Math.PI / 2), MAT.brass); clock.add(cr);
-  const cf = new THREE.Mesh(new THREE.CircleGeometry(0.15, 48), new THREE.MeshStandardMaterial({ map: gaugeFaceTexture('N', 0, 10, 5), roughness: 0.5 })); cf.position.z = 0.026; clock.add(cf);
+  const cf = new THREE.Mesh(new THREE.CircleGeometry(0.15, 48), new THREE.MeshStandardMaterial({ map: gaugeFaceTexture(0, 10, 5), roughness: 0.5 })); cf.position.z = 0.026; clock.add(cf);
   const cn = new THREE.Mesh(new THREE.BoxGeometry(0.008, 0.12, 0.004), new THREE.MeshStandardMaterial({ color: 0xb02a1a })); cn.position.set(0.02, 0.04, 0.03); cn.rotation.z = -0.5; clock.add(cn);
   clock.position.set(-2.35, 2.55, WALL_Z + 0.03); ROOM.add(shadowify(clock));
   // 천장 조명 레일
   const crail = roundedPanel(5.2, 0.04, 0.06, 0.015, MAT.graphite, 2); crail.position.set(0.6, CEIL - 0.06, 0.4); ROOM.add(crail);
 }
-function gaugeFaceTexture(unit, vmin, vmax, nMajor, sub = 5) {
+function gaugeFaceTexture(vmin, vmax, nMajor, sub = 5) {
   return canvasTex(512, 512, (c, W) => {
     const g = c.createRadialGradient(W / 2, W / 2, 10, W / 2, W / 2, W / 2);
     g.addColorStop(0, '#f4ecdf'); g.addColorStop(1, '#d9ccb8');
@@ -146,43 +146,36 @@ function gaugeFaceTexture(unit, vmin, vmax, nMajor, sub = 5) {
       if (major) { c.font = font('mono', 36); c.fillText(String(Math.round(vmin + f * (vmax - vmin))), W / 2 + Math.cos(a) * W * 0.28, W / 2 - Math.sin(a) * W * 0.28); }
     }
     c.strokeStyle = '#b4281a'; c.lineWidth = 8; c.beginPath(); c.arc(W / 2, W / 2, W * 0.44, a0 - sw, a0 - sw * 0.82); c.stroke();
-    c.font = font('mono', 30); c.fillStyle = '#5a5048'; c.fillText(unit, W / 2, W * 0.72);
   });
 }
 
 // 벽 도식: 자유 물체 도형 (도막이 받는 힘)
 function drawDiagramFBD(c, W, H) {
   gridLines(c, W, H, 12, 8);
-  c.font = font('mono', 30); c.fillStyle = 'rgba(186,230,253,0.85)'; c.fillText('FREE-BODY DIAGRAM · ΣF = 0', 36, 56);
   const cx = W * 0.46, cy = H * 0.56;
   c.strokeStyle = 'rgba(255,207,154,0.85)'; c.lineWidth = 4; c.strokeRect(cx - 90, cy - 55, 180, 110);
   c.fillStyle = 'rgba(255,207,154,0.08)'; c.fillRect(cx - 90, cy - 55, 180, 110);
   c.strokeStyle = 'rgba(186,230,253,0.4)'; c.beginPath(); c.moveTo(60, cy + 57); c.lineTo(W - 60, cy + 57); c.stroke();
-  const arrow = (x0, y0, x1, y1, col, lbl) => {
+  const arrow = (x0, y0, x1, y1, col) => {
     glowStroke(c, col, 6, 14, (c) => { c.moveTo(x0, y0); c.lineTo(x1, y1); });
     const a = Math.atan2(y1 - y0, x1 - x0); c.fillStyle = col; c.beginPath(); c.moveTo(x1, y1); c.lineTo(x1 - 22 * Math.cos(a - 0.4), y1 - 22 * Math.sin(a - 0.4)); c.lineTo(x1 - 22 * Math.cos(a + 0.4), y1 - 22 * Math.sin(a + 0.4)); c.closePath(); c.fill();
-    c.font = font('mono', 26); c.fillText(lbl, x1 + (x1 > x0 ? 12 : x1 < x0 ? -40 : 14), y1 + (y1 > y0 ? 4 : y1 < y0 ? 20 : -12));
   };
-  arrow(cx - 10, cy, cx - 10, cy + 150, 'rgba(255,179,107,0.95)', 'W');
-  arrow(cx + 10, cy, cx + 10, cy - 150, 'rgba(240,240,240,0.9)', 'N');
-  arrow(cx + 90, cy, cx + 240, cy, 'rgba(196,181,253,0.95)', 'F');
-  arrow(cx - 30, cy + 50, cx - 180, cy + 50, 'rgba(252,165,165,0.95)', 'f');
+  arrow(cx - 10, cy, cx - 10, cy + 150, 'rgba(255,179,107,0.95)');
+  arrow(cx + 10, cy, cx + 10, cy - 150, 'rgba(240,240,240,0.9)');
+  arrow(cx + 90, cy, cx + 240, cy, 'rgba(196,181,253,0.95)');
+  arrow(cx - 30, cy + 50, cx - 180, cy + 50, 'rgba(252,165,165,0.95)');
 }
 // 벽 도식: 훅 법칙
 function drawDiagramHooke(c, W, H) {
   gridLines(c, W, H, 8, 5, 'rgba(255,179,107,0.07)');
-  c.font = font('head', 64); c.fillStyle = 'rgba(255,207,154,0.95)'; c.shadowColor = 'rgba(255,179,107,0.8)'; c.shadowBlur = 16;
-  c.fillText('F = k·x', 60, H * 0.34); c.shadowBlur = 0;
   const x0 = 80, y0 = H - 50, x1 = W - 70, y1 = H * 0.46;
   c.strokeStyle = 'rgba(186,230,253,0.5)'; c.lineWidth = 2; c.beginPath(); c.moveTo(x0, y1 - 10); c.lineTo(x0, y0); c.lineTo(x1 + 20, y0); c.stroke();
-  glowStroke(c, 'rgba(160,230,255,0.95)', 4, 12, (c) => { c.moveTo(x0, y0); c.lineTo(x1, y1); });
+  glowStroke(c, 'rgba(134,239,172,0.95)', 4, 12, (c) => { c.moveTo(x0, y0); c.lineTo(x1, y1); });
   c.fillStyle = 'rgba(230,246,255,0.95)'; for (let i = 1; i <= 5; i++) { const t = i / 5; c.beginPath(); c.arc(x0 + (x1 - x0) * t, y0 + (y1 - y0) * t, 7, 0, Math.PI * 2); c.fill(); }
-  c.font = font('mono', 22); c.fillStyle = 'rgba(186,230,253,0.7)'; c.fillText('x →', x1 - 20, y0 - 12); c.fillText('F', x0 + 12, y1);
 }
 // 벽 도식: 부력
 function drawDiagramBuoy(c, W, H) {
   gridLines(c, W, H, 10, 7);
-  c.font = font('mono', 26); c.fillStyle = 'rgba(186,230,253,0.85)'; c.fillText('BUOYANCY · B = ρ·g·V', 36, 52);
   const bx = W * 0.5, by = H * 0.9, bw = 300, bh = 330;
   c.fillStyle = 'rgba(125,211,252,0.16)'; c.fillRect(bx - bw / 2, by - bh * 0.72, bw, bh * 0.72);
   glowStroke(c, 'rgba(125,211,252,0.85)', 4, 10, (c) => { c.moveTo(bx - bw / 2, by - bh); c.lineTo(bx - bw / 2, by); c.lineTo(bx + bw / 2, by); c.lineTo(bx + bw / 2, by - bh); });
@@ -191,7 +184,6 @@ function drawDiagramBuoy(c, W, H) {
   const up = (x, y0, y1, col) => { glowStroke(c, col, 6, 14, (c) => { c.moveTo(x, y0); c.lineTo(x, y1); }); c.fillStyle = col; c.beginPath(); c.moveTo(x, y1); c.lineTo(x - 12, y1 + (y1 < y0 ? 22 : -22)); c.lineTo(x + 12, y1 + (y1 < y0 ? 22 : -22)); c.fill(); };
   up(bx + 26, by - bh * 0.4, by - bh * 0.8, 'rgba(125,211,252,0.95)');
   up(bx - 26, by - bh * 0.4, by - bh * 0.04, 'rgba(255,179,107,0.95)');
-  c.font = font('mono', 24); c.fillStyle = 'rgba(125,211,252,0.95)'; c.fillText('B', bx + 42, by - bh * 0.76); c.fillStyle = 'rgba(255,179,107,0.95)'; c.fillText('W', bx - 70, by - bh * 0.1);
 }
 
 // ==== 5 CONSOLE ====
@@ -218,16 +210,13 @@ function buildConsole() {
   const panel = new THREE.Group(); panel.position.set(0, 0.715, 0.545); panel.rotation.x = PANEL_TILT; desk.add(panel);
   CONSOLE.panel = panel;
   const pBase = roundedPanel(3.42, 0.47, 0.035, 0.014, MAT.graphite, 4); panel.add(pBase);
-  const Z = 0.0185, en = LANG === 'en';
+  const Z = 0.0185;
   for (const x of [-1.12, -0.48, 0.32, 1.47]) { const seam = new THREE.Mesh(new THREE.BoxGeometry(0.004, 0.43, 0.002), MAT.slot); seam.position.set(x, 0, Z); panel.add(seam); }
   for (const [x, y] of [[-1.68, -0.205], [-1.68, 0.205], [1.68, -0.205], [1.68, 0.205]]) { const s = screw(MAT.chrome, 1); s.position.set(x, y, Z); panel.add(s); }
   const pv = ventSlits(0.16, 0.3, 7); pv.position.set(-1.6, -0.02, Z); panel.add(pv);
-  const plate = engravedPlate('LUMEBENCH  ·  힘 관측대  ·  FORCE OBSERVATORY', 2.2, 0.052, { size: 0.46, letter: 0.08, rule: true, mat: new THREE.MeshStandardMaterial({ color: 0x9c7a46, roughness: 0.62, metalness: 0.75 }) });
-  plate.position.set(0.12, 0.19, Z + 0.003); panel.add(plate);
   // 재생 버튼
   const btn = bigButton(0.055); btn.group.position.set(-1.33, -0.03, Z); panel.add(btn.group);
   CONSOLE.button = btn;
-  const bLab = engravedPlate(en ? 'RUN' : '재생', 0.11, 0.026, { size: 0.6, screws: false }); bLab.position.set(-1.33, -0.15, Z + 0.002); panel.add(bLab);
   // 상태 램프: 평형(알짜힘 0) / 움직임
   CONSOLE.lamps = {};
   [['bal', 0x86efac], ['move', 0xffb36b]].forEach(([k, col], i) => {
@@ -237,25 +226,21 @@ function buildConsole() {
     CONSOLE.lamps[k] = { mesh: lamp, on: new THREE.Color(col).multiplyScalar(3), off: new THREE.Color(0x1a1a1a) };
   });
   // 당기는 힘 슬라이더 2개 (끌기대 왼쪽·오른쪽 저울)
-  const mkSlider = (y, col, txt) => {
+  const mkSlider = (y, col) => {
     const sl = ledSlider({ length: 0.5, n: 24, color: col }); sl.group.position.set(-0.8, y, Z + 0.004); panel.add(sl.group);
-    const lab = engravedPlate(txt, 0.34, 0.024, { size: 0.55, screws: false }); lab.position.set(-0.8, y - 0.052, Z + 0.002); panel.add(lab);
     return sl;
   };
-  CONSOLE.sF1 = mkSlider(0.085, 0xc4b5fd, en ? 'LEFT PULL  F1 · 0–6 N' : '왼쪽 당김  F1 · 0–6 N');
-  CONSOLE.sF2 = mkSlider(-0.04, 0xc4b5fd, en ? 'RIGHT PULL  F2 · 0–6 N' : '오른쪽 당김  F2 · 0–6 N');
+  CONSOLE.sF1 = mkSlider(0.085, 0xc4b5fd);
+  CONSOLE.sF2 = mkSlider(-0.04, 0xc4b5fd);
   // 다이얼 2개: 행성(중력 가속도), 수조 높이
   const P = PHYS.PLANETS, gf = (g) => (g - PHYS.C.gMin) / (PHYS.C.gMax - PHYS.C.gMin);
-  const pn = en ? { moon: 'Moon', mars: 'Mars', earth: 'Earth' } : { moon: '달', mars: '화성', earth: '지구' };
-  const dG = knobWithArc({ radius: 0.052, color: 0xffb36b, label: en ? 'GRAVITY g' : '중력 가속도 g', ticks: P.map((p) => [gf(p.g), pn[p.id]]) });
+  const dG = knobWithArc({ radius: 0.052, color: 0xffb36b, ticks: P.map((p) => [gf(p.g), String(p.g)]) });
   dG.group.position.set(-0.17, -0.005, Z); panel.add(dG.group); CONSOLE.dialG = dG;
-  const dJ = knobWithArc({ radius: 0.052, color: 0x7dd3fc, label: en ? 'TANK HEIGHT' : '수조 높이', ticks: [[0, '0'], [0.5, '14'], [1, '28 cm']] });
+  const dJ = knobWithArc({ radius: 0.052, color: 0x7dd3fc, ticks: [[0, '0'], [0.5, '14'], [1, '28']] });
   dJ.group.position.set(0.11, -0.005, Z); panel.add(dJ.group); CONSOLE.dialJ = dJ;
   // 그래프 화면 2개
   const sA = graphScreen(0.5, 0.27, drawScreenA); sA.group.position.set(0.74, -0.02, Z + 0.006); panel.add(sA.group); CONSOLE.screenA = sA;
   const sB = graphScreen(0.5, 0.27, drawScreenB); sB.group.position.set(1.27, -0.02, Z + 0.006); panel.add(sB.group); CONSOLE.screenB = sB;
-  const aLab = engravedPlate(en ? 'FORCE LEDGER' : '힘 장부 · 받는 힘', 0.3, 0.022, { size: 0.55, screws: false }); aLab.position.set(0.74, -0.185, Z + 0.002); panel.add(aLab);
-  const bLab2 = engravedPlate(en ? 'RECORD GRAPH' : '기록 그래프', 0.3, 0.022, { size: 0.55, screws: false }); bLab2.position.set(1.27, -0.185, Z + 0.002); panel.add(bLab2);
   shadowify(desk, true, true);
   occluder(desk);
 }

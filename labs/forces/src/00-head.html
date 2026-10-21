@@ -28,45 +28,16 @@ button{font:inherit;color:inherit}
 /* 좌상단 */
 #left{left:28px;top:22px;width:min(390px,33vw);max-height:calc(100vh - 80px);overflow:auto;scrollbar-width:none}
 #left::-webkit-scrollbar{display:none}
-#kicker{font:500 13px/1 var(--mono);letter-spacing:.2em;color:#fff;opacity:.92;text-transform:uppercase}
-#kicker b{color:var(--cool);font-weight:500}
-#hook{font:800 56px/.95 var(--head);color:var(--warm);margin:10px 0 12px;text-shadow:0 0 28px rgba(255,179,107,.35),0 2px 0 rgba(0,0,0,.25);letter-spacing:-.01em}
-#lead{color:#e9dfd3;font-size:14.5px;line-height:1.55;margin:0 0 14px;max-width:25em;text-shadow:0 1px 8px rgba(0,0,0,.5)}
-#lead em{font-style:normal;color:var(--cool2)}
 #chips{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
 .chip{background:var(--glass);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--glass-line);border-radius:12px;padding:9px 11px 8px;min-width:0}
 .chip .k{font:500 10px/1 var(--mono);letter-spacing:.14em;color:var(--quiet);text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .chip .v{font:600 23px/1.15 var(--head);margin-top:5px;font-variant-numeric:tabular-nums;white-space:nowrap}
 .chip .v small{font:500 11px var(--mono);color:var(--quiet);margin-left:3px;letter-spacing:.06em}
-.chip .s{font:400 10.5px/1.3 var(--mono);color:var(--dim);margin-top:3px;letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .chip.c1 .v{color:#d9f99d} .chip.c2 .v{color:var(--cool2)} .chip.c3 .v{color:var(--yellow)}
-#caption{background:var(--glass);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--glass-line);border-left:3px solid var(--cool);border-radius:10px;padding:10px 13px;font-size:14px;line-height:1.55;min-height:3.4em}
-#caption .n{color:var(--cool2);font-weight:700;font-variant-numeric:tabular-nums}
-#caption .w{color:var(--warm2);font-weight:700;font-variant-numeric:tabular-nums}
-#caption b{color:#fff}
-#caption .tag{display:inline-block;font:500 10px/1 var(--mono);letter-spacing:.14em;color:var(--quiet);margin-right:6px;vertical-align:1px;text-transform:uppercase}
 
 /* 수업 카드 */
 #lesson{margin-top:10px;background:rgba(18,30,38,.76);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(125,211,252,.35);border-radius:12px;padding:12px 14px;display:none}
 #lesson.on{display:block}
-#lesson .top{display:flex;justify-content:space-between;align-items:center;gap:8px;font:500 10.5px/1 var(--mono);letter-spacing:.14em;color:var(--cool);text-transform:uppercase}
-#lesson .code{font:500 10px/1 var(--mono);letter-spacing:.06em;color:#06202c;background:var(--cool);border-radius:5px;padding:3px 6px;text-transform:none}
-#lesson .phase{color:var(--warm2)}
-#lesson h3{font:700 17px/1.3 var(--sans);margin:8px 0 4px}
-#lesson p{margin:0 0 6px;font-size:13.5px;color:#dfe8ee;line-height:1.5}
-#lesson .q{border-left:2px solid var(--warm);padding-left:8px;color:var(--warm2);font-size:13px}
-#lesson .q::before{content:attr(data-l);display:block;font:500 9.5px/1.4 var(--mono);letter-spacing:.14em;color:var(--dim);text-transform:uppercase}
-#lesson .after{margin-top:6px;padding-top:8px;border-top:1px dashed rgba(125,211,252,.3);color:var(--cool2);font-size:13.5px;display:none}
-#lesson .after.on{display:block}
-#lesson .nav{display:flex;gap:6px;margin-top:10px;align-items:center}
-#lesson .dots{flex:1;display:flex;gap:3px;flex-wrap:wrap}
-#lesson .dots i{width:12px;height:4px;border-radius:2px;background:rgba(255,255,255,.18)}
-#lesson .dots i.done{background:var(--cool)} #lesson .dots i.cur{background:#fff}
-.rec{width:100%;border-collapse:collapse;margin:6px 0 2px;font:400 11.5px/1.35 var(--mono);color:#dfe8ee;font-variant-numeric:tabular-nums}
-.rec th{font:500 9.5px/1.2 var(--mono);letter-spacing:.08em;color:var(--dim);text-align:right;padding:3px 5px;border-bottom:1px solid rgba(255,255,255,.12);text-transform:uppercase}
-.rec td{text-align:right;padding:3px 5px;border-bottom:1px solid rgba(255,255,255,.05)}
-.rec th:first-child,.rec td:first-child{text-align:left}
-.rec tr.new td{color:#fff;background:rgba(125,211,252,.1)}
 .tbtn{border:1px solid var(--glass-line);background:rgba(255,255,255,.06);border-radius:8px;padding:6px 10px;cursor:pointer;font:500 11px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase}
 .tbtn:hover{border-color:var(--cool)} .tbtn.primary{background:var(--cool);color:#06202c;border-color:var(--cool)}
 .tbtn:disabled{opacity:.4;cursor:default}
@@ -77,11 +48,9 @@ button{font:inherit;color:inherit}
 .prow:last-child{border-bottom:0;padding-bottom:2px}
 .prow:first-child{padding-top:2px}
 .lab{display:flex;justify-content:space-between;align-items:baseline;font:500 10.5px/1 var(--mono);letter-spacing:.14em;color:var(--quiet);text-transform:uppercase;margin-bottom:7px}
-.lab kbd{font:400 10px var(--mono);color:var(--dim);letter-spacing:.08em;margin-left:6px}
 .lab .val{color:var(--ink);font-size:12px;letter-spacing:.04em;font-variant-numeric:tabular-nums;text-transform:none}
 .seg{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:3px;background:rgba(0,0,0,.25);border-radius:9px;padding:3px}
 .seg button{border:0;background:none;border-radius:7px;padding:7px 4px 6px;cursor:pointer;font:500 12px/1.2 var(--sans);color:#d9cec2;position:relative}
-.seg button kbd{display:block;font:400 9.5px/1 var(--mono);color:var(--dim);margin-top:3px}
 .seg button:hover{background:rgba(255,255,255,.06)}
 .seg button[aria-pressed="true"]{background:rgba(255,179,107,.18);color:#fff;box-shadow:inset 0 0 0 1px rgba(255,179,107,.55)}
 .seg.station button[aria-pressed="true"]{background:rgba(125,211,252,.16);box-shadow:inset 0 0 0 1px rgba(125,211,252,.6)}
@@ -99,7 +68,6 @@ input[type=range]:focus-visible{outline:2px solid var(--cool);outline-offset:2px
 .toggles{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}
 .tg{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--glass-line);background:rgba(255,255,255,.04);border-radius:999px;padding:5px 10px 5px 8px;cursor:pointer;font:500 12px/1 var(--sans);color:#d9cec2}
 .tg i{width:8px;height:8px;border-radius:50%;background:#5c544c;flex:none}
-.tg kbd{font:400 9.5px var(--mono);color:var(--dim)}
 .tg[aria-pressed="true"]{color:#fff;border-color:rgba(255,255,255,.28);background:rgba(255,255,255,.08)}
 .tg[aria-pressed="true"] i{background:var(--dot,#7dd3fc);box-shadow:0 0 8px var(--dot,#7dd3fc)}
 .r3{display:flex;gap:8px;align-items:center}
@@ -108,7 +76,6 @@ input[type=range]:focus-visible{outline:2px solid var(--cool);outline-offset:2px
 .ib svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
 .ib:hover{border-color:rgba(255,255,255,.3)}
 .ib[aria-pressed="true"]{background:rgba(125,211,252,.16);border-color:rgba(125,211,252,.55);color:#fff}
-.ib .kb{position:absolute;right:2px;bottom:1px;font:400 8.5px var(--mono);color:var(--dim)}
 .ib.wide{width:auto;padding:0 10px;display:flex;gap:6px;font:500 12px/1 var(--sans)}
 .speed{display:flex;align-items:center;gap:6px;margin-top:9px}
 .speed .seg button{padding:6px 2px 5px;font:500 11px/1 var(--mono)}
@@ -126,102 +93,44 @@ input[type=range]:focus-visible{outline:2px solid var(--cool);outline-offset:2px
 .lbl::after{content:"";position:absolute;left:50%;top:100%;width:1px;height:var(--stem,0px);background:linear-gradient(rgba(255,255,255,.35),rgba(255,255,255,0))}
 
 /* 하단 */
-#hint{left:50%;bottom:16px;transform:translateX(-50%);font:400 11.5px/1 var(--mono);letter-spacing:.04em;color:rgba(244,237,228,.72);background:rgba(18,15,13,.42);padding:8px 14px;border-radius:999px;white-space:nowrap;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
-@media (max-width:1240px){#hint{display:none}}
 #other{right:20px;bottom:16px;display:flex;gap:8px;align-items:stretch}
 #other a.card{display:flex;gap:10px;align-items:center;text-decoration:none;color:inherit;background:var(--glass);border:1px solid var(--glass-line);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-radius:12px;padding:8px 12px 8px 8px}
-#other .thumb{width:44px;height:32px;border-radius:7px;background:radial-gradient(60% 80% at 70% 40%,rgba(196,181,253,.55),transparent 70%),radial-gradient(60% 80% at 25% 70%,rgba(255,179,107,.5),transparent 70%),#0f0d0b}
-#other .t{font:500 10px/1.2 var(--mono);letter-spacing:.12em;color:var(--quiet);text-transform:uppercase}
-#other .n{font:600 13px/1.3 var(--sans)}
 #other .share{width:46px;border-radius:12px;height:auto}
 
-/* 모달 공통 (도움말·지도서·평가) */
+/* 쉬운 모드 시작 화면 */
 .modal{position:fixed;inset:0;z-index:30;background:rgba(10,8,7,.62);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;padding:20px}
 .modal.on{display:flex}
 .modal .box{width:min(860px,100%);max-height:90vh;overflow:auto;background:#1f1a16;border:1px solid var(--glass-line);border-radius:16px;padding:22px 24px;box-shadow:0 30px 80px rgba(0,0,0,.5)}
-.modal h2{font:800 26px/1.1 var(--head);color:var(--warm);margin:0 0 6px}
-.modal h3{font:700 14.5px/1.3 var(--sans);color:var(--cool2);margin:18px 0 6px}
-.modal h4{font:700 13px/1.3 var(--sans);color:#fff;margin:12px 0 4px}
-.modal p,.modal li{font-size:14px;color:#e2d8cc;line-height:1.6}
-.modal ul,.modal ol{margin:4px 0;padding-left:20px}
-.modal table{width:100%;border-collapse:collapse;font-size:13px;margin-top:4px}
-.modal th,.modal td{text-align:left;padding:6px 8px;border-bottom:1px solid rgba(255,255,255,.08);vertical-align:top;color:#e2d8cc}
-.modal th{font:500 10.5px var(--mono);letter-spacing:.1em;color:var(--quiet);text-transform:uppercase}
-.modal .keys{display:grid;grid-template-columns:repeat(2,1fr);gap:4px 18px;font:400 12.5px/1.6 var(--mono);color:#d9cec2}
-.modal .keys kbd{display:inline-block;min-width:22px;text-align:center;border:1px solid var(--glass-line);border-radius:5px;padding:0 5px;margin-right:6px;color:#fff}
-.modal .x{float:right}
-.modal .eq{font:400 13px/1.7 var(--mono);background:rgba(0,0,0,.25);border-radius:8px;padding:8px 12px;color:#e8f6ff}
-.modal .std{display:inline-block;font:500 11px/1 var(--mono);background:rgba(125,211,252,.15);color:var(--cool2);border:1px solid rgba(125,211,252,.4);border-radius:5px;padding:3px 6px;margin-right:6px}
-.modal .note{font-size:12.5px;color:var(--dim)}
-.mtabs{display:flex;gap:4px;flex-wrap:wrap;margin:10px 0 4px;border-bottom:1px solid rgba(255,255,255,.1)}
-.mtabs button{border:0;background:none;padding:8px 10px;cursor:pointer;font:500 13px/1 var(--sans);color:var(--quiet);border-bottom:2px solid transparent;margin-bottom:-1px}
-.mtabs button[aria-selected="true"]{color:#fff;border-bottom-color:var(--warm)}
-.mpane[hidden]{display:none}
-.quiz{counter-reset:q}
-.qi{border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:10px 12px;margin:10px 0;background:rgba(255,255,255,.02)}
-.qi .qh{display:flex;gap:8px;align-items:baseline;font-size:14px;color:#fff}
-.qi .qh::before{counter-increment:q;content:counter(q);font:500 11px var(--mono);color:var(--warm2);min-width:16px}
-.qi label{display:flex;gap:8px;align-items:flex-start;font-size:13.5px;color:#e2d8cc;padding:4px 6px;border-radius:6px;cursor:pointer}
-.qi label:hover{background:rgba(255,255,255,.04)}
-.qi .fb{font-size:13px;margin-top:6px;display:none}
-.qi.graded .fb{display:block}
-.qi.right{border-color:rgba(134,239,172,.5)} .qi.right .fb{color:var(--green)}
-.qi.wrong{border-color:rgba(252,165,165,.5)} .qi.wrong .fb{color:var(--red)}
-.likert{display:flex;gap:4px;margin-top:4px}
-.likert label{border:1px solid rgba(255,255,255,.12);border-radius:6px;padding:4px 8px;font-size:12.5px}
-.score{font:800 30px/1 var(--head);color:var(--yellow)}
-.lv{display:inline-block;font:500 11px/1 var(--mono);border-radius:5px;padding:3px 7px}
-.lv.A{background:rgba(134,239,172,.18);color:var(--green)} .lv.B{background:rgba(253,230,138,.16);color:var(--yellow)} .lv.C{background:rgba(252,165,165,.16);color:var(--red)}
-@media print{body{overflow:visible;background:#fff}canvas,#left,#panel,#hint,#other,#labels{display:none!important}.modal{position:static;background:none;display:block!important}.modal:not(.printing){display:none!important}.modal .box{max-height:none;box-shadow:none;border:0;background:#fff;color:#000}.modal *{color:#000!important}}
-
-/* 이벤트 토스트 */
-#event{position:fixed;left:50%;top:18%;transform:translate(-50%,-8px);z-index:12;font:700 15px/1.2 var(--sans);padding:10px 16px;border-radius:999px;background:rgba(18,30,38,.8);border:1px solid rgba(125,211,252,.5);color:#e6f7ff;opacity:0;transition:opacity .25s,transform .25s;pointer-events:none;white-space:nowrap}
-#event.on{opacity:1;transform:translate(-50%,0)}
-
 /* 등장 애니메이션 */
-.intro #left>*,.intro #panel,.intro #other,.intro #hint{opacity:0;transform:translateY(8px)}
-#left>*,#panel,#other,#hint{transition:opacity .7s ease,transform .7s ease}
+.intro #left>*,.intro #panel,.intro #other{opacity:0;transform:translateY(8px)}
+#left>*,#panel,#other{transition:opacity .7s ease,transform .7s ease}
 
 /* 모바일 */
 @media (max-width:980px){
   #left{left:14px;top:12px;width:calc(100vw - 28px);max-height:none;overflow:visible}
-  #kicker{font-size:11px;padding-right:120px} #kicker b{display:none}
-  #hook{font-size:36px;margin:6px 0 6px}
-  #lead{display:none}
   #chips{gap:6px;margin-bottom:0}
   .chip{padding:6px 8px 6px;border-radius:10px}
   .chip .v{font-size:17px}
-  .chip .s{display:none}
-  #caption{display:none}
-  #lesson{position:fixed;left:14px;right:14px;bottom:calc(var(--sheet,128px) + 10px);margin:0;padding:10px 12px;max-height:44vh;overflow:auto}
-  #lesson h3{font-size:15px;margin:6px 0 3px} #lesson p,#lesson .after{font-size:12.5px;line-height:1.45}
-  #lesson .q{display:none}
+    #lesson{position:fixed;left:14px;right:14px;bottom:calc(var(--sheet,128px) + 10px);margin:0;padding:10px 12px;max-height:44vh;overflow:auto}
   #panel{left:0;right:0;top:auto;bottom:0;width:auto;border-radius:16px 16px 0 0;padding:10px 14px calc(10px + env(safe-area-inset-bottom));max-height:70vh;overflow:auto}
   #panel .more{display:none}
   #panel.open .more{display:block}
   #panelToggle{display:flex;width:100%;justify-content:center;border:0;background:none;padding:0 0 6px;cursor:pointer}
   #panelToggle i{width:38px;height:4px;border-radius:2px;background:rgba(255,255,255,.3)}
-  #hint,#other{display:none}
+  #other{display:none}
   .lbl{font-size:9.5px;padding:3px 7px 3px 6px}
-  #event{top:auto;bottom:calc(var(--sheet,128px) + 16px);font-size:13px}
   .modal{padding:0}.modal .box{max-height:100vh;height:100%;border-radius:0;padding:16px}
 }
 @media (max-width:980px) and (orientation:landscape){
   #chips{width:60%}
   #panel{max-height:58vh}
 }
-body.lesson-on #lead,body.lesson-on #caption{display:none}
-@media (max-height:640px){#lead{display:none}#hook{font-size:40px;margin:6px 0 8px}#chips{margin-bottom:8px}}
-/* ===== 쉬운 모드 (초등학생): 퀘스트 게임 ===== */
-#kidSub,#kid,#legend,#kidhud{display:none}
+@media (max-height:640px){#chips{margin-bottom:8px}}#kid,#legend,#kidhud{display:none}
 body.kid #kid:empty{display:none}
 #kid:has(.kwin.on) .know,#kid:has(.kwin.on) .kmine{display:none}
-body.kid #panel,body.kid #chips,body.kid #lead,body.kid #caption,body.kid #lesson,body.kid #hint,body.kid #other{display:none!important}
-body.kid #kidSub{display:block;font-size:15px;line-height:1.5;color:#efe6db;margin:-4px 0 10px;text-shadow:0 1px 8px rgba(0,0,0,.6)}
-body.kid #kidSub b{color:var(--warm2)}
+body.kid #panel,body.kid #chips,body.kid #lesson,body.kid #other{display:none!important}
 body.kid #kid,body.kid #kidhud{display:block}
 body.kid #legend{display:flex}
-body.kid #hook{font-size:40px;margin:4px 0 6px}
 #kid{background:rgba(24,20,17,.86);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.14);border-radius:18px;padding:12px 16px 12px;position:relative;margin-bottom:28px;box-shadow:0 12px 40px rgba(0,0,0,.35)}
 #kid .ktag{display:inline-block;font:700 12px/1 var(--sans);color:#06202c;background:var(--cool);border-radius:999px;padding:5px 10px;letter-spacing:.02em}
 #kid .ktag.boss{background:linear-gradient(90deg,#fde68a,#ffb36b);color:#2a1a0c}
@@ -231,8 +140,6 @@ body.kid #hook{font-size:40px;margin:4px 0 6px}
 #kid .ksay{font-size:16px;line-height:1.5;color:#f1e9df;margin:6px 0 8px}
 #kid .ksay b{color:var(--warm2)}
 #kid .kpred{background:linear-gradient(180deg,rgba(196,181,253,.16),rgba(196,181,253,.06));border:1px solid rgba(196,181,253,.45);border-radius:14px;padding:11px 12px;margin-top:6px}
-#kid .kq{font-size:14px;color:#ddd6fe;line-height:1.45}
-#kid .kq b{display:block;font-size:17px;color:#fff;margin-top:3px}
 #kid .kopts{display:grid;gap:8px;margin-top:10px}
 #kid .kopts.n2{grid-template-columns:1fr 1fr}
 #kid .kopts.n3{grid-template-columns:1fr}
@@ -273,44 +180,15 @@ body.kid #hook{font-size:40px;margin:4px 0 6px}
 #kid .kbtns.g6{grid-template-columns:repeat(6,1fr)}
 #kid .kbtns.g6 .c2{grid-column:span 2;padding-left:4px;padding-right:4px}
 #kid .kbtns.g6 .c3{grid-column:span 3}
-#kid .kqnext{width:100%}
 #kid .kbtns .kbtn:nth-child(odd):last-child{grid-column:1/-1}
 #kid .know{margin-top:10px;border-left:3px solid var(--cool);padding:2px 0 2px 10px;font-size:14.5px;line-height:1.5;color:#e6f1f7}
 #kid .know span{display:block;font:600 11px/1.4 var(--sans);color:var(--cool);letter-spacing:.06em}
 #kid .kwin{display:none;margin-top:10px;background:rgba(134,239,172,.13);border:1px solid rgba(134,239,172,.55);border-radius:14px;padding:10px 12px}
 #kid .kwin.on{display:block;animation:kpop .35s ease}
-#kid .kwhy:empty{display:none}
-#kid .kwhy{margin-bottom:6px;font-size:14px;line-height:1.45}
-#kid .khit{display:inline-block;color:#2a1a0c;background:linear-gradient(90deg,#fde68a,#ffcf9a);border-radius:999px;padding:4px 11px;font-size:14px}
-#kid .kmiss{color:#fde68a}
-#kid .kwintxt{font-size:15px;line-height:1.5;color:#eafff0;margin-bottom:8px}
-#kid .kgain{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:9px}
-#kid .kgain span{display:inline-flex;align-items:center;gap:6px;font:700 13px/1 var(--sans);color:#fde68a;background:rgba(0,0,0,.3);border-radius:999px;padding:6px 10px}
-#kid .kgain span i{width:12px;height:5px;border-radius:3px;background:var(--c);box-shadow:0 0 6px var(--c)}
 #kid .kwin .kbtn{width:100%;background:linear-gradient(180deg,#a7f3c0,#86efac);color:#06240f;border-color:#a7f3c0}
 #kid .kskip{position:absolute;right:12px;bottom:-24px;border:0;background:none;color:var(--dim);font:500 12px var(--sans);cursor:pointer}
-#kid .kquiz{margin-top:4px}
-#kid .kqd{display:flex;align-items:center;gap:6px;margin-bottom:8px;font:600 12px/1 var(--mono);color:var(--quiet)}
-#kid .kqd i{width:22px;height:8px;border-radius:4px;background:rgba(255,255,255,.14)}
-#kid .kqd i.cur{background:rgba(255,255,255,.5)}
-#kid .kqd i.ok{background:#86efac}
-#kid .kqd i.no{background:#fca5a5}
-#kid .kqd span{margin-left:auto}
-#kid .kqq{font:700 18px/1.45 var(--sans);color:#fff;background:rgba(0,0,0,.28);border-radius:12px;padding:12px 14px;margin-bottom:10px}
-#kid .kqfb{font-size:15px;line-height:1.5;border-radius:12px;padding:10px 12px;margin-bottom:10px}
-#kid .kqfb.ok{background:rgba(134,239,172,.14);border:1px solid rgba(134,239,172,.5)}
-#kid .kqfb.no{background:rgba(253,230,138,.1);border:1px solid rgba(253,230,138,.45)}
 #kid .kfinal{text-align:center}
 #kid .ktro{font-size:58px;line-height:1;margin:4px 0 2px;filter:drop-shadow(0 0 18px rgba(253,230,138,.5))}
-#kid .krank{display:inline-block;margin:8px 0;font:800 20px/1 var(--sans);color:#2a1a0c;background:linear-gradient(90deg,#fde68a,#ffcf9a);border-radius:999px;padding:8px 16px}
-#kid .kfs{display:flex;justify-content:center;gap:14px;font-size:15px;color:#efe6db;margin:4px 0 10px}
-#kid .kfs b{color:#fde68a;font-size:20px}
-#kid .kcards{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:6px 0 4px}
-#kid .kcard{border:1px solid rgba(255,255,255,.14);border-radius:10px;padding:7px 4px;background:rgba(0,0,0,.25);font-size:11.5px;line-height:1.25}
-#kid .kcard i{display:block;height:5px;width:60%;margin:0 auto 5px;border-radius:3px;background:var(--c);box-shadow:0 0 8px var(--c)}
-#kid .kcard.off{opacity:.4}
-#kid .kcard.off i{background:rgba(255,255,255,.3);box-shadow:none}
-#kid .kcard b{color:#fff;font-weight:700}
 #kid .kfinal .kbtns{margin-top:10px}
 #kid .kreset{margin-top:10px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.06);color:#efe6db;border-radius:999px;padding:7px 14px;font:600 13px/1 var(--sans);cursor:pointer}
 #kid .kreset:hover{background:rgba(255,255,255,.14)}
@@ -335,9 +213,6 @@ body.kid #hook{font-size:40px;margin:4px 0 6px}
 #kidhud .kn2.boss{width:32px;height:32px;font-size:17px}
 #kidhud .kn2 em{position:absolute;right:-5px;top:-6px;font-size:10px;font-style:normal}
 @keyframes kbob{50%{transform:scale(1.18) translateY(-2px)}}
-#kidhud .kscore{display:inline-block;margin-left:8px;background:linear-gradient(180deg,rgba(253,230,138,.24),rgba(253,230,138,.1));border:1px solid rgba(253,230,138,.5);border-radius:999px;padding:7px 13px;font:700 14px/1 var(--sans);color:#fde68a}
-#kidhud .kscore b{font:800 17px/1 var(--head);font-variant-numeric:tabular-nums;color:#fff;margin:0 3px}
-#kidhud .kscore small{font-size:11px;color:#fde68a}
 #kidhud .ksnd{margin-left:6px;border:1px solid rgba(255,255,255,.16);background:rgba(18,15,13,.6);color:#efe6db;border-radius:999px;padding:7px 11px;font:600 12px/1 var(--sans);cursor:pointer}
 body.kid #modeBtn{top:auto;bottom:14px;left:286px;right:auto;transform:none;padding:9px 14px}
 #kfx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:25}
@@ -345,42 +220,20 @@ body.kid #modeBtn{top:auto;bottom:14px;left:286px;right:auto;transform:none;padd
 #kpop.on{animation:kcard 2.6s ease forwards}
 @keyframes kcard{0%{opacity:0;transform:translate(-50%,10px) scale(.7) rotate(-6deg)}12%{opacity:1;transform:translate(-50%,0) scale(1.06) rotate(1deg)}20%{transform:translate(-50%,0) scale(1) rotate(0)}82%{opacity:1;transform:translate(-50%,0) scale(1)}100%{opacity:0;transform:translate(-50%,-14px) scale(.96)}}
 #kpop .kpcard{width:230px;text-align:center;background:linear-gradient(180deg,#2a231d,#1a1512);border:2px solid var(--c);border-radius:16px;padding:14px 16px 16px;box-shadow:0 0 28px -6px var(--c),0 18px 50px rgba(0,0,0,.5)}
-#kpop small{display:block;font:700 12px/1 var(--sans);color:#fde68a;letter-spacing:.06em;margin-bottom:10px}
-#kpop i{display:block;height:8px;width:70%;margin:0 auto 10px;border-radius:4px;background:var(--c);box-shadow:0 0 14px var(--c)}
-#kpop b{display:block;font:800 21px/1.2 var(--sans);color:#fff;margin-bottom:6px}
-#kpop span{display:block;font-size:13.5px;line-height:1.45;color:#e2d8cc}
 /* 힘 카드 모음 (화면 아래) */
 #legend{position:fixed;right:16px;bottom:14px;z-index:10;gap:6px 12px;flex-wrap:wrap;justify-content:center;max-width:min(800px,calc(100vw - 500px));background:rgba(18,15,13,.66);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:7px 14px;font:500 12.5px/1.3 var(--sans);color:#efe6db}
-#legend b{color:#fde68a;font-weight:700;margin-right:2px}
-#legend span,#kidIntro .kilegend span{display:inline-flex;align-items:center;gap:6px}
-#legend span.off{justify-content:center;width:20px;height:20px;border-radius:6px;border:1px dashed rgba(255,255,255,.3);color:rgba(255,255,255,.5);font:700 11px/1 var(--sans)}
-#legend i,#kidIntro .kilegend i{width:14px;height:5px;border-radius:3px;display:inline-block}
 #modeBtn{position:fixed;top:14px;left:50%;transform:translateX(-50%);z-index:11;border:1px solid rgba(255,255,255,.18);background:rgba(18,15,13,.6);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:#efe6db;border-radius:999px;padding:7px 14px;font:600 12.5px/1 var(--sans);cursor:pointer}
 #modeBtn:hover{border-color:var(--warm)}
 .hide-ui #modeBtn,.hide-ui #legend,.hide-ui #kidhud{opacity:0;pointer-events:none}
 #kidIntro .box{width:min(580px,100%);padding:26px 30px}
-#kidIntro h2{font-size:42px;margin-bottom:12px}
-#kidIntro .kil{display:flex;gap:14px;align-items:flex-start;font-size:18px;line-height:1.5;margin:9px 0;color:#f4ede4}
-#kidIntro .kil span:first-child{font-size:27px;line-height:1.1;width:34px;flex:none}
-#kidIntro .kil b{color:var(--warm2)}
-#kidIntro .kimap{display:flex;align-items:center;justify-content:center;margin:16px 0 18px;background:rgba(0,0,0,.25);border-radius:12px;padding:10px 8px}
-#kidIntro .kimap span{font-size:20px}
-#kidIntro .kimap span.boss{font-size:26px}
-#kidIntro .kimap i{flex:1;max-width:14px;height:2px;background:rgba(255,255,255,.25);margin:0 2px}
 #kidIntro .kstart{width:100%;font-size:20px;padding:16px}
-#kidIntro .kfull{display:block;margin:12px auto 0;border:0;background:none;color:var(--dim);font:500 13px var(--sans);cursor:pointer;text-decoration:underline}
 @media (max-height:780px) and (min-width:981px){
-  body.kid #hook{font-size:34px;margin:2px 0 4px} body.kid #kidSub{font-size:14px;margin-bottom:8px}
   #kid{padding:10px 14px 10px} #kid .ksay{font-size:15px;margin:4px 0 6px} .kbtn{padding:10px 8px;font-size:15px} .kopt{padding:9px 8px;font-size:15px}
-  #kid .kmeter{padding:6px 10px;margin:2px 0 8px} #kid .khead{margin:6px 0 2px} #kid .kicon{font-size:28px} #kid .ktitle{font-size:21px}
-  #kid .kwintxt{font-size:14.5px} #kid .know{font-size:14px;margin-top:8px}
+  #kid .kmeter{padding:6px 10px;margin:2px 0 8px} #kid .khead{margin:6px 0 2px} #kid .kicon{font-size:28px} #kid .ktitle{font-size:21px} #kid .know{font-size:14px;margin-top:8px}
 }
-@media (max-height:680px) and (min-width:981px){ body.kid #kidSub,body.kid #kicker{display:none} #kid .ksay{font-size:14.5px} }
+@media (max-height:680px) and (min-width:981px){#kid .ksay{font-size:14.5px} }
 @media (max-width:980px){
   body.kid #kid{position:fixed;left:10px;right:10px;bottom:10px;max-height:58vh;overflow:auto;margin:0}
-  body.kid #kidSub{display:none}
-  body.kid #hook{font-size:30px}
-  body.kid #kicker,body.kid #hook{display:none}
   #legend{display:none!important}
   #kidhud{left:8px;right:8px;transform:none;top:52px;display:flex!important;justify-content:center;gap:6px}
   body:not(.kid) #kidhud{display:none!important}
@@ -390,8 +243,6 @@ body.kid #modeBtn{top:auto;bottom:14px;left:286px;right:auto;transform:none;padd
   #kidhud .kn2.boss{width:24px;height:24px;font-size:13px}
   #kidhud .kn2.cur{transform:scale(1.12)}
   #kidhud .kmap>i{width:2px}
-  #kidhud .kscore{margin:0;padding:6px 9px;font-size:12px}
-  #kidhud .kscore b{font-size:14px}
   body.kid #modeBtn{top:auto;bottom:calc(58vh + 18px);left:auto;right:10px}
   #kpop{left:50%;top:14%}
   #kid .ktitle{font-size:19px} #kid .ksay{font-size:15px} .kbtn{padding:11px 8px;font-size:15px}
@@ -415,11 +266,6 @@ body.kid #kid{position:fixed!important;inset:0!important;max-height:none!importa
 #kid .kban,#kid .kbox,#kidIntro .box{background:var(--kbg);border:1px solid var(--kline);border-radius:20px;box-shadow:var(--kshadow);color:var(--ktx)}
 #kid .keye,#kidIntro .keye{display:flex;align-items:center;gap:7px;font:700 12px/1 var(--kfont);letter-spacing:.06em;color:var(--kacc);text-transform:uppercase}
 #kid .keye i{width:3px;height:3px;border-radius:50%;background:currentColor;opacity:.55}
-#kid .kav,#kidIntro .kav{flex:none;display:grid;place-items:center;width:52px;height:52px;border-radius:50%;background:#f5ece1;overflow:hidden}
-#kid .kav svg,#kidIntro .kav svg{width:86%;height:86%;margin-top:8%}
-#kid .kav.sm{width:44px;height:44px}
-#kid .ksay2{flex:none;display:inline-grid;place-items:center;width:32px;height:32px;border-radius:10px;border:0;background:var(--kbg2);color:var(--ksub);font-size:17px;cursor:pointer;transition:background .15s,color .15s}
-#kid .ksay2:hover{background:var(--kacc2);color:var(--kacc)}
 body.kid .kbtn,#kidIntro .kbtn{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:44px;padding:0 18px;border-radius:12px;border:1px solid var(--kline);background:#fff;color:var(--ktx);font:600 15px/1 var(--kfont);box-shadow:0 1px 2px rgba(16,24,40,.06);cursor:pointer;transition:background .15s,border-color .15s,transform .1s}
 body.kid .kbtn:hover,#kidIntro .kbtn:hover{background:var(--kbg2)}
 body.kid .kbtn:active,#kidIntro .kbtn:active{transform:scale(.98)}
@@ -478,8 +324,7 @@ body.kid .kbtn.main:hover,#kidIntro .kbtn.main:hover{background:var(--kacc-d)}
 #kid .kmodal{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(10,12,20,.45);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
 #kid .kbox{position:relative;width:min(560px,100%);max-height:calc(100vh - 96px);overflow:auto;padding:22px;text-align:left;animation:kpop2 .32s cubic-bezier(.2,.9,.3,1.12)}
 #kid .kmh{display:flex;align-items:center;gap:12px;margin-bottom:18px}
-#kid .kmh>div:not(.kav){flex:1;min-width:0}
-#kid .kq{margin-top:5px;font:700 20px/1.4 var(--kfont);color:var(--ktx);text-wrap:balance}
+#kid .kmh>div{flex:1;min-width:0}
 #kid .kpred{margin:0}
 #kid .kopts{display:grid;grid-template-columns:repeat(var(--n,3),1fr);gap:10px;margin:0}
 #kid .kopts.n2{--n:2}
@@ -489,7 +334,6 @@ body.kid .kbtn.main:hover,#kidIntro .kbtn.main:hover{background:var(--kacc-d)}
 #kid .kpic{display:grid;place-items:center;height:52px;font-size:46px;color:var(--kacc)}
 #kid .kpic .ksw{width:46px;height:46px;border-radius:12px}
 #kid .kpt{font:700 34px/1 var(--knum);color:var(--kacc)}
-#kid .kol{font:500 14px/1.35 var(--kfont);color:var(--ksub)}
 #kid .kpred.shake{animation:kshake .4s}
 
 /* ---- 미션 성공 (아래 띠) ---- */
@@ -497,90 +341,33 @@ body.kid .kbtn.main:hover,#kidIntro .kbtn.main:hover{background:var(--kacc-d)}
 #kid .kwin.on{display:block!important;animation:kup .35s cubic-bezier(.2,.9,.3,1.1)}
 #kid .kwin .kbox{width:100%;max-height:none;overflow:hidden;padding:14px 16px 16px;animation:none}
 #kid:has(.kwin.on) .kfoot{display:none}
-#kid .kwrow{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
-#kid .kwok{display:grid;place-items:center;flex:none;width:44px;height:44px;border-radius:50%;background:var(--kok);color:#fff;font-size:24px;box-shadow:0 0 0 6px var(--kok2)}
-#kid .kwmain{flex:1;min-width:200px}
-#kid .kwt{display:flex;align-items:center;gap:10px;font:700 17px/1.2 var(--kfont);color:var(--ktx)}
 #kid .kstars{display:inline-flex;gap:2px;margin:0;font-size:18px;color:#e2e5ea}
 #kid .kstars i{display:inline-grid;width:auto;height:auto;background:none;clip-path:none;filter:none}
 #kid .kstars i.on{color:var(--kgold);animation:kstar2 .45s cubic-bezier(.2,1.6,.4,1) both}
 @keyframes kstar2{from{transform:scale(0)}to{transform:none}}
-#kid .kgain{display:flex;flex-wrap:wrap;gap:6px;margin:7px 0 0}
-#kid .kchip{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;background:var(--kbg2);font:600 12.5px/1.4 var(--kfont);color:var(--ksub)}
-#kid .kchip .ki{color:var(--kgold)}
-#kid .kchip.ok{background:var(--kok2);color:#15803d}
-#kid .kchip.ok .ki{color:#15803d}
-#kid .kchip .dot{width:9px;height:9px;border-radius:50%;background:var(--c)}
-#kid .kwhybtn{display:inline-flex;align-items:center;gap:6px;height:44px;margin:0;padding:0 14px;border-radius:12px;border:1px solid var(--kline);background:#fff;color:var(--ktx);font:600 14px/1 var(--kfont);cursor:pointer;box-shadow:none}
-#kid .kwhybtn:hover{background:var(--kbg2)}
 #kid .kwin .kgo{width:auto;margin:0;padding:0 18px}
-#kid .kwintxt{display:none;position:static;margin:0 0 12px;padding:12px 14px;border:0;border-radius:12px;background:var(--kbg2);box-shadow:none;font:500 15px/1.6 var(--kfont);color:var(--ktx);text-align:left}
-#kid .kwin.open .kwintxt{display:block}
-#kid .kwintxt b{color:var(--ktx)!important;font-weight:700}
 #kid .kauto{position:absolute;left:0;right:0;bottom:0;height:3px;margin:0;background:none;overflow:hidden}
 #kid .kauto div{height:100%;border:0;border-radius:0;background:none}
 #kid .kauto i{display:block;height:100%;width:0;background:var(--kacc)}
 @keyframes kauto{from{width:0}to{width:100%}}
 
-/* ---- 퀴즈 ---- */
-#kid .kquiz{margin:0}
-#kid .kqd{display:flex;gap:4px;margin-top:8px}
-#kid .kqd i{width:22px;height:4px;border-radius:2px;background:#e5e7eb;border:0}
-#kid .kqd i.cur{background:var(--kacc)}
-#kid .kqd i.ok{background:var(--kok)}
-#kid .kqd i.no{background:#f59e0b}
-#kid .kqq{margin:0 0 18px;padding:0;border:0;background:none;box-shadow:none;font:700 21px/1.45 var(--kfont);color:var(--ktx);text-wrap:balance}
-#kid .kox{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-#kid .kox .kbtn{flex-direction:column;gap:10px;height:auto;min-height:124px;border-radius:16px;border:1.5px solid var(--kline);background:#fff;color:var(--ksub);font:600 15px/1 var(--kfont);text-shadow:none}
-#kid .kox .kbtn .ki{font-size:56px;stroke-width:2.4}
-#kid .kox .ko .ki{color:#2563eb}
-#kid .kox .kx .ki{color:#e5484d}
-#kid .kox .ko:hover{border-color:#2563eb;box-shadow:0 0 0 4px #e3edff;background:#fff}
-#kid .kox .kx:hover{border-color:#e5484d;box-shadow:0 0 0 4px #fde8e8;background:#fff}
-#kid .kqfb{display:flex;align-items:flex-start;gap:12px;margin:0 0 12px;padding:14px;border:0;border-radius:14px;box-shadow:none;color:var(--ktx);text-align:left}
-#kid .kqfb.ok{background:var(--kok2)}
-#kid .kqfb.no{background:#fff6e5}
-#kid .kqfi{display:grid;place-items:center;flex:none;width:34px;height:34px;border-radius:50%;background:var(--kok);color:#fff;font-size:18px}
-#kid .kqfb.no .kqfi{background:#f59e0b}
-#kid .kqfb b{display:block;margin-bottom:4px;font:700 16px/1.3 var(--kfont)}
-#kid .kqfb span{font:500 14px/1.6 var(--kfont);color:var(--ksub)}
-#kid .kqnext{width:100%}
-
 /* ---- 최종 결과 ---- */
 #kid .kfinal{text-align:center}
 #kid .ktro{display:grid;place-items:center;width:72px;height:72px;margin:2px auto 12px;border-radius:50%;background:#fff5d6;color:#d99a00;font-size:36px;filter:none}
 #kid .ktro::before{display:none}
-#kid .kfinal .keye{justify-content:center}
-#kid .kfinal .ktitle{justify-content:center;font-size:24px}
-#kid .krank{display:inline-block;margin:10px 0 16px;padding:7px 14px;border:0;border-radius:999px;background:var(--kacc2);color:var(--kacc);font:700 14px/1 var(--kfont);box-shadow:none}
-#kid .kfs{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 16px}
-#kid .kfs div{padding:12px 6px;border-radius:14px;background:var(--kbg2)}
-#kid .kfs b{display:block;font:700 24px/1.15 var(--knum);color:var(--ktx)}
-#kid .kfs span{font:500 12px/1.3 var(--kfont);color:var(--ksub)}
-#kid .kcards{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:0}
-#kid .kcard{padding:10px 6px;border:1px solid var(--kline);border-radius:12px;background:#fff;box-shadow:none;font:600 12px/1.3 var(--kfont);color:var(--ktx)}
-#kid .kcard b{color:inherit;font-weight:600}
-#kid .kcard i{display:block;width:28px;height:4px;margin:0 auto 7px;border-radius:2px;background:var(--c);box-shadow:none}
-#kid .kcard.off{background:var(--kbg2);color:#9aa1ad;border-color:transparent}
-#kid .kcard.off i{background:#d6d9e0}
-#kid .kfinal .ksay{display:block;margin:14px 0;font:500 14px/1.6 var(--kfont);color:var(--ksub)}
 #kid .kfinal .kbtns{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0}
 
 /* ---- 위 HUD: 진행·점수·소리 ---- */
 body.kid #kidhud{top:12px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:8px;font-family:var(--kfont)}
-#kidhud .kprog,#kidhud .kscore,#kidhud .ksnd{height:40px;margin:0;background:rgba(255,255,255,.95);border:1px solid var(--kline);border-radius:12px;box-shadow:0 6px 18px -6px rgba(16,24,40,.45)}
+#kidhud .kprog,#kidhud .ksnd{height:40px;margin:0;background:rgba(255,255,255,.95);border:1px solid var(--kline);border-radius:12px;box-shadow:0 6px 18px -6px rgba(16,24,40,.45)}
 #kidhud .kprog{display:flex;align-items:center;gap:10px;padding:0 14px}
 #kidhud .kpn{font:500 13px/1 var(--knum);color:var(--ksub);white-space:nowrap}
 #kidhud .kpn b{font-size:16px;font-weight:700;color:var(--ktx)}
 #kidhud .kseg{display:flex;gap:3px}
 #kidhud .kseg i{width:14px;height:6px;border-radius:3px;background:#e5e7eb;transition:width .3s,background .3s}
-#kidhud .kseg i.done{background:#a5b4fc}
 #kidhud .kseg i.cur{width:26px;background:var(--kacc)}
 #kidhud .kseg i.boss{background:#fde3b5}
-#kidhud .kseg i.boss.done{background:#fbbf6a}
 #kidhud .kseg i.boss.cur{background:#f59e0b}
-#kidhud .kscore{display:flex;align-items:center;gap:6px;padding:0 14px 0 12px;font-size:16px;color:var(--kgold)}
-#kidhud .kscore b{min-width:2.4em;font:700 16px/1 var(--knum);font-variant-numeric:tabular-nums;color:var(--ktx)}
 #kidhud .ksnd{display:grid;place-items:center;width:40px;padding:0;color:var(--ksub);font-size:18px;cursor:pointer}
 #kidhud .ksnd:hover{color:var(--kacc)}
 
@@ -588,36 +375,16 @@ body.kid #kidhud{top:12px;left:50%;transform:translateX(-50%);display:flex;align
 #kpop{left:50%!important;top:18%!important}
 #kpop .kpcard{width:260px;padding:0 0 16px;overflow:hidden;text-align:center;background:#fff;border:1px solid var(--kline);border-radius:18px;box-shadow:var(--kshadow)}
 #kpop .kpcard::before{content:"";display:block;height:6px;background:var(--c)}
-#kpop small{display:block;margin:14px 0 12px;padding:0;background:none;font:700 12px/1 var(--kfont);letter-spacing:.06em;color:var(--kacc)}
-#kpop i{display:block;width:40px;height:40px;margin:0 auto 10px;border:0;border-radius:50%;background:var(--c);box-shadow:0 0 0 6px rgba(17,24,39,.05)}
-#kpop b{display:block;margin:0 14px 6px;font:700 19px/1.3 var(--kfont);color:var(--ktx)}
-#kpop span{display:block;padding:0 18px;font:500 13.5px/1.55 var(--kfont);color:var(--ksub)}
 
 /* ---- 아래 힘 카드 모음 ---- */
 body.kid #legend{align-items:center;gap:6px 8px;background:rgba(255,255,255,.95);border:1px solid var(--kline);border-radius:14px;box-shadow:0 6px 18px -6px rgba(16,24,40,.45);backdrop-filter:none;-webkit-backdrop-filter:none;padding:8px 12px;font:500 12.5px/1.3 var(--kfont);color:var(--ktx)}
-body.kid #legend b{display:inline-flex;align-items:center;gap:6px;margin-right:2px;font-weight:700;color:var(--ktx)}
-body.kid #legend b .ki{color:var(--kacc)}
-body.kid #legend b em{font:600 12.5px var(--knum);font-style:normal;color:var(--ksub)}
-body.kid #legend span.on{gap:6px;padding:3px 9px 3px 7px;border-radius:999px;background:var(--kbg2)}
-body.kid #legend span.on i{width:8px;height:8px;border-radius:50%;box-shadow:none!important}
-body.kid #legend span.off{width:16px;height:16px;border-radius:5px;border:1.5px dashed #cdd1d9;background:none;font-size:0}
 
 /* ---- 시작 화면 ---- */
 #kidIntro .box{position:relative;width:min(520px,100%);margin:0;padding:28px 28px 20px;text-align:center;font-family:var(--kfont)}
-#kidIntro .kav.lg{width:84px;height:84px;margin:0 auto 14px}
 #kidIntro .keye{justify-content:center}
-#kidIntro h2{margin:8px 0 20px;font:800 30px/1.2 var(--kfont);letter-spacing:-.02em;color:var(--ktx);text-shadow:none}
 #kidIntro .kitiles{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:0 0 14px}
 #kidIntro .kitile{display:flex;flex-direction:column;align-items:center;gap:8px;padding:14px 6px 12px;border:0;border-radius:14px;background:var(--kbg2);box-shadow:none}
-#kidIntro .kitile span{display:grid;place-items:center;width:40px;height:40px;border-radius:12px;background:#fff;color:var(--kacc);font-size:20px;box-shadow:inset 0 0 0 1px var(--kline)}
-#kidIntro .kitile b{font:600 12.5px/1.35 var(--kfont);color:var(--ktx)}
-#kidIntro .kilisten{display:inline-flex;align-items:center;gap:6px;margin:0 0 16px;padding:6px 10px;border:0;border-radius:10px;background:none;box-shadow:none;color:var(--kacc);font:600 13px/1 var(--kfont);cursor:pointer}
-#kidIntro .kilisten:hover{background:var(--kacc2)}
-#kidIntro .kimap{display:flex;justify-content:center;gap:4px;margin:0 0 18px;padding:0;border:0;background:none}
-#kidIntro .kimap i{flex:none;width:18px;max-width:none;height:6px;margin:0;border-radius:3px;background:#e5e7eb}
-#kidIntro .kimap i.boss{background:#fbbf6a}
 #kidIntro .kstart{width:100%;height:52px;font-size:17px}
-#kidIntro .kfull{display:block;margin:12px auto 0;border:0;background:none;color:var(--ksub);font:500 13px var(--kfont);cursor:pointer;text-decoration:underline}
 
 /* ---- 장면 속 손잡이 ---- */
 #khandles{position:fixed;inset:0;pointer-events:none;z-index:11;transition:opacity .25s;font-family:var(--kfont)}
@@ -674,24 +441,20 @@ body:not(.kid) #khandles{display:none}
 #kid .kcb{display:inline-grid;place-items:center;width:16px;height:16px;margin-right:4px;border-radius:4px;border:1.5px solid rgba(255,255,255,.4);vertical-align:-3px;font-size:12px;font-style:normal;color:#fff}
 #kid .kcb.on{background:#22c55e;border-color:#22c55e}
 #kid .kmeter .ki{font-size:18px;color:#cbd5e1}
-#kid .kqfb .kqfi{color:#fff;font-size:18px;line-height:1}
 #kid .kopts.n3{--n:3;grid-template-columns:repeat(3,1fr)}
 #kid .kwin .kgo{background:var(--kacc);border-color:var(--kacc);color:#fff}
 #kid .kwin .kgo:hover{background:var(--kacc-d)}
-#kid .kgain .kchip{background:var(--kbg2);color:var(--ksub);font:600 12.5px/1.4 var(--kfont);padding:4px 10px;gap:6px}
-#kid .kgain .kchip.ok{background:var(--kok2);color:#15803d}
-#kid .kgain .kchip i.dot{width:9px;height:9px;border-radius:50%;margin:0;background:var(--c);box-shadow:none}
 #kid .kfoot,#kid .kwin{bottom:66px}
 body.kid #modeBtn{top:12px;bottom:auto;left:16px;right:auto;transform:none}
 #kpop{left:auto!important;right:20px;top:64px!important;transform:none}
 #kpop.on{animation:kcard2 2.6s ease forwards}
 @keyframes kcard2{0%{opacity:0;transform:translateX(20px)}10%{opacity:1;transform:none}85%{opacity:1;transform:none}100%{opacity:0;transform:translateX(20px)}}
 @media (max-width:980px){
-  #kid .kban{top:96px;gap:10px;padding:12px} #kid .kban .kav{width:40px;height:40px}
+  #kid .kban{top:96px;gap:10px;padding:12px}
   #kid .ktitle{font-size:17px} #kid .kskip{font-size:12px}
   #kid .kfoot,#kid .kwin{bottom:12px}
-  #kid .kopt{min-height:108px} #kid .kpic{font-size:36px;height:42px} #kid .kol{font-size:12.5px}
-  #kid .kwin .kgo,#kid .kwhybtn{flex:1}
+  #kid .kopt{min-height:108px} #kid .kpic{font-size:36px;height:42px}
+  #kid .kwin .kgo{flex:1}
   body.kid #kidhud{top:52px;left:8px;right:8px;transform:none;justify-content:center;gap:6px}
   #kidhud .kprog{padding:0 10px;gap:8px} #kidhud .kseg i{width:8px} #kidhud .kseg i.cur{width:16px}
   #kidhud .ksnd{display:none}
@@ -727,10 +490,9 @@ body:not(.kid) #ktc{display:none}
 #kid>*{transition:opacity .45s ease}
 body.kcut #kid>*,body.kcut #khandles{opacity:0!important;pointer-events:none!important}
 /* 슬로 모션 표시 (중계 화면의 리플레이 표식) */
-#kslow{position:fixed;left:16px;top:calc(8vh + 12px);z-index:16;display:flex;align-items:center;gap:8px;padding:7px 12px;border-radius:999px;background:rgba(10,12,20,.78);color:#fff;font:700 12px/1 var(--knum);letter-spacing:.12em;opacity:0;transform:translateY(-6px);transition:opacity .3s,transform .3s;pointer-events:none}
-#kslow i{width:8px;height:8px;border-radius:50%;background:#ef4444;animation:kslowDot 1s ease-in-out infinite}
+#kslow{position:fixed;left:12px;bottom:var(--kslow-bottom,100px);z-index:16;display:flex;align-items:center;gap:8px;padding:7px 12px;border-radius:999px;background:rgba(10,12,20,.78);color:#fff;font:700 12px/1 var(--knum);letter-spacing:.12em;opacity:0;transform:translateY(-6px);transition:opacity .3s,transform .3s;pointer-events:none}
+#kslow svg{width:24px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 body.kid.kslow #kslow{opacity:1;transform:none}
-@keyframes kslowDot{50%{opacity:.25}}
 /* 해설선 */
 #kcall{position:fixed;inset:0;z-index:11;pointer-events:none;font-family:var(--kfont)}
 .kco .d{position:absolute;width:12px;height:12px;margin:-6px 0 0 -6px;border-radius:50%;background:var(--c);box-shadow:0 0 0 3px rgba(255,255,255,.95),0 0 18px var(--c);animation:kcoDot .4s cubic-bezier(.2,1.7,.4,1) both}
@@ -757,9 +519,6 @@ body.kid.kslow #kslow{opacity:1;transform:none}
 #kid .kstations button{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1.5px solid var(--kline);border-radius:14px;background:#fff;color:var(--ktx);font:inherit;text-align:left;cursor:pointer;transition:border-color .15s,box-shadow .15s}
 #kid .kstations button:hover{border-color:#c7cbf5}
 #kid .kstations button.on{border-color:var(--kacc);box-shadow:0 0 0 4px var(--kacc2)}
-#kid .kstations .kso{width:36px;height:36px;font-size:20px;color:var(--kacc)}
-#kid .kstations b{display:block;font:700 15px/1.25 var(--kfont)}
-#kid .kstations small{display:block;margin-top:2px;font:500 12px/1.3 var(--kfont);color:var(--ksub)}
 #kid .kfinal .kbtns.g3{grid-template-columns:1fr 1fr 1fr}
 #kidIntro .kistart{display:grid;grid-template-columns:2fr 1fr;gap:8px}
 #kidIntro .kistart .kbtn{height:52px}
@@ -775,9 +534,6 @@ body.kid.kslow #kslow{opacity:1;transform:none}
 #kid .kfoot .kmeter>span{white-space:nowrap}
 /* 고르기 버튼 그림 */
 .ksw.al{background:linear-gradient(135deg,#f5f6f8,#a3a9b4 55%,#e6e8ec)}
-.kfl{display:inline-block;width:22px;height:22px;border-radius:50% 50% 50% 50%/58% 58% 42% 42%;box-shadow:inset 0 -4px 0 rgba(0,0,0,.12)}
-.kfl.water{background:#58b6ea} .kfl.brine{background:#5fbdb2} .kfl.oil{background:#e5ac3c}
-.kpl{display:inline-block;width:22px;height:22px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fdba8c,#c2410c)}
 .khpick .ki{font-size:22px;color:var(--ktx)}
 .khpick button.on .ki{color:var(--kacc)}
 @media (max-width:980px){
@@ -790,7 +546,6 @@ body.kid.kslow #kslow{opacity:1;transform:none}
 #kcall{z-index:13}
 /* 쉬운 모드 힘 이름표: 읽기 쉬운 글꼴, 결정적 순간(슬로 모션·해설)에는 비켜 준다 */
 body.kid .lbl.force{padding:4px 10px 4px 8px;gap:6px;font:600 12px/1.2 var(--kfont);letter-spacing:0;background:rgba(12,14,22,.78);border-color:rgba(255,255,255,.14)}
-body.kid .lbl.force b{font-weight:700}
 body.kid .lbl.force span{font:700 12px/1 var(--knum);color:#fff}
 body.kid .lbl.force i{width:8px;height:8px}
 body.kid.kslow #labels{opacity:0}
@@ -801,7 +556,6 @@ body.kid.kslow #labels{opacity:0}
 #khandles.hush #khdock{opacity:.35}
 #khdock .kh{position:static;transform:none;display:flex;flex-direction:column;align-items:center;gap:3px;padding:0 10px;background:none;border:0;border-radius:0;box-shadow:none;flex:none}
 #khdock .kh+.kh{border-left:1px solid var(--kline)}
-#khdock .khl{font:700 11px/1 var(--kfont);letter-spacing:.06em;color:var(--ksub)}
 #khdock .khb{display:flex;align-items:center;gap:3px}
 #khdock .khpick button{min-width:54px;padding:6px 5px 5px}
 #khdock .khstep .khb{height:100%;min-height:52px}
@@ -829,19 +583,15 @@ body.kid.kslow #labels{opacity:0}
 #kid .kstep .ksw2{font:600 12.5px/1 var(--kfont);color:var(--ksub)}
 /* 자유 실험실 카드: 작게 */
 #kid .kban.kfree{min-width:0;padding:10px 12px}
-#kid .kban.kfree .keye{margin:0 0 8px 2px}
 #kid .kfree .kstations{margin-top:0;grid-template-columns:1fr 1fr}
 #kid .kfree .kstations button{padding:7px 12px 7px 8px;gap:8px}
-#kid .kfree .kstations .kso{width:30px;height:30px;font-size:17px}
-#kid .kfree .kstations b{font-size:14px}
 @media (max-width:980px){
   #kid .kfree .kstations{grid-template-columns:1fr 1fr}
-  #kid .kfree .kstations small{display:none}
   #khdock{width:calc(100vw - 24px);padding:6px 4px;border-radius:16px;flex-wrap:wrap;justify-content:center;row-gap:8px;overflow:visible}
   #khdock .kh+.kh{border-left:0}
   #khdock .kh{padding:0 6px}
   #khdock .khpick button{min-width:46px;padding:5px 3px 4px;font-size:10.5px}
-  #khdock .khpick .ksw,#khdock .khpick .kfl,#khdock .khpick .kpl{width:22px;height:22px}
+  #khdock .khpick .ksw{width:22px;height:22px}
   #khdock .khstep button{width:32px;height:32px}
 }
 /* ===== 묘사 층 (69-depict.js) ===== */
@@ -877,13 +627,11 @@ body.kcut #knote{opacity:0}
 #knote .knb{display:none;padding:0 12px 12px}
 #knote.open .knb{display:block}
 #knote .kny{padding:7px 9px;border-radius:9px;background:var(--kbg2);font:500 12px/1.35 var(--kfont);color:var(--ksub)}
-#knote .kny b{color:var(--ktx);font-weight:700}
 #knote .knrows{display:flex;flex-direction:column;gap:6px;margin-top:9px}
 #knote .knr{display:flex;align-items:center;gap:6px}
 #knote .knc{display:inline-flex;align-items:center;gap:3px;height:26px;padding:0 5px;border-radius:7px;font-size:15px;color:var(--ktx);box-shadow:inset 0 0 0 1px var(--kline)}
 #knote .knc em{font:700 12px/1 var(--knum);font-style:normal}
 #knote .knc .ksw{width:16px;height:16px;border-radius:4px}
-#knote .knc .kfl,#knote .knc .kpl{width:15px;height:15px}
 #knote .knc.chg{box-shadow:inset 0 0 0 2px var(--kacc);background:var(--kacc2)}
 #knote .knbar{flex:1;min-width:30px;position:relative;height:10px;border-radius:5px;background:var(--kbg2);overflow:hidden}
 #knote .knbar i{position:absolute;left:0;top:0;bottom:0;width:var(--w);border-radius:5px;background:var(--c);transition:width .5s cubic-bezier(.2,.8,.2,1)}
@@ -891,10 +639,6 @@ body.kcut #knote{opacity:0}
 #knote .knr.new{animation:knIn .45s cubic-bezier(.2,.9,.3,1.1)}
 #knote .knr>b{min-width:46px;text-align:right;font:700 14px/1 var(--knum)}
 #knote .knr>b small{font-size:11px;color:var(--ksub)}
-#knote .kne{margin:9px 2px 0;font:500 12.5px/1.5 var(--kfont);color:var(--ksub)}
-#knote .knt{margin:9px 2px 0;font:500 11.5px/1.3 var(--kfont);color:var(--ksub)}
-#knote .knw{display:flex;gap:6px;margin:9px 0 0;padding:8px 9px;border-radius:9px;background:#fff7ed;color:#9a3412;font:600 12px/1.45 var(--kfont)}
-#knote .knw .ki{flex:none;font-size:15px;margin-top:1px}
 @keyframes knGrow{from{width:0}}
 @keyframes knIn{from{opacity:0;transform:translateX(-10px)}}
 /* 도구대: 돋보기 버튼 */
@@ -912,6 +656,165 @@ body.kcut #knote{opacity:0}
   #khdock .khzoom button .ki{font-size:19px}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* U3: wordless quest surfaces, including narrow portrait screens. */
+#kidhud .kprog[hidden]{display:none}
+#kidhud .kmode button{font-size:22px;min-width:42px;display:grid;place-items:center}
+body.kid #modeBtn{left:16px;transform:none;width:42px;height:40px;padding:8px;font-size:22px}
+#kid .kban:not(.kfree){min-width:0;width:min(460px,calc(100vw - 24px));padding:10px 12px;align-items:center}
+#kid .kban .kbtxt{min-width:0;flex:1}
+#kid .kban .kprog{display:flex;align-items:center;gap:10px;color:var(--ksub);font:600 13px var(--knum)}
+#kid .kban .kseg{display:flex;gap:3px;flex:1}
+#kid .kban .kseg i{height:6px;flex:1;background:#d8dce5;border-radius:3px}
+#kid .kban .kseg i.cur{background:var(--kacc)}
+#kid .kban .ksteps{display:flex;flex-wrap:nowrap;gap:8px;margin-top:8px}
+#kid .kban .kstep{gap:3px;padding:3px;min-width:0}
+#kid .kban .kso{width:27px;height:27px;font-size:23px}
+#kid .kban .ksa{font-size:22px}
+#kid .kban .kstep em{font-size:10px}
+#kid .kpred{width:min(560px,100%);padding:16px}
+#kid .kpred .kopts{grid-template-columns:repeat(var(--n,3),minmax(0,1fr));gap:8px}
+#kid .kpred .kopt{min-width:0;min-height:116px;padding:12px 2px}
+#kid .kpred .kpic{width:100%;height:80px;font-size:72px}
+#kid .kpred .kpic>.ki,#kid .kpred .kpic>.ksw{width:72px;height:72px;min-width:64px;min-height:64px}
+#kid .kpred .balance-card{width:100%;height:80px}
+#kid .kmine .balance-card{width:60px;height:30px}
+#kid .kmeter>span,#kid .kchk>span{display:inline-flex;align-items:center;gap:5px}
+#kid .kmeter .ki{color:inherit;font-size:26px}
+#kid .kmeter .checked{border:2px solid #86efac;border-radius:50%;padding:2px}
+#kid .kchk{display:flex;justify-content:center;gap:14px;padding:6px 10px}
+#kid .kchk .ki{font-size:24px}
+#kid .kfoot .krow{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;max-width:100%}
+#kid .kfoot .kmeterbox{max-width:100%;min-width:0}
+#kid .kfoot .kmeter{gap:7px;padding:8px 10px}
+#kid .ktarget{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;color:#c4b5fd}
+svg.ksw{background:none!important;color:#d0d8e5;box-shadow:none!important}
+.kpic svg.ksw{color:var(--kacc)}
+#kid .kfoot:has(.kmine){max-width:calc(100vw - 24px)}
+body.kid #legend{bottom:8px}
+@media(max-width:980px){
+  body.kid #modeBtn{display:block;top:8px;left:8px}
+  body.kid #kidhud{top:8px;left:58px;right:8px;justify-content:flex-end}
+  #kid .kban:not(.kfree){top:60px}
+  #kid .kfoot{bottom:48px}
+  #kid .kpred{padding:12px}
+  #kid .kpred .kpic>.ki,#kid .kpred .kpic>.ksw{width:64px;height:64px}
+  #kid .kban .ksteps{gap:4px}
+  #kid .kfoot .kmeter{font-size:12px;gap:5px}
+  #kid .kfoot .kn{font-size:18px}
+  #kid .kfoot .kmeter .ki{font-size:22px}
+}
+
+
+/* U4: wordless principle cards, stars and force album.
+   Keep the 3D-label name data for U5; its DOM name layer is hidden in kid. */
+body.kid #labels b{display:none}
+#kid .kwin{width:min(560px,calc(100vw - 24px))}
+#kid .kwin .kbox{display:grid;grid-template-columns:1fr auto;align-items:center;gap:10px;max-height:calc(100dvh - 110px);overflow:auto;padding:12px}
+#kid .kprinciple{grid-column:1/-1;min-width:0;display:flex;align-items:center;gap:10px}
+#kid .kprinciple>.balance-card{width:100%;min-width:0;flex:1;height:auto;display:block;background:#1d293c;color:#f1f5f9;border-radius:12px;padding:6px;box-sizing:border-box}
+#kid .kcompare{display:flex;align-items:center;justify-content:center;gap:5px;width:138px;flex-shrink:0}
+#kid .kcompare>span{display:grid;place-items:center;width:54px;height:50px;border:1px solid var(--kline);border-radius:9px;color:var(--kacc)}
+#kid .kcompare .ki,#kid .kcompare .ksw{width:32px;height:32px;min-width:0}
+#kid .kcompare .balance-card{width:100%;height:48px}
+#kid .kcompare .match{width:24px;color:#16a34a;flex-shrink:0}
+#kid .kstars{justify-content:center;font-size:26px}
+#kid .kwin .kgo{min-width:64px;height:48px}
+#kid .kseg i.earned.s3,#kidhud .kseg i.earned.s3{background:#dba917}
+#kid .kseg i.earned.s2,#kidhud .kseg i.earned.s2{background:linear-gradient(90deg,#dba917 50%,#b9c2d1 50%)}
+#kid .kseg i.earned.s1,#kidhud .kseg i.earned.s1{background:#e0d6ae}
+#kid .kalbum,#legend .kalbum{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px;width:100%}
+#kid .kforce,#legend .kforce{position:relative;border:1px solid var(--c);border-radius:10px;background:#1d293c;overflow:hidden;min-width:0}
+#kid .kforce>.balance-card,#legend .kforce>.balance-card{display:block;width:100%;height:auto;color:var(--c)}
+#kid .kforce.off,#legend .kforce.off{filter:grayscale(1);opacity:.5;border-color:#9ca3af}
+#kid .kforce>.ki,#legend .kforce>.ki{position:absolute;right:2px;bottom:2px;width:16px;height:16px;color:#e5e7eb;background:#1d293c;border-radius:3px}
+#kid .ktotal{display:grid;grid-template-columns:repeat(13,minmax(0,1fr));gap:3px;margin:8px 0 18px;color:#d6dbe2}
+#kid .ktotal i{display:block;font-style:normal}
+#kid .ktotal .ki{width:100%;height:auto}
+#kid .ktotal .on{color:#dba917}
+#kid .kfinal .kbtns{margin-top:18px}
+body.kid #legend{width:280px;max-width:calc(100vw - 32px);padding:6px}
+body.kid #legend:has(.kalbum){display:block!important}
+body.kid:has(.kfinal) #legend,body.kid:has(#kidIntro.on) #legend{display:none!important}
+#kpop .kpcard{padding:14px;color:var(--c);width:180px;animation:kcardopen .45s ease-out}
+#kpop .kpcard>.balance-card{display:block;width:100%;height:90px;background:#1d293c;border-radius:10px}
+#kpop .kpcard>.ki{width:30px;height:30px;margin-top:10px}
+@keyframes kcardopen{from{transform:scale(.55) rotateY(85deg);opacity:0}to{transform:scale(1) rotateY(0);opacity:1}}
+#kidIntro .box{width:min(480px,calc(100vw - 24px));max-height:calc(100dvh - 32px);overflow:auto;box-sizing:border-box}
+#kidIntro .kilogo .balance-card{display:block;width:100%;height:120px}
+#kidIntro .kitiles{grid-template-columns:repeat(4,minmax(0,1fr));margin-bottom:18px}
+#kidIntro .kitile{font-size:32px;padding:14px 4px;color:var(--kacc)}
+#kidIntro .kistart{display:grid;grid-template-columns:2fr 1fr 1fr;align-items:stretch;gap:8px}
+#kidIntro .kistart .kbtn{display:grid;place-items:center;margin:0;text-decoration:none;border:1px solid var(--kline);height:64px;font-size:28px;padding:0}
+#kidIntro .kistart .main{background:var(--kacc);color:#fff;font-size:36px}
+#kid .kfree .kstations{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+#kid .kfree .kstations button{display:grid;place-items:center;padding:10px 18px;font-size:28px}
+@media(max-width:600px){
+ #kid .kprinciple{flex-direction:column;gap:5px}
+ #kid .kprinciple>.balance-card{flex:auto;width:100%;max-height:145px}
+ #kid .kcompare{width:100%;height:44px}
+ #kid .kcompare>span{height:40px}
+ #kid .kcompare .balance-card{height:38px}
+ #kid .kfinal .kalbum{grid-template-columns:repeat(4,minmax(0,1fr))}
+ #kid .kfinal .kforce>.balance-card{height:64px}
+ #kid .kmodal .kbox{max-height:calc(100dvh - 120px);overflow:auto}
+ body.kid #legend{width:230px;bottom:6px}
+ body.kid:has(.kfoot) #legend,body.kid:has(.kwin.on) #legend{display:none!important}
+}
+
+/* U6: readable prediction diagrams and overlays clear of the instructions. */
+body.kid #kpop{top:var(--kpop-top,148px)!important}
+#kid .kpred.klarge .kpic>.balance-card{display:block;width:100%;height:100%;min-width:0;box-sizing:border-box}
+#kid .kpred.klarge .kopt{padding:8px;min-height:132px}
+#kid .kpred.klarge .kpic{height:110px}
+@media(max-width:600px) and (orientation:portrait){
+  #kpop{right:12px}
+  #kpop .kpcard{width:100px;padding:7px}
+  #kpop .kpcard>.balance-card{height:52px}
+  #kpop .kpcard>.ki{width:22px;height:22px;margin-top:4px}
+  #kid .kwin .kbox{grid-template-columns:minmax(0,1fr) 44px;gap:4px;padding:6px;max-height:150px}
+  #kid .kwin .kprinciple{grid-column:1;grid-row:1/3;flex-direction:row;gap:4px}
+  #kid .kwin .kprinciple>.balance-card{height:112px;max-height:112px;padding:4px;flex:1}
+  #kid .kwin .kcompare{flex-direction:column;width:44px;height:auto;gap:2px}
+  #kid .kwin .kcompare>span{width:40px;height:30px}
+  #kid .kwin .kcompare .balance-card{height:28px}
+  #kid .kwin .kcompare .ki,#kid .kwin .kcompare .ksw{width:24px;height:24px}
+  #kid .kwin .kcompare .match{width:14px;height:14px}
+  #kid .kwin .kstars{grid-column:2;grid-row:1;font-size:14px;gap:0}
+  #kid .kwin .kgo{grid-column:2;grid-row:2;min-width:44px;width:44px;height:44px;padding:0}
+  #kid .kpred.klarge .kopt{padding:6px;min-height:104px}
+  #kid .kpred.klarge .kpic{height:90px}
+}
+
+/* Teacher demonstration */
+body:not(.kid) #left{width:350px;max-width:calc(100vw - 28px)}
+body:not(.kid) .ki,body:not(.kid) .ksw{width:24px;height:24px;vertical-align:middle;flex:none}
+body:not(.kid) .lab{align-items:center}
+body:not(.kid) .lab:has([data-icon="arrowL"]),body:not(.kid) .lab:has([data-icon="arrowR"]){color:var(--violet)}
+body:not(.kid) .lab:has([data-icon="arrowD"]){color:var(--warm)}
+body:not(.kid) .seg button{min-height:38px;display:flex;align-items:center;justify-content:center;gap:4px}
+#vg{color:var(--warm)} #vF1,#vF2,#dirs{color:var(--violet)}
+.chip.c1 .k{color:var(--green)} .chip.c2 .k{color:var(--cool)} .chip.c3 .k{color:var(--yellow)}
+#lesson .dots{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px}
+#lesson .dots button{height:36px;padding:4px;display:flex;align-items:center;justify-content:center;gap:2px}
+#lesson .dots .ki{width:13px;height:13px}
+#lesson .dots .cur{border-color:var(--cool);background:rgba(125,211,252,.22)}
+#lesson .dots .done{color:var(--green)}
+#lesson .nav{display:flex;justify-content:flex-end;gap:6px;margin-top:8px}
+a.ib{text-decoration:none;color:inherit}
+#other a.card{padding:8px;width:46px;justify-content:center}
+.fluid-swatch{display:flex;align-items:center;gap:3px;color:var(--cool)}
+.fluid-swatch i{width:3px;height:3px;border-radius:50%;background:currentColor}
+.fluid-oil{color:var(--yellow)}
+body:not(.kid) #modeBtn{width:42px;height:40px;padding:8px}
+@media(max-width:980px){
+ body:not(.kid) #left{top:58px;width:calc(100vw - 28px)}
+ body:not(.kid) #panel{max-height:calc(100dvh - 280px)}
+ body:not(.kid) #lesson{max-height:130px;bottom:calc(var(--sheet,128px) + 8px);padding:8px}
+ #lesson .dots{grid-template-columns:repeat(10,minmax(0,1fr));gap:3px}
+ #lesson .dots button{height:30px;font-size:11px;flex-direction:column;gap:0;padding:2px}
+ #lesson .dots .ki{width:10px;height:10px}
+}
 </style>
 <script type="importmap">
 { "imports": {
@@ -925,25 +828,15 @@ body.kcut #knote{opacity:0}
 <div id="labels" aria-hidden="true"></div>
 
 <section id="left" class="hud" aria-live="polite">
-  <div id="kicker" data-i18n="kicker"></div>
-  <h1 id="hook" data-i18n="hook"></h1>
-  <p id="kidSub"></p>
-  <p id="lead" data-i18n-html="lead"></p>
+  
   <div id="chips">
-    <div class="chip c1"><div class="k" data-i18n="chipScale"></div><div class="v" id="c1">—</div><div class="s" id="c1s">—</div></div>
-    <div class="chip c2"><div class="k" data-i18n="chipBuoy"></div><div class="v" id="c2">—</div><div class="s" id="c2s">—</div></div>
-    <div class="chip c3"><div class="k" data-i18n="chipNet"></div><div class="v" id="c3">—</div><div class="s" id="c3s">—</div></div>
+    <div class="chip c1"><div class="k" data-icon="spring"></div><div class="v" id="c1">—</div></div>
+    <div class="chip c2"><div class="k" data-icon="arrowU"></div><div class="v" id="c2">—</div></div>
+    <div class="chip c3"><div class="k" data-icon="arrowR"></div><div class="v" id="c3">—</div></div>
   </div>
-  <div id="caption"></div>
   <div id="lesson" role="dialog" aria-live="polite">
-    <div class="top"><span><span id="lsStep"></span> · <span class="phase" id="lsPhase"></span></span><span class="code" id="lsCode"></span></div>
-    <h3 id="lsTitle"></h3>
-    <p id="lsGoal"></p>
-    <p class="q" id="lsQ"></p>
-    <p id="lsTask"></p>
-    <div id="lsRec"></div>
-    <div class="after" id="lsAfter"></div>
-    <div class="nav"><div class="dots" id="lsDots"></div><button class="tbtn" id="lsClose" data-i18n="close"></button><button class="tbtn" id="lsPrev" data-i18n="prev"></button><button class="tbtn primary" id="lsNext" data-i18n="next"></button></div>
+    <div class="dots" id="lsDots"></div>
+    <div class="nav"><a class="ib" id="lsGuide" href="guide.html#step-1" target="_blank" rel="noopener" aria-label="Step guide" data-icon="book"></a><button class="ib" id="lsPrev" aria-label="Previous" data-icon="chevL"></button><button class="ib" id="lsNext" aria-label="Next" data-icon="chevR"></button><button class="ib" id="lsClose" aria-label="Close" data-icon="x"></button></div>
   </div>
   <div id="kid" aria-live="polite"></div>
 </section>
@@ -951,10 +844,10 @@ body.kcut #knote{opacity:0}
 <section id="panel" class="hud" aria-label="controls">
   <button id="panelToggle" aria-label="expand"><i></i></button>
   <div class="prow">
-    <div class="lab"><span data-i18n="scenario"></span><span><kbd>1–4</kbd></span></div>
+    <div class="lab"><span data-icon="flag"></span><span></span></div>
     <div class="seg" id="presets" role="group"></div>
     <div class="sl">
-      <div class="lab" style="margin:0"><span><span data-i18n="gravity"></span><kbd>Z X</kbd></span><span class="val" id="vg"></span></div>
+      <div class="lab" style="margin:0"><span><span data-icon="arrowD"></span></span><span class="val" id="vg"></span></div>
       <input type="range" id="sg" min="1" max="10" step="0.1" aria-label="g">
       <div class="ticks" id="gTicks"></div>
     </div>
@@ -962,68 +855,63 @@ body.kcut #knote{opacity:0}
   <div class="prow more">
     <div class="seg station" id="stations" role="tablist"></div>
     <div class="grp" id="grpHang">
-      <div class="lab" style="margin:10px 0 6px"><span data-i18n="object"></span><kbd>O</kbd></div>
+      <div class="lab" style="margin:10px 0 6px"><span data-icon="weight"></span></div>
       <div class="seg" id="objects" role="group"></div>
       <div class="two" style="margin-top:9px">
-        <div><div class="lab"><span><span data-i18n="weights"></span><kbd>- =</kbd></span><span class="val" id="vn"></span></div><input type="range" id="sn" min="0" max="5" step="1" aria-label="n"></div>
-        <div><div class="lab"><span><span data-i18n="jack"></span><kbd>[ ]</kbd></span><span class="val" id="vj"></span></div><input type="range" id="sj" min="0.03" max="0.31" step="0.002" aria-label="jack"></div>
+        <div><div class="lab"><span><span data-icon="weight"></span></span><span class="val" id="vn"></span></div><input type="range" id="sn" min="0" max="5" step="1" aria-label="n"></div>
+        <div><div class="lab"><span><span data-icon="beaker"></span></span><span class="val" id="vj"></span></div><input type="range" id="sj" min="0.03" max="0.31" step="0.002" aria-label="jack"></div>
       </div>
-      <div class="lab" style="margin:10px 0 6px"><span data-i18n="fluid"></span><kbd>U</kbd></div>
+      <div class="lab" style="margin:10px 0 6px"><span data-icon="drop"></span></div>
       <div class="seg" id="fluids" role="group"></div>
     </div>
     <div class="grp" id="grpTrack" hidden>
       <div class="two" style="margin-top:10px">
-        <div><div class="lab"><span><span data-i18n="f1"></span><kbd>, .</kbd></span><span class="val" id="vF1"></span></div><input type="range" id="sF1" min="0" max="6" step="0.05" aria-label="F1"></div>
-        <div><div class="lab"><span><span data-i18n="f2"></span><kbd>; '</kbd></span><span class="val" id="vF2"></span></div><input type="range" id="sF2" min="0" max="6" step="0.05" aria-label="F2"></div>
+        <div><div class="lab"><span><span data-icon="arrowL"></span></span><span class="val" id="vF1"></span></div><input type="range" id="sF1" min="0" max="6" step="0.05" aria-label="F1"></div>
+        <div><div class="lab"><span><span data-icon="arrowR"></span></span><span class="val" id="vF2"></span></div><input type="range" id="sF2" min="0" max="6" step="0.05" aria-label="F2"></div>
       </div>
-      <div class="lab" style="margin:10px 0 6px"><span data-i18n="dir"></span><kbd>P</kbd></div>
+      <div class="lab" style="margin:10px 0 6px"><span data-icon="arrowR"></span></div>
       <div class="seg" id="dirs" role="group"></div>
-      <div class="lab" style="margin:10px 0 6px"><span data-i18n="surface"></span><kbd>B</kbd></div>
+      <div class="lab" style="margin:10px 0 6px"><span data-icon="grip"></span></div>
       <div class="seg" id="surfaces" role="group"></div>
       <div class="sl">
-        <div class="lab" style="margin:0"><span><span data-i18n="load"></span><kbd>J</kbd></span><span class="val" id="vL"></span></div>
+        <div class="lab" style="margin:0"><span><span data-icon="weight"></span></span><span class="val" id="vL"></span></div>
         <input type="range" id="sL" min="0" max="3" step="1" aria-label="load">
       </div>
     </div>
   </div>
   <div class="prow more">
     <div class="toggles" id="overlays"></div>
-    <div class="lab" style="margin:10px 0 6px"><span data-i18n="graph"></span></div>
+    <div class="lab" style="margin:10px 0 6px"><span data-icon="graph"></span></div>
     <div class="seg" id="graphs" role="group"></div>
   </div>
   <div class="prow more">
     <div class="r3">
       <div class="seg" id="views" role="group"></div>
-      <button class="ib" id="bPlay" aria-label="play"><svg viewBox="0 0 24 24"><path id="playIcon" d="M8 5v14l11-7z"/></svg><span class="kb">␣</span></button>
+      <button class="ib" id="bPlay" aria-label="play"><svg viewBox="0 0 24 24"><path id="playIcon" d="M8 5v14l11-7z"/></svg></button>
     </div>
     <div class="speed"><div class="seg" id="speeds" role="group"></div></div>
     <div class="r3" style="margin-top:9px;justify-content:flex-end;flex-wrap:wrap">
-      <button class="ib wide" id="bLesson" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M5 4v16"/><path d="M5 5h11l-2 4 2 4H5"/></svg><span data-i18n="lesson"></span><span class="kb">T</span></button>
-      <button class="ib wide" id="bGuide" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 19V5"/><path d="M9 7h6M9 11h6"/></svg><span data-i18n="guide"></span><span class="kb">G</span></button>
-      <button class="ib wide" id="bEval" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9"/></svg><span data-i18n="evalBtn"></span><span class="kb">Y</span></button>
+      <button class="ib wide" id="bLesson" aria-label="Lesson" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M5 4v16"/><path d="M5 5h11l-2 4 2 4H5"/></svg></button>
+      <a class="ib wide" id="bGuide" href="guide.html#teacher-guide" target="_blank" rel="noopener" aria-label="Guide"><svg viewBox="0 0 24 24"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 19V5"/><path d="M9 7h6M9 11h6"/></svg></a>
+      <a class="ib wide" id="bEval" href="guide.html#assessment" target="_blank" rel="noopener" aria-label="Assessment"><svg viewBox="0 0 24 24"><path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9"/></svg></a>
     </div>
     <div class="r3" style="margin-top:8px;justify-content:flex-end">
-      <button class="ib" id="bSound" aria-pressed="false" aria-label="sound"><svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.5 8.5a5 5 0 0 1 0 7"/></svg><span class="kb">N</span></button>
-      <button class="ib" id="bCine" aria-pressed="false" aria-label="cinematic"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="13" height="12" rx="2"/><path d="M16 10l5-3v10l-5-3"/></svg><span class="kb">C</span></button>
-      <button class="ib" id="bReset" aria-label="reset"><svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 0 2.4-5.7"/><path d="M4 4v4h4"/></svg><span class="kb">R</span></button>
-      <button class="ib" id="bHelp" aria-label="help"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.3a2.6 2.6 0 0 1 5 .9c0 1.8-2.5 2.2-2.5 3.8"/><path d="M12 17.2v.01"/></svg><span class="kb">?</span></button>
+      <button class="ib" id="bSound" aria-pressed="false" aria-label="sound"><svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.5 8.5a5 5 0 0 1 0 7"/></svg></button>
+      <button class="ib" id="bCine" aria-pressed="false" aria-label="cinematic"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="13" height="12" rx="2"/><path d="M16 10l5-3v10l-5-3"/></svg></button>
+      <button class="ib" id="bReset" aria-label="reset"><svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 0 2.4-5.7"/><path d="M4 4v4h4"/></svg></button>
+      <a class="ib" id="bHelp" aria-label="help" href="guide.html#controls" target="_blank" rel="noopener" aria-label="Controls"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.3a2.6 2.6 0 0 1 5 .9c0 1.8-2.5 2.2-2.5 3.8"/><path d="M12 17.2v.01"/></svg></a>
     </div>
   </div>
 </section>
 
-<div id="hint" class="hud" data-i18n="hint"></div>
 <div id="other" class="hud">
-  <a class="card" href="../"><div class="thumb"></div><div><div class="t" data-i18n="otherT"></div><div class="n" data-i18n="otherN"></div></div></a>
+  <a class="card" href="../" aria-label="All labs" data-icon="home"></a>
   <button class="ib share" id="bShare" aria-label="share"><svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="M8.2 10.8l7.6-4.4M8.2 13.2l7.6 4.4"/></svg></button>
 </div>
-<div id="event" role="status"></div>
 <div id="legend" aria-label="arrow colours"></div>
-<div id="kslow" aria-hidden="true"><i></i>SLOW ×0.25</div>
-<button id="modeBtn"></button>
+<div id="kslow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 12h3M9 12h2.5M14.5 12h1.5M17.5 8l3 4-3 4"/></svg><span>×0.25</span></div>
+<button id="modeBtn" aria-label="Switch mode"></button>
 <div id="kidhud" aria-label="quest progress"></div>
 <div id="kpop" aria-live="polite"></div>
 <canvas id="kfx" aria-hidden="true"></canvas>
 <div id="kidIntro" class="modal" role="dialog" aria-modal="true"><div class="box"></div></div>
-<div id="help" class="modal" role="dialog" aria-modal="true"><div class="box" id="helpBox"></div></div>
-<div id="guide" class="modal" role="dialog" aria-modal="true"><div class="box" id="guideBox"></div></div>
-<div id="eval" class="modal" role="dialog" aria-modal="true"><div class="box" id="evalBox"></div></div>

@@ -69,26 +69,19 @@ function dirCut(m) {
   const Sh = stationShot(m.shot);
   if (!dirOn()) { flyTo(Sh, 1.8); return; }
   dirReveal(Sh); sfx('whoosh');
-  const t = m.t[LANG] || m.t.ko, eye = m.boss ? L2('도전 과제', 'Challenge') : `Step ${m.stage} · ${(STAGE[LANG] || STAGE.ko)[m.stage]}`;
-  const el = dirLayer('ktc');
-  el.innerHTML = `<div class="in"><div class="e">${eye}</div><div class="t">${t[0]}</div><i class="l"></i></div>`;
-  el.classList.remove('on'); void el.offsetWidth; el.classList.add('on');
-  document.body.classList.add('kcut', 'kbars');
-  const id = (DIR.cutId = (DIR.cutId || 0) + 1);
-  KID.after(1.8, () => { if (DIR.cutId === id) document.body.classList.remove('kcut'); });
-  KID.after(2.2, () => { if (DIR.cutId === id && !DIR.slow) document.body.classList.remove('kbars'); });
+  document.body.classList.remove('kcut', 'kbars');
 }
 
 // ---- 사건 → 연출 ----
 const CARD_AT = { F: ['block', () => Math.max(S.F2.tgt, S.F1.tgt)], net: ['block', () => Math.abs(S.F ? S.F.net : 0)], W: ['obj', () => (S.hang ? S.hang.W : 0)], T: ['obj', () => S.Tlive], f: ['block', () => Math.abs(S.F ? S.F.f : 0)], B: ['obj', () => (S.hang ? S.hang.B : 0)], N: ['block', () => (S.F ? S.F.N : 0)] };
 const dirAt = (k) => (k === 'obj' ? () => LOOK.obj().clone() : () => KID_AT.block());
 function dirEvent(type, e) {
-  if (!dirOn()) return;
+  if (!dirOn() || (!KID.free && KID.i >= KID.missions.length)) return;
   const cd = (k, s) => { if ((DIR.cool[k] ?? -99) + s > DIR.t) return false; DIR.cool[k] = DIR.t; return true; };
   if (type === 'slip') noteTrack(e);   // 기록은 연출 쿨다운과 상관없이 매번
   if (type === 'slip' && cd('slip', 5)) {
     dirSlow(0.22, 0.9); DIR.punch = 0.08; sfx('swell'); DIR.marks.push(DIR.tele.length);
-    dirCallout(dirAt('block'), L2('미끄러지기 시작!', 'It starts to slide!'), () => `${L2('붙잡는 힘 최대', 'Max grip')} ${fx(e && e.fsMax || 0, 1)} N`, hex(FCOL.f), 2.8);
+    dirCallout(dirAt('block'), hex(FCOL.f), 2.8, 'arrowR', () => `${fx(e?.fsMax || 0, 1)} N`);
   }
   if (type === 'bump') { DIR.shake = 0.035; dirRing(KID_AT.block()); if (KID.free && !DIR.home) DIR.home = { t: 0 }; }
   if (type === 'splash' && cd('splash', 4)) {
@@ -96,13 +89,13 @@ function dirEvent(type, e) {
   }
   if (type === 'deep' && cd('deep', 4)) {
     DIR.punch = Math.max(DIR.punch, 0.05); sfx('swell');
-    dirLens(dirAt('obj'), 'micro-water', L2('물이 밀어 올려요', 'Water pushes up'), () => `${L2('아래가 더 세게 → 부력', 'Stronger from below → buoyancy')} ${fx(S.hang ? S.hang.B : 0, 2)} N`, hex(FCOL.B), 3.6, LENS_WATER_SVG);
+    dirLens(dirAt('obj'), 'micro-water', hex(FCOL.B), 3.6);
   }
-  if (type === 'float' && cd('float', 4)) dirCallout(dirAt('obj'), L2('둥둥 떠요!', 'It floats!'), () => L2('부력 = 무게', 'Buoyancy = weight'), hex(FCOL.B), 2.6);
+  if (type === 'float' && cd('float', 4)) dirCallout(dirAt('obj'), hex(FCOL.B), 2.6, 'float');
   if (type === 'win') {
     dirSlow(0.35, 0.7); DIR.punch = Math.max(DIR.punch, 0.09);
     const c = e && e.card && CARD_AT[e.card], card = c && CARDS.find((q) => q.k === e.card);
-    if (c) dirCallout(dirAt(c[0]), cardT(card)[0], () => `${fx(c[1](), 2)} N`, hex(card.col), 3.2);
+    if (c) dirCallout(dirAt(c[0]), hex(card.col), 3.2, {W:'arrowD',T:'spring',B:'arrowU',N:'arrowU',f:'hold'}[e.card] || 'arrowR', () => `${fx(c[1](),2)} N`);
   }
 }
 function dirGrab(k) {
@@ -117,10 +110,16 @@ function dirGrab(k) {
   } else if (!k && DIR.tone) { const T = DIR.tone; DIR.tone = null; T.g.gain.setTargetAtTime(0, C.currentTime, 0.07); T.o.stop(C.currentTime + 0.5); }
 }
 
-function dirTeleReset() { cueReset(); DIR.tele.length = 0; DIR.marks.length = 0; DIR.teleAcc = 0; DIR.callouts.forEach((q) => (q.t = Math.max(q.t, q.dur))); if (LENS.cur) LENS.cur.t = Math.max(LENS.cur.t, LENS.cur.dur); DIR.home = null; }
+function dirTeleReset() {
+  cueReset(); DIR.tele.length = 0; DIR.marks.length = 0; DIR.teleAcc = 0;
+  DIR.callouts.forEach((q) => q.el.remove()); DIR.callouts.length = 0;
+  // Also remove fading lenses that no longer belong to LENS.cur.
+  document.getElementById('kcall')?.replaceChildren(); LENS.cur = null;
+  if (NOTE.el) NOTE.el.classList.remove('on'); NOTE.sig = '';
+  DIR.prevIn = DIR.prevFloat = DIR.prevDeep = null; DIR.home = null;
+}
 
 // ---- 바닥 바꾸기: 새 바닥이 실험대를 따라 쓸고 지나가고, 이름표가 뜬다 ----
-const SURF_FEEL = { glass: ['매끈매끈', 'Slick'], wood: ['보통', 'Medium'], sand: ['까끌까끌', 'Rough'] };
 const SURF_RGB = { glass: '200,235,255', wood: '196,150,98', sand: '178,132,84' };
 function dirSurface(v) {
   if (!dirOn()) return;
@@ -130,7 +129,7 @@ function dirSurface(v) {
     const p = khProj(V3(lerp(x0, x1, i / (n - 1)), TRK_Y + 0.004, TRK.z + rr(-0.03, 0.04)));
     DIR.parts.push({ k: 'sweep', x: p.x, y: p.y, r: rr(3, 7), life: 0.75, t0: 0.75, delay: i * 0.016, c: SURF_RGB[v] || '255,255,255' });
   }
-  dirLens(() => V3(blockX(S.trk.x), TRK_Y + 0.004, TRK.z), SURF_IMG[v], `${T('surfName')[v]} · ${SURF_FEEL[v][isEn() ? 1 : 0]}`, () => `${L2('붙잡는 힘 최대', 'Max grip')} ${fx(S.F ? S.F.fsMax : 0, 1)} N`, hex(FCOL.f), 3.2);
+  dirLens(() => V3(blockX(S.trk.x), TRK_Y + 0.004, TRK.z), SURF_IMG[v], hex(FCOL.f), 3.2);
 }
 // ---- 짐 올리기: 위에서 떨어져 쿵 → 도막이 눌리고 먼지 → '바닥이 받치는 힘' 해설 ----
 function dirLoad(d) {
@@ -148,7 +147,7 @@ function dirDropFrame(dt) {
       D.hit = true; sfx('clack'); DIR.shake = Math.max(DIR.shake, 0.02); DIR.squash = 0.11; DIR.punch = Math.max(DIR.punch, 0.07);
       const c = khProj(V3(blockX(S.trk.x), TRK_Y + 0.004, TRK.z + 0.03));
       for (let i = 0; i < 14; i++) { const s = i % 2 ? 1 : -1; DIR.parts.push({ k: 'dust', x: c.x + s * rr(18, 34), y: c.y + rr(-2, 3), vx: s * rr(0.6, 1.8), vy: -rr(0.1, 0.5), r: rr(2.5, 5), life: rr(0.5, 0.9), t0: 1, c: S.surface === 'sand' ? '150,110,70' : S.surface === 'glass' ? '220,235,245' : '185,150,105' }); }
-      dirCallout(() => V3(blockX(S.trk.x), TRK_Y + PC.block.h + S.load.tgt * PC.load.h, TRK.z), L2(`짐 ${S.load.tgt}개 · 더 무거워요`, `${S.load.tgt} load(s) · heavier`), () => `${L2('바닥이 받치는 힘', 'Floor push')} ${fx(S.F ? S.F.N : 0, 1)} N`, hex(FCOL.N), 2.6);
+      dirCallout(() => V3(blockX(S.trk.x), TRK_Y + PC.block.h + S.load.tgt * PC.load.h, TRK.z), hex(FCOL.N), 2.6, 'box', () => `${fx(S.F?.N || 0,1)} N`);
     }
     if (D.t > T + 0.05) { if (m) m.position.y = m.userData.y0; DIR.drop = null; }
   }
@@ -162,18 +161,23 @@ function dirView(dt) {
   if (KH.drag) return;   // 조작 중에는 틀을 바꾸지 않는다
   const H = innerHeight, rect = (q) => { const e = document.querySelector(q); if (!e) return null; const r = e.getBoundingClientRect(); return r.height > 0 ? r : null; };
   const ban = rect('#kid .kban'), hud = rect('#kidhud'), foot = rect('#kid .kfoot'), dock = KH.dock && !KH.dock.classList.contains('none') && KH.el && !KH.el.classList.contains('off') ? rect('#khdock') : null;
+  const win = rect('#kid .kwin.on'), album = rect('#legend');
+  document.body.style.setProperty('--kpop-top', `${Math.max(ban?.bottom || 0, hud?.bottom || 0) + 8}px`);
+  const slowFloor = Math.min(foot?.top ?? H, dock?.top ?? H, win?.top ?? H, album?.top ?? H);
+  document.body.style.setProperty('--kslow-bottom', `${Math.max(16, H - slowFloor + 10)}px`);
   if (!ban && !foot) return;
   const top = Math.max(ban ? ban.bottom : 0, hud ? hud.bottom : 0) + 8;
   const bot = Math.min(dock ? dock.top : H, foot ? foot.top : H) - 8;
   if (bot - top < 120) return;
-  const td = (top + bot) / 2 - H / 2, pt = isPortrait(), tz = pt && S.station === 'track' ? 1 : clamp((bot - top) / (H * (pt ? 0.5 : 0.6)), pt ? 0.66 : 0.74, 1);   // 세로 화면의 끌기대는 가로로 길어 줄이지 않는다
+  const td = (top + bot) / 2 - H / 2, pt = isPortrait(), tz = pt && S.station === 'track' ? 1 : S.station === 'balance' && !pt ? 0.8 : clamp((bot - top) / (H * (pt ? 0.5 : 0.6)), pt ? 0.66 : 0.74, 1);   // 세로 화면의 끌기대는 가로로 길어 줄이지 않는다
   const k = KVIEW.d == null ? 1 : 1 - Math.exp(-dt * 2.4);
   const nd = KVIEW.d == null ? td : KVIEW.d + (td - KVIEW.d) * k, nz = KVIEW.z + (tz - KVIEW.z) * k;
   if (KVIEW.d == null || Math.abs(nd - KVIEW.d) > 0.3 || Math.abs(nz - KVIEW.z) > 0.0005) { KVIEW.d = nd; KVIEW.z = nz; applyViewOffset(); }
 }
 
 // ---- 해설선 (텔레스트레이션): 점이 튀어나오고, 선이 그어지고, 이름표가 미끄러져 들어온다 ----
-function dirCallout(at, title, val, col, dur = 2.8) {
+function dirCallout(at, col, dur = 2.8, pic = 'arrowR', val = () => '') {
+  const title = ico(pic);
   const L = dirLayer('kcall');
   DIR.callouts.forEach((q) => (q.t = Math.max(q.t, q.dur)));   // 앞의 해설은 비켜 준다
   const el = document.createElement('div'); el.className = 'kco'; el.style.setProperty('--c', col);
@@ -224,6 +228,7 @@ function dirDraw(c, dt) {
 
 // ---- 원격 측정 그래프: 최근 6초의 힘 ----
 function dirTele(dt) {
+  if (S.station === 'balance') return;
   const cv = document.querySelector('#kid .ktele'); if (!cv) return;
   const st = S.station;
   if (DIR.teleSt !== st) { DIR.teleSt = st; DIR.tele.length = 0; DIR.marks.length = 0; }
@@ -237,7 +242,6 @@ function dirTele(dt) {
   if (cv.width !== Math.round(W * dpr)) { cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr); }
   const c = cv.getContext('2d'); c.setTransform(dpr, 0, 0, dpr, 0, 0); c.clearRect(0, 0, W, H);
   const cols = st === 'track' ? [hex(FCOL.F), hex(FCOL.f)] : [hex(FCOL.T), hex(FCOL.B)];
-  const names = st === 'track' ? [L2('당기는 힘', 'Pull'), L2('붙잡는 힘', 'Grip')] : [L2('저울', 'Scale'), L2('부력', 'Buoyancy')];
   const mx = Math.max(st === 'track' ? 3 : 1, ...DIR.tele.map((q) => Math.max(q[0], q[1]))) * 1.15, x0 = 8, x1 = W - 8, y0 = 18, y1 = H - 6;
   c.strokeStyle = 'rgba(255,255,255,.08)'; c.lineWidth = 1; c.beginPath(); c.moveTo(x0, y1); c.lineTo(x1, y1); c.stroke();
   const X = (i) => x0 + (i / 119) * (x1 - x0), Y = (v) => y1 - (v / mx) * (y1 - y0);
@@ -246,15 +250,24 @@ function dirTele(dt) {
     c.strokeStyle = cols[s]; c.lineWidth = s ? 1.6 : 2; c.beginPath();
     DIR.tele.forEach((q, i) => (i ? c.lineTo(X(i), Y(q[s])) : c.moveTo(X(i), Y(q[s])))); c.stroke();
   }
-  c.font = '600 10px "Noto Sans KR", sans-serif'; c.textBaseline = 'top';
-  c.fillStyle = cols[0]; c.fillText(names[0], x0, 4); const w0 = c.measureText(names[0]).width;
-  c.fillStyle = cols[1]; c.fillText(names[1], x0 + w0 + 10, 4);
+  // Color samples and directed arrows share the scene's force grammar.
+  cols.forEach((col, i) => {
+    const x = x0 + i * 40, y = 9;
+    c.fillStyle = col; c.beginPath(); c.arc(x + 3, y, 3, 0, Math.PI * 2); c.fill();
+    c.strokeStyle = col; c.lineWidth = 2; c.beginPath();
+    if (st === 'track') {
+      const a = i ? x + 30 : x + 12, b = i ? x + 12 : x + 30, d = i ? 1 : -1;
+      c.moveTo(a, y); c.lineTo(b, y); c.moveTo(b + d * 5, y - 4); c.lineTo(b, y); c.lineTo(b + d * 5, y + 4);
+    } else { c.moveTo(x + 22, y + 6); c.lineTo(x + 22, y - 6); c.moveTo(x + 18, y - 2); c.lineTo(x + 22, y - 6); c.lineTo(x + 26, y - 2); }
+    c.stroke();
+  });
 }
 
 // ---- 매 프레임 (실제 시간) ----
 function dirFrame(dt) {
   const kid = dirOn(), r = S.hang;
   if (!kid) { document.body.classList.remove('kcut', 'kbars', 'kslow'); DIR.parts.length = 0; if (DIR.callouts.length) dirCallouts(dt); dirLensFrame(dt); if (NOTE.el) NOTE.el.classList.remove('on'); return; }
+  if (!KID.free && KID.i >= KID.missions.length) { dirTeleReset(); return; }
   if (r && S.station === 'hang') {
     if (DIR.prevIn === false && r.inFluid && !r.empty) dirEvent('splash');
     if (DIR.prevFloat === false && r.floating) dirEvent('float');

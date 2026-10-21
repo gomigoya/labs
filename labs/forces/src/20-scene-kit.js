@@ -140,35 +140,6 @@ function ventSlits(w, h, n, mat = MAT.slot) {
   }
   return g;
 }
-// 각인 명판: 황동 판 + 오목하게 새긴 글자 텍스처
-function engravedPlate(text, w, h, opts = {}) {
-  const g = new THREE.Group();
-  const plate = roundedPanel(w, h, opts.depth || 0.006, Math.min(h * 0.3, 0.01), opts.mat || MAT.brass, 3);
-  g.add(plate);
-  const px = 2048, py = Math.round(px * h / w);
-  const tex = canvasTex(px, py, (c, W, H) => {
-    c.clearRect(0, 0, W, H);
-    const size = Math.round(H * (opts.size || 0.42));
-    c.font = font(opts.font || 'mono', size);
-    c.textAlign = 'center'; c.textBaseline = 'middle';
-    if (opts.letter) c.letterSpacing = `${size * opts.letter}px`;
-    const lines = Array.isArray(text) ? text : [text];
-    lines.forEach((ln, i) => {
-      const y = H / 2 + (i - (lines.length - 1) / 2) * size * 1.25;
-      c.fillStyle = 'rgba(255,240,210,0.55)'; c.fillText(ln, W / 2 + 2, y + 2);
-      c.fillStyle = 'rgba(40,24,8,0.92)'; c.fillText(ln, W / 2, y);
-    });
-    if (opts.rule) { c.fillStyle = 'rgba(40,24,8,0.6)'; c.fillRect(W * 0.03, H * 0.12, W * 0.94, 2); c.fillRect(W * 0.03, H * 0.88, W * 0.94, 2); }
-  });
-  const face = new THREE.Mesh(new THREE.PlaneGeometry(w * 0.98, h * 0.94), new THREE.MeshStandardMaterial({ map: tex, transparent: true, metalness: 0.7, roughness: 0.45, depthWrite: false }));
-  face.position.z = (opts.depth || 0.006) / 2 + 0.0004;
-  g.add(face);
-  if (opts.screws !== false) {
-    for (const sx of [-1, 1]) { const s = screw(MAT.brassD, 0.9); s.position.set(sx * (w / 2 - h * 0.32), 0, (opts.depth || 0.006) / 2); g.add(s); }
-  }
-  return g;
-}
-
 // 다이얼: 둥근 노브 + 값만큼 채워지는 발광 원호. 270° 범위, 왼쪽 아래(최소) → 오른쪽 아래(최대)
 const ARC_START = Math.PI * 1.25, ARC_SWEEP = Math.PI * 1.5;
 function knobWithArc(opts) {
@@ -189,7 +160,6 @@ function knobWithArc(opts) {
     }
     c.font = font('mono', 30); c.fillStyle = 'rgba(240,232,220,0.8)';
     for (const [f, txt] of ticks) { const a = ARC_START - f * ARC_SWEEP; c.fillText(txt, W / 2 + Math.cos(a) * W * 0.28, W / 2 - Math.sin(a) * W * 0.28); }
-    c.font = font('mono', 26); c.fillStyle = 'rgba(255,179,107,0.9)'; c.fillText(opts.label || '', W / 2, W * 0.86);
   });
   const base = new THREE.Mesh(new THREE.CircleGeometry(R * 2.05, 64), new THREE.MeshStandardMaterial({ map: face, roughness: 0.6, metalness: 0.2 }));
   base.position.z = 0.001; g.add(base);

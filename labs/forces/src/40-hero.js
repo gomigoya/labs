@@ -346,7 +346,6 @@ function buildOverlays() {
     c.clearRect(0, 0, W, H); c.fillStyle = 'rgba(14,22,28,0.72)'; c.fillRect(0, 0, W, H);
     c.fillStyle = '#bae6fd'; c.strokeStyle = '#bae6fd'; c.textBaseline = 'middle';
     for (let mm = 0; mm <= 300; mm += 5) { const py = 40 + mm / 300 * (H - 80), mj = mm % 50 === 0; c.fillRect(0, py - 1, mj ? 80 : mm % 10 === 0 ? 50 : 28, mj ? 4 : 2); if (mj) { c.font = font('mono', 50); c.fillText(String(mm / 10), 92, py); } }
-    c.font = font('mono', 34); c.fillText('cm', 92, H - 20);
   });
   const rp = new THREE.Mesh(new THREE.PlaneGeometry(0.03, 0.30 * (1600 / (1600 - 80))), new THREE.MeshBasicMaterial({ map: rt, transparent: true, toneMapped: false, depthWrite: false }));
   rp.position.set(HS.x + 0.05, TOP + 0.80 - 0.15, HS.z + 0.02); rul.add(rp);

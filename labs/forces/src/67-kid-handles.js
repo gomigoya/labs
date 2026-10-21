@@ -2,7 +2,7 @@
 // 기구 바로 옆에 크고 눈에 보이는 손잡이를 붙인다 (3D 물체를 정확히 맞혀 잡지 않아도 된다)
 //  · 끌개(F1·F2): 줄 끝 손잡이를 레일 따라 끌면 그만큼 센 힘 (눈금 0~6 N, 목표 깃발)
 //  · 비커(jack): 위아래 레일
-//  · 바닥·물체·액체·중력 고르기, 짐·추 ➖ ➕ 는 장면 아래 고정된 '도구대'에 (누르는 동안 움직이지 않게)
+//  · 바닥·물체·액체·중력 고르기, 짐·추 − + 는 장면 아래 고정된 '도구대'에 (누르는 동안 움직이지 않게)
 //  · 줄다리기: 양쪽을 다 맞추고 손을 떼면 '고정 핀'이 잠시 뒤 풀린다 (마우스는 한 번에 손잡이 하나만 잡을 수 있으므로)
 const KH = { el: null, items: [], drag: null };
 const KH_GOAL = { team: { F1: 1, F2: 1 }, floor: { F2: 2 }, boss: { F2: 4 } };
@@ -10,20 +10,24 @@ const KH_FLEN = 0.22;
 // 바닥·짐을 바꾸면 당기던 힘은 그대로 두고, 퀘스트에서는 이미 미끄러진 도막만 출발점으로 (바로 다시 비교해 볼 수 있게)
 function khFresh() { KID.ctx.fail = false; KID.ctx.hold = 0; if (!KID.free && Math.abs(S.trk.x - PC.track.x0) > 1e-3) resetTrack(); }
 // 실험대마다 만질 수 있는 기구 (퀘스트가 고른 기구는 강조, 나머지는 은은하게)
-const KH_STATION = { track: ['F2', 'F1', 'block', 'surface', 'zoom'], hang: ['objt', 'obj', 'jack', 'fluid', 'grav', 'zoom'] };
+// Balance uses native 3D targets; mission.allow contains exact balance:* keys.
+const KH_STATION = { balance: [], track: ['F2', 'F1', 'block', 'surface', 'zoom'], hang: ['objt', 'obj', 'jack', 'fluid', 'grav', 'zoom'] };
 const KH_DOCK = ['surface', 'block', 'objt', 'obj', 'fluid', 'grav', 'zoom'];   // 도구대 순서
-const KH_LABEL = { surface: ['바닥', 'Surface'], block: ['짐', 'Loads'], objt: ['물체', 'Object'], obj: ['추', 'Weights'], fluid: ['액체', 'Liquid'], grav: ['중력', 'Gravity'], zoom: ['돋보기', 'Zoom'] };
-const PLANET_NAME = { earth: ['지구', 'Earth'], mars: ['화성', 'Mars'], moon: ['달', 'Moon'] };
 // 고르기 버튼: 목록·지금 값·그림·이름·바꾸기·붙일 곳·화면 오프셋
 const KH_PICK = {
-  surface: { list: () => SURFS, cur: () => S.surface, pic: (v) => swatch(v), name: (v) => T('surfName')[v], set: (v) => { if (S.surface === v) return; setSurface(v); khFresh(); dirSurface(v); } },
-  objt: { list: () => OBJS, cur: () => S.obj, pic: (v) => (v === 'weights' ? ico('weight') : swatch(v === 'al' ? 'al' : 'wood')), name: (v) => T('objName')[v], set: (v) => { setObj(v); if (v === 'weights' && !S.n.tgt) setParam('n', 2); } },
-  fluid: { list: () => FLUIDS, cur: () => S.fluid, pic: (v) => `<span class="kfl ${v}"></span>`, name: (v) => T('fluidName')[v], set: (v) => setFluid(v) },
-  grav: { list: () => ['earth', 'mars', 'moon'], cur: () => (PHYS.nearPlanet(S.g.tgt) || {}).id, pic: (v) => (v === 'moon' ? ico('moon') : v === 'mars' ? '<span class="kpl"></span>' : ico('globe')), name: (v) => PLANET_NAME[v][isEn() ? 1 : 0], set: (v) => { setParam('g', PHYS.PLANETS.find((q) => q.id === v).g); S.hv.v += 0.004; } },
+  surface: { list: () => SURFS, cur: () => S.surface, pic: (v) => swatch(v), set: (v) => { if (S.surface === v) return; setSurface(v); khFresh(); dirSurface(v); } },
+  objt: { list: () => OBJS, cur: () => S.obj, pic: (v) => (v === 'weights' ? ico('weight') : swatch(v === 'al' ? 'al' : 'wood')), set: (v) => { setObj(v); if (v === 'weights' && !S.n.tgt) setParam('n', 2); } },
+  fluid: { list: () => FLUIDS, cur: () => S.fluid, pic: (v) => `<span style="color:${{water:"#58b6ea",brine:"#5fbdb2",oil:"#e5ac3c"}[v]}">${ico("drop")}</span>`, set: (v) => setFluid(v) },
+  grav: { list: () => ['earth', 'mars', 'moon'], cur: () => (PHYS.nearPlanet(S.g.tgt) || {}).id, pic: (v) => (v === 'moon' ? ico('moon') : v === 'mars' ? ico('planet') : ico('globe')), set: (v) => { setParam('g', PHYS.PLANETS.find((q) => q.id === v).g); S.hv.v += 0.004; } },
 };   // 힘 레일 길이 (m, 장면 속)
 const khRailPx = () => clamp(innerWidth * 0.2, 120, 270);
 function khScreenEnds(k) {
   const R = KH_RAIL[k]; let [a, b] = R.ends().map(khProj); if (k === 'jack') return [a, b];
+  // Same-direction forces get distinct screen lanes; rail values and world forces stay unchanged.
+  if (S.same && (k === 'F1' || k === 'F2')) {
+    const lane = k === 'F1' ? -46 : 46;
+    a = { ...a, y:a.y+lane }; b = { ...b, y:b.y+lane };
+  }
   const dx = b.x - a.x, dy = b.y - a.y, l = Math.hypot(dx, dy) || 1, P = isPortrait() ? 58 : 40, M = 44;   // 끌개에서 화면상 P px 떨어져 시작 (두 손잡이가 겹치지 않게)
   a = { x: a.x + dx / l * P, y: a.y + dy / l * P };
   // 레일 길이: 화면 가장자리까지 남은 자리에 맞춘다 (좁은 화면에서 밀려 들어와 손잡이끼리 겹치지 않게)
@@ -57,7 +61,7 @@ function khBuild() {
   const m = KID.missions[KID.i];
   if (S.mode !== 'kid') return;
   const free = KID.free;
-  if (!free && (!m || m.quiz || m.shot === 'hero')) return;
+  if (!free && (!m || m.shot === 'hero')) return;
   const goal = free ? {} : KH_GOAL[m.id] || {}, focus = free ? [] : m.allow || [];
   const keys = [...new Set([...focus, ...(KH_STATION[S.station] || [])])];
   keys.sort((a, b) => KH_DOCK.indexOf(a) - KH_DOCK.indexOf(b));
@@ -68,7 +72,7 @@ function khBuild() {
       el = document.createElement('div'); el.className = `kh khrail ${force ? 'force' : 'water'}`;
       const ticks = force ? Array.from({ length: R.max() + 1 }, (_, i) => `<span class="khtick" style="left:${(i / R.max()) * 100}%"><em>${i}</em></span>`).join('') : '';
       const g = goal[k] != null ? `<span class="khgoal" style="left:${(goal[k] / R.max()) * 100}%">${ico('flag')}</span>` : '';
-      el.innerHTML = `<div class="khbar"><i class="khfill"></i>${ticks}${g}${force ? `<span class="khlast"><em>${L2('지난번', 'Last')}</em></span>` : ''}</div><i class="khghost"></i><button class="khknob" aria-label="${k}">${ico('grip')}</button><div class="khval"></div>`;
+      el.innerHTML = `<div class="khbar"><i class="khfill"></i>${ticks}${g}${force ? `<span class="khlast"><em>${ico('reset')}</em></span>` : ''}</div><i class="khghost"></i><button class="khknob" aria-label="${k}">${ico('grip')}</button><div class="khval"></div>`;
       const knob = el.querySelector('.khknob');
       knob.onpointerdown = (e) => {
         if (!KID.allows(k)) return; ensureAudio(); KID.acted(); if (k !== 'jack') KID.ctx.fail = false;
@@ -80,13 +84,13 @@ function khBuild() {
     } else if (KH_PICK[k]) {
       const P = KH_PICK[k];
       el = document.createElement('div'); el.className = 'kh khpick';
-      el.innerHTML = `<span class="khl">${KH_LABEL[k][isEn() ? 1 : 0]}</span><div class="khb">${P.list().map((v) => `<button data-s="${v}">${P.pic(v)}<span>${P.name(v)}</span></button>`).join('')}</div>`;
+      el.innerHTML = `<div class="khb">${P.list().map((v) => `<button data-s="${v}">${P.pic(v)}</button>`).join('')}</div>`;
       el.querySelectorAll('button').forEach((b) => (b.onclick = () => {
         if (!KID.allows(k)) return; KID.acted(); ensureAudio(); P.set(b.dataset.s); sfx('click'); KID.update(true);
       }));
     } else if (k === 'block' || k === 'obj') {
       el = document.createElement('div'); el.className = `kh khstep ${k}`;
-      el.innerHTML = `<span class="khl">${KH_LABEL[k][isEn() ? 1 : 0]}</span><div class="khb"><button data-d="-1" aria-label="-">${ico('minus')}</button><span class="khcount"></span><button data-d="1" aria-label="+">${ico('plus')}</button></div>`;
+      el.innerHTML = `<div class="khb"><button data-d="-1" aria-label="-">${ico('minus')}</button><span class="khcount"></span><button data-d="1" aria-label="+">${ico('plus')}</button></div>`;
       el.querySelectorAll('button').forEach((b) => (b.onclick = () => {
         if (!KID.allows(k)) return; KID.acted(); ensureAudio(); const d = +b.dataset.d;
         if (k === 'block') { const L = clamp(S.load.tgt + d, 0, PC.loadMax); if (L === S.load.tgt) return; setParam('load', L, true); khFresh(); dirLoad(d); }
@@ -95,7 +99,7 @@ function khBuild() {
       }));
     } else if (k === 'zoom') {
       el = document.createElement('div'); el.className = 'kh khzoom';
-      el.innerHTML = `<span class="khl">${KH_LABEL[k][isEn() ? 1 : 0]}</span><div class="khb"><button aria-label="${KH_LABEL[k][isEn() ? 1 : 0]}">${ico('eye')}<span>${L2('가까이', 'Look')}</span></button></div>`;
+      el.innerHTML = `<div class="khb"><button aria-label="zoom">${ico('eye')}</button></div>`;
       el.querySelector('button').onclick = () => { if (!KID.allows(k)) return; ensureAudio(); lensNow(); };
     } else continue;
     if (!free && !focus.includes(k)) el.classList.add('sub');
@@ -171,6 +175,6 @@ function khPin() {
   if (el._st !== st) {
     el._st = st; el.className = `khpin on ${st}`;
     el.querySelector('.khpi').innerHTML = ico(st === 'go' ? 'unlock' : 'lock');
-    el.querySelector('b').textContent = st === 'go' ? L2('출발!', 'Go!') : st === 'arm' ? L2('손을 떼고 기다려요', 'Hands off…') : L2('고정', 'Locked');
+    el.querySelector('b').innerHTML = ico(st === 'go' ? 'arrowR' : st === 'arm' ? 'hold' : 'lock');
   }
 }

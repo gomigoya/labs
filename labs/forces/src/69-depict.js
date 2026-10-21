@@ -42,13 +42,13 @@ function microSVG(k) {
 
 // ---- 돋보기 렌즈 ----
 const LENS = { cur: null };
-const LENS_WATER_SVG = '';   // 물속 단면은 microSVG('micro-water') 안에 압력 화살표까지 그린다
-function dirLens(at, img, title, val, col, dur = 3.4, overlay = '') {
+function dirLens(at, img, col, dur = 3.4) {
   if (!dirOn()) return;
+  const title = ico(img === 'micro-water' ? 'arrowU' : 'hold'); const val = () => `${fx(img === 'micro-water' ? S.hang?.B || 0 : S.F?.fsMax || 0, 2)} N`;
   const L = dirLayer('kcall');
   if (LENS.cur) { const o = LENS.cur.el; o.classList.add('out'); setTimeout(() => o.remove(), 450); }   // 새 돋보기가 열리면 이전 것은 바로 닫는다
   const el = document.createElement('div'); el.className = 'klens'; el.style.setProperty('--c', col);
-  el.innerHTML = `<i class="ln"></i><i class="d"></i><div class="lw"><div class="lc">${microSVG(img)}</div>${overlay}<span class="ltag">${ico('eye')}${L2('가까이 보면', 'Up close')}</span></div><div class="lcap"><b>${title}</b><span></span></div>`;
+  el.innerHTML = `<i class="ln"></i><i class="d"></i><div class="lw"><div class="lc">${microSVG(img)}</div><span class="ltag">${ico('eye')}</span></div><div class="lcap"><b>${title}</b><span></span></div>`;
   L.appendChild(el);
   LENS.cur = { el, at, val, t: 0, dur, side: DIR.side = -DIR.side };
   sfx('whoosh');
@@ -72,8 +72,9 @@ function dirLensFrame(dt) {
 }
 // 지금 기구에 맞는 돋보기 (도구대 '돋보기' 버튼)
 function lensNow() {
-  if (S.station === 'track') dirLens(() => V3(blockX(S.trk.x), TRK_Y + 0.004, TRK.z), SURF_IMG[S.surface], `${T('surfName')[S.surface]} · ${SURF_FEEL[S.surface][isEn() ? 1 : 0]}`, () => `${L2('붙잡는 힘 최대', 'Max grip')} ${fx(S.F ? S.F.fsMax : 0, 1)} N`, hex(FCOL.f), 4);
-  else dirLens(() => LOOK.obj().clone(), 'micro-water', L2('물이 사방에서 눌러요', 'Water presses on all sides'), () => `${L2('아래가 더 세게 → 부력', 'Stronger from below → buoyancy')} ${fx(S.hang ? S.hang.B : 0, 2)} N`, hex(FCOL.B), 4, LENS_WATER_SVG);
+  if (S.station === 'balance') return;
+  if (S.station === 'track') dirLens(() => V3(blockX(S.trk.x), TRK_Y + 0.004, TRK.z), SURF_IMG[S.surface], hex(FCOL.f), 4);
+  else dirLens(() => LOOK.obj().clone(), 'micro-water', hex(FCOL.B), 4);
 }
 
 // ---- 실험 노트: 시행 기록과 비교 막대 ----
@@ -102,23 +103,17 @@ function noteConds(st, q, p) {
   const ch = (k) => (p && p[k] !== q[k] ? ' chg' : '');
   if (st === 'track') return `<span class="knc${ch('s')}">${swatch(q.s)}</span><span class="knc${ch('l')}">${ico('box')}<em>${q.l}</em></span>`;
   const obj = q.o === 'weights' ? `${ico('weight')}<em>${q.n}</em>` : swatch(q.o === 'al' ? 'al' : 'wood');
-  const med = q.w === 'out' ? `<em>${L2('공기', 'Air')}</em>` : `<span class="kfl ${q.f}"></span>`;
-  const g = q.g === 'moon' ? ico('moon') : q.g === 'mars' ? '<span class="kpl"></span>' : ico('globe');
+  const med = q.w === 'out' ? ico('beaker') : ico('drop');
+  const g = q.g === 'moon' ? ico('moon') : q.g === 'mars' ? ico('planet') : ico('globe');
   return `<span class="knc${ch('o')}${ch('n')}">${obj}</span><span class="knc${ch('w')}${ch('f')}">${med}</span><span class="knc${ch('g')}">${g}</span>`;
 }
 function noteRender() {
   const st = S.station, A = NOTE.rec[st] || [], el = NOTE.el;
-  const sig = `${st}|${NOTE.open}|${LANG}|${A.map((q) => Object.values(q).join(',') + fx(q.v, 2)).join(';')}|${NOTE.flash}`;
+  const sig = `${st}|${KID.free}|${NOTE.open}|${LANG}|${A.map((q) => Object.values(q).join(',') + fx(q.v, 2)).join(';')}|${NOTE.flash}`;
   if (sig === NOTE.sig) return; NOTE.sig = sig;
   const mx = Math.max(st === 'track' ? 2 : 1, ...A.map((q) => q.v)) * 1.08;
-  const what = st === 'track' ? L2('미끄러지기 시작한 힘', 'Force when it starts to slide') : L2('저울 눈금', 'Scale reading');
   const prev = (i) => A[i - 1];
-  const nChg = A.length > 1 ? NOTE_KEYS[st].filter((k) => A.at(-1)[k] !== A.at(-2)[k] && !(st === 'hang' && k === 'f' && A.at(-1).w !== A.at(-2).w)).length : 0;
-  const empty = st === 'track' ? L2('줄을 당겨 도막을 미끄러뜨리면 여기에 기록돼요', 'Pull until the block slides — it gets recorded here') : L2('추가 멈추면 저울 눈금이 기록돼요. 물에 넣어 보세요', 'When it settles, the reading is recorded. Try dipping it in water');
-  el.innerHTML = `<button class="knh"><span class="kni">${ico('ruler')}</span><b>${L2('실험 노트', 'Lab notes')}</b><em>${A.length}</em>${ico('chevR')}</button>
-    <div class="knb"><div class="kny">${L2('잰 것', 'Measured')} · <b>${what}</b></div>
-    ${A.length ? `<div class="knrows">${A.map((q, i) => `<div class="knr${i === NOTE.flash ? ' new' : ''}">${noteConds(st, q, prev(i))}<span class="knbar"><i style="--w:${(q.v / mx) * 100}%;--c:${hex(st === 'track' ? FCOL.f : FCOL.T)}"></i></span><b>${fx(q.v, st === 'track' ? 1 : 2)}<small> N</small></b></div>`).join('')}</div>` : `<p class="kne">${empty}</p>`}
-    ${nChg >= 2 ? `<p class="knw">${ico('info')}${L2('한꺼번에 두 가지를 바꿨어요. 하나만 바꿔야 무엇 때문인지 알 수 있어요', 'You changed two things at once. Change one at a time to know which one matters')}</p>` : A.length > 1 ? `<p class="knt">${L2('테두리 = 이번에 바꾼 조건', 'Outlined = what you changed')}</p>` : ''}</div>`;
+  el.innerHTML = `<button class="knh" aria-label="records"><span class="kni">${ico('ruler')}</span><em>${A.length}</em>${ico('chevR')}</button><div class="knb"><div class="kny">${ico(st === 'track' ? 'arrowR' : 'balance')}</div>${A.length ? `<div class="knrows">${A.map((q,i) => `<div class="knr${i === NOTE.flash ? ' nnew' : ''}">${noteConds(st,q,prev(i))}<span class="knbar"><i style="--w:${q.v/mx*100}%;--c:${hex(st === 'track' ? FCOL.f : FCOL.T)}"></i></span><b>${fx(q.v,st === 'track' ? 1 : 2)} N</b></div>`).join('')}</div>` : ico('tap')}</div>`;
   el.querySelector('.knh').onclick = () => { NOTE.open = !NOTE.open; NOTE.sig = ''; noteRender(); };
   el.classList.toggle('open', NOTE.open);
 }

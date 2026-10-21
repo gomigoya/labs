@@ -3,12 +3,13 @@ const S = {
   g: { cur: 9.8, tgt: 9.8 }, n: { cur: 3, tgt: 3 }, jack: { cur: 0.03, tgt: 0.03 },
   F1: { cur: 0, tgt: 0 }, F2: { cur: 0, tgt: 0 }, load: { cur: 0, tgt: 0 },
   obj: 'weights', fluid: 'water', surface: 'glass', same: false,
+  balance: { left: PHYS.balanceSide(), right: PHYS.balanceSide() }, beam: { theta: 0, omega: 0 },
   station: 'hang', preset: -1, playing: true, speed: 1,
   overlays: { F: true, L: true, K: false }, graph: 'hooke', view: 'lab', sound: false,
   trk: { x: PC.track.x0, v: 0 }, dist: 0, tTrk: 0, vtAcc: 0, hv: { x: 0, v: 0 }, settle: 0,
   hang: null, F: null, Tlive: 0, lastSign: 0,
   rec: { hooke: [], buoy: [], fric: [], vt: [] }, newRec: null,
-  seen: { acc: false, dec: false, rev: false }, evalOpened: false, mode: 'kid',
+  seen: { acc: false, dec: false, rev: false }, mode: 'kid',
 };
 const PRESETS = [
   { station: 'track', F1: 2, F2: 2, same: false, surface: 'glass', load: 0, g: 9.8 },
@@ -35,12 +36,23 @@ function setParam(name, v, fromPreset = false) {
   if (!fromPreset) { S._tick = (S._tick || 0) + 1; if (S._tick % 3 === 0) sfx('tick'); }
 }
 function clampJack() { const jm = PHYS.jackMax(hangParams(S.jack.tgt)); if (S.jack.tgt > jm) S.jack.tgt = jm; }
-function setObj(o) { if (S.obj === o) return; S.obj = o; S.settle = 0; S.preset = -1; S.jack.tgt = PC.jack.min; S.hv.v += 0.02; UI.syncControls(); UI.event(T('objName')[o]); }
+function setObj(o) { if (S.obj === o) return; S.obj = o; S.settle = 0; S.preset = -1; S.jack.tgt = PC.jack.min; S.hv.v += 0.02; UI.syncControls();  }
 function setFluid(f) { S.fluid = f; S.preset = -1; setFluidLook(f); clampJack(); UI.syncControls(); }
-function setSurface(s) { S.surface = s; S.preset = -1; setSurfaceLook(s); UI.syncControls(); UI.event(T('surfName')[s]); }
+function setSurface(s) { S.surface = s; S.preset = -1; setSurfaceLook(s); UI.syncControls();  }
 function setSame(b) { S.same = b; S.preset = -1; UI.syncControls(); }
 function setStation(st, fly = true) {
-  S.station = st; UI.syncControls();
+  if (!['hang', 'track', 'balance'].includes(st)) return;
+  const previousStation = S.station;
+  if (BAL.drag) { balanceUp({}, true); DRAG.kind = null; controls.enabled = true; }
+  S.station = st;
+  if (BAL.root) { BAL.root.visible = st === 'balance'; HERO.hang.visible = HERO.track.visible = st !== 'balance'; }
+  document.body.classList.toggle('balance-station', st === 'balance');
+  if (st === 'balance') {
+    dirTeleReset(); DIR.slow = null; DIR.ts = 1;
+    if (S.mode === 'kid' && (KID.free || KID.missions[KID.i]?.shot !== 'balance')) { KID.free = true; KID.passed = false; KID.showWin = false; KID.fx.later.length = 0; S.pin = false; }
+  }
+  if (S.mode === 'kid' && KID.free && (st === 'balance' || previousStation === 'balance')) KID.renderFree();
+  UI.syncControls();
   if (fly) { CAM.cine = false; flyTo(stationShot(st), 1.8); }
   if (st === 'track' && S.graph !== 'vt') S.graph = 'vt';
   if (st === 'hang' && S.graph === 'vt') S.graph = S.obj === 'weights' ? 'hooke' : 'buoy';
@@ -63,7 +75,7 @@ function applyPreset(i) {
   }
   S.preset = i;
   setStation(p.station);
-  UI.syncControls(); UI.event(T('presets')[i]);
+  UI.syncControls(); 
   sfx('click');
 }
 function setOverlay(k, on) { S.overlays[k] = on; UI.syncButtons(); }
@@ -103,7 +115,7 @@ function recordFriction(e) {
   S.newRec = 'f' + S.rec.fric.length;
 }
 
-// ---- 화면 A: 힘 장부 ----
+// Screen A: force bars and numeric readings.
 function screenFrame(c, W, H) {
   const g = c.createLinearGradient(0, 0, 0, H); g.addColorStop(0, '#08141b'); g.addColorStop(1, '#050b0f');
   c.fillStyle = g; c.fillRect(0, 0, W, H);
@@ -111,34 +123,38 @@ function screenFrame(c, W, H) {
 const hex = (n) => '#' + n.toString(16).padStart(6, '0');
 function drawScreenA(c, W, H) {
   screenFrame(c, W, H);
-  if (!S.hang || !S.F) return;
-  const en = LANG === 'en', hang = S.station === 'hang', r = S.hang, F = S.F, P = trackParams();
-  c.font = font('mono', 17); c.textBaseline = 'middle'; c.textAlign = 'left'; c.fillStyle = 'rgba(186,230,253,0.8)';
-  c.fillText(hang ? (en ? 'HANGING OBJECT · up +' : '매단 물체가 받는 힘 · 위 +') : (en ? 'BLOCK · right +' : '도막이 받는 힘 · 오른쪽 +'), 16, 16);
+  if (S.station === 'balance' || !S.hang || !S.F) return;
+  const hang = S.station === 'hang', r = S.hang, F = S.F, P = trackParams();
   const rows = hang
-    ? [[T('fW'), -r.W, FCOL.W], [T('fT'), S.Tlive, FCOL.T], [T('fB'), r.B, FCOL.B]]
-    : [[T('fF1'), P.same ? P.F1 : -P.F1, FCOL.F], [T('fF2'), P.F2, FCOL.F], [T('ff'), F.f, FCOL.f]].concat(Math.abs(F.bump) > 1e-3 ? [[T('fBump'), F.bump, FCOL.bump]] : []);
+    ? [[-r.W, FCOL.W], [S.Tlive, FCOL.T], [r.B, FCOL.B]]
+    : [[P.same ? P.F1 : -P.F1, FCOL.F], [P.F2, FCOL.F], [F.f, FCOL.f]]
+      .concat(Math.abs(F.bump) > 1e-3 ? [[F.bump, FCOL.bump]] : []);
   const net = hang ? S.Tlive + r.B - r.W : F.net;
-  const maxF = Math.max(3, ...rows.map((q) => Math.abs(q[1]))) * 1.08;
-  const xm = W * 0.6, half = W * 0.36, rowH = Math.min(30, (H - 92) / (rows.length + 1));
+  const maxF = Math.max(3, Math.abs(net), ...rows.map(([v]) => Math.abs(v))) * 1.08;
+  // Fixed number column keeps peak-force readings inside the display.
+  const xm = W * 0.48, half = W * 0.30, rowH = Math.min(30, (H - 92) / (rows.length + 1));
+  c.textBaseline = 'middle'; c.textAlign = 'left';
+  c.font = font('mono', 17); c.fillStyle = '#bae6fd';
+  c.fillText(hang ? '\u2191 +' : '\u2192 +', 14, 16);
   c.strokeStyle = 'rgba(186,230,253,0.25)'; c.beginPath(); c.moveTo(xm, 32); c.lineTo(xm, H - 34); c.stroke();
-  const bar = (y, name, v, col, bold) => {
+  const bar = (y, v, col, bold = false) => {
     const w = v / maxF * half;
-    c.fillStyle = hex(col); c.globalAlpha = bold ? 1 : 0.85; c.shadowColor = hex(col); c.shadowBlur = 8;
-    c.fillRect(Math.min(xm, xm + w), y - rowH * 0.3, Math.abs(w), rowH * 0.6); c.shadowBlur = 0; c.globalAlpha = 1;
-    c.font = font('mono', 16); c.fillStyle = bold ? '#fff' : 'rgba(230,240,248,0.85)'; c.textAlign = 'left'; c.fillText(name, 14, y);
-    c.textAlign = v >= 0 ? 'left' : 'right'; c.fillStyle = '#e6f7ff';
-    c.fillText(`${v >= 0 ? '+' : '−'}${fx(Math.abs(v), 2)} N`, xm + w + (v >= 0 ? 6 : -6), y);
+    dot(c, 20, y, hex(col), bold ? 6 : 5);
+    c.fillStyle = hex(col); c.globalAlpha = bold ? 1 : 0.85;
+    c.fillRect(Math.min(xm, xm + w), y - rowH * 0.3, Math.abs(w), rowH * 0.6); c.globalAlpha = 1;
+    c.font = font('mono', 16); c.textAlign = 'right'; c.fillStyle = '#e6f7ff';
+    c.fillText(`${v >= 0 ? '+' : '\u2212'}${fx(Math.abs(v), 2)} N`, W - 12, y);
   };
-  rows.forEach((q, i) => bar(42 + i * rowH, q[0], q[1], q[2]));
-  const yn = 42 + rows.length * rowH + 6;
+  rows.forEach(([v, col], i) => bar(42 + i * rowH, v, col));
+  const yn = 48 + rows.length * rowH;
   c.strokeStyle = 'rgba(255,255,255,0.18)'; c.beginPath(); c.moveTo(14, yn - rowH * 0.5); c.lineTo(W - 14, yn - rowH * 0.5); c.stroke();
-  bar(yn, T('fNet'), Math.abs(net) < 0.005 ? 0 : net, FCOL.net, true);
-  c.font = font('mono', 15); c.textAlign = 'left'; c.fillStyle = 'rgba(186,230,253,0.6)';
-  if (hang) c.fillText(en ? `m ${fx(r.m * 1000, 0)} g · g ${fx(r.g, 1)} m/s²` : `질량 ${fx(r.m * 1000, 0)} g · g ${fx(r.g, 1)} m/s²`, 14, H - 16);
-  else c.fillText(en ? `vertical: W ${fx(F.W, 2)} ↓ = N ${fx(F.N, 2)} ↑ · a ${fx(F.a, 2)} m/s²` : `위아래: 중력 ${fx(F.W, 2)}↓ = 수직항력 ${fx(F.N, 2)}↑ · a ${fx(F.a, 2)} m/s²`, 14, H - 16);
+  bar(yn, Math.abs(net) < 0.005 ? 0 : net, FCOL.net, true);
+  if (!hang) {
+    c.font = font('mono', 15); c.textAlign = 'left';
+    dot(c, 20, H - 16, hex(FCOL.W), 4); c.fillStyle = '#e6f7ff'; c.fillText(`\u2212${fx(F.W, 2)} N \u2193`, 32, H - 16);
+    dot(c, W / 2 + 6, H - 16, '#ffffff', 4); c.fillText(`+${fx(F.N, 2)} N \u2191`, W / 2 + 18, H - 16);
+  }
 }
-// ---- 화면 B: 기록 그래프 ----
 function axes(c, x0, y0, x1, y1, nx, ny) {
   c.strokeStyle = 'rgba(125,211,252,0.09)'; c.lineWidth = 1;
   for (let i = 0; i <= nx; i++) { const x = x0 + (x1 - x0) * i / nx; c.beginPath(); c.moveTo(x, y0); c.lineTo(x, y1); c.stroke(); }
@@ -146,47 +162,44 @@ function axes(c, x0, y0, x1, y1, nx, ny) {
 }
 function dot(c, x, y, col, r = 5) { c.fillStyle = col; c.shadowColor = col; c.shadowBlur = 8; c.beginPath(); c.arc(x, y, r, 0, Math.PI * 2); c.fill(); c.shadowBlur = 0; }
 function drawScreenB(c, W, H) {
+  if (S.station === 'balance') { screenFrame(c,W,H); return; }
   screenFrame(c, W, H);
-  const en = LANG === 'en', x0 = 58, x1 = W - 20, y0 = 34, y1 = H - 40;
+  const x0 = 58, x1 = W - 20, y0 = 34, y1 = H - 40;
   c.font = font('mono', 16); c.textBaseline = 'middle';
   axes(c, x0, y0, x1, y1, 5, 5);
-  const lab = (t, x, y, al = 'left', col = 'rgba(186,230,253,0.75)') => { c.textAlign = al; c.fillStyle = col; c.fillText(t, x, y); };
+  const reading = (t, x, y, al = 'left', col = 'rgba(186,230,253,0.75)') => { c.textAlign = al; c.fillStyle = col; c.fillText(t, x, y); };
   if (S.graph === 'hooke') {
+    dot(c, 20, 14, hex(FCOL.T));
     const pts = S.rec.hooke.filter((q) => Math.abs(q.g - S.g.tgt) < 0.05);
     const X = (x) => x0 + x / 0.25 * (x1 - x0), Y = (F) => y1 - F / 5 * (y1 - y0);
-    lab(en ? 'SPRING FORCE F (N) vs STRETCH x' : '탄성력 F (N) – 늘어난 길이 x', x0, 14);
-    for (let i = 0; i <= 5; i++) { lab(String(i), x0 - 8, Y(i), 'right', 'rgba(186,230,253,0.55)'); lab(String(i * 5), X(i * 0.05), H - 22, 'center', 'rgba(186,230,253,0.55)'); }
-    lab(en ? 'x (cm) →' : 'x (cm) →', x1, H - 6, 'right', 'rgba(186,230,253,0.55)');
-    if (pts.length >= 2) { const k = PHYS.fitK(pts); glowStroke(c, 'rgba(134,239,172,0.7)', 2, 8, (c) => { c.moveTo(X(0), Y(0)); c.lineTo(X(Math.min(0.25, 5 / k)), Y(Math.min(5, 0.25 * k))); }); lab(`k = ${fx(k, 1)} N/m`, x0 + 12, y0 + 12, 'left', '#d9f99d'); }
+    for (let i = 0; i <= 5; i++) { reading(String(i), x0 - 8, Y(i), 'right', 'rgba(186,230,253,0.55)'); reading(String(i * 5), X(i * 0.05), H - 22, 'center', 'rgba(186,230,253,0.55)'); }
+    if (pts.length >= 2) { const k = PHYS.fitK(pts); glowStroke(c, 'rgba(134,239,172,0.7)', 2, 8, (c) => { c.moveTo(X(0), Y(0)); c.lineTo(X(Math.min(0.25, 5 / k)), Y(Math.min(5, 0.25 * k))); }); reading(`${fx(k, 1)}`, x0 + 12, y0 + 12, 'left', '#d9f99d'); }
     pts.forEach((q) => dot(c, X(q.x), Y(q.F), q.key === S.newRec ? '#ffffff' : '#a7f3d0'));
     const r = S.hang;
     if (r && r.obj === 'weights' && !r.empty && !r.inFluid) { c.strokeStyle = 'rgba(255,255,255,0.4)'; c.setLineDash([4, 4]); c.beginPath(); c.arc(X(S.hv.x), Y(S.Tlive), 9, 0, Math.PI * 2); c.stroke(); c.setLineDash([]); }
-    if (!pts.length) lab(en ? 'hang weights to record' : '추를 걸면 자동 기록', (x0 + x1) / 2, (y0 + y1) / 2, 'center', 'rgba(186,230,253,0.5)');
   } else if (S.graph === 'buoy') {
+    dot(c, 20, 14, hex(FCOL.B));
     const r = S.hang, obj = r && r.obj !== 'weights' ? r.obj : 'al';
     const pts = S.rec.buoy.filter((q) => q.obj === obj && q.fluid === S.fluid && Math.abs(q.g - S.g.tgt) < 0.05);
     const W0 = (PHYS.OBJECTS[obj].mass) * S.g.tgt, hcm = PC.objV / (Math.PI * PC.objR ** 2) * 100;
     const ymax = Math.max(3, W0 * 1.15), X = (s) => x0 + s / (hcm / 100) * (x1 - x0), Y = (F) => y1 - F / ymax * (y1 - y0);
-    lab(en ? 'SCALE READING (N) vs DEPTH SUBMERGED' : '저울 눈금 (N) – 잠긴 깊이', x0, 14);
-    for (let i = 0; i <= 5; i++) { lab(fx(ymax * i / 5, 1), x0 - 8, Y(ymax * i / 5), 'right', 'rgba(186,230,253,0.55)'); lab(fx(hcm * i / 5, 1), X(hcm / 100 * i / 5), H - 22, 'center', 'rgba(186,230,253,0.55)'); }
-    lab(en ? 'depth (cm) →' : '잠긴 깊이 (cm) →', x1, H - 6, 'right', 'rgba(186,230,253,0.55)');
+    for (let i = 0; i <= 5; i++) { reading(fx(ymax * i / 5, 1), x0 - 8, Y(ymax * i / 5), 'right', 'rgba(186,230,253,0.55)'); reading(fx(hcm * i / 5, 1), X(hcm / 100 * i / 5), H - 22, 'center', 'rgba(186,230,253,0.55)'); }
     c.setLineDash([8, 6]); c.strokeStyle = 'rgba(255,179,107,0.8)'; c.beginPath(); c.moveTo(x0, Y(W0)); c.lineTo(x1, Y(W0)); c.stroke(); c.setLineDash([]);
-    lab(`${en ? 'weight' : '무게'} ${fx(W0, 2)} N`, x1 - 4, Y(W0) - 12, 'right', 'rgba(255,207,154,0.95)');
+    reading(`${fx(W0, 2)} N`, x1 - 4, Y(W0) - 12, 'right', 'rgba(255,207,154,0.95)');
     pts.sort((a, b) => a.s - b.s);
     if (pts.length > 1) glowStroke(c, 'rgba(125,211,252,0.7)', 2, 8, (c) => pts.forEach((q, i) => (i ? c.lineTo(X(q.s), Y(q.T)) : c.moveTo(X(q.s), Y(q.T)))));
     pts.forEach((q) => dot(c, X(q.s), Y(q.T), q.key === S.newRec ? '#ffffff' : '#bae6fd', 4));
-    if (r && r.obj === obj) { const q = { s: r.s, T: S.Tlive }; c.strokeStyle = 'rgba(255,255,255,0.45)'; c.beginPath(); c.arc(X(q.s), Y(q.T), 8, 0, Math.PI * 2); c.stroke(); if (r.B > 0.01) lab(`${en ? 'buoyancy' : '부력'} ${fx(r.B, 2)} N`, x1 - 4, y1 - 14, 'right', '#bae6fd'); }
+    if (r && r.obj === obj) { const q = { s: r.s, T: S.Tlive }; c.strokeStyle = 'rgba(255,255,255,0.45)'; c.beginPath(); c.arc(X(q.s), Y(q.T), 8, 0, Math.PI * 2); c.stroke(); if (r.B > 0.01) reading(`+${fx(r.B, 2)} N`, x1 - 4, y1 - 14, 'right', '#bae6fd'); }
   } else {
+    dot(c, 20, 14, hex(FCOL.net));
     const pts = S.rec.vt, tN = S.tTrk, span = 10;
     const vmax = Math.max(0.4, ...pts.map((p) => Math.abs(p.v))) * 1.15;
     const X = (t) => x1 - (tN - t) / span * (x1 - x0), Y = (v) => (y0 + y1) / 2 - v / vmax * (y1 - y0) / 2;
-    lab(en ? 'BLOCK VELOCITY v (m/s) vs TIME' : '도막의 속도 v (m/s) – 시간', x0, 14);
     c.strokeStyle = 'rgba(186,230,253,0.35)'; c.beginPath(); c.moveTo(x0, Y(0)); c.lineTo(x1, Y(0)); c.stroke();
-    for (const v of [-vmax, 0, vmax]) lab(fx(v / 1.15, 2), x0 - 8, Y(v / 1.15), 'right', 'rgba(186,230,253,0.55)');
-    lab(en ? `last ${span} s → now` : `최근 ${span}초 → 지금`, x1, H - 14, 'right', 'rgba(186,230,253,0.55)');
+    for (const v of [-vmax, 0, vmax]) reading(fx(v / 1.15, 2), x0 - 8, Y(v / 1.15), 'right', 'rgba(186,230,253,0.55)');
     glowStroke(c, 'rgba(253,230,138,0.95)', 3, 10, (c) => { let pen = false; for (const p of pts) { if (tN - p.t > span) continue; const x = X(p.t), y = Y(p.v); if (!pen) { c.moveTo(x, y); pen = true; } else c.lineTo(x, y); } });
     dot(c, x1, Y(S.trk.v), '#fff7d6', 4.5);
-    lab(`${fx(S.trk.v, 2)} m/s`, x1 - 10, Y(S.trk.v) - 14, 'right', '#fff7d6');
+    reading(`${S.trk.v >= 0 ? '+' : '\u2212'}${fx(Math.abs(S.trk.v), 2)}`, x1 - 10, Y(S.trk.v) - 14, 'right', '#fff7d6');
   }
 }
 
@@ -204,7 +217,7 @@ function buildStudio() {
   STUDIO.visible = false; scene.add(STUDIO);
 }
 
-// ---- 수업 단계 (docs/quest-map.md). 문장은 60의 LESSON_TXT, 완료 판정은 물리 결과 ----
+// ---- 수업 단계 (docs/quest-map.md). 안내는 guide.html, 완료 판정은 물리 결과 (마지막은 도달 완료) ----
 const LESSON = {
   i: -1, done: [], ctx: {}, passed: false,
   steps: [
@@ -226,8 +239,7 @@ const LESSON = {
       check: () => S.seen.acc && S.seen.dec },
     { id: 'design', st: 'track', enter() { setSame(false); setSurface('glass'); setParam('load', 0, true); setParam('F1', 0, true); setParam('F2', 0, true); resetTrack(); },
       check: () => S.F1.tgt === 0 && S.F2.tgt >= 4 && S.trk.v === 0 && S.F && S.F.mode === 'held' },
-    { id: 'wrap', st: 'hero', enter() { LESSON.ctx.e0 = S.evalOpened; S.evalOpened = false; },
-      check: () => S.evalOpened },
+    { id: 'wrap', st: 'hero', check: () => true },
   ],
 };
 function lessonGo(i) {
@@ -236,7 +248,7 @@ function lessonGo(i) {
   cueReset();
   const st = LESSON.steps[i];
   st.enter && st.enter();
-  S.station = st.st === 'beaker' || st.st === 'hang' ? 'hang' : st.st === 'track' ? 'track' : S.station;
+  setStation(st.st === 'beaker' || st.st === 'hang' ? 'hang' : st.st === 'track' ? 'track' : S.station, false);
   if (st.graph) S.graph = st.graph; else if (S.station === 'track') S.graph = 'vt';
   CAM.cine = false; flyTo(stationShot(st.st), 2.2);
   UI.syncControls(); UI.syncButtons(); UI.renderLesson();
@@ -276,9 +288,9 @@ function update(rdt) {
     S.dist += Math.abs(S.trk.x - x0);
     for (const e of ev) {
       if (e.type === 'start' || e.type === 'bump') dirEvent(e.type === 'start' ? 'slip' : 'bump', e);
-      if (e.type === 'start') { recordFriction(e); sfx('scrape'); if (S.mode !== 'kid') UI.event(T('evStart')(e), 1800); }
+      if (e.type === 'start') { recordFriction(e); sfx('scrape'); }
       if (e.type === 'stop') sfx('tick');
-      if (e.type === 'bump') { sfx('clack'); if (S.mode !== 'kid') UI.event(T('evBump'), 1400); }
+      if (e.type === 'bump') { sfx('clack'); }
     }
     S.tTrk += dts; S.vtAcc += dts;
     if (S.vtAcc >= 0.04) { S.vtAcc = 0; S.rec.vt.push({ t: S.tTrk, v: S.trk.v }); while (S.rec.vt.length && S.tTrk - S.rec.vt[0].t > 12) S.rec.vt.shift(); }
@@ -290,9 +302,14 @@ function update(rdt) {
     if (along < -0.05) S.seen.dec = true;
     const sg = Math.sign(S.trk.v); if (S.lastSign && sg !== S.lastSign) S.seen.rev = true; S.lastSign = sg;
   }
+  updateBalance(S.playing ? dt * S.speed : 0);
   updateTrack(S.trk, { ...P, F1: S.F1.cur, F2: S.F2.cur });
   updateArrows(r, hv.x, S.Tlive, F, P, S.trk, S.overlays.F, dt);
   updateCues(r, hv.x, F, P, dt);
+  if (S.station === 'balance') {
+    for (const group of [OVL.h, OVL.t, OVL.cue]) for (const a of Object.values(group)) a.mesh.visible = false;
+    OVL.ruler.visible = false;
+  }
   // --- 콘솔 ---
   CONSOLE.dialG.set((S.g.cur - PC.gMin) / (PC.gMax - PC.gMin)); CONSOLE.dialJ.set((S.jack.cur - PC.jack.min) / (PC.jack.max - PC.jack.min));
   CONSOLE.sF1.set(S.F1.cur / PC.trackMax); CONSOLE.sF2.set(S.F2.cur / PC.trackMax);
@@ -305,7 +322,7 @@ function update(rdt) {
   if (frameNo % 3 === 1) CONSOLE.screenB.redraw();
   // --- HUD ---
   uiT += rdt;
-  if (uiT > 0.08) { uiT = 0; document.getElementById('caption').innerHTML = captionFor(); UI.updateChips(); lessonUpdate(); KID.update(); }
+  if (uiT > 0.08) { uiT = 0; UI.updateChips(); lessonUpdate(); KID.update(); }
   UI.updateLabels(); KID.frame(rdt); khFrame(); dirFrame(rdt); updateTheme(rdt);
   audioUpdate();
   // --- 카메라·렌더 ---
@@ -343,17 +360,66 @@ function onResize() {
   if (PIPE.composer) { PIPE.composer.setPixelRatio(renderer.getPixelRatio()); PIPE.composer.setSize(w, h); }
   if (PIPE.depthRT) PIPE.depthRT.setSize(Math.ceil(w * renderer.getPixelRatio()), Math.ceil(h * renderer.getPixelRatio()));
   const p = isPortrait();
-  if (lastPortrait !== null && p !== lastPortrait && !CAM.fly) shot(heroShot());
+  if (lastPortrait !== null && p !== lastPortrait && !CAM.fly) shot(S.station === 'balance' ? stationShot('balance') : heroShot());
   lastPortrait = p;
   UI.$ && UI.sheet();
 }
 
 window.__lab = {
+  // Read-only metadata for the text-audit runner; never advances a quest.
+  get textAuditInfo() { return { phase: KID.phase(), missions: KID.missions.map((m) => ({ id: m.id, answer: m.pred?.ans ?? null })) }; },
+  textAudit() {
+    const words = [], tooltips = [], emoji = [];
+    const where = (el) => el.id ? `#${CSS.escape(el.id)}` : `${el.localName}${Array.from(el.classList).slice(0, 2).map((c) => `.${CSS.escape(c)}`).join('')}`;
+    const visible = (el, rects) => {
+      for (let p = el; p; p = p.parentElement) {
+        const s = getComputedStyle(p);
+        if (s.display === 'none' || s.visibility === 'hidden' || s.visibility === 'collapse' || +s.opacity === 0 || p.hidden) return false;
+        const b = p.getBoundingClientRect();
+        if (p === el && s.display !== 'contents' && (!b.width || !b.height)) return false;
+      }
+      return Array.from(rects).some((r) => {
+        let left = Math.max(0, r.left), top = Math.max(0, r.top), right = Math.min(innerWidth, r.right), bottom = Math.min(innerHeight, r.bottom);
+        for (let p = el; p; p = p.parentElement) {
+          const s = getComputedStyle(p), b = p.getBoundingClientRect();
+          if (/(hidden|clip|scroll|auto)/.test(s.overflowX)) { left = Math.max(left, b.left); right = Math.min(right, b.right); }
+          if (/(hidden|clip|scroll|auto)/.test(s.overflowY)) { top = Math.max(top, b.top); bottom = Math.min(bottom, b.bottom); }
+        }
+        return r.width > 0 && r.height > 0 && right > left && bottom > top;
+      });
+    };
+    const collect = (text, el, rectsFor) => {
+      for (const m of text.matchAll(/\S+/gu)) {
+        if (/(?:[가-힣A-Za-z]{2,}|\bm\/s\b|\bN·g\b)/u.test(m[0]) && visible(el, rectsFor(m.index, m[0].length))) words.push({ text: m[0], where: where(el) });
+      }
+    };
+    const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+    for (let node; (node = walker.nextNode());) {
+      const el = node.parentElement;
+      if (el.closest('script,style,template,input,textarea,select')) continue;
+      const rectsFor = (start, length) => { const r = document.createRange(); r.setStart(node, start); r.setEnd(node, start + length); return r.getClientRects(); };
+      collect(node.data, el, rectsFor);
+      for (const m of node.data.matchAll(/\p{Extended_Pictographic}/gu)) if (visible(el, rectsFor(m.index, m[0].length))) emoji.push({ text: m[0], where: where(el) });
+    }
+    for (const el of document.querySelectorAll('input,textarea,select')) {
+      if (el instanceof HTMLInputElement && ['hidden', 'checkbox', 'radio', 'range', 'color', 'file', 'image'].includes(el.type)) continue;
+      const text = el instanceof HTMLSelectElement ? Array.from(el.selectedOptions, (o) => o.text).join(' ') : el.value || el.placeholder || '';
+      collect(text, el, () => el.getClientRects());
+    }
+    for (const el of document.querySelectorAll('[title]')) if (visible(el, el.getClientRects())) tooltips.push({ text: el.getAttribute('title'), where: where(el) });
+    return { words, tooltips, emoji, count: words.length };
+  },
+  balance: {
+    set: balanceSet,
+    state() { return { ...structuredClone(S.balance), ...PHYS.balance(balanceParams()), ...S.beam }; },
+    step(n = 1) { for (let i = 0; i < Math.min(36000, Math.max(0, n)); i++) updateBalance(1 / 60); return this.state(); },
+    place: balancePlace, clips: balanceClips, pos: balancePos,
+  },
   state: S, PHYS, SHOTS, SHOTS_VERTICAL, renderer, scene,
   get pipe() { return PIPE; },
   set(name, v) {
     if (name in DEC) { setParam(name, v); S[name].cur = S[name].tgt; }
-    else if (name === 'obj') setObj(v); else if (name === 'fluid') setFluid(v); else if (name === 'surface') setSurface(v); else if (name === 'same') setSame(v); else if (name === 'station') setStation(v, false);
+    else if (name === 'obj') setObj(v); else if (name === 'fluid') setFluid(v); else if (name === 'surface') setSurface(v); else if (name === 'same') setSame(v); else if (name === 'station') { setStation(v, false); if (v === 'balance') shot(stationShot(v)); }
     else if (name in S) S[name] = v;
   },
   settle() { S.jack.cur = S.jack.tgt; const r = PHYS.hang(hangParams()); S.hv.x = r.floating || r.empty ? 0 : r.x; S.hv.v = 0; S.settle = 1; },
@@ -371,13 +437,13 @@ window.__lab = {
     const r = await fetch(`/__save/${name}.jpg`, { method: 'POST', body: url });
     return r.ok ? `${name}.jpg` : `fail ${r.status}`;
   },
-  quality: setQuality, mode: (m) => setMode(m), kid: { go: (i) => KID.go(i), get i() { return KID.i; }, get passed() { return KID.passed; }, at(k) { const v = KID_AT[k]().project(camera); return [(v.x + 1) / 2 * innerWidth, (1 - v.y) / 2 * innerHeight]; } },
+  quality: setQuality, mode: (m) => setMode(m), kid: { get count() { return KID.missions.length; }, go: (i) => KID.go(typeof i === 'string' ? KID.missions.findIndex(m => m.id === i) : i), predict: (k) => KID.predict(k), status() { const m=KID.missions[KID.i]; return { id:m?.id, phase:KID.phase(), passed:KID.passed, check:m ? m.check() : false }; }, get i() { return KID.i; }, get passed() { return KID.passed; }, at(k) { const v = KID_AT[k]().project(camera); return [(v.x + 1) / 2 * innerWidth, (1 - v.y) / 2 * innerHeight]; } },
   perf() { return { avg: PERF.last, pr: renderer.getPixelRatio(), ao: PIPE.gtao.enabled, bokeh: PIPE.bokeh.enabled, calls: renderer.info.render.calls, tris: renderer.info.render.triangles }; },
 };
 
 async function init() {
   try { await Promise.race([document.fonts.ready, new Promise((r) => setTimeout(r, 2500))]); } catch {}
-  buildRoom(); buildConsole(); buildHero(); buildOverlays(); buildCues(); buildLights(); buildStudio(); buildThemes(); buildPipeline(); buildCamera();
+  buildRoom(); buildConsole(); buildHero(); buildBalance(); buildOverlays(); buildCues(); buildLights(); buildStudio(); buildThemes(); buildPipeline(); buildCamera();
   setFluidLook(S.fluid); setSurfaceLook(S.surface);
   tagPickables();
   UI.init();
@@ -393,4 +459,4 @@ async function init() {
   setTimeout(() => document.body.classList.remove('intro'), 300);
   if (QS.has('lesson') && S.mode === 'full') lessonGo(Math.max(0, (+QS.get('lesson') || 1) - 1));
 }
-init().catch((e) => { console.error(e); const d = document.createElement('pre'); d.style.cssText = 'position:fixed;left:8px;bottom:8px;z-index:99;color:#fca5a5;background:#000a;padding:8px;font:12px monospace;white-space:pre-wrap;max-width:90vw'; d.textContent = String(e && e.stack || e); document.body.appendChild(d); });
+init().catch(e => console.error(e));

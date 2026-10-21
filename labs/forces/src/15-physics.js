@@ -3,6 +3,33 @@
 // 모든 길이는 콘솔 상판(TOP) 기준 m, 힘은 N, 질량은 kg. 화면의 숫자·위치·화살표 길이는 전부 여기서 나온다.
 const PHYS = (() => {
   const clamp = (x, a, b) => Math.min(b, Math.max(a, x));
+  const BALANCE = Object.freeze({ MAX_CLIPS: 60, spacing: 0.06, K: 0.0337, thetaMax: Math.PI / 9,
+    masses: Object.freeze({ a: 10, b: 20, c: 30, d: 40, e: 50 }) });
+  const balanceSide = (p = {}) => ({
+    obj: Object.hasOwn(BALANCE.masses, p.obj) ? p.obj : null,
+    clips: clamp(Math.round(Number(p.clips) || 0), 0, BALANCE.MAX_CLIPS),
+    pos: clamp(Math.round(Number.isFinite(Number(p.pos)) && p.pos != null ? Number(p.pos) : 5), 1, 5),
+  });
+  function balance({ left, right, g = 9.8 }) {
+    const L = balanceSide(left), R = balanceSide(right);
+    const momentL = ((BALANCE.masses[L.obj] || 0) + L.clips) * L.pos;
+    const momentR = ((BALANCE.masses[R.obj] || 0) + R.clips) * R.pos;
+    const tau = 0.001 * g * BALANCE.spacing * (momentR - momentL);
+    const level = Math.abs(tau) <= 0.5 * 0.001 * 9.8 * BALANCE.spacing;
+    return { tau, thetaTarget: clamp(Math.atan(tau / BALANCE.K), -BALANCE.thetaMax, BALANCE.thetaMax),
+      level, heavier: level ? null : tau > 0 ? 'R' : 'L', momentL, momentR };
+  }
+  function beamStep(state, thetaTarget, dt) {
+    let { theta, omega } = state;
+    const sub = Math.max(1, Math.ceil(Math.max(0, dt) / 0.004)), h = Math.max(0, dt) / sub;
+    for (let i = 0; i < sub; i++) {
+      omega += (-36 * (theta - thetaTarget) - 4.2 * omega) * h;
+      theta += omega * h;
+      if (Math.abs(theta) > BALANCE.thetaMax) { theta = clamp(theta, -BALANCE.thetaMax, BALANCE.thetaMax); if (theta * omega > 0) omega = 0; }
+      if (Math.abs(theta - thetaTarget) < 0.0005 && Math.abs(omega) < 0.002) { theta = thetaTarget; omega = 0; }
+    }
+    return { theta, omega };
+  }
   const C = {
     kHang: 20,          // 매달기 용수철저울 용수철 상수 N/m (눈금 0~5 N, 최대 25 cm 늘어남)
     hangMax: 5,
@@ -145,6 +172,6 @@ const PHYS = (() => {
     return sxx > 0 ? sfx / sxx : NaN;
   }
 
-  return { C, OBJECTS, FLUIDS, SURFACES, PLANETS, RANGE, planetOf, nearPlanet, hangObject, hang, jackMax, jackForFull, trackMass, trackForces, trackStep, fitK };
+  return { C, BALANCE, balanceSide, balance, beamStep, OBJECTS, FLUIDS, SURFACES, PLANETS, RANGE, planetOf, nearPlanet, hangObject, hang, jackMax, jackForFull, trackMass, trackForces, trackStep, fitK };
 })();
 // ==== END PHYSICS ====

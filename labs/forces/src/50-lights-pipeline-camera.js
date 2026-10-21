@@ -122,8 +122,12 @@ function applyViewOffset() {
   else { camera.aspect = W / H; camera.clearViewOffset(); }
   camera.updateProjectionMatrix();
 }
-const KID_SHOTS_V = { track: { pos: V3(0.45, 3.3, 3.0), tgt: V3(0.45, 0.99, 0.08), fov: 62 }, hang: { pos: V3(-0.9, 1.56, 3.0), tgt: V3(-1.08, 1.42, -0.2), fov: 52 }, hero: { pos: V3(0.6, 3.0, 4.6), tgt: V3(0.0, 1.05, -0.1), fov: 62 } };
-const stationShot = (name) => (S.mode === 'kid' && KID_SHOTS[name]) ? (isPortrait() ? KID_SHOTS_V : KID_SHOTS)[name] : name === 'hero' ? heroShot() : (isPortrait() ? SHOTS_VERTICAL[name === 'track' ? 2 : name === 'hero' ? 0 : 1] : SHOTS[SHOT_IDX[name]]);
+const KID_SHOTS_V = { track: { pos: V3(0.45, 2.65, 2.18), tgt: V3(0.45, 0.99, 0.08), fov: 54 }, hang: { pos: V3(-0.9, 1.56, 3.0), tgt: V3(-1.08, 1.42, -0.2), fov: 52 }, hero: { pos: V3(0.6, 3.0, 4.6), tgt: V3(0.0, 1.05, -0.1), fov: 62 } };
+const BALANCE_SHOTS = {
+  wide: { name: 'balance', pos: V3(0.45, 1.82, 1.50), tgt: V3(0.25, 1.20, 0.04), fov: 38 },
+  tall: { name: 'balance-v', pos: V3(0.25, 2.05, 2.45), tgt: V3(0.25, 1.20, 0.04), fov: 44 },
+};
+const stationShot = (name) => name === 'balance' ? BALANCE_SHOTS[isPortrait() ? 'tall' : 'wide'] : (S.mode === 'kid' && KID_SHOTS[name]) ? (isPortrait() ? KID_SHOTS_V : KID_SHOTS)[name] : name === 'hero' ? heroShot() : (isPortrait() ? SHOTS_VERTICAL[name === 'track' ? 2 : name === 'hero' ? 0 : 1] : SHOTS[SHOT_IDX[name]]);
 
 let controls;
 const CAM = { fly: null, cine: false, cineIdx: 0, cineT: 0 };
@@ -186,13 +190,14 @@ function hudRects(W, H) {
 
 // 실험대 집중: 지금 실험하는 장치(쉬운 모드) 또는 작업대 전체(자세히 모드)만 밝게 남긴다
 const FBOX = {
+  balance: [V3(-0.24, TOP, -0.24), V3(0.74, TOP + 0.65, 0.36)],
   track: [V3(TRK.x0 - 0.05, TRK_Y - 0.03, TRK.z - 0.14), V3(TRK.x1 + 0.05, TRK_Y + 0.26, TRK.z + 0.14)],
   hang: [V3(HS.rodX - 0.07, TOP - 0.01, HS.z - 0.17), V3(HS.x + 0.2, TOP + HS.armY + 0.07, HS.z + 0.17)],
 };
 const FOC = { s: 0, p: new THREE.Vector3(), f: new THREE.Vector3(), w: new THREE.Vector3(), cc: new THREE.Color() };
 function updateFocus(dt) {
   const u = PIPE.finish.uniforms, kid = S.mode === 'kid', F = FOC;
-  const bx = kid && KID.missions[KID.i]?.shot !== 'hero' && KID.i < KID.missions.length ? [FBOX[S.station]] : [FBOX.track, FBOX.hang];
+  const bx = S.station === 'balance' ? [FBOX.balance] : kid && KID.missions[KID.i]?.shot !== 'hero' && KID.i < KID.missions.length ? [FBOX[S.station]] : [FBOX.track, FBOX.hang];
   camera.getWorldDirection(F.f);
   let x0 = 9, y0 = 9, x1 = -9, y1 = -9, n = 1e9, f = 0, ok = 0;
   for (const [a, b] of bx) for (let i = 0; i < 8; i++) {

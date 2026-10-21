@@ -1,7 +1,7 @@
 // ==== 13c 쉬운 모드 배경: 퀘스트 주제에 맞춘 무대 배경 (방 대신 둥근 배경막) ====
 // 운동장(당기기·줄다리기·힘 합체) → 우주(달나라, 중력에 따라 섞임) → 장난감 공방(용수철) → 얼음·숲·사막(바닥 재질)
-// → 물속(부력) → 경주로(힘과 운동) → 성(보스) → 칠판(퀴즈). 배경은 흐리고 어둡게 눌러(집중 효과) 실험이 앞에 서게 한다.
-const THEME = { cache: {}, a: 'class', b: 'class', m: 1, on: false, mesh: null };
+// Background themes follow the experiments; the removed quiz has no theme.
+const THEME = { cache: {}, a: 'field', b: 'field', m: 1, on: false, mesh: null };
 const TW = 2048, TH = 768;
 function themeCanvas(key) {
   if (THEME.cache[key]) return THEME.cache[key];
@@ -80,17 +80,10 @@ function themeCanvas(key) {
     x.fillStyle = '#1b0f33'; x.fillRect(TW * 0.3, 260, TW * 0.4, 300); for (let i = 0; i < 12; i++) x.fillRect(TW * 0.3 + i * TW * 0.4 / 12, 230, TW * 0.4 / 24, 30);
     for (const px of [TW * 0.27, TW * 0.73]) { x.fillRect(px - 60, 180, 120, 380); for (let i = 0; i < 4; i++) x.fillRect(px - 60 + i * 34, 150, 18, 30); }
     for (let i = 0; i < 8; i++) { const px = TW * (0.08 + i * 0.12); x.fillStyle = i % 2 ? '#fbbf24' : '#ef4444'; x.beginPath(); x.moveTo(px, 60); x.lineTo(px + 50, 60); x.lineTo(px + 50, 200); x.lineTo(px + 25, 175); x.lineTo(px, 200); x.fill(); }
-    x.fillStyle = '#fde68a'; x.font = '120px "Segoe UI Emoji", "Noto Color Emoji", sans-serif'; x.textAlign = 'center'; x.fillText('👑', TW / 2, 220);
+    x.save(); x.translate(TW / 2, 160); x.strokeStyle = '#fde68a'; x.lineWidth = 6; x.lineJoin = 'round';
+    x.stroke(new Path2D('M-54 40-66-35-30-8 0-52 30-8 66-35 54 40ZM-54 24H54')); x.restore();
     grad([[0, '#3b2257'], [1, '#22123a']], 560, TH);
-  } else {
-    // class: 칠판
-    grad([[0, '#2c5a46'], [1, '#1f4535']]);
-    x.strokeStyle = 'rgba(255,255,255,.55)'; x.fillStyle = 'rgba(255,255,255,.6)'; x.lineWidth = 6; x.lineCap = 'round';
-    const arrow = (x0, y0, x1, y1, col) => { x.strokeStyle = col; x.fillStyle = col; x.beginPath(); x.moveTo(x0, y0); x.lineTo(x1, y1); x.stroke(); const a = Math.atan2(y1 - y0, x1 - x0); x.beginPath(); x.moveTo(x1, y1); x.lineTo(x1 - 26 * Math.cos(a - 0.5), y1 - 26 * Math.sin(a - 0.5)); x.lineTo(x1 - 26 * Math.cos(a + 0.5), y1 - 26 * Math.sin(a + 0.5)); x.fill(); };
-    x.strokeRect(TW * 0.42, 180, 120, 120); arrow(TW * 0.42 + 60, 240, TW * 0.42 + 60, 420, 'rgba(255,179,107,.8)'); arrow(TW * 0.42 + 60, 240, TW * 0.42 + 60, 80, 'rgba(134,239,172,.8)');
-    arrow(TW * 0.62, 250, TW * 0.72, 250, 'rgba(196,181,253,.8)'); arrow(TW * 0.62, 300, TW * 0.55, 300, 'rgba(252,165,165,.8)');
-    x.font = '700 64px "Noto Sans KR", sans-serif'; x.fillStyle = 'rgba(255,255,255,.7)'; x.fillText('힘 = 밀기 · 당기기', TW * 0.18, 140); x.fillText('1 N', TW * 0.75, 420); x.fillText('⭕ ❌', TW * 0.3, 470);
-    grad([[0, '#6b4a2e'], [1, '#4a321e']], 600, TH);
+
   }
   const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.wrapS = THREE.RepeatWrapping; t.repeat.x = -1; t.anisotropy = 4;
   return (THEME.cache[key] = t);
@@ -111,17 +104,16 @@ function floorTex(key) {
   else if (key === 'water') { fill('#2b8cc4'); x.strokeStyle = 'rgba(255,255,255,.35)'; x.lineWidth = 3; for (let i = 0; i <= 8; i++) { x.beginPath(); x.moveTo(i * N / 8, 0); x.lineTo(i * N / 8, N); x.stroke(); x.beginPath(); x.moveTo(0, i * N / 8); x.lineTo(N, i * N / 8); x.stroke(); } x.strokeStyle = 'rgba(255,255,255,.25)'; for (let i = 0; i < 18; i++) { const x0 = R() * N, y0 = R() * N; x.beginPath(); x.arc(x0, y0, 20 + R() * 30, 0.3, 2.6); x.stroke(); } }
   else if (key === 'race') { fill('#3d434f'); speck(1500, ['#4b5260', '#333843'], 2, 4); x.fillStyle = '#f5f5f5'; for (let i = 0; i < 4; i++) x.fillRect(i * N / 4 + 20, N / 2 - 5, N / 8, 10); x.fillStyle = '#fbbf24'; x.fillRect(0, 30, N, 8); x.fillRect(0, N - 38, N, 8); }
   else if (key === 'arena') { for (let r = 0; r < 8; r++) for (let q = 0; q < 8; q++) { x.fillStyle = (r + q) % 2 ? '#3a2161' : '#4a2a78'; x.fillRect(q * N / 8, r * N / 8, N / 8 - 2, N / 8 - 2); } }
-  else { for (let i = 0; i < 16; i++) { x.fillStyle = i % 2 ? '#7a5532' : '#8a623b'; x.fillRect(0, i * N / 16, N, N / 16 - 2); } }
   const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(9, 9); t.anisotropy = 8;
   return (FLOOR_CACHE[key] = t);
 }
 // 바닥 색(배경막 아래 원판)
-const THEME_FLOOR = { field: 0x3f7d36, space: 0x6c6f78, spring: 0x8a5a2e, ice: 0xa9d6ee, forest: 0x6e4c2c, desert: 0xc08843, water: 0x0f3f6e, race: 0x3a414d, arena: 0x2a1745, class: 0x46301d };
+const THEME_FLOOR = { field: 0x3f7d36, space: 0x6c6f78, spring: 0x8a5a2e, ice: 0xa9d6ee, forest: 0x6e4c2c, desert: 0xc08843, water: 0x0f3f6e, race: 0x3a414d, arena: 0x2a1745 };
 function buildThemes() {
   const geo = new THREE.CylinderGeometry(5.2, 5.2, 7, 96, 1, true);
   const mat = new THREE.ShaderMaterial({
     side: THREE.BackSide, depthWrite: false, fog: false,
-    uniforms: { tA: { value: themeCanvas('class') }, tB: { value: themeCanvas('class') }, uMix: { value: 1 } },
+    uniforms: { tA: { value: themeCanvas('field') }, tB: { value: themeCanvas('field') }, uMix: { value: 1 } },
     vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix*modelViewMatrix*vec4(position,1.0); }',
     fragmentShader: `uniform sampler2D tA, tB; uniform float uMix; varying vec2 vUv;
       void main(){ vec2 uv = vec2(-vUv.x, clamp((vUv.y - 0.26) / 0.62, 0.0, 1.0)); 
@@ -146,10 +138,11 @@ function themeMode(on) {
 }
 function themeTarget() {
   const m = KID.missions[KID.i];
+  if (S.station === 'balance') return 'spring';
   if (KID.free) return S.station === 'track' ? { glass: 'ice', wood: 'forest', sand: 'desert' }[S.surface] : 'water';
-  if (!m) return 'class';
+  if (!m) return 'field';
   if (m.theme === 'surface') return { glass: 'ice', wood: 'forest', sand: 'desert' }[S.surface];
-  return m.theme || 'class';
+  return m.theme || 'field';
 }
 function updateTheme(dt) {
   if (!THEME.on) return;

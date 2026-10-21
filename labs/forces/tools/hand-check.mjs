@@ -58,6 +58,70 @@ for (const [surface, mus, load] of [['glass', 0.25, 0], ['wood', 0.45, 1], ['san
   check('설계: 사포·짐2 4 N 알짜힘', F.net, 0, 1e-12, 'N');
 }
 
+// Independent hand values: g*0.001*0.06 = 0.000588 N m per g-tick.
+for (const [name, left, right, ml, mr, angle, level, heavier] of [
+  ['30@2 = 20@3', {obj:'c',pos:2}, {obj:'b',pos:3},60,60,0,true,null],
+  ['50@1 = 10@5', {obj:'e',pos:1}, {obj:'a',pos:5},50,50,0,true,null],
+  ['20@5 = 20@5', {obj:'b',pos:5}, {obj:'b',pos:5},100,100,0,true,null],
+  ['right stop', {obj:'a',pos:5}, {obj:'e',pos:5},50,250,0.3490658503988659,false,'R'],
+  ['30 vs 27 clips', {obj:'c',pos:5}, {clips:27,pos:5},150,135,-0.2559794726480946,false,'L'],
+  ['30 vs 30 clips', {obj:'c',pos:5}, {clips:30,pos:5},150,150,0,true,null],
+  ['clip cap', {}, {clips:99,pos:5},0,300,0.3490658503988659,false,'R'],
+]) {
+  const r = PHYS.balance({left,right,g:9.8});
+  check('balance '+name+' L',r.momentL,ml,1e-12,'g-tick');
+  check('balance '+name+' R',r.momentR,mr,1e-12,'g-tick');
+  check('balance '+name+' tau',r.tau,(mr-ml)*0.000588,1e-12,'Nm');
+  check('balance '+name+' angle',r.thetaTarget,angle,1e-12,'rad');
+  check('balance '+name+' verdict',+(r.level===level && r.heavier===heavier),1,0,'');
+}
+{
+  const initial={theta:0,omega:0}; let st=initial, peak=0;
+  for(let i=0;i<600;i++){st=PHYS.beamStep(st,0.1,1/60);peak=Math.max(peak,st.theta);}
+  check('beam settled angle',st.theta,0.1,0,'rad');
+  check('beam settled omega',st.omega,0,0,'rad/s');
+  // Analytic damped step overshoot exp(-pi*.35/sqrt(1-.35^2)) = 30.92%.
+  check('beam overshoot',peak,0.130919,0.001,'rad');
+  check('beam pure',+(initial.theta===0 && initial.omega===0),1,0,'');
+  const large=PHYS.beamStep(initial,0.1,10);
+  check('beam large dt',large.theta,0.1,0,'rad');
+}
+{
+  const input={left:{obj:'a',clips:-9,pos:0},right:{clips:61,pos:9},g:9.8};
+  const before=JSON.stringify(input), r=PHYS.balance(input);
+  check('balance lower bounds',r.momentL,10,0,'g-tick');
+  check('balance upper bounds',r.momentR,300,0,'g-tick');
+  check('balance input pure',+(JSON.stringify(input)===before),1,0,'');
+  const tolerance=PHYS.balance({left:{},right:{clips:1,pos:1},g:4.9});
+  check('balance inclusive tolerance',+tolerance.level,1,0,'');
+  check('balance zero gravity',+PHYS.balance({...input,g:0}).level,1,0,'');
+  const stopped=PHYS.beamStep({theta:0,omega:0},0.3490658503988659,10);
+  check('beam positive stop',stopped.theta,0.3490658503988659,0,'rad');
+  const negative=PHYS.beamStep({theta:0,omega:0},-0.3490658503988659,10);
+  check('beam negative stop',negative.theta,-0.3490658503988659,0,'rad');
+}
+// Quest boundaries use the actual shared predicate and actual mission data, without a browser.
+{
+  const kidSource=fs.readFileSync(new URL('../src/65-kid.js',import.meta.url),'utf8');
+  const balanceSource=fs.readFileSync(new URL('../src/45-balance.js',import.meta.url),'utf8');
+  const first=kidSource.lastIndexOf('    {',kidSource.indexOf("id: 'cmp'"));
+  const last=kidSource.lastIndexOf('    {',kidSource.indexOf("id: 'weights'"));
+  const data=kidSource.slice(first,last);
+  const predicate=balanceSource.slice(balanceSource.indexOf('function kidBalanceCheck()'),balanceSource.indexOf('const balanceSVG'));
+  const S={balance:{},beam:{}},DRAG={kind:null};
+  const missions=new Function('PHYS','S','DRAG','balanceParams',`function kidBalanceEnter() {} ${predicate}; return [${data}];`)(PHYS,S,DRAG,()=>({...S.balance,g:9.8}));
+  const pose=(left,right)=>{S.balance={left:PHYS.balanceSide(left),right:PHYS.balanceSide(right)};S.beam={theta:PHYS.balance({...S.balance}).thetaTarget,omega:0};};
+  for(const m of missions){
+    pose(m.setup.left,m.setup.right);check(m.id+' initial incomplete',+m.check(),0,0,'');
+    const goals={cmp:[{obj:'a'},{obj:'e'}],clip:[{obj:'c'},{clips:30}],lever:[{obj:'b',pos:5},{obj:'e',pos:2}]};
+    pose(...goals[m.id]);check(m.id+' goal complete',+m.check(),1,0,'');
+    S.beam.omega=.01;check(m.id+' moving incomplete',+m.check(),0,0,'');
+    pose(...goals[m.id]);DRAG.kind='balance';check(m.id+' dragging incomplete',+m.check(),0,0,'');DRAG.kind=null;
+  }
+  pose({obj:'b',pos:5},{obj:'e',pos:5});check('lever outer incomplete',+missions[2].check(),0,0,'');
+  pose({obj:'c'},{clips:29});check('clip 29 incomplete',+missions[1].check(),0,0,'');
+  pose({obj:'c'},{obj:'b',clips:10});check('clip object substitute incomplete',+missions[1].check(),0,0,'');
+}
 const w = Math.max(...rows.map((r) => r.name.length));
 for (const r of rows) console.log(`${r.ok ? 'OK  ' : 'FAIL'} ${r.name.padEnd(w)}  모델 ${String(r.model).padStart(9)}  손계산 ${String(r.hand).padStart(9)} ${r.unit}`);
 const bad = rows.filter((r) => !r.ok).length;
