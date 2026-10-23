@@ -1,0 +1,16 @@
+{
+  "slug": "rocket-liftoff",
+  "status": "draft",
+  "order": 8,
+  "subject": "physics",
+  "titleKo": "로켓은 언제 땅에서 떠오를까",
+  "titleEn": "When Does a Rocket Lift Off?",
+  "hookKo": "불꽃이 있어도 뜨지 않는 로켓, 무엇을 바꾸면 떠오를까요?",
+  "hookEn": "A rocket has flames but stays on its pad. What would make it lift off?",
+  "curriculumKo": "초등 3~6학년 과학 · 힘과 우리 생활, 물체의 운동 (4과01-01, 6과10-01, 6과10-02)",
+  "curriculumEn": "Elementary science, grades 3–6 · Forces and motion (4과01-01, 6과10-01, 6과10-02)",
+  "reviewed": false,
+  "teacherMode": true,
+  "attractMode": true,
+  "thumbnail": "thumb.jpg"
+}

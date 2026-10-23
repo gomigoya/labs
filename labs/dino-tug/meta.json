@@ -1,0 +1,16 @@
+{
+  "slug": "dino-tug",
+  "status": "draft",
+  "order": 4,
+  "subject": "physics",
+  "titleKo": "공룡과 줄다리기",
+  "titleEn": "Dinosaur Tug of War",
+  "hookKo": "공룡은 언제나 이길까요? 같은 팀으로 바닥만 바꾸면 결과가 달라집니다.",
+  "hookEn": "Do dinosaurs always win? Change only the ground and compare the same team's result.",
+  "curriculumKo": "초등 3~6학년 과학 · 힘과 우리 생활, 지층과 화석의 추정 모형 (4과01-01, 보조 6과01-03)",
+  "curriculumEn": "Elementary science, grades 3–6 · Pushes and pulls; fossil-based model limitations (4과01-01, supporting 6과01-03)",
+  "reviewed": false,
+  "teacherMode": true,
+  "attractMode": true,
+  "thumbnail": "thumb.jpg"
+}

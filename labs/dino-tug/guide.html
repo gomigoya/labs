@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="ko" data-lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>공룡과 줄다리기 — 교사 안내서</title>
+<script>const en=new URLSearchParams(location.search).get('lang')==='en';document.documentElement.lang=en?'en':'ko';document.documentElement.dataset.lang=en?'en':'ko';if(en)document.title='Dinosaur Tug of War — Teacher Guide';</script>
+<style>
+*{box-sizing:border-box}body{margin:0;color:#26323a;background:white;font:16px/1.75 system-ui,"Malgun Gothic",sans-serif}main{max-width:980px;margin:auto;padding:32px 24px 64px}h1{line-height:1.35}h2{margin-top:36px;border-bottom:2px solid #536b74}h3{margin-top:24px}article{border-bottom:1px solid #bbb;padding-bottom:18px}a{color:#17576b}table{border-collapse:collapse;width:100%;margin:16px 0}th,td{border:1px solid #999;padding:8px;vertical-align:top;text-align:left}th{background:#eef2f3}dt{font-weight:700;margin-top:10px}dd{margin:0}code{overflow-wrap:anywhere}.lang-en{display:none}html[data-lang=en] .lang-ko{display:none}html[data-lang=en] .lang-en{display:block}nav{border-bottom:1px solid #aaa;padding-bottom:12px}thead{display:table-header-group}@page{size:A4;margin:16mm}@media print{body{font-size:10pt;line-height:1.5}main{padding:0;max-width:none}nav{display:none}h1,h2,h3,dt{break-after:avoid}tr{break-inside:avoid}p,dd,li{orphans:3;widows:3}a{color:inherit;text-decoration:none}th{background:none}}@media(max-width:600px){main{padding:18px 14px}table{font-size:14px}}
+</style>
+</head>
+<body><main>
+<nav aria-label="Language"><a href="guide.html" lang="ko">한국어</a> · <a href="guide.html?lang=en" lang="en">English</a> · <a href="index.html">실험실 / Lab</a></nav>
+<div class="lang-ko" lang="ko">
+<h1>공룡과 줄다리기</h1>
+<p>당기는 능력은 근육과 바닥 마찰 중 작은 한계로 정해집니다. 같은 팀·같은 공룡에서 조건 하나를 바꾸며 예상과 관찰을 비교합니다.</p>
+<h2>40분 운영안 두 가지</h2>
+<table><thead><tr><th>방식</th><th>시간과 활동</th></tr></thead><tbody>
+<tr><td>교사 시연 중심</td><td>5분: Q1 예상 투표 → 10분: Q2·Q3 팀 늘리기 → 10분: Q4·Q5 바닥과 마찰 A/B → 8분: Q6·Q7 비율과 설계 → 7분: 예상 수정과 평가. 합계 40분입니다.</td></tr>
+<tr><td>학생 탐험 중심</td><td>5분: 조작과 예상 약속 → 15분: 짝별 Q1~Q3 → 10분: Q4·Q5 동일 조건 기록 → 5분: Q6·Q7 설계 공유 → 5분: 예상-결과 비교. 합계 40분입니다. 진도가 느린 모둠은 나머지를 교사 시연으로 함께 봅니다.</td></tr>
+</tbody></table>
+<p>말이나 글 대신 먼저 카드 세 장을 비교하게 하십시오. 학생·자유·교사 모드는 상단의 지도·자유 축·리모컨 기호입니다. <code>?teacher=1</code>로 시연에 바로 들어갑니다. 오른쪽의 재생, 한 프레임, 사분의 일 속도, 층 쌓기, A/B, 학급 예상 도구를 사용합니다. Space는 재생, 점 키는 한 프레임, Esc는 초기화, /는 UI 표시 전환입니다. 수치 층은 기본 꺼짐입니다.</p>
+<h2>연계 성취기준</h2>
+<p>교육과정 CSV 원문을 그대로 인용합니다.</p>
+<blockquote><p><strong>4과01-01</strong> “일상생활에서 힘과 관련된 현상에 흥미를 갖고, 물체를 밀거나 당길 때 나타나는 현상을 관찰할 수 있다.”</p></blockquote>
+<blockquote><p><strong>6과01-03</strong> “화석의 생성 과정을 모형으로 설명하고, 지구의 과거 생물과 환경을 추리하는 활동을 통해 화석의 가치를 인식할 수 있다.”</p></blockquote>
+<p>모든 퀘스트는 밀기·당기기의 관찰에 직접 연결합니다. 화석 성취기준은 과거 생물을 추리하는 모형의 한계를 논의하는 보조 연결입니다. 이 활동만으로 화석 생성 과정 설명까지 평가하지 않습니다. 실제 공룡 근력은 알려져 있지 않습니다.</p>
+<h2>퀘스트별 수업 안내</h2>
+<p>예상은 틀려도 진행할 수 있습니다. A/B 고정은 현재 계산값을 흰 점선으로 남깁니다. 조건 하나를 바꾸십시오. 아래의 층 이름은 실제 실행 키입니다.</p>
+<article><h3>Q1 · 작은 공룡이면 아이 혼자도 이길까요?</h3>
+<dl><dt>예상 후보와 정답</dt><dd>A 공룡 방향 깃발 / B 중앙 / C 아이 방향. 정답 C입니다.</dd>
+<dt>교사 발문</dt><dd>공룡의 두 점선 중 어느 선에 먼저 닿나요?</dd>
+<dt>흔한 오해와 깨는 장면</dt><dd>공룡은 언제나 이긴다 → 자갈 위 아이 하나와 벨로키랍토르를 당겨 봅니다. 아이 137.34 N, 공룡 실제 한계 80.9325 N입니다. 122.951132 N은 공룡 근육 한계이며 실제 자갈 한계와 다릅니다.</dd>
+<dt>시연 순서</dt><dd>예상 → 마디 → 문턱·한계 윤곽 → 숨은 구조·돋보기.</dd>
+<dt>A/B와 관찰 증거</dt><dd>같은 작은 공룡·한 명에서 자갈 상태를 고정하고 유리로 바꿉니다. 주황·초록 실선과 안쪽 분홍 윤곽을 비교합니다. 단순한 종 이름보다 작은 한계를 근거로 설명하게 합니다.</dd></dl></article>
+<article><h3>Q2 · 트리케라톱스에게 몇 명이 필요할까요?</h3>
+<dl><dt>예상 후보와 정답</dt><dd>A 5명 / B 20명 / C 약 50명. 정답 C이며 엄격한 초과는 49명부터입니다.</dd>
+<dt>교사 발문</dt><dd>같은 조각을 한 개 더 붙일 때 어느 윤곽을 넘나요?</dd>
+<dt>흔한 오해와 깨는 장면</dt><dd>작은 팀이면 어떤 공룡도 이긴다 → 48명에서는 부족하고 49명에서 넘어서는 장면을 보여 줍니다.</dd>
+<dt>시연 순서</dt><dd>쌓아 채우기·계단 → 마디 → 문턱·한계 윤곽.</dd>
+<dt>A/B와 관찰 증거</dt><dd>트리케라톱스·자갈·48명을 고정하고 49명으로 바꿉니다. 공룡 한계 6674.814366 N에 대해 팀 한계 6592.32 N과 6729.66 N을 비교합니다.</dd></dl></article>
+<article><h3>Q3 · 티라노사우루스도 팀으로 이길까요?</h3>
+<dl><dt>예상 후보와 정답</dt><dd>A 100명도 패배 / B 약 60명에서 아이 승리 / C 10명에서 승리. 정답 B이며 정확한 최소 인원은 자갈에서 59명입니다.</dd>
+<dt>교사 발문</dt><dd>무게와 당길 수 있는 힘은 같은 비율로 늘어날까요?</dd>
+<dt>흔한 오해와 깨는 장면</dt><dd>몸무게가 크면 팀을 아무리 늘려도 이길 수 없다 → 58명과 59명의 결과가 바뀌는 모습을 비교합니다.</dd>
+<dt>시연 순서</dt><dd>쌓아 채우기·계단 → 문턱·한계 윤곽 → 비교·겹치기.</dd>
+<dt>A/B와 관찰 증거</dt><dd>같은 티라노·자갈에서 58명을 고정하고 59명으로 바꿉니다. 7965.72 N은 8085.961758 N보다 작고 8103.06 N은 큽니다.</dd></dl></article>
+<article><h3>Q4 · 같은 팀으로 바닥만 바꾸면 어떻게 될까요?</h3>
+<dl><dt>예상 후보와 정답</dt><dd>A 유리에서 아이 방향 / B 전후 같음 / C 유리에서 공룡 방향. 반전 조건의 동일 팀에서는 C입니다.</dd>
+<dt>교사 발문</dt><dd>방금 바꾼 것은 무엇이고 그대로 둔 것은 무엇인가요?</dd>
+<dt>흔한 오해와 깨는 장면</dt><dd>미끄러우면 공룡만 더 불리하다 → 티라노·59명을 고정하고 자갈에서 유리로 바꾸어 양쪽 마찰 한계를 함께 봅니다.</dd>
+<dt>시연 순서</dt><dd>비교·겹치기 → 문턱·한계 윤곽 → 바닥 교체 → 마디.</dd>
+<dt>A/B와 관찰 증거</dt><dd>자갈에서 A 고정 후 유리에서 B를 실행합니다. 서로 다른 두 번의 완료된 당김이 필요합니다. 자갈의 아이 승리가 유리의 공룡 승리로 바뀌고 분홍 한계도 달라집니다.</dd></dl></article>
+<article><h3>Q5 · 미끄러운 바닥에서 팀을 늘리면 무엇이 늘까요?</h3>
+<dl><dt>예상 후보와 정답</dt><dd>A 분홍 윤곽 고정 / B 연장 / C 축소. 정답 B입니다.</dd>
+<dt>교사 발문</dt><dd>아이 한 명을 더 세우면 바닥이 붙잡는 힘도 더해질까요?</dd>
+<dt>흔한 오해와 깨는 장면</dt><dd>같은 바닥이면 팀 전체의 마찰 한계도 같다 → 유리에서 59명과 69명의 분홍 윤곽을 비교합니다. 이 예에서는 둘 다 아이 쪽 마찰 제한입니다.</dd>
+<dt>시연 순서</dt><dd>문턱·한계 윤곽 → 쌓아 채우기·계단 → 숨은 구조·돋보기. 사건 중에는 발 단면 하나만 남깁니다.</dd>
+<dt>A/B와 관찰 증거</dt><dd>같은 종·유리·59명에서 A를 고정하고 69명으로 늘려 B를 실행합니다. 두 완료 기록의 인원 차가 10명 이상이고 분홍 한계가 늘어나는지 봅니다. 그래도 이 예의 아이 팀은 이기지 못합니다.</dd></dl></article>
+<article><h3>Q6 · 가장 무거우면 체중 대비 힘도 가장 클까요?</h3>
+<dl><dt>예상 후보와 정답</dt><dd>A 큰 종의 비율 막대가 더 김 / B 같음 / C 더 짧음. 정답 C입니다.</dd>
+<dt>교사 발문</dt><dd>같은 체중 기준으로 맞추어도 초록 표본의 순서가 같나요?</dd>
+<dt>흔한 오해와 깨는 장면</dt><dd>몸무게 대비 근육 힘도 크기와 함께 늘어난다 → 벨로키랍토르와 아르젠티노사우루스의 같은 높이 기준 막대를 봅니다.</dd>
+<dt>시연 순서</dt><dd>비교 → 두 끝 종 선택 → 동일 기준 내부 막대. 절대 힘 마디와 구별합니다.</dd>
+<dt>A/B와 관찰 증거</dt><dd>작은 종을 고정한 뒤 큰 종을 선택합니다. 비교 창을 실제로 열고 두 종을 모두 선택해야 합니다. 같은 체중 기준에서 큰 종의 내부 막대가 짧습니다. 실제 생물 근력의 검증으로 쓰지 않습니다.</dd></dl></article>
+<article><h3>Q7 · 정해진 팀으로 이길 수 있는 가장 무거운 표본은?</h3>
+<dl><dt>예상 후보와 정답</dt><dd>A 벨로키랍토르 / B 딜로포사우루스 / C 스테고사우루스. 정답 B입니다.</dd>
+<dt>교사 발문</dt><dd>고른 종보다 바로 다음으로 무거운 종도 이길 수 있나요?</dd>
+<dt>흔한 오해와 깨는 장면</dt><dd>한 번 이겼으니 더 무거운 표본도 된다 → 아이 30명·자갈을 유지하고 딜로포사우루스와 스테고사우루스를 차례로 당깁니다.</dd>
+<dt>시연 순서</dt><dd>종 견본 → 마디 → 문턱·한계 윤곽 → 비교·겹치기.</dd>
+<dt>A/B와 관찰 증거</dt><dd>딜로포사우루스를 고정하고 다음 종으로 바꿉니다. 아이 4120.2 N에 대해 1097.433852 N인 종은 이기고 4204.869562 N인 종은 이기지 못합니다.</dd></dl></article>
+<h2>과장 스케일 ⤢, 근사와 한계</h2>
+<p>계산 모형은 Fm=k m^(2/3), k=0.5×70×9.81/70^(2/3)=20.2149043956(추정), 마찰 한계 Ff=μm×9.81입니다. 아이 한 명은 35 kg, 근육 한계는 0.4×35×9.81=137.34 N으로 따로 둡니다. 바닥 μ는 유리 0.05, 모래 0.35, 자갈 0.55, 아스팔트 0.8입니다. 팀은 한 명의 작은 한계에 인원을 곱합니다. 실제 줄 장력과 양쪽 최대 능력은 같은 양이 아닙니다.</p>
+<p><strong>추정: 힘 압축.</strong> b=force/137.34일 때 b≤10이면 길이 b, 그 밖에는 10+5×ln(1+(b−10)/5)입니다. 20마디의 표시 길이는 15.4930614433입니다. 끊김과 ⤢ 이후의 화면 간격을 같은 힘 마디로 세지 마십시오. 눈금 위치도 같은 변환을 사용합니다.</p>
+<p><strong>추정: 모형·접촉 확대.</strong> 공룡 크기와 접촉 거칠기는 실제 생체 치수·미시적 표면이 아닙니다. R4의 전시 모형 확대도 정량 키 비교 자료가 아닙니다. 실제 비율의 수치 배율을 발명하지 않습니다.</p>
+<p><strong>추정: 깃발 이동·먼지.</strong> 승리 방향·마찰 제한 사건을 강조하는 연출입니다. 시간 점을 속도·가속도 측정으로 사용하지 않습니다. 한계 차를 질량으로 나누어 실제 가속도를 만들지 않습니다.</p>
+<p>근육 계수와 아이 계수는 추정이며 공룡 실제 근력의 복원이 아닙니다. 아이들은 같은 각도로 정확히 힘을 합칩니다. 발톱·자세·몸 기울기·동마찰, 줄 질량·탄성·지형 변형을 무시합니다. 줄은 수평이며 바닥 μ는 대표값입니다.</p>
+<p>아르젠티노사우루스의 체중 대비 근육 힘 0.05와 유리 μ=0.05가 우연히 같아 두 한계는 34335 N입니다. 부동소수점에서 근육이 미세하게 작아질 수 있습니다. 이것은 모델 계수의 우연이며 실제 생물의 특별한 경계가 아닙니다. ±1 N은 비김 띠이고 최소 승리 인원 함수는 엄격한 초과를 계산합니다.</p>
+<h2>평가 아이디어</h2>
+<ol><li>예상 카드에서 팀·바닥·종 중 바뀌는 변수를 지목합니다.</li><li>근육·마찰 중 안쪽 윤곽을 실제 한계로 설명합니다.</li><li>동일 팀·종을 유지한 바닥 전후 실행을 비교합니다.</li><li>팀 증가와 마찰 한계 증가를 관찰 기록으로 연결합니다.</li><li>체중 대비 힘과 절대 힘, 추정 연출과 측정을 구별합니다.</li></ol>
+<p>예상-결과 비교 질문: “처음 고른 그림과 실제 깃발은 어디가 같고 달랐나요? 어느 관찰 때문에 생각을 바꾸었나요? 다음에는 조건 하나를 어떻게 바꾸면 확인할 수 있을까요?”</p>
+<h2>자주 하는 질문</h2>
+<dl><dt>정말 공룡을 이길 수 있다는 뜻인가요?</dt><dd>아닙니다. 사람 기준의 추정 근육 법칙을 적용한 모형 안의 결과입니다.</dd><dt>유리에서 아이를 더 늘렸는데 왜 계속 지나요?</dt><dd>분홍 팀 한계는 늘어도 공룡 한계를 넘지 못할 수 있습니다. 티라노의 경우 상한 100명 안에는 해가 없고, 상한을 무시한 엄격한 계산은 229명입니다.</dd><dt>예상을 틀리면 진행하지 못하나요?</dt><dd>틀린 예상도 결과와 비교하고 완료할 수 있습니다. 교사 학급 예상은 학생 별이나 완료 기록을 만들지 않습니다.</dd><dt>빈 카드나 측정 0은 무슨 뜻인가요?</dt><dd>관찰 전 데이터는 null·빈 배열이며 0 N으로 해석하지 않습니다. 콘텐츠가 없는 패널은 숨깁니다.</dd><dt>대기 화면과 오류 복구는 어떻게 하나요?</dt><dd>교사 모드와 카드 진행 중을 제외하고 90초 무입력이면 대기합니다. 양수 <code>?idle=N</code>으로 바꿀 수 있습니다. 만지면 손 맥동 뒤 학생 첫 퀘스트로 초기화됩니다. 오류·연속 프레임 정체의 회전 화살표를 누르면 다시 시작합니다.</dd></dl>
+<h2>안전한 실물 활동 세 가지</h2>
+<ol><li>작은 나무토막을 용수철저울로 천천히 당기며 책상과 천 위에서 미끄러지기 직전 값을 비교합니다. 얼굴·발에서 떨어뜨리고 저울 정격을 넘기지 않습니다.</li><li>같은 바닥의 토막 위에 가벼운 추를 하나씩 놓아 마찰 한계 변화를 비교합니다. 추가 굴러 떨어지지 않게 고정하고 손가락을 토막 아래에 넣지 않습니다.</li><li>같은 고무줄을 나란히 걸어 당기는 조각의 합을 비교합니다. 낮은 장력만 쓰고 얼굴 방향으로 당기거나 놓아 쏘지 않습니다. 고무줄은 근육의 생물학적 복원이 아닌 합산 모형입니다.</li></ol>
+<p>학생 몸으로 세게 줄다리기하거나 유리·미끄러운 바닥에서 활동하지 않습니다. 화석 단면·발자국 자료를 별도로 조사해 무엇을 알 수 있고 근력처럼 무엇을 직접 알 수 없는지 연결하십시오.</p>
+</div>
+<div class="lang-en" lang="en">
+<h1>Dinosaur Tug of War</h1>
+<p>Pulling capacity is the smaller of muscle capacity and ground friction. Keep the team and species fixed, change one condition, and compare a prediction with an observation.</p>
+<h2>Two 40-minute lessons</h2>
+<table><thead><tr><th>Format</th><th>Sequence</th></tr></thead><tbody><tr><td>Teacher demonstration</td><td>5 min Q1 vote; 10 min Q2–Q3 team size; 10 min Q4–Q5 ground and friction A/B; 8 min Q6–Q7 ratio and design; 7 min revise and assess. Total 40 min.</td></tr><tr><td>Student exploration</td><td>5 min controls and prediction agreement; 15 min paired Q1–Q3; 10 min Q4–Q5 controlled records; 5 min Q6–Q7 design sharing; 5 min prediction–result comparison. Total 40 min. Demonstrate unfinished quests together.</td></tr></tbody></table>
+<p>Compare the three pictures before explaining them. The top icons select student, free, or teacher mode; <code>?teacher=1</code> opens teacher mode. The right strip provides playback, a frame, quarter speed, layers, A/B, class prediction and reset. Space plays, the period key advances one frame, Esc resets, and / toggles the UI. Numbers are off by default.</p>
+<h2>Curriculum connections</h2>
+<p>The Korean achievement statements below are quoted verbatim from the curriculum CSV. English descriptions are explanatory translations.</p>
+<blockquote><p><strong>4과01-01</strong> “일상생활에서 힘과 관련된 현상에 흥미를 갖고, 물체를 밀거나 당길 때 나타나는 현상을 관찰할 수 있다.”</p></blockquote>
+<p>Take an interest in everyday force phenomena and observe what happens when objects are pushed or pulled. All quests directly support this observation goal.</p>
+<blockquote><p><strong>6과01-03</strong> “화석의 생성 과정을 모형으로 설명하고, 지구의 과거 생물과 환경을 추리하는 활동을 통해 화석의 가치를 인식할 수 있다.”</p></blockquote>
+<p>Explain fossil formation with a model and recognize fossils' value through inference about past life and environments. This is a supporting connection about model limitations; fossil formation requires a separate lesson. Dinosaur muscle capacity is not known from this simulation.</p>
+<h2>Quest teaching notes</h2>
+<p>A wrong prediction still allows completion. A/B pins the current calculated setup as a white dashed reference. Change one condition. Layer keys below match the Korean runtime keys.</p>
+<article><h3>Q1 · Can one child beat the small dinosaur?</h3><dl><dt>Candidates and answer</dt><dd>A flag toward dinosaur; B centered; C toward child. Answer C.</dd><dt>Ask</dt><dd>Which dashed limit does the dinosaur reach first?</dd><dt>Misconception and scene</dt><dd>Dinosaurs always win. Pull with one child and Velociraptor on gravel: 137.34 N versus the actual capacity 80.9325 N. Its 122.951132 N muscle capacity is not its gravel capacity.</dd><dt>Layer sequence</dt><dd>Prediction → Marks (<code>마디</code>) → limits (<code>문턱·한계 윤곽</code>) → contact (<code>숨은 구조·돋보기</code>).</dd><dt>A/B and evidence</dt><dd>Pin one child and the small dinosaur on gravel, then change only to glass. Compare solid capacities with the inner pink limit, rather than using species names as evidence.</dd></dl></article>
+<article><h3>Q2 · How many children for Triceratops?</h3><dl><dt>Candidates and answer</dt><dd>A 5; B 20; C about 50. Answer C, strictly exceeding its capacity from 49 children.</dd><dt>Ask</dt><dd>Which outline does one more equal piece cross?</dd><dt>Misconception and scene</dt><dd>A small team always wins. Compare 48 and 49 on gravel.</dd><dt>Layer sequence</dt><dd>Stack (<code>쌓아 채우기·계단</code>) → marks → limits.</dd><dt>A/B and evidence</dt><dd>Pin 48 and change to 49. Team capacities 6592.32 and 6729.66 N straddle 6674.814366 N.</dd></dl></article>
+<article><h3>Q3 · Can a team beat Tyrannosaurus?</h3><dl><dt>Candidates and answer</dt><dd>A even 100 lose; B about 60 win; C 10 win. Answer B, with the exact gravel minimum 59.</dd><dt>Ask</dt><dd>Do weight and pulling capacity grow in the same proportion?</dd><dt>Misconception and scene</dt><dd>Its mass makes victory impossible. Compare 58 and 59 children.</dd><dt>Layer sequence</dt><dd>Stack → limits → overlay (<code>비교·겹치기</code>).</dd><dt>A/B and evidence</dt><dd>Pin 58 on gravel, then use 59: 7965.72 N is below 8085.961758 N; 8103.06 N is above it.</dd></dl></article>
+<article><h3>Q4 · What if only the ground changes?</h3><dl><dt>Candidates and answer</dt><dd>A glass favors children; B unchanged; C glass favors dinosaur. Answer C for the fixed reversal setup.</dd><dt>Ask</dt><dd>What changed, and what did we keep fixed?</dd><dt>Misconception and scene</dt><dd>Slippery ground only disadvantages the dinosaur. Keep 59 children and Tyrannosaurus; change gravel to glass and inspect both friction limits.</dd><dt>Layer sequence</dt><dd>Overlay → limits → ground replacement → marks.</dd><dt>A/B and evidence</dt><dd>Pin gravel, then run glass. Two distinct completed pulls establish the reversal from children winning to dinosaur winning.</dd></dl></article>
+<article><h3>Q5 · What grows when the team grows on glass?</h3><dl><dt>Candidates and answer</dt><dd>A fixed pink outline; B longer; C shorter. Answer B.</dd><dt>Ask</dt><dd>Does another child also add ground support?</dd><dt>Misconception and scene</dt><dd>Same ground means the same total friction. Compare 59 and 69 on glass; both examples are limited by children's friction.</dd><dt>Layer sequence</dt><dd>Limits → stack → contact. Only one contact explanation remains during the event.</dd><dt>A/B and evidence</dt><dd>Pin 59 with the same species on glass, increase to 69 and run again. The two completed records differ by at least 10 children and the pink limit grows. This example still loses.</dd></dl></article>
+<article><h3>Q6 · Is the heaviest also strongest relative to weight?</h3><dl><dt>Candidates and answer</dt><dd>A larger relative bar; B equal; C shorter. Answer C.</dd><dt>Ask</dt><dd>Does the order remain when we use the same weight reference?</dd><dt>Misconception and scene</dt><dd>Relative strength increases with size. Compare Velociraptor and Argentinosaurus inside equal outlines.</dd><dt>Layer sequence</dt><dd>Ratio (<code>비교</code>) → select both endpoint species → inspect the inner bars separately from absolute force marks.</dd><dt>A/B and evidence</dt><dd>Pin the small species, select the large one and actually open comparison. Both species must be visited. The large species has a shorter relative bar; this is not biological validation.</dd></dl></article>
+<article><h3>Q7 · Which is the heaviest species this team can beat?</h3><dl><dt>Candidates and answer</dt><dd>A Velociraptor; B Dilophosaurus; C Stegosaurus. Answer B.</dd><dt>Ask</dt><dd>Can the team also beat the next heavier species?</dd><dt>Misconception and scene</dt><dd>One victory proves the next larger species can be beaten. Keep 30 children on gravel.</dd><dt>Layer sequence</dt><dd>Species sample → marks → limits → overlay.</dd><dt>A/B and evidence</dt><dd>Pin Dilophosaurus, then choose Stegosaurus. The team's 4120.2 N exceeds 1097.433852 N but is below 4204.869562 N.</dd></dl></article>
+<h2>Exaggeration ⤢, approximations and limits</h2>
+<p>The model uses Fm=k m^(2/3), k=0.5×70×9.81/70^(2/3)=20.2149043956 (estimated), and Ff=μm×9.81. A child is 35 kg with a separately estimated muscle limit 0.4×35×9.81=137.34 N. Ground μ values are glass 0.05, sand 0.35, gravel 0.55 and asphalt 0.8. Multiply the smaller single-child limit by team size. Actual rope tension is distinct from either side's maximum capacity.</p>
+<p><strong>Estimated force display:</strong> b=force/137.34; length=b for b≤10, otherwise 10+5×ln(1+(b−10)/5). Twenty units display as 15.4930614433. Beyond the break and ⤢, equal screen intervals do not mean equal force. Tick positions use the same mapping.</p>
+<p><strong>Estimated models and contact enlargement:</strong> dinosaur size, including the R4 exhibition enlargement, and surface roughness are schematic, not recovered anatomy or microscopic measurements. No physical enlargement factor is invented.</p>
+<p><strong>Estimated flag and dust:</strong> these show winning direction and friction limitation. Time dots are not velocity or acceleration measurements. Do not divide capacity difference by mass to infer actual acceleration.</p>
+<p>Muscle and child coefficients are estimates, not reconstructed dinosaur strength. Children add forces exactly at the same angle. The rope is horizontal and massless. Claws, posture, body tilt, kinetic friction, elasticity and terrain deformation are omitted; ground coefficients are representative.</p>
+<p>Argentinosaurus has relative muscle capacity 0.05, coincidentally equal to glass μ=0.05, giving equal limits of 34335 N with possible floating-point differences. This is a model coincidence, not a special biological boundary. A ±1 N tie band differs from the strict inequality used for minimum team size.</p>
+<h2>Assessment</h2>
+<ol><li>Identify the changed variable in a prediction.</li><li>Explain why the inner muscle or friction outline sets capacity.</li><li>Compare two completed ground runs with fixed team and species.</li><li>Use records to connect added children with increased friction capacity.</li><li>Separate relative from absolute force, and schematic animation from measurement.</li></ol>
+<p>Prediction–result prompt: “Where did your picture agree or disagree with the flag? Which observation changed your thinking? Which single condition would you change next to check your explanation?”</p>
+<h2>Frequently asked questions</h2>
+<dl><dt>Could real children beat a real dinosaur?</dt><dd>This simulation cannot establish that. It uses an estimated human-based scaling law.</dd><dt>Why does adding children on glass still lose?</dt><dd>The team limit grows but may remain smaller. Tyrannosaurus cannot be beaten within the 100-child limit; the unbounded strict calculation needs 229.</dd><dt>Does a wrong prediction stop progress?</dt><dd>No. Students compare and complete. Class prediction does not award student stars or completion records.</dd><dt>Does an empty record mean zero force?</dt><dd>No. Unobserved data are null or empty arrays. Empty content panels are hidden.</dd><dt>How do idle and recovery work?</dt><dd>Outside teacher mode and active cards, 90 seconds without input starts the loop; positive <code>?idle=N</code> overrides it. Touch produces a hand pulse and resets to the first student quest. The reset arrow recovers after errors or repeated stalled frames.</dd></dl>
+<h2>Three safe physical connections</h2>
+<ol><li>Slowly pull a small wooden block with a spring balance on a desk and cloth. Compare the value just before slipping. Keep it away from faces and feet and within the balance rating.</li><li>Add light secured weights to the same block on the same surface. Compare limiting friction; prevent rolling weights and keep fingers out from underneath.</li><li>Use parallel elastic bands at low tension to compare the sum of equal pulling pieces. Never aim or release them toward faces. They model addition, not biological muscle.</li></ol>
+<p>Do not conduct forceful body tugging or activities on glass or slippery floors. Separately inspect fossil sections and footprints to discuss what evidence can reveal and what it cannot directly establish, such as muscle strength.</p>
+</div>
+<footer><p><a href="docs/theory-card.md">이론 카드 / Theory</a> · <a href="docs/quest-map.md">퀘스트 지도 / Quest map</a> · <a href="docs/reviewer-brief.md">검수 요약 / Review brief</a>. 교육과정 원문: science-2022.csv. 검수 상태: draft, reviewed=false. 브라우저 화면·인쇄 결과는 팀장 검수 대상입니다.</p></footer>
+</main></body></html>

@@ -1,0 +1,1991 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#30251f">
+<title></title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#30251f}
+#gl{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none;outline:none}
+.hud{position:fixed;z-index:10;left:50%;transform:translateX(-50%);display:flex;align-items:center;justify-content:center;gap:4px;padding:8px;border:1px solid #ffffff29;border-radius:18px;background:#211e23b8;backdrop-filter:blur(14px);box-shadow:0 8px 32px #0004}
+#quests{top:max(16px,env(safe-area-inset-top));pointer-events:none;gap:12px;padding:10px 18px;color:#d5d8df6b}
+.quest{display:grid;justify-items:center;gap:5px}.quest i{width:4px;height:4px;border-radius:50%;background:#bcbecb55}
+#tools{bottom:max(18px,env(safe-area-inset-bottom))}
+button{border:0;border-radius:13px;min-width:56px;height:56px;display:grid;place-items:center;background:#ffffff08;color:#e4dfd5;cursor:pointer;padding:8px;touch-action:manipulation}
+button[aria-pressed=true]{background:#bc96513d;color:#ffce8b}button:focus-visible{outline:2px solid #ffcf9a;outline-offset:2px}
+svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+#speed{display:flex;gap:4px;min-width:28px;justify-content:center}#speed i{width:4px;height:4px;background:#ffce8b;border-radius:50%}
+.hide-ui .hud{visibility:hidden;pointer-events:none}
+@media(max-width:980px){#quests{top:max(78px,env(safe-area-inset-top));gap:9px;padding:9px 12px}#quests svg{width:20px;height:20px}#tools{width:260px;flex-wrap:wrap;gap:2px;padding:6px}#speed{width:30px}#tools button{min-width:56px}#tools button:nth-last-child(3){margin-left:20px}#tools button:last-child{margin-right:20px}}
+#person-card{position:fixed;z-index:9;right:18px;top:96px;width:min(310px,calc(100vw - 36px));padding:14px;border:1px solid #ffffff38;border-radius:14px;background:#192a36c9;backdrop-filter:blur(14px);box-shadow:0 8px 32px #0004;pointer-events:none}
+#person-card svg{display:block;width:100%;height:auto;stroke-width:2}
+@media(max-width:980px){#person-card{top:150px;right:12px;width:230px;padding:10px}}
+.hide-ui #person-card{visibility:hidden}
+</style>
+<style>
+#quests{pointer-events:auto;gap:3px;padding:5px;color:#d5d8df;max-width:calc(100vw - 16px)}
+#quests button{position:relative;min-width:56px;width:56px;height:56px;padding:7px;flex-shrink:0}
+#quests .quest{opacity:.3;background:transparent}#quests .current{opacity:1;color:#ffce8b;box-shadow:inset 0 0 15px #ffc47a35}#quests .complete{opacity:1;color:#64ead0}#quests .complete svg{fill:#64ead030}
+.q-dots{display:flex;gap:2px;height:4px}.q-dots i{background:currentColor;width:3px;height:3px;border-radius:50%}
+#q-pictures{position:fixed;z-index:13;left:50%;bottom:170px;transform:translateX(-50%);display:flex;justify-content:center;align-items:center;gap:12px;width:min(700px,94vw);color:#e5e7ec}
+#q-pictures[hidden]{display:none}#q-pictures svg{width:100%;height:auto;stroke-width:2}
+#q-pictures button[data-candidate]{width:210px;height:140px;padding:6px;border:1px solid #ffffff45;background:#142c38ed;box-shadow:0 8px 32px #0005}
+#q-pictures .q-picked{width:125px;border-radius:10px;background:#182c37d9;padding:3px;animation:q-pick .45s both}
+#q-pictures.act,#q-pictures.observe{top:86px;bottom:auto;pointer-events:none}
+.q-compare,.q-principle{display:flex;align-items:center;background:#142c38ed;border:1px solid #ffffff45;border-radius:18px;padding:15px;width:500px;max-width:calc(100% - 65px);animation:q-arrive .6s both}
+.q-compare>svg{width:50%!important}.q-compare.matched>svg{margin-right:-15%;opacity:.8}.q-compare.matched>svg:last-child{width:56px!important;color:#64ead0;opacity:1;margin:0}
+.q-principle{flex-direction:column}.q-stars{display:flex;color:#ffce8b;gap:9px}.q-stars svg{width:24px!important;fill:#ffce8b44}
+#q-extra{bottom:86px;z-index:11;gap:2px;padding:4px;max-width:calc(100vw - 16px)}#q-extra .sub{opacity:.35}#q-extra svg{max-height:52px}#q-extra .q-restore{display:none}#q-extra[data-ring] .q-restore{display:grid}
+#q-overlay{position:fixed;inset:0;pointer-events:none;z-index:19;color:#fff}#q-overlay>svg{width:100%;height:100%;stroke-width:2}
+.q-event .hud,.q-event #q-pictures,.q-event #person-card{opacity:.12;pointer-events:none}
+.q-bars:before,.q-bars:after{content:'';position:fixed;left:0;right:0;height:10vh;background:#13191d;z-index:18;pointer-events:none}.q-bars:before{top:0}.q-bars:after{bottom:0}
+.hide-ui #q-pictures,.hide-ui #q-overlay{visibility:hidden}
+@keyframes q-pick{from{transform:translateY(200px) scale(1.7)}to{transform:translateY(0) scale(1)}}
+@keyframes q-arrive{from{transform:translateY(-70px);opacity:.2}to{transform:translateY(0);opacity:1}}
+@media(max-width:980px){
+ #quests{top:12px;width:348px;display:grid;grid-template-columns:repeat(6,56px);gap:0;padding:5px}#quests button:nth-child(n+7){transform:translateX(56px)}
+ #tools{bottom:12px;width:348px;flex-wrap:nowrap;gap:0;padding:4px}#speed{display:none}#tools button:nth-last-child(3),#tools button:last-child{margin:0}#tools button{width:56px}
+ #q-extra{bottom:80px;width:348px;display:flex;flex-wrap:wrap;gap:0;padding:4px}#q-extra button{width:56px;min-width:56px;height:56px}#q-extra .sub{display:none}
+ #q-pictures{bottom:210px;gap:6px;width:359px}#q-pictures button[data-candidate]{width:115px;min-width:56px;height:88px;padding:3px}
+ #q-pictures.act,#q-pictures.observe{top:140px}#q-pictures .q-picked{width:95px}.q-compare,.q-principle{padding:8px;max-width:calc(100% - 62px)}
+ #person-card{top:200px;right:12px;width:220px}
+}
+@media(prefers-reduced-motion:reduce){#q-pictures *{animation-duration:.01ms!important}}
+</style>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.176.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.176.0/examples/jsm/"}}</script>
+<style>
+:root{--ui-scale:1}
+[hidden]{display:none!important}
+body[data-mode=teacher] button{min-width:72px;min-height:72px;height:72px;background:#11212bf2;color:#fff;border:1px solid #ffffff80}
+body[data-mode=teacher] svg{width:calc(24px * var(--ui-scale));height:calc(24px * var(--ui-scale));stroke-width:calc(2 * var(--ui-scale))}
+body[data-mode=teacher] svg path,body[data-mode=teacher] svg circle,body[data-mode=teacher] svg rect{vector-effect:non-scaling-stroke}
+body[data-mode=teacher] button[aria-pressed=true]{background:#70501d;color:#ffe2a0;border-color:#ffe2a0}
+body[data-mode=teacher] #quests{width:auto;display:flex;top:12px;padding:4px}
+body[data-mode=teacher] #quests button{width:72px;transform:none}
+body[data-mode=teacher] #tools,body[data-mode=teacher] #q-extra{display:none}
+#teacher-strip{position:fixed;z-index:22;right:12px;top:12px;bottom:12px;width:244px;overflow:auto;overscroll-behavior:contain;touch-action:pan-y;padding:8px;background:#101b23f2;border:2px solid #ffffff80;border-radius:18px;scrollbar-width:thin}
+.teacher-grid{display:grid;grid-template-columns:repeat(3,72px);gap:4px;padding-bottom:8px;margin-bottom:8px;border-bottom:1px solid #ffffff60}
+#teacher-strip button{width:72px;padding:10px}
+#teacher-numbers{position:fixed;z-index:20;left:14px;top:110px;padding:14px;background:#101b23ed;color:#fff;border:1px solid #ffffff80;border-radius:14px;pointer-events:none;font:24px 'DM Mono',monospace;font-variant-numeric:tabular-nums}
+#teacher-numbers>div{display:flex;align-items:center;gap:12px;min-height:48px}
+#teacher-spot{position:fixed;inset:0;z-index:25;pointer-events:none;background:#000c;mask-image:radial-gradient(circle 140px at var(--pointer-x,50%) var(--pointer-y,50%),transparent 65%,black 100%)}
+#teacher-laser{position:fixed;inset:0;width:100%;height:100%;z-index:26;pointer-events:none}
+#teacher-class{position:fixed;inset:0;z-index:24;display:flex;align-items:center;justify-content:center;gap:20px;padding:100px 28px;background:#101b23ed;color:#fff}
+#teacher-class>button:first-child{position:absolute;right:16px;top:16px}
+#teacher-class>button[data-choice]{width:30%;height:auto;aspect-ratio:300/160;min-height:160px;padding:12px}
+#teacher-class>button[data-choice] svg{width:100%;height:auto}
+.class-result{width:90%;max-width:1100px}.class-result .q-compare{position:relative;width:100%;max-width:100%;display:grid;min-height:240px;animation:q-arrive .6s both}
+.class-result .q-compare>svg{grid-area:1/1;width:100%!important;height:auto!important;opacity:.65}.class-result .q-compare>svg:first-child{stroke-dasharray:5 5;color:#fff}
+.hide-ui #teacher-strip,.hide-ui #teacher-numbers,.hide-ui #teacher-class{visibility:hidden;pointer-events:none}
+#kiosk-recover{position:fixed;inset:0;width:100%;height:100%;z-index:40;background:#101b23e8;color:#fff}
+#kiosk-recover svg{width:72px;height:72px}
+#attract-start{position:fixed;bottom:24px;left:calc(50% - 36px);width:72px;height:72px;z-index:30;color:#fff;background:#10232abb}
+#touch-pulse{position:fixed;z-index:35;left:calc(50% - 48px);top:calc(50% - 48px);width:96px;height:96px;border:3px solid #fff;border-radius:50%;display:grid;place-items:center;color:#fff;pointer-events:none;animation:touch-pulse .8s both}
+#touch-pulse svg{width:48px;height:48px}
+@keyframes touch-pulse{0%{transform:scale(.65);opacity:0}30%{opacity:1}100%{transform:scale(1.4);opacity:0}}
+@media(max-width:980px){
+ #quests{grid-template-columns:repeat(6,56px);width:348px}
+ #quests button:nth-child(n+7){transform:none}
+ #teacher-strip{width:88px;right:4px;padding:6px;top:100px;bottom:8px}
+ .teacher-grid{grid-template-columns:72px;gap:4px}
+ body[data-mode=teacher] #quests{left:8px;transform:none}
+ #teacher-numbers{left:8px;top:100px;font-size:18px;padding:8px}
+ #teacher-class{flex-direction:column;gap:10px;padding:90px 16px 16px}
+ #teacher-class>button[data-choice]{width:100%;max-width:540px;min-height:72px;flex:1;max-height:28vh}
+ #teacher-class>button[data-choice] svg{height:100%;width:auto;max-width:100%}
+}
+@media(prefers-reduced-motion:reduce){#touch-pulse,.class-result *{animation:none!important}}
+</style>
+
+<style>
+/* 29 controls, eight rows. At 720px: 8*72 + 7*4 + 20 = 624px. */
+@media(min-width:981px){
+ #teacher-strip{--teacher-cell:clamp(56px,calc((100dvh - 72px)/8),72px);width:calc(4 * var(--teacher-cell) + 32px);display:grid;grid-template-columns:repeat(4,var(--teacher-cell));align-content:start;gap:4px}
+ #teacher-strip .teacher-grid{display:contents}
+ body[data-mode=teacher] #teacher-strip button{width:var(--teacher-cell);height:var(--teacher-cell);min-width:0;min-height:0;padding:8px}
+ body[data-mode=teacher] #teacher-strip svg{width:calc(var(--teacher-cell) * .47);height:calc(var(--teacher-cell) * .47)}
+ body[data-mode=teacher] #quests{left:12px;transform:none;max-width:calc(100vw - 360px);flex-wrap:wrap}
+}
+#q-pictures>button[data-candidate]{width:250px;height:120px;padding:3px}
+#q-pictures>button[data-candidate]>svg{width:100%;height:100%;stroke-width:3;fill:none}
+body[data-mode=teacher] #teacher-class>button[data-choice]>svg{stroke-width:3;fill:none}
+@media(max-width:980px){
+ #q-pictures>button[data-candidate]{min-width:0;width:calc((100vw - 32px)/3);height:calc((100vw - 32px)*.1556);padding:2px}
+}
+</style>
+</head>
+<body>
+<canvas id="gl"></canvas>
+<div id="quests" class="hud" aria-hidden="true"></div>
+<div id="tools" class="hud"></div>
+<script type="module">
+// 이 파일은 src/의 조각을 tools/assemble.mjs로 이어 붙여 만든다. 수정은 src/에서.
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { GTAOPass } from 'three/addons/postprocessing/GTAOPass.js';
+import { BokehPass } from 'three/addons/postprocessing/BokehPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+import { RectAreaLightUniformsLib } from 'three/addons/lights/RectAreaLightUniformsLib.js';
+
+// ==== 1 PHYSICS ====
+// 평형조석·원궤도 근사. 단위는 m, s, kg, rad이며 로슈 구간은 추정이다.
+const PHYS = (() => {
+  const C = Object.freeze({
+    GM: 4.9028e12, massRatio: 0.012294,
+    R: 6.371e6, d0: 3.844e8, moonRadius: 1.737e6,
+    T0: 27.3217 * 86400, siderealDay: 86164.1,
+    rhoEarth: 5514, rhoMoon: 3344, g: 9.81, earthDiameter: 1.2742e7,
+    rocheFluid: 2.456, rocheRigid: 1.26,
+    get dMin() { return 8e6; },
+    get closerMax() { return this.d0 - this.dMin; },
+  });
+  const RANGE = Object.freeze({ closer: Object.freeze([0.1, C.closerMax]) });
+  const RAIL_SPLIT = 0.5, RAIL_BOUNDARY = 1e8;
+  const railDB = C.d0 - RAIL_BOUNDARY;
+
+  // 슬라이더 밖 로슈 사건도 계산하므로 closer를 UI 범위로 자르지 않는다.
+  const dist = closer => C.d0 - closer;
+  const frac = closer => dist(closer) / C.d0;
+  const tideExcess = closer => Math.expm1(-3 * Math.log1p(-closer / C.d0));
+  const ratio = closer => (C.d0 / dist(closer)) ** 3;
+  const tideH0 = () => C.massRatio * C.R ** 4 / C.d0 ** 3;
+  const tideHeight = closer => tideH0() * ratio(closer);
+  const tideLevel = (theta, closer) => tideHeight(closer) * (3 * Math.cos(theta) ** 2 - 1) / 2;
+  const tidalAccel = closer => 2 * C.GM * C.R / dist(closer) ** 3;
+  const personTidalForce = (massKg, closer) => massKg * tidalAccel(closer);
+  const orbitPeriod = closer => C.T0 * frac(closer) ** 1.5;
+  const angularSizeDeg = closer => 2 * C.moonRadius / dist(closer) * 180 / Math.PI;
+  const roche = () => ({
+    fluid: C.rocheFluid * C.R * Math.cbrt(C.rhoEarth / C.rhoMoon),
+    rigid: C.rocheRigid * C.R * Math.cbrt(C.rhoEarth / C.rhoMoon),
+  });
+  function fractureState(closer) {
+    const d = dist(closer), { fluid, rigid } = roche();
+    if (d > fluid) return { state: 'whole', progress: 0 };
+    if (d > rigid) return { state: 'cracking', progress: (fluid - d) / (fluid - rigid) };
+    return { state: 'ring', progress: 1 };
+  }
+  const beads = closer => dist(closer) / C.earthDiameter;
+  // 앞 구간은 가까워진 양, 뒤 구간은 남은 중심 거리를 로그로 배분한다.
+  const railX = closer => closer <= RANGE.closer[0] ? 0 : closer >= C.closerMax ? 1
+    : closer <= RAIL_BOUNDARY
+      ? RAIL_SPLIT * Math.log10(closer / RANGE.closer[0]) / Math.log10(RAIL_BOUNDARY / RANGE.closer[0])
+      : RAIL_SPLIT + (1 - RAIL_SPLIT) * Math.log(railDB / dist(closer)) / Math.log(railDB / C.dMin);
+  const closerFromRailX = x => x <= RAIL_SPLIT
+    ? RANGE.closer[0] * (RAIL_BOUNDARY / RANGE.closer[0]) ** (x / RAIL_SPLIT)
+    : C.d0 - railDB * Math.exp(-Math.log(railDB / C.dMin) * (x - RAIL_SPLIT) / (1 - RAIL_SPLIT));
+  const rocheX = () => {
+    const { fluid, rigid } = roche();
+    return { fluid: railX(C.d0 - fluid), rigid: railX(C.d0 - rigid) };
+  };
+  const RAIL_NOTCHES = Object.freeze([RANGE.closer[0], 1e3, 1e4, 1e5, 1e6, 1e7, RAIL_BOUNDARY]
+    .map(closer => Object.freeze({ closer, x: railX(closer) })));
+  const DETENTS = Object.freeze([1 / 2, 1 / 3, 1 / 10, 1 / 20]
+    .map(frac => {
+      const closer = C.d0 * (1 - frac);
+      return Object.freeze({ frac, closer, x: railX(closer) });
+    }));
+
+  const relRate = closer => 2 * Math.PI / C.siderealDay - 2 * Math.PI / orbitPeriod(closer);
+  const tidePeriod = closer => Math.PI / Math.abs(relRate(closer));
+  const harborLevel = (t, lon0, closer) => tideLevel(lon0 + relRate(closer) * t, closer);
+  const peaksCrossed = (thetaPrev, thetaNow) => Math.floor(thetaNow / Math.PI) - Math.floor(thetaPrev / Math.PI);
+
+  const judgeQ1 = ({ closer, lensOpen }) => closer >= 0.1 && lensOpen === true;
+  const judgeQ2 = ({ visited, closer }) => new Set([...visited]
+    .filter(i => Number.isInteger(i) && i >= 0 && i < RAIL_NOTCHES.length)).size >= 6 && ratio(closer) >= 1.25;
+  // 포함 경계의 산술 반올림만 허용한다.
+  const judgeQ3 = ({ closer }) => Math.abs(frac(closer) - 0.5) <= 0.02 + Number.EPSILON;
+  const judgeQ4 = ({ peaks }) => peaks >= 2;
+  const judgeQ5 = ({ closer, personSeen, oceanSeen }) => frac(closer) <= 0.1 && personSeen === true && oceanSeen === true;
+  const judgeQ6 = ({ closer, skyOpen }) => frac(closer) <= 0.1 && skyOpen === true;
+  const judgeQ7 = ({ closer }) => fractureState(closer).state === 'ring';
+  function judgeQ8({ wall, closer }) {
+    const r = ratio(closer), rounding = 8 * Number.EPSILON * wall;
+    return [2, 8, 27].includes(wall) && r >= 0.94 * wall - rounding && r <= wall + rounding;
+  }
+
+  const moonVisDist = closer => 4.5 - 3.2 * railX(closer);
+  const oceanBulge = closer => {
+    const r = ratio(closer);
+    return r <= 3 ? { bulge: 0.04 * r, saturated: false }
+      : { bulge: 0.12 + 0.30 * (1 - Math.exp(-(r - 3) / 60)), saturated: true };
+  };
+
+  // Absolute force units share the present center force; differences are exaggerated fivefold.
+  function tidalArrows(closer) {
+    const d = dist(closer), unit = C.GM / C.d0 ** 2;
+    const near = 6 * C.GM / (d - C.R) ** 2 / unit;
+    const center = 6 * C.GM / d ** 2 / unit;
+    const far = 6 * C.GM / (d + C.R) ** 2 / unit;
+    return { near, center, far, diffNear: 5 * (near - center), diffFar: 5 * (center - far) };
+  }
+  const apparentRateDegPerHour = closer => Math.abs(relRate(closer)) * 3600 * 180 / Math.PI;
+  const personWeightRatio = closer => (1 - tidalAccel(closer) / C.g) / (1 - tidalAccel(0) / C.g);
+
+  // Presentation only: a cube-root axis keeps 8/27/64 visible on one card.
+  const cardExcessHeight = closer => 12 + 32 * Math.log2(ratio(closer));
+  const cardTideHeight = closer => 104 * Math.cbrt(ratio(closer)) / 4;
+  const cardWeightLift = weightRatio => 90 * Math.max(0, Math.min(1, 1 - weightRatio));
+
+  return { cardExcessHeight, cardTideHeight, cardWeightLift, tidalArrows, apparentRateDegPerHour, personWeightRatio, moonVisDist, oceanBulge, C, RANGE, dist, frac, tideExcess, ratio, tideH0, tideHeight, tideLevel,
+    tidalAccel, personTidalForce, orbitPeriod, angularSizeDeg, roche, fractureState,
+    beads, railX, closerFromRailX, rocheX, RAIL_NOTCHES, DETENTS, relRate, tidePeriod,
+    harborLevel, peaksCrossed, judgeQ1, judgeQ2, judgeQ3, judgeQ4, judgeQ5, judgeQ6, judgeQ7, judgeQ8 };
+})();
+// ==== END PHYSICS ====
+
+const QS = new URLSearchParams(location.search);
+const LANG = QS.get('lang') === 'en' ? 'en' : 'ko';
+document.documentElement.lang = LANG;
+const THEME = Object.freeze({ moon: 0xe5e7ec, tide: 0x64ead0, sea: 0x246aa8, reference: 0xffffff,
+  brass: 0xb79859, graphite: 0x303943, chrome: 0xbcc7cc, warm: 0xffb36b, cool: 0x7dd3fc,
+  red: 0xe66b62, wood: 0x644936, wall: 0x62544b, navy: 0x303e50 });
+const MODEL = Object.freeze({ Rv: 0.30, moonRatio: 0.2727, E: Object.freeze([-0.55, 1.30, 0]), top: 0.84 });
+const V3 = (x, y, z) => new THREE.Vector3(x, y, z);
+const E = V3(...MODEL.E), RV = MODEL.Rv;
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const closerAt = u => u < 0 ? 0 : PHYS.closerFromRailX(u);
+const railAt = u => E.x + PHYS.moonVisDist(closerAt(u)) * RV;
+const pair = value => ({ value, target: value });
+// Only independent simulation and interaction state lives here. Derived values use PHYS.
+const S = { u: pair(-0.05), lon0: pair(0.45), t: pair(0), playing: pair(1), speed: pair(1),
+  sound: pair(0), lens: pair(0), ui: pair(1), drag: null, snap: null, fly: null,
+  shotIndex: 1, vertical: innerWidth / innerHeight < 0.9, quality: '', layers: {},
+  graphKeys: [], frames: 0, ms: 16, sampleMs: 0, sampleFrames: 0, lastTime: 0, autoLevel: 0 };
+function mulberry32(a) { return () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+const rand = mulberry32(730219);
+const canvas = document.getElementById('gl');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, preserveDrawingBuffer: true, powerPreference: 'high-performance' });
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 0.86;
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x30251f);
+scene.fog = new THREE.Fog(0x514137, 10, 24);
+const camera = new THREE.PerspectiveCamera(34, innerWidth / innerHeight, 0.03, 40);
+const ROOM = new THREE.Group(), CONSOLE = new THREE.Group(), HERO = new THREE.Group();
+scene.add(ROOM, CONSOLE, HERO);
+const pmrem = new THREE.PMREMGenerator(renderer);
+const environmentRoom = new RoomEnvironment();
+scene.environment = pmrem.fromScene(environmentRoom, 0.04).texture;
+scene.environmentIntensity = 0.40;
+environmentRoom.dispose(); pmrem.dispose();
+RectAreaLightUniformsLib.init();
+const MAT = {};
+for (const name of ['brass', 'graphite', 'chrome', 'wood', 'wall', 'navy', 'moon']) {
+  MAT[name] = new THREE.MeshStandardMaterial({ color: THEME[name], roughness: name === 'brass' ? 0.34 : 0.65,
+    metalness: ['brass', 'chrome'].includes(name) ? 1 : 0.12, flatShading: name === 'moon' });
+}
+MAT.glow = new THREE.MeshStandardMaterial({ color: THEME.tide, emissive: THEME.tide, emissiveIntensity: 2.2 });
+MAT.rubber = new THREE.MeshStandardMaterial({ color: 0x262a2c, roughness: 0.95 });
+const KIT = {
+  mesh(g, material, parent, x = 0, y = 0, z = 0) {
+    const m = new THREE.Mesh(g, material); m.position.set(x, y, z); m.castShadow = true; m.receiveShadow = true; parent.add(m); return m;
+  },
+  roundedPanel(w, h, d, material, parent, x = 0, y = 0, z = 0, r = 0.018) {
+    return this.mesh(new RoundedBoxGeometry(w, h, d, 3, Math.min(r, w / 3, h / 3, d / 3)), material, parent, x, y, z);
+  },
+  ball(r, material, parent, x = 0, y = 0, z = 0, detail = 2) {
+    return this.mesh(new THREE.IcosahedronGeometry(r, detail), material, parent, x, y, z);
+  },
+  rod(a, b, r, material, parent) {
+    const d = b.clone().sub(a), m = this.mesh(new THREE.CylinderGeometry(r, r, d.length(), 12), material, parent);
+    m.position.copy(a).add(b).multiplyScalar(0.5); m.quaternion.setFromUnitVectors(V3(0, 1, 0), d.normalize()); return m;
+  },
+  line(points, color, parent, dashed = false, opacity = 1) {
+    const material = dashed ? new THREE.LineDashedMaterial({ color, dashSize: 0.018, gapSize: 0.012, transparent: true, opacity })
+      : new THREE.LineBasicMaterial({ color, transparent: true, opacity });
+    const l = new THREE.Line(new THREE.BufferGeometry().setFromPoints(points), material);
+    if (dashed) l.computeLineDistances(); parent.add(l); return l;
+  },
+  canvasTex(w, h, draw) {
+    const c = document.createElement('canvas'); c.width = w; c.height = h;
+    draw(c.getContext('2d'), w, h); const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t;
+  },
+  screw(parent, x, y, z) {
+    const m = this.mesh(new THREE.CylinderGeometry(0.012, 0.012, 0.006, 12), MAT.chrome, parent, x, y, z);
+    m.rotation.x = Math.PI / 2;
+    this.line([V3(x - 0.006, y, z + 0.004), V3(x + 0.006, y, z + 0.004)], 0x34373b, parent);
+  },
+  lampWithBulb(parent, x, y, z) {
+    this.mesh(new THREE.CylinderGeometry(0.16, 0.18, 0.035, 24), MAT.graphite, parent, x, y, z);
+    this.rod(V3(x, y, z), V3(x, y + 0.66, z), 0.016, MAT.brass, parent);
+    this.rod(V3(x, y + 0.66, z), V3(x + 0.23, y + 0.86, z), 0.02, MAT.brass, parent);
+    this.mesh(new THREE.ConeGeometry(0.19, 0.20, 24, 1, true), MAT.graphite, parent, x + 0.23, y + 0.79, z);
+    const glow = new THREE.MeshStandardMaterial({ color: THEME.warm, emissive: THEME.warm, emissiveIntensity: 3 });
+    this.ball(0.055, glow, parent, x + 0.23, y + 0.73, z);
+    const light = new THREE.PointLight(THEME.warm, 2.5, 4, 2); light.position.set(x + 0.23, y + 0.69, z); parent.add(light);
+  },
+  graphScreen(parent, x, y, z, w, h) {
+    this.roundedPanel(w + 0.055, h + 0.05, 0.04, MAT.brass, parent, x, y, z - 0.015);
+    const tex = this.canvasTex(768, 256, () => {});
+    const material = new THREE.MeshStandardMaterial({ map: tex, emissiveMap: tex, emissive: 0xffffff, emissiveIntensity: 1.3, roughness: 0.55 });
+    const mesh = this.mesh(new THREE.PlaneGeometry(w, h), material, parent, x, y, z + 0.009); mesh.castShadow = false;
+    const light = new THREE.RectAreaLight(THEME.cool, 0.6, w, h); light.position.set(x, y, z + 0.035); light.rotation.y = Math.PI; parent.add(light);
+    return { mesh, tex, ctx: tex.image.getContext('2d') };
+  },
+  knobWithArc(parent, x, y, z) {
+    this.mesh(new THREE.CylinderGeometry(0.135, 0.135, 0.045, 48).rotateX(Math.PI / 2), MAT.brass, parent, x, y, z);
+    const knob = this.mesh(new THREE.CylinderGeometry(0.103, 0.11, 0.08, 32).rotateX(Math.PI / 2), MAT.graphite, parent, x, y, z + 0.04);
+    const mark = this.roundedPanel(0.01, 0.065, 0.005, MAT.glow, knob, 0, 0.045, 0.044, 0.002);
+    for (let i = 0; i < 24; i++) { const a = i / 24 * Math.PI * 2; this.line([V3(x + Math.sin(a) * 0.15, y + Math.cos(a) * 0.15, z), V3(x + Math.sin(a) * 0.164, y + Math.cos(a) * 0.164, z)], THEME.chrome, parent); }
+    const arc = this.mesh(new THREE.TorusGeometry(0.18, 0.008, 6, 96), MAT.glow.clone(), parent, x, y, z);
+    arc.rotation.z = Math.PI / 2;
+    const light = new THREE.PointLight(THEME.tide, 0.16, 1); light.position.set(x, y, z + 0.1); parent.add(light);
+    return { knob, mark, arc };
+  },
+  ledSlider(parent, x, y, z, width) {
+    this.roundedPanel(width + 0.1, 0.095, 0.028, MAT.rubber, parent, x, y, z);
+    this.roundedPanel(width, 0.008, 0.008, MAT.glow, parent, x, y, z + 0.019, 0.002);
+    const handle = this.roundedPanel(0.06, 0.10, 0.06, MAT.chrome, parent, x, y, z + 0.04);
+    for (let i = 0; i < 22; i++) this.roundedPanel(0.005, i % 5 ? 0.008 : 0.016, 0.004, MAT.brass, parent, x - width / 2 + i / 21 * width, y - 0.068, z);
+    const marker = this.mesh(new THREE.ConeGeometry(0.013, 0.02, 3).rotateX(Math.PI / 2), MAT.brass, handle, 0, -0.078, 0);
+    const light = new THREE.PointLight(THEME.tide, 0.12, 1); light.position.set(x, y, z + 0.1); parent.add(light);
+    return { handle, marker, x, y, z, width };
+  },
+  expansion(parent, x, y, z) {
+    const t = this.canvasTex(128, 128, c => {
+      c.strokeStyle = '#ffffff'; c.lineWidth = 8; c.lineCap = 'round'; c.beginPath();
+      c.moveTo(32, 96); c.lineTo(96, 32); c.moveTo(32, 68); c.lineTo(32, 96); c.lineTo(60, 96);
+      c.moveTo(68, 32); c.lineTo(96, 32); c.lineTo(96, 60); c.stroke();
+    });
+    const s = new THREE.Sprite(new THREE.SpriteMaterial({ map: t, depthTest: true, transparent: true }));
+    s.position.set(x, y, z); s.scale.setScalar(0.075); parent.add(s); return s;
+  }
+};
+// Grammar primitives share one unit in world space, with countable cross cuts.
+KIT.breakMark = function(parent, color, x = 0, y = 0, z = 0) {
+  const group = new THREE.Group(); group.position.set(x, y, z); parent.add(group);
+  for (const offset of [-0.009, 0.009]) this.line(Array.from({ length: 25 }, (_, i) => {
+    const t = i / 24; return V3((t - 0.5) * 0.064, offset + Math.sin(t * Math.PI * 3) * 0.007, 0);
+  }), color, group);
+  return group;
+};
+KIT.quantityArrow = function(parent, color, unit, width) {
+  const group = new THREE.Group(); parent.add(group);
+  const material = new THREE.ShaderMaterial({
+    uniforms: { uColor: { value: new THREE.Color(color) }, uUnits: { value: 1 }, uStyle: { value: 0 } },
+    vertexShader: `varying vec2 vUv; void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}`,
+    fragmentShader: `uniform vec3 uColor; uniform float uUnits; uniform float uStyle; varying vec2 vUv;
+      void main(){float cut=step(0.075,fract(vUv.x*uUnits));
+      float edge=step(0.7,abs(vUv.y-0.5)*2.0);float dash=step(0.4,fract(vUv.x*uUnits*2.0));
+      gl_FragColor=vec4(uColor, mix(0.24+0.76*cut,edge*dash,uStyle));
+      #include <tonemapping_fragment>
+      #include <colorspace_fragment>
+      }`,
+    transparent: true, side: THREE.DoubleSide, depthTest: false, depthWrite: false
+  });
+  const shaft = this.mesh(new THREE.PlaneGeometry(1, width).translate(0.5, 0, 0), material, group);
+  const shape = new THREE.Shape(); shape.moveTo(0, -width * 1.8); shape.lineTo(width * 2.8, 0); shape.lineTo(0, width * 1.8); shape.closePath();
+  const head = this.mesh(new THREE.ShapeGeometry(shape), new THREE.MeshBasicMaterial({ color, depthTest: false, depthWrite: false, side: THREE.DoubleSide }), group);
+  const overflow = this.breakMark(group, color);
+  group.traverse(o => { o.renderOrder = 12; o.castShadow = false; });
+  group.userData = { shaft, head, overflow, material, unit };
+  return group;
+};
+
+// Observatory stage: two walls, plank floor, arched night window, instrument shelves.
+const floorTex = KIT.canvasTex(1024, 1024, (c, w, h) => {
+  c.fillStyle = '#674b38'; c.fillRect(0, 0, w, h);
+  for (let row = 0; row < 12; row++) {
+    const y = row * h / 12;
+    c.fillStyle = row % 2 ? '#70503a' : '#795a43'; c.fillRect(0, y, w, h / 12 - 2);
+    for (let i = 0; i < 48; i++) { c.fillStyle = '#30201a13'; c.fillRect(rand() * w, y + rand() * h / 12, rand() * 240, 1); }
+    for (let x = (row % 3) * 120; x < w; x += 360) { c.fillStyle = '#30251f'; c.fillRect(x, y, 2, h / 12); }
+  }
+});
+floorTex.wrapS = floorTex.wrapT = THREE.RepeatWrapping; floorTex.repeat.set(3, 3);
+KIT.mesh(new THREE.PlaneGeometry(14, 14).rotateX(-Math.PI / 2), new THREE.MeshStandardMaterial({ map: floorTex, roughness: 0.84 }), ROOM, 0, 0, 1);
+KIT.roundedPanel(10, 4.5, 0.12, MAT.wall, ROOM, 1, 2.25, -2.8);
+KIT.roundedPanel(0.12, 4.5, 10, MAT.navy, ROOM, -3.4, 2.25, 1.2);
+for (let i = 0; i < 17; i++) {
+  KIT.roundedPanel(0.47, 0.65, 0.025, MAT.wood, ROOM, -3 + i * 0.51, 0.48, -2.71);
+}
+KIT.roundedPanel(10, 0.045, 0.06, MAT.brass, ROOM, 1, 0.88, -2.67);
+KIT.roundedPanel(0.05, 0.045, 8, MAT.brass, ROOM, -3.3, 0.88, 0.8);
+for (let i = 0; i < 6; i++) KIT.roundedPanel(0.035, 3.4, 0.06, MAT.wood, ROOM, -3.2 + i * 1.4, 2.5, -2.68);
+
+const skyTexture = KIT.canvasTex(1024, 1024, (c, w, h) => {
+  const g = c.createLinearGradient(0, 0, 0, h); g.addColorStop(0, '#18233f'); g.addColorStop(0.65, '#354d67'); g.addColorStop(1, '#b17c62');
+  c.fillStyle = g; c.fillRect(0, 0, w, h);
+  for (let i = 0; i < 280; i++) { c.fillStyle = `rgba(223,238,255,${0.3 + rand() * 0.6})`; c.beginPath(); c.arc(rand() * w, rand() * h * 0.9, 0.6 + rand() * 1.7, 0, Math.PI * 2); c.fill(); }
+  c.fillStyle = '#273c4b'; c.beginPath(); c.moveTo(0, h); for (let x = 0; x <= w; x += 32) c.lineTo(x, 880 - rand() * 65); c.lineTo(w, h); c.fill();
+});
+const arch = new THREE.Shape(); arch.moveTo(-0.92, -0.78); arch.lineTo(0.92, -0.78); arch.lineTo(0.92, 0.14);
+arch.absarc(0, 0.14, 0.92, 0, Math.PI, false); arch.lineTo(-0.92, -0.78);
+const archGeo = new THREE.ShapeGeometry(arch, 48);
+// ShapeGeometry's default UV uses world coordinates; normalize to the canvas bounds.
+const uv = archGeo.attributes.uv, ap = archGeo.attributes.position;
+for (let i = 0; i < uv.count; i++) uv.setXY(i, (ap.getX(i) + 0.92) / 1.84, (ap.getY(i) + 0.78) / 1.84);
+const windowMesh = KIT.mesh(archGeo, new THREE.MeshBasicMaterial({ map: skyTexture }), ROOM, 0.7, 2.35, -2.69);
+windowMesh.castShadow = false;
+const windowBorder = arch.getPoints(64).map(p => V3(p.x + 0.7, p.y + 2.35, -2.64));
+for (let i = 1; i < windowBorder.length; i++) KIT.rod(windowBorder[i - 1], windowBorder[i], 0.032, MAT.brass, ROOM);
+KIT.rod(V3(0.7, 1.58, -2.61), V3(0.7, 3.38, -2.61), 0.018, MAT.graphite, ROOM);
+KIT.rod(V3(-0.22, 2.49, -2.61), V3(1.62, 2.49, -2.61), 0.018, MAT.graphite, ROOM);
+KIT.roundedPanel(2.04, 0.075, 0.28, MAT.wood, ROOM, 0.7, 1.54, -2.60);
+const moonlight = new THREE.RectAreaLight(THEME.cool, 2.2, 1.6, 1.7);
+moonlight.position.set(0.7, 2.5, -2.45); moonlight.rotation.y = Math.PI; ROOM.add(moonlight);
+
+for (const [dx, dy, seed] of [[-1.45, 2.65, 0], [2.45, 2.35, 1]]) {
+  KIT.roundedPanel(0.92, 0.69, 0.055, MAT.brass, ROOM, dx, dy, -2.63);
+  const tex = KIT.canvasTex(512, 384, (c, w, h) => {
+    c.fillStyle = '#1c3040'; c.fillRect(0, 0, w, h); c.strokeStyle = '#477083'; c.lineWidth = 1;
+    for (let x = 32; x < w; x += 40) { c.beginPath(); c.moveTo(x, 0); c.lineTo(x, h); c.stroke(); }
+    for (let y = 24; y < h; y += 40) { c.beginPath(); c.moveTo(0, y); c.lineTo(w, y); c.stroke(); }
+    const points = Array.from({ length: 9 }, (_, i) => [60 + (i % 4) * 112 + rand() * 24, 55 + Math.floor(i / 4) * 110 + rand() * 45]);
+    c.strokeStyle = '#9dd5df'; c.lineWidth = 3; c.beginPath();
+    points.forEach(([x, y], i) => i ? c.lineTo(x, y) : c.moveTo(x, y)); c.stroke();
+    for (const [x, y] of points) { c.fillStyle = seed ? '#ffcc8c' : '#d5ecf5'; c.beginPath(); c.arc(x, y, 5, 0, Math.PI * 2); c.fill(); }
+  });
+  KIT.mesh(new THREE.PlaneGeometry(0.85, 0.62), new THREE.MeshStandardMaterial({ map: tex, emissiveMap: tex, emissive: THEME.cool, emissiveIntensity: 0.35 }), ROOM, dx, dy, -2.598);
+}
+for (const y of [1.13, 1.80]) {
+  KIT.roundedPanel(1.85, 0.06, 0.38, MAT.wood, ROOM, -1.65, y, -2.39);
+  for (const x of [-2.32, -0.98]) KIT.rod(V3(x, y - 0.25, -2.62), V3(x, y - 0.035, -2.25), 0.014, MAT.brass, ROOM);
+}
+// Phase models, shell fan, lighthouse, sand timer, tide clock, bottles, orrery disc.
+for (let i = 0; i < 6; i++) {
+  const x = -2.38 + i * 0.25;
+  KIT.rod(V3(x, 1.84, -2.36), V3(x, 1.98, -2.36), 0.009, MAT.brass, ROOM);
+  KIT.ball(0.075, MAT.moon, ROOM, x, 2.04, -2.36);
+  KIT.mesh(new THREE.SphereGeometry(0.076, 16, 12, i / 6 * Math.PI * 2, Math.PI), MAT.navy, ROOM, x, 2.04, -2.36);
+}
+const shellMat = new THREE.MeshStandardMaterial({ color: 0xddbba2, roughness: 0.8, flatShading: true });
+for (let i = 0; i < 9; i++) {
+  const a = (i - 4) * 0.18;
+  const p = KIT.mesh(new THREE.ConeGeometry(0.025, 0.20, 5), shellMat, ROOM, -2.13 + Math.sin(a) * 0.09, 1.22, -2.28);
+  p.rotation.z = -a; p.rotation.x = 0.8;
+}
+KIT.mesh(new THREE.CylinderGeometry(0.055, 0.095, 0.31, 12), MAT.moon, ROOM, -1.73, 1.32, -2.36);
+KIT.mesh(new THREE.CylinderGeometry(0.085, 0.085, 0.09, 12), MAT.brass, ROOM, -1.73, 1.52, -2.36);
+KIT.mesh(new THREE.ConeGeometry(0.11, 0.10, 12), MAT.graphite, ROOM, -1.73, 1.61, -2.36);
+const glassMat = new THREE.MeshPhysicalMaterial({ color: 0xbcdfe5, transparent: true, opacity: 0.30, roughness: 0.12, transmission: 0.35, thickness: 0.04 });
+for (const y of [1.19, 1.48]) KIT.mesh(new THREE.CylinderGeometry(0.09, 0.09, 0.026, 16), MAT.brass, ROOM, -1.28, y, -2.35);
+for (const dx of [-0.07, 0.07]) KIT.rod(V3(-1.28 + dx, 1.20, -2.35), V3(-1.28 + dx, 1.47, -2.35), 0.008, MAT.brass, ROOM);
+for (const sign of [-1, 1]) {
+  const cone = KIT.mesh(new THREE.ConeGeometry(0.067, 0.13, 12), glassMat, ROOM, -1.28, 1.335 + sign * 0.065, -2.35); cone.rotation.z = sign > 0 ? Math.PI : 0;
+}
+KIT.mesh(new THREE.ConeGeometry(0.052, 0.08, 12), shellMat, ROOM, -1.28, 1.245, -2.35);
+const clock = new THREE.Group(); clock.position.set(2.42, 1.36, -2.45); ROOM.add(clock);
+KIT.mesh(new THREE.CylinderGeometry(0.27, 0.27, 0.07, 48).rotateX(Math.PI / 2), MAT.brass, clock);
+KIT.mesh(new THREE.CircleGeometry(0.245, 48), MAT.navy, clock, 0, 0, 0.04);
+for (let i = 0; i < 24; i++) {
+  const a = i / 24 * Math.PI * 2, r = i % 6 ? 0.215 : 0.19;
+  KIT.line([V3(Math.sin(a) * r, Math.cos(a) * r, 0.045), V3(Math.sin(a) * 0.232, Math.cos(a) * 0.232, 0.045)], THEME.moon, clock);
+}
+KIT.rod(V3(0, 0, 0.055), V3(0.12, 0.14, 0.055), 0.007, MAT.brass, clock);
+for (let i = 0; i < 3; i++) {
+  KIT.mesh(new THREE.CylinderGeometry(0.045, 0.045, 0.18, 12), glassMat, ROOM, 1.90 + i * 0.19, 1.66, -2.54);
+  KIT.mesh(new THREE.CylinderGeometry(0.048, 0.048, 0.025, 12), MAT.brass, ROOM, 1.90 + i * 0.19, 1.76, -2.54);
+}
+KIT.roundedPanel(0.82, 0.06, 0.30, MAT.wood, ROOM, 2.10, 1.54, -2.49);
+const telescope = new THREE.Group(); telescope.position.set(1.85, 0, -1.5); ROOM.add(telescope);
+for (let i = 0; i < 3; i++) { const a = i / 3 * Math.PI * 2; KIT.rod(V3(Math.sin(a) * 0.40, 0.04, Math.cos(a) * 0.40), V3(0, 1.18, 0), 0.023, MAT.brass, telescope); }
+KIT.rod(V3(-0.38, 1.24, 0), V3(0.38, 1.62, -0.28), 0.105, MAT.navy, telescope);
+KIT.rod(V3(0.31, 1.58, -0.25), V3(0.41, 1.63, -0.29), 0.12, MAT.brass, telescope);
+KIT.rod(V3(-0.44, 1.21, 0.025), V3(-0.31, 1.275, -0.015), 0.045, MAT.chrome, telescope);
+KIT.lampWithBulb(ROOM, -1.80, 0.86, -0.63);
+// Foreground stool and side tray deliberately extend beyond the hero frame.
+KIT.roundedPanel(0.67, 0.13, 0.53, MAT.wood, ROOM, -1.95, 0.55, 1.36, 0.05);
+for (const dx of [-0.24, 0.24]) for (const dz of [-0.18, 0.18]) KIT.rod(V3(-1.95 + dx, 0.05, 1.36 + dz), V3(-1.95 + dx * 0.9, 0.50, 1.36 + dz * 0.9), 0.03, MAT.graphite, ROOM);
+KIT.roundedPanel(0.7, 0.045, 0.5, MAT.brass, ROOM, 1.55, 0.61, 1.25);
+KIT.ball(0.12, MAT.moon, ROOM, 1.55, 0.74, 1.25);
+
+// Console front is vertical so instruments remain legible at a shallow hero angle.
+KIT.roundedPanel(3.22, 0.62, 1.02, MAT.graphite, CONSOLE, -0.10, 0.48, 0.10, 0.07);
+KIT.roundedPanel(3.34, 0.10, 1.16, MAT.wood, CONSOLE, -0.10, MODEL.top - 0.05, 0.10, 0.035);
+KIT.roundedPanel(3.16, 0.018, 1.02, MAT.graphite, CONSOLE, -0.10, MODEL.top + 0.008, 0.10);
+KIT.roundedPanel(3.12, 0.43, 0.035, MAT.navy, CONSOLE, -0.10, 0.54, 0.63);
+for (const x of [-1.61, 1.41]) for (const y of [0.37, 0.71]) KIT.screw(CONSOLE, x, y, 0.654);
+for (let i = 0; i < 23; i++) KIT.roundedPanel(0.035, 0.06, 0.012, MAT.rubber, CONSOLE, -1.12 + i * 0.11, 0.22, 0.618, 0.004);
+for (const x of [-1.43, 1.23]) for (const z of [-0.30, 0.50]) KIT.roundedPanel(0.21, 0.15, 0.18, MAT.rubber, CONSOLE, x, 0.10, z);
+const DIAL = KIT.knobWithArc(CONSOLE, -1.30, 0.54, 0.681);
+const GRAPHS = [KIT.graphScreen(CONSOLE, -0.66, 0.57, 0.68, 0.67, 0.24), KIT.graphScreen(CONSOLE, 0.12, 0.57, 0.68, 0.67, 0.24)];
+const SLIDER = KIT.ledSlider(CONSOLE, -0.27, 0.355, 0.69, 1.32);
+KIT.mesh(new THREE.CylinderGeometry(0.115, 0.115, 0.045, 40).rotateX(Math.PI / 2), MAT.brass, CONSOLE, 0.73, 0.53, 0.69);
+const PLAY_BUTTON = KIT.mesh(new THREE.CylinderGeometry(0.088, 0.088, 0.055, 32).rotateX(Math.PI / 2), MAT.graphite, CONSOLE, 0.73, 0.53, 0.72);
+const PLAY_GLYPH = new THREE.Group(); PLAY_BUTTON.add(PLAY_GLYPH);
+for (const x of [-0.023, 0.023]) KIT.roundedPanel(0.012, 0.065, 0.005, MAT.glow, PLAY_GLYPH, x, 0, 0.031, 0.002);
+const playShape = new THREE.Shape(); playShape.moveTo(-0.025, -0.035); playShape.lineTo(0.04, 0); playShape.lineTo(-0.025, 0.035); playShape.closePath();
+const PLAY_TRIANGLE = KIT.mesh(new THREE.ShapeGeometry(playShape), MAT.glow, PLAY_BUTTON, 0, 0, 0.032);
+KIT.roundedPanel(0.35, 0.29, 0.024, MAT.brass, CONSOLE, 1.17, 0.55, 0.68);
+KIT.line(Array.from({ length: 33 }, (_, i) => V3(1.10 + Math.cos(i / 32 * Math.PI * 2) * 0.05, 0.60 + Math.sin(i / 32 * Math.PI * 2) * 0.05, 0.695)), THEME.graphite, CONSOLE);
+for (let k = 0; k < 3; k++) KIT.line(Array.from({ length: 35 }, (_, i) => V3(1.035 + i / 34 * 0.27, 0.46 + k * 0.023 + Math.sin(i / 34 * Math.PI * 4) * 0.01, 0.695)), THEME.graphite, CONSOLE);
+
+function drawGraphs() {
+  const closer = closerAt(S.u.value), ratio = PHYS.ratio(closer);
+  const keys = [`${S.u.value.toFixed(6)}:${S.lon0.value.toFixed(5)}:${Math.floor(S.t.value / 120)}`, S.u.value.toFixed(6)];
+  GRAPHS.forEach((g, index) => {
+    if (S.graphKeys[index] === keys[index]) return;
+    S.graphKeys[index] = keys[index];
+    const c = g.ctx, w = 768, h = 256, left = 52, right = 724, top = 22, bottom = 216;
+    c.fillStyle = '#11232e'; c.fillRect(0, 0, w, h); c.lineWidth = 1; c.strokeStyle = '#385363';
+    for (let i = 0; i <= 12; i++) { const x = left + (right - left) * i / 12; c.beginPath(); c.moveTo(x, top); c.lineTo(x, bottom); c.stroke(); }
+    for (let i = 0; i <= 4; i++) { const y = top + (bottom - top) * i / 4; c.beginPath(); c.moveTo(left, y); c.lineTo(right, y); c.stroke(); }
+    const scale = index ? 1 : Math.max(PHYS.tideHeight(closer), PHYS.tideH0());
+    const xy = (u, v) => [left + u * (right - left), index ? bottom - v * (bottom - top) : 94 - v / scale * 66];
+    const curve = (reference) => {
+      c.setLineDash(reference ? [10, 8] : []); c.strokeStyle = reference ? '#ffffff' : `#${new THREE.Color(index ? THEME.tide : THEME.sea).getHexString()}`; c.lineWidth = reference ? 2 : 4;
+      c.beginPath();
+      for (let i = 0; i <= 320; i++) {
+        const u = i / 320;
+        const v = index ? Math.log(PHYS.ratio(PHYS.closerFromRailX(u))) / Math.log(PHYS.ratio(PHYS.C.closerMax)) : PHYS.harborLevel(u * 86400, S.lon0.value, reference ? 0 : closer);
+        const [x, y] = xy(u, v); i ? c.lineTo(x, y) : c.moveTo(x, y);
+      }
+      c.stroke(); c.setLineDash([]);
+    };
+    if (!index) curve(true); curve(false);
+    const u = index ? PHYS.railX(closer) : ((S.t.value % 86400) + 86400) % 86400 / 86400;
+    const v = index ? Math.log(ratio) / Math.log(PHYS.ratio(PHYS.C.closerMax)) : PHYS.harborLevel(S.t.value, S.lon0.value, closer);
+    const [x, y] = xy(u, v);
+    c.strokeStyle = '#ffcf9a'; c.lineWidth = 2; c.beginPath(); c.moveTo(x, top); c.lineTo(x, bottom); c.stroke();
+    c.fillStyle = '#ffcf9a'; c.beginPath(); c.arc(x, y, 6, 0, Math.PI * 2); c.fill();
+    // Axis end icons: wave at y, crescent at x; deliberately no text drawing API.
+    c.strokeStyle = '#c6dee9'; c.lineWidth = 3; c.beginPath();
+    for (let i = 0; i <= 28; i++) { const xx = 10 + i; const yy = 24 + Math.sin(i / 28 * Math.PI * 3) * 5; i ? c.lineTo(xx, yy) : c.moveTo(xx, yy); } c.stroke();
+    c.beginPath(); c.arc(743, 234, 10, 0.6, Math.PI * 1.8); c.stroke(); c.beginPath(); c.arc(749, 231, 8, 1.5, 4.3); c.stroke();
+    g.tex.needsUpdate = true;
+  });
+}
+
+const EARTH_SPIN = new THREE.Group(); EARTH_SPIN.position.copy(E); HERO.add(EARTH_SPIN);
+KIT.mesh(new THREE.CylinderGeometry(0.38, 0.41, 0.045, 64), MAT.brass, HERO, E.x, MODEL.top + 0.035, E.z);
+KIT.mesh(new THREE.CylinderGeometry(0.32, 0.35, 0.035, 64), MAT.graphite, HERO, E.x, MODEL.top + 0.075, E.z);
+KIT.rod(V3(E.x, MODEL.top + 0.07, 0), V3(E.x, E.y - RV * 0.8, 0), 0.025, MAT.brass, HERO);
+// Two glass hemispheres keep the near cross section readable.
+for (const [phi, opacity] of [[0, 0.10], [Math.PI, 0.24]]) {
+  const material = new THREE.MeshPhysicalMaterial({ color: 0x86b5c2, transparent: true, opacity,
+    roughness: 0.17, metalness: 0.08, side: THREE.DoubleSide, depthWrite: false, transmission: 0.16, thickness: 0.025 });
+  const half = KIT.mesh(new THREE.SphereGeometry(RV * 0.985, 48, 32, phi, Math.PI), material, EARTH_SPIN);
+  half.castShadow = false;
+}
+const gridMaterial = new THREE.LineBasicMaterial({ color: 0x8bb6bd, transparent: true, opacity: 0.42 });
+for (let j = 0; j < 12; j++) {
+  const a = j / 12 * Math.PI * 2;
+  const p = Array.from({ length: 97 }, (_, i) => { const t = i / 96 * Math.PI * 2; return V3(Math.cos(t) * Math.cos(a), Math.sin(t), Math.cos(t) * Math.sin(a)).multiplyScalar(RV * 0.973); });
+  EARTH_SPIN.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(p), gridMaterial));
+}
+for (let j = -3; j <= 3; j++) {
+  const a = j * Math.PI / 8;
+  const p = Array.from({ length: 97 }, (_, i) => { const t = i / 96 * Math.PI * 2; return V3(Math.cos(t) * Math.cos(a), Math.sin(a), Math.sin(t) * Math.cos(a)).multiplyScalar(RV * 0.973); });
+  EARTH_SPIN.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(p), gridMaterial));
+}
+// Seeded clustered facets: abstract land, no bitmap map and no geographic illustration.
+const landMat = new THREE.MeshStandardMaterial({ color: 0x859a79, flatShading: true, roughness: 0.9 });
+const continentCenters = Array.from({ length: 7 }, () => V3(rand() * 2 - 1, rand() * 1.6 - 0.8, rand() * 2 - 1).normalize());
+const landGeo = new THREE.IcosahedronGeometry(RV * 0.944, 3);
+const lp = landGeo.attributes.position, landTriangles = [];
+for (let i = 0; i < lp.count; i += 3) {
+  const center = V3().fromBufferAttribute(lp, i).add(V3().fromBufferAttribute(lp, i + 1)).add(V3().fromBufferAttribute(lp, i + 2)).normalize();
+  if (continentCenters.some(p => p.dot(center) > 0.86 + rand() * 0.07)) {
+    for (let k = 0; k < 3; k++) landTriangles.push(lp.getX(i + k), lp.getY(i + k), lp.getZ(i + k));
+  }
+}
+const continentGeo = new THREE.BufferGeometry(); continentGeo.setAttribute('position', new THREE.Float32BufferAttribute(landTriangles, 3)); continentGeo.computeVertexNormals();
+KIT.mesh(continentGeo, landMat, EARTH_SPIN); landGeo.dispose();
+KIT.ball(RV * 0.73, new THREE.MeshStandardMaterial({ color: 0x264e64, roughness: 0.84, flatShading: true }), EARTH_SPIN);
+KIT.rod(V3(0, -RV * 1.23, 0), V3(0, RV * 1.23, 0), 0.008, MAT.brass, EARTH_SPIN);
+for (const y of [-1, 1]) KIT.ball(0.018, MAT.brass, EARTH_SPIN, 0, RV * 1.24 * y, 0);
+const HARBOR = new THREE.Group(); HARBOR.position.set(RV * 0.99, 0, 0); EARTH_SPIN.add(HARBOR);
+KIT.rod(V3(0, 0, 0), V3(0.079, 0, 0), 0.008, MAT.brass, HARBOR);
+KIT.ball(0.023, MAT.glow, HARBOR, 0.077, 0, 0);
+const PIN_HIT = KIT.ball(0.065, new THREE.MeshBasicMaterial({ visible: false }), HARBOR, 0.072, 0, 0);
+PIN_HIT.visible = false;
+
+const oceanMaterial = new THREE.ShaderMaterial({
+  uniforms: { uBulge: { value: PHYS.oceanBulge(0).bulge }, uRv: { value: RV },
+    uSea: { value: new THREE.Color(THEME.sea) }, uTide: { value: new THREE.Color(THEME.tide) } },
+  vertexShader: `uniform float uBulge; uniform float uRv; varying float vHeight; varying vec3 vNormal; varying vec3 vView;
+    void main(){ vec3 dir=normalize(position); float p=(3.0*dir.x*dir.x-1.0)*0.5;
+      vHeight=p; vec3 pos=dir*uRv*(1.0+uBulge*p); vec4 mv=modelViewMatrix*vec4(pos,1.0);
+      vNormal=normalize(normalMatrix*dir); vView=normalize(-mv.xyz); gl_Position=projectionMatrix*mv; }`,
+  fragmentShader: `uniform vec3 uSea; uniform vec3 uTide; varying float vHeight; varying vec3 vNormal; varying vec3 vView;
+    void main(){ float rim=pow(1.0-abs(dot(normalize(vNormal),normalize(vView))),2.0);
+      vec3 col=mix(uSea,uTide,clamp((vHeight+0.5)/1.5,0.0,1.0));
+      gl_FragColor=vec4(col*(0.62+rim*1.05)+uTide*pow(max(0.0,vHeight),32.0)*0.28,0.24+rim*0.38);
+      #include <tonemapping_fragment>
+      #include <colorspace_fragment>
+    }`,
+  transparent: true, depthWrite: false, side: THREE.DoubleSide
+});
+const OCEAN = KIT.mesh(new THREE.SphereGeometry(RV, 96, 64), oceanMaterial, HERO, ...MODEL.E);
+OCEAN.castShadow = false; OCEAN.renderOrder = 3;
+const REFERENCE = new THREE.Group(); REFERENCE.position.copy(E); HERO.add(REFERENCE);
+const baseline = PHYS.oceanBulge(0).bulge;
+function referencePoint(x, y, z) {
+  const d = V3(x, y, z).normalize(); return d.multiplyScalar(RV * (1 + baseline * (3 * d.x * d.x - 1) / 2) + 0.001);
+}
+for (let j = 0; j < 8; j++) {
+  const a = j / 8 * Math.PI;
+  KIT.line(Array.from({ length: 181 }, (_, i) => { const t = i / 180 * Math.PI * 2; return referencePoint(Math.cos(t), Math.sin(t) * Math.cos(a), Math.sin(t) * Math.sin(a)); }), THEME.reference, REFERENCE, true, 0.62);
+}
+for (const x of [-0.7, 0, 0.7]) {
+  KIT.line(Array.from({ length: 181 }, (_, i) => { const t = i / 180 * Math.PI * 2, r = Math.sqrt(1 - x * x); return referencePoint(x, Math.cos(t) * r, Math.sin(t) * r); }), THEME.reference, REFERENCE, true, 0.5);
+}
+const SATURATION_SIGN = KIT.expansion(HERO, E.x - RV * 0.55, E.y + RV * 1.28, 0.02);
+
+// Brass groove lies below the equatorial moon handle; uprights support the carriage.
+const railY = E.y - RV * 0.65, railStart = railAt(1), railEnd = railAt(0);
+for (const z of [-0.033, 0.033]) KIT.rod(V3(railStart - 0.045, railY, z), V3(railEnd + 0.07, railY, z), 0.011, MAT.brass, HERO);
+KIT.roundedPanel(railEnd - railStart + 0.13, 0.018, 0.047, MAT.rubber, HERO, (railStart + railEnd) / 2 + 0.012, railY - 0.012, 0, 0.005);
+for (const x of [railStart, railEnd]) {
+  KIT.rod(V3(x, MODEL.top + 0.025, 0), V3(x, railY, 0), 0.015, MAT.brass, HERO);
+  KIT.roundedPanel(0.10, 0.025, 0.16, MAT.graphite, HERO, x, MODEL.top + 0.035, 0);
+}
+for (const n of PHYS.RAIL_NOTCHES) KIT.rod(V3(railAt(n.x), railY, 0.035), V3(railAt(n.x), railY, 0.069), 0.004, MAT.brass, HERO);
+PHYS.DETENTS.forEach((n, i) => {
+  KIT.rod(V3(railAt(n.x), railY, 0.035), V3(railAt(n.x), railY, 0.105 + i * 0.012), 0.007, MAT.brass, HERO);
+  for (let k = 0; k <= i; k++) KIT.ball(0.006, MAT.brass, HERO, railAt(n.x), railY + 0.007, 0.065 + k * 0.014);
+});
+// Separate grip recess at the outer stop represents the negative-u current detent.
+KIT.line([V3(railEnd + 0.015, railY + 0.012, -0.025), V3(railEnd + 0.055, railY + 0.012, 0.025)], THEME.reference, HERO);
+const MOON_CARRIAGE = new THREE.Group(); HERO.add(MOON_CARRIAGE);
+KIT.roundedPanel(0.09, 0.035, 0.10, MAT.chrome, MOON_CARRIAGE, 0, railY, 0);
+KIT.rod(V3(0, railY, 0), V3(0, E.y - RV * MODEL.moonRatio, 0), 0.009, MAT.brass, MOON_CARRIAGE);
+const MOON_SHAKE = new THREE.Group(); MOON_SHAKE.position.y = E.y; MOON_CARRIAGE.add(MOON_SHAKE);
+const moonCrackMaterial = new THREE.ShaderMaterial({
+  uniforms: { uProgress: { value: 0 }, uOpacity: { value: 1 } },
+  vertexShader: `varying vec3 vPosition; varying vec3 vNormal; varying vec3 vView;
+    void main(){vPosition=position;vec4 mv=modelViewMatrix*vec4(position,1.0);
+      vNormal=normalize(normalMatrix*normal);vView=normalize(-mv.xyz);gl_Position=projectionMatrix*mv;}`,
+  fragmentShader: `uniform float uProgress; uniform float uOpacity;
+    varying vec3 vPosition; varying vec3 vNormal; varying vec3 vView;
+    vec3 hash(vec3 p){return fract(sin(vec3(dot(p,vec3(127.1,311.7,74.7)),dot(p,vec3(269.5,183.3,246.1)),dot(p,vec3(113.5,271.9,124.6))))*43758.5453);}
+    void main(){vec3 p=normalize(vPosition)*5.0;vec3 cell=floor(p);vec3 f=fract(p);float f1=10.0;float f2=10.0;
+      for(int x=-1;x<=1;x++)for(int y=-1;y<=1;y++)for(int z=-1;z<=1;z++){
+        vec3 o=vec3(float(x),float(y),float(z));float d=length(o+hash(cell+o)-f);
+        if(d<f1){f2=f1;f1=d;}else if(d<f2){f2=d;}}
+      float edge=1.0-smoothstep(0.025,0.095,f2-f1);
+      float reveal=smoothstep(0.02,0.30,uProgress)*(0.65+0.35*smoothstep(hash(cell).x-0.15,hash(cell).x+0.15,uProgress));
+      float light=0.38+0.62*max(0.0,dot(normalize(vNormal),normalize(vec3(-0.5,0.8,1.0))));
+      float rim=pow(1.0-abs(dot(normalize(vNormal),normalize(vView))),3.0);
+      vec3 silver=vec3(0.78,0.82,0.88)*(light+0.10*f1);
+      gl_FragColor=vec4(silver+edge*reveal*vec3(3.8,5.0,6.2)+rim*0.12,uOpacity);
+      #include <tonemapping_fragment>
+      #include <colorspace_fragment>
+    }`, transparent: true
+});
+const MOON = KIT.ball(RV * MODEL.moonRatio, moonCrackMaterial, MOON_SHAKE, 0, 0, 0, 3);
+for (let i = 0; i < 15; i++) {
+  const d = V3(rand() * 2 - 1, rand() * 2 - 1, rand() * 2 - 1).normalize();
+  const crater = KIT.mesh(new THREE.TorusGeometry(0.007 + rand() * 0.009, 0.0014, 4, 10), MAT.chrome, MOON, ...d.clone().multiplyScalar(RV * MODEL.moonRatio * 0.985).toArray());
+  crater.quaternion.setFromUnitVectors(V3(0, 0, 1), d);
+}
+const CRACKS = new THREE.Group(); MOON_SHAKE.add(CRACKS);
+const MOON_HIT = KIT.ball(0.15, new THREE.MeshBasicMaterial({ visible: false }), MOON_CARRIAGE, 0, E.y, 0);
+MOON_HIT.visible = false;
+const BEADS = new THREE.InstancedMesh(new THREE.SphereGeometry(0.008, 8, 6), MAT.moon, 31); HERO.add(BEADS);
+const BEAD_SIGN = KIT.expansion(HERO, 0, E.y - 0.07, 0.14);
+const SHARDS = new THREE.InstancedMesh(new THREE.IcosahedronGeometry(1, 0), MAT.moon, 180);
+SHARDS.position.copy(E); SHARDS.rotation.z = 0.12; HERO.add(SHARDS);
+const shardData = Array.from({ length: 180 }, (_, i) => ({ a: i / 180 * Math.PI * 2 + rand() * 0.025, r: RV * (1.58 + rand() * 0.25), y: (rand() - 0.5) * 0.035, s: 0.006 + rand() * 0.010, phase: rand() * 6 }));
+const dummy = new THREE.Object3D();
+function updateHero() {
+  const closer = closerAt(S.u.value), { bulge, saturated } = PHYS.oceanBulge(closer), fracture = PHYS.fractureState(closer);
+  const moonX = E.x + PHYS.moonVisDist(closer) * RV;
+  MOON_CARRIAGE.position.x = moonX;
+  EARTH_SPIN.rotation.y = S.lon0.value + PHYS.relRate(closer) * S.t.value;
+  oceanMaterial.uniforms.uBulge.value = bulge;
+  OCEAN.visible = !saturated && S.layers.ocean !== false;
+  SATURATION_SIGN.visible = saturated && S.layers.reference !== false;
+  const cracking = fracture.state === 'cracking';
+  MOON.visible = fracture.state !== 'ring'; CRACKS.visible = cracking;
+  CRACKS.children.forEach((line, i) => { line.visible = i < Math.ceil(fracture.progress * 5); });
+  MOON_SHAKE.position.x = cracking ? Math.sin(S.t.value * 0.013) * 0.004 * fracture.progress : 0;
+  MOON_SHAKE.position.z = cracking ? Math.cos(S.t.value * 0.019) * 0.003 * fracture.progress : 0;
+  SHARDS.visible = fracture.state === 'ring' && S.layers.ring !== false;
+  if (SHARDS.visible) {
+    for (let i = 0; i < SHARDS.count; i++) {
+      const d = shardData[Math.floor(i * shardData.length / SHARDS.count)], a = d.a + S.t.value * 0.0001;
+      dummy.position.set(Math.cos(a) * d.r, d.y, Math.sin(a) * d.r); dummy.rotation.set(d.phase, a, d.phase);
+      dummy.scale.set(d.s, d.s * 0.65, d.s * 1.4); dummy.updateMatrix(); SHARDS.setMatrixAt(i, dummy.matrix);
+    }
+    SHARDS.instanceMatrix.needsUpdate = true; SHARDS.computeBoundingSphere();
+  }
+  const count = Math.max(1, Math.round(PHYS.beads(closer)));
+  BEADS.count = count;
+  for (let i = 0; i < count; i++) {
+    const x = THREE.MathUtils.lerp(E.x + RV, moonX - RV * MODEL.moonRatio, (i + 1) / (count + 1));
+    dummy.position.set(x, E.y - 0.065, 0.12); dummy.rotation.set(0, 0, 0); dummy.scale.setScalar(1); dummy.updateMatrix(); BEADS.setMatrixAt(i, dummy.matrix);
+  }
+  BEADS.instanceMatrix.needsUpdate = true; BEADS.computeBoundingSphere();
+  BEAD_SIGN.position.x = (E.x + RV + moonX - RV * MODEL.moonRatio) / 2;
+  SLIDER.handle.position.x = SLIDER.x - SLIDER.width / 2 + (S.u.value + 0.05) / 1.05 * SLIDER.width;
+  DIAL.knob.rotation.z = -S.t.value / 86400 * Math.PI * 2;
+  const arcValue = ((S.t.value % 86400) + 86400) % 86400 / 86400;
+  DIAL.arc.geometry.setDrawRange(0, Math.max(36, Math.floor(arcValue * 96) * 36));
+  DIAL.arc.material.emissiveIntensity = 1.8 + arcValue;
+  PLAY_GLYPH.visible = !!S.playing.target; PLAY_TRIANGLE.visible = !S.playing.target;
+}
+
+﻿// All grammar decisions live here. Physical quantities always come from PHYS.
+const GRAMMAR = (() => {
+  const enabled = { marks: true, field: true, lens: false, person: false, sky: false, limit: true };
+  const groups = {};
+  for (const name of ['marks', 'field', 'lens', 'limit']) { groups[name] = new THREE.Group(); HERO.add(groups[name]); }
+  const unit = 0.016, arrowCap = 14, markCap = 30;
+  groups.marks.position.set(E.x - 0.49, MODEL.top + 0.045, 0.22);
+  const cells = new THREE.InstancedMesh(new THREE.BoxGeometry(0.075, 0.014, 0.027),
+    new THREE.MeshBasicMaterial({ color: THEME.tide, transparent: true, opacity: 0.85 }), markCap);
+  groups.marks.add(cells);
+  const marksBreak = KIT.breakMark(groups.marks, THEME.tide);
+  const obj = new THREE.Object3D();
+  let markValue = 1, clock = 0, ringMix = 0, crackProgress = 0;
+  const seed = mulberry32(450073);
+  const particles = Array.from({ length: 360 }, () => ({ phase: seed(), phi: seed() * Math.PI * 2,
+    side: seed() < 0.5 ? -1 : 1, radius: 1.04 + seed() * 0.10 }));
+  const streakMaterial = new THREE.MeshBasicMaterial({ color: THEME.tide, blending: THREE.AdditiveBlending,
+    transparent: true, opacity: 0.16, depthWrite: false });
+  const streaks = new THREE.InstancedMesh(new THREE.SphereGeometry(1, 6, 4), streakMaterial, particles.length);
+  streaks.position.copy(E); streaks.frustumCulled = false; groups.field.add(streaks);
+  groups.lens.position.copy(E);
+  const disk = KIT.mesh(new THREE.CircleGeometry(RV * 1.8, 64), new THREE.MeshBasicMaterial({ color: 0x5c91a7,
+    transparent: true, opacity: 0.18, side: THREE.DoubleSide, depthWrite: false, depthTest: false }), groups.lens);
+  disk.renderOrder = 9;
+  KIT.line(Array.from({ length: 97 }, (_, i) => V3(Math.cos(i / 96 * Math.PI * 2) * RV * 1.8,
+    Math.sin(i / 96 * Math.PI * 2) * RV * 1.8, 0)), THEME.reference, groups.lens, true, 0.7);
+  const lensRadius = RV * 1.8;
+  for (let i = -4; i <= 4; i++) {
+    const offset = i * lensRadius / 5, reach = Math.sqrt(lensRadius ** 2 - offset ** 2);
+    for (const vertical of [false, true]) {
+      const line = KIT.line(vertical ? [V3(offset, -reach, 0), V3(offset, reach, 0)]
+        : [V3(-reach, offset, 0), V3(reach, offset, 0)], 0x8faebb, groups.lens, false, 0.16);
+      line.material.depthTest = false; line.renderOrder = 10;
+    }
+  }
+  const arrows = [
+    ['near', 0.23, 0.10, 1, THEME.moon], ['center', 0, 0, 1, THEME.moon], ['far', -0.23, -0.10, 1, THEME.moon],
+    ['diffNear', 0.23, 0.22, 1, THEME.tide], ['diffFar', -0.23, -0.22, -1, THEME.tide]
+  ].map(([key, x, y, direction, color]) => {
+    const mesh = KIT.quantityArrow(groups.lens, color, unit, key.startsWith('diff') ? 0.010 : 0.006);
+    mesh.position.set(x, y, 0); if (direction < 0) mesh.rotation.z = Math.PI;
+    return { key, mesh };
+  });
+  KIT.expansion(groups.lens, 0, 0.25, 0.01);
+  const { fluid, rigid } = PHYS.rocheX();
+  const x1 = railAt(fluid), x2 = railAt(rigid), bandZ = 0.23, bandDepth = 0.22;
+  const band = KIT.mesh(new THREE.PlaneGeometry(x1 - x2, bandDepth).rotateX(-Math.PI / 2),
+    new THREE.MeshBasicMaterial({ color: THEME.red, transparent: true, opacity: 0.26, side: THREE.DoubleSide, depthWrite: false }),
+    groups.limit, (x1 + x2) / 2, MODEL.top + 0.03, bandZ);
+  KIT.line([V3(x2, MODEL.top + 0.032, bandZ - bandDepth / 2), V3(x1, MODEL.top + 0.032, bandZ - bandDepth / 2),
+    V3(x1, MODEL.top + 0.032, bandZ + bandDepth / 2), V3(x2, MODEL.top + 0.032, bandZ + bandDepth / 2),
+    V3(x2, MODEL.top + 0.032, bandZ - bandDepth / 2)], THEME.red, groups.limit, true);
+  // Keep the threshold readable above the rail even when the moon has crossed it.
+  for (const x of [x1, x2]) KIT.line([V3(x, railY + 0.025, 0.05), V3(x, railY + 0.025, 0.11)], THEME.red, groups.limit, true);
+
+  const card = document.createElement('div'); card.id = 'person-card'; card.hidden = true; card.setAttribute('aria-hidden', 'true');
+  card.innerHTML = `<svg viewBox="0 0 288 92"><g stroke="#e5e7ec" transform="translate(2 7)"><circle cx="12" cy="5" r="3"/><path d="M12 9v7m-7-5h14m-7 5-5 7m5-7 5 7"/></g><g stroke="#64ead0" transform="translate(2 57)"><path d="M2 8q3-6 6 0t6 0 6 0M2 16q3-6 6 0t6 0 6 0"/></g><g id="person-grid" stroke="#b1c6d34d"></g><g fill="none" stroke="#fff" stroke-dasharray="3 3"><rect x="38" y="12" width="18" height="16"/><rect x="38" y="62" width="18" height="16"/></g><path id="person-now" stroke="#e5e7ec" stroke-width="5"/><path id="sea-now" stroke="#64ead0" stroke-width="7"/><path id="sea-break" stroke="#64ead0" d="M264 59q4-5 8 0t8 0m-16 8q4-5 8 0t8 0"/></svg>`;
+  document.body.append(card);
+  card.querySelector('#person-grid').innerHTML = Array.from({ length: 13 }, (_, i) => `<path d="M${38 + i * 18} 8v24m0 26v24"/>`).join('');
+  const personNow = card.querySelector('#person-now'), seaNow = card.querySelector('#sea-now'), seaBreak = card.querySelector('#sea-break');
+  const skyBase = document.createElement('canvas'); skyBase.width = skyBase.height = 1024;
+  skyBase.getContext('2d').drawImage(skyTexture.image, 0, 0);
+  let skyKey = '';
+  function set(values) {
+    for (const name of Object.keys(values)) if (!(name in enabled)) throw new RangeError(name);
+    for (const [name, on] of Object.entries(values)) {
+      enabled[name] = !!on; S.layers[name] = !!on;
+      if (name === 'lens') S.lens.target = on ? 1 : 0;
+    }
+  }
+  function update(dt) {
+    clock += dt;
+    const closer = closerAt(S.u.value), ratio = PHYS.ratio(closer), strength = Math.min(ratio, markCap);
+    // S.lens is also used by the existing reset button.
+    enabled.lens = !!S.lens.target; S.layers.lens = enabled.lens;
+    for (const name of ['marks', 'field', 'limit']) groups[name].visible = enabled[name];
+    const targetMarks = Math.min(markCap, Math.ceil(ratio));
+    markValue += (targetMarks - markValue) * (1 - Math.exp(-10 * dt));
+    for (let i = 0; i < markCap; i++) {
+      const amount = clamp(markValue - i, 0, 1);
+      obj.position.set(0, (i + 0.5) * unit, 0); obj.scale.set(1, Math.max(0.001, amount), 1); obj.rotation.set(0, 0, 0);
+      obj.updateMatrix(); cells.setMatrixAt(i, obj.matrix);
+    }
+    cells.count = Math.ceil(markValue); cells.instanceMatrix.needsUpdate = true; cells.frustumCulled = false;
+    marksBreak.position.y = markCap * unit + 0.018; marksBreak.visible = ratio > markCap;
+    const lensAmount = S.lens.value;
+    groups.lens.visible = lensAmount > 0.001; groups.lens.scale.setScalar(Math.max(0.001, lensAmount));
+    streaks.count = Math.round(particles.length * (0.12 + 0.88 * strength / markCap));
+    streakMaterial.opacity = (0.10 + 0.28 * strength / markCap) * (1 - 0.8 * lensAmount);
+    if (enabled.field) {
+      const bulge = PHYS.oceanBulge(closer).bulge;
+      for (let i = 0; i < streaks.count; i++) {
+        const p = particles[i], progress = (p.phase + clock * 0.16) % 1;
+        const theta = (1 - progress) * Math.PI / 2, r = RV * p.radius * (1 + bulge * (3 * Math.cos(theta) ** 2 - 1) / 2);
+        obj.position.set(p.side * Math.cos(theta) * r, Math.sin(theta) * Math.cos(p.phi) * r, Math.sin(theta) * Math.sin(p.phi) * r);
+        const tangent = V3(p.side * Math.sin(theta), -Math.cos(theta) * Math.cos(p.phi), -Math.cos(theta) * Math.sin(p.phi)).normalize();
+        obj.quaternion.setFromUnitVectors(V3(0, 1, 0), tangent); obj.scale.set(0.0018, 0.009 + strength * 0.0002, 0.0018);
+        obj.updateMatrix(); streaks.setMatrixAt(i, obj.matrix);
+      }
+      streaks.instanceMatrix.needsUpdate = true;
+    }
+    const force = PHYS.tidalArrows(closer);
+    for (const { key, mesh } of arrows) {
+      const { shaft, head, overflow, material } = mesh.userData, units = Math.min(arrowCap, force[key]);
+      shaft.scale.x = units * unit; head.position.x = units * unit;
+      material.uniforms.uUnits.value = units; overflow.position.set(units * unit - 0.012, 0, 0.001);
+      overflow.rotation.z = Math.PI / 2; overflow.visible = force[key] > arrowCap;
+    }
+    card.hidden = !enabled.person;
+    if (enabled.person) {
+      personNow.setAttribute('d', `M38 20h${18 * PHYS.personWeightRatio(closer)}`);
+      seaNow.setAttribute('d', `M38 70h${18 * Math.min(12, ratio)}`); seaBreak.style.display = ratio > 12 ? '' : 'none';
+    }
+    const inBand = PHYS.fractureState(closer).state !== 'whole';
+    band.material.opacity = inBand ? 0.30 + 0.12 * Math.sin(clock * 5) : 0.22;
+    const nextSkyKey = `${enabled.sky}:${closer.toFixed(1)}:${innerWidth}:${camera.position.z.toFixed(2)}`;
+    if (nextSkyKey !== skyKey) {
+      skyKey = nextSkyKey; const c = skyTexture.image.getContext('2d'), w = 1024, h = 1024;
+      c.clearRect(0, 0, w, h); c.drawImage(skyBase, 0, 0);
+      if (enabled.sky) {
+        const cx = w * 0.68, cy = h * 0.40;
+        const left = V3(-0.22, 2.8, -2.69).project(camera), right = V3(1.62, 2.8, -2.69).project(camera);
+        const texturePerPixel = w / Math.max(50, Math.abs(right.x - left.x) * innerWidth / 2);
+        const baseR = Math.max(10 * texturePerPixel, PHYS.angularSizeDeg(0) / 60 * w / 2);
+        // Apply the same visibility scale to today's reference and the enlarged disc.
+        const rawR = baseR * PHYS.angularSizeDeg(closer) / PHYS.angularSizeDeg(0), r = Math.min(rawR, w * 0.18);
+        c.strokeStyle = '#a7c6dc88'; c.lineWidth = 2; c.beginPath(); c.moveTo(0, cy); c.lineTo(w, cy); c.stroke();
+        const gap = PHYS.apparentRateDegPerHour(closer) / 60 * w;
+        c.fillStyle = '#e5e7ec';
+        for (let i = -12; i <= 12; i++) { const x = cx + i * gap; if (x < 5 || x > w - 5 || !i) continue;
+          c.beginPath(); c.arc(x, cy, Math.max(4, 3 * texturePerPixel), 0, Math.PI * 2); c.fill(); }
+        const g = c.createRadialGradient(cx - r * 0.3, cy - r * 0.3, 0, cx, cy, r);
+        g.addColorStop(0, '#f5f6ef'); g.addColorStop(1, '#a7b2be'); c.fillStyle = g; c.beginPath(); c.arc(cx, cy, r, 0, Math.PI * 2); c.fill();
+        c.strokeStyle = '#ffffff'; c.lineWidth = 2; c.setLineDash([3, 3]); c.beginPath(); c.arc(cx, cy, baseR, 0, Math.PI * 2); c.stroke(); c.setLineDash([]);
+        if (rawR > w * 0.18) { c.beginPath(); for (let i = 0; i <= 32; i++) { const x = cx - 35 + i * 70 / 32, y = cy - r + Math.sin(i * Math.PI / 8) * 6; i ? c.lineTo(x, y) : c.moveTo(x, y); } c.stroke(); }
+      }
+      skyTexture.needsUpdate = true;
+    }
+    // Real-time interpolation remains independent of paused simulation time.
+    const fracture = PHYS.fractureState(closer);
+    crackProgress += (fracture.progress - crackProgress) * (1 - Math.exp(-dt * 8));
+    moonCrackMaterial.uniforms.uProgress.value = crackProgress;
+    MOON.scale.setScalar(1 + crackProgress * 0.06);
+    CRACKS.visible = false;
+    const ringTarget = fracture.state === 'ring' ? 1 : 0;
+    ringMix = clamp(ringMix + (ringTarget ? 1 : -1) * dt / 0.8, 0, 1);
+    MOON.visible = ringMix < 0.98; moonCrackMaterial.uniforms.uOpacity.value = 1 - ringMix;
+    SHARDS.visible = ringMix > 0 && S.layers.ring !== false;
+    if (SHARDS.visible) {
+      const settle = ringMix * ringMix * (3 - 2 * ringMix), burst = Math.sin(ringMix * Math.PI) * RV * 0.6;
+      for (let i = 0; i < SHARDS.count; i++) {
+        const d = shardData[Math.floor(i * shardData.length / SHARDS.count)], a = d.a + S.t.value * 0.0001;
+        const r = d.r * settle + burst;
+        dummy.position.set((MOON_CARRIAGE.position.x - E.x) * (1 - settle) + Math.cos(a) * r,
+          d.y * settle + Math.sin(d.phase) * burst * 0.4, Math.sin(a) * r);
+        dummy.rotation.set(d.phase, a, d.phase); dummy.scale.setScalar(d.s * Math.min(1, ringMix * 5)); dummy.updateMatrix(); SHARDS.setMatrixAt(i, dummy.matrix);
+      }
+      SHARDS.instanceMatrix.needsUpdate = true; SHARDS.computeBoundingSphere();
+    }
+  }
+  function bounds() {
+    const b = new THREE.Box3();
+    if (enabled.marks) b.expandByPoint(groups.marks.position.clone().add(V3(-0.04, 0, -0.02)))
+      .expandByPoint(groups.marks.position.clone().add(V3(0.04, markCap * unit + 0.04, 0.02)));
+    if (enabled.lens) b.union(new THREE.Box3(E.clone().addScalar(-lensRadius), E.clone().addScalar(lensRadius)));
+    return b;
+  }
+  return { set, update, groups, enabled, bounds };
+})();
+// Extend the existing debug entry point without editing the loop's layer implementation.
+layer = new Proxy(layer, { apply(target, thisArg, args) {
+  const [name, on] = args;
+  if (name in GRAMMAR.enabled) { GRAMMAR.set({ [name]: on }); return; }
+  return Reflect.apply(target, thisArg, args);
+} });
+window.GRAMMAR = GRAMMAR;
+
+scene.add(new THREE.HemisphereLight(0xb8d7e4, 0x6a432c, 1.25));
+const keyLight = new THREE.SpotLight(THEME.warm, 26, 12, 0.65, 0.7, 1.5);
+keyLight.position.set(-2.2, 4.2, 3.3); keyLight.target.position.copy(E); keyLight.castShadow = true;
+keyLight.shadow.mapSize.set(2048, 2048); keyLight.shadow.bias = -0.0003; keyLight.shadow.normalBias = 0.02;
+scene.add(keyLight, keyLight.target);
+const fillLight = new THREE.RectAreaLight(THEME.cool, 2.8, 2.4, 2.0);
+fillLight.position.set(2.3, 2.8, 0.8); fillLight.lookAt(E); scene.add(fillLight);
+const rimLight = new THREE.PointLight(THEME.cool, 1.1, 4.5, 2);
+rimLight.position.set(-0.4, 2.3, -1.1); scene.add(rimLight);
+
+const composer = new EffectComposer(renderer);
+const renderPass = new RenderPass(scene, camera); composer.addPass(renderPass);
+const aoPass = new GTAOPass(scene, camera, innerWidth, innerHeight);
+aoPass.blendIntensity = 0.75; aoPass.updateGtaoMaterial({ radius: 0.18, samples: 8, distanceFallOff: 1, screenSpaceRadius: false }); composer.addPass(aoPass);
+const bokehPass = new BokehPass(scene, camera, { focus: 3.2, aperture: 0.0013, maxblur: 0.006 }); composer.addPass(bokehPass);
+const bloomPass = new UnrealBloomPass(new THREE.Vector2(innerWidth, innerHeight), 0.36, 0.45, 1.1); composer.addPass(bloomPass);
+composer.addPass(new OutputPass());
+const controls = new OrbitControls(camera, canvas);
+controls.enableDamping = true; controls.dampingFactor = 0.10; controls.minDistance = 0.5; controls.maxDistance = 14;
+controls.maxPolarAngle = Math.PI * 0.49; controls.enablePan = false;
+const SHOTS = [
+  { name: 'room', pos: V3(4.0, 3.2, 6.5), target: V3(-0.2, 1.5, -0.7), fov: 38 },
+  { name: 'hero', pos: V3(1.1, 2.2, 3.1), target: V3(-0.12, 1.30, 0), fov: 34 },
+  { name: 'moon', pos: V3(1.20, 1.63, 0.92), target: V3(0.65, 1.28, 0), fov: 34 },
+  { name: 'ocean', pos: V3(0.13, 1.66, 1.47), target: E.clone(), fov: 34 },
+  { name: 'harbor', pos: V3(-0.14, 1.49, 0.81), target: E.clone(), fov: 32 },
+  { name: 'sky', pos: V3(0.7, 2.50, 0.45), target: V3(0.7, 2.50, -2.65), fov: 36 }
+];
+const SHOTS_VERTICAL = [
+  { name: 'hero-v', pos: V3(1.8, 2.8, 5.2), target: V3(-0.13, 1.20, 0), fov: 38 },
+  { name: 'rail-v', pos: V3(1.0, 2.4, 3.2), target: V3(0.2, 1.23, 0), fov: 38 },
+  { name: 'sky-v', pos: V3(0.7, 2.45, 1.8), target: V3(0.7, 2.45, -2.65), fov: 38 }
+];
+const CONSOLE_SHOT = { name: 'console', pos: V3(0, 1.10, 3.8), target: V3(-0.1, 0.57, 0.64), fov: 34 };
+function heroBox(maximum = false) {
+  const closer = closerAt(S.u.value), b = maximum ? PHYS.oceanBulge(PHYS.C.closerMax).bulge : PHYS.oceanBulge(closer).bulge;
+  const r = RV * (1 + b), moonX = E.x + PHYS.moonVisDist(closer) * RV;
+  const ringR = RV * 1.83;
+  const ring = maximum || PHYS.fractureState(closer).state === 'ring';
+  return new THREE.Box3(V3(E.x - (ring ? ringR : r), MODEL.top, -(ring ? ringR : r)),
+    V3(Math.max(railEnd + 0.08, moonX + RV * MODEL.moonRatio), E.y + Math.max(r, RV * 1.45), ring ? ringR : r)).union(GRAMMAR.bounds());
+}
+function projectedBox(box, cam = camera) {
+  const points = [];
+  for (const x of [box.min.x, box.max.x]) for (const y of [box.min.y, box.max.y]) for (const z of [box.min.z, box.max.z]) points.push(V3(x, y, z).project(cam));
+  const xs = points.map(p => (p.x + 1) * innerWidth / 2), ys = points.map(p => (1 - p.y) * innerHeight / 2);
+  return { left: Math.min(...xs), right: Math.max(...xs), top: Math.min(...ys), bottom: Math.max(...ys), behind: points.some(p => p.z < -1 || p.z > 1) };
+}
+function heroCoverage() {
+  camera.updateMatrixWorld(); const b = projectedBox(heroBox());
+  const overlaps = id => {
+    const el = document.getElementById(id); if (!el.getClientRects().length || getComputedStyle(el).visibility === 'hidden') return false;
+    const r = el.getBoundingClientRect(); return b.left < r.right && b.right > r.left && b.top < r.bottom && b.bottom > r.top;
+  };
+  return { width: (b.right - b.left) / innerWidth, height: (b.bottom - b.top) / innerHeight,
+    overlapsTop: overlaps('quests'), overlapsTools: overlaps('tools'), clipped: b.left < 0 || b.right > innerWidth || b.top < 0 || b.bottom > innerHeight || b.behind, bounds: b };
+}
+function fitHero(portrait) {
+  // Projection-only candidate search; no render in this loop. Fit the maximum extent as well.
+  const box = heroBox(), maximumBox = heroBox(true), target = box.getCenter(V3());
+  const top = document.getElementById('quests').getBoundingClientRect().bottom + 14;
+  const bottom = document.getElementById('tools').getBoundingClientRect().top - 14;
+  const cam = camera.clone(); cam.fov = portrait ? 38 : 34; cam.aspect = innerWidth / innerHeight;
+  cam.clearViewOffset(); cam.updateProjectionMatrix();
+  let best = null;
+  for (const azimuth of portrait ? [22, 30, 38] : [18, 24, 30]) for (const elevation of [15, 20, 25]) {
+    const az = THREE.MathUtils.degToRad(azimuth), el = THREE.MathUtils.degToRad(elevation);
+    const direction = V3(Math.sin(az) * Math.cos(el), Math.sin(el), Math.cos(az) * Math.cos(el));
+    for (let distance = 1.8; distance <= 9; distance += 0.04) {
+      cam.position.copy(target).addScaledVector(direction, distance); cam.lookAt(target); cam.updateMatrixWorld();
+      const b = projectedBox(box, cam), maximum = projectedBox(maximumBox, cam), width = (b.right - b.left) / innerWidth;
+      const available = bottom - top, centerShift = ((top + bottom) / 2 - (b.top + b.bottom) / 2);
+      if (width > (portrait ? 0.86 : 0.75) || width < (portrait ? 0.64 : 0.60) || b.bottom - b.top > available || b.behind) continue;
+      if (maximum.left < 8 || maximum.right > innerWidth - 8 || maximum.top + centerShift < top || maximum.bottom + centerShift > bottom || maximum.behind) continue;
+      const score = Math.abs(width - (portrait ? 0.82 : 0.69));
+      if (!best || score < best.score) best = { score, pos: cam.position.clone(), target: target.clone(), fov: cam.fov, offset: centerShift };
+    }
+  }
+  return best;
+}
+function shot(index = 1, vertical = innerWidth / innerHeight < 0.9) {
+  const list = vertical ? SHOTS_VERTICAL : SHOTS;
+  const spec = typeof index === 'object' ? index : index === 'console' ? CONSOLE_SHOT : list[clamp(Math.trunc(index), 0, list.length - 1)];
+  S.fly = null; S.shotIndex = index; S.vertical = vertical;
+  camera.clearViewOffset();
+  let chosen = spec;
+  if (index === 'console' && vertical) chosen = { ...CONSOLE_SHOT, pos: V3(-0.1, 1.50, 12.3), fov: 38 };
+  if ((!vertical && index === 1) || (vertical && index === 0)) chosen = fitHero(vertical) || spec;
+  camera.position.copy(chosen.pos); camera.fov = chosen.fov;
+  controls.target.copy(chosen.target); camera.lookAt(chosen.target); camera.updateProjectionMatrix();
+  if (chosen.offset) camera.setViewOffset(innerWidth, innerHeight, 0, -chosen.offset, innerWidth, innerHeight);
+  controls.update(); camera.updateMatrixWorld();
+  bokehPass.uniforms.focus.value = camera.position.distanceTo(controls.target);
+}
+function flyTo(index, duration = 1.4) {
+  const to = typeof index === 'object' ? index : SHOTS[clamp(Math.trunc(index), 0, SHOTS.length - 1)];
+  camera.clearViewOffset();
+  S.fly = { from: camera.position.clone(), fromTarget: controls.target.clone(), fromFov: camera.fov, to, elapsed: 0, duration };
+}
+function resize(refit = true) {
+  const low = S.quality === 'low';
+  renderer.setPixelRatio(Math.min(devicePixelRatio || 1, low ? 1 : 1.6));
+  renderer.setSize(innerWidth, innerHeight, false); composer.setPixelRatio(renderer.getPixelRatio()); composer.setSize(innerWidth, innerHeight);
+  const size = renderer.getDrawingBufferSize(new THREE.Vector2()); bloomPass.setSize(size.x * (low ? 0.5 : 1), size.y * (low ? 0.5 : 1));
+  camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix();
+  if (refit) shot(innerWidth / innerHeight < 0.9 ? 0 : 1, innerWidth / innerHeight < 0.9);
+}
+function setQuality(level) {
+  if (!['high', 'low'].includes(level)) throw new RangeError('quality');
+  S.quality = level; const low = level === 'low';
+  aoPass.enabled = !low; bokehPass.enabled = !low;
+  keyLight.shadow.mapSize.setScalar(low ? 1024 : 2048);
+  if (keyLight.shadow.map) { keyLight.shadow.map.dispose(); keyLight.shadow.map = null; }
+  SHARDS.count = low ? 90 : 180; resize(false);
+  return level;
+}
+window.addEventListener('resize', () => resize());
+
+const LABELS = {
+  canvas: { ko: '달과 지구 모형 실험실', en: 'Moon and Earth model laboratory' },
+  play: { ko: '재생 또는 일시정지', en: 'Play or pause' }, minus: { ko: '느리게', en: 'Slower' }, plus: { ko: '빠르게', en: 'Faster' },
+  reset: { ko: '처음 상태', en: 'Reset' }, lens: { ko: '돋보기 상태', en: 'Magnifier state' }, sound: { ko: '소리 켜기 또는 끄기', en: 'Toggle sound' }
+};
+const ICONS = {
+  play: 'M8 5l11 7-11 7z', pause: 'M8 5v14M16 5v14', minus: 'M6 12h12', plus: 'M6 12h12M12 6v12',
+  reset: 'M4 10a8 8 0 1 1 1 8M4 4v6h6', lens: 'M16 16l5 5M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0',
+  sound: 'M3 9h4l5-4v14l-5-4H3zM16 8q6 4 0 8M19 5q9 7 0 14',
+  muted: 'M3 9h4l5-4v14l-5-4H3zM16 9l6 6M22 9l-6 6',
+  moon: 'M19 16A9 9 0 0 1 8 3 9 9 0 1 0 19 16z',
+  rail: 'M3 17h18M6 13V7M12 13V4M18 13V9',
+  half: 'M12 3v18M12 3a9 9 0 0 1 0 18 9 9 0 0 1 0-18',
+  wave: 'M2 9q3-6 6 0t6 0 6 0M2 17q3-6 6 0t6 0 6 0',
+  pin: 'M12 21V11M16 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0',
+  sky: 'M12 2l2 7 7 3-7 2-2 8-2-8-8-2 8-3z',
+  ring: 'M21 8c2 3-2 7-7 9S3 19 2 16s2-7 8-9 10-2 11 1M16 12a4 4 0 1 1-8 0 4 4 0 0 1 8 0',
+  wall: 'M3 20V9h6v11M9 20V4h6v16M15 20V12h6v8'
+};
+function icon(name) { return `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="${ICONS[name] || ICONS.moon}"/></svg>`; }
+canvas.setAttribute('aria-label', LABELS.canvas[LANG]);
+const toolbar = document.getElementById('tools');
+for (const name of ['play', 'minus', 'plus', 'reset', 'lens', 'sound']) {
+  const button = document.createElement('button'); button.id = `tool-${name}`; button.setAttribute('aria-label', LABELS[name][LANG]);
+  button.innerHTML = icon(name); button.addEventListener('click', () => action(name)); toolbar.append(button);
+  if (name === 'minus') { const dots = document.createElement('span'); dots.id = 'speed'; dots.setAttribute('aria-hidden', 'true'); toolbar.append(dots); }
+}
+let audioContext;
+function tick() {
+  if (!S.sound.target) return;
+  audioContext ||= new (window.AudioContext || window.webkitAudioContext)();
+  if (audioContext.state === 'suspended') void audioContext.resume();
+  const o = audioContext.createOscillator(), g = audioContext.createGain(), now = audioContext.currentTime;
+  o.frequency.setValueAtTime(1300, now); o.frequency.exponentialRampToValueAtTime(750, now + 0.035);
+  g.gain.setValueAtTime(0.035, now); g.gain.exponentialRampToValueAtTime(0.0001, now + 0.045);
+  o.connect(g).connect(audioContext.destination); o.start(); o.stop(now + 0.05);
+}
+function action(name) {
+  if (!['sound', 'reset'].includes(name) && !QUEST.allows()) return;
+  QUEST.touch();
+  if (name === 'play') S.playing.target = S.playing.target ? 0 : 1;
+  if (name === 'minus') S.speed.target = clamp(S.speed.target - 0.25, 0.25, 2);
+  if (name === 'plus') S.speed.target = clamp(S.speed.target + 0.25, 0.25, 2);
+  if (name === 'lens') GRAMMAR.set({ lens: !S.lens.target });
+  if (name === 'sound') { S.sound.target = 1 - S.sound.target; tick(); }
+  if (name === 'reset') TEACHER.reset();
+  syncUI();
+}
+function syncUI() {
+  document.getElementById('tool-play').innerHTML = icon(S.playing.target ? 'pause' : 'play');
+  document.getElementById('tool-play').setAttribute('aria-pressed', String(!!S.playing.target));
+  document.getElementById('tool-lens').setAttribute('aria-pressed', String(!!S.lens.target));
+  document.getElementById('tool-sound').setAttribute('aria-pressed', String(!!S.sound.target));
+  document.getElementById('tool-sound').innerHTML = icon(S.sound.target ? 'sound' : 'muted');
+  document.getElementById('speed').innerHTML = '<i></i>'.repeat(Math.round(S.speed.target / 0.25));
+}
+const raycaster = new THREE.Raycaster(), pointer = new THREE.Vector2();
+const dragObjects = [MOON_HIT, SLIDER.handle, PIN_HIT, DIAL.knob, PLAY_BUTTON, ...GRAPHS.map(g => g.mesh)];
+function rayFromEvent(event) {
+  const r = canvas.getBoundingClientRect(); pointer.set((event.clientX - r.left) / r.width * 2 - 1, -(event.clientY - r.top) / r.height * 2 + 1);
+  raycaster.setFromCamera(pointer, camera);
+}
+function planePoint(plane) { return raycaster.ray.intersectPlane(plane, V3()); }
+const SNAPS = [-0.05, ...PHYS.RAIL_NOTCHES.map(n => n.x), ...PHYS.DETENTS.map(n => n.x)];
+function setRailFromPointer(u) {
+  u = clamp(u, -0.05, 1);
+  const near = SNAPS.reduce((best, value) => Math.abs(value - u) < Math.abs(best - u) ? value : best, Infinity);
+  const snapped = Math.abs(near - u) <= 0.012;
+  if (snapped && S.snap !== near) tick();
+  S.snap = snapped ? near : null; S.u.target = snapped ? near : u;
+}
+canvas.addEventListener('pointerdown', event => {
+  if (event.button !== 0) return;
+  if (!QUEST.allows()) { event.stopImmediatePropagation(); return; }
+  QUEST.touch();
+  rayFromEvent(event); scene.updateMatrixWorld(true);
+  const hit = raycaster.intersectObjects(dragObjects, true)[0];
+  if (!hit) return;
+  let object = hit.object; while (object.parent && !dragObjects.includes(object)) object = object.parent;
+  let type = object === MOON_HIT ? 'moon' : object === SLIDER.handle ? 'slider' : object === PIN_HIT ? 'pin' : object === DIAL.knob ? 'dial' : object === PLAY_BUTTON ? 'play' : 'graph';
+  if (type === 'play') { action('play'); event.stopImmediatePropagation(); return; }
+  const plane = type === 'pin' ? new THREE.Plane(V3(0, 1, 0), -E.y) : new THREE.Plane(V3(0, 0, 1), type === 'moon' ? 0 : -0.73);
+  const p = planePoint(plane); if (!p) return;
+  S.drag = { type, id: event.pointerId, plane, start: p, u: S.u.target, t: S.t.target,
+    angle: Math.atan2(p.x + 1.30, p.y - 0.54), graph: object === GRAPHS[0].mesh ? 0 : 1,
+    lon: Math.atan2(-(p.z - E.z), p.x - E.x) };
+  if (type === 'dial') { S.drag.wasPlaying = S.playing.target; S.playing.target = 0; }
+  controls.enabled = false; S.fly = null; canvas.setPointerCapture(event.pointerId); event.stopImmediatePropagation();
+}, { capture: true });
+canvas.addEventListener('pointermove', event => {
+  if (!S.drag || event.pointerId !== S.drag.id) return;
+  rayFromEvent(event); const d = S.drag, p = planePoint(d.plane); if (!p) return;
+  if (d.type === 'moon') setRailFromPointer(d.u - (p.x - d.start.x) / (railEnd - railStart));
+  if (d.type === 'slider') setRailFromPointer(d.u + (p.x - d.start.x) / SLIDER.width * 1.05);
+  if (d.type === 'pin') {
+    const lon = Math.atan2(-(p.z - E.z), p.x - E.x);
+    const delta = Math.atan2(Math.sin(lon - d.lon), Math.cos(lon - d.lon));
+    S.lon0.target += delta; d.lon = lon;
+  }
+  if (d.type === 'dial') {
+    const angle = Math.atan2(p.x + 1.30, p.y - 0.54), delta = Math.atan2(Math.sin(angle - d.angle), Math.cos(angle - d.angle));
+    S.t.target = ((S.t.target + delta / (2 * Math.PI) * 86400) % 86400 + 86400) % 86400; d.angle = angle;
+  }
+  if (d.type === 'graph') {
+    const g = GRAPHS[d.graph], u = clamp((p.x - g.mesh.position.x + 0.335) / 0.67, 0, 1);
+    if (d.graph) setRailFromPointer(u); else { S.playing.target = 0; S.t.target = u * 86400; }
+  }
+  event.stopImmediatePropagation();
+}, { capture: true });
+function endDrag(event) {
+  if (!S.drag || event.pointerId !== S.drag.id) return;
+  if (S.drag.type === 'dial') S.playing.target = S.drag.wasPlaying;
+  S.drag = null; S.snap = null; controls.enabled = true;
+  if (canvas.hasPointerCapture(event.pointerId)) canvas.releasePointerCapture(event.pointerId);
+  syncUI();
+}
+canvas.addEventListener('pointerup', endDrag); canvas.addEventListener('pointercancel', endDrag);
+canvas.addEventListener('lostpointercapture', endDrag);
+window.addEventListener('keydown', event => {
+  if (event.key !== '/' || event.repeat) return;
+  S.ui.target = 1 - S.ui.target; document.body.classList.toggle('hide-ui', !S.ui.target);
+  window.__site?.setVisible(!!S.ui.target); event.preventDefault();
+});
+function set(name, value) {
+  if (name === 'quest') { QUEST.go(Number(value)); return; }
+  if (name === 'playing') { S.playing.target = value ? 1 : 0; syncUI(); return; }
+  value = Number(value); if (!Number.isFinite(value)) throw new TypeError(name);
+  if (name === 'closer') { value = clamp(value, 0, PHYS.C.closerMax); S.u.target = value < PHYS.RANGE.closer[0] ? -0.05 : PHYS.railX(value); }
+  else if (name === 'u') S.u.target = clamp(value, -0.05, 1);
+  else if (name === 'lon0') S.lon0.target = value % (Math.PI * 2);
+  else if (name === 't') S.t.target = ((value % 86400) + 86400) % 86400;
+  else throw new RangeError(name);
+}
+function preset(index) {
+  const values = [0, 0.1, PHYS.C.d0 / 2, PHYS.C.d0 * 0.9, PHYS.C.d0 * 0.95, PHYS.C.closerMax];
+  if (!Number.isInteger(index) || index < 0 || index >= values.length) throw new RangeError('preset');
+  set('closer', values[index]);
+}
+function textAudit() {
+  const found = [], walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+  while (walker.nextNode()) {
+    const node = walker.currentNode, parent = node.parentElement;
+    if (!parent || parent.closest('script,style,template,[hidden]')) continue;
+    const range = document.createRange(); range.selectNodeContents(node);
+    const r = range.getBoundingClientRect(), style = getComputedStyle(parent);
+    if (!r.width || !r.height || style.visibility === 'hidden' || style.display === 'none' || +style.opacity === 0 || r.bottom < 0 || r.top > innerHeight || r.right < 0 || r.left > innerWidth) continue;
+    const numeric = parent.closest('[data-numeric]');
+    const content = node.textContent.trim();
+    const words = numeric
+      ? (T.mode === 'teacher' && T.numbers && /^[-+−\d.,\s]+(?:km|m|s|h|°|×)?$/u.test(content) ? null : [content])
+      : content.match(/[\p{L}\p{N}]+/gu);
+    if (words) found.push({ words, x: r.x, y: r.y, width: r.width, height: r.height });
+  }
+  return found;
+}
+
+// One flow state, eight data rows. Indices in the debug API are zero based.
+const Q = { i: 0, phase: 'intro', pick: null, stars: Array(8).fill(0), completed: new Set(), free: false, flags: {} };
+// Solve display targets through the authoritative model instead of copying its law.
+function closerForRatio(target) {
+  let low = 0, high = PHYS.C.closerMax;
+  for (let i = 0; i < 52; i++) { const mid = (low + high) / 2; if (PHYS.ratio(mid) < target) low = mid; else high = mid; }
+  return (low + high) / 2;
+}
+const QUESTS = [
+  { id: 1, icon: 'moon', startState: { closer: 0 }, candidates: [{ key: 'flood', closer: PHYS.DETENTS[0].closer }, { key: 'little', closer: closerForRatio(2) }, { key: 'same', closer: 0.1 }], answerKey: 'same', layers: ['marks'], goalMarks: [0.1], fields: ['closer', 'lensOpen'], judge: s => PHYS.judgeQ1(s), events: s => s.lensOpen },
+  { id: 2, icon: 'rail', startState: { closer: 0 }, candidates: [{ key: 'km', closer: 1e3 }, { key: 'thousand', closer: 1e6 }, { key: 'hundred-thousand', closer: 1e8 }], answerKey: 'hundred-thousand', layers: ['marks'], goalMarks: PHYS.RAIL_NOTCHES.map(n => n.closer), fields: ['visited', 'closer'], judge: s => PHYS.judgeQ2(s), events: s => s.visited.size >= 6 && PHYS.ratio(s.closer) >= 1.25 },
+  { id: 3, icon: 'half', startState: { closer: 0 }, candidates: [2, 4, 8].map(n => ({ key: String(n), closer: closerForRatio(n) })), answerKey: '8', layers: ['marks'], goalMarks: [PHYS.DETENTS[0].closer], fields: ['closer'], judge: s => PHYS.judgeQ3(s), events: s => PHYS.judgeQ3(s) },
+  { id: 4, icon: 'wave', startState: { closer: PHYS.DETENTS[0].closer }, candidates: ['near', 'far', 'both'].map(key => ({ key, closer: PHYS.DETENTS[0].closer })), answerKey: 'both', layers: ['field'], goalMarks: [], fields: ['peaks'], judge: s => PHYS.judgeQ4(s), events: s => s.peaks >= 2 },
+  { id: 5, icon: 'pin', startState: { closer: 0 }, candidates: ['float', 'lighter', 'same'].map((key, i) => ({ key, closer: PHYS.DETENTS[3].closer, weightRatio: [0, 0.5, PHYS.personWeightRatio(PHYS.DETENTS[3].closer)][i] })), answerKey: 'same', layers: ['marks'], goalMarks: [PHYS.DETENTS[3].closer], fields: ['closer', 'personSeen', 'oceanSeen'], judge: s => PHYS.judgeQ5(s), events: s => PHYS.judgeQ5(s) },
+  { id: 6, icon: 'sky', startState: { closer: 0 }, candidates: ['size', 'speed', 'both'].map(key => ({ key, closer: PHYS.DETENTS[3].closer })), answerKey: 'both', layers: [], goalMarks: [PHYS.DETENTS[3].closer], fields: ['closer', 'skyOpen'], judge: s => PHYS.judgeQ6(s), events: s => PHYS.judgeQ6(s) },
+  { id: 7, icon: 'ring', startState: { closer: PHYS.DETENTS[3].closer }, candidates: [{ key: 'whole', closer: 0 }, { key: 'crack', closer: PHYS.C.d0 - (PHYS.roche().fluid + PHYS.roche().rigid) / 2 }, { key: 'ring', closer: PHYS.C.closerMax }], answerKey: 'ring', layers: ['limit'], goalMarks: [PHYS.C.d0 - PHYS.roche().rigid], fields: ['closer'], judge: s => PHYS.judgeQ7(s), events: s => PHYS.fractureState(s.closer).state === 'ring' },
+  { id: 8, icon: 'wall', startState: { closer: 0 }, candidates: [1 / 2, 1 / 3, 1 / 4].map(frac => ({ key: String(frac), closer: PHYS.C.d0 * (1 - frac) })), answerKey: '0.5', layers: ['marks'], goalMarks: [], fields: ['wall', 'closer'], judge: s => PHYS.judgeQ8(s), events: s => PHYS.judgeQ8(s) }
+].map(d => ({ ...d, card: s => CARDS.principle(d.id, s) }));
+const QUEST = {
+  get i() { return Q.i; }, get passed() { return Q.completed.has(Q.i); },
+  state() { return { ...Q, stars: [...Q.stars], completed: [...Q.completed], flags: { ...Q.flags, visited: [...Q.flags.visited || []] } }; },
+  sample() { return { closer: closerAt(S.u.value), lensOpen: !!Q.flags.lensOpen, visited: Q.flags.visited, peaks: Q.flags.peaks,
+    personSeen: !!Q.flags.personSeen, oceanSeen: !!Q.flags.oceanSeen, skyOpen: GRAMMAR.enabled.sky, wall: Q.flags.wall, lon0: S.lon0.value, t: S.t.value }; },
+  phase(phase) { if (!['intro', 'predict', 'act', 'observe', 'confirm', 'card'].includes(phase)) throw new RangeError('phase'); Q.phase = phase; Q.flags.elapsed = 0; questUI(); },
+  go(i) {
+    if (!Number.isInteger(i) || i < 0 || i >= QUESTS.length) throw new RangeError('quest');
+    // Restoration happens only at a quest boundary, never on success.
+    Q.i = i; Q.free = false; Q.pick = null;
+    Q.flags = { elapsed: 0, idle: 0, demos: 0, visited: new Set(), peaks: 0, prevT: 0, theta: 0, hold: 0, wall: 8 };
+    set('closer', QUESTS[i].startState.closer); S.u.value = S.u.target;
+    S.t.value = S.t.target = 0; S.playing.value = S.playing.target = 0;
+    for (const name of Object.keys(GRAMMAR.enabled)) GRAMMAR.set({ [name]: QUESTS[i].layers.includes(name) });
+    document.body.classList.remove('q-event'); DIRECTOR.clear(); this.phase('intro'); DIRECTOR.intro(); syncUI();
+  },
+  pick(k) { if (Q.phase !== 'predict' || Q.free) return; const c = QUESTS[Q.i].candidates[k]; if (!c) throw new RangeError('pick'); Q.pick = c.key; this.phase('act'); Q.flags.idle = 0; Q.flags.demos = 1; Q.flags.demoLeft = 2.2; },
+  mode(free) { Q.free = !!free; DIRECTOR.clear(); if (free) { for (const name of ['marks', 'field', 'limit']) GRAMMAR.set({ [name]: true }); } questUI(); },
+  touch() { Q.flags.idle = 0; },
+  allows() { if (Q.free) return true; if (['intro', 'predict', 'observe'].includes(Q.phase)) { document.getElementById('q-pictures').animate([{ transform: 'translateX(-5px)' }, { transform: 'translateX(5px)' }, { transform: 'translateX(0)' }], { duration: 220 }); return false; } return true; },
+  open(name) {
+    if (!this.allows()) return;
+    if (name === 'micro') Q.flags.lensOpen = true;
+    else if (name === 'person' || name === 'sky' || name === 'lens') { GRAMMAR.set({ [name]: !GRAMMAR.enabled[name] }); if (name === 'sky' && GRAMMAR.enabled.sky) flyTo(S.vertical ? SHOTS_VERTICAL[2] : SHOTS[5], 1.8); }
+    else if (name === 'personSeen' || name === 'oceanSeen') { GRAMMAR.set({ person: true }); Q.flags[name] = true; }
+    this.touch(); questUI();
+  },
+  skip(phase) { this.phase(phase === 'event' ? 'observe' : phase); if (Q.phase === 'observe') DIRECTOR.event(this.sample()); },
+  update(dt) {
+    const f = Q.flags; f.elapsed += dt; f.idle += dt;
+    if (Q.free) return;
+    if (Q.phase === 'intro') { if (f.elapsed >= 0.9 && !f.pushed) { f.pushed = true; DIRECTOR.push(); } if (f.elapsed >= 2.7) this.phase('predict'); return; }
+    if (Q.phase === 'act') {
+      f.demoLeft = Math.max(0, f.demoLeft - dt);
+      if (S.drag) { this.touch(); f.demoLeft = 0; }
+      if (f.idle >= 7 && f.demos < 2) { f.demos++; f.idle = 0; f.demoLeft = 2.2; }
+      const s = this.sample();
+      if (Q.i === 0 && Math.abs(S.u.value) < 1e-8 && S.u.target === 0) f.lensOpen = true;
+      if (Q.i === 1) PHYS.RAIL_NOTCHES.forEach((n, i) => { if (Math.abs(S.u.value - n.x) < 0.006) f.visited.add(i); });
+      if (Q.i === 2 && !f.bonus && Math.abs(PHYS.frac(s.closer) - 1 / 3) < 0.008) { f.bonus = { ...s }; questUI(); }
+      if (Q.i === 3) {
+        const delta = ((S.t.value - f.prevT + 129600) % 86400) - 43200; f.prevT = S.t.value;
+        if (S.drag?.type === 'pin' || !GRAMMAR.enabled.lens) { f.peaks = 0; f.theta = S.lon0.value; }
+        else if (delta > 0) { const next = f.theta + PHYS.relRate(s.closer) * delta; f.peaks += Math.max(0, PHYS.peaksCrossed(f.theta, next)); f.theta = next; }
+      }
+      const actual = this.sample(), valid = QUESTS[Q.i].judge(actual);
+      if (Q.i !== 6 && PHYS.fractureState(actual.closer).state === 'ring') { f.hold = 0; return; }
+      if (Q.i === 7) {
+        const stationary = !S.drag && Math.abs(S.u.target - S.u.value) < 1e-7;
+        f.hold = valid && stationary ? f.hold + dt : 0;
+      }
+      if (valid && (Q.i !== 7 || f.hold >= 1.5)) {
+        f.success = Object.freeze({ ...actual, visited: [...actual.visited] });
+        if (QUESTS[Q.i].events(actual)) DIRECTOR.event(actual);
+        this.phase('observe');
+      }
+    } else if (Q.phase === 'observe' && f.elapsed >= 0.8) {
+      Q.completed.add(Q.i); Q.stars[Q.i] = Q.pick === QUESTS[Q.i].answerKey || Q.pick === null ? 3 : 2;
+      this.phase('confirm'); if (Q.stars[Q.i] === 3) DIRECTOR.chord();
+    } else if (Q.phase === 'confirm' && f.elapsed >= 0.6) this.phase('card');
+    else if (Q.phase === 'card' && f.elapsed >= 6.1 && Q.i < 7) this.go(Q.i + 1);
+  },
+  auto(i) {
+    this.go(i); step(90, 1 / 30); this.pick(QUESTS[i].candidates.findIndex(c => c.key === QUESTS[i].answerKey));
+    const move = closer => { set('closer', closer); step(100, 1 / 30); };
+    if (i === 0) move(0.1);
+    if (i === 1) for (const n of PHYS.RAIL_NOTCHES) move(n.closer);
+    if (i === 2) move(PHYS.DETENTS[0].closer);
+    if (i === 3) { this.open('lens'); for (let h = 1; h <= 28 && Q.phase === 'act'; h++) { set('t', h * 3600); step(60, 1 / 30); } }
+    if (i === 4) { move(PHYS.DETENTS[3].closer); this.open('personSeen'); this.open('oceanSeen'); }
+    if (i === 5) { this.open('sky'); move(PHYS.DETENTS[3].closer); }
+    if (i === 6) move(PHYS.C.closerMax);
+    if (i === 7) { Q.flags.wall = 8; move(PHYS.DETENTS[0].closer); }
+    for (let n = 0; n < 3 && Q.phase !== 'card'; n++) step(100, 1 / 30);
+    return { i, passed: this.passed, phase: Q.phase, judge: QUESTS[i].judge(this.sample()), stars: Q.stars[i] };
+  }
+};
+
+// All miniature simulation pictures and frozen principle equations live here.
+const CARDS = (() => {
+  const svg = body => `<svg viewBox="0 0 300 140" aria-hidden="true">${body}</svg>`;
+  const path = (d, color = '#64ead0', dash = false) => `<path stroke="${color}" ${dash ? 'stroke-dasharray="4 4"' : ''} d="${d}"/>`;
+  const circle = (x, y, r, dash = false) => `<circle cx="${x}" cy="${y}" r="${r}" ${dash ? 'stroke-dasharray="4 4"' : ''}/>`;
+  const arrow = (x, y, dx, dy = 0) => path(`M${x} ${y}l${dx} ${dy}m${-Math.sign(dx || 1) * 6} -5l${Math.sign(dx || 1) * 6} 5 ${-Math.sign(dx || 1) * 6} 5`);
+  const equal = path('M140 63h20m-20 12h20', '#fff');
+  const bar = (x, n, unit = 3, y = 118) => Array.from({ length: Math.min(30, Math.ceil(n)) }, (_, i) => `<rect x="${x}" y="${y - (i + 1) * unit}" width="20" height="${Math.max(0.2, Math.min(1, n - i) * unit - 0.5)}"/>`).join('');
+  function ocean(closer, side = 'both', time = 0) {
+    const b = PHYS.oceanBulge(closer).bulge, points = [];
+    for (let i = 0; i <= 100; i++) { const a = i / 100 * Math.PI * 2, allowed = side === 'both' || (side === 'near' ? Math.cos(a) > 0 : Math.cos(a) < 0), r = 35 * (1 + (allowed ? b : 0) * (3 * Math.cos(a) ** 2 - 1) / 2); points.push(`${i ? 'L' : 'M'}${80 + Math.cos(a) * r} ${65 + Math.sin(a) * r}`); }
+    const theta = PHYS.relRate(closer) * time;
+    return circle(80, 65, 35, true) + path(points.join('') + 'Z') + circle(80 + Math.cos(theta) * 35, 65 + Math.sin(theta) * 35, 3) + circle(137, 65, 6);
+  }
+  function wave(closer, lon, duration = 86400, side = 'both') {
+    return path(Array.from({ length: 121 }, (_, i) => { const t = i / 120 * duration, theta = lon + PHYS.relRate(closer) * t, visible = side === 'both' || (side === 'near' ? Math.cos(theta) > 0 : Math.cos(theta) < 0), level = PHYS.harborLevel(t, lon, closer) / PHYS.tideHeight(closer); return `${i ? 'L' : 'M'}${163 + i} ${78 - (visible ? level : Math.min(0, level)) * 28}`; }).join(''));
+  }
+  const faint = body => `<g opacity=".22">${body}</g>`;
+  const bold = body => `<g stroke-width="4" stroke-linecap="round" stroke-linejoin="round">${body}</g>`;
+  const expansion = () => path('M277 126l14-14m-14 6v8h8m-2-14h8v8', '#fff');
+  const slab = (x, y, w, h) => `<rect x="${x}" y="${y}" width="${w}" height="${Math.max(.2, h)}" fill="#64ead0" fill-opacity=".28"/>`;
+  function picture(id, c, time = 0) {
+    // Predictions remain distinct at every loop time, including the first frame.
+    const closer = c.closer, r = PHYS.ratio(closer);
+    let common = '', body = '';
+    if (id === 1 || id === 3 || id === 8) {
+      const h = id === 1 ? PHYS.cardExcessHeight(closer) : id === 3 ? r * 13 : PHYS.cardTideHeight(closer);
+      const unit = id === 1 ? 12 : 13;
+      common = path('M28 124h244M40 12v112', '#fff');
+      for (let i = 0; i <= 8; i++) common += path(`M28 ${124 - i * 13}h244`, '#fff', true);
+      common += path(`M42 ${124 - (id === 8 ? PHYS.cardTideHeight(PHYS.C.d0 / 2) : unit)}h218`, '#fff', true);
+      body = slab(48, 124 - h, 204, h) + path(`M48 124v-${h}h204v${h}`);
+      if (id === 3) for (let i = 1; i < r - 1e-6; i++) body += path(`M48 ${124 - i * unit}h204`);
+      if (id !== 3) body += expansion();
+    }
+    if (id === 2) {
+      const selected = PHYS.RAIL_NOTCHES.reduce((best, n, i, all) =>
+        Math.abs(n.x - PHYS.railX(closer)) < Math.abs(all[best].x - PHYS.railX(closer)) ? i : best, 0);
+      common = path('M25 118h250', '#fff') + PHYS.RAIL_NOTCHES.map((n, i) =>
+        path(`M${30 + i * 40} 118V${118 - PHYS.ratio(n.closer) * 22}`, '#fff') + circle(30 + i * 40, 118, 5)).join('');
+      const x = 30 + selected * 40;
+      body = path(`M30 36H${x}M${x} 22v96m-10-84 10-12 10 12`) + circle(x, 118, 10) + slab(x - 10, 118 - PHYS.ratio(closer) * 22, 20, PHYS.ratio(closer) * 22);
+    }
+    if (id === 4) {
+      common = circle(145, 70, 48, true) + path('M24 70h252', '#fff', true) + circle(281, 70, 9);
+      const points = [];
+      for (let i = 0; i <= 120; i++) {
+        const a = i / 120 * Math.PI * 2, cosine = Math.cos(a);
+        const active = c.key === 'both' || (c.key === 'near' ? cosine >= 0 : cosine <= 0);
+        const radius = 48 + (active ? PHYS.cardTideHeight(closer) * cosine ** 2 : 0);
+        points.push(`${i ? 'L' : 'M'}${145 + cosine * radius} ${70 + Math.sin(a) * radius}`);
+      }
+      body = path(points.join('') + 'Z') + expansion();
+    }
+    if (id === 5) {
+      // These are explicit prediction hypotheses; the measured answer uses personWeightRatio.
+      const weight = c.weightRatio ?? PHYS.personWeightRatio(closer), lift = PHYS.cardWeightLift(weight);
+      common = path('M28 124h244M28 34h244M28 79h244', '#fff', true) + slab(55, 110, 190, 14);
+      body = slab(55, 110 - lift, 190, 14) + path(`M55 ${110 - lift}h190v14H55z`);
+      if (lift > 1) body += path(`M150 108v-${lift - 8}m-8 8 8-8 8 8`);
+      else body += path('M65 108v18m25-18v18m120-18v18m25-18v18');
+    }
+    if (id === 6) {
+      const radius = (c.key === 'speed' ? PHYS.angularSizeDeg(0) : PHYS.angularSizeDeg(closer)) * 4.7;
+      const gap = (c.key === 'size' ? PHYS.apparentRateDegPerHour(0) : PHYS.apparentRateDegPerHour(closer)) * 1.75;
+      common = path('M12 12h276v116H12zM125 12v116M140 70h146', '#fff', true) + circle(65, 70, PHYS.angularSizeDeg(0) * 4.7, true);
+      for (let i = 0; i < 3; i++) common += circle(145 + i * PHYS.apparentRateDegPerHour(0) * 1.75, 70, 5, true);
+      body = circle(65, 70, Math.max(2.5, radius)) + path(`M145 99h${2 * gap}m-8-6 8 6-8 6`);
+      for (let i = 0; i < 3; i++) body += circle(145 + i * gap, 70, 7);
+    }
+    if (id === 7) {
+      const f = PHYS.fractureState(closer);
+      common = circle(150, 70, 54, true) + path('M20 70h260', '#fff', true);
+      body = f.state === 'ring' ? Array.from({ length: 24 }, (_, i) => {
+        const a = i / 24 * Math.PI * 2;
+        return path(`M${150 + Math.cos(a) * 122} ${70 + Math.sin(a) * 46}l${Math.cos(a) * 9} ${Math.sin(a) * 9}`);
+      }).join('') : circle(150, 70, 54) + (f.state === 'cracking' ? path('M137 18l20 23-25 22 32 20-27 21 18 19', '#fff') : '');
+    }
+    return svg(faint(common) + bold(body));
+  }
+  function principle(id, s) {
+    const closer = s.closer, r = PHYS.ratio(closer);
+    if (id === 1) return svg(circle(42, 55, 15, true) + circle(46, 55, 15) + arrow(65, 55, 35) + equal + bar(200, PHYS.ratio(0), 28) + bar(242, r, 28) + path('M195 90h75', '#fff', true));
+    if (id === 2) return picture(id, { closer });
+    if (id === 3) return svg(path('M15 45h100m-100-8v16m50-16v16m50-16v16', '#fff', true) + path(`M15 45h${100 * PHYS.frac(closer)}`, '#fff') + circle(15 + 100 * PHYS.frac(closer), 45, 10) + equal + bar(195, 1, 10) + arrow(220, 70, 25) + bar(265, r, 10));
+    if (id === 4) return svg(ocean(closer) + arrow(42, 65, -22) + arrow(118, 65, 22) + circle(219, 33, 14) + path('M219 21v12h10', '#fff') + wave(closer, s.lon0, 2 * PHYS.tidePeriod(closer)));
+    if (id === 5) return svg(circle(35, 36, 5) + path('M35 41v18m-9-10h18m-9 10-7 9m7-9 7 9', '#fff') + circle(62, 65, Math.max(1.5, (1 - PHYS.personWeightRatio(closer)) * 50)) + path('M160 30q5-8 10 0t10 0 10 0') + bar(210, r, 3) + path('M201 19l8-4 8 4m-16 7 8-4 8 4') + path('M55 100h190m-180-5v10m18-10v10m18-10v10', '#fff', true));
+    if (id === 6) return picture(id, { key: 'both', closer });
+    if (id === 7) return svg(circle(40, 70, 25) + arrow(75, 70, 35) + circle(150, 70, 25) + path('M145 46l8 14-12 11 14 10-8 13', '#fff') + arrow(180, 70, 28) + Array.from({ length: 16 }, (_, i) => { const a = i / 16 * Math.PI * 2; return circle(250 + Math.cos(a) * 34, 70 + Math.sin(a) * 17, 2); }).join(''));
+    return svg(bar(45, s.wall, 3) + equal + bar(210, r, 3) + path(`M35 ${118 - s.wall * 3}h200`, '#fff', true) + circle(100 + PHYS.frac(closer) * 100, 112, 9));
+  }
+  function micro() {
+    const gap = PHYS.tideH0() * PHYS.tideExcess(0.1), diameter = 0.28e-9, scale = 42 / diameter;
+    return svg(circle(90, 70, 61) + path('M37 85h106', '#fff', true) + path(`M37 ${85 - gap * scale}h106`) + circle(223, 67, diameter * scale * 0.29) + circle(209, 81, diameter * scale * 0.16) + circle(237, 81, diameter * scale * 0.16) + path('M216 73l-4 4m18-4 4 4', '#fff') + path('M194 90h58m-58-5v10m58-10v10', '#fff'));
+  }
+  function actual(id, s) {
+    return picture(id, { closer: s.closer, key: ['same', 'hundred-thousand', '8', 'both', 'same', 'both', PHYS.fractureState(s.closer).state, String(PHYS.frac(s.closer))][id - 1] });
+  }
+  return { picture, actual, principle, micro, bar, svg };
+})();
+
+// Camera, sound, explanations and HUD consume Q; they never decide success.
+Object.assign(ICONS, {
+  hand: 'M8 12V4a2 2 0 0 1 4 0v7-4a2 2 0 0 1 4 0v4-2a2 2 0 0 1 4 0v6q0 7-7 7-4 0-7-5l-3-4q-1-3 2-2l3 2',
+  check: 'M4 12l5 5L21 5', next: 'M5 12h14m-6-6 6 6-6 6',
+  star: 'M12 2l3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1z',
+  free: 'M3 5h18v14H3zM8 8v8m8-8v8M5 12h6m2 0h6',
+  person: 'M12 3a3 3 0 1 1 0 6 3 3 0 0 1 0-6M12 9v8m-7-5h14m-7 5-5 6m5-6 5 6'
+});
+Object.assign(LABELS, {
+  quest: { ko: '퀘스트', en: 'Quests' }, free: { ko: '자유 실험', en: 'Free exploration' },
+  pick: { ko: '예상 그림', en: 'Prediction' }, next: { ko: '다음', en: 'Next' }, replay: { ko: '다시 비교', en: 'Replay comparison' },
+  micro: { ko: '물 분자 크기 돋보기', en: 'Molecular scale magnifier' }, person: { ko: '사람 비교 열기', en: 'Open person comparison' },
+  sky: { ko: '하늘 창 열기', en: 'Open sky window' }, personSeen: { ko: '사람 줄 보기', en: 'Inspect person row' },
+  oceanSeen: { ko: '바다 줄 보기', en: 'Inspect ocean row' }, wall: { ko: '방파제 높이', en: 'Breakwater height' }
+});
+const qPictures = document.createElement('div'); qPictures.id = 'q-pictures'; document.body.append(qPictures);
+const qOverlay = document.createElement('div'); qOverlay.id = 'q-overlay'; qOverlay.setAttribute('aria-hidden', 'true'); document.body.append(qOverlay);
+const qExtra = document.createElement('div'); qExtra.id = 'q-extra'; qExtra.className = 'hud'; document.body.append(qExtra);
+const questLight = new THREE.PointLight(THEME.cool, 0, 0.7, 2); scene.add(questLight);
+function qButton(label, symbol, fn, parent, suffix = '') {
+  const b = document.createElement('button'); b.setAttribute('aria-label', LABELS[label][LANG] + suffix); b.innerHTML = icon(symbol); b.onclick = fn; parent.append(b); return b;
+}
+function questUI() {
+  // 80-teacher is shared infrastructure outside this pass's editable files.
+  // Both consecutive sky stages use the window shot: baseline -> half -> tenth.
+  Object.assign(TEACHER_CFG.attract[1], { shot: 5, layers: ['sky', 'reference', 'ocean'] });
+  Object.assign(TEACHER_CFG.attract[2], { shot: 5, layers: ['sky', 'reference', 'ocean'] });
+  const d = QUESTS[Q.i], f = Q.flags, top = document.getElementById('quests');
+  top.removeAttribute('aria-hidden'); top.replaceChildren();
+  qButton('quest', 'moon', () => TEACHER.mode('student'), top).setAttribute('aria-pressed', String(T.mode === 'student'));
+  qButton('free', 'free', () => TEACHER.mode('free'), top).setAttribute('aria-pressed', String(T.mode === 'free'));
+  qButton('teacher', 'teacher', () => TEACHER.mode('teacher'), top).setAttribute('aria-pressed', String(T.mode === 'teacher'));
+  if (T.mode !== 'teacher')
+  QUESTS.forEach((row, i) => {
+    const b = qButton('quest', row.icon, () => { if (i === 0 || Q.completed.has(i - 1) || Q.completed.has(i)) QUEST.go(i); }, top, ` ${i + 1}`);
+    b.className = `quest ${i === Q.i ? 'current' : ''} ${Q.completed.has(i) ? 'complete' : ''}`;
+    b.setAttribute('aria-disabled', String(i > 0 && !Q.completed.has(i - 1) && !Q.completed.has(i)));
+    b.innerHTML += `<span class="q-dots">${'<i></i>'.repeat(Q.stars[i] || (i === Q.i ? ['intro', 'predict', 'act', 'observe', 'confirm', 'card'].indexOf(Q.phase) + 1 : 1))}</span>`;
+  });
+  qPictures.replaceChildren(); qExtra.replaceChildren();
+  qPictures.className = Q.phase; qPictures.hidden = Q.free;
+  if (!Q.free && Q.phase === 'predict') d.candidates.forEach((c, k) => { const b = qButton('pick', 'moon', () => QUEST.pick(k), qPictures, ` ${k + 1}`); b.dataset.candidate = k; });
+  if (!Q.free && ['act', 'observe'].includes(Q.phase)) qPictures.innerHTML = `<div class="q-picked">${CARDS.picture(d.id, d.candidates.find(c => c.key === Q.pick) || d.candidates[0])}</div>`;
+  if (!Q.free && Q.phase === 'confirm') {
+    const chosen = d.candidates.find(c => c.key === Q.pick) || d.candidates[0];
+    qPictures.innerHTML = `<div class="q-compare ${Q.stars[Q.i] === 3 ? 'matched' : ''}">${CARDS.picture(d.id, chosen)}${CARDS.actual(d.id, f.success || QUEST.sample())}${Q.stars[Q.i] === 3 ? icon('check') : ''}</div>`;
+    if (Q.stars[Q.i] === 2) qButton('replay', 'reset', () => QUEST.skip('observe'), qPictures);
+  }
+  if (!Q.free && Q.phase === 'card') {
+    qPictures.innerHTML = `<div class="q-principle">${d.card(f.success || QUEST.sample())}<span class="q-stars">${icon('star').repeat(Q.stars[Q.i])}</span></div>`;
+    if (Q.i < 7) qButton('next', 'next', () => QUEST.go(Q.i + 1), qPictures);
+    else qButton('free', 'free', () => QUEST.mode(true), qPictures);
+  }
+  if (f.bonus && !Q.free && ['act', 'card'].includes(Q.phase)) qButton('pick', 'half', () => { qPictures.innerHTML = `<div class="q-principle">${d.card(f.bonus)}</div>`; }, qExtra);
+  for (const [name, symbol] of [['micro', 'lens'], ['lens', 'lens'], ['person', 'person'], ['sky', 'sky']]) {
+    const active = Q.free || (name === 'micro' ? Q.i === 0 : name === 'lens' ? Q.i === 3 : name === 'person' ? Q.i === 4 : Q.i === 5);
+    const b = qButton(name, symbol, () => QUEST.open(name), qExtra); b.classList.toggle('sub', !active);
+  }
+  for (const [name, symbol] of [['personSeen', 'person'], ['oceanSeen', 'wave']]) if (Q.free || Q.i === 4) qButton(name, symbol, () => QUEST.open(name), qExtra).setAttribute('aria-pressed', String(!!f[name]));
+  if (Q.free || Q.i === 7) for (const wall of [2, 8, 27]) {
+    const b = qButton('wall', 'wall', () => { if (!QUEST.allows()) return; f.wall = wall; f.hold = 0; questUI(); }, qExtra, ` ${wall}`);
+    b.innerHTML = CARDS.svg(CARDS.bar(135, wall, 3)); b.setAttribute('aria-pressed', String(f.wall === wall));
+  }
+  qButton('reset', 'reset', () => { set('closer', 0); S.u.value = S.u.target; f.hold = 0; }, qExtra).className = 'q-restore';
+  document.body.dataset.qphase = Q.free ? 'free' : Q.phase;
+  document.getElementById('person-card').style.pointerEvents = 'auto';
+}
+document.getElementById('person-card').addEventListener('pointerdown', e => {
+  if (Q.i !== 4 || Q.phase !== 'act') return;
+  const r = e.currentTarget.getBoundingClientRect(); QUEST.open(e.clientY < r.top + r.height / 2 ? 'personSeen' : 'oceanSeen');
+});
+const DIRECTOR = {
+  clock: 0, eventLeft: 0, snapshot: null, tone: null, previewAt: -1,
+  clear() { this.eventLeft = 0; this.snapshot = null; document.body.classList.remove('q-event', 'q-bars'); },
+  intro() { document.body.classList.add('q-bars'); shot(S.vertical ? SHOTS_VERTICAL[0] : SHOTS[0], S.vertical); },
+  push() {
+    document.body.classList.remove('q-bars');
+    const from = camera.position.clone(), fromTarget = controls.target.clone(), fromFov = camera.fov;
+    shot(S.vertical ? 0 : 1, S.vertical); camera.clearViewOffset();
+    const top = S.vertical ? 160 : 110, bottom = innerHeight - (S.vertical ? 315 : 335), available = Math.max(170, bottom - top);
+    const box = heroBox(true), target = box.getCenter(V3()); controls.target.copy(target); camera.lookAt(target); camera.updateMatrixWorld();
+    for (let i = 0; i < 12; i++) { const b = projectedBox(box); if (b.bottom - b.top < available && b.right - b.left < innerWidth * .87) break; camera.position.sub(target).multiplyScalar(1.08).add(target); camera.lookAt(target); camera.updateMatrixWorld(); }
+    const to = { pos: camera.position.clone(), target: target.clone(), fov: camera.fov };
+    camera.position.copy(from); controls.target.copy(fromTarget); camera.fov = fromFov; flyTo(to, 1.8);
+  },
+  event(s) { this.eventLeft = 1.4; this.snapshot = { ...s }; document.body.classList.add('q-event'); this.sound([220, 330], 0.45); },
+  time(dt) { return dt * (this.eventLeft > 0 ? 0.18 : 1) * (T.slow ? 0.25 : 1); },
+  sound(notes, duration = 0.35) {
+    if (!S.sound.target) return;
+    audioContext ||= new (window.AudioContext || window.webkitAudioContext)();
+    void audioContext.resume(); const now = audioContext.currentTime;
+    notes.forEach(freq => { const o = audioContext.createOscillator(), g = audioContext.createGain(); o.frequency.value = freq; g.gain.setValueAtTime(0.025 / notes.length, now); g.gain.exponentialRampToValueAtTime(0.0001, now + duration); o.connect(g).connect(audioContext.destination); o.start(); o.stop(now + duration); });
+  },
+  chord() { this.sound([523.25, 659.25, 783.99], 0.7); },
+  update(dt) {
+    this.clock += dt; this.eventLeft = Math.max(0, this.eventLeft - dt); document.body.classList.toggle('q-event', this.eventLeft > 0);
+    if (S.drag && S.sound.target) {
+      if (!this.tone) { audioContext ||= new (window.AudioContext || window.webkitAudioContext)(); const o = audioContext.createOscillator(), g = audioContext.createGain(); g.gain.value = 0.012; o.connect(g).connect(audioContext.destination); o.start(); this.tone = { o, g }; }
+      this.tone.o.frequency.setTargetAtTime(140 + Math.log2(PHYS.ratio(closerAt(S.u.value))) * 35, audioContext.currentTime, 0.05);
+    } else if (this.tone) { this.tone.o.stop(); this.tone = null; }
+    if (Math.floor(this.clock * 12) !== this.previewAt) {
+      this.previewAt = Math.floor(this.clock * 12);
+      qPictures.querySelectorAll('[data-candidate]').forEach(b => { const d = QUESTS[Q.i]; b.innerHTML = CARDS.picture(d.id, d.candidates[+b.dataset.candidate], this.clock); });
+    }
+    const project = p => { const v = p.clone().project(camera); return [(v.x + 1) * innerWidth / 2, (1 - v.y) * innerHeight / 2]; };
+    const line = (d, color = '#ffce8b', dash = false) => `<path stroke="${color}" ${dash ? 'stroke-dasharray="6 6"' : ''} d="${d}"/>`;
+    let body = '';
+    const d = QUESTS[Q.i], f = Q.flags, actual = QUEST.sample();
+    const focus = Q.i === 3 ? DIAL.knob.getWorldPosition(V3()) : MOON_CARRIAGE.position.clone().setY(E.y);
+    questLight.position.copy(focus).add(V3(0, .10, .12)); questLight.intensity = Q.free ? 0 : 0.32;
+    if (!Q.free && f.pushed && !S.drag && !GRAMMAR.enabled.sky && Q.phase !== 'intro') {
+      camera.clearViewOffset(); camera.updateMatrixWorld(); const b = projectedBox(heroBox(true));
+      const offset = ((S.vertical ? 160 : 110) + innerHeight - (S.vertical ? 315 : 335) - b.top - b.bottom) / 2;
+      camera.setViewOffset(innerWidth, innerHeight, 0, -offset, innerWidth, innerHeight);
+    }
+    if (!Q.free && Q.phase === 'intro' && f.elapsed < 0.9) body = `<g transform="translate(${innerWidth / 2 - 42} ${innerHeight / 2 - 42}) scale(3.5)"><defs><clipPath id="q-wipe"><rect width="${Math.min(24, f.elapsed / .65 * 24)}" height="24"/></clipPath></defs><g clip-path="url(#q-wipe)">${icon(d.icon).replace(/^<svg[^>]*>|<\/svg>$/g, '')}</g></g>`;
+    if ((Q.free || ['act', 'observe', 'confirm', 'card'].includes(Q.phase))) {
+      if (f.lensOpen && (Q.free || Q.i === 0)) body += `<svg x="${innerWidth / 2 - 150}" y="${S.vertical ? 170 : 135}" width="300" height="140">${CARDS.micro().replace(/^<svg[^>]*>|<\/svg>$/g, '')}</svg>`;
+      const goals = Q.i === 7 ? [closerForRatio(f.wall)] : d.goalMarks;
+      if (!Q.free && Q.phase === 'act') for (const closer of goals) {
+        const [x, y] = project(V3(railAt(PHYS.railX(closer)), railY, 0.07));
+        body += line(`M${x} ${y + 9}v-47h17l-5 7 5 7h-17`, '#ffce8b', true) + `<circle cx="${x}" cy="${y - 42}" r="9" stroke-dasharray="3 3"/>`;
+      }
+      if (Q.i === 1) for (const i of f.visited) { const [x, y] = project(V3(railAt(PHYS.RAIL_NOTCHES[i].x), railY, 0.08)); body += line(`M${x} ${y}v-${PHYS.ratio(PHYS.RAIL_NOTCHES[i].closer) * 14}`, '#64ead0'); }
+      if (Q.i === 7 || Q.free) {
+        const wallCloser = closerForRatio(f.wall);
+        const [x, y] = project(E.clone().add(V3(RV * (1 + PHYS.oceanBulge(wallCloser).bulge), 0, 0.08))), [mx, my] = project(GRAMMAR.groups.marks.position);
+        const red = PHYS.ratio(actual.closer) > f.wall, col = red ? '#ff695e' : '#fff';
+        body += line(`M${x} ${y - 24}v48M${mx - 18} ${my - f.wall * 5}h38`, col, true);
+        if (red) { const [tx, ty] = project(E.clone().add(V3(RV * (1 + PHYS.oceanBulge(actual.closer).bulge), 0, .08))); body += `<circle cx="${tx}" cy="${ty}" r="10" fill="#ff695e" opacity="${.3 + .5 * Math.abs(Math.sin(this.clock * 9))}"/>`; }
+        if (f.hold > 0) body += `<circle cx="${x}" cy="${y - 60}" r="12" stroke="#64ead0" stroke-dasharray="${Math.min(1, f.hold / 1.5) * 75} 75"/>`;
+      }
+      if (!Q.free && Q.phase === 'act' && f.demoLeft > 0 && !S.drag) {
+        const target = Q.i === 3 ? DIAL.knob.getWorldPosition(V3()) : MOON_CARRIAGE.position.clone().setY(E.y), [x, y] = project(target), shift = Math.min(1, (2.2 - f.demoLeft) / 1.7) * -70;
+        body += line(`M${x} ${y}h-70m8-6-8 6 8 6`, '#ffce8b', true) + `<g transform="translate(${x + shift - 12} ${y + 6})">${icon('hand').replace(/^<svg[^>]*>|<\/svg>$/g, '')}</g>`;
+      }
+      if (Q.i === 3 && f.peaks > 0) { const [x, y] = project(GRAPHS[0].mesh.position); body += Array.from({ length: Math.min(4, f.peaks) }, (_, i) => `<circle cx="${x - 20 + i * 14}" cy="${y - 20}" r="4" fill="#64ead0"/>`).join(''); }
+      if (PHYS.fractureState(actual.closer).state === 'ring') { qExtra.dataset.ring = 'true'; } else delete qExtra.dataset.ring;
+    }
+    if (this.eventLeft > 0) {
+      const [x, y] = project(E), age = 1.4 - this.eventLeft, width = Math.min(1, age / 0.45) * 90;
+      body = `<circle cx="${x}" cy="${y}" r="5" fill="#64ead0"/>` + line(`M${x} ${y}l${width} -65`, '#64ead0') + (age > 0.45 ? `<svg x="${Math.min(innerWidth - 200, x + 80)}" y="${Math.max(140, y - 140)}" width="190" height="100">${d.card(this.snapshot).replace(/^<svg[^>]*>|<\/svg>$/g, '')}</svg>` : '');
+    }
+    qOverlay.innerHTML = `<svg viewBox="0 0 ${innerWidth} ${innerHeight}">${body}</svg>`;
+  }
+};
+
+function update(dt) {
+  ATTRACT.update(dt);
+  const physicalDt = DIRECTOR.time(dt);
+  const k = 1 - Math.exp(-18 * dt);
+  for (const name of ['u', 'lon0', 'playing', 'speed', 'sound', 'lens', 'ui']) {
+    const p = S[name]; p.value += (p.target - p.value) * k;
+    if (Math.abs(p.target - p.value) < 1e-8) p.value = p.target;
+  }
+  S.t.target = (S.t.target + physicalDt * 3600 * S.speed.value * S.playing.value) % 86400;
+  const tDelta = ((S.t.target - S.t.value + 129600) % 86400) - 43200;
+  S.t.value = ((S.t.value + tDelta * k) % 86400 + 86400) % 86400;
+  if (Math.abs(tDelta) < 1e-7) S.t.value = S.t.target;
+  updateHero(); drawGraphs();
+  // Saturation is signalled by the existing break mark; keep the physical bulge visible in demonstrations.
+  if (T.mode === 'teacher' || A.active) OCEAN.visible = S.layers.ocean !== false;
+  QUEST.update(dt); GRAMMAR.update(physicalDt);
+  if (S.fly) {
+    const f = S.fly; f.elapsed += dt; const u = clamp(f.elapsed / f.duration, 0, 1), smooth = 1 - (1 - u) ** 3;
+    camera.position.lerpVectors(f.from, f.to.pos, smooth); controls.target.lerpVectors(f.fromTarget, f.to.target, smooth);
+    camera.fov = THREE.MathUtils.lerp(f.fromFov, f.to.fov, smooth); camera.updateProjectionMatrix();
+    if (u === 1) S.fly = null;
+  }
+  controls.update();
+  DIRECTOR.update(dt);
+  TEACHER.update(dt);
+  if (T.mode === 'teacher') TEACHER_CFG.frameViewport();
+  bokehPass.uniforms.focus.value = camera.position.distanceTo(controls.target);
+  composer.render(dt); S.frames++;
+}
+function step(n = 1, dt = 1 / 60) {
+  if (!Number.isInteger(n) || n < 0 || n > 120 || !Number.isFinite(dt) || dt < 0 || dt > 1) throw new RangeError('step');
+  for (let i = 0; i < n; i++) update(dt);
+  return { u: S.u.value, closer: closerAt(S.u.value), t: S.t.value };
+}
+function layer(name, on) {
+  const layers = { room: ROOM, console: CONSOLE, hero: HERO, ocean: OCEAN, reference: REFERENCE, beads: BEADS, ring: SHARDS };
+  if (!(name in layers)) throw new RangeError(name);
+  S.layers[name] = !!on; layers[name].visible = !!on;
+  if (name === 'beads') BEAD_SIGN.visible = !!on;
+  if (name === 'reference') SATURATION_SIGN.visible = !!on && PHYS.oceanBulge(closerAt(S.u.value)).saturated;
+}
+async function capture(name = 'hero') {
+  if (!/^[\w-]+$/.test(name)) throw new TypeError('capture');
+  if (name === 'thumb') {
+    const saved = { ratio: renderer.getPixelRatio(), size: renderer.getSize(new THREE.Vector2()),
+      camera: camera.clone(), target: controls.target.clone(), fly: S.fly, shotIndex: S.shotIndex,
+      vertical: S.vertical, ui: !!S.ui.target };
+    let data;
+    try {
+      TEACHER_CFG.ui(false); S.fly = null;
+      camera.clearViewOffset(); camera.aspect = 1200 / 750;
+      camera.position.copy(TEACHER_CFG.heroShot.pos); controls.target.copy(TEACHER_CFG.heroShot.target);
+      camera.fov = TEACHER_CFG.heroShot.fov; camera.lookAt(controls.target); camera.updateProjectionMatrix();
+      renderer.setPixelRatio(1); renderer.setSize(1200, 750, false);
+      composer.setPixelRatio(1); composer.setSize(1200, 750); composer.render(0);
+      data = canvas.toDataURL('image/jpeg', .94);
+    } finally {
+      renderer.setPixelRatio(saved.ratio); renderer.setSize(saved.size.x, saved.size.y, false);
+      composer.setPixelRatio(saved.ratio); composer.setSize(saved.size.x, saved.size.y);
+      const buffer = renderer.getDrawingBufferSize(new THREE.Vector2()), bloomScale = S.quality === 'low' ? .5 : 1;
+      bloomPass.setSize(buffer.x * bloomScale, buffer.y * bloomScale);
+      camera.copy(saved.camera); controls.target.copy(saved.target); S.fly = saved.fly;
+      S.shotIndex = saved.shotIndex; S.vertical = saved.vertical; TEACHER_CFG.ui(saved.ui);
+      composer.render(0);
+    }
+    const response = await fetch('/__save/thumb.jpg', { method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: data });
+    if (!response.ok) throw new Error(`capture ${response.status}`);
+    return { name, width: 1200, height: 750 };
+  }
+  const size = renderer.getSize(new THREE.Vector2());
+  if (!canvas.width || !canvas.height || size.x !== innerWidth || size.y !== innerHeight) resize(false);
+  update(0);
+  const data = canvas.toDataURL('image/jpeg', 0.94);
+  const response = await fetch(`/__save/${name}.jpg`, { method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: data });
+  if (!response.ok) throw new Error(`capture ${response.status}`);
+  return { name, width: canvas.width, height: canvas.height };
+}
+function perf() {
+  return { ms: S.ms, fps: 1000 / S.ms, frames: S.frames, calls: renderer.info.render.calls,
+    triangles: renderer.info.render.triangles, quality: S.quality, ao: aoPass.enabled, bokeh: bokehPass.enabled,
+    pixelRatio: renderer.getPixelRatio(), geometries: renderer.info.memory.geometries, textures: renderer.info.memory.textures };
+}
+window.__lab = { state: S, PHYS, quest: QUEST, SHOTS, SHOTS_VERTICAL, set, preset, shot, flyTo, layer, step, quality: setQuality, textAudit, heroCoverage, perf, capture };
+function boot() {
+  syncUI();
+  setQuality(QS.get('lite') === '1' || window.__SITE__?.quality === 'low' ? 'low' : 'high');
+  updateHero(); shot(S.vertical ? 0 : 1, S.vertical); QUEST.go(0);
+  TEACHER.mode(QS.get('teacher') === '1' ? 'teacher' : 'student'); update(0);
+  requestAnimationFrame(frame);
+}
+function frame(now) {
+  requestAnimationFrame(frame);
+  const elapsed = S.lastTime ? now - S.lastTime : 16.67; S.lastTime = now;
+  if (document.hidden) return;
+  ATTRACT.health(elapsed);
+  S.ms += (elapsed - S.ms) * 0.03;
+  S.sampleMs += Math.min(elapsed, 100); S.sampleFrames++;
+  if (S.sampleMs >= 2000) {
+    if (S.sampleMs / S.sampleFrames > 32 && S.quality !== 'low') {
+      if (S.autoLevel === 0) aoPass.enabled = false;
+      else if (S.autoLevel === 1) { renderer.setPixelRatio(1); renderer.setSize(innerWidth, innerHeight, false); composer.setPixelRatio(1); composer.setSize(innerWidth, innerHeight); }
+      else setQuality('low');
+      S.autoLevel++;
+    }
+    S.sampleMs = 0; S.sampleFrames = 0;
+  }
+  update(Math.min(elapsed / 1000, 0.05));
+}
+
+// Lab-specific bindings stop at this object. The controller below is portable.
+const TEACHER_CFG = {
+  idleSeconds: 90,
+  layerOrder: ['marks', 'field', 'lens', 'person', 'sky', 'limit', 'ocean', 'reference', 'beads', 'ring'],
+  layerIcons: { marks: 'rail', field: 'wave', lens: 'lens', person: 'person', sky: 'sky', limit: 'wall', ocean: 'wave', reference: 'half', beads: 'rail', ring: 'ring' },
+  layerLabels: {
+    marks: { ko: '마디', en: 'Quantity marks' }, field: { ko: '조석장', en: 'Tidal field' },
+    lens: { ko: '단면', en: 'Section' }, person: { ko: '사람 비교', en: 'Person comparison' },
+    sky: { ko: '하늘 창', en: 'Sky window' }, limit: { ko: '한계', en: 'Limits' },
+    ocean: { ko: '바다', en: 'Ocean' }, reference: { ko: '기준 윤곽', en: 'Reference' },
+    beads: { ko: '거리 마디', en: 'Distance beads' }, ring: { ko: '고리', en: 'Ring' }
+  },
+  numbers: [
+    { label: 'rail', fn: () => PHYS.dist(closerAt(S.u.value)) / 1000, unit: 'km' },
+    { label: 'half', fn: () => PHYS.ratio(closerAt(S.u.value)), unit: '×' },
+    { label: 'wave', fn: () => PHYS.tideHeight(closerAt(S.u.value)), unit: 'm' },
+    { label: 'play', fn: () => PHYS.orbitPeriod(closerAt(S.u.value)) / 3600, unit: 'h' },
+    { label: 'sky', fn: () => PHYS.angularSizeDeg(closerAt(S.u.value)), unit: '°' }
+  ],
+  attract: [
+    { shot: 1, closer: 0, layers: ['ocean', 'reference', 'beads'], seconds: 8 },
+    { shot: 3, closer: PHYS.DETENTS[0].closer, layers: ['ocean', 'reference', 'marks', 'field'], seconds: 12 },
+    { shot: 5, closer: PHYS.DETENTS[2].closer, layers: ['sky', 'reference', 'ocean'], seconds: 12 },
+    { shot: 2, closer: PHYS.C.d0 - (PHYS.roche().fluid + PHYS.roche().rigid) / 2, layers: ['limit', 'ring', 'reference'], seconds: 10 },
+    { shot: 1, closer: 0, layers: ['ocean', 'reference', 'beads'], seconds: 10 }
+  ],
+  shots: SHOTS, verticalShots: SHOTS_VERTICAL, heroShot: SHOTS[1],
+  language: LANG, icon, setLayer: layer,
+  layerOn: name => name in GRAMMAR.enabled ? GRAMMAR.enabled[name] : S.layers[name] !== false,
+  getCloser: () => closerAt(S.u.value),
+  setCloser(value, immediate = false) { set('closer', value); if (immediate) S.u.value = S.u.target; },
+  getPlaying: () => !!S.playing.target,
+  play(on) { S.playing.value = S.playing.target = +on; syncUI(); },
+  oneFrame() { const playing = S.playing.target; S.playing.value = S.playing.target = 1; step(1); S.playing.value = S.playing.target = playing; syncUI(); },
+  ui(on) { S.ui.value = S.ui.target = +on; document.body.classList.toggle('hide-ui', !on); window.__site?.setVisible(on); },
+  getUI: () => !!S.ui.target,
+  fly(spec, duration) { flyTo(spec, duration); },
+  shotForStage(row) { return S.vertical ? SHOTS_VERTICAL[row.shot === 5 ? 2 : row.shot === 2 ? 1 : 0] : SHOTS[row.shot]; },
+  quests: QUESTS,
+  getQuest: () => Q.i,
+  bindMode(state) {
+    Object.defineProperty(Q, 'free', {
+      get: () => state.mode !== 'student',
+      set(value) { if (state.mode !== 'teacher') state.mode = value ? 'free' : 'student'; },
+      enumerable: true, configurable: true
+    });
+  },
+  questMode(free) { QUEST.mode(free); },
+  selectQuest(i) {
+    const d = QUESTS[i]; Q.i = i; Q.pick = null; Q.free = true; Q.phase = 'act';
+    Q.flags = { elapsed: 0, visited: new Set(), peaks: 0, wall: 8, hold: 0 };
+    DIRECTOR.clear(); set('closer', d.startState.closer); S.u.value = S.u.target;
+    S.t.value = S.t.target = 0;
+    TEACHER.layers(d.layers); shot(S.vertical ? SHOTS_VERTICAL[0] : SHOTS[1], S.vertical); questUI();
+  },
+  cardBusy: () => !Q.free && ['intro', 'predict', 'observe', 'confirm', 'card'].includes(Q.phase),
+  reset() {
+    if (S.drag) endDrag({ pointerId: S.drag.id });
+    S.fly = null; controls.enabled = true; preset(0); S.u.value = S.u.target;
+    S.lon0.value = S.lon0.target = 0.45; S.t.value = S.t.target = 0;
+    S.speed.value = S.speed.target = 1; S.playing.value = S.playing.target = 0;
+    S.sound.value = S.sound.target = 0;
+    Q.completed.clear(); Q.stars.fill(0); Q.pick = null;
+    DIRECTOR.clear(); QUEST.go(0); Q.free = true; Q.phase = 'act';
+    updateHero(); GRAMMAR.update(10); SHARDS.visible = false;
+    shot(S.vertical ? SHOTS_VERTICAL[0] : SHOTS[1], S.vertical); syncUI();
+  },
+  startStudent() { QUEST.go(0); },
+  refresh: questUI,
+  visibilityReset() { S.lastTime = 0; },
+  frameViewport() {
+    const strip = teacherStrip.getBoundingClientRect(), top = document.getElementById('quests').getBoundingClientRect().bottom + 12;
+    const width = Math.max(100, strip.left - 24), height = Math.max(100, innerHeight - top - 12);
+    camera.setViewOffset(width, height, -12, -top, innerWidth, innerHeight);
+  },
+  scale(value) {
+    S.lineScale = value;
+    if (value === 1) { camera.clearViewOffset(); camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); }
+    for (const grip of [SLIDER.handle, DIAL.knob, PLAY_BUTTON, MOON_HIT, PIN_HIT]) grip.scale.setScalar(value);
+    scene.traverse(o => {
+      if (o.isLine) o.material.linewidth = value;
+      if (o.userData.shaft) {
+        o.userData.shaft.scale.y = value; o.userData.head.scale.y = value;
+      }
+    });
+  },
+  // Reuse the grammar's dashed reference geometry and material; clone buffers only once.
+  ghost: (() => {
+    const root = new THREE.Group(); HERO.add(root); root.visible = false;
+    const outline = REFERENCE.clone(); root.add(outline);
+    outline.children.forEach(o => { o.geometry = o.geometry.clone(); });
+    const moon = new THREE.Group(); root.add(moon);
+    for (const axis of [0, 1, 2]) KIT.line(Array.from({ length: 97 }, (_, i) => {
+      const a = i / 96 * Math.PI * 2, r = RV * MODEL.moonRatio;
+      return axis === 0 ? V3(0, Math.cos(a) * r, Math.sin(a) * r)
+        : axis === 1 ? V3(Math.cos(a) * r, 0, Math.sin(a) * r) : V3(Math.cos(a) * r, Math.sin(a) * r, 0);
+    }), THEME.reference, moon, true, .9);
+    return snapshot => {
+      root.visible = !!snapshot; if (!snapshot) return;
+      moon.position.set(E.x + PHYS.moonVisDist(snapshot.closer) * RV, E.y, E.z);
+      const bulge = PHYS.oceanBulge(snapshot.closer).bulge;
+      outline.children.forEach((o, j) => {
+        const source = REFERENCE.children[j].geometry.attributes.position, target = o.geometry.attributes.position;
+        for (let i = 0; i < target.count; i++) {
+          const dir = V3().fromBufferAttribute(source, i).normalize();
+          const r = RV * (1 + bulge * (3 * dir.x ** 2 - 1) / 2) + .002;
+          target.setXYZ(i, dir.x * r, dir.y * r, dir.z * r);
+        }
+        target.needsUpdate = true; o.computeLineDistances();
+      });
+    };
+  })(),
+  predict(open = false, choice = null, dt = 0) {
+    const d = QUESTS[Q.i];
+    if (open) { Q.phase = 'predict'; Q.pick = null; Q.flags.classElapsed = 0; }
+    if (choice !== null) {
+      Q.pick = d.candidates[choice].key; Q.phase = 'observe'; Q.flags.classElapsed = 0;
+      const answer = d.candidates.find(c => c.key === d.answerKey);
+      // The result follows the question's condition, independently of the chosen prediction.
+      set('closer', d.goalMarks.at(-1) ?? answer.closer);
+      if (Q.i === 0) { set('closer', .1); Q.flags.lensOpen = true; }
+      if (Q.i === 3) { GRAMMAR.set({ lens: true }); this.play(true); }
+      if (Q.i === 4) GRAMMAR.set({ person: true });
+      if (Q.i === 5) { GRAMMAR.set({ sky: true }); flyTo(S.vertical ? SHOTS_VERTICAL[2] : SHOTS[5], 1.8); }
+      if (Q.i === 6) set('closer', PHYS.C.closerMax);
+    }
+    if (Q.phase === 'observe') {
+      Q.flags.classElapsed += dt;
+      if (Q.flags.classElapsed >= 2.5) Q.phase = 'confirm';
+    }
+    return { phase: Q.phase, candidates: d.candidates,
+      picture: c => CARDS.picture(d.id, c, DIRECTOR.clock),
+      compare: () => {
+        const chosen = d.candidates.find(c => c.key === Q.pick) || d.candidates[0];
+        return `<div class="q-compare">${CARDS.picture(d.id, chosen)}${CARDS.actual(d.id, QUEST.sample())}</div>`;
+      } };
+  }
+};
+
+const T = { mode: 'student', slow: false, spotlight: false, laser: false, numbers: false, ab: null, layerStep: 0 };
+TEACHER_CFG.bindMode(T);
+// Compatibility view, never a second stored snapshot.
+Object.defineProperty(S, 'ab', { get: () => T.ab, set: value => { T.ab = value; } });
+const TEACHER_LABELS = {
+  teacher: { ko: '교사 시연', en: 'Teacher demonstration' },
+  ui: { ko: '화면 조작 숨기기 또는 보이기', en: 'Hide or show controls' },
+  frame: { ko: '한 프레임', en: 'One frame' }, slow: { ko: '사분의 일 속도', en: 'Quarter speed' },
+  stack: { ko: '다음 표현 층', en: 'Stack next layer' }, ab: { ko: '비교 고정', en: 'Pin comparison' },
+  clear: { ko: '비교 해제', en: 'Clear comparison' }, spotlight: { ko: '스포트라이트', en: 'Spotlight' },
+  laser: { ko: '레이저 포인터', en: 'Laser pointer' }, numbers: { ko: '수치 층', en: 'Numeric layer' },
+  predict: { ko: '학급 예상', en: 'Class prediction' }, close: { ko: '예상 닫기', en: 'Close prediction' },
+  play: { ko: '정지 또는 재생', en: 'Pause or play' }, reset: { ko: '처음 상태', en: 'Reset' },
+  choice: { ko: '예상 후보', en: 'Prediction candidate' }, quest: { ko: '퀘스트 바로가기', en: 'Quest shortcut' }
+};
+Object.assign(LABELS, TEACHER_LABELS);
+Object.assign(ICONS, {
+  teacher: 'M6 3h12v18H6zM9 6h6M9 10h6M9 15h1m4 0h1M9 18h6',
+  frame: 'M4 5v14l8-7zM14 5l8 7-8 7z', slow: 'M3 14h18M6 14V9h12v5M8 9V6m8 3V6M7 18h1m8 0h1',
+  ab: 'M3 5h7v14H3zM14 5h7v14h-7zM10 12h4', clear: 'M5 5l14 14M19 5L5 19',
+  spotlight: 'M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18M12 7v10M7 12h10',
+  laser: 'M3 21l9-9m-2-2 4 4M16 2v4m2 2h4M18 6l3-3',
+  numbers: 'M7 3L5 21M16 3l-2 18M2 9h19M1 15h19', predict: 'M3 4h18v13H3zM8 21l4-4 4 4M7 8h3m4 0h3M7 12h10', close: 'M5 5l14 14M19 5L5 19'
+});
+const TEACHER_KEYS = { Space: 'play', '.': 'frame', '/': 'ui', Escape: 'reset' };
+const teacherStrip = document.createElement('aside'); teacherStrip.id = 'teacher-strip'; document.body.append(teacherStrip);
+const numericLayer = document.createElement('div'); numericLayer.id = 'teacher-numbers'; document.body.append(numericLayer);
+const classPanel = document.createElement('div'); classPanel.id = 'teacher-class'; classPanel.hidden = true; document.body.append(classPanel);
+const spotMask = document.createElement('div'); spotMask.id = 'teacher-spot'; document.body.append(spotMask);
+const laserCanvas = document.createElement('canvas'); laserCanvas.id = 'teacher-laser'; document.body.append(laserCanvas);
+const laserTrail = [];
+function teacherButton(label, symbol, fn, parent, dictionary = TEACHER_LABELS) {
+  const b = document.createElement('button'); b.setAttribute('aria-label', dictionary[label][TEACHER_CFG.language]);
+  b.innerHTML = TEACHER_CFG.icon(symbol); b.onclick = fn; parent.append(b); return b;
+}
+const TEACHER = {
+  state: T, config: TEACHER_CFG,
+  mode(mode) {
+    if (!['student', 'free', 'teacher'].includes(mode)) throw new RangeError('mode');
+    if (T.mode === 'teacher' && mode !== 'teacher') this.reset();
+    T.mode = mode; document.body.dataset.mode = mode;
+    document.documentElement.style.setProperty('--ui-scale', mode === 'teacher' ? '1.4' : '1');
+    TEACHER_CFG.scale(mode === 'teacher' ? 1.4 : 1);
+    TEACHER_CFG.questMode(mode !== 'student');
+    if (mode === 'teacher') this.select(TEACHER_CFG.getQuest());
+    this.render();
+  },
+  layers(names) { for (const name of TEACHER_CFG.layerOrder) TEACHER_CFG.setLayer(name, names.includes(name)); },
+  stack() {
+    if (T.layerStep >= TEACHER_CFG.layerOrder.length) { T.layerStep = 0; this.layers([]); }
+    else { if (!T.layerStep) this.layers([]); TEACHER_CFG.setLayer(TEACHER_CFG.layerOrder[T.layerStep++], true); }
+    this.render();
+  },
+  select(i) { TEACHER_CFG.selectQuest(i); T.layerStep = 0; classPanel.hidden = true; this.render(); },
+  reset() {
+    const mode = T.mode;
+    T.slow = T.spotlight = T.laser = T.numbers = false; T.ab = null; T.layerStep = 0;
+    classPanel.hidden = true; laserTrail.length = 0;
+    TEACHER_CFG.reset(); T.mode = mode; this.layers([]); TEACHER_CFG.ghost(null); TEACHER_CFG.ui(true);
+    if (T.mode === 'student') TEACHER_CFG.startStudent();
+    TEACHER_CFG.refresh(); this.render();
+  },
+  command(name) {
+    if (name === 'reset') this.reset();
+    else if (name === 'play') TEACHER_CFG.play(!TEACHER_CFG.getPlaying());
+    else if (name === 'frame') TEACHER_CFG.oneFrame();
+    else if (name === 'stack') this.stack();
+    else if (name === 'ab') { T.ab = { closer: TEACHER_CFG.getCloser() }; TEACHER_CFG.ghost(T.ab); }
+    else if (name === 'clear') { T.ab = null; TEACHER_CFG.ghost(null); }
+    else if (name === 'predict') { TEACHER_CFG.predict(true); classPanel.hidden = false; this.prediction(); }
+    else if (['slow', 'spotlight', 'laser', 'numbers'].includes(name)) T[name] = !T[name];
+    this.render();
+  },
+  render() {
+    const focusLabel = document.activeElement?.closest('#teacher-strip') ? document.activeElement.getAttribute('aria-label') : null;
+    teacherStrip.hidden = T.mode !== 'teacher'; teacherStrip.replaceChildren();
+    const section = () => { const g = document.createElement('div'); g.className = 'teacher-grid'; teacherStrip.append(g); return g; };
+    let group = section();
+    for (const name of ['play', 'frame', 'slow']) {
+      const b = teacherButton(name, name === 'play' ? TEACHER_CFG.getPlaying() ? 'pause' : 'play' : name, () => this.command(name), group);
+      b.setAttribute('aria-pressed', String(name === 'play' ? TEACHER_CFG.getPlaying() : !!T[name]));
+    }
+    group = section();
+    for (const name of TEACHER_CFG.layerOrder) teacherButton(name, TEACHER_CFG.layerIcons[name], () => {
+      TEACHER_CFG.setLayer(name, !TEACHER_CFG.layerOn(name)); this.render();
+    }, group, TEACHER_CFG.layerLabels).setAttribute('aria-pressed', String(TEACHER_CFG.layerOn(name)));
+    teacherButton('stack', 'next', () => this.stack(), group);
+    group = section();
+    for (const name of ['ab', 'clear', 'spotlight', 'laser', 'numbers']) teacherButton(name, name, () => this.command(name), group).setAttribute('aria-pressed', String(name === 'ab' ? !!T.ab : !!T[name]));
+    group = section();
+    TEACHER_CFG.quests.forEach((d, i) => { const b = teacherButton('quest', d.icon, () => this.select(i), group); b.setAttribute('aria-label', `${TEACHER_LABELS.quest[TEACHER_CFG.language]} ${i + 1}`); });
+    group = section();
+    for (const name of ['predict', 'reset']) teacherButton(name, name, () => this.command(name), group);
+    if (focusLabel) [...teacherStrip.querySelectorAll('button')].find(b => b.getAttribute('aria-label') === focusLabel)?.focus({ preventScroll: true });
+    this.update(0);
+  },
+  prediction() {
+    const data = TEACHER_CFG.predict(); classPanel.replaceChildren();
+    teacherButton('close', 'close', () => { classPanel.hidden = true; }, classPanel);
+    if (data.phase === 'predict') data.candidates.forEach((c, i) => {
+      const b = teacherButton('choice', 'predict', () => { TEACHER_CFG.predict(false, i); this.prediction(); }, classPanel);
+      b.dataset.choice = i; b.setAttribute('aria-label', `${TEACHER_LABELS.choice[TEACHER_CFG.language]} ${i + 1}`); b.innerHTML = data.picture(c);
+    });
+    else { const compare = document.createElement('div'); compare.className = 'class-result'; compare.innerHTML = data.compare(); classPanel.append(compare); }
+    classPanel.querySelector('button')?.focus({ preventScroll: true });
+  },
+  update(dt) {
+    spotMask.hidden = T.mode !== 'teacher' || !T.spotlight;
+    laserCanvas.hidden = T.mode !== 'teacher' || !T.laser;
+    numericLayer.hidden = T.mode !== 'teacher' || !T.numbers;
+    if (!numericLayer.hidden) numericLayer.innerHTML = TEACHER_CFG.numbers.map(row => `<div>${TEACHER_CFG.icon(row.label)}<span data-numeric>${row.fn().toFixed(2)} ${row.unit}</span></div>`).join('');
+    if (!classPanel.hidden) {
+      const data = TEACHER_CFG.predict(false, null, dt);
+      if (data.phase === 'predict') classPanel.querySelectorAll('[data-choice]').forEach(b => { b.innerHTML = data.picture(data.candidates[+b.dataset.choice]); });
+      else classPanel.querySelector('.class-result').innerHTML = data.compare();
+    }
+    if (!laserCanvas.hidden) {
+      if (laserCanvas.width !== innerWidth || laserCanvas.height !== innerHeight) { laserCanvas.width = innerWidth; laserCanvas.height = innerHeight; }
+      const c = laserCanvas.getContext('2d'), now = performance.now(); c.clearRect(0, 0, innerWidth, innerHeight);
+      while (laserTrail.length > 1 && now - laserTrail[0].t > 160) laserTrail.shift();
+      if (laserTrail.length) {
+        c.strokeStyle = '#ff3838'; c.fillStyle = '#ff3838'; c.lineWidth = 4; c.shadowColor = '#ff0000'; c.shadowBlur = 12;
+        c.beginPath(); laserTrail.forEach((p, i) => i ? c.lineTo(p.x, p.y) : c.moveTo(p.x, p.y)); c.stroke();
+        const p = laserTrail.at(-1); c.beginPath(); c.arc(p.x, p.y, 5, 0, Math.PI * 2); c.fill();
+      }
+    }
+  }
+};
+window.addEventListener('pointermove', e => {
+  spotMask.style.setProperty('--pointer-x', `${e.clientX}px`); spotMask.style.setProperty('--pointer-y', `${e.clientY}px`);
+  if (T.laser) laserTrail.push({ x: e.clientX, y: e.clientY, t: performance.now() });
+}, { passive: true });
+window.addEventListener('pointerdown', e => {
+  spotMask.style.setProperty('--pointer-x', `${e.clientX}px`); spotMask.style.setProperty('--pointer-y', `${e.clientY}px`);
+  if (T.laser) laserTrail.push({ x: e.clientX, y: e.clientY, t: performance.now() });
+}, { passive: true });
+window.addEventListener('keydown', e => {
+  if (T.mode !== 'teacher' || e.repeat || e.altKey || e.ctrlKey || e.metaKey) return;
+  const command = TEACHER_KEYS[e.code === 'Space' ? 'Space' : e.key];
+  // The existing HUD owns the shared slash shortcut in all modes.
+  if (command && command !== 'ui') { e.preventDefault(); TEACHER.command(command); }
+});
+Object.assign(window.__lab, { teacher: TEACHER });
+
+// Portable kiosk controller: only TEACHER_CFG knows the apparatus.
+const A = { active: false, t: 0, stage: 0 };
+const ATTRACT_LABELS = {
+  recover: { ko: '처음부터 다시 시작', en: 'Restart from the beginning' },
+  start: { ko: '만져서 시작', en: 'Touch to start' }
+};
+const recovery = document.createElement('button'); recovery.id = 'kiosk-recover'; recovery.hidden = true;
+recovery.setAttribute('aria-label', ATTRACT_LABELS.recover[TEACHER_CFG.language]); recovery.innerHTML = TEACHER_CFG.icon('reset'); document.body.append(recovery);
+const touchPulse = document.createElement('div'); touchPulse.id = 'touch-pulse'; touchPulse.hidden = true;
+touchPulse.setAttribute('aria-hidden', 'true'); touchPulse.innerHTML = TEACHER_CFG.icon('hand'); document.body.append(touchPulse);
+const attractStart = document.createElement('button'); attractStart.id = 'attract-start'; attractStart.hidden = true;
+attractStart.setAttribute('aria-label', ATTRACT_LABELS.start[TEACHER_CFG.language]); attractStart.innerHTML = TEACHER_CFG.icon('hand'); document.body.append(attractStart);
+let lastInput = performance.now(), stalledFrames = 0, pulseUntil = 0;
+const idleOption = Number(new URLSearchParams(location.search).get('idle'));
+const idleSeconds = Number.isFinite(idleOption) && idleOption > 0 ? idleOption : TEACHER_CFG.idleSeconds;
+const ATTRACT = {
+  state: A,
+  start(stage = 0) {
+    if (!Number.isInteger(stage) || !TEACHER_CFG.attract[stage]) throw new RangeError('stage');
+    if (T.mode === 'teacher') return;
+    A.active = true; A.t = 0; A.stage = stage;
+    document.body.classList.add('attract'); attractStart.hidden = false;
+    TEACHER_CFG.questMode(true); TEACHER_CFG.play(true); TEACHER_CFG.ui(false); this.stage();
+  },
+  stage() {
+    const row = TEACHER_CFG.attract[A.stage];
+    TEACHER.layers(row.layers); TEACHER_CFG.fly(TEACHER_CFG.shotForStage(row), Math.min(3, row.seconds / 2));
+  },
+  wake(pulse = true) {
+    A.active = false; A.t = 0; A.stage = 0;
+    document.body.classList.remove('attract'); attractStart.hidden = true; recovery.hidden = true;
+    stalledFrames = 0; lastInput = performance.now();
+    TEACHER.reset(); TEACHER.mode('student'); TEACHER_CFG.startStudent();
+    if (pulse) { pulseUntil = performance.now() + 800; touchPulse.hidden = false; touchPulse.style.animation = 'none'; void touchPulse.offsetWidth; touchPulse.style.animation = ''; }
+  },
+  fail() {
+    A.active = false; recovery.hidden = false; attractStart.hidden = true;
+    document.body.classList.remove('attract'); TEACHER_CFG.play(false);
+  },
+  health(ms) { stalledFrames = ms > 1000 ? stalledFrames + 1 : 0; if (stalledFrames >= 5) this.fail(); },
+  update(dt) {
+    if (!touchPulse.hidden && performance.now() >= pulseUntil) touchPulse.hidden = true;
+    if (!recovery.hidden) return;
+    if (!A.active) {
+      if (T.mode !== 'teacher' && !TEACHER_CFG.cardBusy() && performance.now() - lastInput >= idleSeconds * 1000) this.start();
+      return;
+    }
+    const row = TEACHER_CFG.attract[A.stage], before = A.t; A.t = Math.min(row.seconds, A.t + dt);
+    const ease = t => { const x = t / row.seconds; return x * x * (3 - 2 * x); };
+    const mix = (ease(A.t) - ease(before)) / Math.max(1e-9, 1 - ease(before));
+    TEACHER_CFG.setCloser(TEACHER_CFG.getCloser() + (row.closer - TEACHER_CFG.getCloser()) * mix, true);
+    if (A.t >= row.seconds) {
+      TEACHER_CFG.setCloser(row.closer, true); A.stage = (A.stage + 1) % TEACHER_CFG.attract.length; A.t = 0; this.stage();
+    }
+  }
+};
+recovery.onclick = () => ATTRACT.wake(); attractStart.onclick = () => ATTRACT.wake();
+for (const name of ['pointerdown', 'pointermove', 'touchstart', 'keydown', 'wheel']) window.addEventListener(name, event => {
+  lastInput = performance.now();
+  if (!A.active || name === 'pointermove') return;
+  event.preventDefault(); event.stopImmediatePropagation(); ATTRACT.wake();
+}, { capture: true, passive: false });
+window.onerror = () => { ATTRACT.fail(); return false; };
+window.addEventListener('unhandledrejection', () => ATTRACT.fail());
+window.addEventListener('click', event => {
+  if (event.isTrusted && performance.now() < pulseUntil) { event.preventDefault(); event.stopImmediatePropagation(); }
+}, { capture: true });
+document.addEventListener('visibilitychange', () => { lastInput = performance.now(); stalledFrames = 0; TEACHER_CFG.visibilityReset(); });
+Object.assign(window.__lab, { attract: ATTRACT });
+boot();
+
+</script>
+</body>
+</html>

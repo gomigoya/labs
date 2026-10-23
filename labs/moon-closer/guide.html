@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="ko" data-lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>달이 가까워지면 — 교사 안내서</title>
+<script>
+const english = new URLSearchParams(location.search).get('lang') === 'en';
+document.documentElement.dataset.lang = english ? 'en' : 'ko';
+document.documentElement.lang = english ? 'en' : 'ko';
+if (english) document.title = 'If the Moon Moved Closer — Teacher Guide';
+</script>
+<style>
+*{box-sizing:border-box}body{margin:0;color:#202a31;background:#fff;font:16px/1.75 system-ui,"Malgun Gothic",sans-serif}main{max-width:980px;margin:auto;padding:32px 26px 72px}h1{font-size:2rem;line-height:1.35}h2{margin-top:42px;padding-bottom:6px;border-bottom:2px solid #536b74;font-size:1.4rem}h3{font-size:1.15rem}p{margin:12px 0}a{color:#17576b;text-underline-offset:3px}nav{border-bottom:1px solid #bbb;padding-bottom:14px}article{padding:5px 0 22px;border-bottom:1px solid #ccc}dt{font-weight:700;margin-top:12px}dd{margin-left:0}table{border-collapse:collapse;width:100%;margin:18px 0}th,td{border:1px solid #999;padding:10px;text-align:left;vertical-align:top;overflow-wrap:anywhere}th{background:#eef2f3}footer{margin-top:38px;font-size:.9rem}q{quotes:none}.lang-en{display:none}html[data-lang="en"] .lang-ko{display:none}html[data-lang="en"] .lang-en{display:block}thead{display:table-header-group}@media(max-width:600px){main{padding:20px 16px}table{font-size:.9rem}th,td{padding:6px}}
+@page{size:A4;margin:16mm}@media print{body{font-size:10pt;line-height:1.5}main{max-width:none;padding:0}nav{display:none}h1{font-size:20pt}h2{font-size:15pt;margin-top:24pt}h3{font-size:12pt}h1,h2,h3,dt{break-after:avoid}tr{break-inside:avoid}p,li,dd{orphans:3;widows:3}a{color:inherit;text-decoration:none}th{background:none}*{box-shadow:none;text-shadow:none}}
+</style>
+</head>
+<body><main>
+<nav aria-label="Language"><a href="guide.html" lang="ko">한국어</a> · <a href="guide.html?lang=en" lang="en">English</a></nav>
+<div class="lang-ko" lang="ko">
+<header><h1>달이 가까워지면 — 교사 안내서</h1>
+<p>달까지의 거리를 바꾸며 조석의 차이와 양쪽 부풂을 비교하는 글 없는 모형 실험실입니다.</p>
+<p>교사의 개인 화면과 인쇄용 자료입니다. 학생 화면에는 설명 문장을 띄우지 않고 예상 그림 선택, 조작, 관찰을 통해 생각을 고치게 합니다.</p></header>
+<section><h2>수업 활용: 40분 운영안 두 가지</h2>
+<p>시간 배분과 A/B 장면은 교사용 제안입니다. 교사 도구가 제공되면 손잡이·선 대비를 높이고 정지, 슬로 0.25×, 표현 층, A/B 고정, 스포트라이트를 순서대로 사용합니다. 현재 읽은 공개 훅에는 전용 A/B·퀘스트 함수가 없으므로 두 상태를 차례로 정지해 비교해도 됩니다. 아래 흐름은 설계 목표이며 모든 도구의 구현 완료를 뜻하지 않습니다.</p>
+<table><thead><tr><th>운영</th><th>40분 배분과 활동</th></tr></thead><tbody>
+<tr><th>시연 중심</th><td>도입·예상 5분 → Q1·Q2 7분 → Q3·Q4 12분 → Q5·Q6·Q7 8분 → Q8 설계·정리 8분. 교사가 조작하고 학생은 예상에 손들기, 관찰 그림, 근거 말하기를 맡습니다.</td></tr>
+<tr><th>학생 탐험 중심</th><td>도입·조작 약속 5분 → 짝별 Q1~Q3 10분 → Q4~Q6 탐험 10분 → 교사와 Q7·짝별 Q8 10분 → 예상–결과 공유 5분. 조작자와 기록자를 바꾸고 거리 외 조건을 유지하게 합니다.</td></tr>
+</tbody></table>
+<p>완료 속도보다 예상이 바뀐 근거에 중점을 둡니다. 예상 그림, 고정한 조건, 바꾼 조건, 관찰 증거를 기록하게 하십시오. 자유 실험에서는 손잡이를 모두 탐색하되 비교할 때는 조건 하나만 바꿉니다.</p></section>
+<section><h2>연계 성취기준</h2>
+<p>다음 문장은 지정된 science-2022.csv 원문입니다. 거리 세제곱 법칙과 로슈 한계는 확장 탐구이며 성취기준의 필수 내용이라고 제시하지 않습니다.</p>
+<dl>
+<dt>4과06-03</dt><dd><q>밀물과 썰물의 차이를 알고, 갯벌의 가치와 보전의 필요성을 설득⋅홍보할 수 있다.</q><p>밀물·썰물 관찰 뒤 물때표와 갯벌 보전으로 확장합니다. 모형만으로 보전의 가치까지 평가하지 않습니다.</p></dd>
+<dt>4과13-01</dt><dd><q>달의 모양과 표면, 달의 위상변화를 관찰하여 밤하늘 관찰에 흥미를 가질 수 있다.</q><p>겉보기 크기 비교를 밤하늘 관찰의 동기로 사용합니다. 위상변화는 별도 관찰로 보완합니다.</p></dd>
+<dt>4과13-02</dt><dd><q>태양계 구성원을 알고, 태양과 행성을 조사할 수 있다.</q><p>달 붕괴는 태양계에 관한 확장 질문입니다. 태양·행성 조사를 대체하지 않습니다.</p></dd>
+<dt>4과01-01</dt><dd><q>일상생활에서 힘과 관련된 현상에 흥미를 갖고, 물체를 밀거나 당길 때 나타나는 현상을 관찰할 수 있다.</q><p>사람과 바다의 당김 비교를 밀고 당기는 현상의 관찰과 연결합니다.</p></dd>
+<dt>6과12-02</dt><dd><q>지구의 자전을 알고, 낮과 밤이 생기는 이유를 설명할 수 있다.</q><p>항구의 회전을 자전과 연결하고 낮·밤의 이유는 태양을 포함한 별도 모형으로 설명하게 합니다.</p></dd>
+</dl></section>
+<section><h2>퀘스트 8개</h2>
+<article><h3>1. 달을 10cm 가까이 당기면?</h3><dl>
+<dt>예상 그림 후보와 정답</dt><dd>바다가 크게 넘친다 / 조금 높아진다 / 거의 그대로. 정답은 거의 그대로입니다.</dd>
+<dt>교사 발문</dt><dd>윤곽이 같아 보여도 변화가 전혀 없다고 말할 수 있을까요?</dd>
+<dt>흔한 오해와 깨는 장면</dt><dd>조금 당겨도 눈에 띄게 높아진다는 예상은 현재 점선과 거의 겹치는 바다로 되짚습니다. “변화 0”이 아니라 관찰하기 어려운 작은 변화입니다.</dd>
+<dt>시연 순서</dt><dd>현재에서 정지 → 예상 선택 → 첫 칸 10cm → 현재 윤곽 겹침 → 돋보기 확대 순서로 보여 주세요.</dd>
+<dt>A/B 고정 장면 제안</dt><dd>A 현재, B 10cm 가까이. 시각·항구 위치를 고정합니다.</dd>
+<dt>관찰 증거</dt><dd>윤곽은 겹치고 돋보기 ×10⁹에서 약 0.28nm의 차이 크기를 비교합니다. Δd≥0.1m와 돋보기 열림이 설계 완료 조건입니다.</dd>
+</dl></article>
+<article><h3>2. 달을 얼마나 당겨야 바다가 눈에 띄게 달라질까?</h3><dl>
+<dt>예상 그림 후보와 정답</dt><dd>1km 칸 / 1,000km 칸 / 100,000km 칸. 정답은 100,000km 칸입니다.</dd>
+<dt>교사 발문</dt><dd>레일에서 같은 만큼 움직인 것이 실제로 같은 거리를 뜻할까요?</dd>
+<dt>흔한 오해와 깨는 장면</dt><dd>1,000km면 크게 변한다는 예상은 앞 칸의 낮은 계단과 마지막 칸의 급상승을 비교해 고칩니다. “눈에 띔”은 모형 표현 기준이며 자연의 관측 한계가 아닙니다.</dd>
+<dt>시연 순서</dt><dd>예상 → 10cm·1km·10km·100km·1,000km·10,000km·100,000km를 차례로 방문 → 남은 마디 계단 비교로 진행합니다.</dd>
+<dt>A/B 고정 장면 제안</dt><dd>A 1,000km 접근, B 100,000km 접근. 시간·항구를 유지합니다.</dd>
+<dt>관찰 증거</dt><dd>앞 칸의 변화는 작고 마지막 칸에서 계단이 뚜렷합니다. 7칸 중 6칸 이상 방문하고 r≥1.25가 설계 완료 조건입니다.</dd>
+</dl></article>
+<article><h3>3. 달이 지금 거리의 반이 되면 조석은 몇 배?</h3><dl>
+<dt>예상 그림 후보와 정답</dt><dd>2배 / 4배 / 8배. 정답은 8배입니다.</dd>
+<dt>교사 발문</dt><dd>거리 반이라는 말과 부풂 두 배라는 말은 같은 규칙일까요?</dd>
+<dt>흔한 오해와 깨는 장면</dt><dd>단순 반비례로 2배라고 고르면 1마디와 8마디를 나란히 셉니다. 화면 바다의 포화한 길이 대신 계산 마디로 확인합니다.</dd>
+<dt>시연 순서</dt><dd>현재 1마디 고정 → 예상 → 1/2 걸림에 놓기 → 8마디 확인 → 거리만 되돌려 비교합니다.</dd>
+<dt>A/B 고정 장면 제안</dt><dd>A 현재, B 1/2 거리. 같은 시각·항구를 씁니다.</dd>
+<dt>관찰 증거</dt><dd>거리 1/2에서 H/H₀=8입니다. 설계 판정은 d/d₀=0.5±0.02이며 교사는 중심 걸림에서 확인합니다.</dd>
+</dl></article>
+<article><h3>4. 바다는 어디가 부풀까? 항구는 하루에 몇 번 높아질까?</h3><dl>
+<dt>예상 그림 후보와 정답</dt><dd>달 쪽만 / 반대쪽만 / 양쪽. 정답은 양쪽입니다.</dd>
+<dt>교사 발문</dt><dd>모두 달 쪽으로 당겨지는데 왜 먼 쪽도 바깥으로 늘어날까요?</dd>
+<dt>흔한 오해와 깨는 장면</dt><dd>달 쪽만 부푼다는 생각은 가까운 물·중심·먼 물의 세 당김에서 중심 값을 빼는 장면으로 고칩니다. 먼 물이 달에게 밀려나는 것은 아닙니다.</dd>
+<dt>시연 순서</dt><dd>예상 → 돋보기 세 화살표 → 중심 당김 차감 → 양쪽 차이 화살표 → 항구 핀 이동 → 현재 거리에서 시간 다이얼을 24시간 진행 → 수위 점 읽기 순서입니다.</dd>
+<dt>A/B 고정 장면 제안</dt><dd>A 항구가 부풂에 있을 때, B 사이 띠에 있을 때. 거리·항구 초기 위치를 고정하고 시간만 바꿉니다.</dd>
+<dt>관찰 증거</dt><dd>양쪽 부풂과 항구 수위의 두 봉우리를 연결합니다. 상대 회전 한 바퀴의 정점 두 개가 근거이며 모든 거리의 24시간에 두 번으로 일반화하지 않습니다.</dd>
+</dl></article>
+<article><h3>5. 사람도 떠오를까? 바다와 비교하면?</h3><dl>
+<dt>예상 그림 후보와 정답</dt><dd>사람이 뜬다 / 조금 가벼워진다 / 사실상 그대로. 정답은 사실상 그대로입니다.</dd>
+<dt>교사 발문</dt><dd>바다가 크게 변한다는 사실만으로 사람도 떠오른다고 할 수 있을까요?</dd>
+<dt>흔한 오해와 깨는 장면</dt><dd>달의 당김과 지구에 대한 상대 차이를 구별합니다. 사람과 바다를 같은 기준으로 비교하는 장면으로 오해를 깹니다. 중력이 없어진다는 뜻도 아닙니다.</dd>
+<dt>시연 순서</dt><dd>예상 → 1/20 거리 → 사람 핀·바다 핀 번갈아 보기 → 공통 마디 비교 → 추정 구간 표시 짚기 순서입니다.</dd>
+<dt>A/B 고정 장면 제안</dt><dd>A 사람 비교, B 바다 비교. 거리 1/20과 시각을 유지합니다.</dd>
+<dt>관찰 증거</dt><dd>설계에서는 사람 변화가 거의 0마디, 바다는 수천 마디입니다. d/d₀≤0.1에서 두 비교 열람이 완료 조건입니다. PHYS 사람 힘 함수는 지구 규모 차등력이며 몸 길이에 따른 변형을 직접 계산하지 않습니다.</dd>
+</dl></article>
+<article><h3>6. 하늘에서 달은 어떻게 보일까? 몇 시간에 한 바퀴 돌까?</h3><dl>
+<dt>예상 그림 후보와 정답</dt><dd>크기만 커진다 / 빨리 돈다 / 둘 다. 정답은 둘 다입니다.</dd>
+<dt>교사 발문</dt><dd>같은 시간 간격의 점들이 더 벌어졌다면 무엇이 달라졌을까요?</dd>
+<dt>흔한 오해와 깨는 장면</dt><dd>크기만 커진다는 예상은 현재 점선 원과 커진 달 원, 넓어진 시간 점 간격으로 고칩니다. 커진 원을 실제 달의 팽창으로 읽지 않게 합니다.</dd>
+<dt>시연 순서</dt><dd>예상 → 하늘 창 → 현재 원 고정 → 거리 줄이기 → 같은 시간 간격 점 비교 → 1/20 주기 확인 순서입니다.</dd>
+<dt>A/B 고정 장면 제안</dt><dd>A 현재, B 1/20 거리. 같은 관측 기준·시간 간격을 씁니다.</dd>
+<dt>관찰 증거</dt><dd>겉보기 지름은 약 0.52°에서 10.4°, 주기는 27.32일에서 7.3시간입니다. d/d₀≤0.1과 하늘 창 열람이 완료 조건입니다.</dd>
+</dl></article>
+<article><h3>7. 너무 가까워지면 달은 어떻게 될까?</h3><dl>
+<dt>예상 그림 후보와 정답</dt><dd>그대로 / 금이 간다 / 흩어져 고리가 된다. 정답은 흩어져 고리가 된다입니다.</dd>
+<dt>교사 발문</dt><dd>점선 띠를 하나의 정확한 붕괴 거리라고 읽어도 될까요?</dd>
+<dt>흔한 오해와 깨는 장면</dt><dd>언제나 둥근 달로 남는다는 예상은 띠 안의 균열·파편·고리로 고칩니다. 연출은 실제 붕괴 순서·속도를 확정하는 예측이 아닙니다.</dd>
+<dt>시연 순서</dt><dd>예상 → 1/20에서 온전한 달 → 로슈 띠 접근 → 슬로로 균열 관찰 → 강체 한계 안쪽 고리 → 다음 활동 전 온전한 상태 복구 순서입니다.</dd>
+<dt>A/B 고정 장면 제안</dt><dd>A 1/20의 온전한 달, B 레일 끝 8,000km의 고리입니다.</dd>
+<dt>관찰 증거</dt><dd>유체 약 18,486km와 강체 약 9,484km 사이를 추정 구간으로 읽습니다. 19,220km는 유체 한계 바깥입니다. 강체 한계 이하 사건이 설계 완료 조건입니다.</dd>
+</dl></article>
+<article><h3>8. 방파제 높이가 정해졌다. 달을 어디까지 데려올 수 있을까?</h3><dl>
+<dt>예상 그림 후보와 정답</dt><dd>지금 거리의 1/2 / 1/3 / 1/4. 방파제 8마디일 때 정답은 1/2입니다.</dd>
+<dt>교사 발문</dt><dd>높이가 8마디이면 거리를 1/8로 줄여도 괜찮을까요?</dd>
+<dt>흔한 오해와 깨는 장면</dt><dd>마디 수만큼 거리를 단순 비례로 줄이는 오해는 1/2에서 8마디, 1/3에서 27마디인 비교로 고칩니다. 실제 방재 설계 수치로 쓰지 않습니다.</dd>
+<dt>시연 순서</dt><dd>8마디 조건에서 예상 → 높이 선택 → 거리 조절 → 점선 바로 아래에서 손 떼기 → 유지 확인 → 2·27마디로 다시 탐색합니다.</dd>
+<dt>A/B 고정 장면 제안</dt><dd>A 8마디 방파제와 현재 거리, B 같은 방파제와 1/2 거리. 높이·시각·항구를 유지합니다.</dd>
+<dt>관찰 증거</dt><dd>높이 w는 2·8·27마디입니다. r∈[0.94w,w]에서 손을 뗀 뒤 1.5초 유지가 설계 조건입니다. 8마디와 1/2 거리의 관계를 근거로 말하게 합니다.</dd>
+</dl></article>
+</section>
+<section><h2>과장 스케일 — 이론 카드 원문</h2><ul>
+<li>지구–달 거리: 로그 압축. 화면 속 거리는 비례가 아니다. 대신 레일에 <strong>지구 지름 마디</strong>(현재 30.2마디, 1/20 거리 1.5마디, 레일 끝 0.6마디)를 달아 실제 비율을 셀 수 있게 한다.</li>
+<li>해수면 높이: 고정 배율 K. 현재 조석 0.36m가 지구 반지름의 약 4%로 보이게 K≈7×10⁵. 거리가 줄어도 K는 바꾸지 않는다.</li>
+<li>바다 껍질 두께와 대기: 실제 비율이 아니다.</li>
+<li>달 자체 크기(지구 대비 0.27배): 실제 비율을 쓴다.</li>
+</ul><p>구현 대조: 위는 설계 원문입니다. 현재 PHYS.oceanBulge()는 r≤3에서 0.04r, 그 위에서 0.12+0.30(1−exp(−(r−3)/60))로 큰 변형을 포화 압축합니다. 화면 껍질 길이로 배율을 재지 말고 물리 높이·마디·그래프 계산값을 비교하십시오.</p></section>
+<section><h2>근사와 한계 — 이론 카드 원문</h2><ul>
+<li>평형조석(대륙·수심 무시). 실제 해안 조수는 지형 때문에 훨씬 클 수 있다.</li>
+<li>달은 순간적으로 다른 거리의 원궤도에 놓였다고 본다(안정화·궤도 진화 무시).</li>
+<li>태양 조석, 지구 몸체 조석, 달의 조석 가속(지구 자전 감속)은 무시한다.</li>
+<li>로슈 한계는 구간(추정)으로 그린다. 1/20 거리(19,220 km)는 액체 한계보다 바깥이라 달이 버틴다고 본다.</li>
+<li>거리가 1/10 아래에서는 평형조석 식이 해양 깊이(평균 3.7km)를 넘어 정확하지 않다. 그 구간은 "추정" 표식(점선 해안선)으로 표시한다.</li>
+</ul><p>해석 주의: 추정 표시 범위 전체에서 높이가 평균 수심을 넘는 것은 아닙니다. 1/20의 2,853m도 3.7km보다 작습니다. 원문의 범위를 보수적인 추정 표시로 읽고 실제 해안 수위를 확정하지 마십시오. 로슈 띠도 정확한 붕괴 거리·속도 예보가 아닙니다.</p>
+<p>기준 수치: 구현 H₀≈0.3566m는 설계의 약 0.357m와 같은 반올림 관계입니다. 로슈는 PHYS 계산을 반올림한 18,486/9,484km를 쓰며 이론 카드 e절의 더 거친 근삿값과 구별합니다.</p></section>
+<section><h2>평가 아이디어</h2><p>다섯 항목을 관찰함·재관찰·아직 확인 못함으로 기록합니다. 공식 성취수준이 아닌 수업용 체크리스트입니다.</p><ul>
+<li>조작 전에 후보를 선택하고 이유를 말합니다.</li>
+<li>거리만 바꾸고 시각·항구 등 고정 조건을 설명합니다.</li>
+<li>현재 점선과 변한 실선을 비교하여 1/2 거리의 8마디를 근거로 듭니다.</li>
+<li>중심 당김을 뺀 차이 화살표와 양쪽 부풂·항구 봉우리를 연결합니다.</li>
+<li>사람·바다, 화면 과장·실제 비율, 추정·확정값을 구별합니다.</li>
+</ul><p>예상–결과 비교 질문: “처음 고른 그림과 실제 그림에서 어느 부분이 달랐나요?”, “생각을 바꾸게 한 점선·마디·시간 점은 무엇인가요?”, “같은 결과를 다시 보려면 무엇을 고정해야 하나요?”, “이 모형으로 알 수 없는 것은 무엇인가요?”</p></section>
+<section><h2>자주 하는 질문</h2><dl>
+<dt>10cm가 정말 물 분자 하나 두께인가요?</dt><dd>10cm는 달을 당긴 거리입니다. 그때 해수면 높이 변화는 ΔH≈2.783×10⁻¹⁰m, 약 0.28nm로 설계서의 물 분자 지름 약 0.28nm와 비슷합니다. 돋보기는 두 크기의 비교입니다. 특정 물 분자가 정확히 그만큼 움직이거나 한 분자 층이 생긴다는 뜻이 아닙니다. 연속적인 물의 계산을 분자 단위의 실제 예측으로 받아들이지 않게 하십시오.</dd>
+<dt>1/20 거리에서 조석이 왜 2,853m인가요?</dt><dd>H/H₀=(d₀/d)³이므로 20³=8,000배입니다. 반올림 전 H₀에 곱하면 약 2,853m입니다. 평형조석의 한계 안에서 얻은 추정이며 실제 해안의 밀물 높이나 쓰나미 높이 예보가 아닙니다. 수심·대륙·동적인 물의 운동을 계산하지 않습니다.</dd>
+<dt>바다는 크게 변하는데 사람은 왜 안 뜨나요?</dt><dd>조석은 지구와 함께 받는 당김을 제외한 차이입니다. 지구 규모의 바다와 작은 사람 몸을 같은 변형으로 볼 수 없습니다. 지구 중력도 남아 있습니다. PHYS의 personTidalForce는 지구 반지름을 사용한 차등 가속도에 질량을 곱하며 사람 몸의 길이·자세·지지력을 모델링하지 않습니다. “사실상 그대로”는 이 수업의 비교 답이며 모든 생리·환경 영향이 없다는 주장은 아닙니다.</dd>
+</dl></section>
+<section><h2>실물 실험 연결</h2><dl>
+<dt>달 위상 관찰</dt><dd>보호자·교사와 안전한 장소에서 달의 모양과 위치를 여러 날 기록합니다. 겉보기 크기 변화와 위상변화가 다른 현상임을 되짚습니다. 태양을 맨눈이나 망원경으로 보지 않습니다.</dd>
+<dt>갯벌 사진과 물때표 읽기</dt><dd>교실에서 같은 장소의 밀물·썰물 사진과 공개 물때표를 비교하여 물이 덮은 범위, 높아지는 때, 갯벌 생물의 생활과 보전 이유를 이야기합니다. 자료 활동으로 현장 방문을 대체해도 됩니다. 실제 현장에서는 통제 구역에 들어가지 않고 보호자·현장 안전 안내를 따릅니다.</dd>
+<dt>물 든 투명 주머니 늘이기</dt><dd>교사가 소량의 물을 담아 밀봉한 튼튼한 투명 주머니를 쟁반 위에서 양쪽으로 부드럽게 늘입니다. 풍선은 알레르기·파열 위험을 고려해 주머니로 대체합니다. 양쪽 늘어남의 비유이며 중력·조석을 재현한 실험은 아닙니다. 내용물을 마시지 않고 물은 바로 닦습니다.</dd>
+</dl></section>
+<footer><p>근거: docs/theory-card.md, docs/quest-map.md, src/15-physics.js, tools/hand-check.mjs. 교육과정 문장은 science-2022.csv 원문입니다. 시간 배분·발문·A/B·평가는 교사용 제안입니다.</p></footer>
+</div>
+<div class="lang-en" lang="en">
+<header><h1>If the Moon Moved Closer — Teacher Guide</h1>
+<p>A wordless tabletop Moon–Earth laboratory for comparing differential tides and two-sided bulges as distance changes.</p>
+<p>Read this on a teacher’s personal screen or print it. Invite a prediction before manipulating the model, then ask learners to revise it using evidence.</p></header>
+<section><h2>Two 40-minute lesson plans</h2>
+<p>Timing and fixed A/B scenes are teaching suggestions. When available, use enlarged high-contrast teacher controls, pause, 0.25× slow motion, layers, A/B freeze and spotlight in sequence. The inspected public hooks have no dedicated A/B or quest controls; compare paused states sequentially when those tools are unavailable. This guide describes the design without claiming every tool is implemented.</p>
+<table><thead><tr><th>Format</th><th>Suggested allocation</th></tr></thead><tbody>
+<tr><th>Teacher demonstration</th><td>Introduction and prediction: 5 minutes; Q1–Q2: 7; Q3–Q4: 12; Q5–Q7: 8; Q8 and reflection: 8. Learners vote, sketch observations and explain evidence while the teacher operates.</td></tr>
+<tr><th>Student exploration</th><td>Introduction and handling: 5 minutes; paired Q1–Q3: 10; Q4–Q6: 10; teacher-supported Q7 and paired Q8: 10; prediction–result discussion: 5. Swap operator and recorder roles.</td></tr>
+</tbody></table>
+<p>Prioritize evidence for a revised prediction over completion speed. Record the prediction, fixed conditions, changed condition and observation. Explore freely, then change one condition at a time for a comparison.</p></section>
+<section><h2>Curriculum connections</h2>
+<p>The Korean quotations reproduce the supplied science-2022.csv verbatim. English explanations are teaching connections, not official translations. The inverse-cube law and Roche limit are extension topics.</p><dl>
+<dt>4과06-03</dt><dd><q lang="ko">밀물과 썰물의 차이를 알고, 갯벌의 가치와 보전의 필요성을 설득⋅홍보할 수 있다.</q><p>Connect tide observations with tide tables and mudflat conservation. The model alone does not assess conservation understanding.</p></dd>
+<dt>4과13-01</dt><dd><q lang="ko">달의 모양과 표면, 달의 위상변화를 관찰하여 밤하늘 관찰에 흥미를 가질 수 있다.</q><p>Use apparent size to motivate observing the Moon; observe phases separately.</p></dd>
+<dt>4과13-02</dt><dd><q lang="ko">태양계 구성원을 알고, 태양과 행성을 조사할 수 있다.</q><p>Treat breakup as an extension question; retain separate study of the Sun and planets.</p></dd>
+<dt>4과01-01</dt><dd><q lang="ko">일상생활에서 힘과 관련된 현상에 흥미를 갖고, 물체를 밀거나 당길 때 나타나는 현상을 관찰할 수 있다.</q><p>Connect the person–ocean comparison with observing pushes and pulls.</p></dd>
+<dt>6과12-02</dt><dd><q lang="ko">지구의 자전을 알고, 낮과 밤이 생기는 이유를 설명할 수 있다.</q><p>Connect harbor rotation with Earth’s spin; use a separate Sun–Earth model to explain day and night.</p></dd>
+</dl></section>
+<section><h2>Eight quests</h2>
+<article><h3>1. What changes if the Moon comes 10 cm closer?</h3><dl>
+<dt>Prediction choices and answer</dt><dd>Large overflow / slight rise / almost unchanged. Answer: almost unchanged.</dd>
+<dt>Teacher prompt</dt><dd>Does an overlapping outline prove that the change is exactly zero?</dd>
+<dt>Common misconception and counter-scene</dt><dd>Compare the nearly overlapping outlines to challenge a visible-rise prediction. The change is tiny, rather than exactly zero.</dd>
+<dt>Demonstration sequence</dt><dd>Pause at the present distance, predict, move to the 10 cm notch, compare the reference and open the lens.</dd>
+<dt>Suggested fixed A/B scenes</dt><dd>A: present; B: 10 cm closer. Keep time and harbor fixed.</dd>
+<dt>Observation evidence</dt><dd>The ×10⁹ lens compares a change of about 0.28 nm. The design requires an approach of at least 0.1 m and an open lens.</dd>
+</dl></article>
+<article><h3>2. How far must we bring the Moon for a visible change?</h3><dl>
+<dt>Prediction choices and answer</dt><dd>1 km notch / 1,000 km notch / 100,000 km notch. Answer: 100,000 km notch.</dd>
+<dt>Teacher prompt</dt><dd>Does equal screen travel mean equal physical travel?</dd>
+<dt>Common misconception and counter-scene</dt><dd>Use the low early steps and steep final step to challenge the 1,000 km prediction. Visibility here concerns this model.</dd>
+<dt>Demonstration sequence</dt><dd>Predict, visit the 10 cm, 1 km, 10 km, 100 km, 1,000 km, 10,000 km and 100,000 km approach notches, then compare the steps.</dd>
+<dt>Suggested fixed A/B scenes</dt><dd>A: 1,000 km approach; B: 100,000 km approach. Fix time and harbor.</dd>
+<dt>Observation evidence</dt><dd>The final step is conspicuous. The design requires at least 6 of the 7 notches and r≥1.25.</dd>
+</dl></article>
+<article><h3>3. At half the present distance, how large is the tide?</h3><dl>
+<dt>Prediction choices and answer</dt><dd>2 times / 4 times / 8 times. Answer: 8 times.</dd>
+<dt>Teacher prompt</dt><dd>Why would half the distance imply more than twice the bulge?</dd>
+<dt>Common misconception and counter-scene</dt><dd>Compare one unit with eight to challenge simple inverse proportionality. Count computed units rather than measuring the saturated shell.</dd>
+<dt>Demonstration sequence</dt><dd>Fix the present reference, predict, move to the half-distance detent, count eight units and return for comparison.</dd>
+<dt>Suggested fixed A/B scenes</dt><dd>A: present; B: half distance. Fix time and harbor.</dd>
+<dt>Observation evidence</dt><dd>H/H₀=8. The design accepts d/d₀=0.5±0.02; demonstrate at the central detent.</dd>
+</dl></article>
+<article><h3>4. Where does the sea bulge, and how often does the harbor rise?</h3><dl>
+<dt>Prediction choices and answer</dt><dd>Near side only / far side only / both sides. Answer: both sides.</dd>
+<dt>Teacher prompt</dt><dd>If all three pulls point toward the Moon, why does the far side stretch outward?</dd>
+<dt>Common misconception and counter-scene</dt><dd>Subtract the center pull from the near-water and far-water pulls. The Moon does not push the far water away.</dd>
+<dt>Demonstration sequence</dt><dd>Predict, open the lens, show three pulls, subtract the central pull, show both residuals, move the harbor and advance 24 hours at the present distance.</dd>
+<dt>Suggested fixed A/B scenes</dt><dd>A: harbor in a bulge; B: harbor between bulges. Change only time.</dd>
+<dt>Observation evidence</dt><dd>Link both bulges with two peaks per relative revolution. Do not promise exactly two peaks in every 24 hours at every distance.</dd>
+</dl></article>
+<article><h3>5. Would a person float? How does a person compare with the sea?</h3><dl>
+<dt>Prediction choices and answer</dt><dd>Person floats / slightly lighter / practically unchanged. Answer: practically unchanged.</dd>
+<dt>Teacher prompt</dt><dd>Does a large sea response imply that a person must float?</dd>
+<dt>Common misconception and counter-scene</dt><dd>Distinguish the Moon’s pull from differential acceleration relative to Earth. Compare person and ocean on a common scale; gravity has not disappeared.</dd>
+<dt>Demonstration sequence</dt><dd>Predict, select one-twentieth distance, alternate person and ocean comparisons, inspect common units and identify the estimate region.</dd>
+<dt>Suggested fixed A/B scenes</dt><dd>A: person; B: sea. Fix one-twentieth distance and time.</dd>
+<dt>Observation evidence</dt><dd>The design shows almost zero body change versus thousands of ocean units. It requires d/d₀≤0.1 and both comparisons. The PHYS person-force function uses Earth’s radius and is not a body-length deformation calculation.</dd>
+</dl></article>
+<article><h3>6. How large would the Moon look, and how quickly would it orbit?</h3><dl>
+<dt>Prediction choices and answer</dt><dd>Larger only / faster only / both. Answer: both.</dd>
+<dt>Teacher prompt</dt><dd>What do wider gaps between equal-time position dots tell us?</dd>
+<dt>Common misconception and counter-scene</dt><dd>Compare the reference circle and equal-time traces to challenge size-only reasoning. A larger apparent disk is not an expanding Moon.</dd>
+<dt>Demonstration sequence</dt><dd>Predict, open the sky view, fix the present circle, reduce distance and compare equal-time dots and the orbital period.</dd>
+<dt>Suggested fixed A/B scenes</dt><dd>A: present; B: one-twentieth distance. Use the same viewing convention and time spacing.</dd>
+<dt>Observation evidence</dt><dd>Apparent diameter changes from about 0.52° to 10.4°; period from 27.32 days to 7.3 hours. Completion requires d/d₀≤0.1 and the sky view.</dd>
+</dl></article>
+<article><h3>7. What happens if the Moon comes too close?</h3><dl>
+<dt>Prediction choices and answer</dt><dd>Unchanged / cracks / fragments into a ring. Answer: fragments into a ring.</dd>
+<dt>Teacher prompt</dt><dd>Can a band represent one precisely known breaking distance?</dd>
+<dt>Common misconception and counter-scene</dt><dd>Cracks and a ring challenge the intact-forever prediction. The animation does not establish an exact real breakup sequence or speed.</dd>
+<dt>Demonstration sequence</dt><dd>Predict, inspect the intact Moon at one-twentieth distance, approach the Roche band, slow the cracks, cross the rigid limit and restore the Moon before another activity.</dd>
+<dt>Suggested fixed A/B scenes</dt><dd>A: intact at one-twentieth distance; B: ring at the 8,000 km rail endpoint.</dd>
+<dt>Observation evidence</dt><dd>The estimated fluid/rigid bounds are about 18,486/9,484 km. The 19,220 km state is outside the fluid bound. The design completes after crossing the rigid bound.</dd>
+</dl></article>
+<article><h3>8. For a fixed breakwater, how close may the Moon come?</h3><dl>
+<dt>Prediction choices and answer</dt><dd>Half / one-third / one-quarter of the present distance. Answer: half distance for an eight-unit wall.</dd>
+<dt>Teacher prompt</dt><dd>Would an eight-unit wall permit one-eighth distance?</dd>
+<dt>Common misconception and counter-scene</dt><dd>Compare eight units at half distance with 27 units at one-third. This is a model challenge, not a coastal engineering design.</dd>
+<dt>Demonstration sequence</dt><dd>Predict for eight units, choose a wall, adjust distance, release below the dashed line, hold and repeat with the two- and 27-unit walls.</dd>
+<dt>Suggested fixed A/B scenes</dt><dd>A: eight-unit wall at present distance; B: same wall at half distance. Fix wall, time and harbor.</dd>
+<dt>Observation evidence</dt><dd>Choose w=2, 8 or 27. The design requires r∈[0.94w,w] for 1.5 seconds after release. Explain the eight-unit/half-distance result using evidence.</dd>
+</dl></article>
+</section>
+<section><h2>Exaggerated scales — translation of the design</h2><ul>
+<li>Earth–Moon distance is logarithmically compressed, not proportional to screen distance. Earth-diameter beads give physical proportions: 30.2 now, 1.5 at one-twentieth distance and 0.6 at the rail endpoint.</li>
+<li>Sea height uses a fixed design factor K≈7×10⁵, making the present 0.36 m tide appear about 4% of Earth’s radius. The design keeps K fixed as distance changes.</li>
+<li>Ocean-shell thickness and atmosphere are not to scale.</li>
+<li>The Moon’s own size relative to Earth, 0.27, uses the physical proportion.</li>
+</ul><p>Implementation difference: PHYS.oceanBulge() uses 0.04r for r≤3 and 0.12+0.30(1−exp(−(r−3)/60)) above it. Large visible deformation therefore saturates instead of retaining the design’s fixed factor. Use computed height, units and graph values; do not measure shell length to recover the physical ratio.</p></section>
+<section><h2>Approximations and limits — translation of the design</h2><ul>
+<li>Equilibrium tides ignore continents and depth. Actual coastal tides can be much larger because of geography.</li>
+<li>The Moon is placed instantaneously on a circular orbit at a new distance. Settling and orbital evolution are ignored.</li>
+<li>Solar tides, solid-Earth tides and lunar tidal acceleration that slows Earth’s rotation are ignored.</li>
+<li>The Roche limit is an estimated band. At one-twentieth distance, 19,220 km, the Moon lies outside the fluid limit and is treated as intact.</li>
+<li>Below one-tenth distance, the design says the equilibrium-tide formula exceeds mean ocean depth (3.7 km) and is inaccurate. It marks that region as an estimate using a dashed coastline.</li>
+</ul><p>Qualification to the last statement: the calculated height does not exceed mean depth throughout that region. Even 2,853 m at one-twentieth distance is below 3.7 km. Treat the boundary as a conservative estimate flag, not a depth-crossing calculation. Neither coastal water levels nor an exact lunar breakup distance are established.</p>
+<p>The implementation gives H₀≈0.3566 m, consistent with the design’s rounded 0.357 m. Use the computed rounded Roche bounds of 18,486/9,484 km; the theory card’s equation section uses coarser rounding.</p></section>
+<section><h2>Assessment ideas</h2><p>Record each item as observed, revisit, or not yet observed. These five items are teaching suggestions, not official attainment levels.</p><ul>
+<li>Predict before operating and explain the choice.</li>
+<li>Change distance while naming the conditions kept fixed.</li>
+<li>Compare dashed reference and current outline, using eight units at half distance as evidence.</li>
+<li>Connect subtraction of the central pull with both bulges and harbor peaks.</li>
+<li>Distinguish person from ocean, visual exaggeration from physical scale, and estimates from established outputs.</li>
+</ul><p>Prediction–result prompts: Which part differed from your prediction? Which outline, unit or time dot changed your explanation? What must remain fixed to repeat the result? What can this model not tell us?</p></section>
+<section><h2>Frequently asked questions</h2><dl>
+<dt>Is 10 cm really one water molecule thick?</dt><dd>The 10 cm is the Moon’s approach. The calculated tide-height change is about 2.783×10⁻¹⁰ m, or 0.28 nm, comparable with the approximate molecular diameter in the design. The lens compares sizes; it does not predict a particular molecule’s motion or a new molecular layer. A continuum calculation is not a molecular simulation.</dd>
+<dt>Why is the one-twentieth tide 2,853 m?</dt><dd>The inverse-cube ratio is 20³=8,000. Multiply the unrounded H₀ by this ratio, then round to 2,853 m. This equilibrium-model estimate is neither a coastal high-water prediction nor a tsunami height. Continents, depth and dynamic water motion are omitted.</dd>
+<dt>Why does a person not float?</dt><dd>Tides concern differential acceleration after the shared pull is removed. An Earth-sized ocean and a small body cannot be assigned the same deformation, and Earth’s gravity remains. PHYS.personTidalForce uses Earth’s radius and does not model body length, posture or support. “Practically unchanged” is the teaching comparison, not a claim that every environmental or biological effect vanishes.</dd>
+</dl></section>
+<section><h2>Connect with physical activities</h2><dl>
+<dt>Observe lunar phases</dt><dd>With adult supervision from a safe location, record the Moon’s shape and position over several days. Distinguish phase from apparent size. Never view the Sun directly or through a telescope.</dd>
+<dt>Read tide tables and mudflat photographs</dt><dd>Compare high- and low-tide photographs of the same place with published tide tables. Discuss water coverage, timing, habitats and conservation. Classroom sources can replace a field visit. Follow supervision and access restrictions outdoors.</dd>
+<dt>Gently stretch a sealed transparent water pouch</dt><dd>A teacher can place a securely sealed, sturdy pouch with a small amount of water over a tray and gently stretch it from both sides. Prefer a pouch to balloons where allergy or bursting is a concern. This is an analogy for two-sided deformation, not a reproduction of gravity or tides. Do not drink the contents; wipe spills promptly.</dd>
+</dl></section>
+<footer><p>Sources: docs/theory-card.md, docs/quest-map.md, src/15-physics.js and tools/hand-check.mjs. Curriculum quotations reproduce science-2022.csv. Timing, prompts, A/B scenes and assessment are teacher suggestions.</p></footer>
+</div>
+</main></body>
+</html>

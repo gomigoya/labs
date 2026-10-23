@@ -1,0 +1,16 @@
+{
+  "slug": "black-hole-fall",
+  "status": "draft",
+  "order": 5,
+  "subject": "earth-science",
+  "titleKo": "블랙홀에 빠지면",
+  "titleEn": "Falling into a Black Hole",
+  "hookKo": "같은 지평선 거리에서도 왜 작은 블랙홀의 양 끝 당김 차이가 더 클까요?",
+  "hookEn": "Why are tides stronger at the horizon of a smaller black hole?",
+  "curriculumKo": "초등 3~6학년 과학 심화 · 태양계와 별에서 확장하는 조석 탐구 (4과13-02, 4과13-03)",
+  "curriculumEn": "Elementary science enrichment, grades 3–6 · Solar system, stars and tidal differences (4과13-02, 4과13-03)",
+  "reviewed": false,
+  "teacherMode": true,
+  "attractMode": true,
+  "thumbnail": "thumb.jpg"
+}

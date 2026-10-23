@@ -1,0 +1,16 @@
+{
+  "slug": "moon-closer",
+  "status": "draft",
+  "order": 3,
+  "subject": "earth-science",
+  "titleKo": "달이 가까워지면",
+  "titleEn": "If the Moon Moved Closer",
+  "hookKo": "달이 10cm 가까워질 때와 거리가 반이 될 때, 바다는 어떻게 달라질까요?",
+  "hookEn": "How would the sea change if the Moon moved 10 cm closer, or came halfway to Earth?",
+  "curriculumKo": "초등 3~6학년 과학 · 밀물과 썰물, 달, 지구의 자전 (4과06-03, 4과13-01, 6과12-02)",
+  "curriculumEn": "Elementary science, grades 3–6 · Tides, the Moon and Earth’s rotation (4과06-03, 4과13-01, 6과12-02)",
+  "reviewed": false,
+  "teacherMode": true,
+  "attractMode": true,
+  "thumbnail": "thumb.jpg"
+}

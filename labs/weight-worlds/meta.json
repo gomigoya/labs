@@ -1,0 +1,16 @@
+{
+  "slug": "weight-worlds",
+  "status": "draft",
+  "order": 6,
+  "subject": "earth-science",
+  "titleKo": "다른 별에서 내 몸무게는",
+  "titleEn": "Your Weight on Other Worlds",
+  "hookKo": "같은 추를 달과 태양으로 옮기면 무게와 점프 높이는 어떻게 달라질까요?",
+  "hookEn": "How do weight and jump height change when the same mass moves to the Moon or Sun?",
+  "curriculumKo": "초등 3~6학년 과학 · 수평잡기, 저울, 태양과 행성 (4과01-02, 4과01-03, 4과13-02)",
+  "curriculumEn": "Elementary science, grades 3–6 · Balance, weighing, the Sun and planets (4과01-02, 4과01-03, 4과13-02)",
+  "reviewed": false,
+  "teacherMode": true,
+  "attractMode": true,
+  "thumbnail": "thumb.jpg"
+}

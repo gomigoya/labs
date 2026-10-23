@@ -1,0 +1,16 @@
+{
+  "slug": "earth-stop",
+  "status": "draft",
+  "order": 7,
+  "subject": "earth-science",
+  "titleKo": "지구 자전이 멈추면",
+  "titleEn": "If Earth Stopped Rotating",
+  "hookKo": "땅만 멈추면 몸 구슬은 어디로 움직이고, 자전이 없어도 낮과 밤은 돌아올까요?",
+  "hookEn": "Where does the bead move when the ground stops, and can day and night return without rotation?",
+  "curriculumKo": "초등 5~6학년 중심 과학 · 지구의 자전과 낮밤, 힘과 운동 심화 연결 (6과12-02, 4과01-01)",
+  "curriculumEn": "Elementary science, mainly grades 5–6 · Rotation, day and night; extension on forces and motion (6과12-02, 4과01-01)",
+  "reviewed": false,
+  "teacherMode": true,
+  "attractMode": true,
+  "thumbnail": "thumb.jpg"
+}
