@@ -451,3 +451,111 @@ if(P.staticPull){
 }
 console.log('U6 new rows '+(count-pullStart)+'; total '+count+': passed '+(count-failures)+', failed '+failures);
 process.exitCode=failures?1:0;
+
+// R2 visibility: snapshots recorded before this task, with the legacy default API.
+const r2LegacyFrames=[[[11.999999999999979,40,8],[12.699999999999976,26,8],[12.999999999999975,20,8],[12.799999999999976,26,10],[13.699999999999973,8,8],[15.199999999999967,8,10]],[[11.999999999999979,20,12],[12.199999999999978,14,10],[12.399999999999977,8,8],[12.699999999999976,8,8],[15.599999999999966,8,8],[17.399999999999984,8,8]],[[14.39999999999997,14,10],[14.899999999999968,8,8],[16.29999999999997,8,8],[16.699999999999974,8,8],[20.60000000000003,8,8],[22.900000000000063,8,8]],[[18.800000000000004,78,28],[18.900000000000006,78,28],[22.400000000000055,72,32],[22.500000000000057,72,36],[22.60000000000006,72,28],[22.60000000000006,72,24]]];
+const r2LegacyBounds=[{"min":[-4.65,0.8600000000000001,-1.16],"max":[4.95,3.65,1.3]},{"min":[-4.65,0.8600000000000001,-1.16],"max":[4.95,4.106777549144235,1.3]},{"min":[-4.65,0.8600000000000001,-1.16],"max":[4.95,4.465844669687624,1.3]},{"min":[-4.65,0.8600000000000001,-1.16],"max":[4.95,4.575313059083818,1.3]},{"min":[-4.65,0.8600000000000001,-1.16],"max":[4.95,5.566734226030764,1.3]},{"min":[-4.65,0.8600000000000001,-1.16],"max":[4.95,6.185,1.3]}];
+// R2 independent scene/DOM stubs execute the production construction and layer functions.
+const r2Start=count,r2Views=[[1440,900],[1280,720],[800,548],[375,812]];
+const cameraSource=fs.readFileSync('src/50-lights-pipeline-camera.js','utf8');
+const rectCode=cameraSource.slice(cameraSource.indexOf('function stageRect('),cameraSource.indexOf('// Retained for teacher'));
+function r2Rect(w,h,css={},mode='student'){
+ return new Function('S','T','innerWidth','innerHeight','document','getComputedStyle',rectCode+';return stageRect();')(
+  {vertical:w/h<.9},{mode},w,h,{documentElement:{}},()=>({getPropertyValue:name=>css[name]??''}));
+}
+exact('R2 default landscape HUD',r2Rect(800,548),{left:12,right:788,top:130,bottom:358,stageOnly:true});
+exact('R2 default portrait HUD',r2Rect(375,812),{left:12,right:363,top:150,bottom:552,stageOnly:true});
+exact('R2 CSS HUD insets',r2Rect(800,548,{'--hud-top':'90px','--hud-bottom':'120px','--hud-right':'140px'}),{left:12,right:648,top:90,bottom:428,stageOnly:true});
+exact('R2 CSS zero inset',r2Rect(800,548,{'--hud-top':'0px','--hud-bottom':'0px'}).top,0);
+exact('R2 teacher frames the stage only',r2Rect(800,548,{},'teacher').stageOnly,true);
+// Teacher mode: the stage fits whole inside the lane left by the side panel (340px) or the portrait drawer (46dvh).
+for(const [w,h] of [[1440,900],[1280,720],[1024,768],[800,600],[375,812]]){
+ const drawer=w<=600||w/h<=.9,panelRight=drawer?0:340+24,panelBottom=drawer?Math.round(h*.46)+16:12;
+ const lane=r2Rect(w,h,{'--hud-top':'12px','--hud-right':panelRight+'px','--hud-bottom':panelBottom+'px'},'teacher');
+ for(const [quest,index] of [[1,0],[3,4],[4,3]]){
+  const frame=P.dramaFrame(w,h,species[index],lane),box=projectDrama(frame.stageBounds,frame,w,h);
+  exact('R6 teacher quest '+quest+' whole stage inside panel-free lane '+w+'x'+h,box.bounds[0]>=lane.left-1&&box.bounds[2]<=lane.right+1&&box.bounds[1]>=lane.top-1&&box.bounds[3]<=lane.bottom+1&&!box.clipped,true);
+  exact('R6 teacher quest '+quest+' not tiny '+w+'x'+h,box.width>=.25||box.height>=.25,true);
+ }
+}
+for(const [i,s]of species.entries()){
+ exact('R2 default bounds regression '+i,P.dramaBounds(s),r2LegacyBounds[i]);
+ exact('R2 child bounds ignore dinosaur '+i,P.dramaBounds(s,5),P.dramaBounds(species[0],5));
+ exact('R2 child ceiling '+i,P.dramaBounds(s,5).max[1]<=P.DRAMA.ground+P.DRAMA.kidHeight+1,true);
+}
+const roomSource=fs.readFileSync('src/30-room-console.js','utf8');
+class R2Geometry{
+ constructor(radius=1){this.radius=radius;this.type='Geometry';}
+ rotateX(){return this;}setAttribute(){return this;}setIndex(){return this;}computeVertexNormals(){}
+ computeBoundingSphere(){this.boundingSphere={radius:this.radius,center:{length:()=>0}};}
+}
+// Circumscribed origin spheres bound these primitives independently of tessellation.
+const r2Pose=()=>({set(){},setScalar(){}});
+const r2Three={
+ Object3D:class{constructor(){this.position=r2Pose();this.rotation=r2Pose();this.scale=r2Pose();}updateMatrix(){}},
+ MeshStandardMaterial:class{constructor(options){Object.assign(this,options);}},
+ MeshBasicMaterial:class{constructor(options){Object.assign(this,options);}},
+ InstancedMesh:class{constructor(g,m,n){this.material=m;this.count=n;this.instanceMatrix={count:n};this.rotation={};}setMatrixAt(){}},
+ Shape:class{constructor(){this.holes=[];}moveTo(){}lineTo(){}closePath(){}},
+ Path:class{moveTo(){}lineTo(){}closePath(){}},
+ PlaneGeometry:R2Geometry,ShapeGeometry:R2Geometry,BufferGeometry:R2Geometry,Float32BufferAttribute:class{},
+ IcosahedronGeometry:R2Geometry,CircleGeometry:R2Geometry,
+ CylinderGeometry:class extends R2Geometry{constructor(a,b,h){super(Math.hypot(Math.max(a,b),h/2));}},
+ ConeGeometry:class extends R2Geometry{constructor(r,h){super(Math.hypot(r,h/2));}},
+ CatmullRomCurve3:class{},TubeGeometry:class extends R2Geometry{constructor(){super(2.7);}},DoubleSide:2
+};
+const r2Room={position:{},add(){},traverse(){}},r2Mat={bark:{},stone:{}},r2Kit={
+ canvasTex(){return {};},mesh(){return {rotation:{},position:{}};}
+};
+const envCode=roomSource.slice(0,roomSource.indexOf('const ENVIRONMENT=buildEnvironment();'));
+const r2Env=new Function('PHYS','BIOME','THREE','ROOM','MAT','KIT','mulberry32','V3',envCode+
+ ';buildEnvironment();return {props:ENVIRONMENT_PROPS,targets:STAGE_SIGHT_TARGETS,sightTargets:stageSightTargets,hits:environmentOcclusions,allowed:environmentPropAllowed};')(
+ P,{trail:['a','b','c']},r2Three,r2Room,r2Mat,r2Kit,seed=>()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296;},(...p)=>p);
+exact('R2 rear forest retained',r2Env.props.length>100,true);
+exact('R2 generated prop spheres stay behind stage',r2Env.props.every(r2Env.allowed),true);
+exact('R2 occlusion detects crossing sphere',r2Env.hits([0,0,10],[[0,0,0]],[{center:[0,0,5],radius:1}]).length,1);
+exact('R2 occlusion rejects sphere beyond endpoint',r2Env.hits([0,0,10],[[0,0,0]],[{center:[0,0,-5],radius:1}]).length,0);
+exact('R2 occlusion detects tangent',r2Env.hits([0,0,10],[[0,0,0]],[{center:[1,0,5],radius:1}]).length,1);
+function r2KidRatio(frame,w,h,x){
+ const p=[x,P.DRAMA.ground,-.78],q=[x,P.DRAMA.ground+P.DRAMA.kidHeight,-.78];
+ const line=projectDrama({min:p,max:q},frame,w,h);return line.height;
+}
+for(const [vi,[w,h]]of r2Views.entries()){
+ const rect=r2Rect(w,h);
+ for(const [si,s]of species.entries()){
+  const a=P.dramaFrame(w,h,s,{left:12,right:w-12,top:130,bottom:h-190});
+  exact('R2 legacy frame '+w+'/'+si,[a.distance,a.azimuth,a.elevation],r2LegacyFrames[vi][si]);
+ }
+ for(const [si,s]of [...species,'children'].entries()){
+  const n=s==='children'?5:0,sp=n?species[5]:s,frame=P.dramaFrame(w,h,sp,rect,null,n);
+  const b=frame&&projectDrama(frame.stageBounds,frame,w,h).bounds;
+  exact('R2 stage inside HUD lane '+w+'/'+si,!!b&&b[0]>=rect.left-1e-6&&b[1]>=rect.top-1e-6&&b[2]<=rect.right+1e-6&&b[3]<=rect.bottom+1e-6,true);
+  const event=P.dramaFrame(w,h,sp,rect,-.56,n);
+  exact('R2 four sight lines clear '+w+'/'+si,[frame,event].every((f,j)=>r2Env.hits(f.pos,r2Env.sightTargets(sp,n,j?-.56:0,n?5:59),r2Env.props).length===0),true);
+ }
+ const child=P.dramaFrame(w,h,species[5],rect,null,5),dino=P.dramaFrame(w,h,species[5],rect);
+ // 두 팀이 좌우로 마주 보여야 한다: 가로 화면은 정면 ±20°, 세로 화면은 52° 이하, 가장 작은 아이도 2% 이상.
+ exact('R2 children face-on azimuth '+w,child.azimuth<=(w/h<.9?52:20),true);
+ const minKid=Math.min(...[-4.38,-.4,.4,4.38].map(x=>r2KidRatio(child,w,h,x)));
+ exact('R2 smallest child >=2% '+w,minKid>=.02,true);
+ const old=P.dramaFrame(w,h,species[4],{left:12,right:w-12,top:w/h<.9?158:136,bottom:h-(w/h<.9?262:270)});
+ const after=P.dramaFrame(w,h,species[4],rect);
+ const beforeRatio=r2KidRatio(old,w,h,-2.4),afterRatio=r2KidRatio(after,w,h,-2.4);
+ exact('R2 dinosaur quest child enlarged '+w,afterRatio>beforeRatio,true);
+ console.log('R2 kid height '+w+'x'+h+': '+JSON.stringify({dinosaurBefore:beforeRatio,dinosaurAfter:afterRatio,childrenBefore:Math.min(...[-4.38,-.4,.4,4.38].map(x=>r2KidRatio(old,w,h,x))),childrenMin:minKid,childrenCenter:r2KidRatio(child,w,h,0)}));
+}
+const loopSource=fs.readFileSync('src/70-loop.js','utf8');
+const layerCode=loopSource.slice(loopSource.indexOf('function layer('),loopSource.indexOf('async function capture('));
+// Execute with lexical scene globals as the browser does; no invisible physical target survives.
+const result=new Function('PHYS',`
+const S={layers:{},drag:null},T={mode:'student'},controls={enabled:false};
+const ROOM={},CONSOLE={},CAPACITIES={},TRACK={},RAIL_HANDLE={visible:true};
+const HERO={children:[...Array.from({length:2+PHYS.DETENTS.length},()=>({visible:true})),RAIL_HANDLE]};
+const dragObjects=[RAIL_HANDLE,{},{},{},{},{},{}];
+${layerCode}
+const result=[];
+for(const [k,mode] of ['student','free','teacher','teacher','student'].entries()){T.mode=mode;S.drag={};if(k===3)layer('console',true);syncConsoleLayer();result.push([CONSOLE.visible,CAPACITIES.visible,HERO.children.every(o=>o.visible),dragObjects.length,S.drag===null]);}
+return result;`)(P);
+for(const [i,mode]of ['student','free','teacher (console off by default)','teacher (console chip on)','student-again'].entries())exact('R2 console visibility/pick targets '+mode,result[i],i===3?[true,false,true,7,false]:[false,false,false,0,true]);
+console.log('R2 visibility new rows '+(count-r2Start)+'; total '+count+': passed '+(count-failures)+', failed '+failures);
+process.exitCode=failures?1:0;

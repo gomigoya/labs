@@ -52,7 +52,7 @@ const SHOTS_VERTICAL = [
  {name:'ground-v',pos:V3(4.2,3.4,7.2),target:V3(1.5,1.4,0),fov:38}
 ];
 const CONSOLE_SHOT={name:'console',pos:V3(0,2.1,11.4),target:V3(0,.68,1.12),fov:34};
-function heroBox(){const b=PHYS.dramaBounds(SPECIES_KEYS[Math.round(S.species.value)]);return new THREE.Box3(V3(...b.min),V3(...b.max));}
+function heroBox(){const b=S.stageBounds||PHYS.dramaBounds(SPECIES_KEYS[Math.round(S.species.value)],S.rivalN);return new THREE.Box3(V3(...b.min),V3(...b.max));}
 function projectedBox(box, cam = camera) {
   const points = [];
   for (const x of [box.min.x, box.max.x]) for (const y of [box.min.y, box.max.y]) for (const z of [box.min.z, box.max.z]) points.push(V3(x, y, z).project(cam));
@@ -62,31 +62,25 @@ function projectedBox(box, cam = camera) {
 function heroCoverage() {
   camera.updateMatrixWorld(); const b = projectedBox(heroBox());
   const overlaps = id => {
-    const el = document.getElementById(id); if (!el.getClientRects().length || getComputedStyle(el).visibility === 'hidden') return false;
+    const el = document.getElementById(id); if (!el || !el.getClientRects().length || getComputedStyle(el).visibility === 'hidden') return false;
     const r = el.getBoundingClientRect(); return b.left < r.right && b.right > r.left && b.top < r.bottom && b.bottom > r.top;
   };
   return { width: (b.right - b.left) / innerWidth, height: (b.bottom - b.top) / innerHeight,
-    overlaps: overlaps('quests')||overlaps('tools')||overlaps('mission'), overlapsTop: overlaps('quests')||overlaps('mission'), overlapsTools: overlaps('tools'), clipped: b.left < 0 || b.right > innerWidth || b.top < 0 || b.bottom > innerHeight || b.behind, bounds: b };
+    overlaps: overlaps('lab-header')||overlaps('control-panel')||overlaps('q-pictures')||overlaps('mission')||overlaps('teacher-strip'), overlapsTop: overlaps('lab-header')||overlaps('mission'), overlapsTools: overlaps('control-panel')||overlaps('q-pictures')||overlaps('teacher-strip'), clipped: b.left < 0 || b.right > innerWidth || b.top < 0 || b.bottom > innerHeight || b.behind, bounds: b };
 }
-function stageRegion(event=false){
- const region={left:12,right:innerWidth-12,top:12,bottom:innerHeight-12};
- const visible=id=>{const e=document.getElementById(id);return e&&e.getClientRects().length&&getComputedStyle(e).visibility!=='hidden'?e.getBoundingClientRect():null;};
- const top=visible('quests'),tools=visible('tools'),picture=visible('q-pictures'),strip=visible('teacher-strip'),numbers=visible('teacher-numbers'),classPanel=visible('teacher-class');
- if(top)region.top=top.bottom+12;
- const mission=visible('mission');
- if(mission)region.top=Math.max(region.top,mission.bottom+12);
- if(tools)region.bottom=Math.min(region.bottom,tools.top-12);
- if(picture&&!event&&picture.height>0)region.bottom=Math.min(region.bottom,picture.top-12);
- if(strip){if(strip.width>strip.height)region.bottom=Math.min(region.bottom,strip.top-12);else region.right=Math.min(region.right,strip.left-12);}
- if(numbers)region.top=Math.max(region.top,numbers.bottom+12);
- if(classPanel)region.bottom=Math.min(region.bottom,classPanel.top-12);
- if(event)region.top=Math.max(region.top,innerWidth/innerHeight<.9?94:122);
- if(event&&mission)region.top=Math.max(region.top,mission.bottom+8+(S.vertical?70:98)+12);
- return region;
+// CSS inset contract shared with the DOM HUD. Read afresh so font/layout changes refit.
+function stageRect(){
+ const css=getComputedStyle(document.documentElement),vertical=S.vertical;
+ const read=(name,fallback)=>{const raw=css.getPropertyValue(name).trim(),n=parseFloat(raw);return raw&&Number.isFinite(n)?Math.max(0,n):fallback;};
+ const top=read('--hud-top',vertical?150:130),bottom=read('--hud-bottom',vertical?260:190),right=read('--hud-right',0);
+ return {left:12,right:Math.max(13,innerWidth-right-12),top,bottom:Math.max(top+1,innerHeight-bottom),stageOnly:true};
 }
-function fitHero(eventX=null,region=stageRegion(eventX!==null)) {
+// Retained for teacher integrations; all lane arithmetic lives in stageRect.
+function stageRegion(){return stageRect();}
+function fitHero(eventX=null,region=stageRect()) {
  const species=typeof A!=='undefined'&&A.active?SPECIES_KEYS.at(-1):SPECIES_KEYS[Math.round(S.species.value)];
- const fit=PHYS.dramaFrame(innerWidth,innerHeight,species,region,eventX);
+ const fit=PHYS.dramaFrame(innerWidth,innerHeight,species,region,eventX,S.rivalN);
+ S.stageBounds=fit?.stageBounds;
  return fit?{...fit,pos:V3(...fit.pos),target:V3(...fit.target)}:null;
 }
 function shot(index = 1, vertical = innerWidth / innerHeight < 0.9) {
@@ -125,3 +119,6 @@ function setQuality(level) {
   return level;
 }
 window.addEventListener('resize', () => resize());
+
+// Registered before the physical-control listener, including its enlarged pixel targets.
+canvas.addEventListener('pointerdown',()=>syncConsoleLayer(),{capture:true});

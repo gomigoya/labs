@@ -1,7 +1,7 @@
 function update(dt){
  ATTRACT.update(dt);
  const physicalDt=DIRECTOR.time(dt);
- ENVIRONMENT.update(physicalDt);
+ ENVIRONMENT.update(physicalDt);syncConsoleLayer();
  const k=1-Math.exp(-18*dt);
  for(const name of ['u','species','ground','playing','sound','ui','cassette']){const p=S[name];p.value+=(p.target-p.value)*k;if(Math.abs(p.target-p.value)<1e-8)p.value=p.target;}
  S.t.target+=physicalDt*S.playing.value*(Q.free?1.8:Math.PI/.9);S.t.value+=(S.t.target-S.t.value)*k;
@@ -15,6 +15,22 @@ function update(dt){
 function renderFrame(dt){styleDiagramPanels(scene);INK.convertMaterials(scene);composer.render(dt);}
 function step(n=1,dt=1/60){if(!Number.isInteger(n)||n<0||n>120||!Number.isFinite(dt)||dt<0||dt>1)throw new RangeError('step');for(let i=0;i<n;i++)update(dt);return{kids:PHYS.kidsFromRailX(S.u.value),species:SPECIES_KEYS[Math.round(S.species.value)],mu:GROUND_VALUES[Math.round(S.ground.value)]};}
 function layer(name,on){const layers={room:ROOM,console:CONSOLE,hero:HERO,capacities:CAPACITIES,track:TRACK};if(!(name in layers))throw new RangeError(name);S.layers[name]=!!on;layers[name].visible=!!on;}
+// The rail lives in HERO for historical reasons; collect its full apparatus once.
+let consolePickObjects=null,consoleRailObjects=null,consoleMode=null;
+function syncConsoleLayer(){
+ if(!consolePickObjects)consolePickObjects=dragObjects.slice();
+ if(!consoleRailObjects){
+  const first=HERO.children.indexOf(RAIL_HANDLE);
+  consoleRailObjects=HERO.children.slice(first-2-PHYS.DETENTS.length,first+1);
+ }
+ const teacher=T.mode==='teacher';
+ if(!teacher||consoleMode!==T.mode){layer('console',false);layer('capacities',false);}
+ consoleMode=T.mode;
+ const on=teacher&&CONSOLE.visible;
+ for(const o of consoleRailObjects)o.visible=on;
+ dragObjects.splice(0,dragObjects.length,...(on?consolePickObjects:[]));
+ if(!on&&S.drag){S.drag=null;controls.enabled=true;}
+}
 async function capture(name='hero'){
  if(!/^[\w-]+$/.test(name))throw new TypeError('capture');
  if(name==='thumb'){
@@ -25,7 +41,7 @@ async function capture(name='hero'){
    const representative=PHYS.DRAMA.representative;
    S.u.value=S.u.target=PHYS.railX(representative.n);S.species.value=S.species.target=representative.speciesIndex;S.ground.value=S.ground.target=representative.groundIndex;
    S.playing.value=S.playing.target=0;S.t.value=S.t.target=representative.phase;S.cassette.value=S.cassette.target=0;
-   ROOM.visible=CONSOLE.visible=HERO.visible=TRACK.visible=true;updateHero();
+   ROOM.visible=HERO.visible=TRACK.visible=true;syncConsoleLayer();updateHero();
    camera.clearViewOffset();camera.aspect=1200/750;camera.position.copy(TEACHER_CFG.heroShot.pos);controls.target.copy(TEACHER_CFG.heroShot.target);camera.fov=TEACHER_CFG.heroShot.fov;camera.lookAt(controls.target);camera.updateProjectionMatrix();camera.setViewOffset(1200,750,-TEACHER_CFG.heroShot.offsetX,-TEACHER_CFG.heroShot.offset,1200,750);
    renderer.setPixelRatio(1);renderer.setSize(1200,750,false);composer.setPixelRatio(1);composer.setSize(1200,750);
    drawGraphs();GRAMMAR.update(0);
@@ -43,7 +59,7 @@ const size=renderer.getSize(new THREE.Vector2());
  update(0);const data=canvas.toDataURL('image/jpeg',.94);const r=await fetch('/__save/'+name+'.jpg',{method:'POST',headers:{'Content-Type':'text/plain'},body:data});if(!r.ok)throw new Error('capture '+r.status);return{name,width:canvas.width,height:canvas.height};
 }
 function perf(){return{ms:S.ms,fps:1000/S.ms,frames:S.frames,calls:renderer.info.render.calls,triangles:renderer.info.render.triangles,quality:S.quality,ao:false,bokeh:false,pixelRatio:renderer.getPixelRatio(),geometries:renderer.info.memory.geometries,textures:renderer.info.memory.textures};}
-window.__lab={state:S,PHYS,quest:QUEST,mode:m=>TEACHER.mode(m==='explore'?'free':m),SHOTS,SHOTS_VERTICAL,set,preset,shot,flyTo,layer,step,quality:setQuality,textAudit,heroCoverage,perf,capture};
+window.__lab={state:S,PHYS,quest:QUEST,mode:m=>TEACHER.mode(m==='explore'?'free':m),SHOTS,SHOTS_VERTICAL,stageRect,environment:{props:ENVIRONMENT_PROPS,targets:STAGE_SIGHT_TARGETS,sightTargets:stageSightTargets,occlusions:environmentOcclusions},set,preset,shot,flyTo,layer,step,quality:setQuality,textAudit,heroCoverage,perf,capture};
 function frame(now){requestAnimationFrame(frame);const elapsed=S.lastTime?now-S.lastTime:16.67;S.lastTime=now;if(document.hidden)return;ATTRACT.health(elapsed);S.ms+=(elapsed-S.ms)*.03;update(Math.min(elapsed/1000,.05));}
 function boot(){
  // Bind the portable teacher controller to the same responsive stage lane as students.

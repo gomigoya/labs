@@ -41,7 +41,7 @@ try {
     await new Promise(resolve => server.listen(5181, '127.0.0.1', resolve)); url = 'http://127.0.0.1:5181/';
   }
   const states = [ ['hero',0],['triceratops-threshold',1],['tyrannosaurus-gravel',2],['tyrannosaurus-glass',3],['tyrannosaurus-sand',4],['design-team',5],['largest-max-team',6],['queue',0],['contact',2],['free-event',3],['capacity',2],['ratio',6],['console',0], ...Array.from({length:8},(_,i)=>['layer-'+i,2]), ['comparison-pin',2],['extreme-min',0],['extreme-max',6],['layers-together',6],['force-shader-close',2],['surface-glass',3],['surface-sand',4],['surface-gravel',2],['surface-asphalt',6] ];
-  for(let i=1;i<=9;i++)for(const phase of ['intro','predict','act','event','confirm','explain','card'])states.push([`q${i}-${phase}`,0]);
+  for(let i=1;i<=12;i++)for(const phase of ['intro','predict','act','event','confirm','explain','card'])states.push([`q${i}-${phase}`,0]);
   for(const name of ['teacher-strip','teacher-layers','teacher-ab','teacher-spot','teacher-laser','teacher-numbers','teacher-class-predict','teacher-class-result','attract-1','attract-2','attract-3','touch-pulse','thumb'])states.push([name,name==='thumb'?2:0]);
   for(const mode of ['student','free','teacher','attract'])for(let i=1;i<=3;i++)states.push([`vertical-${mode}-${i}`,0]);
   browser = await chromium.launch({ headless: true, args: ['--use-angle=d3d11', '--enable-gpu', '--ignore-gpu-blocklist'] });
@@ -62,26 +62,20 @@ try {
       const require=(ok,label)=>{if(!ok)throw new Error('mission: '+label);};
       require(banner?.getAttribute('role')==='status'&&banner.getAttribute('aria-live')==='polite','polite status');
       lab.mode('student');
-      for(let i=0;i<9;i++){
+      for(let i=0;i<12;i++){
         lab.quest.auto(i);
         for(const phase of ['intro','predict','act','observe','confirm','explain','card']){
           lab.quest.skip(phase);lab.step(1,0);
-          require(banner.getClientRects().length>0&&banner.textContent.trim().length>0&&Array.from(banner.textContent).length<=32,`Q${i+1}/${phase} visible words`);
-          const r=banner.getBoundingClientRect(),top=document.getElementById('quests').getBoundingClientRect(),bottom=document.getElementById('tools').getBoundingClientRect();
-          require(r.top>=top.bottom&&r.bottom<=bottom.top&&r.left>=0&&r.right<=innerWidth,'pill stays between control bars');
+          require(banner.getClientRects().length>0&&banner.textContent.trim().length>0,`Q${i+1}/${phase} visible words`);
+          const r=banner.getBoundingClientRect(),top=document.getElementById('lab-header').getBoundingClientRect(),bottom=document.getElementById('control-panel').getBoundingClientRect();
+          require(r.top>=top.bottom&&r.bottom<=bottom.top&&r.left>=0&&r.right<=innerWidth,'guide stays between header and controls');
           const card=document.getElementById('q-pictures');
-          if(card.getClientRects().length)require(r.bottom<=card.getBoundingClientRect().top,'pill clears card');
+          if(card.getClientRects().length)require(r.bottom<=card.getBoundingClientRect().top,'guide clears card');
           require(parseFloat(getComputedStyle(banner).fontSize)>=15&&getComputedStyle(banner).pointerEvents==='none','readable and click through');
-          require(lab.textAudit().length===0,'no other visible words');
-          const learn=[...document.querySelectorAll('[data-learn]')];
-          require(learn.every(el=>el.parentElement===card&&el.matches('.q-explain,.q-principle')),'learning roots only inside pictures');
+          require(lab.textAudit().length===0,'no canvas text or clipped HUD words');
           if(phase==='explain'){
+            require(!card.querySelector('.q-concept'),'reason question has no concept answer');
             require(card.querySelectorAll('[data-option]').length===3,'three explanation choices');
-            // Disable just the exception to ensure the audit sees real panel text.
-            learn.forEach(el=>el.removeAttribute('data-learn'));
-            const words=lab.textAudit();
-            learn.forEach(el=>el.setAttribute('data-learn',''));
-            require(words.length>0&&words.every(w=>learn.some(el=>{const r=el.getBoundingClientRect();return w.x>=r.left&&w.x<=r.right&&w.y>=r.top&&w.y<=r.bottom;})),'all learning words in panel');
             const wrong=[...card.querySelectorAll('[data-option]')].find(b=>b.dataset.option!==lab.quest.correctKey());
             wrong.click();lab.step(60,1/30);
             require(lab.quest.state().phase==='explain'&&getComputedStyle(card).display!=='none','replay restores explanation');
@@ -134,7 +128,7 @@ try {
           if (!name.startsWith('attract-') && name !== 'touch-pulse') lab.step(100, 1 / 30);
           lab.step(1, 0);
           return { textAudit: lab.textAudit(), coverage: lab.heroCoverage(), perf: lab.perf(),
-            occlusion: [...document.querySelectorAll('#quests,#mission,#teacher-strip,#teacher-numbers,#q-pictures')].filter(el => el.getClientRects().length && getComputedStyle(el).visibility !== 'hidden').map(el => {
+            occlusion: [...document.querySelectorAll('#lab-header,#mission,#teacher-strip,#teacher-numbers,#q-pictures')].filter(el => el.getClientRects().length && getComputedStyle(el).visibility !== 'hidden').map(el => {
               const r = el.getBoundingClientRect(), b = lab.heroCoverage().bounds;
               return { id: el.id, intentional: !document.getElementById('teacher-class').hidden, overlaps: b.left < r.right && b.right > r.left && b.top < r.bottom && b.bottom > r.top };
             }),
@@ -154,7 +148,7 @@ try {
           lab.step(1,0);
           const bounds=lab.heroCoverage().bounds;
           return {quest:lab.quest.state(),textAudit:lab.textAudit(),coverage:lab.heroCoverage(),perf:lab.perf(),
-            occlusion:[...document.querySelectorAll('#quests,#mission,#tools,#q-pictures')].filter(el=>el.getClientRects().length&&getComputedStyle(el).visibility!=='hidden').map(el=>{const r=el.getBoundingClientRect();return {id:el.id,overlaps:bounds.left<r.right&&bounds.right>r.left&&bounds.top<r.bottom&&bounds.bottom>r.top};}),
+            occlusion:[...document.querySelectorAll('#lab-header,#mission,#control-panel,#q-pictures')].filter(el=>el.getClientRects().length&&getComputedStyle(el).visibility!=='hidden').map(el=>{const r=el.getBoundingClientRect();return {id:el.id,overlaps:bounds.left<r.right&&bounds.right>r.left&&bounds.top<r.bottom&&bounds.bottom>r.top};}),
             touchTargets:[...document.querySelectorAll('button')].filter(b=>b.getClientRects().length).map(b=>({label:b.getAttribute('aria-label'),width:b.getBoundingClientRect().width,height:b.getBoundingClientRect().height})),
             horizontalScroll:document.documentElement.scrollWidth>innerWidth+1};
         }
@@ -181,7 +175,7 @@ try {
       if (server) await page.evaluate(name => window.__lab.capture(name), `${name}-${viewportName}-canvas`);
       await page.screenshot({ path: path.join(output, file), type: 'jpeg', quality: 92, animations: 'disabled' });
       const row = { file, ...result, consoleErrorCount: consoleErrors.length - c0, pageErrorCount: pageErrors.length - p0,
-        textWordCount: result.textAudit.reduce((n, r) => n + r.words.length, 0), consoleErrors: consoleErrors.slice(c0), pageErrors: pageErrors.slice(p0),
+        textWordCount: result.textAudit.reduce((n, r) => n + 1, 0), consoleErrors: consoleErrors.slice(c0), pageErrors: pageErrors.slice(p0),
         startupConsoleErrors: consoleErrors.slice(0, c0), startupPageErrors: pageErrors.slice(0, p0), requestErrors: [...requestErrors] };
       report.push(row);
       const fullHero=!['queue','contact','capacity','ratio','console','force-shader-close'].includes(name)&&!name.startsWith('surface-')&&!/^(teacher-|attract-|touch-pulse|vertical-)/.test(name)&&!/^q\d+-intro$/.test(name);

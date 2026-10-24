@@ -1,12 +1,5 @@
 // Share floating-panel colors with the scene diagrams.
 for(const [name,value]of Object.entries({'--diagram-paper':css(INK_CFG.diagram.screen),'--diagram-ink':css(INK_CFG.diagram.ink),'--diagram-border':INK_CFG.diagram.borderPx+'px'}))document.documentElement.style.setProperty(name,value);
-// All accessible words live in this dictionary; no rendered labels or tooltips.
-const LABELS={
- canvas:{ko:'공룡 줄다리기 실험실',en:'Dinosaur tug laboratory'},play:{ko:'당김 실행 또는 중단',en:'Play or pause pull'},reset:{ko:'시작 상태 복구',en:'Reset'},sound:{ko:'소리 전환',en:'Toggle sound'},
- species:SPECIES_KEYS.map((ko,i)=>({ko,en:['Velociraptor','Dilophosaurus','Stegosaurus','Triceratops','Tyrannosaurus','Argentinosaurus'][i]})),
- rival:PHYS.C.rivalChoices.map(n=>({ko:'?? ?? '+n+'?',en:'Rival team of '+n+' children'})),
- ground:[{ko:'유리 바닥',en:'Glass ground'},{ko:'모래 바닥',en:'Sand ground'},{ko:'자갈 바닥',en:'Gravel ground'},{ko:'아스팔트 바닥',en:'Asphalt ground'}]
-};
 const ICONS={play:'M8 5l11 7-11 7z',pause:'M8 5v14M16 5v14',reset:'M4 10a8 8 0 1 1 1 8M4 4v6h6',sound:'M3 9h4l5-4v14l-5-4H3zM16 8q6 4 0 8M19 5q9 7 0 14',muted:'M3 9h4l5-4v14l-5-4H3zM16 9l6 6M22 9l-6 6',
  rail:'M3 18h18M6 14V8M12 14V4M18 14V9',force:'M3 12h17m-5-5 5 5-5 5M7 9v6M11 9v6',
  s0:'M2 15l6-2 5-2 2-5 5 1-1 3h-3l-2 5 3 5M10 15l-2 5',
@@ -31,78 +24,18 @@ Object.assign(ICONS,{
  q10:'M2 16h20M12 16v-3M12 3a5 5 0 1 0 0 10 5 5 0 1 0 0-10M12 8l3-3M9 5l1 1m5 4-1-1',
  q7:'M2 3h20v18H2zM5 8h3m3 0h3m3 0h3M6 14l3 3 6-6M18 12v6'
 });
-for(let i=0;i<12;i++)ICONS['layer'+i]=[
- 'M3 20V5h18v15zM6 17l4-7 4 4 4-7','M3 5h18v14H3zM6 9h12M6 14h4m4 0h4',
- 'M2 9l10-5 10 5-10 5zM2 15l10 5 10-5','M3 18V6m0 12h18M7 15v-5m5 5V7m5 8v-9',
- 'M3 12h18M6 8v8m4-8v8m4-8v8m4-8v8','M3 19h5v-5h5V9h5V4h3',
- 'M3 18h18M3 6h18M7 3v6m10 6v6','M3 5h8v14H3zM13 5h8v14h-8zM7 8v8m10-8v8',
- 'M10 3a7 7 0 1 0 0 14 7 7 0 0 0 0-14M15 15l7 7M5 11h10',
- 'M3 12h2m3 0h2m3 0h2m3 0h3M5 8v8M19 8v8','M3 3v18h18M7 17V7m5 10V10m5 7v-3',
- 'M4 3h16v18H4zM8 7h8m-8 5h8m-8 5h8'][i];
 function icon(name){return '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="'+ICONS[name]+'"/></svg>';}
-canvas.setAttribute('aria-label',LABELS.canvas[LANG]);
-const toolbar=document.getElementById('tools');
-for(const name of ['play','reset','sound',...SPECIES_KEYS.map((_,i)=>'s'+i),...GROUND_VALUES.map((_,i)=>'g'+i)]){
- const b=document.createElement('button');b.id='tool-'+name;
- b.setAttribute('aria-label',(name[0]==='s'&&name.length===2?LABELS.species[+name[1]]:name[0]==='g'?LABELS.ground[+name[1]]:LABELS[name])[LANG]);
- b.innerHTML=icon(name);b.addEventListener('click',()=>action(name));toolbar.append(b);
-}
-// Wordless layer tools use existing instrument line icons; accessible names stay off screen.
-const grammarIcons=[...Array.from({length:8},(_,i)=>'layer'+(i+4)),'q10','lens','q12'];
+Object.assign(ICONS,{
+ quest:'M3 5h18v15H3zM7 9h2m4 0h4M7 14h2m4 0h4',free:'M3 12h18M12 3v18M5 5l14 14M19 5 5 19',
+ hand:'M7 12V5a2 2 0 0 1 4 0v7-4a2 2 0 0 1 4 0v4-2a2 2 0 0 1 4 0v5q0 6-6 6-4 0-6-4l-3-4q-1-3 2-2l3 2',
+ check:'M4 12l5 5L21 5',next:'M4 12h16m-6-6 6 6-6 6',star:'M12 2l3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1z',
+ compare:'M4 5h6v14H4zM14 5h6v14h-6zM6 16v-8m10 8v-3',layers:'M3 7l9-4 9 4-9 4zM3 12l9 4 9-4M3 17l9 4 9-4',
+ rival:'M6 7a1 1 0 1 0 0 .01M12 7a1 1 0 1 0 0 .01M18 7a1 1 0 1 0 0 .01M9 15a1 1 0 1 0 0 .01M15 15a1 1 0 1 0 0 .01',species:'M3 19h18M5 15V9h5v6m4 0V5h5v10',ground:'M3 17h18M4 12l4-4 4 4 4-4 4 4'
+});
 ICONS.lens='M10 3a7 7 0 1 0 0 14 7 7 0 0 0 0-14M15 15l7 7';
-ICONS.layer12=ICONS.q10;ICONS.layer13=ICONS.lens;ICONS.layer14=ICONS.q12;
-for(const [i,name]of GRAMMAR.LAYERS.entries()){
- const b=document.createElement('button');b.className='grammar-tool';b.dataset.layer=name;b.setAttribute('aria-label',({ko:['마디','쌓기와 계단','한계 윤곽','겹치기','접촉 돋보기','시간 흔적','비율 비교','실행 기록','장력계','렌즈','서서히 당기기'],en:['Force units','Stack and steps','Limits','Overlay','Contact magnifier','Time traces','Ratio comparison','Run records','Tension gauges','Object lens','Gradual pull']}[LANG])[i]);b.setAttribute('aria-pressed',String(GRAMMAR.defaults[name]));b.innerHTML=icon(grammarIcons[i]);
- b.addEventListener('click',()=>{if(!Q.free)return;GRAMMAR.set({[name]:!GRAMMAR.enabled[name]});b.setAttribute('aria-pressed',String(GRAMMAR.enabled[name]));});toolbar.append(b);
-}
-for(const [name,glyph]of [['pin','g0'],['record','rail']]){
- const b=document.createElement('button');b.className='grammar-tool';b.setAttribute('aria-label',({pin:{ko:'비교 고정',en:'Pin comparison'},record:{ko:'상태 기록',en:'Record setup'}}[name])[LANG]);b.innerHTML=icon(glyph);
- b.addEventListener('click',()=>{if(!Q.free)return;if(name==='pin'){if(GRAMMAR.baseline)GRAMMAR.unpin();else GRAMMAR.pin();b.setAttribute('aria-pressed',String(!!GRAMMAR.baseline));}
- else{GRAMMAR.record();GRAMMAR.set({[GRAMMAR.LAYERS[7]]:true});}});toolbar.append(b);
-}
 let audioContext;
 function tick(){if(!S.sound.target)return;audioContext ||= new(window.AudioContext||window.webkitAudioContext)();if(audioContext.state==='suspended')void audioContext.resume();
  const o=audioContext.createOscillator(),g=audioContext.createGain(),now=audioContext.currentTime;o.frequency.setValueAtTime(1300,now);o.frequency.exponentialRampToValueAtTime(750,now+.035);g.gain.setValueAtTime(.035,now);g.gain.exponentialRampToValueAtTime(.0001,now+.045);o.connect(g).connect(audioContext.destination);o.start();o.stop(now+.05);}
-function action(name){
- if(name!=='sound'&&!QUEST.allows())return;QUEST.touch();
- if(name==='play'){if(Q.free)S.playing.target=1-S.playing.target;else QUEST.pull();}
- else if(name==='sound'){S.sound.target=1-S.sound.target;tick();}
- else if(name==='reset'){if(!Q.free){QUEST.go(Q.i);return;}preset(0);S.t.value=S.t.target=0;S.playing.target=1;shot(S.vertical?0:1,S.vertical);}
- else if(/^s[0-5]$/.test(name))set('species',+name[1]);
- else if(/^g[0-3]$/.test(name))set('ground',+name[1]);
- syncUI();
-}
-function syncUI(missionOnly=false){
- const mission=document.getElementById('mission');
- mission.hidden=T.mode==='teacher'||(!Q.free&&Q.phase==='explain'); // 설명 단계는 질문 패널이 안내한다
- mission.style.setProperty('--mission-top',(document.getElementById('quests').getBoundingClientRect().bottom+8)+'px');
- const text=missionText(Q.i,Q.phase,{...QUEST.sample(),free:Q.free,focus:QUEST.focus(),pending:Q.flags.pending,right:Q.pick===null||Q.pick===QUESTS[Q.i].answerKey,toolPage,toolGroup});
- if(mission.textContent!==text){
-  mission.textContent=text;
-  for(const animation of mission.getAnimations())animation.cancel();
-  if(!matchMedia('(prefers-reduced-motion: reduce)').matches)mission.animate([{opacity:0},{opacity:1}],{duration:120});
- }
- if(missionOnly)return;
- for(const b of [...speciesTools,...groundTools,...rivalTools])b.disabled=!!S.pullMode;
- toolbar.dataset.rival=String(S.rivalN>0);
- lensTool.hidden=!lensAvailable();
- lensTool.setAttribute('aria-pressed',String(toolGroup==='lens'));
- lensTools.forEach((b,i)=>b.setAttribute('aria-pressed',String(S.lens===lensValues[i])));
- if(!lensAvailable()&&toolGroup==='lens')showTools('species');
- rivalTool.hidden=S.rivalN===0;
- rivalTool.setAttribute('aria-pressed',String(toolGroup==='rival'));
- rivalTools.forEach((b,i)=>b.setAttribute('aria-pressed',String(S.rivalN===PHYS.C.rivalChoices[i])));
- if(S.rivalN===0&&toolGroup==='rival')showTools('species');
- if(window.__lab&&!window.__lab.GRAMMAR){
-  window.__lab.GRAMMAR=GRAMMAR;
-  window.__lab.sample=()=>QUEST.sample();
-  window.__lab.layer=(name,on)=>{if(GRAMMAR.LAYERS.includes(name))GRAMMAR.set({[name]:!!on});else layer(name,on);};
- }
- if(window.__lab)toolbar.querySelectorAll('[data-layer]').forEach(b=>b.setAttribute('aria-pressed',String(GRAMMAR.enabled[b.dataset.layer])));
- for(const name of ['play','sound']){const b=document.getElementById('tool-'+name);b.innerHTML=icon(name==='play'?(S.playing.target?'pause':'play'):(S.sound.target?'sound':'muted'));b.setAttribute('aria-pressed',String(!!S[name==='play'?'playing':'sound'].target));}
- SPECIES_KEYS.forEach((_,i)=>speciesTools[i].setAttribute('aria-pressed',String(i===S.species.target)));
- GROUND_VALUES.forEach((_,i)=>groundTools[i].setAttribute('aria-pressed',String(i===S.ground.target)));
-}
 // One normalized control value feeds all three handles and pointer deltas.
 function controlValue(n=PHYS.kidsFromRailX(S.u.value)){return S.pullMode?S.pullP:PHYS.railX(n);}
 function setRailFromPointer(u){if(S.pullMode){set('pull',clamp(u,0,1));return;}QUEST.changed('n');u=clamp(u,0,1);const near=PHYS.DETENTS.reduce((a,b)=>Math.abs(a.x-u)<Math.abs(b.x-u)?a:b);const snap=Math.abs(near.x-u)<=.012;if(snap&&S.snap!==near.n)tick();S.snap=snap?near.n:null;S.u.target=PHYS.railX(PHYS.kidsFromRailX(snap?near.x:u));}
@@ -164,109 +97,173 @@ function set(name,v){
 }
 const PRESETS=[[1,0,2],[49,3,2],[59,4,2],[59,4,0],[68,4,1],[30,1,2],[100,5,3]];
 function preset(i){if(!Number.isInteger(i)||!PRESETS[i])throw new RangeError('preset');const [n,s,g]=PRESETS[i];set('kids',n);set('species',s);set('ground',g);S.previousGround=g;S.cassette.value=S.cassette.target=0;S.t.value=S.t.target=0;}
-function textAudit(){const found=[],walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);
- while(walker.nextNode()){const n=walker.currentNode,p=n.parentElement;if(!p||p.closest('script,style,template,[hidden]'))continue;
- if(p.closest('#mission[data-mission]')||p.closest('[data-learn]'))continue;
- const range=document.createRange();range.selectNodeContents(n);const r=range.getBoundingClientRect();let visible=!!r.width&&!!r.height;
- for(let a=p;a;a=a.parentElement){const s=getComputedStyle(a);if(s.visibility==='hidden'||s.display==='none'||+s.opacity===0)visible=false;}
- if(!visible||r.bottom<0||r.top>innerHeight||r.right<0||r.left>innerWidth)continue;
- if(p.closest('[data-numeric]')&&T.mode==='teacher'&&T.numbers&&/^\s*-?\d+(?:\.\d+)?\s*(?:km|kg|N|m|s|h|°|×)\s*$/.test(n.textContent))continue;
- const words=n.textContent.match(/[\p{L}\p{N}]+/gu);if(words)found.push({words,x:r.x,y:r.y,width:r.width,height:r.height});}return found;}
-
-// All quest UI uses this same icon vocabulary and bilingual off-screen names.
-Object.assign(ICONS,{
- quest:'M3 5h18v15H3zM7 9h2m4 0h4M7 14h2m4 0h4',free:'M3 12h18M12 3v18M5 5l14 14M19 5 5 19',
- hand:'M7 12V5a2 2 0 0 1 4 0v7-4a2 2 0 0 1 4 0v4-2a2 2 0 0 1 4 0v5q0 6-6 6-4 0-6-4l-3-4q-1-3 2-2l3 2',
- check:'M4 12l5 5L21 5',next:'M4 12h16m-6-6 6 6-6 6',star:'M12 2l3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1z',
- compare:'M4 5h6v14H4zM14 5h6v14h-6zM6 16v-8m10 8v-3',layers:'M3 7l9-4 9 4-9 4zM3 12l9 4 9-4M3 17l9 4 9-4',
- rival:'M6 7a1 1 0 1 0 0 .01M12 7a1 1 0 1 0 0 .01M18 7a1 1 0 1 0 0 .01M9 15a1 1 0 1 0 0 .01M15 15a1 1 0 1 0 0 .01',species:'M3 19h18M5 15V9h5v6m4 0V5h5v10',ground:'M3 17h18M4 12l4-4 4 4 4-4 4 4'
-});
-Object.assign(LABELS,{quest:{ko:'퀘스트',en:'Quests'},free:{ko:'자유 실험',en:'Free exploration'},pick:{ko:'예상 선택',en:'Choose prediction'},next:{ko:'다음',en:'Next quest'},replay:{ko:'예상 다시 비교',en:'Replay comparison'},compare:{ko:'비율 비교 열기',en:'Open ratio comparison'},rivalTool:{ko:'?? ?? ???',en:'Show rival team sizes'},speciesTool:{ko:'종 견본 펼치기',en:'Show species samples'},groundTool:{ko:'바닥 견본 펼치기',en:'Show ground samples'},layersTool:{ko:'층 도구 펼치기',en:'Show layer tools'}});
-LABELS.play={ko:'당김 실행 또는 중단',en:'Run or interrupt pull'};LABELS.reset={ko:'시작 상태 복구',en:'Restore starting setup'};LABELS.sound={ko:'소리 켜기 또는 끄기',en:'Toggle sound'};
-for(const name of ['play','reset','sound'])document.getElementById('tool-'+name).setAttribute('aria-label',LABELS[name][LANG]);
-const qPictures=document.createElement('div');qPictures.id='q-pictures';document.body.append(qPictures);
-const qOverlay=document.createElement('div');qOverlay.id='q-overlay';qOverlay.setAttribute('aria-hidden','true');document.body.append(qOverlay);
-const qArchive=document.createElement('div');qArchive.id='q-archive';qArchive.className='hud';document.body.append(qArchive);
-function qButton(label,symbol,fn,parent,suffix=''){
- const b=document.createElement('button');b.setAttribute('aria-label',LABELS[label][LANG]+suffix);b.innerHTML=icon(symbol);b.onclick=fn;parent.append(b);return b;
+const hudRoot=document.createElement('div');hudRoot.id='student-hud';document.body.append(hudRoot);
+const header=document.createElement('header');header.id='lab-header';hudRoot.append(header);
+// 사이트 공통 메뉴(shared/shell.js의 data-site-slot)는 머리줄 안에 넣어 조작 패널을 가리지 않게 한다.
+const siteSlot=document.getElementById('site-slot');
+const guide=document.createElement('section');guide.id='lab-guide';hudRoot.append(guide);
+const progress=document.createElement('ol');progress.id='lab-progress';guide.append(progress);
+const mission=document.getElementById('mission');guide.append(mission);
+const questList=document.createElement('section');questList.id='quest-list';questList.hidden=true;hudRoot.append(questList);
+const qPictures=document.createElement('section');qPictures.id='q-pictures';hudRoot.append(qPictures);
+const qOverlay=document.createElement('div');qOverlay.id='q-overlay';document.body.append(qOverlay);
+const controlPanel=document.createElement('section');controlPanel.id='control-panel';hudRoot.append(controlPanel);
+const forceCard=document.createElement('section');forceCard.id='force-card';hudRoot.append(forceCard);
+const resultNotice=document.createElement('div');resultNotice.id='result-notice';resultNotice.setAttribute('role','status');resultNotice.hidden=true;hudRoot.append(resultNotice);
+function ui(key){return text(UI_TEXT[key]);}
+function button(label,fn,parent){const b=document.createElement('button');b.textContent=label;b.onclick=fn;parent.append(b);return b;}
+function element(tag,words,parent){const e=document.createElement(tag);if(words!==undefined)e.textContent=words;parent.append(e);return e;}
+function phaseStep(phase){return {intro:0,predict:0,act:1,observe:2,confirm:2,explain:3,card:4}[phase];}
+function experimentPosition(i=Q.i){return LANG==='ko'?`${ui('experiment')} ${SEQUENCE.indexOf(i)+1} / ${SEQUENCE.length} · ${levelOf(i)}${ui('level')}`:`${ui('experiment')} ${SEQUENCE.indexOf(i)+1} / ${SEQUENCE.length} · ${ui('level')} ${levelOf(i)}`;}
+function renderHeader(){
+ header.replaceChildren();const brand=element('div',undefined,header);brand.className='brand';element('strong',ui('lab'),brand);if(siteSlot)brand.append(siteSlot);
+ const middle=element('div',undefined,header);element('div',Q.free?ui('free'):experimentPosition(),middle);element('h1',Q.free?ui('free'):text(QUESTS[Q.i].title),middle);
+ const nav=element('nav',undefined,header);
+ const listButton=button(ui('list'),()=>{questList.hidden=!questList.hidden;renderQuestList();listButton.setAttribute('aria-expanded',String(!questList.hidden));},nav);listButton.setAttribute('aria-expanded',String(!questList.hidden));
+ button(ui(Q.free?'back':'free'),()=>TEACHER.mode(Q.free?'student':'free'),nav);
+ button(ui('teacher'),()=>TEACHER.mode('teacher'),nav);
+ progress.replaceChildren();UI_TEXT.steps.forEach((label,i)=>{const li=element('li',(i<phaseStep(Q.phase)?'✓ ':'')+text(label),progress);if(!Q.free&&i===phaseStep(Q.phase))li.setAttribute('aria-current','step');});progress.hidden=Q.free;
+ renderQuestList();
 }
-// A fixed two-row tool strip; sample palettes replace row two rather than growing it.
-const toolMain=document.createElement('div'),toolPalette=document.createElement('div');toolMain.className='tool-row';toolPalette.className='tool-row';toolbar.append(toolMain,toolPalette);
-const sampleButtons=[...toolbar.children].filter(b=>b.tagName==='BUTTON');
-for(const b of sampleButtons.slice(0,3))toolMain.append(b);
-const speciesTools=sampleButtons.filter(b=>/^tool-s[0-5]$/.test(b.id)),groundTools=sampleButtons.filter(b=>/^tool-g/.test(b.id)),layerTools=sampleButtons.filter(b=>b.classList.contains('grammar-tool'));
-for(const b of sampleButtons.slice(3))b.remove();
-let toolGroup='species',toolPage=0;
-const rivalTools=PHYS.C.rivalChoices.map((n,i)=>{
- const b=document.createElement('button');b.id='tool-r'+n;b.setAttribute('aria-label',LABELS.rival[i][LANG]);
- b.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true">'+Array.from({length:n},(_,j)=>'<circle cx="'+(5+j%4*4.5)+'" cy="'+(8+Math.floor(j/4)*8)+'" r="1.3" fill="currentColor"/>').join('')+'</svg>';
- b.onclick=()=>{if(!QUEST.allows())return;QUEST.touch();set('rival',n);};return b;
-});
-
+function renderQuestList(){
+ questList.replaceChildren();
+ for(const level of LEVELS){element('h2',LANG==='ko'?`${level.id}${ui('level')} · ${text(UI_TEXT.levels[level.id-1])}`:`${ui('level')} ${level.id} · ${text(UI_TEXT.levels[level.id-1])}`,questList);
+ for(const id of level.quests){const i=id-1,unlocked=QUEST.unlocked(i),status=Q.completed.has(i)?`${ui('done')} ${'★'.repeat(Q.stars[i])}`:i===Q.i?ui('now'):unlocked?'':ui('lock');
+ const b=button(`${text(QUESTS[i].title)} · ${status}`,()=>{if(!QUEST.unlocked(i)){mission.textContent=ui('locked');questList.dataset.notice='locked';return;}questList.hidden=true;TEACHER.mode('student');QUEST.go(i);},questList);b.dataset.quest=i;b.setAttribute('aria-disabled',String(!unlocked));}
+ }
+ if(questList.dataset.notice)element('p',ui(questList.dataset.notice),questList).setAttribute('role','status');
+}
 const lensValues=[null,'rope','A','B'];
-LABELS.lensTool={ko:'보는 물체 고르기',en:'Choose what to look at'};
-LABELS.lens=[{ko:'렌즈 해제',en:'Show both teams'},{ko:'줄',en:'Rope'},{ko:'왼쪽 팀',en:'Left team'},{ko:'오른쪽 팀',en:'Right team'}];
-const lensTools=lensValues.map((v,i)=>{
- const b=document.createElement('button');b.id='tool-lens-'+(v??'none');b.setAttribute('aria-label',LABELS.lens[i][LANG]);
- const dots=x=>[0,1,2].map(j=>'<circle cx="'+(x+j*3)+'" cy="8" r="1" fill="currentColor"/>').join('');
- b.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 14h18"/>'+((v===null||v==='A')?dots(3):'')+((v===null||v==='B')?dots(15):'')+'</svg>';
- b.onclick=()=>{if(!QUEST.allows())return;QUEST.touch();set('lens',v);};return b;
-});
-function lensAvailable(){return S.rivalN>0&&(Q.free||!!QUESTS[Q.i].lens);}
-const toolBank={species:speciesTools,rival:rivalTools,lens:lensTools,ground:groundTools,layers:layerTools};
-qButton('speciesTool','species',()=>showTools('species'),toolMain);
-const rivalTool=qButton('rivalTool','rival',()=>showTools('rival'),toolMain);rivalTool.id='rivalTool';rivalTool.hidden=true;
-const lensTool=qButton('lensTool','lens',()=>showTools('lens'),toolMain);lensTool.id='lensTool';lensTool.hidden=true;
-qButton('groundTool','ground',()=>showTools('ground'),toolMain);
-qButton('compare','compare',()=>QUEST.compare(),toolMain).id='tool-compare';
-const layersToggle=qButton('layersTool','layers',()=>showTools('layers'),toolPalette);
-const paletteNext=qButton('next','next',()=>{toolPage++;showTools(toolGroup,false);},toolPalette);
-function showTools(group,reset=true){
- if(group==='lens'&&!lensAvailable())group='species';
- if(group==='rival'&&S.rivalN===0)group='species';
- if(group==='layers'&&!Q.free)group='species';toolGroup=group;if(reset)toolPage=0;
- const bank=toolBank[group],slots=Q.free?4:5,pages=Math.ceil(bank.length/slots);toolPage%=pages;
- toolPalette.replaceChildren();if(Q.free)toolPalette.append(layersToggle);
- for(const b of bank.slice(toolPage*slots,(toolPage+1)*slots))toolPalette.append(b);
- if(pages>1)toolPalette.append(paletteNext);
- layersToggle.setAttribute('aria-pressed',String(group==='layers'));
+function countControl(name,parent){
+ const left=name==='kids',n=left?PHYS.kidsFromRailX(S.u.target):S.rivalN,max=left?100:20;
+ const row=element('div',undefined,parent);row.className='count-row';
+ button('−',()=>set(name,Math.max(1,n-1)),row).setAttribute('aria-label',ui(name)+' −');element('output',n+ui('people'),row);
+ button('+',()=>set(name,Math.min(max,n+1)),row).setAttribute('aria-label',ui(name)+' +');
+ if(left)rangeControl(name,n,1,100,1,v=>set('kids',v),parent);
 }
-function conceptHTML(id){return '<div class="q-concept">'+icon('star')+text(CONCEPTS.find(c=>c.id===CONCEPTS_OF[id][0]))+'</div>';}
-function cardHTML(i,s,stars){
- const id=QUESTS[i].id,done=new Set([...Q.completed].flatMap(i=>CONCEPTS_OF[QUESTS[i].id]));
- const bridge=EXPLAIN[id].bridge?`<p class="q-bridge">${text(EXPLAIN[id].bridge)}</p>`:'';
- const map='<div class="q-map" aria-hidden="true">'+CONCEPTS.map(c=>'<svg viewBox="0 0 24 24" aria-hidden="true"><circle data-concept="'+c.id+'" cx="12" cy="12" r="8" fill="'+(done.has(c.id)?'currentColor':'none')+'" stroke-width="'+(CONCEPTS_OF[id].includes(c.id)?4:1.5)+'"/></svg>').join('')+'</div>';
- return `<div class="q-principle" data-learn>${conceptHTML(id)}<p class="q-recap">${text(EXPLAIN[id].recap)}</p>${bridge}${QUESTS[i].card(s)}${map}<span class="q-stars">${icon('star').repeat(stars)}</span></div>`;
+function rangeControl(name,value,min,max,step,change,parent){
+ const label=element('label',ui(name),parent);label.htmlFor='input-'+name;
+ const input=element('input',undefined,parent);input.id='input-'+name;input.type='range';input.min=min;input.max=max;input.step=step;input.value=value;input.oninput=()=>change(Number(input.value));return input;
 }
-function questUI(){
- const d=QUESTS[Q.i],f=Q.flags,top=document.getElementById('quests');top.removeAttribute('aria-hidden');top.replaceChildren();
- qButton('quest','quest',()=>TEACHER.mode('student'),top).setAttribute('aria-pressed',String(!Q.free));
- qButton('free','free',()=>TEACHER.mode('free'),top).setAttribute('aria-pressed',String(Q.free));
- qButton('teacher','teacher',()=>TEACHER.mode('teacher'),top).setAttribute('aria-pressed',String(T.mode==='teacher'));
- const row=document.createElement('div');row.className='quest-row';top.append(row);
- SEQUENCE.forEach((i,pos)=>{const b=qButton('quest',QUESTS[i].icon,()=>{if(QUEST.unlocked(i))QUEST.go(i);},row,' '+(pos+1));b.className='quest'+(Q.i===i?' current':'')+(Q.completed.has(i)?' complete':'')+(pos>0&&levelOf(i)!==levelOf(SEQUENCE[pos-1])?' level-gap':'');b.setAttribute('aria-disabled',String(!QUEST.unlocked(i)));b.innerHTML+='<span class="q-dots">'+('<i></i>'.repeat(Q.i===i?PHASES.indexOf(Q.phase)+1:1))+'</span>';});
- qPictures.replaceChildren();qPictures.className=Q.phase;qPictures.hidden=Q.free;
- if(!Q.free&&Q.phase==='predict')d.candidates.forEach((c,k)=>{const b=qButton('pick',d.icon,()=>QUEST.pick(k),qPictures,' '+(k+1));b.dataset.candidate=k;b.innerHTML=CARDS.picture(d.id,c,0,QUEST.sample());});
- if(!Q.free&&Q.phase==='confirm'){
-  const chosen=d.candidates.find(c=>c.key===Q.pick)||d.candidates[0];
-  qPictures.innerHTML='<div class="q-compare '+(Q.stars[Q.i]===3?'matched':'')+'">'+CARDS.picture(d.id,chosen,0,f.success)+CARDS.actual(d.id,f.success||QUEST.sample())+(Q.stars[Q.i]===3?icon('check'):'')+'</div>';
-  if(Q.stars[Q.i]===2)qButton('replay','reset',()=>QUEST.skip('event'),qPictures);
+function chips(values,current,change,parent){for(const [i,label]of values.entries())button(label,()=>change(i),parent).setAttribute('aria-pressed',String(i===current));}
+// Each control is defined once. The quest controls array is the only student selector.
+const CONTROL_TYPES={
+ kids:parent=>countControl('kids',parent),rival:parent=>countControl('rival',parent),
+ ground:parent=>chips(UI_TEXT.grounds.map(text),S.ground.target,i=>set('ground',i),parent),
+ species:parent=>chips(UI_TEXT.dinos.map((d,i)=>text(d)+' · '+PHYS.SPECIES[SPECIES_KEYS[i]]+' kg'),S.species.target,i=>set('species',i),parent),
+ compare:parent=>button(ui('compare'),()=>QUEST.compare(),parent).setAttribute('aria-pressed',String(!!Q.flags.compareOpen)),
+ lens:parent=>chips(UI_TEXT.lenses.map(text),lensValues.indexOf(S.lens),i=>set('lens',lensValues[i]),parent),
+ pullSlider:parent=>{rangeControl('pullSlider',Math.round(S.pullP*100),0,100,1,v=>set('pull',v/100),parent);element('output',Math.round(S.pullP*100)+'%',parent);element('small',ui('slow'),parent);},
+ pull:parent=>{const b=button(ui(S.playing.target?'stop':'pull'),()=>QUEST.pull(),parent);b.className='primary';},
+};
+function focusedControl(name){const f=QUEST.focus();return f==='rail'?['kids','rival'].includes(name):f==='play'?name==='pull':['pull','slip'].includes(f)?name==='pullSlider':name===f;}
+function activeControls(){return Q.free?['kids','rival','ground',...(S.rivalN===0?['species']:[]),'lens','pull']:QUESTS[Q.i].controls;}
+function showTools(){renderControls();} // The boot entry now renders the text control panel.
+// The control rows are drawn by one function for the student panel and the teacher panel.
+function controlSignature(){return JSON.stringify([Q.free,Q.i,Q.phase,QUEST.focus(),S.u.target,S.rivalN,S.species.target,S.ground.target,S.lens,S.pullP,S.playing.target,S.sound.target,S.pullMode,Q.flags.compareOpen,GRAMMAR.enabled]);}
+// A slider under the pointer is never rebuilt; only its readout follows.
+function sliderHeld(parent){
+ const active=document.activeElement;
+ if(!(active?.type==='range'&&active.matches(':active')&&parent.contains(active)))return false;
+ const output=active.parentElement.querySelector('output');if(output)output.textContent=active.id==='input-pullSlider'?Math.round(S.pullP*100)+'%':PHYS.kidsFromRailX(S.u.target)+ui('people');return true;
+}
+function drawControls(parent,names){
+ for(const name of names){
+ const group=element('fieldset',undefined,parent);group.dataset.control=name;element('legend',ui(name),group);CONTROL_TYPES[name](group);
+ group.disabled=!Q.free&&!['act','card','confirm'].includes(Q.phase)||S.pullMode&&['kids','rival','species','ground'].includes(name);
+ if(!Q.free&&Q.phase==='act'&&!group.disabled&&focusedControl(name)){group.classList.add('focus-control');element('small',ui('here'),group).className='focus-label';}
  }
- if(!Q.free&&Q.phase==='explain'){
-  const e=f.explain,data=EXPLAIN[d.id],last=data.options.find(o=>o.key===e.tries.at(-1));
-  qPictures.innerHTML='<div class="q-explain" data-learn>'+conceptHTML(d.id)+'<p class="q-ask">'+text(data.q)+'</p><div class="q-options"></div><p class="q-hint" role="status">'+(last?text(last.hint):'')+'</p></div>';
-  const options=qPictures.querySelector('.q-options');
-  for(const key of e.order){const o=data.options.find(o=>o.key===key),b=document.createElement('button');b.dataset.option=key;b.textContent=text(o);b.setAttribute('aria-label',text(o));b.setAttribute('aria-disabled',String(e.tries.includes(key)));b.onclick=()=>QUEST.answer(key);options.append(b);}
- }
- if(!Q.free&&Q.phase==='card'){
-  qPictures.innerHTML=cardHTML(Q.i,f.success||QUEST.sample(),Q.stars[Q.i]);
-  const next=QUEST.next(),action=next===null?'free':'next';
-  qButton(action,action,()=>next===null?QUEST.mode(true):QUEST.go(next),qPictures);
- }
- qArchive.replaceChildren();for(const i of Q.completed){const b=qButton('quest',QUESTS[i].icon,()=>{qPictures.hidden=false;qPictures.className='card';qPictures.innerHTML=cardHTML(i,Q.results[i].success,Q.stars[i]);},qArchive);b.className='archive-card';}
- qArchive.hidden=!Q.free||!Q.completed.size;
- document.body.dataset.qphase=Q.free?'free':Q.phase;document.body.dataset.focus=QUEST.focus();
- showTools(QUEST.focus()==='lens'?'lens':QUEST.focus()==='ground'?'ground':toolGroup,false);
+}
+function renderControls(){
+ const active=document.activeElement,selection=active?.id,detailsOpen=controlPanel.querySelector('details')?.open;
+ const signature=controlSignature();
+ if(renderControls.signature===signature||sliderHeld(controlPanel))return;
+ renderControls.signature=signature;
+ controlPanel.replaceChildren();
+ if(Q.free){const opponent=element('div',undefined,controlPanel);element('strong',ui('opponent'),opponent);chips([ui('dinosaur'),ui('team')],+(S.rivalN>0),i=>set('rival',i?5:0),opponent);}
+ drawControls(controlPanel,activeControls());
+ const auxiliary=element('div',undefined,controlPanel);auxiliary.className='auxiliary';
+ button(ui('reset'),()=>action('reset'),auxiliary);button(ui(S.sound.target?'soundOff':'soundOn'),()=>action('sound'),auxiliary);
+ if(Q.free){const details=element('details',undefined,controlPanel);details.open=!!detailsOpen;element('summary',ui('layers'),details);for(const [i,name]of GRAMMAR.LAYERS.entries()){const label=element('label',undefined,details),check=element('input',undefined,label);check.type='checkbox';check.checked=!!GRAMMAR.enabled[name];check.onchange=()=>{GRAMMAR.set({[name]:check.checked});syncUI();};label.append(document.createTextNode(text(UI_TEXT.layerNames[i])));}}
+ if(selection&&controlPanel.querySelector('#'+selection)){const input=controlPanel.querySelector('#'+selection);input.focus({preventScroll:true});}
+}
+function action(name){
+ if(name==='sound'){S.sound.target=1-S.sound.target;tick();}
+ else if(!QUEST.allows())return;
+ else if(name==='play')QUEST.pull();
+ else if(name==='reset'){if(Q.free){preset(0);S.t.value=S.t.target=0;S.playing.target=0;}else QUEST.go(Q.i);}
  syncUI();
 }
-
+function forceRows(quest,sample){
+ const s=sample,row=(key,value,color)=>({label:ui(key),value,color});
+ if(quest.pullMode&&!Q.free){const p=PHYS.staticPull(s.n,s.mu,s.pullP);return {rows:[row('pullSlider',p.applied,'#d77732'),row('friction',p.friction,'#ad466c'),{...row('limit',p.limit,'#ad466c'),dashed:true}],status:ui(p.slipped?'slipping':'holding')};}
+ if((quest.lens||Q.free)&&s.rivalN>0&&s.lens){const f=PHYS.lensForces(s.n,s.species,s.rivalN,s.mu,s.lens);return {rows:f.arrows.map(a=>row(a.kind==='pull'?'ropeForce':'friction',a.value,a.kind==='pull'?'#d77732':'#ad466c')),status:ui(f.balanced?'balanced':f.sum>0?'netRight':'netLeft')};}
+ const m=PHYS.matchOutcome(s.n,s.species,s.rivalN,s.mu),rows=[row(s.rivalN?'leftForce':'kidForce',m.kids,'#d77732'),row(s.rivalN?'rightForce':'dinoForce',m.dino,s.rivalN?'#467daa':'#568553')];
+ if(quest.layers.includes('장력계'))rows.push(row('tension',PHYS.tensionOf(s.n,s.species,s.rivalN,s.mu),'#7863a6'));
+ return {rows,status:Math.abs(m.kids-m.dino)<1e-7?ui('equal'):''};
+}
+function resultSentence(s,slip=false){
+ if(slip)return ui('slipped');
+ const winner=PHYS.matchOutcome(s.n,s.species,s.rivalN,s.mu).winner;
+ return ui(s.rivalN?(winner==='kids'?'winLeft':winner==='dino'?'winRight':'tieTeams'):(winner==='kids'?'winKids':winner==='dino'?'winDino':'tieDino'));
+}
+function renderForces(){
+ forceCard.hidden=!(Q.free||['act','observe','confirm'].includes(Q.phase));if(forceCard.hidden)return;
+ const {rows,status}=forceRows(QUESTS[Q.i],QUEST.sample()),max=Math.max(1,...rows.map(r=>r.value))*1.1,numbers=Q.free||levelOf(Q.i)>=2;
+ forceCard.replaceChildren();element('strong',ui('forces'),forceCard);
+ for(const row of rows){const line=element('div',undefined,forceCard);line.className='force-row';element('span',row.label+(numbers?' · '+Math.round(row.value)+' N':''),line);const track=element('div',undefined,line);track.className='force-track';const bar=element('div',undefined,track);bar.className=row.dashed?'force-bar dashed':'force-bar';bar.style.width=(row.value/max*100)+'%';bar.style.background=row.color;}
+ element('div',status,forceCard);if(rows.length>=2&&Math.abs(rows[0].value-rows[1].value)<1e-7&&status!==ui('equal'))element('div',ui('equal'),forceCard);
+}
+function announceResult(s,slip=false){resultNotice.textContent=resultSentence(s,slip);resultNotice.hidden=false;clearTimeout(announceResult.timer);announceResult.timer=setTimeout(()=>{resultNotice.hidden=true;},2600);}
+function conceptHTML(id){return '<div class="q-concept">'+text(CONCEPTS.find(c=>c.id===CONCEPTS_OF[id][0]))+'</div>';}
+function cardHTML(i,s,stars){const id=QUESTS[i].id;return `<div class="q-principle"><h2>${ui('learned')}</h2>${conceptHTML(id)}<p>${text(EXPLAIN[id].recap)}</p><p class="q-bridge">${EXPLAIN[id].bridge?text(EXPLAIN[id].bridge):''}</p>${QUESTS[i].card(s)}<span>${'★'.repeat(stars)}</span></div>`;}
+function questUI(){
+ if(Q.phase==='intro'){resultNotice.hidden=true;delete questList.dataset.notice;}
+ renderHeader();qPictures.replaceChildren();qPictures.className=Q.phase;qPictures.hidden=Q.free;
+ const d=QUESTS[Q.i],f=Q.flags;
+ if(!Q.free&&Q.phase==='predict'){
+ element('h2',text(MISSION[Q.i].ask),qPictures);const choices=element('div',undefined,qPictures);choices.className='prediction-choices';
+ d.candidates.forEach((c,k)=>{const b=button(text(c.label),()=>QUEST.pick(k),choices);b.dataset.candidate=k;const diagram=element('div',undefined,b);diagram.setAttribute('aria-hidden','true');diagram.innerHTML=CARDS.picture(d.id,c,0,QUEST.sample());});
+ }
+ if(!Q.free&&Q.phase==='confirm'){
+ const chosen=d.candidates.find(c=>c.key===Q.pick)||d.candidates[0],s=f.success||QUEST.sample();element('p',ui('myPick')+': '+text(chosen.label),qPictures);element('p',ui('actual')+': '+resultSentence(s,!!d.pullMode),qPictures);element('strong',ui(Q.pick===d.answerKey?'right':'wrong'),qPictures);
+ element('div',undefined,qPictures).innerHTML='<div class="q-compare">'+CARDS.picture(d.id,chosen,0,s)+CARDS.actual(d.id,s)+'</div>';
+ }
+ if(!Q.free&&Q.phase==='explain'){
+ const data=EXPLAIN[d.id],e=f.explain,last=data.options.find(o=>o.key===e.tries.at(-1));const panel=element('div',undefined,qPictures);panel.className='q-explain';
+ // 결과는 짧은 확인 단계 뒤에도 여기서 계속 읽을 수 있다(학생이 고를 때까지 기다리는 단계).
+ const chosen=d.candidates.find(c=>c.key===Q.pick),outcome=element('div',undefined,panel);outcome.className='q-outcome';if(chosen)element('p',ui('myPick')+': '+text(chosen.label),outcome);element('p',ui('actual')+': '+resultSentence(f.success||QUEST.sample(),!!d.pullMode),outcome);
+ element('h2',text(data.q),panel);const options=element('div',undefined,panel);options.className='q-options';
+ for(const key of e.order){const o=data.options.find(o=>o.key===key),b=button(text(o),()=>QUEST.answer(key),options);b.dataset.option=key;b.disabled=e.tries.includes(key);}
+ const hint=element('p',last?text(last.hint):'',panel);hint.className='q-hint';hint.setAttribute('role','status');
+ }
+ if(!Q.free&&Q.phase==='card'){qPictures.innerHTML=cardHTML(Q.i,f.success||QUEST.sample(),Q.stars[Q.i]);const next=QUEST.next();button(ui(next===null?'last':'next'),()=>next===null?TEACHER.mode('free'):QUEST.go(next),qPictures);}
+ document.body.dataset.qphase=Q.free?'free':Q.phase;document.body.dataset.focus=QUEST.focus();syncUI();
+}
+function syncUI(){
+ hudRoot.hidden=T.mode==='teacher';mission.hidden=false;
+ mission.textContent=questList.dataset.notice&&!questList.hidden?ui(questList.dataset.notice):missionText(Q.i,Q.phase,{...QUEST.sample(),free:Q.free,focus:QUEST.focus(),pending:Q.flags.pending,right:Q.pick===null||Q.pick===QUESTS[Q.i].answerKey});
+ if(T.mode!=='teacher')renderControls();
+ renderForces();
+ guide.style.top=(header.getBoundingClientRect().bottom+6)+'px';
+ hudRoot.style.setProperty('--panel-height',controlPanel.getBoundingClientRect().height+'px');
+ hudRoot.style.setProperty('--guide-bottom',guide.getBoundingClientRect().bottom+'px');
+ // 카메라 맞춤(stageRect)이 HUD를 피하도록 위·아래 예약 높이를 알려 준다.
+ const covers=[controlPanel,qPictures].filter(e=>e.getClientRects().length&&e.getBoundingClientRect().height>0).map(e=>e.getBoundingClientRect().top);
+ if(T.mode!=='teacher'){document.documentElement?.style?.setProperty('--hud-right','0px');
+ document.documentElement?.style?.setProperty('--hud-top',Math.round(guide.getBoundingClientRect().bottom+8)+'px');
+ document.documentElement?.style?.setProperty('--hud-bottom',Math.round(innerHeight-Math.min(innerHeight,...covers)+8)+'px');}
+ resultNotice.style.top=(guide.getBoundingClientRect().bottom+10)+'px';
+ if(innerWidth>600)forceCard.style.top=(guide.getBoundingClientRect().bottom+10)+'px';else forceCard.style.top='auto';
+ canvas.setAttribute('aria-label',ui('lab'));
+ if(window.__lab&&!window.__lab.GRAMMAR){window.__lab.GRAMMAR=GRAMMAR;window.__lab.sample=()=>QUEST.sample();window.__lab.layer=(name,on)=>{if(GRAMMAR.LAYERS.includes(name))GRAMMAR.set({[name]:!!on});else layer(name,on);};}
+}
+function textAudit(){
+ const found=[];for(const e of document.querySelectorAll('#student-hud button,#student-hud h1,#student-hud h2,#student-hud p,#student-hud label,#mission')){
+ if(!e.getClientRects().length)continue;let r=e.getBoundingClientRect(),visible=true;
+ for(let parent=e.parentElement;parent;parent=parent.parentElement){const style=getComputedStyle(parent);if(style.visibility==='hidden'||style.display==='none')visible=false;if(/auto|scroll|hidden/.test(style.overflowY)){const p=parent.getBoundingClientRect();r={left:Math.max(r.left,p.left),right:Math.min(r.right,p.right),top:Math.max(r.top,p.top),bottom:Math.min(r.bottom,p.bottom)};}}
+ if(!visible||r.right<=r.left||r.bottom<=r.top)continue;
+ if(r.left<-.5||r.right>innerWidth+.5||r.top<-.5||r.bottom>innerHeight+.5)found.push({kind:'hud-clipped',text:e.textContent});
+ }
+ for(const e of document.querySelectorAll('#gl text,#gl [data-text]'))if(e.textContent.trim())found.push({kind:'canvas-text',text:e.textContent});return found;
+}

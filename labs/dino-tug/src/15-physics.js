@@ -212,12 +212,15 @@ const PHYS = (() => {
     dinoZ:-.10, dinoStretch:.60, enlargement:3.6, maxHeight:4.6, ropeY:SCENE.top+.425,
     flagTravel:.56, flagStep:.14, beadRadius:.055,
     heroAzimuths:Object.freeze([8,14,20,26,32,40,48]), portraitAzimuths:Object.freeze([60,66,72,78]), portraitElevations:Object.freeze([24,28,32,36]),
+    // 두 팀이 좌우로 마주 보이도록 정면에 가까운 각도만 쓴다(비스듬하면 한 팀이 가려진다).
+    childPortraitAzimuths:Object.freeze([36,44,52]), childHeroAzimuths:Object.freeze([8,14,20]), childPortraitFov:20, childElevations:Object.freeze([10,14,18]),
     elevations:Object.freeze([8,10,12]), heroWidth:.80, minWidth:.70,
     heroHeight:.55, maxWidth:.90, fov:34, portraitFov:38,
     representative:Object.freeze({n:59,speciesIndex:4,groundIndex:2,phase:Math.PI*.82}) });
+  const SOLO_GAP=.9; // 혼자인 아이가 가운데 깃발 뒤에 가려지지 않게 깃발에서 떨어뜨린다.
   function dramaChild(n,i) {
     const rows=n<=30?1:n<=66?2:3,columns=Math.ceil(n/rows),row=Math.floor(i/columns);
-    return {rows,columns,x:DRAMA.kidStart+(columns===1?DRAMA.kidSpan:i%columns*DRAMA.kidSpan/(columns-1)),
+    return {rows,columns,x:DRAMA.kidStart+(columns===1?DRAMA.kidSpan-SOLO_GAP:i%columns*DRAMA.kidSpan/(columns-1)),
       y:DRAMA.ground,z:-.78+row*DRAMA.rowGap,band:Math.floor(i/10)%2};
   }
   function dramaState(n,species,mu,phase=0,rivalN=0) {
@@ -237,19 +240,22 @@ const PHYS = (() => {
       slipX:(result.winner==='kids'?(rivalN>0?-dramaChild(Math.min(rivalN,C.rivalMax),Math.min(rivalN-1,3)).x:DRAMA.dinoX):dramaChild(n,Math.min(n-1,3)).x)+skid,
       beadAmplitude:.026*effort,effort};
   }
-  function dramaBounds(species) {
+  function dramaBounds(species, rivalN=0, stageOnly=false) {
+    const floor=stageOnly?DRAMA.ground-.12:SCENE.top-.24;
+    if(rivalN>0)return {min:[-4.65,floor,-1.0],max:[4.95,DRAMA.ground+DRAMA.kidHeight+.9,.65]};
     const d=dramaState(59,species,.55,Math.PI);
-    return {min:[-4.65,SCENE.top-.24,-1.16],max:[4.95,Math.max(3.65,DRAMA.ground+d.height+.35),1.3]};
+    return {min:[-4.65,floor,-1.16],max:[4.95,Math.max(stageOnly?DRAMA.ground+DRAMA.kidHeight+.9:3.65,DRAMA.ground+d.height+.35),1.3]};
   }
   // Pinhole fit shared by hero, teacher, attract and event shots; no renderer/DOM.
-  function dramaFrame(width,height,species,rect,eventX=null) {
-    const bounds=dramaBounds(species),center=bounds.min.map((v,i)=>(v+bounds.max[i])/2);
+  function dramaFrame(width,height,species,rect,eventX=null,rivalN=0) {
+    const bounds=dramaBounds(species,rivalN,rect.stageOnly);
+    const center=bounds.min.map((v,i)=>(v+bounds.max[i])/2);
     if(eventX!==null){center[0]=center[0]*.8+eventX*.2;center[1]=center[1]*.85+DRAMA.ropeY*.15;}
-    const portrait=width/height<.9,fov=portrait?DRAMA.portraitFov:DRAMA.fov,tan=Math.tan(fov*Math.PI/360);
+    const portrait=width/height<.9,fov=portrait?(rect.stageOnly&&rivalN>0?DRAMA.childPortraitFov:DRAMA.portraitFov):DRAMA.fov,tan=Math.tan(fov*Math.PI/360);
     const dot=(a,b)=>a.reduce((v,x,i)=>v+x*b[i],0),corners=[];
     for(const x of [bounds.min[0],bounds.max[0]])for(const y of [bounds.min[1],bounds.max[1]])for(const z of [bounds.min[2],bounds.max[2]])corners.push([x,y,z].map((v,i)=>v-center[i]));
     let best=null;
-    for(const azimuth of portrait?DRAMA.portraitAzimuths:DRAMA.heroAzimuths)for(const elevation of portrait?DRAMA.portraitElevations:DRAMA.elevations){
+    for(const azimuth of portrait?(rect.stageOnly&&rivalN>0?DRAMA.childPortraitAzimuths:DRAMA.portraitAzimuths):(rect.stageOnly?DRAMA.childHeroAzimuths:DRAMA.heroAzimuths))for(const elevation of rect.stageOnly&&(rivalN>0||!portrait)?DRAMA.childElevations:portrait?DRAMA.portraitElevations:DRAMA.elevations){
       const az=azimuth*Math.PI/180,el=elevation*Math.PI/180;
       const direction=[Math.sin(az)*Math.cos(el),Math.sin(el),Math.cos(az)*Math.cos(el)],right=[Math.cos(az),0,-Math.sin(az)],up=[-Math.sin(az)*Math.sin(el),Math.cos(el),-Math.cos(az)*Math.sin(el)];
       for(let distance=6;distance<=55;distance+=.10){
@@ -257,15 +263,22 @@ const PHYS = (() => {
         if(points.some(p=>p[2]<=0))continue;
         const left=Math.min(...points.map(p=>p[0])),r=Math.max(...points.map(p=>p[0])),top=Math.min(...points.map(p=>p[1])),b=Math.max(...points.map(p=>p[1]));
         const w=r-left,h=b-top,availableW=rect.right-rect.left,availableH=rect.bottom-rect.top;
-        if(w>Math.min(width*DRAMA.maxWidth,availableW)||h>availableH)continue;
+        if(w>(rect.stageOnly?availableW:Math.min(width*DRAMA.maxWidth,availableW))||h>availableH)continue;
         const coverageW=w/width,coverageH=h/height;
-        const score=Math.abs(coverageW-(eventX===null?DRAMA.heroWidth:.88))+Math.max(0,DRAMA.heroHeight-coverageH)*2+Math.max(0,DRAMA.minWidth-coverageW)*3+(eventX===null?0:distance*.0001);
+        // Prefer the closest fit that keeps even the far team's child at least 6% tall.
+        let childRatio=1;
+        if(rect.stageOnly&&rivalN>0)for(const x of [DRAMA.kidStart,-DRAMA.kidStart]){
+          const q=[x,DRAMA.ground,-.78].map((v,i)=>v-center[i]),depth=distance-dot(q,direction),y=dot(q,up);
+          const top=(y+DRAMA.kidHeight*up[1])/(depth-DRAMA.kidHeight*direction[1]);
+          childRatio=Math.min(childRatio,Math.abs(top-y/depth)/(2*tan));
+        }
+        const score=rect.stageOnly ? distance + (rivalN>0?Math.max(0,.06-childRatio)*10000:0) + Math.abs(azimuth-(portrait?72:32))*.0001 : Math.abs(coverageW-(eventX===null?DRAMA.heroWidth:.88))+Math.max(0,DRAMA.heroHeight-coverageH)*2+Math.max(0,DRAMA.minWidth-coverageW)*3+(eventX===null?0:distance*.0001);
         if(!best||score<best.score){
           // Event aim follows the flag, but its shift is clamped to the existing safe margins.
           const follow=eventX===null?0:Math.max(-12,Math.min(12,eventX*12));
           const shiftX=Math.max(rect.left-left,Math.min(rect.right-r,(rect.left+rect.right-left-r)/2+follow));
           const shiftY=(rect.top+rect.bottom-top-b)/2;
-          best={score,pos:center.map((v,i)=>v+direction[i]*distance),target:center.slice(),fov,offsetX:shiftX,offset:shiftY,azimuth,elevation,distance,
+          best={...(rect.stageOnly?{stageBounds:bounds}:{}),score,pos:center.map((v,i)=>v+direction[i]*distance),target:center.slice(),fov,offsetX:shiftX,offset:shiftY,azimuth,elevation,distance,
             width:coverageW,height:coverageH,bounds:[left+shiftX,top+shiftY,r+shiftX,b+shiftY]};
         }
       }

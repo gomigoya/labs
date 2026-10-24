@@ -25,7 +25,10 @@ const DIRECTOR={
   const playing=S.playing.target>0;
   if(Q.free&&playing&&!this.wasPlaying&&!A.active)this.event(s);
   this.wasPlaying=playing;
-  const region=stageRegion(this.eventLeft>0),fitKey=[innerWidth,innerHeight,Q.free,Q.phase,s.species,T.mode,...Object.values(region)].join(':');
+  const region=stageRect(),fitKey=[innerWidth,innerHeight,Q.free,Q.phase,s.species,S.rivalN,T.mode,...Object.values(region)].join(':');
+  if(this.eventLeft>0&&this.eventFrame&&fitKey!==this.fitKey){
+   const fit=fitHero(FLAG.position.x);if(fit){this.eventFrame=fit;flyTo(fit,.32);}this.fitKey=fitKey;
+  }
   if(this.eventLeft>0&&this.eventFrame){
    // Keep the complete device inside its lane while following the moving center flag.
    if(!S.fly){
@@ -37,14 +40,14 @@ const DIRECTOR={
    }
   }else if(this.eventFrame){this.eventFrame=null;this.snapshot=null;this.fitKey='';}
   const autoFrame=!Q.free||T.mode==='teacher'||S.shotIndex===(S.vertical?0:1);
-  if(autoFrame&&!S.fly&&!S.drag&&!A.active&&(Q.free||Q.phase!=='intro')&&this.eventLeft<=0&&fitKey!==this.fitKey){this.fit();this.fitKey=fitKey;}
+  if(autoFrame&&!S.fly&&!S.drag&&!A.active&&this.eventLeft<=0&&fitKey!==this.fitKey){this.fit();this.fitKey=fitKey;}
 
   if(S.drag&&S.sound.target){
    audioContext ||= new(window.AudioContext||window.webkitAudioContext)();
    if(!this.tone){void audioContext.resume();const o=audioContext.createOscillator(),g=audioContext.createGain();g.gain.value=.012;o.connect(g).connect(audioContext.destination);o.start();this.tone={o,g};}
    this.tone.o.frequency.setTargetAtTime(140+PHYS.forceVisual(PHYS.kidCap(s.n,s.mu)).length*12,audioContext.currentTime,.05);
   }else if(this.tone){this.tone.o.stop();this.tone=null;}
-  if(Math.floor(this.clock*12)!==this.previewAt){this.previewAt=Math.floor(this.clock*12);qPictures.querySelectorAll('[data-candidate]').forEach(b=>b.innerHTML=CARDS.picture(d.id,d.candidates[+b.dataset.candidate],this.clock,s));}
+  if(Math.floor(this.clock*12)!==this.previewAt){this.previewAt=Math.floor(this.clock*12);qPictures.querySelectorAll('[data-candidate]').forEach(b=>{const diagram=b.querySelector('[aria-hidden]');if(diagram)diagram.innerHTML=CARDS.picture(d.id,d.candidates[+b.dataset.candidate],this.clock,s);});}
   const project=p=>{const v=p.clone().project(camera);return [(v.x+1)*innerWidth/2,(1-v.y)*innerHeight/2];};
   const line=(p,dash=false)=>CARDS.path(p,'#ffce8b',dash);
   let body='';

@@ -1,6 +1,7 @@
 // One flow state; only completed pulls are scientific observations.
 const Q = { i:0, phase:'intro', pick:null, stars:[], completed:new Set(), free:false, flags:{}, run:0, results:[], predict:[], explain:[] };
 const PHASES = ['intro','predict','act','observe','confirm','explain','card'];
+const QUEST_UI = {"1": {"title": {"ko": "작은 공룡과 아이 한 명, 누가 이길까?", "en": "A small dinosaur and one child: who wins?"}, "labels": [{"ko": "공룡이 이긴다", "en": "The dinosaur wins"}, {"ko": "비긴다", "en": "A tie"}, {"ko": "아이가 이긴다", "en": "The child wins"}], "controls": ["pull"]}, "2": {"title": {"ko": "트리케라톱스를 이기려면 몇 명?", "en": "How many children can beat Triceratops?"}, "labels": [{"ko": "5명", "en": "5 children"}, {"ko": "20명", "en": "20 children"}, {"ko": "50명", "en": "50 children"}], "controls": ["kids", "pull"]}, "3": {"title": {"ko": "티라노를 이기려면 몇 명?", "en": "How many children can beat T. rex?"}, "labels": [{"ko": "100명이어도 진다", "en": "Even 100 lose"}, {"ko": "60명이면 이긴다", "en": "60 can win"}, {"ko": "10명이면 이긴다", "en": "10 can win"}], "controls": ["kids", "pull"]}, "4": {"title": {"ko": "바닥을 유리로 바꾸면?", "en": "What if the ground becomes glass?"}, "labels": [{"ko": "아이 팀이 이긴다", "en": "The children win"}, {"ko": "결과가 똑같다", "en": "The result stays the same"}, {"ko": "공룡이 이긴다", "en": "The dinosaur wins"}], "controls": ["ground", "pull"]}, "5": {"title": {"ko": "유리 위에서 인원을 늘리면?", "en": "What if more children join on glass?"}, "labels": [{"ko": "마찰 한계는 그대로다", "en": "The friction limit stays the same"}, {"ko": "인원이 늘면 한계도 커진다", "en": "More children raise the limit"}, {"ko": "인원이 늘면 한계가 작아진다", "en": "More children lower the limit"}], "controls": ["kids", "pull"]}, "6": {"title": {"ko": "큰 공룡은 몸무게에 비해 힘이 셀까?", "en": "Are big dinosaurs stronger for their weight?"}, "labels": [{"ko": "큰 공룡이 몸무게에 비해 더 세다", "en": "Big dinosaurs are stronger for their weight"}, {"ko": "똑같다", "en": "The same"}, {"ko": "큰 공룡이 몸무게에 비해 더 약하다", "en": "Big dinosaurs are weaker for their weight"}], "controls": ["species", "compare"]}, "7": {"title": {"ko": "아이 30명이 이길 수 있는 가장 무거운 공룡은?", "en": "What is the heaviest dinosaur 30 children can beat?"}, "labels": [{"ko": "벨로키랍토르까지", "en": "Up to Velociraptor"}, {"ko": "딜로포사우루스까지", "en": "Up to Dilophosaurus"}, {"ko": "스테고사우루스까지", "en": "Up to Stegosaurus"}], "controls": ["species", "pull"]}, "8": {"title": {"ko": "맞잡기: 두 팀이 똑같이 당기면?", "en": "Equal pull: what if both teams pull equally?"}, "labels": [{"ko": "왼쪽 팀이 이긴다", "en": "The left team wins"}, {"ko": "비긴다(깃발이 멈춘다)", "en": "A tie (the flag stops)"}, {"ko": "오른쪽 팀이 이긴다", "en": "The right team wins"}], "controls": ["pull"]}, "9": {"title": {"ko": "한 명 더: 한 팀에 한 명만 더 오면?", "en": "One more: what if a child joins one team?"}, "labels": [{"ko": "아무 변화 없다", "en": "Nothing changes"}, {"ko": "많은 팀 쪽으로 움직인다", "en": "Moves toward the larger team"}, {"ko": "적은 팀 쪽으로 움직인다", "en": "Moves toward the smaller team"}], "controls": ["kids", "rival", "pull"]}, "10": {"title": {"ko": "줄 가운데 저울은 얼마를 가리킬까?", "en": "What does the gauge in the middle read?"}, "labels": [{"ko": "한 팀이 당기는 힘만큼", "en": "One team?s pulling force"}, {"ko": "두 팀 힘을 더한 만큼", "en": "The sum of both forces"}, {"ko": "0", "en": "0"}], "controls": ["kids", "rival", "pull"]}, "11": {"title": {"ko": "팀을 따로 보기: 힘의 합이 0이 아닌 것은?", "en": "View teams separately: which has a nonzero net force?"}, "labels": [{"ko": "줄", "en": "Rope"}, {"ko": "이기는 팀", "en": "Winning team"}, {"ko": "지는 팀", "en": "Losing team"}], "controls": ["pull", "lens"]}, "12": {"title": {"ko": "서서히 당기기: 마찰은 언제부터 버틸까?", "en": "Pull slowly: when does friction resist?"}, "labels": [{"ko": "처음부터 최대로 버틴다", "en": "Maximum resistance from the start"}, {"ko": "당기는 만큼 커지다가 한계에서 미끄러진다", "en": "Grows with the pull, then slips at the limit"}, {"ko": "움직일 때만 생긴다", "en": "Only acts while moving"}], "controls": ["pullSlider"]}};
 const QUESTS = [
  {id:1,icon:'q1',startState:()=>({n:1,species:SPECIES_KEYS[0],mu:PHYS.GROUNDS['자갈']}),candidates:[{key:'A',flag:'dino'},{key:'B',flag:'tie'},{key:'C',flag:'kids'}],answerKey:'C',layers:[0,2,4],goalMarks:[],focus:'play',judge:s=>PHYS.judgeQ1(s),solve:()=>[{pull:true}]},
  {id:2,icon:'q2',startState:()=>({n:1,species:SPECIES_KEYS[3],mu:PHYS.GROUNDS['자갈']}),candidates:[5,20,50].map((n,i)=>({key:'ABC'[i],n})),answerKey:'C',layers:[0,1,2],goalMarks:[PHYS.minKidsToWin(SPECIES_KEYS[3],GROUND_VALUES[2])],focus:'rail',judge:s=>PHYS.judgeQ2(s),solve:s=>[{n:PHYS.minKidsToWin(s.species,s.mu),pull:true}]},
@@ -16,7 +17,7 @@ const QUESTS = [
  {id:11,icon:'q11',lens:true,startState:()=>({n:6,rival:5,species:SPECIES_KEYS[0],mu:PHYS.GROUNDS['자갈']}),candidates:['rope','winner','loser'].map((flag,i)=>({key:'ABC'[i],flag})),answerKey:'C',layers:[0,2,'렌즈'],goalMarks:[],focus:s=>!s.observations.some(PHYS.validObservation)?'play':['rope','A','B'].every(x=>s.lensVisited.includes(x))?'play':'lens',judge:s=>PHYS.judgeQ11(s),solve:()=>[{pull:true},{lens:'rope'},{lens:'A'},{lens:'B'}]}
 ,
  {id:12,icon:'q12',pullMode:true,startState:()=>({n:5,species:SPECIES_KEYS[3],mu:PHYS.GROUNDS['유리'],rival:0}),candidates:['max','grow','late'].map((flag,i)=>({key:'ABC'[i],flag})),answerKey:'B',layers:['서서히 당기기'],goalMarks:[],focus:s=>!s.sawStatic?'pull':!s.sawSlip?'slip':'pull',judge:s=>PHYS.judgeQ12(s),solve:()=>[{pull:0.4},{hold:0.8},{pull:0.9},{hold:0.8}]}
-].map(d=>({...d,layers:d.layers.map(i=>typeof i==='string'?i:GRAMMAR.LAYERS[i]),events:s=>d.judge(s),card:s=>CARDS.principle(d.id,s)}));
+].map(d=>({...d,title:QUEST_UI[d.id].title,controls:QUEST_UI[d.id].controls,candidates:d.candidates.map((c,k)=>({...c,label:QUEST_UI[d.id].labels[k]})),layers:d.layers.map(i=>typeof i==='string'?i:GRAMMAR.LAYERS[i]),events:s=>d.judge(s),card:s=>CARDS.principle(d.id,s)}));
 validateCurriculum(QUESTS);
 validateExplain(QUESTS);
 Q.stars = Array(QUESTS.length).fill(0);
@@ -73,7 +74,7 @@ const QUEST = {
     const pull=PHYS.staticPull(s.n,s.mu,s.pullP);
     f.staticTime=s.pullP>0&&s.pullP<pull.pSlip&&pull.friction===pull.applied?f.staticTime+dt:0;
     f.slipTime=pull.slipped?f.slipTime+dt:0;
-    f.sawStatic ||= f.staticTime>=.6;f.sawSlip ||= f.slipTime>=.6;
+    if(pull.slipped&&!f.slipNotified){f.slipNotified=true;announceResult(s,true);} f.sawStatic ||= f.staticTime>=.6;f.sawSlip ||= f.slipTime>=.6;
    }
    if(p){
     if(S.drag||s.n!==p.n||s.species!==p.species||s.mu!==p.mu||s.rivalN!==p.rivalN||!S.playing.target){f.pending=null;}
@@ -83,7 +84,7 @@ const QUEST = {
       const record={run:p.run,n:p.n,species:p.species,mu:p.mu,rivalN:p.rivalN};f.observations.push(record);f.pending=null;S.playing.value=S.playing.target=0;S.t.value=S.t.target=Math.PI;
       if(!f.before)f.before=record;else{f.after=record;f.before=f.observations.slice(0,-1).find(before=>PHYS.judgeQ5({before,after:record}))||f.observations.at(-2);}
       // Record the event before any presentation cooldown. No invented acceleration.
-      const result=PHYS.matchOutcome(p.n,p.species,p.rivalN,p.mu);f.events.push({...record,...result});GRAMMAR.record();
+      const result=PHYS.matchOutcome(p.n,p.species,p.rivalN,p.mu);f.events.push({...record,...result});announceResult(record);GRAMMAR.record();
       if(f.observations.length===1&&Q.i===3)GRAMMAR.pin();questUI();
      }
     }
@@ -117,7 +118,7 @@ const QUEST = {
    else if(typeof command.pull!=='number')step(30,1/30);
    if(command.compare)this.compare();if(command.pull===true){this.pull();step(40,1/30);}
   }
-  for(let n=0;n<3&&!['explain','card'].includes(Q.phase);n++)step(30,1/30);
+  for(let n=0;n<12&&!['explain','card'].includes(Q.phase);n++)step(30,1/30);
   if(Q.phase==='explain')this.answer(this.correctKey());
   return {i,passed:this.passed,phase:Q.phase,judge:QUESTS[i].judge(Q.flags.success||this.sample()),stars:Q.stars[i]};
  }

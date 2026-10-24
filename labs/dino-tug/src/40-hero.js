@@ -381,11 +381,11 @@ const rivalRopes=TEAM_ROPES.map(r=>{const copy=r.clone();RIVAL_ROPES.add(copy);r
 const rivalJoins=TEAM_JOINS.map(r=>{const copy=r.clone();RIVAL_ROPES.add(copy);return copy;});
 const RIVAL_EXTENSION=KIT.rod(V3(PHYS.DRAMA.dinoX,0,0),V3(4.5,0,0),.05,MAT.bone,ROPE);
 const harness=KIT.mesh(new THREE.TorusGeometry(.17,.028,6,16),MAT.brass,HERO,PHYS.DRAMA.dinoX,PHYS.DRAMA.ropeY,PHYS.DRAMA.dinoZ);harness.rotation.y=Math.PI/2;
-const FLAG=new THREE.Group();FLAG.scale.setScalar(1.7);ROPE.add(FLAG);
+const FLAG=new THREE.Group();FLAG.scale.setScalar(2.55);ROPE.add(FLAG);
 KIT.rod(V3(0,-.13,0),V3(0,.27,0),.018,MAT.brass,FLAG);
 const FLAG_PANEL=KIT.roundedPanel(.24,.22,.032,MAT.glow.clone(),FLAG,.12,.24,0,.008);
 const FORCE_KNOTS=Array.from({length:8},(_,i)=>{const x=(i<4?-1:1)*(.32+(i%4)*.20),k=KIT.ball(PHYS.DRAMA.beadRadius,MAT.brass,ROPE,x,0,0,1);k.userData.x=x;return k;});
-for(let i=-4;i<=4;i++)KIT.rod(V3(i*PHYS.DRAMA.flagStep,PHYS.DRAMA.ground,-.15),V3(i*PHYS.DRAMA.flagStep,PHYS.DRAMA.ground,.35),.018,i?MAT.bone:MAT.glow,HERO);
+for(let i=-4;i<=4;i++)KIT.rod(V3(i*PHYS.DRAMA.flagStep,PHYS.DRAMA.ground,i?-.15:-.275),V3(i*PHYS.DRAMA.flagStep,PHYS.DRAMA.ground,i?.35:.475),i?.018:.027,i?MAT.bone:MAT.glow,HERO);
 const SLIP_DUST=new THREE.InstancedMesh(new THREE.IcosahedronGeometry(.035,0),new THREE.MeshStandardMaterial({color:THEME.sand,transparent:true,opacity:.8}),PHYS.VIS.dustCount);SLIP_DUST.frustumCulled=false;HERO.add(SLIP_DUST);
 // R1 basic capacity fills; richer thresholds, beads and contact lens arrive in R2.
 const CAPACITIES=new THREE.Group();CAPACITIES.position.copy(CONSOLE.position);CAPACITIES.rotation.copy(CONSOLE.rotation);HERO.add(CAPACITIES);

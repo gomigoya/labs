@@ -4,23 +4,58 @@ const HABITAT = Object.freeze({
   terrain: [1,1,120,0,0], rear: [30,16,.32,11,-29], middle: [24,14,.44,12,-17],
   near: [12,8,.65,14,-8], ferns: [48,20,.9,1.4,0], rocks: [18,9,.65,.45,0],
   litter: [180,60,.10,.02,0], vines: [24,10,.035,5,0], logs: [3,3,.30,3,0],
-  shafts: [4,3,2.4,12,-.5], motes: [64,24,.025,5,-5], smoke: [7,4,.6,3,-43],
-  footprints: [8,8,.26,.12,0], foreground: [6,4,1.5,1.3,5],
+  shafts: [4,3,2.4,12,-12], motes: [64,24,.025,5,-5], smoke: [7,4,.6,3,-43],
+  footprints: [8,8,.26,.12,0], foreground: [0,0,1.5,1.3,5],
   clearing: {inner:[PHYS.DRAMA.width/2+.3,PHYS.DRAMA.depth/2+.18],outer:[5.8,2.1],rise:.123,segments:48,power:.25},
   sun: {opacity:.18,pulse:0,color:BIOME.sun},
   trail: BIOME.trail,
   foregroundLayout:{x:7.5,xStep:2,zStep:1.2,rockY:.24,vineY:1.8,frondY:.65,spread:.7}
 });
+// Pure segment/sphere test. Centers and radii are world-space, independent of THREE.
+function environmentOcclusions(camera,targets,props){
+ return props.filter(prop=>targets.some(target=>{
+  const d=target.map((v,i)=>v-camera[i]),q=prop.center.map((v,i)=>v-camera[i]);
+  const dot=(a,b)=>a.reduce((sum,v,i)=>sum+v*b[i],0),len=dot(d,d);
+  const t=len?Math.max(0,Math.min(1,dot(q,d)/len)):0;
+  return q.reduce((sum,v,i)=>sum+(v-t*d[i])**2,0)<=prop.radius**2;
+ }));
+}
+function stageSightTargets(species,rivalN=0,flagX=0,n=59){
+ const team=(count,mirror=1)=>{
+  const kids=Array.from({length:count},(_,i)=>PHYS.dramaChild(count,i));
+  return [mirror*kids.reduce((sum,k)=>sum+k.x,0)/count,PHYS.DRAMA.ground+PHYS.DRAMA.kidHeight/2,kids.reduce((sum,k)=>sum+k.z,0)/count];
+ };
+ const rival=rivalN>0?team(Math.min(rivalN,PHYS.C.rivalMax),-1):[PHYS.DRAMA.dinoX,PHYS.DRAMA.ground+PHYS.dramaState(n,species,.55).height/2,PHYS.DRAMA.dinoZ];
+ return [team(n),rival,[flagX,PHYS.DRAMA.ropeY+.6,.08],[0,PHYS.DRAMA.ropeY,.08]];
+}
+const STAGE_SIGHT_TARGETS=Object.freeze(stageSightTargets(Object.keys(PHYS.SPECIES)[4]));
+// A conservative swept corridor covers every azimuth/elevation available to dramaFrame,
+// including event focus and future HUD inset changes. Distant forest remains behind it.
+function environmentPropAllowed(prop){
+ return prop.center[2]+prop.radius < -1.3;
+}
+const ENVIRONMENT_PROPS=[];
 function buildEnvironment() {
   ROOM.position.y=PHYS.SCENE.top;
   const seed=mulberry32(761037), dummy=new THREE.Object3D(), batches=[], crowns=[], beams=[];
   let clock=0, quality='';
   const material=color=>new THREE.MeshStandardMaterial({color,flatShading:true});
   const bark=MAT.bark, foliage=material(BIOME.foliage), moss=material(BIOME.moss), mud=material(BIOME.mud);
-  const batch=(geometry,mat,row,poses,parent=ROOM)=>{
-    const mesh=new THREE.InstancedMesh(geometry,mat,row[0]);mesh.frustumCulled=false;mesh.receiveShadow=true;parent.add(mesh);
+  const batch=(geometry,mat,row,poses,parent=ROOM,occluding=true)=>{
+    geometry.computeBoundingSphere();
+    const sphere=geometry.boundingSphere;
+    poses=poses.filter(p=>{
+      // Rotation cannot expand this enclosing origin-centered sphere. Include crown sway.
+      const scale=Math.max(...(p.s||[1,1,1]).map(Math.abs));
+      const radius=(sphere.radius+sphere.center.length())*scale+.25;
+      const prop={center:[p.p[0],p.p[1]+PHYS.SCENE.top,p.p[2]],radius};
+      if(occluding&&!mat.transparent&&!environmentPropAllowed(prop))return false;
+      if(occluding&&!mat.transparent)ENVIRONMENT_PROPS.push(prop);
+      return true;
+    });
+    const mesh=new THREE.InstancedMesh(geometry,mat,poses.length);mesh.frustumCulled=false;mesh.receiveShadow=true;parent.add(mesh);
     poses.forEach((p,i)=>{dummy.position.set(...p.p);dummy.rotation.set(...(p.r||[0,0,0]));dummy.scale.set(...(p.s||[1,1,1]));dummy.updateMatrix();mesh.setMatrixAt(i,dummy.matrix);});
-    batches.push({mesh,low:row[1]});return mesh;
+    batches.push({mesh,low:Math.min(row[1],poses.length)});return mesh;
   };
   // Wet earth, moss islands, leaf flecks, and actual depressed three-toed impressions.
   const impressions=Array.from({length:HABITAT.footprints[0]},(_,i)=>({x:-6+i*1.65,z:2.7+(i%2)*.65}));
@@ -36,7 +71,7 @@ function buildEnvironment() {
   KIT.mesh(earth,mud,ROOM,0,0,0).castShadow=false;
   const cavity=new THREE.BufferGeometry();cavity.setAttribute('position',new THREE.Float32BufferAttribute(cavityVertices,3));cavity.setIndex(cavityIndices);cavity.computeVertexNormals();
   const cavityMat=material(BIOME.cavity);cavityMat.side=THREE.DoubleSide;
-  batch(cavity,cavityMat,HABITAT.footprints,impressions.map(f=>({p:[f.x,0,f.z]})));
+  batch(cavity,cavityMat,HABITAT.footprints,impressions.map(f=>({p:[f.x,0,f.z]})),ROOM,false);
   const trailTexture=KIT.canvasTex(512,128,(c,w,h)=>{
     c.fillStyle=HABITAT.trail[0];c.fillRect(0,0,w,h);
     for(let i=0;i<1800;i++){c.fillStyle=HABITAT.trail[i%3?1:2];c.globalAlpha=.25+seed()*.25;c.fillRect(seed()*w,seed()*h,1+seed()*7,1+seed()*2);}
@@ -90,7 +125,9 @@ function buildEnvironment() {
   batch(new THREE.TubeGeometry(vineCurve,8,HABITAT.vines[2],3,false),moss,HABITAT.vines,tendrils);
   batch(new THREE.CylinderGeometry(HABITAT.logs[2],HABITAT.logs[2]*1.2,HABITAT.logs[3],7),bark,HABITAT.logs,[{p:[-7,.32,-3],r:[0,.4,1.5]},{p:[8,.3,-5],r:[.2,-.7,1.5]},{p:[-9,.3,3],r:[0,-.5,1.5]}]);
   // Distant truncated volcanic cone and smoke use the same fog as the forest.
+  ENVIRONMENT_PROPS.push({center:[0,PHYS.SCENE.top+3.3,-43],radius:8});
   const volcano=KIT.mesh(new THREE.CylinderGeometry(1.1,7,7,9),material(BIOME.volcano),ROOM,0,3.3,-43);volcano.castShadow=false;
+  ENVIRONMENT_PROPS.push({center:[0,PHYS.SCENE.top+6.83,-43],radius:.91});
   KIT.mesh(new THREE.CylinderGeometry(.9,.7,.06,9),material(BIOME.crater),ROOM,0,6.83,-43).castShadow=false;
   const smokePos=Array.from({length:HABITAT.smoke[0]},(_,i)=>({p:[i*.25,7+i*.52,-43],s:[.7+i*.13,.5+i*.12,.7+i*.13]}));
   const smoke=batch(new THREE.IcosahedronGeometry(1,1),new THREE.MeshBasicMaterial({color:0xa5ae92,transparent:true,opacity:.13,depthWrite:false}),HABITAT.smoke,smokePos);
