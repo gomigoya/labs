@@ -103,3 +103,8 @@ node D:/labs/tools/serve.mjs --root labs/moon-closer
 | `capture(name)` | 서버의 `/__save/`로 JPEG 저장 요청. `thumb`는 UI 없는 1200×750 이미지 |
 
 Node 검사와 실제 투사 화면 검수는 구분합니다. 원거리 가독성·실제 포커스·터치 크기·세로 가림·화면 textAudit·캡처 이미지는 브라우저 호스트에서 확인해야 합니다.
+
+환경: 고정 시드 우주 배경·별·은하수·큰 지구를 사용합니다. R9에서 콘솔 몸체와 넓은 갑판을 제거했습니다. 지구본의 얇은 독립 원반과 달의 트러스 레일만 남기고 조작부는 장치 앞 하단의 공중 홀로그램 링·화면으로 옮겼습니다. 지면 없는 궤도이므로 바닥은 없습니다. 카메라·장치 좌표와 `room`·`console`·`hero` 층 이름은 유지합니다. 배치와 검증 한계는 [시각 문법](docs/visual-grammar.md)의 R9 항목을 참조하세요.
+
+
+R15: Navy paper, shared three-band ink renderer and cream HUD; 47 is byte-identical to dino-tug. Hand-check 166/166, quest/teacher/syntax pass; browser capture not run. [Settings, validation and engine workaround](docs/visual-grammar.md#r15---colorfigures-ink-rendering).

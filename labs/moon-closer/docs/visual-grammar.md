@@ -35,3 +35,73 @@ Q5는 `person`, Q6은 `sky`, Q7·Q8은 `limit`을 중심으로 둡니다. A/B는
 - 모든 거리에서 같은 속도의 하늘 점: 공전 주기 변화를 가립니다.
 - 숫자 설명판·말소리·장식 삽화: 문장과 식은 화면 밖 안내서에 두고 학습자 화면에서는 원인을 만지고 결과를 비교합니다.
 - 로슈 한계를 정확한 한 줄로 확정: 유체와 강체 가정 사이 추정 구간을 표현해야 합니다.
+
+## R9 환경 — 갑판 없는 지구·달 궤도
+
+환경 매개값은 `src/30-room-console.js`의 `buildEnvironment()` 첫 `cfg`에서만 관리합니다. `ROOM`은 우주 배경, `CONSOLE`은 독립 공중 조작부, `HERO`는 장치입니다. 기존 layer 이름과 카메라·heroCoverage·textAudit 구현을 유지합니다.
+
+지면이 없는 주제이므로 `MODEL.top = 0.84`는 장치의 기준 높이로만 남깁니다. 지면·그림자 받는 바닥·갑판은 만들지 않습니다. 지구본은 두께 0.025인 독립 원반 하나, 달은 지름 0.022인 두 레일과 지름 0.008인 교차 트러스로 받칩니다. 지구본·달·레일의 기존 좌표는 유지합니다.
+
+조작부 위치·크기는 `CONTROL_LAYOUT` 한 표가 소유합니다. 손잡이와 재생은 청색 발광 링, 그래프는 얇은 발광 테두리를 사용합니다. 책상 몸체·상판·앞면·나사·통풍 장식·황동 장식판, R7 갑판·하부 격자·표시등·태양전지 날개와 연결봉, 레일의 바닥 기둥·받침을 삭제했습니다. 전용 deck/navy 재질과 screw 생성기도 삭제했습니다. 고무 재질은 슬라이더 홈에 사용합니다.
+
+| 조작부 | 중심 (x,y,z) | 크기 |
+|---|---|---|
+| 시간 손잡이 | (-0.86,0.83,0.48) | 링 반경 0.18 |
+| 조석 그래프 | (-0.39,0.90,0.48) | 0.43 × 0.16 |
+| 거리 그래프 | (0.13,0.90,0.48) | 0.43 × 0.16 |
+| 거리 슬라이더 | (-0.12,0.68,0.48) | 가동 폭 0.95 |
+| 재생 | (0.55,0.82,0.48) | 링 반경 0.115 |
+
+레이캐스트는 실제 손잡이·화면 mesh를 대상으로 합니다. 드래그 평면은 명중점 z를 사용하며, 손잡이 각도와 그래프 거리 변환은 생성에 사용한 `CONTROL_LAYOUT`을 참조합니다. 퀘스트 조명·유령 손은 `DIAL.knob.getWorldPosition()`을, 그래프 봉우리 표시는 화면의 월드 좌표를 사용합니다.
+
+| 배경 | 고사양 / 저사양 | 설정 |
+|---|---|---|
+| 별 3겹 | 980+360+96 / 320+120+32 | 크기 .024/.052/.095, 불투명도 .46/.68/.92 |
+| 은하수 | 캔버스 1장 | (0,-3,-17), 29×6, 불투명도 .46, 번짐 180개 |
+| 큰 지구 | 구체·대륙·구름·대기 | (-7.8,-2.3,-14), 반경 2.55, 림 강도 .48 |
+| 구름 | 60 / 26 | 고정 시드, 시뮬레이션 시간으로 회전 |
+
+배경 지구는 기존보다 아래·뒤로 옮기고 반경을 키웠습니다. 저채도와 선명한 대기 림을 유지하며 하늘 달은 기존 위치를 유지합니다. 화면 높이 30~45%와 왼쪽 위~가운데 배치는 투영 계산으로 검토하고 실제 픽셀은 캡처 호스트에서 확인해야 합니다. 실제 크기·거리 비율은 **추정**입니다.
+
+브라우저/CDN은 이 작업에서 실행하지 않습니다. 팀장 캡처 항목: `environment-wide`, `environment-low`, `hero`, `console`, `sky`, `sky-twentieth`, `teacher-strip`, `attract-1`~`attract-3`, 모든 퀘스트 단계와 375×812. 실제 조작부 가림·터치·밝기·heroCoverage·textAudit은 캡처 검증 대상입니다.
+
+
+## R15 - Colorfigures ink rendering
+
+The approved dino-tug `47-ink-style.js` is copied byte for byte. Values live in `46-ink-config.js`; the portable engine remains unchanged. Physics, quests, teacher/attract semantics, camera shots, apparatus positions and touch/aria contracts are preserved.
+
+| 46 setting | Value |
+|---|---|
+| ink / paper | `#161522` / `#232848` |
+| shadow / opacity | `#3f55a8` / `.50` |
+| silhouette / minimum / refDist | `3.2px` / `1.3px` / `3.6` |
+| inner / opacity / wobble | `1.1px` / `.72` / `.8px` times requested wobble |
+| farFade / fog | `[24,38]` / `[23,38]` |
+| depth / normal threshold | `.018` / `.28` |
+| ramp | `[0,128,255]` |
+| dark / mid / light | `[.43,.49,.69]` / `[.83,.84,.81]` / `[1.10,1.06,.97]` |
+| grain / stain / seed | `.025` / `.006` / `73.0219` (same as reference) |
+| ambient / intensity | `#a6b8dc` / `.65` |
+| key / intensity / position / target | `#fff0d0` / `26` / `[-2.2,4.2,3.3]` / `[-.55,1.30,0]` |
+| shadowMap / bias / normalBias | `[2048,1024]` / `-.0003` / `.018` |
+| metal | `#bbc2ce` |
+| diagram screen / ink / border | `#f4efe3` / `#221d18` / `1.5px` |
+| diagram grid / reference / tide / sea / accent / red | `#b6b5ab` / `#393e42` / `#377f88` / `#38658b` / `#b57924` / `#b65450` |
+
+The 3.6 reference distance is an **estimate** from the existing hero camera's approximately 3-4 world-unit viewing distance. Actual ink width needs capture review. NoToneMapping and PCFShadowMap are used with one key spotlight and blue ambient light. Low quality keeps the ink/paper pass, sets DPR 1 and shadowMap 1024, disables wobble, and retains the existing star/cloud/shard low counts. Slow-frame fallback enters this same low path.
+
+Environment: navy paper, cream round stars in three sizes, three translucent flat blue-gray (`#9caec7`) galaxy bands. Background Earth is three-band blue (`#6898bf`) ocean and green (`#abc68b`) land, with a few cream cloud patches and a thin flat atmosphere ring. Sun: yellow `#e8b23a` circle with one faint `#f0d995` halo. The sea bulge and moon crack shaders keep their animated geometry and now share the 46 tone/ink uniforms. Since 47 excludes ShaderMaterial from auxiliary depth, these shaders use flat dark contour bands. Transparent stars/clouds/galaxy/atmosphere/sun never contribute rectangular depth edges.
+
+HUD: existing declarations are replaced with cream surfaces, 1.5px ink borders and ink glyphs, yellow `#e8b23a` active buttons and muted green completion. This includes teacher strip/numbers/choice screen, attract/recovery, event card and magnifier. Graph planes have cream physical backing at their existing positions and the reference CSS-pixel border shader. Controls retain positions, hit targets and aria-labels. Emissive control indicators remain at low intensity. No visible words were added; teacher numeric units remain the only exception.
+
+Removed: GTAO/Bokeh/Bloom imports and passes, focus updates, bloom resize/capture corrections, AO fallback stage, hemisphere/fill/rim/area/point/quest lights, PMREM reflections, roughness/metalness/transmission/thickness tuning, atmospheric Fresnel glow, additive sun/lens glow, galaxy radial noise/gradients, dark HUD CSS, backdrop blur and UI shadows. Additive field particles now use NormalBlending. No ground shadow disk/plane existed in the orbital scene; none was introduced. Shadow color is the single INK_CFG.shadow value.
+
+Portable-engine issue and host workaround: 47's `geometryPair` excludes empty background depth, so isolated object/empty-space silhouettes can disappear. 47 is untouched. A camera-centered paper sphere at `camera.far * .95` (38) supplies real far depth. Its inward triangle winding survives 47's front-sided normal material override; `inkInner=false` masks its normal edges. It is a background, not an expanded object outline shell. It belongs directly to scene, preserving the paper depth when ROOM is hidden. onBeforeRender centers it for both normal/color renders and capture. Visual effectiveness remains unverified without GPU/browser execution.
+
+Validation: assemble; concatenated module and all 16 individual modules node --check; hand-check **166/166**, unchanged from baseline; quest-check including 8 real-PHYS auto runs; teacher-check all pass. `git diff --no-index -- D:/labs/labs/dino-tug/src/47-ink-style.js src/47-ink-style.js`: no differences, exit 0. Byte comparison: 12413 bytes, SHA256 `6061d42983e72abcc54e55e127d63e614ede9bd36fb34097f09d670ab368cedc`.
+
+Line comparison: the four EffectComposer/RenderPass/makeOutlinePass/OutputPass call lines match the reference exactly. All 47 uniform names (`tDepth`, `tNormal`, `tEdges`, `resolution`, `nearFar`, `inverseProjection`), actual attachment texture rebindings, both render-target setSize calls, DPR-scaled widths and per-render inverse projection updates match line for line because the entire file is identical. Host resize follows renderer DPR -> composer DPR -> composer size. Thumbnail entry at 1200x750 and saved DPR/size restoration use composer setSize, updating auxiliary target dimensions/uniforms together. The key target uses this laboratory's E instead of the reference target.
+
+Dark-color grep `#11|#0[0-9a-f]{5}|rgba\(1[0-9],|rgba\(0,` across src/*.js and src/00-head.html: **0 matches**. Intended dark colors are paper and ink; no dark HUD surface remains. This static pattern does not establish rendered contrast.
+
+Not run: browser/CDN, per brief. GPU shader compilation, actual silhouettes and paper-depth workaround, translucent sorting/atmosphere ring, landscape/portrait HUD occlusion, live touch/textAudit and capture pixels require the team lead's browser host. No implementation blocker remains. No commit/push.

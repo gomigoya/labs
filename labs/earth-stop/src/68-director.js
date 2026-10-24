@@ -48,7 +48,7 @@ const DIRECTOR={
   if(Q.free&&f.lens)body+=`<svg x="${innerWidth/2-120}" y="${innerWidth<=980?202:110}" width="240" height="${innerWidth<=980?56:112}" viewBox="0 0 300 140">${CARDS.micro(f.lens==='day'?4:1,QUEST.sample()).replace(/^<svg[^>]*>|<\/svg>$/g,'')}</svg>`;
   if(!Q.free&&Q.phase==='act'){
    for(const value of d.goalMarks){
-    const point=Q.i===0?V3(...PHYS.scenePoint(value,S.spin.value,MODEL.pinReach)):Q.i===3||Q.i===4?DIAL.knob.getWorldPosition(V3()).add(V3(Math.sin(-PHYS.periodRailX(value)*Math.PI*1.5)*.16,Math.cos(-PHYS.periodRailX(value)*Math.PI*1.5)*.16,.05)):V3(SLIDER.x+(PHYS.phiRailX(value)-.5)*SLIDER.width,SLIDER.y,.87);
+    const point=Q.i===0?V3(...PHYS.scenePoint(value,S.spin.value,MODEL.pinReach)):Q.i===3||Q.i===4?DIAL.knob.getWorldPosition(V3()).add(V3(Math.sin(-PHYS.periodRailX(value)*Math.PI*1.5)*CONTROL_LAYOUT.dial.cueRadius,Math.cos(-PHYS.periodRailX(value)*Math.PI*1.5)*CONTROL_LAYOUT.dial.cueRadius,CONTROL_LAYOUT.dial.cueDepth)):V3(SLIDER.x+(PHYS.phiRailX(value)-.5)*SLIDER.width,SLIDER.y,SLIDER.z+CONTROL_LAYOUT.slider.cueDepth);
     const [x,y]=project(point);body+=line(`M${x-10} ${y+12}v-24h20v24z`,true);
    }
    if(f.demoLeft>0&&!S.drag){
@@ -61,7 +61,7 @@ const DIRECTOR={
   }
   if(this.eventLeft>0){
    const [x,y]=project(E),age=1.4-this.eventLeft,u=Math.min(1,age/.45),cx=innerWidth/2,cy=innerWidth<=980?220:164;
-   body=`<circle cx="${x}" cy="${y}" r="5" fill="#64ead0"/>`+line(`M${x} ${y}L${x+(cx-x)*u} ${y+(cy-y)*u}`)+(age>.45?`<svg x="${cx-120}" y="${cy-(innerWidth<=980?28:56)}" width="240" height="${innerWidth<=980?56:112}" viewBox="0 0 300 140">${d.card(this.snapshot).replace(/^<svg[^>]*>|<\/svg>$/g,'')}</svg>`:'');
+   body=`<circle cx="${x}" cy="${y}" r="5" fill="#37795d"/>`+line(`M${x} ${y}L${x+(cx-x)*u} ${y+(cy-y)*u}`)+(age>.45?`<svg x="${cx-120}" y="${cy-(innerWidth<=980?28:56)}" width="240" height="${innerWidth<=980?56:112}" viewBox="0 0 300 140"><rect x="1" y="1" width="298" height="138" rx="16" fill="#f4efe3" stroke="#221d18" stroke-width="1.5"/>${d.card(this.snapshot).replace(/^<svg[^>]*>|<\/svg>$/g,'')}</svg>`:'');
   }
   qOverlay.innerHTML=`<svg viewBox="0 0 ${innerWidth} ${innerHeight}">${body}</svg>`;
  }

@@ -1,94 +1,136 @@
-// Space-center control model room. All art is procedural geometry or instrument linework.
-const css=color=>`#${new THREE.Color(color).getHexString()}`;
-const floorTex=KIT.canvasTex(512,512,(c,w,h)=>{
-  c.fillStyle=css(THEME.wood);c.fillRect(0,0,w,h);
-  for(let y=0;y<h;y+=64){c.strokeStyle=css(THEME.graphite);c.strokeRect(0,y,w,64);
-    for(let i=0;i<32;i++){c.fillStyle=css(THEME.brass);c.globalAlpha=.07;c.fillRect(rand()*w,y+rand()*64,rand()*140,1);}}
-  c.globalAlpha=1;
-});
-floorTex.wrapS=floorTex.wrapT=THREE.RepeatWrapping;floorTex.repeat.set(4,4);
-KIT.mesh(new THREE.PlaneGeometry(18,18).rotateX(-Math.PI/2),new THREE.MeshStandardMaterial({map:floorTex,roughness:.84}),ROOM,0,0,1);
-KIT.roundedPanel(14,5,.14,MAT.wall,ROOM,2,2.5,-2.8);
-KIT.roundedPanel(.14,5,14,MAT.navy,ROOM,-3.4,2.5,3);
-for(let i=0;i<18;i++)KIT.roundedPanel(.025,4.2,.035,MAT.chrome,ROOM,-3.2+i*.65,2.4,-2.71);
-KIT.roundedPanel(14,.05,.08,MAT.brass,ROOM,2,.86,-2.67);
-const sky=KIT.canvasTex(512,512,(c,w,h)=>{
- const grad=c.createLinearGradient(0,0,0,h);grad.addColorStop(0,"#102b50");grad.addColorStop(.55,"#477e9c");grad.addColorStop(1,"#d6a77d");c.fillStyle=grad;c.fillRect(0,0,w,h);
- for(let i=0;i<90;i++){c.globalAlpha=.2+rand()*.6;c.fillStyle="#e3eeff";c.fillRect(rand()*w,rand()*h*.65,1+rand(),1+rand());}
- for(let j=0;j<6;j++){c.globalAlpha=.08;c.fillStyle="#dce7ee";c.beginPath();c.ellipse(rand()*w,h*(.25+j*.10),w*.7,7+j*3,-.08,0,Math.PI*2);c.fill();}
- c.globalAlpha=1;c.fillStyle="#243d50";c.beginPath();c.moveTo(0,h);for(let i=0;i<=24;i++)c.lineTo(i*w/24,h*(.80+rand()*.10));c.lineTo(w,h);c.fill();
- c.fillStyle="#172d40";for(let i=0;i<12;i++){const x=i*w/11;c.fillRect(x,h*.84,8,h*.16);c.fillRect(x-5,h*.88,20,4);}
+// All scenery is built here and attached to ROOM. Dimensions are model units,
+// art direction estimates rather than a scale model of a real launch facility.
+const ENV=Object.freeze({
+ ground:{y:PHYS.SCENE.top,width:60,depth:44,z:12},vent:{x:-.28,z:-1.9,width:1.05,depth:2.2},
+ terminal:{position:[-1.40,1.045,.36],tilt:-.45,panel:[1.34,.36,.035],stem:[.18,.24],
+  dial:{position:[-.46,.015,.035],scale:.52,hit:.105},
+  graphs:{xs:[-.10,.39],y:.065,z:.025,width:.40,height:.13},
+  slider:{position:[-.04,-.105,.025],width:.56,scale:[1,.5,.6],hitHeight:.085,hitDepth:.10},
+  play:{position:[.49,-.105,.055],radius:.047,hit:.065},
+  gravity:{position:[-.60,-.125,.05],hit:.045}},
+ ocean:{width:80,depth:42,z:-30},shore:{count:18,low:10,z:-9},
+ shrubs:{count:44,low:18,z:-8},palms:{count:7,low:4,z:-10},
 
+ tanks:{xs:[-3.8,3.5],z:-3.1,radius:.55},
+ towers:{xs:[-4.7,4.7],z:-4.5,height:3.7},
+ service:{x:-2.65,z:-2,height:2.7,width:.48,levels:6},
+ buildings:{count:4,low:3,z:-7},flags:{count:2,z:-6},
+ stripes:{count:32,low:24},tray:{count:18,low:10,z:-1.2},
+ wake:{distance:1.1,speed:.08,windX:.32,windZ:-.12}
 });
-KIT.roundedPanel(2.1,2,.08,MAT.brass,ROOM,.1,2.65,-2.65);
-KIT.mesh(new THREE.PlaneGeometry(1.98,1.88),new THREE.MeshBasicMaterial({map:sky}),ROOM,.1,2.65,-2.60);
-for(const x of [-.9,.1,1.1])KIT.rod(V3(x,1.7,-2.55),V3(x,3.6,-2.55),.025,MAT.graphite,ROOM);
-KIT.rod(V3(-.9,2.6,-2.55),V3(1.1,2.6,-2.55),.025,MAT.graphite,ROOM);
-KIT.roundedPanel(2.25,.08,.30,MAT.wood,ROOM,.1,1.67,-2.5);
-const daylight=new THREE.RectAreaLight(THEME.cool,2,1.9,1.9);daylight.position.set(.1,2.6,-2.4);daylight.rotation.y=Math.PI;ROOM.add(daylight);
-// Launch trajectory and orbit panels; background props, never simulation output.
-for(const [x,y,orbit] of [[-1.8,2.9,false],[2.25,2.7,true]]){
- KIT.roundedPanel(1.2,.85,.06,MAT.brass,ROOM,x,y,-2.62);
- const tex=KIT.canvasTex(512,384,(c,w,h)=>{
-  c.fillStyle=css(THEME.screen);c.fillRect(0,0,w,h);c.strokeStyle=css(THEME.grid);c.lineWidth=1;
-  for(let i=24;i<w;i+=40){c.beginPath();c.moveTo(i,0);c.lineTo(i,h);c.stroke();}
-  for(let i=24;i<h;i+=40){c.beginPath();c.moveTo(0,i);c.lineTo(w,i);c.stroke();}
-  c.strokeStyle=css(THEME.cool);c.lineWidth=3;c.beginPath();
-  if(orbit){c.ellipse(256,192,180,90,-.4,0,Math.PI*2);c.stroke();c.beginPath();c.arc(256,192,30,0,Math.PI*2);}
-  else{c.moveTo(60,330);c.bezierCurveTo(150,320,180,100,420,45);}c.stroke();
-  for(let i=0;i<7;i++){c.fillStyle=css(THEME.warm);c.beginPath();c.arc(65+i*58,orbit?190+Math.sin(i)*70:325-i*43,4,0,Math.PI*2);c.fill();}
- });
- KIT.mesh(new THREE.PlaneGeometry(1.1,.75),new THREE.MeshStandardMaterial({map:tex,emissiveMap:tex,emissive:THEME.cool,emissiveIntensity:.3}),ROOM,x,y,-2.58);
+function buildEnvironment(){
+ const scenery=new THREE.Group();scenery.position.y=ENV.ground.y;ROOM.add(scenery);
+ const rng=mulberry32(701307),dummy=new THREE.Object3D(),batches=[],flags=[];
+ const material=(color)=>new THREE.MeshToonMaterial({color,flatShading:true});
+ const steel=MAT.steel,sand=material(COAST.sand),green=material(COAST.foliage),yellow=material(COAST.safety);
+ // Shared unit geometries and instances keep repeated equipment to one call each.
+ const batch=(geometry,mat,poses,low=poses.length)=>{
+  const mesh=new THREE.InstancedMesh(geometry,mat,poses.length);mesh.receiveShadow=true;scenery.add(mesh);
+  poses.forEach((p,i)=>{dummy.position.set(...p.p);dummy.rotation.set(...(p.r||[0,0,0]));dummy.scale.set(...p.s);dummy.updateMatrix();mesh.setMatrixAt(i,dummy.matrix);});
+  mesh.computeBoundingSphere();batches.push({mesh,high:poses.length,low});return mesh;
+ };
+ const box=new THREE.BoxGeometry(1,1,1),orb=new THREE.IcosahedronGeometry(1,1),bars=[];
+ const beam=(a,b,width=.035)=>{
+  const start=V3(...a),end=V3(...b),d=end.clone().sub(start);
+  dummy.quaternion.setFromUnitVectors(V3(0,1,0),d.clone().normalize());
+  bars.push({p:start.add(end).multiplyScalar(.5).toArray(),s:[width,d.length(),width],r:[...new THREE.Euler().setFromQuaternion(dummy.quaternion).toArray().slice(0,3)]});
+ };
+ // Continuous concrete receives contact shadows; the vent is a flush ground marking.
+ const v=ENV.vent,ground=new THREE.Shape();
+ const e=ENV.ground,x=e.width/2,near=-e.z-e.depth/2,far=-e.z+e.depth/2;
+ ground.moveTo(-x,near);ground.lineTo(x,near);ground.lineTo(x,far);ground.lineTo(-x,far);ground.closePath();
+ const groundMesh=KIT.mesh(new THREE.ShapeGeometry(ground).rotateX(-Math.PI/2),MAT.concrete,scenery);
+ groundMesh.castShadow=false;groundMesh.receiveShadow=true;
+ const ventMark=KIT.mesh(new THREE.PlaneGeometry(v.width,v.depth).rotateX(-Math.PI/2),material(0x25343b),scenery,v.x,.003,v.z);ventMark.castShadow=false;
+ batch(box,steel,Array.from({length:ENV.tray.count},(_,i)=>({p:[v.x,.005,v.z-v.depth/2+(i+.5)*v.depth/ENV.tray.count],s:[v.width,.004,.025]})),ENV.tray.low);
+ const sea=KIT.mesh(new THREE.PlaneGeometry(ENV.ocean.width,ENV.ocean.depth).rotateX(-Math.PI/2),material(COAST.ocean),scenery,0,-.08,ENV.ocean.z);sea.castShadow=false;
+ for(let i=0;i<5;i++)KIT.line([V3(-13+i*.8,-.075,-12-i*2.2),V3(-3+i*.8,-.075,-12-i*2.2)],COAST.wave,scenery,false,.65);
+ batch(orb,sand,Array.from({length:ENV.shore.count},(_,i)=>({p:[(i%2?-1:1)*(1+Math.floor(i/2)*2),-.08,ENV.shore.z-rng()*1.8],s:[2.2,.13+rng()*.13,1.1]})),ENV.shore.low);
+ batch(orb,green,Array.from({length:ENV.shrubs.count},()=>({p:[(rng()-.5)*30,.13,ENV.shrubs.z-rng()*1.7],s:[.2+rng()*.4,.12+rng()*.2,.28]})),ENV.shrubs.low);
+ const trunks=[],fronds=[];
+ for(let i=0;i<ENV.palms.count;i++){
+  const x=-12+i*3.8,z=ENV.palms.z-rng()*1.4,h=.8+rng()*.65;
+  trunks.push({p:[x,h/2,z],s:[.035,h,.035],r:[0,0,-.09]});
+  for(let j=0;j<5;j++){const a=j*Math.PI*2/5;fronds.push({p:[x+Math.cos(a)*.23,h,z+Math.sin(a)*.23],s:[.75,.035,.14],r:[0,-a,.15]});}
+ }
+ batch(box,green,trunks,ENV.palms.low);batch(new THREE.ConeGeometry(1,1,3).rotateZ(-Math.PI/2),green,fronds,ENV.palms.low*5);
+ const stripes=[];
+ for(let i=0;i<ENV.stripes.count;i++){
+  const side=i%2?-1:1,x=-2.6+Math.floor(i/2)*.35;
+  stripes.push({p:[x,.008,side<0?-3.6:1.15],s:[.19,.012,.12],r:[0,-.55,0]});
+ }
+ batch(box,yellow,stripes,ENV.stripes.low);
+ batch(box,steel,Array.from({length:ENV.tray.count},(_,i)=>({p:[1.9+i*.22,.005,ENV.tray.z],s:[.035,.004,.32]})),ENV.tray.low);
+ for(const z of [ENV.tray.z-.17,ENV.tray.z+.17])batch(box,steel,[{p:[3.85,.005,z],s:[4.1,.004,.018]}]);
+ for(const x of ENV.tanks.xs){
+  KIT.mesh(new THREE.IcosahedronGeometry(ENV.tanks.radius,2),MAT.concrete,scenery,x,.84,ENV.tanks.z);
+  for(const dx of [-.25,.25])beam([x+dx,0,ENV.tanks.z],[x+dx,.5,ENV.tanks.z],.06);
+  beam([x,1.38,ENV.tanks.z],[x,1.53,ENV.tanks.z],.04);
+ }
+ for(const x of ENV.towers.xs){
+  const h=ENV.towers.height,z=ENV.towers.z;
+  for(const dx of [-.12,.12])beam([x+dx,0,z],[x,h-.5,z],.035);
+  beam([x,h-.5,z],[x,h,z],.02);
+  for(let j=0;j<6;j++)beam([x-.12,j*.5,z],[x+.12,(j+1)*.5,z],.018);
+ }
+ const t=ENV.service;
+ for(const dx of [-t.width/2,t.width/2])for(const dz of [-.2,.2])beam([t.x+dx,0,t.z+dz],[t.x+dx,t.height,t.z+dz]);
+ for(let i=0;i<t.levels;i++){
+  const y=i*t.height/t.levels,next=(i+1)*t.height/t.levels;
+  for(const dz of [-.2,.2]){beam([t.x-t.width/2,y,t.z+dz],[t.x+t.width/2,next,t.z+dz],.022);beam([t.x+t.width/2,y,t.z+dz],[t.x-t.width/2,next,t.z+dz],.022);}
+  beam([t.x-.3,next,t.z],[t.x+.3,next,t.z]);
+ }
+ beam([t.x,t.height-.25,t.z],[t.x+.8,t.height-.25,t.z],.06);
+ batch(box,steel,bars).userData.inkInner=false;
+ const buildings=Array.from({length:ENV.buildings.count},(_,i)=>({p:[3.4+i*1.4,.25,ENV.buildings.z-i*.3],s:[1.1,.5+(i%2)*.16,.8]}));
+ batch(box,material(COAST.building),buildings,ENV.buildings.low);
+ batch(box,steel,[{p:[5,.012,-5.5],s:[15,.018,.7]}]);
+ for(let i=0;i<ENV.flags.count;i++){
+  const x=2.8+i*3.2,z=ENV.flags.z;
+  KIT.mesh(new THREE.CylinderGeometry(.015,.015,1.5,6),steel,scenery,x,.75,z);
+  const f=KIT.mesh(new THREE.PlaneGeometry(.45,.22,4,1).translate(.225,0,0),new THREE.MeshToonMaterial({color:COAST.safety,side:THREE.DoubleSide}),scenery,x,1.36,z);
+  f.castShadow=false;flags.push(f);
+ }
+ let clock=0,quality='',exhaust=null;
+ const exhaustMatrix=new THREE.Matrix4();
+ return {update(dt){
+  clock+=dt;const low=S.quality==='low';
+  if(quality!==S.quality){quality=S.quality;for(const b of batches)b.mesh.count=low?b.low:b.high;}
+  const {n,load,g}=selection(),lift=PHYS.liftoffTime(n,load,g),airborne=!!S.ignited.target&&S.t.value>lift&&!PHYS.stateAt(n,load,g,S.t.value).onPad;
+  // Reuse the seeded pad smoke produced by GRAMMAR, after its matrices update.
+  // Keep its density/opacity/quest visibility; only tint and advect the scenery contact.
+  if(!exhaust){
+   exhaust=HERO.children.find(o=>o.isInstancedMesh&&o.material.uniforms?.uBrightness);
+  }
+  if(exhaust&&airborne){
+   for(let i=0;i<exhaust.count;i++){exhaust.getMatrixAt(i,exhaustMatrix);const spread=Math.max(0,exhaustMatrix.elements[13]-PHYS.SCENE.padY)*8;exhaustMatrix.elements[12]+=spread*ENV.wake.windX;exhaustMatrix.elements[14]+=spread*ENV.wake.windZ;exhaust.setMatrixAt(i,exhaustMatrix);}
+   exhaust.instanceMatrix.needsUpdate=true;
+  }
+  flags.forEach((f,i)=>{const p=f.geometry.attributes.position;for(let j=0;j<p.count;j++){const x=p.getX(j);p.setZ(j,Math.sin(clock*.8+x*10+i)*x*.10);}p.needsUpdate=true;f.geometry.computeVertexNormals();});
+ }};
 }
-for(const y of [1.15,1.85]){
- KIT.roundedPanel(2.1,.06,.42,MAT.wood,ROOM,-1.9,y,-2.35);
- for(const x of [-2.6,-1.2])KIT.rod(V3(x,y-.24,-2.65),V3(x,y,-2.15),.016,MAT.brass,ROOM);
-}
-// Tank, detached bell, constellation disc, flashlight, block plinth, hourglass, valves, canisters.
-KIT.mesh(new THREE.CylinderGeometry(.12,.12,.36,12),MAT.ceramic,ROOM,-2.6,2.06,-2.3);
-for(const y of [1.91,2.21])KIT.mesh(new THREE.TorusGeometry(.12,.012,6,16).rotateX(Math.PI/2),MAT.brass,ROOM,-2.6,y,-2.3);
-KIT.mesh(new THREE.CylinderGeometry(.055,.14,.19,12,1,true),MAT.chrome,ROOM,-2.14,1.98,-2.3);
-const disc=KIT.mesh(new THREE.CircleGeometry(.22,16),MAT.navy,ROOM,-1.55,2.08,-2.3);
-const stars=Array.from({length:7},()=>V3((rand()-.5)*.32,(rand()-.5)*.32,.01));KIT.line(stars,THEME.cool,disc);
-for(const p of stars)KIT.ball(.012,MAT.glow,disc,...p.toArray(),0);
-KIT.rod(V3(-2.6,1.22,-2.3),V3(-2.37,1.30,-2.3),.045,MAT.graphite,ROOM);
-KIT.mesh(new THREE.CylinderGeometry(.06,.06,.04,12).rotateZ(Math.PI/2),MAT.brass,ROOM,-2.35,1.31,-2.3);
-KIT.roundedPanel(.25,.13,.20,MAT.navy,ROOM,-1.98,1.25,-2.3);
-KIT.ball(.10,MAT.chrome,ROOM,-1.98,1.40,-2.3,0);
-for(const y of [1.21,1.52])KIT.mesh(new THREE.CylinderGeometry(.10,.10,.025,16),MAT.brass,ROOM,-1.52,y,-2.3);
-for(const s of [-1,1]){const cone=KIT.mesh(new THREE.ConeGeometry(.075,.14,12),MAT.ceramic,ROOM,-1.52,1.365+s*.07,-2.3);cone.rotation.z=s>0?Math.PI:0;}
-for(const dx of [-.085,.085])KIT.rod(V3(-1.52+dx,1.22,-2.3),V3(-1.52+dx,1.51,-2.3),.008,MAT.chrome,ROOM);
-for(let i=0;i<3;i++){KIT.mesh(new THREE.CylinderGeometry(.06,.06,.22,12),MAT.chrome,ROOM,1.7+i*.22,1.5,-2.4);KIT.ball(.045,MAT.brass,ROOM,1.7+i*.22,1.64,-2.4);}
-KIT.roundedPanel(.85,.06,.35,MAT.wood,ROOM,1.95,1.35,-2.4);
-KIT.lampWithBulb(ROOM,-2.0,.84,-.8);
-KIT.lampWithBulb(ROOM,2.45,.84,-1.0);
-// Two foreground objects extend through the image edges in the default hero frame.
-for(const [x,y] of [[-2.3,.55],[-3.1,.55],[3.5,1.2]]){
- KIT.roundedPanel(.85,.12,.7,MAT.wood,ROOM,x,y,1.7,.05);
- for(const dx of [-.3,.3])KIT.rod(V3(x+dx,.04,1.7),V3(x+dx,y-.05,1.7),.035,MAT.graphite,ROOM);
-}
-// Front-facing instruments stay readable from the elevated camera.
-KIT.roundedPanel(PHYS.SCENE.platformWidth+.12,.62,1.02,MAT.graphite,CONSOLE,0,.48,.10,.07);
-KIT.roundedPanel(PHYS.SCENE.platformWidth+.24,.10,1.16,MAT.wood,CONSOLE,0,PHYS.SCENE.top-.05,.1,.035);
-KIT.roundedPanel(PHYS.SCENE.platformWidth+.04,.018,1.02,MAT.graphite,CONSOLE,0,PHYS.SCENE.top+.008,.1);
-KIT.roundedPanel(3.36,.43,.035,MAT.navy,CONSOLE,0,.54,.63);
-for(const x of [-1.61,1.61])for(const y of [.37,.71])KIT.screw(CONSOLE,x,y,.654);
-for(let i=0;i<27;i++)KIT.roundedPanel(.028,.06,.012,MAT.rubber,CONSOLE,-1.42+i*.11,.22,.618,.004);
-const DIAL=KIT.knobWithArc(CONSOLE,-1.38,.54,.681);
-const GRAPHS=[KIT.graphScreen(CONSOLE,-.70,.57,.68,.67,.24),KIT.graphScreen(CONSOLE,.08,.57,.68,.67,.24)];
-const SLIDER=KIT.ledSlider(CONSOLE,PHYS.SCENE.railX,PHYS.SCENE.railY,PHYS.SCENE.railZ,PHYS.SCENE.railWidth);
-// Replace generic fine ticks with categorical PHYS detents.
-for(const d of PHYS.DETENTS.engines)KIT.ball(.012,MAT.brass,CONSOLE,SLIDER.x+(d.x-.5)*SLIDER.width,.275,.71,0);
-KIT.mesh(new THREE.CylinderGeometry(.12,.12,.045,32).rotateX(Math.PI/2),MAT.brass,CONSOLE,.72,.54,.69);
-const PLAY_BUTTON=KIT.mesh(new THREE.CylinderGeometry(.095,.095,.06,24).rotateX(Math.PI/2),MAT.graphite,CONSOLE,.72,.54,.72);
-const playShape=new THREE.Shape();playShape.moveTo(-.025,-.035);playShape.lineTo(.04,0);playShape.lineTo(-.025,.035);playShape.closePath();
-const PLAY_TRIANGLE=KIT.mesh(new THREE.ShapeGeometry(playShape),MAT.glow,PLAY_BUTTON,0,0,.033);
+const ENVIRONMENT=buildEnvironment();
+// One ground-anchored terminal; panel geometry and all picking use this local frame.
+const C=ENV.terminal,CONTROL_FACE=new THREE.Group();
+CONTROL_FACE.position.set(...C.position);CONTROL_FACE.rotation.x=C.tilt;CONSOLE.add(CONTROL_FACE);
+KIT.mesh(new THREE.BoxGeometry(C.stem[0],C.position[1]-ENV.ground.y,C.stem[1]),MAT.steel,CONSOLE,C.position[0],(C.position[1]+ENV.ground.y)/2,C.position[2]);
+KIT.roundedPanel(...C.panel,MAT.ceramic,CONTROL_FACE);
+const dialMount=new THREE.Group();dialMount.position.set(...C.dial.position);dialMount.scale.setScalar(C.dial.scale);CONTROL_FACE.add(dialMount);
+const DIAL=KIT.knobWithArc(dialMount,0,0,0);
+const GRAPHS=C.graphs.xs.map(x=>KIT.graphScreen(CONTROL_FACE,x,C.graphs.y,C.graphs.z,C.graphs.width,C.graphs.height));
+const sliderMount=new THREE.Group();sliderMount.position.set(...C.slider.position);CONTROL_FACE.add(sliderMount);
+// Preserve the full categorical rail while keeping its handle on the compact panel.
+sliderMount.scale.set(...C.slider.scale);
+const SLIDER=KIT.ledSlider(sliderMount,0,0,0,C.slider.width);
+for(const d of PHYS.DETENTS.engines)KIT.ball(.012,MAT.brass,sliderMount,SLIDER.x+(d.x-.5)*SLIDER.width,-.08,.02,0);
+const PLAY_BUTTON=KIT.mesh(new THREE.CylinderGeometry(C.play.radius,C.play.radius,.025,24).rotateX(Math.PI/2),MAT.graphite,CONTROL_FACE,...C.play.position);
+const playShape=new THREE.Shape();playShape.moveTo(-.012,-.018);playShape.lineTo(.02,0);playShape.lineTo(-.012,.018);playShape.closePath();
+const PLAY_TRIANGLE=KIT.mesh(new THREE.ShapeGeometry(playShape),MAT.glow,PLAY_BUTTON,0,0,.014);
 const PLAY_GLYPH=new THREE.Group();PLAY_BUTTON.add(PLAY_GLYPH);
-for(const x of [-.023,.023])KIT.roundedPanel(.012,.065,.005,MAT.glow,PLAY_GLYPH,x,0,.033,.002);
-KIT.roundedPanel(.32,.22,.025,MAT.brass,CONSOLE,1.17,.54,.69);
-const GRAVITY_SWITCH=KIT.rod(V3(1.17,.50,.72),V3(1.17,.60,.79),.025,MAT.chrome,CONSOLE);
-KIT.roundedPanel(.5,.045,.01,MAT.brass,CONSOLE,1.15,.37,.67);
-for(let i=0;i<5;i++)KIT.ball(.009,MAT.graphite,CONSOLE,.98+i*.075,.37,.68,0);
+for(const x of [-.012,.012])KIT.roundedPanel(.006,.034,.004,MAT.glow,PLAY_GLYPH,x,0,.014,.001);
+const gravityMount=new THREE.Group();gravityMount.position.set(...C.gravity.position);CONTROL_FACE.add(gravityMount);
+KIT.roundedPanel(.08,.065,.015,MAT.graphite,gravityMount);
+const GRAVITY_SWITCH=KIT.rod(V3(0,-.015,.015),V3(0,.02,.045),.012,MAT.chrome,gravityMount);
 
 function drawGraphs(){
  const {n,load,g}=selection(),ignited=!!S.ignited.target,t=S.t.value;
@@ -101,12 +143,12 @@ function drawGraphs(){
  const vScale=Math.max(1,...all.v.map(Math.abs));
  GRAPHS.forEach((screen,index)=>{
   const c=screen.ctx,{width:w,height:h,left:L,right:R,top:U,bottom:B}=PHYS.SCENE.graph;
-  c.fillStyle=css(THEME.screen);c.fillRect(0,0,w,h);c.lineWidth=1;c.strokeStyle=css(THEME.grid);
+  c.fillStyle=css(PAINT.screen);c.fillRect(0,0,w,h);c.lineWidth=1;c.strokeStyle=css(PAINT.grid);
   for(let i=0;i<=10;i++){const x=L+(R-L)*i/10;c.beginPath();c.moveTo(x,U);c.lineTo(x,B);c.stroke();}
   for(let i=0;i<=4;i++){const y=U+(B-U)*i/4;c.beginPath();c.moveTo(L,y);c.lineTo(R,y);c.stroke();}
   const X=time=>L+(R-L)*time/horizon,Y=value=>index?(U+B)/2-value/vScale*(B-U)*.45:B-value/maxForce*(B-U)*.9;
   if(ignited){
-   for(const [field,color] of index?[['v',THEME.speed]]:[['T',THEME.thrust],['W',THEME.weight],['normal',THEME.support]]){
+   for(const [field,color] of index?[['v',PAINT.speed]]:[['T',PAINT.thrust],['W',PAINT.weight],['normal',PAINT.support]]){
     c.strokeStyle=css(color);c.lineWidth=3;c.beginPath();let prior=null;
     const times=[...sample.t];if(burn<=observed)times.push(burn-1e-7,burn);times.sort((a,b)=>a-b);
     for(const time of times){const value=PHYS.stateAt(n,load,g,time)[field],x=X(time),y=Y(value);
@@ -116,12 +158,12 @@ function drawGraphs(){
     }
     const y=Y(PHYS.stateAt(n,load,g,observed)[field]);c.fillStyle=css(color);c.beginPath();c.arc(X(observed),y,5,0,Math.PI*2);c.fill();
    }
-   c.strokeStyle=css(THEME.ceramic);c.lineWidth=2;c.beginPath();c.moveTo(X(observed),U);c.lineTo(X(observed),B);c.stroke();
-   for(const event of sample.events){c.fillStyle=css(THEME.brass);c.beginPath();c.moveTo(X(event.t)-5,B+9);c.lineTo(X(event.t),B);c.lineTo(X(event.t)+5,B+9);c.fill();}
+   c.strokeStyle=css(INK_CFG.diagram.ink);c.lineWidth=2;c.beginPath();c.moveTo(X(observed),U);c.lineTo(X(observed),B);c.stroke();
+   for(const event of sample.events){c.fillStyle=css(PAINT.brass);c.beginPath();c.moveTo(X(event.t)-5,B+9);c.lineTo(X(event.t),B);c.lineTo(X(event.t)+5,B+9);c.fill();}
   }
   // Axis-end clock and quantity symbols: paths only, no font rasterization.
-  c.strokeStyle=css(THEME.chrome);c.lineWidth=3;c.beginPath();c.arc(742,235,10,0,Math.PI*2);c.moveTo(742,228);c.lineTo(742,235);c.lineTo(748,238);c.stroke();
-  if(index){for(let i=0;i<3;i++){c.fillStyle=css(THEME.speed);c.beginPath();c.arc(18,22+i*i*7,3,0,Math.PI*2);c.fill();}}
+  c.strokeStyle=css(INK_CFG.diagram.ink);c.lineWidth=3;c.beginPath();c.arc(742,235,10,0,Math.PI*2);c.moveTo(742,228);c.lineTo(742,235);c.lineTo(748,238);c.stroke();
+  if(index){for(let i=0;i<3;i++){c.fillStyle=css(PAINT.speed);c.beginPath();c.arc(18,22+i*i*7,3,0,Math.PI*2);c.fill();}}
   else{c.beginPath();c.moveTo(22,56);c.lineTo(22,20);c.moveTo(14,28);c.lineTo(22,20);c.lineTo(30,28);for(let y=34;y<57;y+=10){c.moveTo(16,y);c.lineTo(28,y);}c.stroke();}
   screen.tex.needsUpdate=true;
  });

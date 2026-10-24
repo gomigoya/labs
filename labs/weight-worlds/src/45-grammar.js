@@ -28,49 +28,49 @@ const GRAMMAR = (() => {
   for (const a of [now,reference]) a.group.position.set(-0.115,PHYS.VIEW.springTop-PHYS.VIEW.springRest,0.20);
   reference.shaft.scale.x=1.35;reference.group.position.z+=0.003;
   const compareShelf = anchor('천체 변경',SHELF_RIG);
-  const radiusNow = KIT.line(Array.from({length:65},(_,k)=>V3(Math.cos(k/64*Math.PI*2),Math.sin(k/64*Math.PI*2),0)),THEME.mint,compareShelf);
-  const radiusBase = KIT.line(Array.from({length:65},(_,k)=>V3(Math.cos(k/64*Math.PI*2),Math.sin(k/64*Math.PI*2),0)),THEME.reference,compareShelf,true);
+  const radiusNow = KIT.line(Array.from({length:65},(_,k)=>V3(Math.cos(k/64*Math.PI*2),Math.sin(k/64*Math.PI*2),0)),inkConfig().diagram.mint,compareShelf);
+  const radiusBase = KIT.line(Array.from({length:65},(_,k)=>V3(Math.cos(k/64*Math.PI*2),Math.sin(k/64*Math.PI*2),0)),inkConfig().diagram.reference,compareShelf,true);
   radiusNow.position.set(0,specimenView.center[1],specimenView.front);radiusBase.position.copy(radiusNow.position);
-  const radiusBreak=KIT.breakMark(compareShelf,THEME.mint);radiusBreak.position.set(0.28,specimenView.center[1]+0.19,specimenView.front+0.02);
+  const radiusBreak=KIT.breakMark(compareShelf,inkConfig().diagram.mint);radiusBreak.position.set(0.28,specimenView.center[1]+0.19,specimenView.front+0.02);
   const RADIUS_SIGN=KIT.expansion(compareShelf,-specimenView.radius-0.03,specimenView.center[1]+specimenView.radius*0.8,specimenView.front);RADIUS_SIGN.scale.setScalar(0.14);
   const mass = anchor('질량 불변',BALANCE_RIG);
-  KIT.rod(V3(-0.43,2.09,0.12),V3(0.43,2.09,0.12),0.008,new THREE.MeshBasicMaterial({color:THEME.mint}),mass);
-  for(const side of [-1,1]) KIT.line([V3(side*0.14,2.16,0.13),V3(0,2.16,0.13),V3(side*0.045,2.20,0.13),V3(0,2.16,0.13),V3(side*0.045,2.12,0.13)],THEME.mint,mass);
-  const massDots=[-1,1].map(side=>Array.from({length:PHYS.C.maxWeights},()=>KIT.ball(PHYS.GRAMMAR_VIEW.dotRadius,new THREE.MeshBasicMaterial({color:THEME.mint}),mass,side*0.39,1.25,0.19,1)));
+  KIT.rod(V3(-0.43,2.09,0.12),V3(0.43,2.09,0.12),0.008,new THREE.MeshBasicMaterial({color:inkConfig().diagram.mint}),mass);
+  for(const side of [-1,1]) KIT.line([V3(side*0.14,2.16,0.13),V3(0,2.16,0.13),V3(side*0.045,2.20,0.13),V3(0,2.16,0.13),V3(side*0.045,2.12,0.13)],inkConfig().diagram.mint,mass);
+  const massDots=[-1,1].map(side=>Array.from({length:PHYS.C.maxWeights},()=>KIT.ball(PHYS.GRAMMAR_VIEW.dotRadius,new THREE.MeshBasicMaterial({color:inkConfig().diagram.mint}),mass,side*0.39,1.25,0.19,1)));
   const stair = anchor('추 개수와 무게 비례',SPRING_RIG);
-  const steps = Array.from({length:PHYS.C.maxWeights},()=>KIT.line([V3(0,0,0),V3(0.035,0,0)],THEME.force,stair));
-  const stepBreaks=steps.map(()=>{const sign=KIT.breakMark(stair,THEME.force);sign.scale.setScalar(0.28);return sign;});
+  const steps = Array.from({length:PHYS.C.maxWeights},()=>KIT.line([V3(0,0,0),V3(0.035,0,0)],inkConfig().diagram.force,stair));
+  const stepBreaks=steps.map(()=>{const sign=KIT.breakMark(stair,inkConfig().diagram.force);sign.scale.setScalar(0.28);return sign;});
   const limit = anchor('계측 한계',SPRING_RIG), limitY=PHYS.VIEW.springTop-PHYS.VIEW.springRest-PHYS.C.springLimit*PHYS.VIEW.markUnit;
-  KIT.line([V3(-0.29,limitY,0.23),V3(0.29,limitY,0.23),V3(0.29,limitY+0.07,0.23),V3(-0.29,limitY+0.07,0.23),V3(-0.29,limitY,0.23)],THEME.red,limit,true);
-  const overflow=KIT.breakMark(limit,THEME.force);overflow.position.set(-0.115,limitY+0.02,0.25);
+  KIT.line([V3(-0.29,limitY,0.23),V3(0.29,limitY,0.23),V3(0.29,limitY+0.07,0.23),V3(-0.29,limitY+0.07,0.23),V3(-0.29,limitY,0.23)],inkConfig().diagram.red,limit,true);
+  const overflow=KIT.breakMark(limit,inkConfig().diagram.force);overflow.position.set(-0.115,limitY+0.02,0.25);
   const jump=anchor('점프 비교',JUMP_RIG), jumpRef=anchor('점프 비교',JUMP_RIG);
-  const trails=Array.from({length:PHYS.GRAMMAR_VIEW.trailIntervals+1},()=>KIT.ball(0.017,new THREE.MeshBasicMaterial({color:0x9aa8b0}),jump,0,0,0.12,1));
-  const jumpBaseline=KIT.line([V3(-0.16,0,0.15),V3(0.16,0,0.15)],THEME.reference,jumpRef,true);
-  const jumpCurrent=KIT.line([V3(-0.16,0,0.16),V3(0.16,0,0.16)],THEME.mint,jump);
-  const jumpOverflow=KIT.breakMark(jump,THEME.mint);jumpOverflow.position.set(0.1,2.74,0.15);
+  const trails=Array.from({length:PHYS.GRAMMAR_VIEW.trailIntervals+1},()=>KIT.ball(0.017,new THREE.MeshBasicMaterial({color:inkConfig().diagram.reference}),jump,0,0,0.12,1));
+  const jumpBaseline=KIT.line([V3(-0.16,0,0.15),V3(0.16,0,0.15)],inkConfig().diagram.reference,jumpRef,true);
+  const jumpCurrent=KIT.line([V3(-0.16,0,0.16),V3(0.16,0,0.16)],inkConfig().diagram.mint,jump);
+  const jumpOverflow=KIT.breakMark(jump,inkConfig().diagram.mint);jumpOverflow.position.set(0.1,2.74,0.15);
   const field=anchor('중력 방향',SHELF_RIG), lens=new THREE.Group();lens.position.set(0,specimenView.center[1],specimenView.front);field.add(lens);
-  KIT.mesh(new THREE.CircleGeometry(0.29,48),new THREE.MeshBasicMaterial({color:THEME.navy,transparent:true,opacity:0.86,depthWrite:false}),lens);
-  KIT.line(Array.from({length:65},(_,k)=>V3(Math.cos(k/64*Math.PI*2)*0.29,Math.sin(k/64*Math.PI*2)*0.29,0.002)),THEME.reference,lens,true);
+  KIT.mesh(new THREE.CircleGeometry(0.29,48),new THREE.MeshBasicMaterial({color:inkConfig().diagram.screen,transparent:true,opacity:0.86,depthWrite:false}),lens);
+  KIT.line(Array.from({length:65},(_,k)=>V3(Math.cos(k/64*Math.PI*2)*0.29,Math.sin(k/64*Math.PI*2)*0.29,0.002)),inkConfig().diagram.reference,lens,true);
   for(let k=-3;k<=3;k++)for(const axis of [0,1]){
     const offset=k*0.065,reach=Math.sqrt(0.28**2-offset**2);
-    KIT.line(axis?[V3(offset,-reach,0.003),V3(offset,reach,0.003)]:[V3(-reach,offset,0.003),V3(reach,offset,0.003)],THEME.cool,lens,false,0.2);
+    KIT.line(axis?[V3(offset,-reach,0.003),V3(offset,reach,0.003)]:[V3(-reach,offset,0.003),V3(reach,offset,0.003)],inkConfig().diagram.cool,lens,false,0.2);
   }
   for(let k=0;k<8;k++){
     const a=k/8*Math.PI*2,dir=V3(Math.cos(a),Math.sin(a),0);
-    KIT.line([dir.clone().multiplyScalar(0.25),dir.clone().multiplyScalar(0.11),V3(Math.cos(a+0.22)*0.15,Math.sin(a+0.22)*0.15,0)],THEME.force,lens);
+    KIT.line([dir.clone().multiplyScalar(0.25),dir.clone().multiplyScalar(0.11),V3(Math.cos(a+0.22)*0.15,Math.sin(a+0.22)*0.15,0)],inkConfig().diagram.force,lens);
   }
   KIT.expansion(lens,0.21,0.22,0.01);
-  const fieldMaterial=new THREE.MeshBasicMaterial({color:THEME.force,transparent:true,opacity:0.15,depthWrite:false});
+  const fieldMaterial=new THREE.MeshBasicMaterial({color:inkConfig().diagram.force,transparent:true,opacity:0.15,depthWrite:false});
   const streaks=new THREE.InstancedMesh(new THREE.CylinderGeometry(0.0025,0.001,0.026,4),fieldMaterial,PHYS.GRAMMAR_VIEW.fieldCount);field.add(streaks);streaks.frustumCulled=false;
   const seed=mulberry32(457310),particles=Array.from({length:PHYS.GRAMMAR_VIEW.fieldCount},()=>({a:seed()*Math.PI*2,z:seed()*2-1,phase:seed()})),dummy=new THREE.Object3D();
   const note=anchor('시험 기록',BALANCE_RIG), records=[],seen=new Set();
-  const recordOverflow=KIT.breakMark(note,THEME.mint);recordOverflow.position.set(0.49,1.25,0.31);recordOverflow.scale.setScalar(0.4);
+  const recordOverflow=KIT.breakMark(note,inkConfig().diagram.mint);recordOverflow.position.set(0.49,1.25,0.31);recordOverflow.scale.setScalar(0.4);
   const rows=Array.from({length:PHYS.GRAMMAR_VIEW.recordLimit},(_,k)=>{
     const g=new THREE.Group();note.add(g);g.position.set(-0.37+k*0.24,1.25,0.31);
     const body=KIT.ball(0.023,new THREE.MeshBasicMaterial(),g,0,0,0,1);
-    const dots=Array.from({length:PHYS.C.maxWeights},(_,j)=>KIT.ball(0.007,new THREE.MeshBasicMaterial({color:THEME.mint}),g,-0.035+j*0.017,-0.05,0,0));
-    const bar=KIT.mesh(new THREE.BoxGeometry(0.021,1,0.01).translate(0,0.5,0),new THREE.MeshBasicMaterial({color:THEME.mint}),g,0,-0.09,0);
-    const event=KIT.line([V3(-0.03,0.1,0),V3(0,0.14,0),V3(0.03,0.1,0)],THEME.mint,g);
+    const dots=Array.from({length:PHYS.C.maxWeights},(_,j)=>KIT.ball(0.007,new THREE.MeshBasicMaterial({color:inkConfig().diagram.mint}),g,-0.035+j*0.017,-0.05,0,0));
+    const bar=KIT.mesh(new THREE.BoxGeometry(0.021,1,0.01).translate(0,0.5,0),new THREE.MeshBasicMaterial({color:inkConfig().diagram.mint}),g,0,-0.09,0);
+    const event=KIT.line([V3(-0.03,0.1,0),V3(0,0.14,0),V3(0.03,0.1,0)],inkConfig().diagram.mint,g);
     return {g,body,dots,bar,event};
   });
   anchor('양의 관계',CONSOLE);
@@ -165,14 +165,14 @@ drawGraphs = function(){
     const key=`${index}:${i}:${n}:${b}:${S.trial?.runId??0}`;
     if(S.graphKeys[index]===key)return;S.graphKeys[index]=key;
     const c=g.ctx,L=52,R=724,T=22,B=214;
-    c.fillStyle=THEME.screen;c.fillRect(0,0,768,256);c.strokeStyle=THEME.grid;c.lineWidth=1;
+    c.fillStyle='#'+new THREE.Color(inkConfig().diagram.screen).getHexString();c.fillRect(0,0,768,256);c.strokeStyle='#'+new THREE.Color(inkConfig().diagram.grid).getHexString();c.lineWidth=1;
     for(let k=0;k<=10;k++){const x=L+(R-L)*k/10;c.beginPath();c.moveTo(x,T);c.lineTo(x,B);c.stroke();}
     for(let k=0;k<=6;k++){const y=T+(B-T)*k/6;c.beginPath();c.moveTo(L,y);c.lineTo(R,y);c.stroke();}
     const dot=(x,y,r,color)=>{c.fillStyle=color;c.beginPath();c.arc(x,y,r,0,Math.PI*2);c.fill();};
-    const orange='#ff9b53',mint='#64ead0';c.lineWidth=4;
+    const orange='#'+new THREE.Color(inkConfig().diagram.force).getHexString(),mint='#'+new THREE.Color(inkConfig().diagram.mint).getHexString();c.lineWidth=4;
     if(index===0){
       for(const ref of [true,false]){
-        c.strokeStyle=ref?'#e5e7ec':orange;c.setLineDash(ref?[9,7]:[]);c.beginPath();let started=false;
+        c.strokeStyle=ref?'#'+new THREE.Color(inkConfig().diagram.reference).getHexString():orange;c.setLineDash(ref?[9,7]:[]);c.beginPath();let started=false;
         for(let k=1;k<=PHYS.C.maxWeights;k++){
           const d=PHYS.springState(ref?b:i,k),x=L+PHYS.railX(k)*(R-L),y=B-d.shownMarks/PHYS.C.springLimit*(B-T);
           if(d.broken){
@@ -195,7 +195,7 @@ drawGraphs = function(){
         c.beginPath();c.moveTo(x,B);c.lineTo(x,y);c.stroke();dot(x,y,6,mint);
         if(d.exaggerated){c.beginPath();c.moveTo(x+7,y+7);c.lineTo(x+17,y-3);c.stroke();}
       });
-      const x=L+PHYS.bodyRailX(i)*(R-L);c.strokeStyle='#e5e7ec';c.beginPath();c.moveTo(x,T);c.lineTo(x,B);c.stroke();
+      const x=L+PHYS.bodyRailX(i)*(R-L);c.strokeStyle='#'+new THREE.Color(inkConfig().diagram.reference).getHexString();c.beginPath();c.moveTo(x,T);c.lineTo(x,B);c.stroke();
     }
     g.tex.needsUpdate=true;
   });

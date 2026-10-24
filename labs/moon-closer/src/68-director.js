@@ -16,7 +16,6 @@ Object.assign(LABELS, {
 const qPictures = document.createElement('div'); qPictures.id = 'q-pictures'; document.body.append(qPictures);
 const qOverlay = document.createElement('div'); qOverlay.id = 'q-overlay'; qOverlay.setAttribute('aria-hidden', 'true'); document.body.append(qOverlay);
 const qExtra = document.createElement('div'); qExtra.id = 'q-extra'; qExtra.className = 'hud'; document.body.append(qExtra);
-const questLight = new THREE.PointLight(THEME.cool, 0, 0.7, 2); scene.add(questLight);
 function qButton(label, symbol, fn, parent, suffix = '') {
   const b = document.createElement('button'); b.setAttribute('aria-label', LABELS[label][LANG] + suffix); b.innerHTML = icon(symbol); b.onclick = fn; parent.append(b); return b;
 }
@@ -103,11 +102,10 @@ const DIRECTOR = {
       qPictures.querySelectorAll('[data-candidate]').forEach(b => { const d = QUESTS[Q.i]; b.innerHTML = CARDS.picture(d.id, d.candidates[+b.dataset.candidate], this.clock); });
     }
     const project = p => { const v = p.clone().project(camera); return [(v.x + 1) * innerWidth / 2, (1 - v.y) * innerHeight / 2]; };
-    const line = (d, color = '#ffce8b', dash = false) => `<path stroke="${color}" ${dash ? 'stroke-dasharray="6 6"' : ''} d="${d}"/>`;
+    const line = (d, color = '#e8b23a', dash = false) => `<path stroke="${color}" ${dash ? 'stroke-dasharray="6 6"' : ''} d="${d}"/>`;
     let body = '';
     const d = QUESTS[Q.i], f = Q.flags, actual = QUEST.sample();
     const focus = Q.i === 3 ? DIAL.knob.getWorldPosition(V3()) : MOON_CARRIAGE.position.clone().setY(E.y);
-    questLight.position.copy(focus).add(V3(0, .10, .12)); questLight.intensity = Q.free ? 0 : 0.32;
     if (!Q.free && f.pushed && !S.drag && !GRAMMAR.enabled.sky && Q.phase !== 'intro') {
       camera.clearViewOffset(); camera.updateMatrixWorld(); const b = projectedBox(heroBox(true));
       const offset = ((S.vertical ? 160 : 110) + innerHeight - (S.vertical ? 315 : 335) - b.top - b.bottom) / 2;
@@ -119,7 +117,7 @@ const DIRECTOR = {
       const goals = Q.i === 7 ? [closerForRatio(f.wall)] : d.goalMarks;
       if (!Q.free && Q.phase === 'act') for (const closer of goals) {
         const [x, y] = project(V3(railAt(PHYS.railX(closer)), railY, 0.07));
-        body += line(`M${x} ${y + 9}v-47h17l-5 7 5 7h-17`, '#ffce8b', true) + `<circle cx="${x}" cy="${y - 42}" r="9" stroke-dasharray="3 3"/>`;
+        body += line(`M${x} ${y + 9}v-47h17l-5 7 5 7h-17`, '#e8b23a', true) + `<circle cx="${x}" cy="${y - 42}" r="9" stroke-dasharray="3 3"/>`;
       }
       if (Q.i === 1) for (const i of f.visited) { const [x, y] = project(V3(railAt(PHYS.RAIL_NOTCHES[i].x), railY, 0.08)); body += line(`M${x} ${y}v-${PHYS.ratio(PHYS.RAIL_NOTCHES[i].closer) * 14}`, '#64ead0'); }
       if (Q.i === 7 || Q.free) {
@@ -132,14 +130,14 @@ const DIRECTOR = {
       }
       if (!Q.free && Q.phase === 'act' && f.demoLeft > 0 && !S.drag) {
         const target = Q.i === 3 ? DIAL.knob.getWorldPosition(V3()) : MOON_CARRIAGE.position.clone().setY(E.y), [x, y] = project(target), shift = Math.min(1, (2.2 - f.demoLeft) / 1.7) * -70;
-        body += line(`M${x} ${y}h-70m8-6-8 6 8 6`, '#ffce8b', true) + `<g transform="translate(${x + shift - 12} ${y + 6})">${icon('hand').replace(/^<svg[^>]*>|<\/svg>$/g, '')}</g>`;
+        body += line(`M${x} ${y}h-70m8-6-8 6 8 6`, '#e8b23a', true) + `<g transform="translate(${x + shift - 12} ${y + 6})">${icon('hand').replace(/^<svg[^>]*>|<\/svg>$/g, '')}</g>`;
       }
-      if (Q.i === 3 && f.peaks > 0) { const [x, y] = project(GRAPHS[0].mesh.position); body += Array.from({ length: Math.min(4, f.peaks) }, (_, i) => `<circle cx="${x - 20 + i * 14}" cy="${y - 20}" r="4" fill="#64ead0"/>`).join(''); }
+      if (Q.i === 3 && f.peaks > 0) { const [x, y] = project(GRAPHS[0].mesh.getWorldPosition(V3())); body += Array.from({ length: Math.min(4, f.peaks) }, (_, i) => `<circle cx="${x - 20 + i * 14}" cy="${y - 20}" r="4" fill="#64ead0"/>`).join(''); }
       if (PHYS.fractureState(actual.closer).state === 'ring') { qExtra.dataset.ring = 'true'; } else delete qExtra.dataset.ring;
     }
     if (this.eventLeft > 0) {
       const [x, y] = project(E), age = 1.4 - this.eventLeft, width = Math.min(1, age / 0.45) * 90;
-      body = `<circle cx="${x}" cy="${y}" r="5" fill="#64ead0"/>` + line(`M${x} ${y}l${width} -65`, '#64ead0') + (age > 0.45 ? `<svg x="${Math.min(innerWidth - 200, x + 80)}" y="${Math.max(140, y - 140)}" width="190" height="100">${d.card(this.snapshot).replace(/^<svg[^>]*>|<\/svg>$/g, '')}</svg>` : '');
+      body = `<circle cx="${x}" cy="${y}" r="5" fill="#64ead0"/>` + line(`M${x} ${y}l${width} -65`, '#64ead0') + (age > 0.45 ? `<svg x="${Math.min(innerWidth - 200, x + 80)}" y="${Math.max(140, y - 140)}" width="190" height="100"><rect x="1" y="1" width="188" height="98" rx="12" fill="#f4efe3" stroke="#221d18" stroke-width="1.5"/>${d.card(this.snapshot).replace(/^<svg[^>]*>|<\/svg>$/g, '')}</svg>` : '');
     }
     qOverlay.innerHTML = `<svg viewBox="0 0 ${innerWidth} ${innerHeight}">${body}</svg>`;
   }

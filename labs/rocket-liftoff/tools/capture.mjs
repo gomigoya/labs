@@ -44,6 +44,7 @@ try {
     await new Promise(resolve => server.listen(5181, '127.0.0.1', resolve)); url = 'http://127.0.0.1:5181/';
   }
   const states = [
+    ['coastal-site',0,0],['coastal-liftoff',3,1],['coastal-platform',0,'console'],
     ['hero',0,1],['burnout-stays',1,1],['delayed-lift',2,1],['five-engines',3,1],
     ['medium-cargo',4,1],['large-cargo',5,1],['lunar-single',6,1],
     ...Array.from({length:6},(_,i)=>[`shot-${i}`,3,i]),['console',3,'console'],

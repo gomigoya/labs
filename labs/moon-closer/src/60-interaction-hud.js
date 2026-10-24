@@ -79,10 +79,10 @@ canvas.addEventListener('pointerdown', event => {
   let object = hit.object; while (object.parent && !dragObjects.includes(object)) object = object.parent;
   let type = object === MOON_HIT ? 'moon' : object === SLIDER.handle ? 'slider' : object === PIN_HIT ? 'pin' : object === DIAL.knob ? 'dial' : object === PLAY_BUTTON ? 'play' : 'graph';
   if (type === 'play') { action('play'); event.stopImmediatePropagation(); return; }
-  const plane = type === 'pin' ? new THREE.Plane(V3(0, 1, 0), -E.y) : new THREE.Plane(V3(0, 0, 1), type === 'moon' ? 0 : -0.73);
+  const plane = type === 'pin' ? new THREE.Plane(V3(0, 1, 0), -E.y) : new THREE.Plane(V3(0, 0, 1), type === 'moon' ? 0 : -hit.point.z);
   const p = planePoint(plane); if (!p) return;
   S.drag = { type, id: event.pointerId, plane, start: p, u: S.u.target, t: S.t.target,
-    angle: Math.atan2(p.x + 1.30, p.y - 0.54), graph: object === GRAPHS[0].mesh ? 0 : 1,
+    angle: Math.atan2(p.x - CONTROL_LAYOUT.dial.at[0], p.y - CONTROL_LAYOUT.dial.at[1]), graph: object === GRAPHS[0].mesh ? 0 : 1,
     lon: Math.atan2(-(p.z - E.z), p.x - E.x) };
   if (type === 'dial') { S.drag.wasPlaying = S.playing.target; S.playing.target = 0; }
   controls.enabled = false; S.fly = null; canvas.setPointerCapture(event.pointerId); event.stopImmediatePropagation();
@@ -98,11 +98,11 @@ canvas.addEventListener('pointermove', event => {
     S.lon0.target += delta; d.lon = lon;
   }
   if (d.type === 'dial') {
-    const angle = Math.atan2(p.x + 1.30, p.y - 0.54), delta = Math.atan2(Math.sin(angle - d.angle), Math.cos(angle - d.angle));
+    const angle = Math.atan2(p.x - CONTROL_LAYOUT.dial.at[0], p.y - CONTROL_LAYOUT.dial.at[1]), delta = Math.atan2(Math.sin(angle - d.angle), Math.cos(angle - d.angle));
     S.t.target = ((S.t.target + delta / (2 * Math.PI) * 86400) % 86400 + 86400) % 86400; d.angle = angle;
   }
   if (d.type === 'graph') {
-    const g = GRAPHS[d.graph], u = clamp((p.x - g.mesh.position.x + 0.335) / 0.67, 0, 1);
+    const { at, size } = CONTROL_LAYOUT.graphs[d.graph], u = clamp((p.x - at[0] + size[0] / 2) / size[0], 0, 1);
     if (d.graph) setRailFromPointer(u); else { S.playing.target = 0; S.t.target = u * 86400; }
   }
   event.stopImmediatePropagation();

@@ -1,15 +1,13 @@
 const EARTH_SPIN = new THREE.Group(); EARTH_SPIN.position.copy(E); HERO.add(EARTH_SPIN);
-KIT.mesh(new THREE.CylinderGeometry(0.38, 0.41, 0.045, 64), MAT.brass, HERO, E.x, MODEL.top + 0.035, E.z);
-KIT.mesh(new THREE.CylinderGeometry(0.32, 0.35, 0.035, 64), MAT.graphite, HERO, E.x, MODEL.top + 0.075, E.z);
-KIT.rod(V3(E.x, MODEL.top + 0.07, 0), V3(E.x, E.y - RV * 0.8, 0), 0.025, MAT.brass, HERO);
+KIT.mesh(new THREE.CylinderGeometry(0.35, 0.35, 0.025, 48), MAT.graphite, HERO, E.x, MODEL.top + 0.035, E.z);
+KIT.rod(V3(E.x, MODEL.top + 0.0475, 0), V3(E.x, E.y - RV * 0.8, 0), 0.025, MAT.brass, HERO);
 // Two glass hemispheres keep the near cross section readable.
 for (const [phi, opacity] of [[0, 0.10], [Math.PI, 0.24]]) {
-  const material = new THREE.MeshPhysicalMaterial({ color: 0x86b5c2, transparent: true, opacity,
-    roughness: 0.17, metalness: 0.08, side: THREE.DoubleSide, depthWrite: false, transmission: 0.16, thickness: 0.025 });
+  const material = new THREE.MeshStandardMaterial({ color: INK_CFG.space.ocean, transparent: true, opacity, side: THREE.DoubleSide, depthWrite: false });
   const half = KIT.mesh(new THREE.SphereGeometry(RV * 0.985, 48, 32, phi, Math.PI), material, EARTH_SPIN);
   half.castShadow = false;
 }
-const gridMaterial = new THREE.LineBasicMaterial({ color: 0x8bb6bd, transparent: true, opacity: 0.42 });
+const gridMaterial = new THREE.LineBasicMaterial({ color: INK_CFG.space.grid, transparent: true, opacity: 0.42 });
 for (let j = 0; j < 12; j++) {
   const a = j / 12 * Math.PI * 2;
   const p = Array.from({ length: 97 }, (_, i) => { const t = i / 96 * Math.PI * 2; return V3(Math.cos(t) * Math.cos(a), Math.sin(t), Math.cos(t) * Math.sin(a)).multiplyScalar(RV * 0.973); });
@@ -21,7 +19,7 @@ for (let j = -3; j <= 3; j++) {
   EARTH_SPIN.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(p), gridMaterial));
 }
 // Seeded clustered facets: abstract land, no bitmap map and no geographic illustration.
-const landMat = new THREE.MeshStandardMaterial({ color: 0x859a79, flatShading: true, roughness: 0.9 });
+const landMat = new THREE.MeshStandardMaterial({ color: INK_CFG.space.land, flatShading: true });
 const continentCenters = Array.from({ length: 7 }, () => V3(rand() * 2 - 1, rand() * 1.6 - 0.8, rand() * 2 - 1).normalize());
 const landGeo = new THREE.IcosahedronGeometry(RV * 0.944, 3);
 const lp = landGeo.attributes.position, landTriangles = [];
@@ -33,7 +31,7 @@ for (let i = 0; i < lp.count; i += 3) {
 }
 const continentGeo = new THREE.BufferGeometry(); continentGeo.setAttribute('position', new THREE.Float32BufferAttribute(landTriangles, 3)); continentGeo.computeVertexNormals();
 KIT.mesh(continentGeo, landMat, EARTH_SPIN); landGeo.dispose();
-KIT.ball(RV * 0.73, new THREE.MeshStandardMaterial({ color: 0x264e64, roughness: 0.84, flatShading: true }), EARTH_SPIN);
+KIT.ball(RV * 0.73, new THREE.MeshStandardMaterial({ color: INK_CFG.space.core, flatShading: true }), EARTH_SPIN);
 KIT.rod(V3(0, -RV * 1.23, 0), V3(0, RV * 1.23, 0), 0.008, MAT.brass, EARTH_SPIN);
 for (const y of [-1, 1]) KIT.ball(0.018, MAT.brass, EARTH_SPIN, 0, RV * 1.24 * y, 0);
 const HARBOR = new THREE.Group(); HARBOR.position.set(RV * 0.99, 0, 0); EARTH_SPIN.add(HARBOR);
@@ -42,17 +40,27 @@ KIT.ball(0.023, MAT.glow, HARBOR, 0.077, 0, 0);
 const PIN_HIT = KIT.ball(0.065, new THREE.MeshBasicMaterial({ visible: false }), HARBOR, 0.072, 0, 0);
 PIN_HIT.visible = false;
 
+// Analytic sea/crack shaders keep their geometry and animation, sharing 46's tone palette.
+const inkShaderUniforms = {
+  inkDark:{value:new THREE.Vector3(...INK_CFG.dark)}, inkMid:{value:new THREE.Vector3(...INK_CFG.mid)},
+  inkLight:{value:new THREE.Vector3(...INK_CFG.light)}, inkColor:{value:new THREE.Color(INK_CFG.ink)},
+  moonColor:{value:new THREE.Color(INK_CFG.space.moon)}
+};
 const oceanMaterial = new THREE.ShaderMaterial({
-  uniforms: { uBulge: { value: PHYS.oceanBulge(0).bulge }, uRv: { value: RV },
+  uniforms: { ...inkShaderUniforms, uBulge: { value: PHYS.oceanBulge(0).bulge }, uRv: { value: RV },
     uSea: { value: new THREE.Color(THEME.sea) }, uTide: { value: new THREE.Color(THEME.tide) } },
   vertexShader: `uniform float uBulge; uniform float uRv; varying float vHeight; varying vec3 vNormal; varying vec3 vView;
     void main(){ vec3 dir=normalize(position); float p=(3.0*dir.x*dir.x-1.0)*0.5;
       vHeight=p; vec3 pos=dir*uRv*(1.0+uBulge*p); vec4 mv=modelViewMatrix*vec4(pos,1.0);
       vNormal=normalize(normalMatrix*dir); vView=normalize(-mv.xyz); gl_Position=projectionMatrix*mv; }`,
-  fragmentShader: `uniform vec3 uSea; uniform vec3 uTide; varying float vHeight; varying vec3 vNormal; varying vec3 vView;
-    void main(){ float rim=pow(1.0-abs(dot(normalize(vNormal),normalize(vView))),2.0);
-      vec3 col=mix(uSea,uTide,clamp((vHeight+0.5)/1.5,0.0,1.0));
-      gl_FragColor=vec4(col*(0.62+rim*1.05)+uTide*pow(max(0.0,vHeight),32.0)*0.28,0.24+rim*0.38);
+  fragmentShader: `uniform vec3 inkDark,inkMid,inkLight,inkColor; uniform vec3 uSea; uniform vec3 uTide; varying float vHeight; varying vec3 vNormal; varying vec3 vView;
+    void main(){
+      float facing=dot(normalize(vNormal),normalize(vec3(-.5,.8,1.0)));
+      vec3 band=facing<-.1?inkDark:(facing<.5?inkMid:inkLight);
+      float level=(vHeight+0.5)/1.5;
+      vec3 col=level<.33?uSea:(level<.67?mix(uSea,uTide,.5):uTide);
+      float contour=step(.10,abs(dot(normalize(vNormal),normalize(vView))));
+      gl_FragColor=vec4(mix(inkColor,col*band,contour),.42);
       #include <tonemapping_fragment>
       #include <colorspace_fragment>
     }`,
@@ -74,13 +82,13 @@ for (const x of [-0.7, 0, 0.7]) {
 }
 const SATURATION_SIGN = KIT.expansion(HERO, E.x - RV * 0.55, E.y + RV * 1.28, 0.02);
 
-// Brass groove lies below the equatorial moon handle; uprights support the carriage.
+// Floating apparatus truss: two thin chords and cross braces, without a shared platform.
 const railY = E.y - RV * 0.65, railStart = railAt(1), railEnd = railAt(0);
 for (const z of [-0.033, 0.033]) KIT.rod(V3(railStart - 0.045, railY, z), V3(railEnd + 0.07, railY, z), 0.011, MAT.brass, HERO);
-KIT.roundedPanel(railEnd - railStart + 0.13, 0.018, 0.047, MAT.rubber, HERO, (railStart + railEnd) / 2 + 0.012, railY - 0.012, 0, 0.005);
-for (const x of [railStart, railEnd]) {
-  KIT.rod(V3(x, MODEL.top + 0.025, 0), V3(x, railY, 0), 0.015, MAT.brass, HERO);
-  KIT.roundedPanel(0.10, 0.025, 0.16, MAT.graphite, HERO, x, MODEL.top + 0.035, 0);
+for (let i = 0; i < 8; i++) {
+  const x = THREE.MathUtils.lerp(railStart - 0.045, railEnd + 0.07, i / 8);
+  const next = THREE.MathUtils.lerp(railStart - 0.045, railEnd + 0.07, (i + 1) / 8);
+  KIT.rod(V3(x, railY, -0.033), V3(next, railY, 0.033), 0.004, MAT.chrome, HERO);
 }
 for (const n of PHYS.RAIL_NOTCHES) KIT.rod(V3(railAt(n.x), railY, 0.035), V3(railAt(n.x), railY, 0.069), 0.004, MAT.brass, HERO);
 PHYS.DETENTS.forEach((n, i) => {
@@ -94,11 +102,11 @@ KIT.roundedPanel(0.09, 0.035, 0.10, MAT.chrome, MOON_CARRIAGE, 0, railY, 0);
 KIT.rod(V3(0, railY, 0), V3(0, E.y - RV * MODEL.moonRatio, 0), 0.009, MAT.brass, MOON_CARRIAGE);
 const MOON_SHAKE = new THREE.Group(); MOON_SHAKE.position.y = E.y; MOON_CARRIAGE.add(MOON_SHAKE);
 const moonCrackMaterial = new THREE.ShaderMaterial({
-  uniforms: { uProgress: { value: 0 }, uOpacity: { value: 1 } },
+  uniforms: { ...inkShaderUniforms, uProgress: { value: 0 }, uOpacity: { value: 1 } },
   vertexShader: `varying vec3 vPosition; varying vec3 vNormal; varying vec3 vView;
     void main(){vPosition=position;vec4 mv=modelViewMatrix*vec4(position,1.0);
       vNormal=normalize(normalMatrix*normal);vView=normalize(-mv.xyz);gl_Position=projectionMatrix*mv;}`,
-  fragmentShader: `uniform float uProgress; uniform float uOpacity;
+  fragmentShader: `uniform vec3 inkDark,inkMid,inkLight,inkColor,moonColor; uniform float uProgress; uniform float uOpacity;
     varying vec3 vPosition; varying vec3 vNormal; varying vec3 vView;
     vec3 hash(vec3 p){return fract(sin(vec3(dot(p,vec3(127.1,311.7,74.7)),dot(p,vec3(269.5,183.3,246.1)),dot(p,vec3(113.5,271.9,124.6))))*43758.5453);}
     void main(){vec3 p=normalize(vPosition)*5.0;vec3 cell=floor(p);vec3 f=fract(p);float f1=10.0;float f2=10.0;
@@ -107,10 +115,11 @@ const moonCrackMaterial = new THREE.ShaderMaterial({
         if(d<f1){f2=f1;f1=d;}else if(d<f2){f2=d;}}
       float edge=1.0-smoothstep(0.025,0.095,f2-f1);
       float reveal=smoothstep(0.02,0.30,uProgress)*(0.65+0.35*smoothstep(hash(cell).x-0.15,hash(cell).x+0.15,uProgress));
-      float light=0.38+0.62*max(0.0,dot(normalize(vNormal),normalize(vec3(-0.5,0.8,1.0))));
-      float rim=pow(1.0-abs(dot(normalize(vNormal),normalize(vView))),3.0);
-      vec3 silver=vec3(0.78,0.82,0.88)*(light+0.10*f1);
-      gl_FragColor=vec4(silver+edge*reveal*vec3(3.8,5.0,6.2)+rim*0.12,uOpacity);
+      float facing=dot(normalize(vNormal),normalize(vec3(-.5,.8,1.0)));
+      vec3 band=facing<-.1?inkDark:(facing<.5?inkMid:inkLight);
+      vec3 silver=moonColor*band;
+      float contour=step(.13,abs(dot(normalize(vNormal),normalize(vView))));
+      gl_FragColor=vec4(mix(inkColor,mix(silver,inkColor,step(.5,edge)*reveal),contour),uOpacity);
       #include <tonemapping_fragment>
       #include <colorspace_fragment>
     }`, transparent: true
@@ -164,6 +173,6 @@ function updateHero() {
   DIAL.knob.rotation.z = -S.t.value / 86400 * Math.PI * 2;
   const arcValue = ((S.t.value % 86400) + 86400) % 86400 / 86400;
   DIAL.arc.geometry.setDrawRange(0, Math.max(36, Math.floor(arcValue * 96) * 36));
-  DIAL.arc.material.emissiveIntensity = 1.8 + arcValue;
+  DIAL.arc.material.emissiveIntensity = .15 + arcValue * .1;
   PLAY_GLYPH.visible = !!S.playing.target; PLAY_TRIANGLE.visible = !S.playing.target;
 }

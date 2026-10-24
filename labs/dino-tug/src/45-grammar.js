@@ -30,7 +30,7 @@ const GRAMMAR = (() => {
       KIT.line([V3(x+glyph.length-.07,y+.08,.01),V3(x+glyph.length,y,.01),V3(x+glyph.length-.07,y-.08,.01)],color,group);
       for(const tick of glyph.ticks)KIT.line([V3(x+tick,y-.05,.012),V3(x+tick,y+.05,.012)],THEME.graphite,group);
     }
-    if(dashed&&color!==THEME.reference){
+    if(dashed&&color!==INK_CFG.diagram.reference){
       const mat=BARS[0].fill.material.clone();mat.uniforms.uColor.value.set(color);mat.uniforms.uStyle.value=style+1;
       mat.uniforms.uUnit.value=glyph.unit/Math.max(.001,glyph.length);mat.uniforms.uForce.value=glyph.length/PHYS.VIS.width;
       KIT.mesh(new THREE.PlaneGeometry(Math.max(.001,glyph.length),.018),mat,group,x+glyph.length/2,y,.006);
@@ -43,17 +43,17 @@ const GRAMMAR = (() => {
   function rebuild(d){
     for(const group of Object.values(groups))clear(group);
     origins.forEach(([x,y],i)=>{
-      const color=i?THEME.dino:THEME.kids;
+      const color=i?INK_CFG.diagram.dino:INK_CFG.diagram.kids;
       arrow(groups[LAYERS[0]],d.forces[i],x,y,color);
-      for(const [offset,forceIndex,c,style]of [[.23,i?4:2,THEME.muscle,0],[.43,i?5:3,THEME.friction,1]]){
+      for(const [offset,forceIndex,c,style]of [[.23,i?4:2,INK_CFG.diagram.muscle,0],[.43,i?5:3,INK_CFG.diagram.friction,1]]){
         arrow(groups[LAYERS[2]],d.forces[forceIndex],x,y+offset,c,true,style);
         const limit=d.forces[forceIndex].length;
         const band=outline(groups[LAYERS[2]],x+limit-.018,y-.08,.036,.17,0xe77678,true,1);
         band.material.opacity=.7;
       }
-      if(baseline)arrow(groups[LAYERS[3]],baseline.forces[i],x,y,THEME.reference,true,1);
+      if(baseline)arrow(groups[LAYERS[3]],baseline.forces[i],x,y,INK_CFG.diagram.reference,true,1);
     });
-    if(baseline)outline(groups[LAYERS[3]],baseline.flagX,PHYS.SCENE.top+.41,.22,.18,THEME.reference,true,1);
+    if(baseline)outline(groups[LAYERS[3]],baseline.flagX,PHYS.SCENE.top+.41,.22,.18,INK_CFG.diagram.reference,true,1);
     // Additive team staircase. Positions of unit boundaries use the same force mapping.
     const g=groups[LAYERS[1]];
     for(let i=0;i<d.n;i++){
@@ -63,50 +63,50 @@ const GRAMMAR = (() => {
     const count=d.forces[0].count;
     for(let i=0;i<count;i++){
       const a=PHYS.forceGlyph(i*PHYS.kidCap(1,d.mu)).length,b=PHYS.forceGlyph((i+1)*PHYS.kidCap(1,d.mu)).length;
-      KIT.mesh(new THREE.PlaneGeometry(Math.max(.001,b-a-.006),.035),ink(THEME.kids),g,-2.77+(a+b)/2,1.76+i/count*.075,.01);
+      KIT.mesh(new THREE.PlaneGeometry(Math.max(.001,b-a-.006),.035),ink(INK_CFG.diagram.kids),g,-2.77+(a+b)/2,1.76+i/count*.075,.01);
     }
-    if(d.n>count)cut(g,-2.77+d.forces[0].length-.07,1.77,THEME.kids);
+    if(d.n>count)cut(g,-2.77+d.forces[0].length-.07,1.77,INK_CFG.diagram.kids);
     // Magnified contact section. Grid + pale sole + rough surface + emissive contacts.
     const lens=groups[LAYERS[4]],lx=-3.05,ly=2.70,w=PHYS.VIS.lensWidth,h=PHYS.VIS.lensHeight;
-    KIT.mesh(new THREE.PlaneGeometry(w,h),ink(THEME.screen,.98),lens,lx+w/2,ly+h/2,-.01);
-    outline(lens,lx,ly,w,h,THEME.reference,false);
-    for(let i=1;i<8;i++)KIT.line([V3(lx+w*i/8,ly,0),V3(lx+w*i/8,ly+h,0)],THEME.grid,lens);
-    for(let i=1;i<4;i++)KIT.line([V3(lx,ly+h*i/4,0),V3(lx+w,ly+h*i/4,0)],THEME.grid,lens);
-    KIT.mesh(new THREE.PlaneGeometry(w*.75,.12),ink(THEME.bone),lens,lx+w/2,ly+.40,.01);
+    KIT.mesh(new THREE.PlaneGeometry(w,h),ink(INK_CFG.diagram.screen),lens,lx+w/2,ly+h/2,-.01);
+    outline(lens,lx,ly,w,h,INK_CFG.diagram.ink,false);
+    for(let i=1;i<8;i++)KIT.line([V3(lx+w*i/8,ly,0),V3(lx+w*i/8,ly+h,0)],INK_CFG.diagram.grid,lens);
+    for(let i=1;i<4;i++)KIT.line([V3(lx,ly+h*i/4,0),V3(lx+w,ly+h*i/4,0)],INK_CFG.diagram.grid,lens);
+    KIT.mesh(new THREE.PlaneGeometry(w*.75,.12),ink(INK_CFG.diagram.screen),lens,lx+w/2,ly+.40,.01);
     const points=Array.from({length:65},(_,i)=>V3(lx+i*w/64,ly+.22+Math.sin(i*2.3)*d.roughness,.02));
-    KIT.line(points,groundColors[GROUND_VALUES.indexOf(d.mu)],lens);
+    KIT.line(points,INK_CFG.diagram.reference,lens);
     for(let i=1;i<8;i++){const mat=new THREE.ShaderMaterial({transparent:true,depthWrite:false,
-      uniforms:{uTime:{value:0},uMu:{value:d.mu},uOpacity:{value:1},uColor:{value:new THREE.Color(THEME.friction)}},
+      uniforms:{uTime:{value:0},uMu:{value:d.mu},uOpacity:{value:1},uColor:{value:new THREE.Color(INK_CFG.diagram.friction)}},
       vertexShader:'varying float vShade;void main(){vShade=.55+.45*normal.z;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',
       fragmentShader:`uniform float uTime,uMu,uOpacity;uniform vec3 uColor;varying float vShade;
-      void main(){float pulse=1.+.12*sin(uTime*3.+uMu*9.);gl_FragColor=vec4(uColor*(1.5+vShade)*pulse,uOpacity*.8);
+      void main(){float pulse=1.+.12*sin(uTime*3.+uMu*9.);gl_FragColor=vec4(uColor*(.85+.15*step(.5,vShade))*pulse,uOpacity*.8);
       #include <tonemapping_fragment>
       #include <colorspace_fragment>
       }`});
       KIT.ball(.015,mat,lens,lx+i*w/8,ly+.27,.025,0);}
-    KIT.line([V3(lx+w,ly,0),V3(d.slipX,PHYS.SCENE.top+.16,-.72)],THEME.reference,lens,true);
+    KIT.line([V3(lx+w,ly,0),V3(d.slipX,PHYS.SCENE.top+.16,-.72)],INK_CFG.diagram.reference,lens,true);
     KIT.expansion(lens,lx+w-.1,ly+h-.1,.025);
     // Same-weight ratio comparison uses a linear dimensionless scale.
     const compare=groups[LAYERS[6]];
     for(const [j,species]of [SPECIES_KEYS[0],d.species].entries()){
       const x=-2.6+j*.65,y=2.73;
-      outline(compare,x,y,.27,PHYS.VIS.ratioHeight,THEME.reference,true);
+      outline(compare,x,y,.27,PHYS.VIS.ratioHeight,INK_CFG.diagram.reference,true);
       const ratio=PHYS.grammarState(1,species,d.mu).ratioLength;
-      KIT.mesh(new THREE.PlaneGeometry(.20,ratio),ink(THEME.muscle),compare,x+.135,y+ratio/2,.01);
+      KIT.mesh(new THREE.PlaneGeometry(.20,ratio),ink(INK_CFG.diagram.muscle),compare,x+.135,y+ratio/2,.01);
       for(let k=1;k<10;k++)KIT.line([V3(x,y+PHYS.VIS.ratioHeight*k/10,.02),V3(x+.27,y+PHYS.VIS.ratioHeight*k/10,.02)],THEME.graphite,compare);
     }
     const log=groups[LAYERS[7]];
     for(const [j,r]of records.entries()){
       const x=-2.7+j*.66,y=2.67;
-      outline(log,x,y,.59,.72,THEME.reference,true);
-      KIT.ball(.035,ink(THEME.kids),log,x+.1,y+.57,.01,0);
+      outline(log,x,y,.59,.72,INK_CFG.diagram.reference,true);
+      KIT.ball(.035,ink(INK_CFG.diagram.kids),log,x+.1,y+.57,.01,0);
       KIT.mesh(new THREE.PlaneGeometry(.18,.045),ink(groundColors[GROUND_VALUES.indexOf(r.mu)]),log,x+.13,y+.40,.01);
       const specimen=DINO_MODELS[r.speciesIndex].clone(true);
       specimen.traverse(o=>{if(o.geometry)o.geometry=o.geometry.clone();if(o.material)o.material=o.material.clone();});
       specimen.position.set(x+.37,y+.36,0);specimen.scale.setScalar(.13);log.add(specimen);
-      for(const i of [0,1])KIT.mesh(new THREE.PlaneGeometry(r.forces[i].length*.20,.035),ink(i?THEME.dino:THEME.kids),log,x+.04+r.forces[i].length*.10,y+.12+i*.10,.02);
+      for(const i of [0,1])KIT.mesh(new THREE.PlaneGeometry(r.forces[i].length*.20,.035),ink(i?INK_CFG.diagram.dino:INK_CFG.diagram.kids),log,x+.04+r.forces[i].length*.10,y+.12+i*.10,.02);
       // Changed conditions have a solid border around their specimen slot.
-      if(baseline&&(r.n!==baseline.n||r.species!==baseline.species||r.mu!==baseline.mu))outline(log,x+.02,y+.32,.55,.36,THEME.kids,false);
+      if(baseline&&(r.n!==baseline.n||r.species!==baseline.species||r.mu!==baseline.mu))outline(log,x+.02,y+.32,.55,.36,INK_CFG.diagram.kids,false);
     }
     // Capture intrinsic opacity once, including deliberately translucent panels.
     for(const group of Object.values(groups))group.traverse(o=>{if(o.material){o.material.transparent=true;o.material.userData.alpha=o.material.opacity;}});
@@ -114,9 +114,9 @@ const GRAMMAR = (() => {
   // Seeded, additive force streaks; density is schematic display force, never rope flow.
   const stream= new THREE.Group();HERO.add(stream);
   const seed=mulberry32(450073),particles=Array.from({length:PHYS.VIS.streamCount},()=>({phase:seed(),height:seed()}));
-  const streakMat=new THREE.MeshBasicMaterial({color:THEME.kids,transparent:true,opacity:.4,blending:THREE.AdditiveBlending,depthWrite:false});
+  const streakMat=new THREE.MeshBasicMaterial({color:INK_CFG.diagram.kids,transparent:true,opacity:.4,blending:THREE.AdditiveBlending,depthWrite:false});
   const streaks=new THREE.InstancedMesh(new THREE.PlaneGeometry(.035,.008),streakMat,particles.length);stream.add(streaks);streaks.frustumCulled=false;
-  const dustMat=new THREE.MeshStandardMaterial({color:THEME.sand,transparent:true,opacity:0,emissive:THEME.friction,emissiveIntensity:.15});
+  const dustMat=new THREE.MeshStandardMaterial({color:THEME.sand,transparent:true,opacity:0,emissive:INK_CFG.diagram.friction,emissiveIntensity:.15});
   const dust=new THREE.InstancedMesh(new THREE.IcosahedronGeometry(.018,0),dustMat,PHYS.VIS.dustCount);HERO.add(dust);dust.frustumCulled=false;
   const dummy=new THREE.Object3D();
   
@@ -145,7 +145,7 @@ const GRAMMAR = (() => {
     for(let i=0;i<streaks.count;i++){
       const p=particles[i],side=i%2,glyph=d.forces[side],origin=origins[side];
       dummy.position.set(origin[0]+((p.phase+clock*(.1+d.streamDensity*.2))%1)*glyph.length,origin[1]+(p.height-.5)*.06,.765);
-      dummy.scale.setScalar(p.height<.2+d.streamDensity?1:0);dummy.updateMatrix();streaks.setMatrixAt(i,dummy.matrix);streaks.setColorAt(i,new THREE.Color(side?THEME.dino:THEME.kids));
+      dummy.scale.setScalar(p.height<.2+d.streamDensity?1:0);dummy.updateMatrix();streaks.setMatrixAt(i,dummy.matrix);streaks.setColorAt(i,new THREE.Color(side?INK_CFG.diagram.dino:INK_CFG.diagram.kids));
     }
     streaks.instanceMatrix.needsUpdate=true;streaks.instanceColor.needsUpdate=true;
     const age=clock-burstStart,burst=d.slip&&age<1.1;

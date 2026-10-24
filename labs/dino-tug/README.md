@@ -66,3 +66,18 @@ node D:/labs/tools/serve.mjs --root labs/dino-tug
 HUD가 `GRAMMAR`와 문법 키를 받는 `layer`를 연결합니다. 뒤 모듈이 `teacher`, `attract`를 추가합니다. `set`은 `quest`, `species`(키·인덱스), `ground`(인덱스), `mu`, `kids`/`n`, `u`, `t`, `playing`을 받습니다. `mode`는 student/free/teacher이고 explore는 free 별칭입니다. `preset(0..6)`은 작은 종, 트리케라 문턱, 티라노 자갈, 유리, 모래, 30명 설계, 최대 팀·최대 종입니다.
 
 `step(n,dt)`는 0~120프레임, 프레임 간격 0~1초를 받습니다. `capture('thumb')`는 UI 없는 1200×750 JPEG를 요청한 뒤 렌더 크기·카메라·UI를 복구합니다. 일반 capture는 캔버스, 도구의 page.screenshot은 HUD 포함 증거입니다. teacher-check의 DOM/GPU 스텁은 실제 브라우저 포커스·터치·장치 가림·5초 구별 검사와 다릅니다.
+
+
+## R9: 책상 없는 밀림
+
+책상 몸체·상판·고무발·띠·나사와 트랙 받침을 삭제했습니다. 지면은 `PHYS.SCENE.top`(1.10), 진흙 공터는 트랙 표면까지 완만하게 이어집니다. 장치·카메라·물리·퀘스트·교사·대기 로직은 유지했습니다. `console` 층은 독립 돌 토템이며 그래프 두 개·다이얼·슬라이더·재생·스위치를 담습니다. 세로 화면에서는 토템만 앞쪽 트랙 끝으로 옮겨 관객 쪽으로 회전합니다. 자세·치수는 `CONTROL_LAYOUT`, 지형·장식은 `HABITAT`, 색은 `BIOME`에서 관리합니다.
+
+밝은 연두 노랑 안개/하늘, 더 밝은 진흙과 채움광, 굵어진 가산 혼합 햇살 네 개, 양옆 전경 양치류·바위·덩굴을 추가/조정했습니다. 로우폴리·고정 시드·저사양 감축을 유지합니다. [좌표와 삭제 목록](docs/visual-grammar.md)에 상세 결정을 기록했습니다.
+
+R9 검증: assemble, 모듈 syntax, hand-check **267/267**, quest-check, teacher-check 통과. 토템 조작부 외곽의 해석적 안전 영역 검사도 84/84 통과했습니다. 브라우저/CDN 캡처는 실행하지 않았습니다. 평균 명도·실제 터치·375×812 UI 가림·실시간 heroCoverage/textAudit 결과는 팀장 캡처에서 확인해야 합니다. 커밋·푸시는 하지 않았습니다.
+
+R10: ?? ?? ?? 6???? ??? 3? ???? ?? ??????? LOD? ?????, ???? ?? ??? [visual-grammar](docs/visual-grammar.md)? ??????.
+
+R12: 밀림 3D를 공통 `src/47-ink-style.js`의 3단 채색·잉크선·종이 렌더로 전환했습니다. [룩·설정·검증](docs/visual-grammar.md#r12--colorfigures-ink-rendering).
+
+R13: 설정을 `src/46-ink-config.js`로 분리하고 `47`을 공통 엔진으로 정리했습니다. 거리별 2.6→1.0px 잉크, 원경 감쇠·배경 경계 제외, 크림 패널과 1.5px 테두리, 공룡 면별 3톤 양자화를 적용했습니다. [값·API·검증 한계](docs/visual-grammar.md#r13--distance-ink-and-portable-engine). assemble·syntax·hand-check 267/267·quest-check·teacher-check 통과. 브라우저 및 새 캡처는 미확인입니다.

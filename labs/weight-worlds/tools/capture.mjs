@@ -42,6 +42,9 @@ try {
     await new Promise(resolve => server.listen(5182, '127.0.0.1', resolve)); url = 'http://127.0.0.1:5182/';
   }
   const states = [
+    ...[0,1,3,9].map(body=>({name:`r9-ground-${body}`,preset:0,body})),
+    {name:'r9-stand',preset:0}, {name:'r9-hologram',preset:6},
+    ...Array.from({length:10},(_,body)=>({name:`scenery-${body}`,preset:0,body})),
     {name:'hero',preset:0}, {name:'moon',preset:1}, {name:'jupiter',preset:2},
     {name:'sun',preset:3}, {name:'neutron',preset:4}, {name:'venus',preset:5}, {name:'space',preset:6},
     {name:'room',preset:0,shot:0,vshot:0}, {name:'spring-section',preset:1,shot:2,vshot:0},

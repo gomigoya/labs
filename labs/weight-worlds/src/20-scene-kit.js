@@ -1,29 +1,24 @@
 const canvas = document.getElementById('gl');
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, preserveDrawingBuffer: true, powerPreference: 'high-performance' });
-renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 0.86;
+renderer.toneMapping = THREE.NoToneMapping;
+renderer.toneMappingExposure = 1.02;
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.shadowMap.enabled = true;
-renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.shadowMap.type = THREE.PCFShadowMap;
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(THEME.background);
-scene.fog = new THREE.Fog(THEME.fog, 10, 24);
+scene.background = new THREE.Color(inkConfig().paper);
+scene.fog = new THREE.Fog(inkConfig().paper, ...inkConfig().fog);
 const camera = new THREE.PerspectiveCamera(34, innerWidth / innerHeight, 0.03, 40);
 const ROOM = new THREE.Group(), CONSOLE = new THREE.Group(), HERO = new THREE.Group();
 scene.add(ROOM, CONSOLE, HERO);
-const pmrem = new THREE.PMREMGenerator(renderer);
-const environmentRoom = new RoomEnvironment();
-scene.environment = pmrem.fromScene(environmentRoom, 0.04).texture;
-scene.environmentIntensity = 0.40;
-environmentRoom.dispose(); pmrem.dispose();
-RectAreaLightUniformsLib.init();
 const MAT = {};
-for (const name of ['brass', 'graphite', 'chrome', 'wood', 'wall', 'navy', 'reference']) {
-  MAT[name] = new THREE.MeshStandardMaterial({ color: THEME[name], roughness: name === 'brass' ? 0.34 : 0.65,
-    metalness: ['brass', 'chrome'].includes(name) ? 1 : 0.12, flatShading: name === 'reference' });
+for (const name of ['brass', 'graphite', 'chrome', 'navy', 'reference']) {
+  MAT[name] = new THREE.MeshStandardMaterial({ name, color: ['brass','chrome'].includes(name)?inkConfig().metal:name==='navy'?inkConfig().diagram.screen:name==='graphite'?inkConfig().apparatus.graphite:inkConfig().diagram.reference, flatShading: name === 'reference' });
 }
-MAT.glow = new THREE.MeshStandardMaterial({ color: THEME.mint, emissive: THEME.mint, emissiveIntensity: 2.2 });
-MAT.rubber = new THREE.MeshStandardMaterial({ color: THEME.rubber, roughness: 0.95 });
+MAT.navy=new THREE.MeshBasicMaterial({color:inkConfig().diagram.screen,fog:false,toneMapped:false});
+MAT.glow = new THREE.MeshStandardMaterial({ color: inkConfig().diagram.mint, emissive: inkConfig().diagram.mint, emissiveIntensity: .25 });
+MAT.rubber = new THREE.MeshStandardMaterial({ color: inkConfig().apparatus.rubber,  });
+const glassMat = new THREE.MeshPhysicalMaterial({color:inkConfig().diagram.cool,transparent:true,opacity:0.3,depthWrite:false});
 const KIT = {
   mesh(g, material, parent, x = 0, y = 0, z = 0) {
     const m = new THREE.Mesh(g, material); m.position.set(x, y, z); m.castShadow = true; m.receiveShadow = true; parent.add(m); return m;
@@ -53,32 +48,21 @@ const KIT = {
     m.rotation.x = Math.PI / 2;
     this.line([V3(x - 0.006, y, z + 0.004), V3(x + 0.006, y, z + 0.004)], THEME.screwInk, parent);
   },
-  lampWithBulb(parent, x, y, z) {
-    this.mesh(new THREE.CylinderGeometry(0.16, 0.18, 0.035, 24), MAT.graphite, parent, x, y, z);
-    this.rod(V3(x, y, z), V3(x, y + 0.66, z), 0.016, MAT.brass, parent);
-    this.rod(V3(x, y + 0.66, z), V3(x + 0.23, y + 0.86, z), 0.02, MAT.brass, parent);
-    this.mesh(new THREE.ConeGeometry(0.19, 0.20, 24, 1, true), MAT.graphite, parent, x + 0.23, y + 0.79, z);
-    const glow = new THREE.MeshStandardMaterial({ color: THEME.warm, emissive: THEME.warm, emissiveIntensity: 3 });
-    this.ball(0.055, glow, parent, x + 0.23, y + 0.73, z);
-    const light = new THREE.PointLight(THEME.warm, 2.5, 4, 2); light.position.set(x + 0.23, y + 0.69, z); parent.add(light);
-  },
   graphScreen(parent, x, y, z, w, h) {
     this.roundedPanel(w + 0.055, h + 0.05, 0.04, MAT.brass, parent, x, y, z - 0.015);
     const tex = this.canvasTex(768, 256, () => {});
-    const material = new THREE.MeshStandardMaterial({ map: tex, emissiveMap: tex, emissive: THEME.white, emissiveIntensity: 1.3, roughness: 0.55 });
+    const material = new THREE.MeshBasicMaterial({ map:tex, toneMapped:false, fog:false });
     const mesh = this.mesh(new THREE.PlaneGeometry(w, h), material, parent, x, y, z + 0.009); mesh.castShadow = false;
-    const light = new THREE.RectAreaLight(THEME.cool, 0.6, w, h); light.position.set(x, y, z + 0.035); light.rotation.y = Math.PI; parent.add(light);
     return { mesh, tex, ctx: tex.image.getContext('2d') };
   },
   knobWithArc(parent, x, y, z) {
     this.mesh(new THREE.CylinderGeometry(0.135, 0.135, 0.045, 48).rotateX(Math.PI / 2), MAT.brass, parent, x, y, z);
     const knob = this.mesh(new THREE.CylinderGeometry(0.103, 0.11, 0.08, 32).rotateX(Math.PI / 2), MAT.graphite, parent, x, y, z + 0.04);
     const mark = this.roundedPanel(0.01, 0.065, 0.005, MAT.glow, knob, 0, 0.045, 0.044, 0.002);
-    for (const detent of PHYS.DETENTS.body) { const a = detent.x * Math.PI * 1.7; this.line([V3(x + Math.sin(a) * 0.15, y + Math.cos(a) * 0.15, z), V3(x + Math.sin(a) * 0.164, y + Math.cos(a) * 0.164, z)], THEME.chrome, parent); }
+    for (const detent of PHYS.DETENTS.body) { const a = detent.x * Math.PI * 1.7; this.line([V3(x + Math.sin(a) * 0.15, y + Math.cos(a) * 0.15, z), V3(x + Math.sin(a) * 0.164, y + Math.cos(a) * 0.164, z)], inkConfig().diagram.ink, parent); }
     const arc = this.mesh(new THREE.TorusGeometry(0.18, 0.008, 6, 96), MAT.glow.clone(), parent, x, y, z);
     arc.rotation.z = Math.PI / 2;
     arc.scale.y = -1;
-    const light = new THREE.PointLight(THEME.mint, 0.16, 1); light.position.set(x, y, z + 0.1); parent.add(light);
     return { knob, mark, arc };
   },
   ledSlider(parent, x, y, z, width) {
@@ -87,7 +71,6 @@ const KIT = {
     const handle = this.roundedPanel(0.06, 0.10, 0.06, MAT.chrome, parent, x, y, z + 0.04);
     for (const detent of PHYS.DETENTS.nWeights) this.roundedPanel(0.005, 0.016, 0.004, MAT.brass, parent, x - width / 2 + detent.x * width, y - 0.068, z);
     const marker = this.mesh(new THREE.ConeGeometry(0.013, 0.02, 3).rotateX(Math.PI / 2), MAT.brass, handle, 0, -0.078, 0);
-    const light = new THREE.PointLight(THEME.mint, 0.12, 1); light.position.set(x, y, z + 0.1); parent.add(light);
     return { handle, marker, x, y, z, width };
   },
   breakMark(parent, color) {
@@ -98,7 +81,7 @@ const KIT = {
   },
   quantityArrow(parent, dashed = false) {
     const material = new THREE.ShaderMaterial({ transparent: true, depthWrite: false, side: THREE.DoubleSide,
-      uniforms: { uColor: { value: new THREE.Color(dashed ? THEME.reference : THEME.force) },
+      uniforms: { uColor: { value: new THREE.Color(dashed ? inkConfig().diagram.reference : inkConfig().diagram.force) },
         uLevel: { value: 0 }, uLength: { value: 0 }, uUnit: { value: PHYS.VIEW.markUnit },
         uStyle: { value: dashed ? 1 : 0 }, uOpacity: { value: 1 }, uTime: { value: 0 } },
       vertexShader: `varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}`,
@@ -113,12 +96,12 @@ const KIT = {
         }` });
     const g = new THREE.Group(); parent.add(g);
     const shaft = this.mesh(new THREE.PlaneGeometry(PHYS.GRAMMAR_VIEW.arrowWidth, 1).translate(0,-0.5,0),material,g);
-    const head = this.line([V3(-0.065,0.065,0),V3(0,0,0),V3(0.065,0.065,0)],dashed?THEME.reference:THEME.force,g,dashed);
+    const head = this.line([V3(-0.065,0.065,0),V3(0,0,0),V3(0.065,0.065,0)],dashed?inkConfig().diagram.reference:inkConfig().diagram.force,g,dashed);
     return { group:g,shaft,head,material };
   },
   expansion(parent, x, y, z) {
     const t = this.canvasTex(128, 128, c => {
-      c.strokeStyle = THEME.whiteInk; c.lineWidth = 8; c.lineCap = 'round'; c.beginPath();
+      c.strokeStyle = '#'+new THREE.Color(inkConfig().diagram.ink).getHexString(); c.lineWidth = 8; c.lineCap = 'round'; c.beginPath();
       c.moveTo(32, 96); c.lineTo(96, 32); c.moveTo(32, 68); c.lineTo(32, 96); c.lineTo(60, 96);
       c.moveTo(68, 32); c.lineTo(96, 32); c.lineTo(96, 60); c.stroke();
     });
@@ -126,3 +109,6 @@ const KIT = {
     s.position.set(x, y, z); s.scale.setScalar(0.075); parent.add(s); return s;
   }
 };
+
+// Adopted by the shared engine once all initial scene objects exist.
+KIT.toon=(color,opts={})=>new THREE.MeshToonMaterial({color,...opts});

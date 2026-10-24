@@ -93,10 +93,10 @@ canvas.addEventListener('pointerdown',event=>{
  if(object===PLAY_BUTTON){action(S.mode.target?'play':'execute');controls.enabled=true;return;}
  if(object===MODE_SWITCH||object===SWITCH_LEVER){action(S.mode.target?'sudden':'gradual');controls.enabled=true;return;}
  const type=object===PIN_HIT?'pin':object===DIAL.knob?'dial':object===SLIDER.handle?'slider':'graph';
- const plane=new THREE.Plane(V3(0,0,1),-.82),p=raycaster.ray.intersectPlane(plane,V3());if(!p){controls.enabled=true;return;}
+ const plane=new THREE.Plane(V3(0,0,1),-object.getWorldPosition(V3()).z),p=raycaster.ray.intersectPlane(plane,V3());if(!p){controls.enabled=true;return;}
  const poles=[-90,90].map(phi=>V3(...PHYS.scenePoint(phi,0,MODEL.pinReach)).project(camera));
  S.drag={id:event.pointerId,type,plane,start:p,startY:event.clientY,phi:S.phi.target,period:S.period.target,
-  height:Math.max(56,Math.abs(poles[0].y-poles[1].y)*innerHeight/2),angle:Math.atan2(p.x+1.32,p.y-.6),graph:object===GRAPHS[0].mesh?0:1};
+  height:Math.max(56,Math.abs(poles[0].y-poles[1].y)*innerHeight/2),angle:Math.atan2(p.x-CONTROL_LAYOUT.dial.x,p.y-CONTROL_LAYOUT.dial.y),graph:object===GRAPHS[0].mesh?0:1};
  S.snap=null;canvas.setPointerCapture(event.pointerId);
 },{capture:true});
 canvas.addEventListener('pointermove',event=>{
@@ -105,13 +105,13 @@ canvas.addEventListener('pointermove',event=>{
  if(d.type==='pin')setRailFromPointer('phi',d.phi-(event.clientY-d.startY)/d.height);
  if(d.type==='slider')setRailFromPointer('phi',d.phi+(p.x-d.start.x)/SLIDER.width);
  if(d.type==='dial'){
-  const a=Math.atan2(p.x+1.32,p.y-.6),delta=Math.atan2(Math.sin(a-d.angle),Math.cos(a-d.angle));
+  const a=Math.atan2(p.x-CONTROL_LAYOUT.dial.x,p.y-CONTROL_LAYOUT.dial.y),delta=Math.atan2(Math.sin(a-d.angle),Math.cos(a-d.angle));
   d.period=clamp(d.period+delta/(Math.PI*1.5),0,1);setRailFromPointer('period',d.period);d.angle=a;
  }
  if(d.type==='graph'){
   const center=GRAPHS[d.graph].mesh.position.x;
   // Map exactly the graph's inner plotting rectangle, not the metal bezel.
-  const canvasX=(p.x-center)/.67*768+384;
+  const canvasX=(p.x-center)/CONTROL_LAYOUT.graphs[d.graph].w*768+384;
   setRailFromPointer(d.graph?'period':'phi',(canvasX-48)/(714-48));
  }
 },{capture:true});
@@ -252,3 +252,6 @@ Object.assign(ICONS,{
  threshold:'M3 3h18v18H3zM7 6v12m0-6h11m-4-3 4 3-4 3',records:'M3 4h18v16H3zM6 8h4m-4 4h8m-8 4h12',
  deck:'M2 7h20v12H2zM6 10v6m4-6v6m4-6v6m4-6v6',apparatus:'M2 3h20v18H2zM6 17V7h12v10z'
 });
+
+// Shared cream/ink values for CSS panels and runtime diagrams.
+for(const [name,value] of Object.entries({'--diagram-paper':'#f4efe3','--diagram-ink':'#221d18','--diagram-border':INK_CFG.diagram.borderPx+'px'}))document.documentElement.style.setProperty(name,value);

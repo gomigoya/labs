@@ -83,3 +83,13 @@ node tools/capture.mjs --out shots/r4-lite --lite
 assemble, 모든 JS 구문, hand-check 전체, quest-check의 실제 PHYS 자동 경로·오답·중단·기록 수명, teacher-check의 구성·원본 일치·컨트롤러 상태·숫자 감사, guide 태그 균형 및 원문 인용, reviewer 표 재계산은 브라우저 없이 검사합니다. 캡처 도구에는 teacher-*, attract-1..3, touch-pulse, thumb, 세로 세 샷, 1920×1080·1280×720 교사 띠를 추가했습니다.
 
 확인하지 못한 것: WebGL 장면·콘솔 오류·실제 textAudit·터치 타깃 경계·카드 가림·장치 60~75% 달성·색 대비·5 m 판독·5초 후보 판독·저사양 fps·썸네일 픽셀. 팀장 호스트에서 tools/capture.mjs와 실제 교실 관찰로 검수하십시오.
+
+
+## R9 책상 제거
+
+콘솔 몸체·상판·앞판·장식과 발사대 플랫폼 두 장을 삭제했습니다. 콘크리트 지면은 `PHYS.SCENE.top`(0.84)에서 이어지고 장치는 기존 좌표에 개별 지지대로 섭니다. 배출구·안전 줄·케이블 트레이는 지면 마킹입니다. 조작부는 앞쪽 왼편의 좁은 기둥과 경사 패널로 옮겼습니다. `ENV.terminal`이 배치·크기의 단일 표이며, 형상·입력 판정·드래그·퀘스트 강조와 유령 손이 같은 패널 변환을 따릅니다. 상세 좌표와 결정은 [시각 문법](docs/visual-grammar.md)에 기록했습니다.
+
+R9에서는 `30-room-console.js` 수정이 허용되어 해당 파일을 변경했습니다. 위의 이전 회차 수정 제한 기록을 대체합니다. 카메라, 물리, 퀘스트 정의, 교사·대기 로직, UI 및 구름 캔버스는 유지했습니다. `MAT.deck`은 `MAT.steel`로 바꾸고 사용하지 않는 나사 도우미는 삭제했습니다.
+
+검증: `node tools/assemble.mjs`, 전체 JS `node --check`, `node tools/hand-check.mjs` 193/193, `node tools/quest-check.mjs`, `node tools/teacher-check.mjs` 통과. 별도 수치 검사 24개로 패널 변환 후 그래프·손잡이·슬라이더와 패널의 기존 히어로 경계 포함을 확인했습니다. 실제 WebGL·모바일 가림·`heroCoverage()`·`textAudit()`은 미검증이며 기존 캡처 도구의 hero/console/coastal-site/퀘스트/교사/대기/모바일 상태를 팀장 호스트에서 확인해야 합니다. **추정**: 단말 크기와 경사는 전시용 모형 치수입니다. 커밋·푸시는 하지 않았습니다.
+R15: 해안 발사장을 컬러피겨 3단 채색·거리별 잉크선·복숭아 크림 종이와 크림 HUD로 전환했습니다. 공통 `47`은 dino-tug와 동일하며, 값·검증·미확인 항목은 [시각 문법](docs/visual-grammar.md#r15-coastal-ink)에 기록했습니다.

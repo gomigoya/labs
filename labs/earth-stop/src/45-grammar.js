@@ -20,10 +20,10 @@ const GRAMMAR = (() => {
     geometry.setAttribute('aFill',new THREE.BufferAttribute(new Float32Array(count),1));
     const material=new THREE.ShaderMaterial({uniforms:{uOpacity:{value:1},uSize:{value:8},uColor:{value:new THREE.Color(THEME.velocity)}},
       vertexShader:`attribute float aFill;varying float vFill;uniform float uSize;void main(){vFill=aFill;gl_PointSize=uSize;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}`,
-      fragmentShader:`varying float vFill;uniform float uOpacity;uniform vec3 uColor;void main(){float r=length(gl_PointCoord-.5)*2.0;if(r>1.0)discard;if(vFill<.5&&r<.64)discard;gl_FragColor=vec4(uColor*1.25,uOpacity*(1.0-smoothstep(.85,1.0,r)));
+      fragmentShader:`varying float vFill;uniform float uOpacity;uniform vec3 uColor;void main(){float r=length(gl_PointCoord-.5)*2.0;if(r>1.0)discard;if(vFill<.5&&r<.64)discard;gl_FragColor=vec4(uColor,uOpacity*(1.0-smoothstep(.85,1.0,r)));
       #include <tonemapping_fragment>
       #include <colorspace_fragment>
-      }`,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending});
+      }`,transparent:true,depthWrite:false,blending:THREE.NormalBlending});
     const object=new THREE.Points(geometry,material);object.frustumCulled=false;parent.add(object);return object;
   };
   const putDots=(object,values)=>{
@@ -68,9 +68,9 @@ const GRAMMAR = (() => {
   const trace=dots(groups[LAYERS[3]],cfg.traceCap+1),traceGuide=line(groups[LAYERS[3]],THEME.reference,true),stopped=line(groups[LAYERS[3]],THEME.reference,true);
   const timeSign=KIT.expansion(groups[LAYERS[5]],.36,1.49,.91);
   const lens=groups[LAYERS[4]],lensCircle=line(lens,THEME.reference),lensRay=line(lens,THEME.warm),lensEdge=line(lens,THEME.cool);
-  const lensMaterial=new THREE.ShaderMaterial({uniforms:{uAngle:{value:0},uOpacity:{value:1}},
+  const lensMaterial=new THREE.ShaderMaterial({uniforms:{uAngle:{value:0},uOpacity:{value:1},uNight:{value:new THREE.Color(inkConfig().diagram.lensNight)},uDay:{value:new THREE.Color(inkConfig().diagram.lensDay)}},
     vertexShader:`varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}`,
-    fragmentShader:`uniform float uAngle,uOpacity;varying vec2 vUv;void main(){vec2 p=(vUv-.5)*2.0;if(length(p)>1.0)discard;float d=dot(p,vec2(cos(uAngle),sin(uAngle)));float day=smoothstep(-.025,.025,d);vec3 c=mix(vec3(.035,.06,.09),vec3(.55,.36,.16),day);gl_FragColor=vec4(c,uOpacity*.9);
+    fragmentShader:`uniform float uAngle,uOpacity;uniform vec3 uNight,uDay;varying vec2 vUv;void main(){vec2 p=(vUv-.5)*2.0;if(length(p)>1.0)discard;float d=dot(p,vec2(cos(uAngle),sin(uAngle)));float day=step(0.0,d);vec3 c=mix(uNight,uDay,day);gl_FragColor=vec4(c,uOpacity*.9);
     #include <tonemapping_fragment>
     #include <colorspace_fragment>
     }`,transparent:true,depthWrite:false,side:THREE.DoubleSide});
@@ -118,9 +118,9 @@ const GRAMMAR = (() => {
     if(innerWidth<=980&&mix[LAYERS[1]]>0){
       const c=compareContext,origin=76,scale=520/cfg.maxLength;c.clearRect(0,0,640,224);
       c.strokeStyle=CSS.velocity;c.lineWidth=5;c.setLineDash([]);c.beginPath();c.moveTo(origin,17);c.lineTo(origin+q.length*scale,17);c.stroke();
-      c.strokeStyle=CSS.reference;c.lineWidth=2;c.setLineDash([5,5]);
+      c.strokeStyle="#393e42";c.lineWidth=2;c.setLineDash([5,5]);
       for(let i=0;i<=Math.floor(cfg.maxLength/cfg.unit);i++){const x=origin+PHYS.quantity(i*PHYS.C.sound).length*scale;c.beginPath();c.moveTo(x,6);c.lineTo(x,216);c.stroke();}
-      PHYS.BENCH.forEach((b,i)=>{const y=47+i*32;c.drawImage(symbolTextures[i].image,8,y-14,54,28);
+      PHYS.BENCH.forEach((b,i)=>{const y=47+i*32;c.filter="brightness(0.25)";c.drawImage(symbolTextures[i].image,8,y-14,54,28);c.filter="none";
         c.beginPath();c.moveTo(origin,y);c.lineTo(origin+PHYS.quantity(b.speed).length*scale,y);c.stroke();});
       if(baseline){c.lineWidth=3;c.beginPath();c.moveTo(origin,17);c.lineTo(origin+PHYS.quantity(baseline.speed).length*scale,17);c.stroke();}
       c.setLineDash([]);
@@ -169,7 +169,7 @@ const GRAMMAR = (() => {
       b.records.forEach((rec,i)=>{const l=ghostLines[LAYERS[7]][i];l.visible=true;points(l,[[-.54,1.45+i*.07,.91],[-.54+PHYS.quantity(rec.relativeSpeed).length,1.45+i*.07,.91]]);});
     }
   }
-  const tipMaterial=MAT.glow.clone();tipMaterial.transparent=true;
+  const tipMaterial=new THREE.MeshBasicMaterial({color:THEME.velocity});tipMaterial.transparent=true;
   return {LAYERS,defaults,enabled,groups,set,pin,unpin,update,clear(){baseline=null;records.length=0;lastRun=0;recordCount=0;},get baseline(){return baseline?structuredClone(baseline):null;}};
 })();
 window.GRAMMAR=GRAMMAR;

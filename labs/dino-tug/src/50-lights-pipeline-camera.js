@@ -1,37 +1,38 @@
-scene.fog.near=30;scene.fog.far=70;
-scene.add(new THREE.HemisphereLight(THEME.cool, THEME.wood, 1.25));
-const keyLight = new THREE.SpotLight(THEME.warm, 70, 30, 0.65, 0.7, 1.5);
-keyLight.position.set(-4, 7, 5); keyLight.target.position.set(0,1.5,0); keyLight.castShadow = true;
-keyLight.shadow.mapSize.set(2048, 2048); keyLight.shadow.bias = -0.0003; keyLight.shadow.normalBias = 0.02;
-scene.add(keyLight, keyLight.target);
-const fillLight = new THREE.RectAreaLight(THEME.cool, 3.5, 4, 3);
-fillLight.position.set(4, 5, 1); fillLight.lookAt(V3(0,1.5,0)); scene.add(fillLight);
-const rimLight = new THREE.PointLight(THEME.cool, 3, 10, 2);
-rimLight.position.set(0,4,-2); scene.add(rimLight);
-
-const composer = new EffectComposer(renderer);
-const renderPass = new RenderPass(scene, camera); composer.addPass(renderPass);
-const aoPass = new GTAOPass(scene, camera, innerWidth, innerHeight);
-aoPass.blendIntensity = 0.75; aoPass.updateGtaoMaterial({ radius: 0.18, samples: 8, distanceFallOff: 1, screenSpaceRadius: false }); composer.addPass(aoPass);
-const bokehPass = new BokehPass(scene, camera, { focus: 3.2, aperture: 0.00035, maxblur: 0.0022 }); composer.addPass(bokehPass);
-// A black material mask makes bloom exclusive to emissive instruments and the force shader.
-const bloomComposer = new EffectComposer(renderer); bloomComposer.renderToScreen = false;
-bloomComposer.addPass(new RenderPass(scene, camera));
-const bloomPass = new UnrealBloomPass(new THREE.Vector2(innerWidth, innerHeight), 0.36, 0.45, 1.1); bloomComposer.addPass(bloomPass);
-const bloomMix = new ShaderPass({ uniforms: { tDiffuse: { value: null }, tBloom: { value: bloomComposer.renderTarget2.texture } },
- vertexShader: 'varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}',
- fragmentShader: 'uniform sampler2D tDiffuse;uniform sampler2D tBloom;varying vec2 vUv;void main(){gl_FragColor=texture2D(tDiffuse,vUv)+texture2D(tBloom,vUv);}' });
-composer.addPass(bloomMix);
-// Surface programs remain procedural but contribute black to the emissive pass.
-for(const cassette of CASSETTES)for(const mesh of cassette.children){
- if(mesh.material===cassette.userData.surface)mesh.onBeforeRender=()=>{
-  const target=renderer.getRenderTarget(),material=mesh.material;
-  material.uniforms.uBloom.value=target===bloomComposer.readBuffer||target===bloomComposer.writeBuffer?0:1;
-  material.uniformsNeedUpdate=true;
- };
+// Dynamic floating diagrams use unlit cream and a CSS-pixel ink border.
+const diagramMaterials=new WeakSet();
+function styleDiagramPanels(root){
+ const screen=new THREE.Color(INK_CFG.diagram.screen);
+ root.traverse(o=>{
+  if(!o.isMesh||o.geometry?.type!=='PlaneGeometry'||!o.material?.isMeshBasicMaterial||!o.material.color.equals(screen))return;
+  const m=o.material;if(diagramMaterials.has(m))return;diagramMaterials.add(m);
+  m.fog=false;m.toneMapped=false;
+  const border={value:INK_CFG.diagram.borderPx*renderer.getPixelRatio()};
+  m.onBeforeCompile=shader=>{
+   shader.uniforms.diagramBorder=border;shader.uniforms.diagramInk={value:new THREE.Color(INK_CFG.diagram.ink)};
+   shader.vertexShader='varying vec2 diagramUv;\n'+shader.vertexShader.replace('#include <uv_vertex>','#include <uv_vertex>\ndiagramUv=uv;');
+   shader.fragmentShader='varying vec2 diagramUv;uniform float diagramBorder;uniform vec3 diagramInk;\n'+shader.fragmentShader;
+   shader.fragmentShader=shader.fragmentShader.replace('#include <opaque_fragment>',
+    'vec2 diagramPixels=min(diagramUv,1.0-diagramUv)/max(fwidth(diagramUv),vec2(0.000001));\nfloat diagramEdge=1.0-smoothstep(diagramBorder-.5,diagramBorder+.5,min(diagramPixels.x,diagramPixels.y));\noutgoingLight=mix(outgoingLight,diagramInk,diagramEdge);\n#include <opaque_fragment>');
+  };
+  m.customProgramCacheKey=()=> 'cream-diagram-border-v1';m.needsUpdate=true;
+  o.onBeforeRender=()=>{border.value=INK_CFG.diagram.borderPx*renderer.getPixelRatio();};
+ });
 }
-const bloomBlack = new THREE.Color(0), blackMesh = new THREE.MeshBasicMaterial({color:0}), blackLine = new THREE.LineBasicMaterial({color:0}), blackSprite = new THREE.SpriteMaterial({color:0});
-const bloomMaterials = new Map();
+// Laboratory integration stays outside the portable style engine.
+KIT.toon=INK.toon;
+for(const name of Object.keys(MAT))MAT[name]=INK.convert(MAT[name]);
+INK.convertMaterials(scene);for(const cassette of CASSETTES)INK.convertMaterials(cassette);
+kidShadowMat.color.set(INK_CFG.shadow);kidShadowMat.opacity=INK_CFG.shadowOpacity;
+scene.background=new THREE.Color(INK_CFG.paper);scene.fog=new THREE.Fog(INK_CFG.paper,...INK_CFG.fog);
+// One hard key and one cool ambient source; all style values live in INK_CFG.
+scene.add(new THREE.AmbientLight(INK_CFG.ambient, INK_CFG.ambientIntensity));
+const keyLight = new THREE.SpotLight(INK_CFG.key, INK_CFG.keyIntensity, 30, .65, 0, 1.5);
+keyLight.position.set(...INK_CFG.keyPosition);keyLight.target.position.set(0,1.5,0);keyLight.castShadow=true;
+keyLight.shadow.mapSize.setScalar(INK_CFG.shadowMap[0]);keyLight.shadow.bias=INK_CFG.shadowBias;keyLight.shadow.normalBias=INK_CFG.shadowNormalBias;
+scene.add(keyLight,keyLight.target);
+const composer=new EffectComposer(renderer);
+const renderPass=new RenderPass(scene,camera);composer.addPass(renderPass);
+const inkPass=INK.makeOutlinePass(scene,camera,{wobble:QS.get('wobble')??.5,lowQuality:()=>S.quality==='low'});composer.addPass(inkPass);
 composer.addPass(new OutputPass());
 const controls = new OrbitControls(camera, canvas);
 controls.enableDamping = true; controls.dampingFactor = 0.10; controls.minDistance = 0.5; controls.maxDistance = 40;
@@ -98,7 +99,6 @@ function shot(index = 1, vertical = innerWidth / innerHeight < 0.9) {
   if (chosen.offset||chosen.offsetX) camera.setViewOffset(innerWidth, innerHeight, -(chosen.offsetX||0), -(chosen.offset||0), innerWidth, innerHeight);
   controls.update(); camera.updateMatrixWorld();
   if(typeof DIRECTOR!=='undefined')DIRECTOR.fitKey='';
-  bokehPass.uniforms.focus.value = camera.position.distanceTo(controls.target);
 }
 function flyTo(index, duration = 1.4) {
   let to = typeof index === 'object' ? index : SHOTS[clamp(Math.trunc(index), 0, SHOTS.length - 1)];
@@ -108,19 +108,15 @@ function flyTo(index, duration = 1.4) {
 }
 function resize(refit = true) {
   const low = S.quality === 'low';
-  bokehPass.enabled=!low&&innerWidth/innerHeight>=.9;
   renderer.setPixelRatio(Math.min(devicePixelRatio || 1, low ? 1 : 1.6));
   renderer.setSize(innerWidth, innerHeight, false); composer.setPixelRatio(renderer.getPixelRatio()); composer.setSize(innerWidth, innerHeight);
-  bloomComposer.setPixelRatio(renderer.getPixelRatio()); bloomComposer.setSize(innerWidth, innerHeight);
-  const size = renderer.getDrawingBufferSize(new THREE.Vector2()); bloomPass.setSize(size.x * (low ? 0.5 : 1), size.y * (low ? 0.5 : 1));
   camera.aspect = innerWidth / innerHeight; if(refit) camera.clearViewOffset(); camera.updateProjectionMatrix();
   if (refit) shot(innerWidth / innerHeight < 0.9 ? 0 : 1, innerWidth / innerHeight < 0.9);
 }
 function setQuality(level) {
   if (!['high', 'low'].includes(level)) throw new RangeError('quality');
   S.quality = level; const low = level === 'low';
-  aoPass.enabled = !low; bokehPass.enabled = !low;
-  keyLight.shadow.mapSize.setScalar(low ? 1024 : 2048);
+  keyLight.shadow.mapSize.setScalar(INK_CFG.shadowMap[low ? 1 : 0]);
   if (keyLight.shadow.map) { keyLight.shadow.map.dispose(); keyLight.shadow.map = null; }
   resize(false);
   return level;

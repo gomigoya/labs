@@ -14,34 +14,34 @@ const GRAMMAR = (() => {
   const seed = mulberry32(450073);
   const particles = Array.from({ length: 360 }, () => ({ phase: seed(), phi: seed() * Math.PI * 2,
     side: seed() < 0.5 ? -1 : 1, radius: 1.04 + seed() * 0.10 }));
-  const streakMaterial = new THREE.MeshBasicMaterial({ color: THEME.tide, blending: THREE.AdditiveBlending,
+  const streakMaterial = new THREE.MeshBasicMaterial({ color: THEME.tide, blending: THREE.NormalBlending,
     transparent: true, opacity: 0.16, depthWrite: false });
   const streaks = new THREE.InstancedMesh(new THREE.SphereGeometry(1, 6, 4), streakMaterial, particles.length);
   streaks.position.copy(E); streaks.frustumCulled = false; groups.field.add(streaks);
   groups.lens.position.copy(E);
-  const disk = KIT.mesh(new THREE.CircleGeometry(RV * 1.8, 64), new THREE.MeshBasicMaterial({ color: 0x5c91a7,
-    transparent: true, opacity: 0.18, side: THREE.DoubleSide, depthWrite: false, depthTest: false }), groups.lens);
+  const disk = KIT.mesh(new THREE.CircleGeometry(RV * 1.8, 64), new THREE.MeshBasicMaterial({ color: INK_CFG.diagram.screen,
+    transparent: true, opacity: 1, side: THREE.DoubleSide, depthWrite: false, depthTest: false }), groups.lens);
   disk.renderOrder = 9;
   KIT.line(Array.from({ length: 97 }, (_, i) => V3(Math.cos(i / 96 * Math.PI * 2) * RV * 1.8,
-    Math.sin(i / 96 * Math.PI * 2) * RV * 1.8, 0)), THEME.reference, groups.lens, true, 0.7);
+    Math.sin(i / 96 * Math.PI * 2) * RV * 1.8, 0)), INK_CFG.diagram.ink, groups.lens, true, 0.7);
   const lensRadius = RV * 1.8;
   for (let i = -4; i <= 4; i++) {
     const offset = i * lensRadius / 5, reach = Math.sqrt(lensRadius ** 2 - offset ** 2);
     for (const vertical of [false, true]) {
       const line = KIT.line(vertical ? [V3(offset, -reach, 0), V3(offset, reach, 0)]
-        : [V3(-reach, offset, 0), V3(reach, offset, 0)], 0x8faebb, groups.lens, false, 0.16);
+        : [V3(-reach, offset, 0), V3(reach, offset, 0)], INK_CFG.diagram.grid, groups.lens, false, 0.5);
       line.material.depthTest = false; line.renderOrder = 10;
     }
   }
   const arrows = [
-    ['near', 0.23, 0.10, 1, THEME.moon], ['center', 0, 0, 1, THEME.moon], ['far', -0.23, -0.10, 1, THEME.moon],
-    ['diffNear', 0.23, 0.22, 1, THEME.tide], ['diffFar', -0.23, -0.22, -1, THEME.tide]
+    ['near', 0.23, 0.10, 1, INK_CFG.diagram.ink], ['center', 0, 0, 1, INK_CFG.diagram.ink], ['far', -0.23, -0.10, 1, INK_CFG.diagram.ink],
+    ['diffNear', 0.23, 0.22, 1, INK_CFG.diagram.tide], ['diffFar', -0.23, -0.22, -1, INK_CFG.diagram.tide]
   ].map(([key, x, y, direction, color]) => {
     const mesh = KIT.quantityArrow(groups.lens, color, unit, key.startsWith('diff') ? 0.010 : 0.006);
     mesh.position.set(x, y, 0); if (direction < 0) mesh.rotation.z = Math.PI;
     return { key, mesh };
   });
-  KIT.expansion(groups.lens, 0, 0.25, 0.01);
+  KIT.expansion(groups.lens, 0, 0.25, 0.01, INK_CFG.diagram.ink);
   const { fluid, rigid } = PHYS.rocheX();
   const x1 = railAt(fluid), x2 = railAt(rigid), bandZ = 0.23, bandDepth = 0.22;
   const band = KIT.mesh(new THREE.PlaneGeometry(x1 - x2, bandDepth).rotateX(-Math.PI / 2),
@@ -54,7 +54,7 @@ const GRAMMAR = (() => {
   for (const x of [x1, x2]) KIT.line([V3(x, railY + 0.025, 0.05), V3(x, railY + 0.025, 0.11)], THEME.red, groups.limit, true);
 
   const card = document.createElement('div'); card.id = 'person-card'; card.hidden = true; card.setAttribute('aria-hidden', 'true');
-  card.innerHTML = `<svg viewBox="0 0 288 92"><g stroke="#e5e7ec" transform="translate(2 7)"><circle cx="12" cy="5" r="3"/><path d="M12 9v7m-7-5h14m-7 5-5 7m5-7 5 7"/></g><g stroke="#64ead0" transform="translate(2 57)"><path d="M2 8q3-6 6 0t6 0 6 0M2 16q3-6 6 0t6 0 6 0"/></g><g id="person-grid" stroke="#b1c6d34d"></g><g fill="none" stroke="#fff" stroke-dasharray="3 3"><rect x="38" y="12" width="18" height="16"/><rect x="38" y="62" width="18" height="16"/></g><path id="person-now" stroke="#e5e7ec" stroke-width="5"/><path id="sea-now" stroke="#64ead0" stroke-width="7"/><path id="sea-break" stroke="#64ead0" d="M264 59q4-5 8 0t8 0m-16 8q4-5 8 0t8 0"/></svg>`;
+  card.innerHTML = `<svg viewBox="0 0 288 92"><g stroke="#221d18" transform="translate(2 7)"><circle cx="12" cy="5" r="3"/><path d="M12 9v7m-7-5h14m-7 5-5 7m5-7 5 7"/></g><g stroke="#377f88" transform="translate(2 57)"><path d="M2 8q3-6 6 0t6 0 6 0M2 16q3-6 6 0t6 0 6 0"/></g><g id="person-grid" stroke="#b6b5ab"></g><g fill="none" stroke="#393e42" stroke-dasharray="3 3"><rect x="38" y="12" width="18" height="16"/><rect x="38" y="62" width="18" height="16"/></g><path id="person-now" stroke="#221d18" stroke-width="5"/><path id="sea-now" stroke="#377f88" stroke-width="7"/><path id="sea-break" stroke="#377f88" d="M264 59q4-5 8 0t8 0m-16 8q4-5 8 0t8 0"/></svg>`;
   document.body.append(card);
   card.querySelector('#person-grid').innerHTML = Array.from({ length: 13 }, (_, i) => `<path d="M${38 + i * 18} 8v24m0 26v24"/>`).join('');
   const personNow = card.querySelector('#person-now'), seaNow = card.querySelector('#sea-now'), seaBreak = card.querySelector('#sea-break');
@@ -129,8 +129,7 @@ const GRAMMAR = (() => {
         c.fillStyle = '#e5e7ec';
         for (let i = -12; i <= 12; i++) { const x = cx + i * gap; if (x < 5 || x > w - 5 || !i) continue;
           c.beginPath(); c.arc(x, cy, Math.max(4, 3 * texturePerPixel), 0, Math.PI * 2); c.fill(); }
-        const g = c.createRadialGradient(cx - r * 0.3, cy - r * 0.3, 0, cx, cy, r);
-        g.addColorStop(0, '#f5f6ef'); g.addColorStop(1, '#a7b2be'); c.fillStyle = g; c.beginPath(); c.arc(cx, cy, r, 0, Math.PI * 2); c.fill();
+        c.fillStyle = '#d9dce2'; c.beginPath(); c.arc(cx, cy, r, 0, Math.PI * 2); c.fill();
         c.strokeStyle = '#ffffff'; c.lineWidth = 2; c.setLineDash([3, 3]); c.beginPath(); c.arc(cx, cy, baseR, 0, Math.PI * 2); c.stroke(); c.setLineDash([]);
         if (rawR > w * 0.18) { c.beginPath(); for (let i = 0; i <= 32; i++) { const x = cx - 35 + i * 70 / 32, y = cy - r + Math.sin(i * Math.PI / 8) * 6; i ? c.lineTo(x, y) : c.moveTo(x, y); } c.stroke(); }
       }

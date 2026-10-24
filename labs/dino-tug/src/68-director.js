@@ -69,7 +69,7 @@ const DIRECTOR={
    // Draw a single filled explanation only after the actual diagram is ready.
    const usable=content.includes('<path')||content.includes('<circle');
    const cy=12,w=S.vertical?150:210,h=S.vertical?70:98;
-   body=age>.45&&usable?`<circle cx="${x}" cy="${y}" r="5"/>`+line(`M${x} ${y}L${innerWidth/2} ${cy+h}`)+`<svg x="${innerWidth/2-w/2}" y="${cy}" width="${w}" height="${h}" viewBox="0 0 300 140"><rect width="300" height="140" rx="12" fill="#11232e"/>${content}</svg>`:'';
+   body=age>.45&&usable?`<circle cx="${x}" cy="${y}" r="5"/>`+line(`M${x} ${y}L${innerWidth/2} ${cy+h}`)+`<svg x="${innerWidth/2-w/2}" y="${cy}" width="${w}" height="${h}" viewBox="0 0 300 140"><rect x="1" y="1" width="298" height="138" rx="12" fill="#f4efe3" stroke="#221d18" stroke-width="3"/>${content}</svg>`:'';
   }
   qOverlay.innerHTML=body?`<svg viewBox="0 0 ${innerWidth} ${innerHeight}">${body}</svg>`:'';
  }

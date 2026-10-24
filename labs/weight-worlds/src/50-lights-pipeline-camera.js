@@ -1,19 +1,36 @@
-scene.add(new THREE.HemisphereLight(THEME.hemiSky, THEME.hemiGround, 1.25));
-const keyLight = new THREE.SpotLight(THEME.warm, 26, 12, 0.65, 0.7, 1.5);
-keyLight.position.set(-2.2, 4.2, 3.3); keyLight.target.position.set(0,1.85,0); keyLight.castShadow = true;
-keyLight.shadow.mapSize.set(2048, 2048); keyLight.shadow.bias = -0.0003; keyLight.shadow.normalBias = 0.02;
-scene.add(keyLight, keyLight.target);
-const fillLight = new THREE.RectAreaLight(THEME.cool, 2.8, 2.4, 2.0);
-fillLight.position.set(2.3, 2.8, 0.8); fillLight.lookAt(0,1.85,0); scene.add(fillLight);
-const rimLight = new THREE.PointLight(THEME.cool, 1.1, 4.5, 2);
-rimLight.position.set(-0.4, 2.3, -1.1); scene.add(rimLight);
-
-const composer = new EffectComposer(renderer);
-const renderPass = new RenderPass(scene, camera); composer.addPass(renderPass);
-const aoPass = new GTAOPass(scene, camera, innerWidth, innerHeight);
-aoPass.blendIntensity = 0.75; aoPass.updateGtaoMaterial({ radius: 0.18, samples: 8, distanceFallOff: 1, screenSpaceRadius: false }); composer.addPass(aoPass);
-const bokehPass = new BokehPass(scene, camera, { focus: 3.2, aperture: 0.0013, maxblur: 0.006 }); composer.addPass(bokehPass);
-const bloomPass = new UnrealBloomPass(new THREE.Vector2(innerWidth, innerHeight), 0.36, 0.45, 1.1); composer.addPass(bloomPass);
+// Dynamic floating diagrams use unlit cream and a CSS-pixel ink border.
+const diagramMaterials=new WeakSet();
+function styleDiagramPanels(root){
+ const screen=new THREE.Color(INK_CFG.diagram.screen);
+ root.traverse(o=>{
+  if(!o.isMesh||!['PlaneGeometry','CircleGeometry'].includes(o.geometry?.type)||!o.material?.isMeshBasicMaterial||!o.material.color.equals(screen))return;
+  const circle=o.geometry.type==='CircleGeometry';
+  const m=o.material;if(diagramMaterials.has(m))return;diagramMaterials.add(m);
+  m.fog=false;m.toneMapped=false;
+  const border={value:INK_CFG.diagram.borderPx*renderer.getPixelRatio()};
+  m.onBeforeCompile=shader=>{
+   shader.uniforms.diagramBorder=border;shader.uniforms.diagramInk={value:new THREE.Color(INK_CFG.diagram.ink)};
+   shader.vertexShader='varying vec2 diagramUv;\n'+shader.vertexShader.replace('#include <uv_vertex>','#include <uv_vertex>\ndiagramUv=uv;');
+   shader.fragmentShader='varying vec2 diagramUv;uniform float diagramBorder;uniform vec3 diagramInk;\n'+shader.fragmentShader;
+   shader.fragmentShader=shader.fragmentShader.replace('#include <opaque_fragment>',
+    (circle?'float diagramEdge=1.0-smoothstep(diagramBorder-.5,diagramBorder+.5,(0.5-length(diagramUv-0.5))/max(fwidth(length(diagramUv-0.5)),0.000001));\noutgoingLight=mix(outgoingLight,diagramInk,diagramEdge);\n#include <opaque_fragment>':'vec2 diagramPixels=min(diagramUv,1.0-diagramUv)/max(fwidth(diagramUv),vec2(0.000001));\nfloat diagramEdge=1.0-smoothstep(diagramBorder-.5,diagramBorder+.5,min(diagramPixels.x,diagramPixels.y));\noutgoingLight=mix(outgoingLight,diagramInk,diagramEdge);\n#include <opaque_fragment>'));
+  };
+  m.customProgramCacheKey=()=> 'cream-diagram-border-v1-'+circle;m.needsUpdate=true;
+  o.onBeforeRender=()=>{border.value=INK_CFG.diagram.borderPx*renderer.getPixelRatio();};
+ });
+}
+// One adoption point after scene construction. Keep animated material handles in sync.
+KIT.toon=INK.toon;
+for(const name of Object.keys(MAT))MAT[name]=INK.convert(MAT[name]);
+INK.convertMaterials(scene);
+scene.add(new THREE.AmbientLight(INK_CFG.ambient,INK_CFG.ambientIntensity));
+const keyLight=new THREE.SpotLight(INK_CFG.key,INK_CFG.keyIntensity,30,.65,0,1.5);
+keyLight.position.set(...INK_CFG.keyPosition);keyLight.target.position.set(...INK_CFG.keyTarget);keyLight.castShadow=true;
+keyLight.shadow.mapSize.setScalar(INK_CFG.shadowMap[0]);keyLight.shadow.bias=INK_CFG.shadowBias;keyLight.shadow.normalBias=INK_CFG.shadowNormalBias;
+scene.add(keyLight,keyLight.target);
+const composer=new EffectComposer(renderer);
+const renderPass=new RenderPass(scene,camera);composer.addPass(renderPass);
+const inkPass=INK.makeOutlinePass(scene,camera,{wobble:QS.get('wobble')??.5,lowQuality:()=>S.quality==='low'});composer.addPass(inkPass);
 composer.addPass(new OutputPass());
 const controls = new OrbitControls(camera, canvas);
 controls.enableDamping = true; controls.dampingFactor = 0.10; controls.minDistance = 0.5; controls.maxDistance = 14;
@@ -88,7 +105,6 @@ function shot(index = 1, vertical = innerWidth / innerHeight < 0.9) {
   controls.target.copy(chosen.target); camera.lookAt(chosen.target); camera.updateProjectionMatrix();
   if (chosen.offset) camera.setViewOffset(innerWidth, innerHeight, 0, -chosen.offset, innerWidth, innerHeight);
   controls.update(); camera.updateMatrixWorld();
-  bokehPass.uniforms.focus.value = camera.position.distanceTo(controls.target);
 }
 function flyTo(index, duration = 1.4) {
   if (!Number.isFinite(duration) || duration <= 0 || (typeof index !== 'object' && (!Number.isInteger(index) || index < 0 || index >= SHOTS.length))) throw new RangeError('flyTo');
@@ -100,15 +116,13 @@ function resize(refit = true) {
   const low = S.quality === 'low';
   renderer.setPixelRatio(Math.min(devicePixelRatio || 1, low ? 1 : 1.6));
   renderer.setSize(innerWidth, innerHeight, false); composer.setPixelRatio(renderer.getPixelRatio()); composer.setSize(innerWidth, innerHeight);
-  const size = renderer.getDrawingBufferSize(new THREE.Vector2()); bloomPass.setSize(size.x * (low ? 0.5 : 1), size.y * (low ? 0.5 : 1));
   camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix();
   if (refit) shot(innerWidth / innerHeight < 0.9 ? 0 : 1, innerWidth / innerHeight < 0.9);
 }
 function setQuality(level) {
   if (!['high', 'low'].includes(level)) throw new RangeError('quality');
   S.quality = level; const low = level === 'low';
-  aoPass.enabled = !low; bokehPass.enabled = !low;
-  keyLight.shadow.mapSize.setScalar(low ? 1024 : 2048);
+  keyLight.shadow.mapSize.setScalar(INK_CFG.shadowMap[low ? 1 : 0]);
   if (keyLight.shadow.map) { keyLight.shadow.map.dispose(); keyLight.shadow.map = null; }
   resize(false);
   return level;

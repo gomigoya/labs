@@ -1,122 +1,160 @@
-// Earth-science room. All diagrams are geometry or canvas paths; no lettering.
-const floorTex = KIT.canvasTex(1024,1024,(c,w,h)=>{
-  c.fillStyle=CSS.floor;c.fillRect(0,0,w,h);
-  for(let row=0;row<12;row++){
-    const y=row*h/12;c.fillStyle=row%2?CSS.floorA:CSS.floorB;c.fillRect(0,y,w,h/12-2);
-    for(let i=0;i<48;i++){c.fillStyle=CSS.grain;c.fillRect(rand()*w,y+rand()*h/12,rand()*240,1);}
-    for(let x=row%3*120;x<w;x+=360){c.fillStyle=CSS.background;c.fillRect(x,y,2,h/12);}
+// R7: all orbital scenery is owned here; ROOM remains the public layer key.
+const ENV_CFG = Object.freeze({
+  seed: 730219, center: [0,-12,-10], radius: 13, atmosphere: 1.006,
+  segments: [64,40], texture: [1024,512], starCount: [320,96], starRadius: 24,
+  starSize: 1.7, starOpacity: .8, drift: .065, satelliteSpeed: .025,
+  satelliteCenter: [0,2,-6], satelliteOrbit: [6,.42,1.2], satelliteScale: .32,
+  cityThreshold: .985, cells: [12,4], sun: [-8,6,-12], sunSize: 2.6
+});
+function buildEnvironment() {
+  const cfg=ENV_CFG, random=mulberry32(cfg.seed);
+  const sunDirection=V3(-.8,.3,.5).normalize();
+  // Opaque terrain and a separate city mask avoid canvas alpha premultiplication.
+  const cityPixels=[];
+  // Terrain bands are evaluated per pixel in the shader (anti-aliased at any zoom); the CPU loop only places city lights.
+  const terrainAt=(px,py,pz)=>Math.sin(px*7+pz*3)*.42+Math.sin(pz*9-py*5)*.32+Math.cos(py*13+px*4)*.19;
+  const cloudAt=(px,py,pz)=>Math.sin(py*48+Math.sin(px*13+pz*9));
+  {
+    const [w,h]=cfg.texture;
+    for(let y=0;y<h;y++)for(let x=0;x<w;x++){
+      const lon=x/w*Math.PI*2,lat=(.5-y/h)*Math.PI;
+      const px=Math.cos(lat)*Math.cos(lon),py=Math.sin(lat),pz=Math.cos(lat)*Math.sin(lon);
+      if(terrainAt(px,py,pz)>.13&&cloudAt(px,py,pz)<=.88&&random()>cfg.cityThreshold)cityPixels.push([x,y]);
+    }
   }
-});
-floorTex.wrapS=floorTex.wrapT=THREE.RepeatWrapping;floorTex.repeat.set(3,3);
-KIT.mesh(new THREE.PlaneGeometry(24,24).rotateX(-Math.PI/2),new THREE.MeshStandardMaterial({map:floorTex,roughness:.84}),ROOM,0,0,1);
-KIT.roundedPanel(18,6,.12,MAT.wall,ROOM,2,3,-3.1);
-KIT.roundedPanel(.12,6,20,MAT.navy,ROOM,-4.2,3,3);
-for(let i=0;i<24;i++)KIT.roundedPanel(.55,.72,.025,MAT.wood,ROOM,-4+i*.58,.48,-3.02);
-for(let i=0;i<10;i++)KIT.roundedPanel(.035,4.6,.04,MAT.wood,ROOM,-4+i*1.3,3.1,-3.01);
-KIT.roundedPanel(17,.045,.06,MAT.brass,ROOM,2,.88,-2.98);
-KIT.roundedPanel(.06,.045,18,MAT.brass,ROOM,-4.1,.88,3);
-const skyTexture=KIT.canvasTex(768,768,(c,w,h)=>{
- const g=c.createLinearGradient(0,0,0,h);g.addColorStop(0,CSS.skyTop);g.addColorStop(.6,CSS.skyMid);g.addColorStop(1,CSS.skyHorizon);c.fillStyle=g;c.fillRect(0,0,w,h);
- for(let i=0;i<160;i++){c.fillStyle=CSS.reference;c.beginPath();c.arc(rand()*w,rand()*h*.8,.5+rand()*1.5,0,Math.PI*2);c.fill();}
- for(let ridge=0;ridge<3;ridge++){c.fillStyle=['#384a60','#273b4c','#192e3e'][ridge];c.beginPath();c.moveTo(0,h);
- for(let x=0;x<=w;x+=16)c.lineTo(x,h*(.79+ridge*.055)-Math.sin(x*.014+ridge)*24-Math.sin(x*.039)*9);
- c.lineTo(w,h);c.closePath();c.fill();}
+  const palette=inkConfig().environment,toV=v=>new THREE.Color(v);
+  const cities=KIT.canvasTex(...cfg.texture,(c,w,h)=>{
+    c.fillStyle='#000';c.fillRect(0,0,w,h);c.fillStyle=inkConfig().environment.star;
+    for(const [x,y] of cityPixels)c.fillRect(x,y,1,1);
+  });
+  cities.wrapS=THREE.RepeatWrapping;
+  const surfaceMaterial=new THREE.ShaderMaterial({
+    uniforms:{uSea:{value:palette.sea.map(toV)},uLand:{value:palette.land.map(toV)},uCloud:{value:toV(palette.cloud)},uCities:{value:cities},uSpin:{value:0},uSun:{value:sunDirection},uDark:{value:new THREE.Vector3(...inkConfig().dark)},uMid:{value:new THREE.Vector3(...inkConfig().mid)},uLight:{value:new THREE.Vector3(...inkConfig().light)}},
+    vertexShader:`varying vec2 vUv;varying vec3 vNormal,vWorld;
+      void main(){vUv=uv;vNormal=normalize(mat3(modelMatrix)*normal);
+      vWorld=(modelMatrix*vec4(position,1.0)).xyz;
+      gl_Position=projectionMatrix*viewMatrix*vec4(vWorld,1.0);}`,
+    fragmentShader:`uniform sampler2D uCities;uniform vec3 uSea[3],uLand[3],uCloud;uniform float uSpin;uniform vec3 uSun,uDark,uMid,uLight;
+      varying vec2 vUv;varying vec3 vNormal,vWorld;
+      float edge(float v,float t){return smoothstep(-.7,.7,(v-t)/max(fwidth(v),1e-5));}
+      void main(){float lon=(vUv.x+uSpin)*6.2831853,lat=(vUv.y-.5)*3.1415927;
+      vec3 p=vec3(cos(lat)*cos(lon),sin(lat),cos(lat)*sin(lon));
+      float h=sin(p.x*7.+p.z*3.)*.42+sin(p.z*9.-p.y*5.)*.32+cos(p.y*13.+p.x*4.)*.19;
+      float cl=sin(p.y*48.+sin(p.x*13.+p.z*9.));
+      vec3 sea=mix(mix(uSea[0],uSea[1],edge(h,-.15)),uSea[2],edge(h,.4));
+      vec3 land=mix(mix(uLand[0],uLand[1],edge(h,-.15)),uLand[2],edge(h,.4));
+      vec3 tex=mix(mix(sea,land,edge(h,.13)),uCloud,edge(cl,.88));
+      vec3 n=normalize(vNormal);float d=dot(n,uSun),day=step(0.0,d);
+      vec3 band=d<0.0?uDark:(d<.55?uMid:uLight);
+      vec3 col=tex*band+texture2D(uCities,vec2(fract(vUv.x+uSpin),vUv.y)).rgb*(1.0-day);
+      gl_FragColor=vec4(col,1.0);
+      #include <tonemapping_fragment>
+      #include <colorspace_fragment>
+      }`
+  });
+  const globe=new THREE.Mesh(new THREE.SphereGeometry(cfg.radius,...cfg.segments),surfaceMaterial);
+  globe.position.set(...cfg.center);ROOM.add(globe);
+  const atmosphereMaterial=new THREE.ShaderMaterial({
+    uniforms:{uColor:{value:new THREE.Color(inkConfig().environment.atmosphere)}},
+    vertexShader:`varying vec3 vNormal,vWorld;void main(){vNormal=normalize(mat3(modelMatrix)*normal);
+      vWorld=(modelMatrix*vec4(position,1.0)).xyz;gl_Position=projectionMatrix*viewMatrix*vec4(vWorld,1.0);}`,
+    fragmentShader:`uniform vec3 uColor;varying vec3 vNormal,vWorld;
+      void main(){float facing=dot(normalize(vNormal),normalize(cameraPosition-vWorld));
+      if(facing<0.0||facing>.12)discard;gl_FragColor=vec4(uColor,.55);
+      #include <colorspace_fragment>
+      }`,transparent:true,depthWrite:false,side:THREE.DoubleSide
+  });
+  const atmosphere=new THREE.Mesh(globe.geometry,atmosphereMaterial);
+  atmosphere.position.copy(globe.position);atmosphere.scale.setScalar(cfg.atmosphere);ROOM.add(atmosphere);
+  const positions=[],phases=[];
+  for(let i=0;i<cfg.starCount[0];i++){
+    const az=random()*Math.PI*2, height=random()*2-1, r=Math.sqrt(1-height*height)*cfg.starRadius;
+    positions.push(Math.cos(az)*r,2+height*cfg.starRadius,Math.sin(az)*r);phases.push(random()*Math.PI*2);
+  }
+  const starsGeo=new THREE.BufferGeometry();
+  starsGeo.setAttribute('position',new THREE.Float32BufferAttribute(positions,3));
+  starsGeo.setAttribute('aPhase',new THREE.Float32BufferAttribute(phases,1));
+  const starsMat=new THREE.ShaderMaterial({uniforms:{uTime:{value:0},uSize:{value:cfg.starSize},uOpacity:{value:cfg.starOpacity},uColor:{value:new THREE.Color(inkConfig().environment.star)}},
+    vertexShader:`attribute float aPhase;uniform float uTime,uSize;varying float vGlow;
+      void main(){vGlow=.72+.28*sin(aPhase+uTime*.3);gl_PointSize=uSize;
+      gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}`,
+    fragmentShader:`uniform float uOpacity;uniform vec3 uColor;varying float vGlow;
+      void main(){float r=length(gl_PointCoord-.5)*2.0;if(r>1.0)discard;
+      gl_FragColor=vec4(uColor,uOpacity*step(.6,vGlow));
+      #include <tonemapping_fragment>
+      #include <colorspace_fragment>
+      }`,transparent:true,depthWrite:false});
+  ROOM.add(new THREE.Points(starsGeo,starsMat));
+  // One small satellite: two instanced solar wings, a faceted bus and antenna.
+  const satellite=new THREE.Group();satellite.scale.setScalar(cfg.satelliteScale);ROOM.add(satellite);
+  KIT.mesh(new THREE.IcosahedronGeometry(.28,0),MAT.chrome,satellite).castShadow=false;
+  KIT.rod(V3(-1.1,0,0),V3(1.1,0,0),.025,MAT.deck,satellite).castShadow=false;
+  KIT.rod(V3(0,.15,0),V3(0,.65,.1),.015,MAT.chrome,satellite).castShadow=false;
+  const cells=new THREE.InstancedMesh(new THREE.BoxGeometry(.27,.018,.42),MAT.navy,cfg.cells[0]);
+  const transform=new THREE.Object3D();
+  for(let i=0;i<cfg.cells[0];i++){
+    const wing=i%2?1:-1,slot=Math.floor(i/2);
+    transform.position.set(wing*(.48+(slot%3)*.29),0,(Math.floor(slot/3)-.5)*.45);
+    transform.updateMatrix();cells.setMatrixAt(i,transform.matrix);
+  }
+  satellite.add(cells);
+  const sunTexture=KIT.canvasTex(128,128,(c,w,h)=>{
+    c.fillStyle=inkConfig().environment.halo;c.globalAlpha=.24;c.beginPath();c.arc(w/2,h/2,w*.48,0,Math.PI*2);c.fill();
+    c.globalAlpha=1;c.fillStyle=inkConfig().environment.sun;c.beginPath();c.arc(w/2,h/2,w*.15,0,Math.PI*2);c.fill();
+  });
+  const sun=new THREE.Sprite(new THREE.SpriteMaterial({map:sunTexture,transparent:true,depthWrite:false,fog:false}));
+  sun.position.set(...cfg.sun);sun.scale.setScalar(cfg.sunSize);ROOM.add(sun);
+  let time=0,quality='';
+  return {update(dt){
+    time+=dt;
+    // Reuse the apparatus angle: sudden-stop freezes at the captured angle;
+    // finite periods and pause use the very same PHYS presentation state.
+    surfaceMaterial.uniforms.uSpin.value=(S.run?S.run.angle:S.spin.value)*cfg.drift/(Math.PI*2);
+    starsMat.uniforms.uTime.value=time;
+    const a=time*cfg.satelliteSpeed;
+    satellite.position.set(cfg.satelliteCenter[0]+Math.cos(a)*cfg.satelliteOrbit[0],
+      cfg.satelliteCenter[1]+Math.sin(a)*cfg.satelliteOrbit[1],cfg.satelliteCenter[2]+Math.sin(a)*cfg.satelliteOrbit[2]);
+    satellite.rotation.set(.2,a,.25);
+    const next=S.quality==='low'||S.autoLevel>0?'low':'high';
+    if(next!==quality){quality=next;const low=next==='low';
+      starsGeo.setDrawRange(0,cfg.starCount[low?1:0]);cells.count=cfg.cells[low?1:0];
+      atmosphere.visible=!low;
+    }
+  }};
+}
+const ENVIRONMENT=buildEnvironment();
 
+// R9: one world-space layout for floating controls, picking, animation and cues.
+// No shared backing surface: each instrument is an independent hologram.
+const CONTROL_LAYOUT = Object.freeze({
+  dial: Object.freeze({x:-.96,y:1.53,z:.20, cueRadius:.16, cueDepth:.05}),
+  graphs: Object.freeze([Object.freeze({x:-.96,y:1.23,z:.20,w:.55,h:.20}),
+    Object.freeze({x:.82,y:1.23,z:.20,w:.55,h:.20})]),
+  slider: Object.freeze({x:-.03,y:1.20,z:.20,width:.95, cueDepth:.08}),
+  play: Object.freeze({x:.80,y:1.53,z:.20, radius:.085,depth:.055,ring:.115,glyph:.05,travel:.012}),
+  mode: Object.freeze({x:1.14,y:1.53,z:.20,w:.24,h:.15,thickness:.018,leverSize:[.065,.085,.025],leverOffset:-.06,travel:.12,depth:.04})
 });
-const arch=new THREE.Shape();arch.moveTo(-1.05,-.85);arch.lineTo(1.05,-.85);arch.lineTo(1.05,.15);arch.absarc(0,.15,1.05,0,Math.PI,false);arch.lineTo(-1.05,-.85);
-const archGeo=new THREE.ShapeGeometry(arch,48),uv=archGeo.attributes.uv,ap=archGeo.attributes.position;
-for(let i=0;i<uv.count;i++)uv.setXY(i,(ap.getX(i)+1.05)/2.1,(ap.getY(i)+.85)/2.1);
-const dome=KIT.mesh(archGeo,new THREE.MeshBasicMaterial({map:skyTexture}),ROOM,.6,2.65,-2.99);dome.castShadow=false;
-const border=arch.getPoints(64).map(p=>V3(p.x+.6,p.y+2.65,-2.95));
-for(let i=1;i<border.length;i++)KIT.rod(border[i-1],border[i],.03,MAT.brass,ROOM);
-KIT.rod(V3(.6,1.8,-2.93),V3(.6,3.85,-2.93),.02,MAT.graphite,ROOM);
-KIT.rod(V3(-.45,2.8,-2.93),V3(1.65,2.8,-2.93),.02,MAT.graphite,ROOM);
-KIT.roundedPanel(2.3,.08,.3,MAT.wood,ROOM,.6,1.77,-2.88);
-const skyLight=new THREE.RectAreaLight(THEME.cool,2,1.8,1.8);skyLight.position.set(.6,2.7,-2.8);skyLight.rotation.y=Math.PI;ROOM.add(skyLight);
-// Cross section and relative rotation panels, each an unlettered instrument drawing.
-for(const [x,y,index] of [[-1.65,3,0],[2.5,2.9,1]]){
- KIT.roundedPanel(1.05,.8,.05,MAT.brass,ROOM,x,y,-2.96);
- const tex=KIT.canvasTex(512,384,(c,w,h)=>{
-  c.fillStyle=CSS.screen;c.fillRect(0,0,w,h);c.strokeStyle=CSS.grid;c.lineWidth=1;
-  for(let a=24;a<w;a+=40){c.beginPath();c.moveTo(a,0);c.lineTo(a,h);c.stroke();}
-  for(let b=24;b<h;b+=40){c.beginPath();c.moveTo(0,b);c.lineTo(w,b);c.stroke();}
-  c.lineWidth=4;
-  for(let k=0;k<3;k++){c.strokeStyle=k%2?CSS.warm:CSS.cool;c.beginPath();c.ellipse(256,190,55+k*42,index?35+k*17:55+k*42,index?.4:0,0,Math.PI*2);c.stroke();}
-  c.fillStyle=CSS.warm;c.beginPath();c.arc(index?390:256,index?120:190,14,0,Math.PI*2);c.fill();
-  c.strokeStyle=CSS.reference;c.beginPath();c.moveTo(125,300);c.lineTo(390,80);c.stroke();
- });
- KIT.mesh(new THREE.PlaneGeometry(.98,.73),new THREE.MeshStandardMaterial({map:tex,emissiveMap:tex,emissive:THEME.cool,emissiveIntensity:.25}),ROOM,x,y,-2.93);
-}
-for(const y of [1.13,1.9])KIT.shelf(ROOM,-1.8,y,-2.7,2.3);
-// Prop 1: star-map disc with countable radial marks.
-const atlas=new THREE.Group();atlas.position.set(2.5,1.65,-2.85);ROOM.add(atlas);
-KIT.mesh(new THREE.CylinderGeometry(.35,.35,.05,48).rotateX(Math.PI/2),MAT.brass,atlas);
-KIT.mesh(new THREE.CircleGeometry(.32,48),MAT.navy,atlas,0,0,.03);
-for(let i=0;i<28;i++){const a=i/28*Math.PI*2;KIT.ball(.007,MAT.glow,atlas,Math.sin(a)*(.12+rand()*.18),Math.cos(a)*(.12+rand()*.18),.04,0);}
-for(const r of [.12,.24])KIT.line(Array.from({length:65},(_,i)=>V3(Math.sin(i/64*Math.PI*2)*r,Math.cos(i/64*Math.PI*2)*r,.04)),THEME.chrome,atlas);
-// Prop 2: axis-mounted small globe.
-KIT.roundedPanel(.3,.04,.25,MAT.graphite,ROOM,-2.55,1.95,-2.65);
-KIT.rod(V3(-2.55,1.96,-2.65),V3(-2.55,2.42,-2.65),.009,MAT.brass,ROOM);
-KIT.ball(.16,MAT.earth,ROOM,-2.55,2.2,-2.65);
-for(let j=-1;j<=1;j++)KIT.line(Array.from({length:49},(_,i)=>{const a=i/48*Math.PI*2;return V3(-2.55+Math.sin(a)*.163*Math.cos(j*.6),2.2+Math.sin(j*.6)*.163,-2.65+Math.cos(a)*.163*Math.cos(j*.6));}),THEME.brass,ROOM);
-// Prop 3: bead tray; prop 4: hourglass.
-KIT.roundedPanel(.72,.045,.28,MAT.brass,ROOM,-1.55,1.95,-2.65);
-for(let i=0;i<5;i++)KIT.ball(.045,MAT.chrome,ROOM,-1.82+i*.13,2.02,-2.65,1);
-for(const y of [1.19,1.52])KIT.mesh(new THREE.CylinderGeometry(.10,.10,.025,16),MAT.brass,ROOM,-2.55,y,-2.65);
-const glassMat=new THREE.MeshPhysicalMaterial({color:THEME.cool,transparent:true,opacity:.28,roughness:.2,transmission:.3,thickness:.025});
-for(const sign of [-1,1]){
- KIT.rod(V3(-2.55+sign*.08,1.2,-2.65),V3(-2.55+sign*.08,1.51,-2.65),.008,MAT.brass,ROOM);
- const cone=KIT.mesh(new THREE.ConeGeometry(.075,.15,12),glassMat,ROOM,-2.55,1.35+sign*.075,-2.65);cone.rotation.z=sign>0?Math.PI:0;
-}
-KIT.mesh(new THREE.ConeGeometry(.065,.08,12),MAT.wood,ROOM,-2.55,1.24,-2.65);
-// Prop 5: orbital teaching model, 6: sample jars, 7: pendulum stand.
-const orbitProp=new THREE.Group();orbitProp.position.set(-1.65,1.45,-2.65);ROOM.add(orbitProp);
-KIT.mesh(new THREE.CylinderGeometry(.24,.27,.035,32),MAT.graphite,orbitProp,0,-.25,0);
-KIT.rod(V3(0,-.23,0),V3(0,0,0),.015,MAT.brass,orbitProp);
-KIT.mesh(new THREE.TorusGeometry(.22,.008,6,48).rotateX(Math.PI/2),MAT.brass,orbitProp);
-KIT.ball(.065,MAT.brass,orbitProp);KIT.ball(.035,MAT.earth,orbitProp,.22,0,0);
-for(let i=0;i<3;i++){
- const x=-.98+i*.12;KIT.mesh(new THREE.CylinderGeometry(.04,.04,.18,12),glassMat,ROOM,x,1.25,-2.66);
- KIT.mesh(new THREE.CylinderGeometry(.043,.043,.025,12),MAT.brass,ROOM,x,1.35,-2.66);
-}
-KIT.roundedPanel(.35,.04,.25,MAT.graphite,ROOM,2.5,1.15,-2.65);
-for(const dx of [-.14,.14])KIT.rod(V3(2.5+dx,1.17,-2.65),V3(2.5+dx,1.75,-2.65),.012,MAT.brass,ROOM);
-KIT.rod(V3(2.36,1.75,-2.65),V3(2.64,1.75,-2.65),.012,MAT.brass,ROOM);
-KIT.rod(V3(2.5,1.75,-2.65),V3(2.58,1.3,-2.65),.004,MAT.chrome,ROOM);KIT.ball(.06,MAT.brass,ROOM,2.58,1.3,-2.65);
-// Prop 8: practical desk lamp. Two foreground furnishings intentionally crop.
-KIT.lampWithBulb(ROOM,-2.2,.96,-.5);
-KIT.roundedPanel(1.3,.12,.72,MAT.wood,ROOM,-1.7,.65,1.3,.06);
-for(const dx of [-.36,.36])for(const dz of [-.25,.25])KIT.rod(V3(-1.7+dx,0,1.3+dz),V3(-1.7+dx,.60,1.3+dz),.035,MAT.graphite,ROOM);
-KIT.roundedPanel(1.1,.06,.6,MAT.brass,ROOM,2.1,1.45,1.2,.04);
-KIT.rod(V3(2.1,.1,1.2),V3(2.1,1.42,1.2),.035,MAT.graphite,ROOM);
-for(let i=0;i<3;i++)KIT.ball(.11,MAT.earth,ROOM,1.85+i*.25,1.59,1.2);
-// Console instrument deck.
-KIT.roundedPanel(3.35,.69,1.2,MAT.graphite,CONSOLE,0,.52,.1,.07);
-KIT.roundedPanel(3.5,.10,1.32,MAT.wood,CONSOLE,0,MODEL.top-.05,.1,.035);
-KIT.roundedPanel(3.34,.018,1.18,MAT.graphite,CONSOLE,0,MODEL.top+.006,.1);
-KIT.roundedPanel(3.22,.48,.035,MAT.navy,CONSOLE,0,.59,.72);
-KIT.brassTrim(CONSOLE,3.22,.48,0,.59,.745);
-for(const x of [-1.54,1.54])for(const y of [.4,.78])KIT.screw(CONSOLE,x,y,.754);
-KIT.ventSlits(CONSOLE,-1.38,.25,.72,48);
-for(const x of [-1.4,1.4])for(const z of [-.32,.5])KIT.roundedPanel(.2,.15,.18,MAT.rubber,CONSOLE,x,.1,z);
-const DIAL=KIT.knobWithArc(CONSOLE,-1.32,.6,.785);
-const GRAPHS=[KIT.graphScreen(CONSOLE,-.66,.64,.78,.67,.25),KIT.graphScreen(CONSOLE,.12,.64,.78,.67,.25)];
-const SLIDER=KIT.ledSlider(CONSOLE,-.28,.39,.79,1.38);
-const PLAY_BUTTON=KIT.bigButton(CONSOLE,.76,.6,.79);
-const MODE_SWITCH=KIT.roundedPanel(.24,.15,.035,MAT.brass,CONSOLE,1.24,.64,.79);
-const SWITCH_LEVER=KIT.roundedPanel(.065,.085,.06,MAT.chrome,CONSOLE,1.18,.64,.83);
-KIT.line([V3(1.15,.78,.815),V3(1.15,.72,.815),V3(1.25,.72,.815)],THEME.chrome,CONSOLE);
-KIT.line(Array.from({length:25},(_,i)=>V3(1.22+i/24*.12,.45+Math.sin(i/24*Math.PI/2)*.10,.815)),THEME.chrome,CONSOLE);
-KIT.roundedPanel(.32,.06,.018,MAT.brass,CONSOLE,1.24,.36,.79);
-for(let i=0;i<3;i++)KIT.line(Array.from({length:33},(_,j)=>V3(1.16+Math.cos(j/32*Math.PI*2)*(.018+i*.022),.36+Math.sin(j/32*Math.PI*2)*.019,.805)),THEME.graphite,CONSOLE);
-KIT.expansion(CONSOLE,-1.53,.84,.82);KIT.expansion(CONSOLE,-.95,.39,.83);KIT.expansion(CONSOLE,.41,.81,.82);
+const DIAL=KIT.knobWithArc(CONSOLE,CONTROL_LAYOUT.dial.x,CONTROL_LAYOUT.dial.y,CONTROL_LAYOUT.dial.z);
+const GRAPHS=CONTROL_LAYOUT.graphs.map(g=>KIT.graphScreen(CONSOLE,g.x,g.y,g.z,g.w,g.h));
+const SLIDER=KIT.ledSlider(CONSOLE,CONTROL_LAYOUT.slider.x,CONTROL_LAYOUT.slider.y,CONTROL_LAYOUT.slider.z,CONTROL_LAYOUT.slider.width);
+const PLAY_BUTTON=KIT.mesh(new THREE.CylinderGeometry(CONTROL_LAYOUT.play.radius,CONTROL_LAYOUT.play.radius,CONTROL_LAYOUT.play.depth,32).rotateX(Math.PI/2),MAT.hologram,CONSOLE,
+  CONTROL_LAYOUT.play.x,CONTROL_LAYOUT.play.y,CONTROL_LAYOUT.play.z);
+KIT.mesh(new THREE.TorusGeometry(CONTROL_LAYOUT.play.ring,.008,6,40),MAT.glow,CONSOLE,CONTROL_LAYOUT.play.x,CONTROL_LAYOUT.play.y,CONTROL_LAYOUT.play.z);
+KIT.roundedPanel(CONTROL_LAYOUT.play.glyph,CONTROL_LAYOUT.play.glyph,.006,MAT.glow,PLAY_BUTTON,0,0,.031,.005);
+const MODE_SWITCH=KIT.roundedPanel(CONTROL_LAYOUT.mode.w,CONTROL_LAYOUT.mode.h,CONTROL_LAYOUT.mode.thickness,MAT.hologram,CONSOLE,
+  CONTROL_LAYOUT.mode.x,CONTROL_LAYOUT.mode.y,CONTROL_LAYOUT.mode.z);
+const SWITCH_LEVER=KIT.roundedPanel(...CONTROL_LAYOUT.mode.leverSize,MAT.glow,CONSOLE,
+  CONTROL_LAYOUT.mode.x+CONTROL_LAYOUT.mode.leverOffset,CONTROL_LAYOUT.mode.y,CONTROL_LAYOUT.mode.z+CONTROL_LAYOUT.mode.depth);
+for(const direction of [-1,1])KIT.line([V3(CONTROL_LAYOUT.mode.x+direction*.08,CONTROL_LAYOUT.mode.y+.10,CONTROL_LAYOUT.mode.z),
+  V3(CONTROL_LAYOUT.mode.x+direction*.03,CONTROL_LAYOUT.mode.y+.10,CONTROL_LAYOUT.mode.z)],THEME.cool,CONSOLE);
+CONSOLE.traverse(o=>{if(o.isMesh){o.castShadow=false;o.receiveShadow=false;}});
 function drawGraphs(){
  const phi=currentPhi(),P=currentPeriod();
  const keys=[String(phi),String(P)];
  GRAPHS.forEach((g,index)=>{
   if(S.graphKeys[index]===keys[index])return;S.graphKeys[index]=keys[index];
   const c=g.ctx,w=768,h=256,L=48,R=714,T=24,B=214;
-  c.fillStyle=CSS.screen;c.fillRect(0,0,w,h);c.strokeStyle=CSS.grid;c.lineWidth=1;
+  c.fillStyle=CSS.screen;c.fillRect(0,0,w,h);c.strokeStyle="#221d18";c.lineWidth=6;c.strokeRect(3,3,w-6,h-6);c.strokeStyle=CSS.grid;c.lineWidth=1;
   for(let i=0;i<=12;i++){const x=L+(R-L)*i/12;c.beginPath();c.moveTo(x,T);c.lineTo(x,B);c.stroke();}
   for(let i=0;i<=4;i++){const y=T+(B-T)*i/4;c.beginPath();c.moveTo(L,y);c.lineTo(R,y);c.stroke();}
   const xy=(u,v)=>[L+u*(R-L),B-v*(B-T)];
@@ -128,15 +166,15 @@ function drawGraphs(){
   }c.stroke();
   // Stop is an isolated point, never connected across the rail discontinuity.
   if(index){const [x,y]=xy(1,PHYS.dayGraphY(Infinity));c.beginPath();c.arc(x,y,5,0,Math.PI*2);c.stroke();
-   c.strokeStyle=CSS.reference;c.beginPath();c.moveTo(19,101);c.lineTo(32,90);c.lineTo(19,79);c.moveTo(19,119);c.lineTo(32,108);c.lineTo(19,97);c.stroke();
+   c.strokeStyle="#393e42";c.beginPath();c.moveTo(19,101);c.lineTo(32,90);c.lineTo(19,79);c.moveTo(19,119);c.lineTo(32,108);c.lineTo(19,97);c.stroke();
   }else{
-   c.setLineDash([9,7]);c.strokeStyle=CSS.reference;c.lineWidth=2;c.beginPath();c.moveTo(L,T);c.lineTo(R,T);c.stroke();c.setLineDash([]);
+   c.setLineDash([9,7]);c.strokeStyle="#393e42";c.lineWidth=2;c.beginPath();c.moveTo(L,T);c.lineTo(R,T);c.stroke();c.setLineDash([]);
    for(const d of PHYS.DETENTS.phi){const [x]=xy(d.x,0);c.beginPath();c.moveTo(x,B);c.lineTo(x,B+10);c.stroke();}
   }
   const u=index?PHYS.periodRailX(P):PHYS.phiRailX(phi),value=index?PHYS.dayGraphY(P):PHYS.v(phi,PHYS.C.T0)/PHYS.v(0,PHYS.C.T0);
   const [x,y]=xy(u,value??0);c.strokeStyle=CSS.warm;c.lineWidth=2;c.beginPath();c.moveTo(x,T);c.lineTo(x,B);c.stroke();
   if(value!==null){c.fillStyle=CSS.warm;c.beginPath();c.arc(x,y,6,0,Math.PI*2);c.fill();}
-  c.strokeStyle=CSS.reference;c.lineWidth=3;c.beginPath();c.arc(740,233,10,.3,Math.PI*1.85);c.stroke();
+  c.strokeStyle="#393e42";c.lineWidth=3;c.beginPath();c.arc(740,233,10,.3,Math.PI*1.85);c.stroke();
   if(index){c.beginPath();c.arc(22,25,10,0,Math.PI*2);c.stroke();}
   else{c.beginPath();c.moveTo(20,38);c.lineTo(20,12);c.lineTo(13,21);c.moveTo(20,12);c.lineTo(27,21);c.stroke();}
   g.tex.needsUpdate=true;

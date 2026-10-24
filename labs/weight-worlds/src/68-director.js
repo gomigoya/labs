@@ -1,5 +1,4 @@
 // Presentation consumes the single Q state. It never awards completion.
-const questLight=new THREE.PointLight(THEME.mint,0,1.3,2);scene.add(questLight);
 const DIRECTOR={
   clock:0,eventLeft:0,snapshot:null,refit:false,
   clear(){this.eventLeft=0;this.snapshot=null;this.offsetAfter=false;controls.enabled=true;qOverlay.innerHTML='';document.body.classList.remove('q-event');},
@@ -57,8 +56,7 @@ const DIRECTOR={
     const path=(p,dash=false)=>`<path d="${p}"${dash?' stroke-dasharray="5 5"':''}/>`;
     const focus=(Q.i===1?BALANCE_ARM:Q.i===4?JUMP_BALL:HANGING).getWorldPosition(V3());
     const needsInspect=(Q.i===1&&[0,1].includes(S.body.target)&&!f.visited.includes(S.body.target))||(Q.i===3&&PHYS.springState(S.body.target,S.nWeights.target).broken&&!f.breakSeen);
-    const control=needsInspect?BALANCE_ARM:Q.i===4&&f.runs.every(r=>r.i!==S.body.target)?LEVER_GRIP:SHELF_HANDLE;
-    questLight.position.copy(control.getWorldPosition(V3())).add(V3(0,.1,.12));questLight.intensity=Q.free?0:.28;
+    const control=needsInspect?BALANCE_ARM:Q.i===4&&f.runs.every(r=>r.i!==S.body.target)?RUN_BUTTON:DIAL.knob;
     let body='';
     if(!Q.free&&Q.phase==='intro'&&f.elapsed<.9){
       body=`<g transform="translate(${innerWidth/2-42} ${innerHeight/2-42}) scale(3.5)"><defs><clipPath id="q-wipe"><rect width="${Math.min(24,f.elapsed/.65*24)}" height="24"/></clipPath></defs><g clip-path="url(#q-wipe)">${icon(d.icon).replace(/^<svg[^>]*>|<\/svg>$/g,'')}</g></g>`;
@@ -72,15 +70,15 @@ const DIRECTOR={
         const [x,y]=project(a),[xx,yy]=project(b);body+=path(`M${x-18} ${y}h36L${xx+18} ${yy}h-36z`,true);
       }
       if(f.demoLeft>0&&!S.drag){
-        const [x,y]=project(control.getWorldPosition(V3())),shift=Math.min(1,(2.2-f.demoLeft)/1.7)*(control===LEVER_GRIP?22:55);
-        body+=path(`M${x} ${y}l${control===LEVER_GRIP?0:55} ${control===LEVER_GRIP?22:0}`,true)+`<rect x="${x+(control===LEVER_GRIP?0:shift)-12}" y="${y+(control===LEVER_GRIP?shift:0)-12}" width="24" height="24" rx="10" opacity=".65"/>`;
+        const [x,y]=project(control.getWorldPosition(V3())),shift=Math.min(1,(2.2-f.demoLeft)/1.7)*(control===RUN_BUTTON?22:55);
+        body+=path(`M${x} ${y}l${control===RUN_BUTTON?0:55} ${control===RUN_BUTTON?22:0}`,true)+`<rect x="${x+(control===RUN_BUTTON?0:shift)-12}" y="${y+(control===RUN_BUTTON?shift:0)-12}" width="24" height="24" rx="10" opacity=".65"/>`;
       }
       if(needsInspect){const r=document.getElementById('tool-inspect').getBoundingClientRect();body+=`<rect x="${r.x+2}" y="${r.y+2}" width="${r.width-4}" height="${r.height-4}" rx="12" stroke-dasharray="4 4"/>`;}
     }
     if(this.eventLeft>0&&!Q.free){
       const [x,y]=project(focus),age=1.4-this.eventLeft,endX=Math.min(innerWidth-112,Math.max(112,x+75)),endY=Math.max(170,y-65),u=Math.min(1,age/.45);
       const mini=Q.i===3||Q.i===5?CARDS.micro(this.snapshot):d.card(this.snapshot);
-      body=`<circle cx="${x}" cy="${y}" r="4" fill="#64ead0"/>`+path(`M${x} ${y}L${x+(endX-x)*u} ${y+(endY-y)*u}`)+(age>.45?`<svg x="${endX-100}" y="${endY-94}" width="200" height="94">${mini.replace(/^<svg[^>]*>|<\/svg>$/g,'')}</svg>`:'');
+      body=`<circle cx="${x}" cy="${y}" r="4" fill="#37795d"/>`+path(`M${x} ${y}L${x+(endX-x)*u} ${y+(endY-y)*u}`)+(age>.45?`<svg x="${endX-100}" y="${endY-94}" width="200" height="94" viewBox="0 0 300 140"><rect x="0.75" y="0.75" width="298.5" height="138.5" rx="12" fill="#f4efe3" stroke="#221d18" stroke-width="2.25"/>${mini.replace(/^<svg[^>]*>|<\/svg>$/g,'')}</svg>`:'');
     }
     qOverlay.innerHTML=body?`<svg viewBox="0 0 ${innerWidth} ${innerHeight}">${body}</svg>`:'';
   }

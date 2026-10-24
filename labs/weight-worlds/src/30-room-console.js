@@ -1,118 +1,208 @@
-// Observatory stage: two walls, plank floor, arched night window, instrument shelves.
-const floorTex = KIT.canvasTex(1024, 1024, (c, w, h) => {
-  c.fillStyle = THEME.floor; c.fillRect(0, 0, w, h);
-  for (let row = 0; row < 12; row++) {
-    const y = row * h / 12;
-    c.fillStyle = row % 2 ? THEME.plankA : THEME.plankB; c.fillRect(0, y, w, h / 12 - 2);
-    for (let i = 0; i < 48; i++) { c.fillStyle = THEME.grain; c.fillRect(rand() * w, y + rand() * h / 12, rand() * 240, 1); }
-    for (let x = (row % 3) * 120; x < w; x += 360) { c.fillStyle = THEME.joint; c.fillRect(x, y, 2, h / 12); }
-  }
-});
-floorTex.wrapS = floorTex.wrapT = THREE.RepeatWrapping; floorTex.repeat.set(3, 3);
-KIT.mesh(new THREE.PlaneGeometry(14, 14).rotateX(-Math.PI / 2), new THREE.MeshStandardMaterial({ map: floorTex, roughness: 0.84 }), ROOM, 0, 0, 1);
-KIT.roundedPanel(10, 4.5, 0.12, MAT.wall, ROOM, 1, 2.25, -2.8);
-KIT.roundedPanel(0.12, 4.5, 10, MAT.navy, ROOM, -3.4, 2.25, 1.2);
-for (let i = 0; i < 17; i++) {
-  KIT.roundedPanel(0.47, 0.65, 0.025, MAT.wood, ROOM, -3 + i * 0.51, 0.48, -2.71);
-}
-KIT.roundedPanel(10, 0.045, 0.06, MAT.brass, ROOM, 1, 0.88, -2.67);
-KIT.roundedPanel(0.05, 0.045, 8, MAT.brass, ROOM, -3.3, 0.88, 0.8);
-for (let i = 0; i < 6; i++) KIT.roundedPanel(0.035, 3.4, 0.06, MAT.wood, ROOM, -3.2 + i * 1.4, 2.5, -2.68);
-
-const skyTexture = KIT.canvasTex(1024, 1024, (c, w, h) => {
-  const g = c.createLinearGradient(0, 0, 0, h); g.addColorStop(0, THEME.night); g.addColorStop(0.65, THEME.dusk); g.addColorStop(1, THEME.skyGlow);
-  c.fillStyle = g; c.fillRect(0, 0, w, h);
-  for (let i = 0; i < 280; i++) { c.fillStyle = `rgba(223,238,255,${0.3 + rand() * 0.6})`; c.beginPath(); c.arc(rand() * w, rand() * h * 0.9, 0.6 + rand() * 1.7, 0, Math.PI * 2); c.fill(); }
-  c.fillStyle = THEME.horizon; c.beginPath(); c.moveTo(0, h); for (let x = 0; x <= w; x += 32) c.lineTo(x, 880 - rand() * 65); c.lineTo(w, h); c.fill();
-});
-const arch = new THREE.Shape(); arch.moveTo(-0.92, -0.78); arch.lineTo(0.92, -0.78); arch.lineTo(0.92, 0.14);
-arch.absarc(0, 0.14, 0.92, 0, Math.PI, false); arch.lineTo(-0.92, -0.78);
-const archGeo = new THREE.ShapeGeometry(arch, 48);
-// ShapeGeometry's default UV uses world coordinates; normalize to the canvas bounds.
-const uv = archGeo.attributes.uv, ap = archGeo.attributes.position;
-for (let i = 0; i < uv.count; i++) uv.setXY(i, (ap.getX(i) + 0.92) / 1.84, (ap.getY(i) + 0.78) / 1.84);
-const windowMesh = KIT.mesh(archGeo, new THREE.MeshBasicMaterial({ map: skyTexture }), ROOM, 0.7, 2.35, -2.69);
-windowMesh.castShadow = false;
-const windowBorder = arch.getPoints(64).map(p => V3(p.x + 0.7, p.y + 2.35, -2.64));
-for (let i = 1; i < windowBorder.length; i++) KIT.rod(windowBorder[i - 1], windowBorder[i], 0.032, MAT.brass, ROOM);
-KIT.rod(V3(0.7, 1.58, -2.61), V3(0.7, 3.38, -2.61), 0.018, MAT.graphite, ROOM);
-KIT.rod(V3(-0.22, 2.49, -2.61), V3(1.62, 2.49, -2.61), 0.018, MAT.graphite, ROOM);
-KIT.roundedPanel(2.04, 0.075, 0.28, MAT.wood, ROOM, 0.7, 1.54, -2.60);
-const windowLight = new THREE.RectAreaLight(THEME.cool, 2.2, 1.6, 1.7);
-windowLight.position.set(0.7, 2.5, -2.45); windowLight.rotation.y = Math.PI; ROOM.add(windowLight);
-
-for (const [dx, dy, seed] of [[-1.45, 2.65, 0], [2.45, 2.35, 1]]) {
-  KIT.roundedPanel(0.92, 0.69, 0.055, MAT.brass, ROOM, dx, dy, -2.63);
-  const tex = KIT.canvasTex(512, 384, (c, w, h) => {
-    c.fillStyle = THEME.panel; c.fillRect(0, 0, w, h); c.strokeStyle = THEME.panelGrid; c.lineWidth = 1;
-    for (let x = 32; x < w; x += 40) { c.beginPath(); c.moveTo(x, 0); c.lineTo(x, h); c.stroke(); }
-    for (let y = 24; y < h; y += 40) { c.beginPath(); c.moveTo(0, y); c.lineTo(w, y); c.stroke(); }
-    c.strokeStyle = THEME.diagram; c.lineWidth = 3;
-    if (!seed) {
-      for (let k = 1; k <= 4; k++) { c.beginPath(); c.ellipse(w/2,h/2,k*49,k*30,-0.3,0,Math.PI*2); c.stroke(); }
-      for (let k = 0; k < 5; k++) { c.fillStyle = THEME.diagramPoint; c.beginPath(); c.arc(w/2+Math.cos(k*1.7)*k*43,h/2+Math.sin(k*1.7)*k*24,6,0,Math.PI*2); c.fill(); }
-    } else {
-      c.beginPath(); c.arc(w/2,h/2,90,0,Math.PI*2); c.stroke();
-      for (let k=0;k<12;k++) { const a=k/12*Math.PI*2; c.beginPath(); c.moveTo(w/2+Math.cos(a)*150,h/2+Math.sin(a)*150); c.lineTo(w/2+Math.cos(a)*100,h/2+Math.sin(a)*100); c.stroke(); }
-      c.fillStyle=THEME.diagramPoint; c.beginPath(); c.arc(w/2,h/2,9,0,Math.PI*2); c.fill();
+// Shared scenery dimensions, densities and display timing.
+const SCENERY = Object.freeze({seed:731027, fadeSeconds:0.85, radius:18, groundSize:64, groundY:PHYS.VIEW.top, shadowLift:0.001,
+  hills:14, hillsLow:7, rocks:42, rocksLow:14, stars:160, starsLow:60, dust:72, dustLow:24,
+  horizonZ:-9, rockInner:2.6, rockOuter:10, dustHeight:1.6, dustExtent:7,
+  drift:0.035, fallScale:0.38, fallCap:8,
+  orbPosition:[-5.5,4.3,-10], orbRadius:1.05, antenna:[-1.64,0.84,-0.39], antennaTip:[-1.64,1.43,-0.39],
+  hillSide:3.8, hillSpread:7, hillDepth:5, hillSize:2, hillHeight:1.5,
+  cloudHeight:0.25, iceHeight:1.7, rockSize:[0.04,0.23],
+  volcano:[0.35,2.9,1.5], volcanoPosition:[-4.8,0.58,-10],
+  rings:[8,9], ringsPosition:[0,5,-12], arc:[2,0.07], arcPosition:[-5,0.05,-9],
+  beam:[0.28,6], beamPosition:[-6,2.7,-11], anchorRadius:0.09,
+  antennaRadius:0.012, dish:[0.09,0.045], stakeRadius:0.026,
+  contacts:{spring:{xs:[-0.30,0.30],z:-0.22,y:0.94,width:0.66},
+    shelf:{xs:[0],z:0,y:0.91,width:0.38},balance:{xs:[0],z:0,y:0.94,width:0.38},
+    jump:{xs:[-0.19,0.19],z:-0.12,y:1.0,width:0.44}},
+  railThickness:0.04, railDepth:0.06, stoneScale:[1,0.45,1], stoneLift:0.3,
+  spindleHeight:0.08});
+// Panel-local coordinates: drawing, picking and drag math share this one layout.
+const CONTROL_LAYOUT=Object.freeze({position:[0,1.04,0.96],tilt:-1.0,
+  panel:[1.28,0.64,0.025],legRadius:0.018,feet:[[-0.30,0,0.20],[0.30,0,0.20],[0,0,-0.22]],
+  dial:{at:[-0.43,0.07,0.025],hit:[0.38,0.38,0.16]},
+  graphs:[{at:[0.20,0.19,0.025],size:[0.68,0.16]},{at:[0.20,-0.02,0.025],size:[0.68,0.16]}],
+  slider:{at:[0.15,-0.22,0.025],width:0.62,hit:[0.76,0.19,0.15]},
+  run:{at:[-0.43,-0.22,0.025],hit:[0.28,0.29,0.17]},
+  sound:{at:[0.55,-0.22,0.025],hit:[0.13,0.17,0.14]}});
+const GROUND_HARDWARE=[],SPACE_HARDWARE=[];
+const contactMaterial=new THREE.MeshToonMaterial({color:inkConfig().worldScenery.earth.ground,flatShading:true});
+// sky / haze / ground / relief / terrain / floating body / cloud cover / stars.
+// Gas giants and stellar scenes are schematic observation sites, not habitable surfaces.
+const WORLD_SCENERY = inkConfig().worldScenery;
+function buildEnvironment() {
+  const seeded=mulberry32(SCENERY.seed), dummy=new THREE.Object3D();
+  const rows=PHYS.BODIES.map(body=>WORLD_SCENERY[body.id]);
+  const weights=rows.map((_,i)=>i===S.body.target?1:0);
+  let time=0, fallPhase=0;
+  const uniforms={uSky:{value:new THREE.Color()},uHaze:{value:new THREE.Color()},uGround:{value:new THREE.Color()},
+    uTime:{value:0},uCloud:{value:0},uCrater:{value:0},uIce:{value:0},uPlasma:{value:0},uVoid:{value:0}};
+  const vertex=`varying vec3 vP; void main(){vP=position;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}`;
+  const colorOutput=`\n#include <tonemapping_fragment>\n#include <colorspace_fragment>\n`;
+  const skyMaterial=new THREE.ShaderMaterial({side:THREE.BackSide,depthWrite:false,uniforms,
+    vertexShader:`varying vec3 vP;void main(){vP=position;gl_Position=projectionMatrix*vec4(mat3(viewMatrix)*position,1.0);}`,
+    fragmentShader:`uniform vec3 uSky,uHaze;uniform float uTime,uCloud;varying vec3 vP;
+      void main(){vec3 p=normalize(vP);float h=step(0.18,p.y);
+        float bands=sin(p.y*45.0+sin(p.x*8.0+uTime*0.025)*1.2);
+        float storm=sin(length((p.xy-vec2(-0.3,0.13))*vec2(1.0,2.5))*60.0-uTime*0.08);
+        vec3 c=mix(uHaze,uSky,h)*(1.0+uCloud*(step(0.3,bands)*0.04+step(0.5,storm)*0.02));
+        gl_FragColor=vec4(c,1.0);${colorOutput}}`});
+  const sky=new THREE.Mesh(new THREE.SphereGeometry(SCENERY.radius,32,16),skyMaterial);sky.frustumCulled=false;ROOM.add(sky);
+  const surfaceMaterial=new THREE.ShaderMaterial({uniforms,vertexShader:vertex,
+    fragmentShader:`uniform vec3 uGround,uHaze;uniform float uTime,uCloud,uCrater,uIce,uPlasma,uVoid;varying vec3 vP;
+      float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
+      void main(){vec2 p=vP.xz;
+        vec2 tile=floor(p/2.4),q=fract(p/2.4)-0.5;
+        vec2 center=vec2(hash(tile),hash(tile+4.0))*0.28-0.14;
+        float d=length(q-center),r=0.13+hash(tile+9.0)*0.12;
+        float crater=exp(-pow((d-r)*55.0,2.0))*0.17-exp(-pow(d/r,4.0))*0.2;
+        float bands=sin(p.y*3.5+sin(p.x*0.65+uTime*0.025)*1.7);
+        float cells=pow(abs(sin(p.x*2.0+sin(p.y*3.0))*sin(p.y*2.7)),8.0);
+        float terrain=uCrater*crater+uCloud*bands*0.14+uIce*abs(sin(p.x*2.0+p.y))*0.08+uPlasma*cells*0.2;
+        float band=step(-0.04,terrain)+step(0.08,terrain);
+        vec3 c=uGround*mix(vec3(${inkConfig().dark.join(',')}),mix(vec3(${inkConfig().mid.join(',')}),vec3(${inkConfig().light.join(',')}),step(1.5,band)),step(0.5,band));
+        c=mix(c,uHaze,step(16.0,length(p))*0.55);
+        gl_FragColor=vec4(c,1.0-uVoid);${colorOutput}}`,transparent:true,depthWrite:true});
+  const surface=new THREE.Mesh(new THREE.PlaneGeometry(SCENERY.groundSize,SCENERY.groundSize).rotateX(-Math.PI/2),surfaceMaterial);
+  surface.position.y=SCENERY.groundY;surface.renderOrder=-1;surface.receiveShadow=true;ROOM.add(surface);
+  // ShadowMaterial supplies the real light shadow over the procedural ground shader.
+  const shadowMaterial=new THREE.ShadowMaterial({color:inkConfig().shadow,opacity:inkConfig().shadowOpacity,depthWrite:false});
+  const shadowGround=new THREE.Mesh(surface.geometry,shadowMaterial);
+  shadowGround.position.y=SCENERY.groundY+SCENERY.shadowLift;shadowGround.receiveShadow=true;ROOM.add(shadowGround);
+  // Depth-only twin of the shader ground: the ink pass skips ShaderMaterial, so apparatus silhouettes need this to read against the ground.
+  const groundDepth=new THREE.Mesh(surface.geometry,new THREE.MeshBasicMaterial({colorWrite:false,polygonOffset:true,polygonOffsetFactor:2,polygonOffsetUnits:4}));
+  groundDepth.position.y=SCENERY.groundY;groundDepth.renderOrder=-2;ROOM.add(groundDepth);
+  const hillGeometry=new THREE.IcosahedronGeometry(1,0),rockGeometry=new THREE.IcosahedronGeometry(1,0),grassGeometry=new THREE.ConeGeometry(0.4,2,3);
+  const orbGeometry=new THREE.IcosahedronGeometry(SCENERY.orbRadius,2);
+  const sets=rows.map((row,i)=>{
+    const root=new THREE.Group();root.position.y=SCENERY.groundY;ROOM.add(root);
+    const material=new THREE.MeshStandardMaterial({color:row.relief,flatShading:true,transparent:weights[i]<1,opacity:weights[i],depthWrite:weights[i]===1});
+    const hills=new THREE.InstancedMesh(hillGeometry,material,SCENERY.hills);
+    const rocks=new THREE.InstancedMesh(row.terrain==='mountains'?grassGeometry:rockGeometry,material,SCENERY.rocks);
+    root.add(hills,rocks);hills.receiveShadow=rocks.receiveShadow=true;hills.userData.inkSkip=true;rocks.userData.inkInner=false;
+    const local=mulberry32(SCENERY.seed+i);
+    for(let k=0;k<SCENERY.hills;k++){
+      const x=(k%2?-1:1)*(SCENERY.hillSide+local()*SCENERY.hillSpread),z=SCENERY.horizonZ-local()*SCENERY.hillDepth;
+      const cloud=row.terrain==='clouds',height=cloud?SCENERY.cloudHeight:row.terrain==='ice'?SCENERY.iceHeight:0.5+local()*SCENERY.hillHeight;
+      dummy.position.set(x,-0.1,z);dummy.scale.set(SCENERY.hillSize*(1+local()),height,SCENERY.hillHeight+local()*SCENERY.hillSize);dummy.rotation.set(0,local()*Math.PI,0);dummy.updateMatrix();hills.setMatrixAt(k,dummy.matrix);
     }
+    for(let k=0;k<SCENERY.rocks;k++){
+      const a=local()*Math.PI*2,r=SCENERY.rockInner+local()*(SCENERY.rockOuter-SCENERY.rockInner),size=SCENERY.rockSize[0]+local()*(SCENERY.rockSize[1]-SCENERY.rockSize[0]);
+      dummy.position.set(Math.cos(a)*r,size*0.3,Math.sin(a)*r);dummy.scale.set(size,size*(row.terrain==='ice'?2.5:0.7),size);
+      dummy.rotation.set(local(),local()*Math.PI,local());dummy.updateMatrix();rocks.setMatrixAt(k,dummy.matrix);
+    }
+    hills.instanceMatrix.needsUpdate=rocks.instanceMatrix.needsUpdate=true;
+    hills.visible=!['void','plasma','crust'].includes(row.terrain);rocks.visible=!['void','clouds','plasma'].includes(row.terrain);
+    if(row.terrain==='volcano'){
+      const volcano=new THREE.Mesh(new THREE.CylinderGeometry(...SCENERY.volcano,10),material);volcano.position.set(...SCENERY.volcanoPosition);root.add(volcano);
+    }
+    let orbMaterial=null;
+    if(row.orb){
+      const earth=row.orb==='earth';
+      orbMaterial=new THREE.ShaderMaterial({transparent:true,depthWrite:false,
+        uniforms:{uOpacity:{value:weights[i]},uEarth:{value:earth?1:0},uColor:{value:new THREE.Color(earth?0x42799c:row.orb==='io'?0xa39769:row.orb==='titan'?0xa48b61:0x7b8289)}},
+        vertexShader:`varying vec3 vN,vP;void main(){vN=normal;vP=position;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}`,
+        fragmentShader:`uniform float uOpacity,uEarth;uniform vec3 uColor;varying vec3 vN,vP;
+          void main(){vec3 n=normalize(vP);float land=sin(n.x*15.0+sin(n.y*13.0))*cos(n.z*11.0+n.y*6.0);
+            vec3 c=mix(uColor,vec3(0.25,0.39,0.32),uEarth*smoothstep(0.05,0.4,land));
+            c=mix(c,vec3(0.65,0.71,0.74),uEarth*smoothstep(0.77,0.94,abs(n.y)));
+            float facing=dot(normalize(vN),normalize(vec3(-0.5,0.6,1.0)));c*=facing<0.0?0.5:(facing<0.55?0.83:1.06);
+            gl_FragColor=vec4(c,uOpacity);${colorOutput}}`});
+      const orb=new THREE.Mesh(orbGeometry,orbMaterial);orb.position.set(...SCENERY.orbPosition);
+      if(row.orb==='phobos')orb.scale.set(0.3,0.23,0.27);root.add(orb);
+    }
+    if(PHYS.BODIES[i].id==='saturn'){
+      const rings=new THREE.Mesh(new THREE.RingGeometry(...SCENERY.rings,64),material);rings.position.set(...SCENERY.ringsPosition);rings.rotation.set(0.3,0,0.25);root.add(rings);
+    }
+    if(row.terrain==='plasma'){
+      const arc=new THREE.Mesh(new THREE.TorusGeometry(...SCENERY.arc,4,32,Math.PI),material);arc.position.set(...SCENERY.arcPosition);root.add(arc);
+    }
+    if(row.terrain==='crust'){
+      const beam=new THREE.Mesh(new THREE.ConeGeometry(...SCENERY.beam,8,1,true),material);beam.position.set(...SCENERY.beamPosition);beam.rotation.z=-0.22;root.add(beam);
+    }
+    return {root,material,hills,rocks,orbMaterial};
   });
-  KIT.mesh(new THREE.PlaneGeometry(0.85, 0.62), new THREE.MeshStandardMaterial({ map: tex, emissiveMap: tex, emissive: THEME.cool, emissiveIntensity: 0.35 }), ROOM, dx, dy, -2.598);
+  const starGeometry=new THREE.BufferGeometry(),starPositions=[];
+  for(let k=0;k<SCENERY.stars;k++){
+    const a=seeded()*Math.PI*2,h=0.12+seeded()*0.85,r=SCENERY.radius*0.9;
+    starPositions.push(Math.cos(a)*Math.sqrt(1-h*h)*r,h*r,Math.sin(a)*Math.sqrt(1-h*h)*r);
+  }
+  starGeometry.setAttribute('position',new THREE.Float32BufferAttribute(starPositions,3));
+  const starMaterial=new THREE.ShaderMaterial({transparent:true,depthWrite:false,
+    uniforms:{uOpacity:{value:0}},
+    vertexShader:`void main(){gl_Position=projectionMatrix*vec4(mat3(viewMatrix)*position,1.0);gl_PointSize=1.4;}`,
+    fragmentShader:`uniform float uOpacity;void main(){gl_FragColor=vec4(0.88,0.90,0.82,uOpacity);${colorOutput}}`});
+  const stars=new THREE.Points(starGeometry,starMaterial);stars.frustumCulled=false;ROOM.add(stars);
+  const dustGeometry=new THREE.BufferGeometry(),dustPositions=[];
+  for(let k=0;k<SCENERY.dust;k++)dustPositions.push((seeded()-0.5)*SCENERY.dustExtent,seeded(),(seeded()-0.5)*SCENERY.dustExtent);
+  dustGeometry.setAttribute('position',new THREE.Float32BufferAttribute(dustPositions,3));
+  const dustMaterial=new THREE.ShaderMaterial({transparent:true,depthWrite:false,
+    uniforms:{uTime:{value:0},uFall:{value:0},uHeight:{value:SCENERY.dustHeight},uDrift:{value:SCENERY.drift},uColor:{value:new THREE.Color()}},
+    vertexShader:`uniform float uTime,uFall,uHeight,uDrift;void main(){vec3 p=position;p.y=(1.0-fract(position.y+uFall))*uHeight;p.x+=sin(uTime*0.2+position.z)*uDrift;vec4 mv=modelViewMatrix*vec4(p,1.0);gl_Position=projectionMatrix*mv;gl_PointSize=clamp(12.0/-mv.z,1.0,2.2);}`,
+    fragmentShader:`uniform vec3 uColor;void main(){float a=step(length(gl_PointCoord-0.5),0.45)*0.24;gl_FragColor=vec4(uColor,a);${colorOutput}}`});
+  const dust=new THREE.Points(dustGeometry,dustMaterial);dust.position.y=SCENERY.groundY;ROOM.add(dust);
+  // Contact hardware is environmental so it cannot expand the apparatus camera bounds.
+  const metal=new THREE.MeshStandardMaterial({color:0x697b85});
+  KIT.rod(V3(...SCENERY.antenna),V3(...SCENERY.antennaTip),SCENERY.antennaRadius,metal,ROOM);
+  KIT.mesh(new THREE.ConeGeometry(...SCENERY.dish,8,1,true),metal,ROOM,...SCENERY.antennaTip).rotation.z=-0.6;
+  const colorKeys=[['paper','uSky'],['haze','uHaze'],['ground','uGround']];
+  const palettes=rows.map(row=>Object.fromEntries(colorKeys.map(([key])=>[key,new THREE.Color(row[key])])));
+  const dustTint=new THREE.Color(inkConfig().diagram.reference);
+  const fallSpeeds=rows.map((_,i)=>Math.min(SCENERY.fallCap,Math.sqrt(Math.log1p(PHYS.g(i)/PHYS.g(PHYS.C.ids.earth)))));
+  return {update(dt){
+    time+=dt;const target=S.body.target,k=1-Math.exp(-dt*6/SCENERY.fadeSeconds);
+    weights.forEach((v,i)=>weights[i]=v+((i===target?1:0)-v)*k);
+    if(weights[target]>0.9999)weights.fill(0),weights[target]=1;
+    for(const [key,u]of colorKeys){uniforms[u].value.setRGB(0,0,0);
+      rows.forEach((_,i)=>{const c=palettes[i][key],out=uniforms[u].value;out.r+=c.r*weights[i];out.g+=c.g*weights[i];out.b+=c.b*weights[i];});}
+    const sum=fn=>rows.reduce((v,row,i)=>v+fn(row,i)*weights[i],0);
+    uniforms.uTime.value=time;uniforms.uCloud.value=sum(row=>row.cloud);
+    uniforms.uCrater.value=sum(row=>row.terrain==='craters'?1:0);
+    uniforms.uIce.value=sum(row=>row.terrain==='ice'?1:0);
+    uniforms.uPlasma.value=sum(row=>row.terrain==='plasma'?1:0);
+    uniforms.uVoid.value=sum(row=>row.terrain==='void'?1:0);
+    surface.visible=shadowGround.visible=uniforms.uVoid.value<0.9999;
+    shadowMaterial.opacity=INK_CFG.shadowOpacity*(1-uniforms.uVoid.value);
+    contactMaterial.color.copy(uniforms.uGround.value);
+    GROUND_HARDWARE.forEach(mesh=>mesh.visible=uniforms.uVoid.value<0.5);
+    SPACE_HARDWARE.forEach(mesh=>mesh.visible=uniforms.uVoid.value>=0.5);
+    CONTROL_PANEL.material=uniforms.uVoid.value>=0.5?hologramMaterial:MAT.navy;
+    scene.background.copy(uniforms.uSky.value);scene.fog.color.copy(uniforms.uSky.value);
+    inkPass.uniforms.paper.value.copy(uniforms.uSky.value);
+    const low=S.quality==='low'||S.autoLevel>0;
+    sets.forEach((set,i)=>{
+      set.root.visible=weights[i]>0.0001;
+      // Converted materials keep animation ownership; settled relief joins the depth/normal pass.
+      set.material=set.hills.material;set.material.opacity=weights[i];
+      const fading=weights[i]<0.9999;
+      if(set.material.transparent!==fading){set.material.transparent=fading;set.material.depthWrite=!fading;set.material.needsUpdate=true;}
+      if(set.orbMaterial)set.orbMaterial.uniforms.uOpacity.value=weights[i];
+      set.hills.count=low?SCENERY.hillsLow:SCENERY.hills;set.rocks.count=low?SCENERY.rocksLow:SCENERY.rocks;
+      set.hills.position.x=rows[i].terrain==='clouds'?Math.sin(time*0.035)*0.15:0;
+    });
+    starGeometry.setDrawRange(0,low?SCENERY.starsLow:SCENERY.stars);
+    starMaterial.uniforms.uOpacity.value=sum(row=>row.stars)*(0.48+Math.sin(time*0.6)*0.06);
+    dustGeometry.setDrawRange(0,low?SCENERY.dustLow:SCENERY.dust);
+    // Gravity comes only from PHYS. Log compression is display-only for stellar extremes.
+    fallPhase+=dt*sum((row,i)=>fallSpeeds[i])*SCENERY.fallScale;
+    dustMaterial.uniforms.uTime.value=time;dustMaterial.uniforms.uFall.value=fallPhase;
+    dustMaterial.uniforms.uColor.value.copy(uniforms.uGround.value).lerp(dustTint,0.3);
+  }};
 }
-for (const y of [1.13, 1.80]) {
-  KIT.roundedPanel(1.85, 0.06, 0.38, MAT.wood, ROOM, -1.65, y, -2.39);
-  for (const x of [-2.32, -0.98]) KIT.rod(V3(x, y - 0.25, -2.62), V3(x, y - 0.035, -2.25), 0.014, MAT.brass, ROOM);
-}
-// Eight thematic prop families: specimen rack, two panels, dome window, lamps,
-// standard-weight chest, ring models, glass jars, telescope and foreground trays.
-for (let i=0;i<6;i++) {
-  const x=-2.35+i*0.26;
-  KIT.rod(V3(x,1.84,-2.36),V3(x,1.99,-2.36),0.009,MAT.brass,ROOM);
-  KIT.ball(0.075,new THREE.MeshStandardMaterial({color:THEME.bodies[i],flatShading:true}),ROOM,x,2.05,-2.36,1);
-}
-KIT.roundedPanel(0.48,0.18,0.26,MAT.navy,ROOM,-2.15,1.24,-2.35);
-for(let i=0;i<5;i++) KIT.mesh(new THREE.CylinderGeometry(0.032,0.04,0.08,12),MAT.chrome,ROOM,-2.32+i*0.08,1.37,-2.35);
-for(let i=0;i<3;i++) {
-  KIT.mesh(new THREE.TorusGeometry(0.10,0.008,6,24),MAT.brass,ROOM,-1.6+i*0.22,1.32,-2.35).rotation.x=i*0.45;
-  KIT.ball(0.045,MAT.chrome,ROOM,-1.6+i*0.22,1.32,-2.35,1);
-}
-const glassMat=new THREE.MeshPhysicalMaterial({color:THEME.cool,transparent:true,opacity:0.3,roughness:0.15,depthWrite:false});
-KIT.roundedPanel(0.85,0.05,0.30,MAT.wood,ROOM,2.1,1.45,-2.48);
-for(let i=0;i<3;i++) {
-  KIT.mesh(new THREE.CylinderGeometry(0.06,0.06,0.21,12),glassMat,ROOM,1.85+i*0.23,1.59,-2.43);
-  KIT.mesh(new THREE.CylinderGeometry(0.065,0.065,0.025,12),MAT.brass,ROOM,1.85+i*0.23,1.71,-2.43);
-  KIT.ball(0.035,MAT.chrome,ROOM,1.85+i*0.23,1.54,-2.43,0);
-}
-const telescope=new THREE.Group();telescope.position.set(2.2,0,-1.3);ROOM.add(telescope);
-for(let i=0;i<3;i++){const a=i/3*Math.PI*2;KIT.rod(V3(Math.cos(a)*0.4,0.04,Math.sin(a)*0.4),V3(0,1.18,0),0.023,MAT.brass,telescope);}
-KIT.rod(V3(-0.35,1.24,0),V3(0.4,1.62,-0.28),0.105,MAT.navy,telescope);
-KIT.rod(V3(0.36,1.60,-0.27),V3(0.44,1.64,-0.30),0.12,MAT.brass,telescope);
-KIT.lampWithBulb(ROOM,-1.90,0.86,-0.65);
-KIT.lampWithBulb(ROOM,2.0,0.86,-0.65);
-// Oversized foreground props cross the edges while the apparatus stays inside.
-KIT.roundedPanel(1.1,0.13,0.65,MAT.wood,ROOM,-2.35,0.55,2.1,0.05);
-for(const dx of [-0.4,0.4])for(const dz of [-0.23,0.23]) KIT.rod(V3(-2.35+dx,0.04,2.1+dz),V3(-2.35+dx,0.50,2.1+dz),0.035,MAT.graphite,ROOM);
-KIT.roundedPanel(1.0,0.06,0.65,MAT.brass,ROOM,2.4,0.63,2.0);
-KIT.ball(0.17,MAT.chrome,ROOM,2.4,0.83,2.0);
+const ENVIRONMENT=buildEnvironment();
 
-// Long console, readable vertical front, metal diagram plate without engraving text.
-KIT.roundedPanel(3.52,0.62,1.08,MAT.graphite,CONSOLE,-0.03,0.48,0.05,0.07);
-KIT.roundedPanel(3.64,0.10,1.20,MAT.wood,CONSOLE,-0.03,PHYS.VIEW.top-0.05,0.05,0.035);
-KIT.roundedPanel(3.48,0.018,1.08,MAT.navy,CONSOLE,-0.03,PHYS.VIEW.top+0.008,0.05);
-KIT.roundedPanel(3.42,0.43,0.035,MAT.navy,CONSOLE,-0.03,0.54,0.62);
-for(const x of [-1.66,1.60])for(const y of [0.37,0.71]) KIT.screw(CONSOLE,x,y,0.65);
-for(let i=0;i<26;i++) KIT.roundedPanel(0.025,0.06,0.012,MAT.rubber,CONSOLE,-1.40+i*0.11,0.22,0.61,0.004);
-for(const x of [-1.45,1.4])for(const z of [-0.3,0.5]) KIT.roundedPanel(0.21,0.15,0.18,MAT.rubber,CONSOLE,x,0.10,z);
-const DIAL=KIT.knobWithArc(CONSOLE,-1.40,0.55,0.68);
-const GRAPHS=[KIT.graphScreen(CONSOLE,-0.68,0.58,0.68,0.80,0.25),KIT.graphScreen(CONSOLE,0.23,0.58,0.68,0.80,0.25)];
-const SLIDER=KIT.ledSlider(CONSOLE,-0.22,0.36,0.69,1.60);
-KIT.mesh(new THREE.CylinderGeometry(0.13,0.13,0.05,32).rotateX(Math.PI/2),MAT.brass,CONSOLE,1.04,0.55,0.69);
-const RUN_BUTTON=KIT.mesh(new THREE.CylinderGeometry(0.10,0.10,0.06,24).rotateX(Math.PI/2),MAT.graphite,CONSOLE,1.04,0.55,0.73);
-KIT.line([V3(-0.04,-0.02,0.034),V3(0,0.035,0.034),V3(0.04,-0.02,0.034)],THEME.mint,RUN_BUTTON);
-KIT.roundedPanel(0.30,0.28,0.025,MAT.brass,CONSOLE,1.43,0.55,0.68);
-KIT.line([V3(1.33,0.59,0.7),V3(1.53,0.59,0.7),V3(1.43,0.59,0.7),V3(1.43,0.46,0.7)],THEME.graphite,CONSOLE);
-for(const x of [1.35,1.51]) KIT.line([V3(x-0.04,0.52,0.7),V3(x,0.48,0.7),V3(x+0.04,0.52,0.7)],THEME.graphite,CONSOLE);
-const SOUND_SWITCH=KIT.roundedPanel(0.06,0.09,0.035,MAT.chrome,CONSOLE,1.43,0.35,0.72);
+// One compact expedition tripod; console remains the public layer name.
+const CONTROL_FACE=new THREE.Group();CONSOLE.add(CONTROL_FACE);
+CONTROL_FACE.position.set(...CONTROL_LAYOUT.position);CONTROL_FACE.rotation.x=CONTROL_LAYOUT.tilt;
+const hologramMaterial=new THREE.MeshBasicMaterial({color:inkConfig().diagram.screen,side:THREE.DoubleSide});
+const CONTROL_PANEL=KIT.roundedPanel(...CONTROL_LAYOUT.panel,MAT.navy,CONTROL_FACE);
+for(const [x,,z] of CONTROL_LAYOUT.feet){
+  GROUND_HARDWARE.push(KIT.rod(V3(x,SCENERY.groundY,z+CONTROL_LAYOUT.position[2]),V3(...CONTROL_LAYOUT.position),CONTROL_LAYOUT.legRadius,MAT.chrome,CONSOLE));
+}
+const DIAL=KIT.knobWithArc(CONTROL_FACE,...CONTROL_LAYOUT.dial.at);
+const GRAPHS=CONTROL_LAYOUT.graphs.map(g=>KIT.graphScreen(CONTROL_FACE,...g.at,...g.size));
+const SLIDER=KIT.ledSlider(CONTROL_FACE,...CONTROL_LAYOUT.slider.at,CONTROL_LAYOUT.slider.width);
+const RUN_BUTTON=KIT.mesh(new THREE.CylinderGeometry(0.10,0.10,0.06,24).rotateX(Math.PI/2),MAT.graphite,CONTROL_FACE,...CONTROL_LAYOUT.run.at);
+KIT.line([V3(-0.04,-0.02,0.034),V3(0,0.035,0.034),V3(0.04,-0.02,0.034)],inkConfig().diagram.mint,RUN_BUTTON);
+const SOUND_SWITCH=KIT.roundedPanel(0.06,0.09,0.035,MAT.chrome,CONTROL_FACE,...CONTROL_LAYOUT.sound.at);
 
 function drawGraphs(){
   const i=PHYS.bodyFromRailX(PHYS.bodyRailX(Math.round(S.body.value))), n=Math.round(S.nWeights.value);
@@ -121,14 +211,14 @@ function drawGraphs(){
   GRAPHS.forEach((g,index)=>{
     if(S.graphKeys[index]===keys[index])return;S.graphKeys[index]=keys[index];
     const c=g.ctx,w=768,h=256,L=52,R=724,T=22,B=214;
-    c.fillStyle=THEME.screen;c.fillRect(0,0,w,h);c.strokeStyle=THEME.grid;c.lineWidth=1;
+    c.fillStyle='#'+new THREE.Color(inkConfig().diagram.screen).getHexString();c.fillRect(0,0,w,h);c.strokeStyle='#'+new THREE.Color(inkConfig().diagram.grid).getHexString();c.lineWidth=1;
     for(let k=0;k<=10;k++){const x=L+(R-L)*k/10;c.beginPath();c.moveTo(x,T);c.lineTo(x,B);c.stroke();}
     for(let k=0;k<=6;k++){const y=T+(B-T)*k/6;c.beginPath();c.moveTo(L,y);c.lineTo(R,y);c.stroke();}
     const dot=(x,y,r,color)=>{c.fillStyle=color;c.beginPath();c.arc(x,y,r,0,Math.PI*2);c.fill();};
-    const forceColor='#'+new THREE.Color(THEME.force).getHexString(),mint='#'+new THREE.Color(THEME.mint).getHexString();
+    const forceColor='#'+new THREE.Color(inkConfig().diagram.force).getHexString(),mint='#'+new THREE.Color(inkConfig().diagram.mint).getHexString();
     if(!index){
       for(const reference of [true,false]){
-        c.strokeStyle=reference?'#'+new THREE.Color(THEME.reference).getHexString():forceColor;c.lineWidth=3;c.setLineDash(reference?[9,7]:[]);c.beginPath();
+        c.strokeStyle=reference?'#'+new THREE.Color(inkConfig().diagram.reference).getHexString():forceColor;c.lineWidth=3;c.setLineDash(reference?[9,7]:[]);c.beginPath();
         let last=null;
         for(let k=1;k<=PHYS.RANGE.nWeights[1];k++){
           const spring=PHYS.springState(reference?baselineBody:i,k),x=L+PHYS.railX(k)*(R-L),y=B-spring.shownMarks/PHYS.C.springLimit*(B-T);

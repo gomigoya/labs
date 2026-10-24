@@ -13,6 +13,7 @@ function update(dt){
  S.t.value+=(S.t.target-S.t.value)*k;
  if(S.run){const p=S.run.elapsed;p.target=Math.min(MODEL.tangentSeconds,p.target+physicalDt*S.playing.value);p.value+=(p.target-p.value)*k;}
  updateHero();
+ if(typeof ENVIRONMENT!=='undefined')ENVIRONMENT.update(physicalDt);
  QUEST.update(dt);
  GRAMMAR.update(dt);
  for(const [name,on] of Object.entries(S.layers))if(!on)LAYERS[name].visible=false;
@@ -23,7 +24,7 @@ function update(dt){
   camera.fov=THREE.MathUtils.lerp(f.fromFov,f.to.fov,smooth);camera.updateProjectionMatrix();if(u===1)S.fly=null;
  }
  controls.update();DIRECTOR.update(dt);
- if(typeof TEACHER!=='undefined'){TEACHER.update(dt);if(T.mode==='teacher')TEACHER_CFG.frameViewport();}bokehPass.uniforms.focus.value=camera.position.distanceTo(controls.target);composer.render(dt);S.frames++;
+ if(typeof TEACHER!=='undefined'){TEACHER.update(dt);if(T.mode==='teacher')TEACHER_CFG.frameViewport();}composer.render(dt);S.frames++;
 }
 function step(n=1,dt=1/60){
  if(!Number.isInteger(n)||n<0||n>120||!Number.isFinite(dt)||dt<0||dt>1)throw new RangeError('step');
@@ -52,8 +53,6 @@ async function capture(name='hero'){
     } finally {
       renderer.setPixelRatio(saved.ratio); renderer.setSize(saved.size.x, saved.size.y, false);
       composer.setPixelRatio(saved.ratio); composer.setSize(saved.size.x, saved.size.y);
-      const buffer = renderer.getDrawingBufferSize(new THREE.Vector2()), bloomScale = S.quality === 'low' ? .5 : 1;
-      bloomPass.setSize(buffer.x * bloomScale, buffer.y * bloomScale);
       camera.copy(saved.camera); controls.target.copy(saved.target); S.fly = saved.fly;
       S.shotIndex = saved.shotIndex; S.vertical = saved.vertical; TEACHER_CFG.ui(saved.ui);
       composer.render(0);
@@ -69,19 +68,12 @@ async function capture(name='hero'){
  if(!response.ok)throw new Error(`capture ${response.status}`);return {name,width:canvas.width,height:canvas.height};
 }
 function perf(){return {ms:S.ms,fps:1000/S.ms,frames:S.frames,calls:renderer.info.render.calls,triangles:renderer.info.render.triangles,
- quality:S.quality,ao:aoPass.enabled,bokeh:bokehPass.enabled,pixelRatio:renderer.getPixelRatio(),geometries:renderer.info.memory.geometries,textures:renderer.info.memory.textures};}
+ quality:S.quality,ao:false,bokeh:false,pixelRatio:renderer.getPixelRatio(),geometries:renderer.info.memory.geometries,textures:renderer.info.memory.textures};}
 window.__lab={quest:QUEST,state:S,PHYS,SHOTS,SHOTS_VERTICAL,PRESETS,set,preset,shot,flyTo,layer,step,quality:setQuality,textAudit,heroCoverage,perf,capture};
 function frame(now){
  requestAnimationFrame(frame);const elapsed=S.lastTime?now-S.lastTime:16.67;S.lastTime=now;if(document.hidden)return;
  ATTRACT.health(elapsed);
- S.ms+=(elapsed-S.ms)*.03;S.sampleMs+=Math.min(elapsed,100);S.sampleFrames++;
- if(S.sampleMs>=2000){
-  if(S.sampleMs/S.sampleFrames>32&&S.quality!=='low'){
-   if(S.autoLevel===0)aoPass.enabled=false;
-   else if(S.autoLevel===1){renderer.setPixelRatio(1);renderer.setSize(innerWidth,innerHeight,false);composer.setPixelRatio(1);composer.setSize(innerWidth,innerHeight);}
-   else setQuality('low');S.autoLevel++;
-  }S.sampleMs=0;S.sampleFrames=0;
- }
+ S.ms+=(elapsed-S.ms)*.03;
  update(Math.min(elapsed/1000,.05));
 }
 function boot(){

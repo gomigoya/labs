@@ -1,3 +1,5 @@
+// Share floating-panel colors with the scene diagrams.
+for(const [name,value]of Object.entries({'--diagram-paper':css(INK_CFG.diagram.screen),'--diagram-ink':css(INK_CFG.diagram.ink),'--diagram-border':INK_CFG.diagram.borderPx+'px'}))document.documentElement.style.setProperty(name,value);
 // All accessible words live in this dictionary; no rendered labels or tooltips.
 const LABELS={
  canvas:{ko:'공룡 줄다리기 실험실',en:'Dinosaur tug laboratory'},play:{ko:'당김 실행 또는 중단',en:'Play or pause pull'},reset:{ko:'시작 상태 복구',en:'Reset'},sound:{ko:'소리 전환',en:'Toggle sound'},
@@ -84,15 +86,17 @@ canvas.addEventListener('pointerdown',e=>{
  e.stopImmediatePropagation();S.fly=null;controls.enabled=false;
  if(object===PLAY_BUTTON||object===SWITCH){action('play');controls.enabled=true;return;}
  const type=object===RAIL_HANDLE?'rail':object===SLIDER.handle?'slider':object===DIAL.knob?'dial':object===GRAPHS[0].mesh?'graph':'ratio';
- const plane=new THREE.Plane(V3(0,0,1),-(type==='rail'?PHYS.SCENE.railZ:1.16));const p=raycaster.ray.intersectPlane(plane,V3());if(!p){controls.enabled=true;return;}
- QUEST.changed('drag');S.drag={id:e.pointerId,type,plane,start:p,u:S.u.target,angle:Math.atan2(p.x+2.75,p.y-.67)};canvas.setPointerCapture(e.pointerId);
+ const local=type!=='rail';
+ const plane=local?new THREE.Plane().setFromNormalAndCoplanarPoint(V3(0,0,1).applyQuaternion(CONSOLE.quaternion),object.getWorldPosition(V3())):new THREE.Plane(V3(0,0,1),-PHYS.SCENE.railZ);
+ const p=raycaster.ray.intersectPlane(plane,V3());if(!p){controls.enabled=true;return;}if(local)CONSOLE.worldToLocal(p);
+ QUEST.changed('drag');S.drag={id:e.pointerId,type,plane,local,start:p,u:S.u.target,angle:Math.atan2(p.x-CONTROL_LAYOUT.dial[0],p.y-CONTROL_LAYOUT.dial[1])};canvas.setPointerCapture(e.pointerId);
 },{capture:true});
 canvas.addEventListener('pointermove',e=>{
- const d=S.drag;if(!d||e.pointerId!==d.id)return;rayFromEvent(e);const p=raycaster.ray.intersectPlane(d.plane,V3());if(!p)return;
+ const d=S.drag;if(!d||e.pointerId!==d.id)return;rayFromEvent(e);const p=raycaster.ray.intersectPlane(d.plane,V3());if(!p)return;if(d.local)CONSOLE.worldToLocal(p);
  if(d.type==='rail'||d.type==='slider')setRailFromPointer(d.u+(p.x-d.start.x)/(d.type==='rail'?PHYS.SCENE.railWidth:SLIDER.width));
- if(d.type==='dial'){const a=Math.atan2(p.x+2.75,p.y-.67),delta=Math.atan2(Math.sin(a-d.angle),Math.cos(a-d.angle));setRailFromPointer(S.u.target+delta/(Math.PI*1.7));d.angle=a;}
- if(d.type==='graph')setRailFromPointer((p.x-GRAPHS[0].mesh.position.x+.79)/1.58);
- if(d.type==='ratio'){const u=clamp((p.x-GRAPHS[1].mesh.position.x+.79)/1.58,0,1);set('species',SPECIES_KEYS.reduce((best,s,i)=>Math.abs(PHYS.massGraphX(s)-u)<Math.abs(PHYS.massGraphX(SPECIES_KEYS[best])-u)?i:best,0));}
+ if(d.type==='dial'){const a=Math.atan2(p.x-CONTROL_LAYOUT.dial[0],p.y-CONTROL_LAYOUT.dial[1]),delta=Math.atan2(Math.sin(a-d.angle),Math.cos(a-d.angle));setRailFromPointer(S.u.target+delta/(Math.PI*1.7));d.angle=a;}
+ if(d.type==='graph')setRailFromPointer((p.x-CONTROL_LAYOUT.graphs[0][0])/CONTROL_LAYOUT.graphSize[0]+.5);
+ if(d.type==='ratio'){const u=clamp((p.x-CONTROL_LAYOUT.graphs[1][0])/CONTROL_LAYOUT.graphSize[0]+.5,0,1);set('species',SPECIES_KEYS.reduce((best,s,i)=>Math.abs(PHYS.massGraphX(s)-u)<Math.abs(PHYS.massGraphX(SPECIES_KEYS[best])-u)?i:best,0));}
  e.stopImmediatePropagation();
 },{capture:true});
 function endDrag(e){if(!S.drag||S.drag.id!==e.pointerId)return;S.drag=null;S.snap=null;controls.enabled=true;if(canvas.hasPointerCapture(e.pointerId))canvas.releasePointerCapture(e.pointerId);syncUI();}

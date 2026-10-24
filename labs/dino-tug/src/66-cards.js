@@ -1,6 +1,8 @@
 ﻿// Candidate hypotheses are dashed; measured diagrams use PHYS and solid ink.
 const CARDS = (()=>{
- const orange='#f4a04d',green='#7ac59d',pink='#f29db5',purple='#b296e0',white='#e1e9e6';
+ const palette=typeof INK_CFG==='undefined'?{kids:0xc57d24,dino:0x37795d,friction:0xb55d77,muscle:0x7863a6,ink:0x221d18}:INK_CFG.diagram;
+ const hex=value=>'#'+value.toString(16).padStart(6,'0');
+ const orange=hex(palette.kids),green=hex(palette.dino),pink=hex(palette.friction),purple=hex(palette.muscle),white=hex(palette.ink);
  const svg=body=>`<svg viewBox="0 0 300 140" aria-hidden="true">${body}</svg>`;
  const path=(d,color=white,dash=false)=>`<path d="${d}" stroke="${color}"${dash?' stroke-dasharray="4 4"':''}/>`;
  const rect=(x,y,w,h,color=white,dash=false)=>`<rect x="${x}" y="${y}" width="${Math.max(0,w)}" height="${h}" rx="2" stroke="${color}"${dash?' stroke-dasharray="4 4"':''}/>`;
@@ -52,7 +54,7 @@ const CARDS = (()=>{
   if(id===5){
    const n=Math.min(100,s.n+Math.floor(loop*PHYS.C.increaseQ5)),before=PHYS.friction(s.n*PHYS.C.kidMass,PHYS.GROUNDS['유리']),after=PHYS.friction(n*PHYS.C.kidMass,PHYS.GROUNDS['유리']);
    const hypothetical=c.limit==='fixed'?before:c.limit==='shrink'?Math.max(0,2*before-after):after;
-   return svg(path(`M25 50h${c.limit==='fixed'?125:c.limit==='grow'?240:45}m-16-12 16 12-16 12`,pink)+pegs(n,18,8)+path('M18 125h263M25 119l9-9m25 9 9-9','#b6e0ed')+force(before,18,84,pink,true,250)+force(hypothetical,18,98,pink,true,250)+force(PHYS.kidCap(n,PHYS.GROUNDS['유리']),18,112,orange,false,250));
+   return svg(path(`M25 50h${c.limit==='fixed'?125:c.limit==='grow'?240:45}m-16-12 16 12-16 12`,pink)+pegs(n,18,8)+path('M18 125h263M25 119l9-9m25 9 9-9',white)+force(before,18,84,pink,true,250)+force(hypothetical,18,98,pink,true,250)+force(PHYS.kidCap(n,PHYS.GROUNDS['유리']),18,112,orange,false,250));
   }
   if(id===4){s.mu=PHYS.GROUNDS['유리'];return svg(scene(s,time,c.flag)+flag(PHYS.outcome(s.n,s.species,PHYS.GROUNDS['자갈']).winner,1,150,111,true));}
   if(c.n!==undefined)s.n=c.n;if(c.species)s.species=c.species;
@@ -69,8 +71,8 @@ const CARDS = (()=>{
   if(id===1){const width=100*PHYS.VIS.width/PHYS.forceGlyph(result.kids).length;return svg(force(result.kids,16,30,orange,false,width)+force(PHYS.muscle(mass),16,55,purple,true,width)+force(PHYS.friction(mass,a.mu),16,70,pink,true,width)+force(result.dino,16,85,green,false,width)+arrow(136,72,25)+flag(result.winner,1,224,100));}
   if(id===2)return svg(pegs(a.n,10,15)+force(result.kids,10,91,orange,false,270)+force(result.dino,10,110,green,true,270)+arrow(136,68,25));
   if(id===3)return svg(specimen(a.species,44,45)+rect(12,66,70,50,white,true)+force(PHYS.muscle(mass),12,91,purple,true,70)+equal+pegs(a.n,174,12)+force(result.kids,174,88,orange,false,110)+force(result.dino,174,108,green,true,110));
-  if(id===4){return svg((s.observations||[]).filter((o,i,arr)=>arr.findIndex(p=>p.mu===o.mu)===i).slice(0,2).map((o,i)=>`<g transform="translate(${i*150} 0) scale(.5 1)">${pegs(o.n)}${specimen(o.species)}${path('M18 70h260',o.mu===PHYS.GROUNDS['유리']?'#b6e0ed':'#999c94')}${flag(PHYS.outcome(o.n,o.species,o.mu).winner)}</g>`).join('')+equal);}
-  if(id===5){return svg([s.before,s.after].filter(Boolean).map((o,i)=>`<g transform="translate(${i*160} 0)">${pegs(o.n,6,15).replaceAll('width="3"','width="2"')}${force(PHYS.friction(o.n*PHYS.C.kidMass,o.mu),6,82,pink,true,125)}${force(PHYS.kidCap(o.n,o.mu),6,104,orange,false,125)}${path('M6 123h125m-100-6 9-9','#b6e0ed')}</g>`).join('')+arrow(142,65,14));}
+  if(id===4){return svg((s.observations||[]).filter((o,i,arr)=>arr.findIndex(p=>p.mu===o.mu)===i).slice(0,2).map((o,i)=>`<g transform="translate(${i*150} 0) scale(.5 1)">${pegs(o.n)}${specimen(o.species)}${path('M18 70h260',o.mu===PHYS.GROUNDS['유리']?white:'#999c94')}${flag(PHYS.outcome(o.n,o.species,o.mu).winner)}</g>`).join('')+equal);}
+  if(id===5){return svg([s.before,s.after].filter(Boolean).map((o,i)=>`<g transform="translate(${i*160} 0)">${pegs(o.n,6,15).replaceAll('width="3"','width="2"')}${force(PHYS.friction(o.n*PHYS.C.kidMass,o.mu),6,82,pink,true,125)}${force(PHYS.kidCap(o.n,o.mu),6,104,orange,false,125)}${path('M6 123h125m-100-6 9-9',white)}</g>`).join('')+arrow(142,65,14));}
   if(id===6)return svg(ratios());
   return svg(pegs(a.n,15,9)+[Object.keys(PHYS.SPECIES)[1],Object.keys(PHYS.SPECIES)[2]].map((species,i)=>`<g transform="translate(${i*150} 0)">${specimen(species,88,65,.8)}${force(result.kids,12,92,orange,true,125)}${force(PHYS.dinoCap(species,a.mu),12,111,green,false,125)}${i===0?rect(6,44,133,85,orange):''}</g>`).join(''));
  }

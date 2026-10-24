@@ -14,6 +14,7 @@ function update(dt) {
   // Saturation is signalled by the existing break mark; keep the physical bulge visible in demonstrations.
   if (T.mode === 'teacher' || A.active) OCEAN.visible = S.layers.ocean !== false;
   QUEST.update(dt); GRAMMAR.update(physicalDt);
+  updateEnvironment(physicalDt);
   if (S.fly) {
     const f = S.fly; f.elapsed += dt; const u = clamp(f.elapsed / f.duration, 0, 1), smooth = 1 - (1 - u) ** 3;
     camera.position.lerpVectors(f.from, f.to.pos, smooth); controls.target.lerpVectors(f.fromTarget, f.to.target, smooth);
@@ -24,7 +25,6 @@ function update(dt) {
   DIRECTOR.update(dt);
   TEACHER.update(dt);
   if (T.mode === 'teacher') TEACHER_CFG.frameViewport();
-  bokehPass.uniforms.focus.value = camera.position.distanceTo(controls.target);
   composer.render(dt); S.frames++;
 }
 function step(n = 1, dt = 1 / 60) {
@@ -57,8 +57,6 @@ async function capture(name = 'hero') {
     } finally {
       renderer.setPixelRatio(saved.ratio); renderer.setSize(saved.size.x, saved.size.y, false);
       composer.setPixelRatio(saved.ratio); composer.setSize(saved.size.x, saved.size.y);
-      const buffer = renderer.getDrawingBufferSize(new THREE.Vector2()), bloomScale = S.quality === 'low' ? .5 : 1;
-      bloomPass.setSize(buffer.x * bloomScale, buffer.y * bloomScale);
       camera.copy(saved.camera); controls.target.copy(saved.target); S.fly = saved.fly;
       S.shotIndex = saved.shotIndex; S.vertical = saved.vertical; TEACHER_CFG.ui(saved.ui);
       composer.render(0);
@@ -77,11 +75,12 @@ async function capture(name = 'hero') {
 }
 function perf() {
   return { ms: S.ms, fps: 1000 / S.ms, frames: S.frames, calls: renderer.info.render.calls,
-    triangles: renderer.info.render.triangles, quality: S.quality, ao: aoPass.enabled, bokeh: bokehPass.enabled,
+    triangles: renderer.info.render.triangles, quality: S.quality, ao: false, bokeh: false,
     pixelRatio: renderer.getPixelRatio(), geometries: renderer.info.memory.geometries, textures: renderer.info.memory.textures };
 }
 window.__lab = { state: S, PHYS, quest: QUEST, SHOTS, SHOTS_VERTICAL, set, preset, shot, flyTo, layer, step, quality: setQuality, textAudit, heroCoverage, perf, capture };
 function boot() {
+  INK.convertMaterials(scene); styleDiagramPanels(scene);
   syncUI();
   setQuality(QS.get('lite') === '1' || window.__SITE__?.quality === 'low' ? 'low' : 'high');
   updateHero(); shot(S.vertical ? 0 : 1, S.vertical); QUEST.go(0);
@@ -97,9 +96,7 @@ function frame(now) {
   S.sampleMs += Math.min(elapsed, 100); S.sampleFrames++;
   if (S.sampleMs >= 2000) {
     if (S.sampleMs / S.sampleFrames > 32 && S.quality !== 'low') {
-      if (S.autoLevel === 0) aoPass.enabled = false;
-      else if (S.autoLevel === 1) { renderer.setPixelRatio(1); renderer.setSize(innerWidth, innerHeight, false); composer.setPixelRatio(1); composer.setSize(innerWidth, innerHeight); }
-      else setQuality('low');
+      setQuality('low');
       S.autoLevel++;
     }
     S.sampleMs = 0; S.sampleFrames = 0;

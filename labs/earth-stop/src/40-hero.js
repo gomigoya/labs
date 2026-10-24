@@ -1,36 +1,35 @@
 // A faceted globe, physical meridian carriage, inertial bead, orbital sun lamp.
 const EARTH_SPIN=new THREE.Group();EARTH_SPIN.position.copy(E);HERO.add(EARTH_SPIN);
-KIT.mesh(new THREE.CylinderGeometry(.38,.43,.06,48),MAT.brass,HERO,0,MODEL.top+.045,0);
-KIT.mesh(new THREE.CylinderGeometry(.31,.36,.05,48),MAT.graphite,HERO,0,MODEL.top+.10,0);
-KIT.rod(V3(0,MODEL.top+.12,0),V3(0,E.y-RV*.9,0),.025,MAT.brass,HERO);
+KIT.mesh(new THREE.CylinderGeometry(.38,.43,.04,48),MAT.brass,HERO,0,MODEL.top+.045,0);
+KIT.rod(V3(0,MODEL.top+.065,0),V3(0,E.y-RV*.9,0),.025,MAT.brass,HERO);
 KIT.rod(V3(0,E.y-RV*1.2,0),V3(0,E.y+RV*1.2,0),.012,MAT.brass,HERO);
 const earthGeometry=new THREE.SphereGeometry(RV,96,64);
 const earthMaterial=new THREE.ShaderMaterial({
- uniforms:{uSun:{value:V3(1,0,0)},uTime:{value:0},uEdge:{value:new THREE.Color(THEME.cool)}},
+ uniforms:{uSun:{value:V3(1,0,0)},uTime:{value:0},uEdge:{value:new THREE.Color(THEME.cool)},uSea:{value:inkConfig().environment.globeSea.map(c=>new THREE.Color(c))},uLand:{value:inkConfig().environment.globeLand.map(c=>new THREE.Color(c))},uCloud:{value:new THREE.Color(inkConfig().environment.cloud)},uDark:{value:new THREE.Vector3(...inkConfig().dark)},uMid:{value:new THREE.Vector3(...inkConfig().mid)},uLight:{value:new THREE.Vector3(...inkConfig().light)}},
  vertexShader:`varying vec3 vLocal;varying vec3 vNormal;varying vec3 vWorld;
  void main(){vLocal=normalize(position);vNormal=normalize(mat3(modelMatrix)*normal);
  vWorld=(modelMatrix*vec4(position,1.0)).xyz;gl_Position=projectionMatrix*viewMatrix*vec4(vWorld,1.0);}`,
- fragmentShader:`uniform vec3 uSun;uniform vec3 uEdge;uniform float uTime;
+ fragmentShader:`uniform vec3 uSun;uniform vec3 uEdge;uniform vec3 uSea[3],uLand[3],uCloud,uDark,uMid,uLight;uniform float uTime;
  varying vec3 vLocal;varying vec3 vNormal;varying vec3 vWorld;
- float terrain(vec3 p){return sin(p.x*7.0+p.z*3.0)*.42+sin(p.z*9.0-p.y*5.0)*.32+cos(p.y*13.0+p.x*4.0)*.19+sin(p.x*29.0+p.z*21.0)*.07;}
+ float terrain(vec3 p){return sin(p.x*7.0+p.z*3.0)*.42+sin(p.z*9.0-p.y*5.0)*.32+cos(p.y*13.0+p.x*4.0)*.19;}
  float hash(vec3 p){return fract(sin(dot(p,vec3(127.1,311.7,74.7)))*43758.5453);}
  void main(){vec3 n=normalize(vNormal),p=normalize(vLocal);float h=terrain(p);
- float land=smoothstep(.12,.16,h),coast=smoothstep(.08,.13,h)*(1.0-smoothstep(.16,.21,h));
- float depth=smoothstep(-.65,.13,h);vec3 sea=mix(vec3(.018,.055,.105),vec3(.075,.29,.36),depth);
- vec3 soil=mix(vec3(.16,.27,.13),vec3(.44,.48,.26),smoothstep(.15,.7,h));
- vec3 col=mix(sea,soil,land);col=mix(col,vec3(.61,.51,.31),coast*.7);
- float d=dot(n,normalize(uSun)),day=smoothstep(-.045,.045,d);
- float cloud=smoothstep(.87,.96,sin(p.y*48.0+sin(p.x*13.0+p.z*9.0)+uTime*.025));
- col=mix(col,vec3(.65,.71,.73),cloud*.25);
- vec3 viewDir=normalize(cameraPosition-vWorld);float spec=pow(max(0.0,dot(reflect(-normalize(uSun),n),viewDir)),48.0)*(1.0-land);
+ float land=step(.13,h);vec3 sea=h<-.2?uSea[0]:(h<.0?uSea[1]:uSea[2]);
+ vec3 soil=h<.3?uLand[0]:(h<.5?uLand[1]:uLand[2]);
+ vec3 col=mix(sea,soil,land);float d=dot(n,normalize(uSun)),day=step(0.0,d);
+ float cloud=step(.92,sin(p.y*48.0+sin(p.x*13.0+p.z*9.0)+uTime*.025));
+ col=mix(col,uCloud,cloud);
  float city=step(.986,hash(floor(p*230.0)))*land*(1.0-day);
- float rim=exp(-abs(d)*75.0);
- gl_FragColor=vec4(col*(.12+day*.9)+spec*.18+city*vec3(1.8,1.0,.35)+uEdge*rim*1.6,1.0);
+ vec3 tone=d<0.0?uDark:(d<.55?uMid:uLight);
+ gl_FragColor=vec4(col*tone+city*uCloud,1.0);
  #include <tonemapping_fragment>
  #include <colorspace_fragment>
  }`
 });
 const EARTH=KIT.mesh(earthGeometry,earthMaterial,EARTH_SPIN);EARTH.castShadow=false;
+const earthInkDepth=KIT.mesh(earthGeometry,new THREE.MeshBasicMaterial({colorWrite:false}),EARTH_SPIN);
+earthInkDepth.scale.setScalar(.999);earthInkDepth.castShadow=false;earthInkDepth.receiveShadow=false;
+
 // Thin meridians and parallels are etched into the globe; no reference overlays.
 for(let j=0;j<12;j++){
  const a=j/12*Math.PI*2;
@@ -58,8 +57,8 @@ const speedMaterial=new THREE.ShaderMaterial({
  void main(){float edge=1.0-smoothstep(.72,1.0,abs(vUv.y-.5)*2.0);
  float dash=step(.38,fract(vUv.x*max(uUnit,1.0)*12.0));if(uStyle>.5&&dash<.5)discard;
  float mark=1.0-smoothstep(.025,.055,abs(fract(vUv.x*uUnit+.5)-.5));
- float streak=pow(max(0.0,sin(vUv.x*32.0-uTime*4.0)),12.0)*.12;
- gl_FragColor=vec4(uColor*(.7+mark*.7+streak),edge*.85*uOpacity);
+ 
+ gl_FragColor=vec4(uColor*(.7+step(.5,mark)*.3),edge*.85*uOpacity);
  #include <tonemapping_fragment>
  #include <colorspace_fragment>
  }`,transparent:true,depthWrite:false,side:THREE.DoubleSide
@@ -72,12 +71,12 @@ KIT.expansion(HERO,-.22,2.79,.05);KIT.expansion(HERO,.95,1.55,.3);
 const SUN_ORBIT=new THREE.Group();SUN_ORBIT.position.copy(E);HERO.add(SUN_ORBIT);
 KIT.mesh(new THREE.TorusGeometry(MODEL.sunRadius,.009,8,96).rotateX(Math.PI/2),MAT.brass,SUN_ORBIT,0,-.50,0);
 const SUN_CARRIAGE=new THREE.Group();SUN_ORBIT.add(SUN_CARRIAGE);
-const sunGlow=new THREE.MeshStandardMaterial({color:THEME.warm,emissive:THEME.warm,emissiveIntensity:2.5,roughness:.5});
+const sunGlow=new THREE.MeshStandardMaterial({color:THEME.warm,emissive:THEME.warm,emissiveIntensity:.25});
 KIT.mesh(new THREE.CylinderGeometry(.16,.19,.035,32),MAT.graphite,SUN_CARRIAGE,MODEL.sunRadius,-.5,0);
 KIT.rod(V3(MODEL.sunRadius,-.49,0),V3(MODEL.sunRadius,.18,0),.015,MAT.brass,SUN_CARRIAGE);
 KIT.ball(MODEL.sunBall,sunGlow,SUN_CARRIAGE,MODEL.sunRadius,.18,0,2);
 const sunGuard=KIT.mesh(new THREE.TorusGeometry(.17,.009,8,48).rotateY(Math.PI/2),MAT.brass,SUN_CARRIAGE,MODEL.sunRadius,.18,0);
-const SUN_LIGHT=new THREE.PointLight(THEME.warm,1.8,5,2);SUN_LIGHT.position.set(MODEL.sunRadius,.18,0);SUN_CARRIAGE.add(SUN_LIGHT);
+const SUN_LIGHT=new THREE.Object3D();SUN_LIGHT.position.set(MODEL.sunRadius,.18,0);SUN_CARRIAGE.add(SUN_LIGHT);
 // Countable benchmark beads occupy a common linear speed axis on a fixed rack.
 const BENCHMARK=new THREE.Group();BENCHMARK.position.set(-.68,1.14,.55);HERO.add(BENCHMARK);
 function updateHero(){
@@ -102,6 +101,6 @@ function updateHero(){
  DIAL.knob.rotation.z=-periodU*Math.PI*1.5;
  // Angular fill on static torus geometry, no per-frame allocation.
  DIAL.arc.material.uniforms.uFill.value=Math.max(.005,periodU);
- SWITCH_LEVER.position.x=1.18+S.mode.value*.12;
- PLAY_BUTTON.position.z=.82+(S.run?-.012:0);
+ SWITCH_LEVER.position.x=CONTROL_LAYOUT.mode.x+CONTROL_LAYOUT.mode.leverOffset+S.mode.value*CONTROL_LAYOUT.mode.travel;
+ PLAY_BUTTON.position.z=CONTROL_LAYOUT.play.z-(S.run?CONTROL_LAYOUT.play.travel:0);
 }

@@ -1,3 +1,5 @@
+// Shared diagram colors; no visible labels added.
+for(const [name,value]of Object.entries({'--diagram-paper':'#'+INK_CFG.diagram.screen.toString(16),'--diagram-ink':'#'+INK_CFG.diagram.ink.toString(16),'--diagram-border':INK_CFG.diagram.borderPx+'px'}))document.documentElement.style.setProperty(name,value);
 // All user-facing language lives only in this accessibility dictionary.
 const LABELS={
  canvas:{ko:'\uBE14\uB799\uD640 \uC870\uC11D \uC2E4\uD5D8\uC2E4',en:'Black hole tidal laboratory'},
@@ -73,8 +75,8 @@ function setRailFromPointer(u){
 function pointerValue(p,d){
  if(d.type==='rail')setRailFromPointer(d.u+(p.x-d.start.x)/(railEnd-railStart));
  if(d.type==='slider')setRailFromPointer(d.u+(p.x-d.start.x)/SLIDER.width);
- if(d.type==='graph0')setRailFromPointer((p.x-GRAPHS[0].mesh.position.x+0.46)/0.92);
- if(d.type==='graph1')set('massIndex',clamp(Math.floor((p.x-GRAPHS[1].mesh.position.x+0.46)/0.92*3),0,2));
+ if(d.type==='graph0')setRailFromPointer((p.x-GRAPHS[0].mesh.position.x+CONTROL_LAYOUT.graphSize[0]/2)/CONTROL_LAYOUT.graphSize[0]);
+ if(d.type==='graph1')set('massIndex',clamp(Math.floor((p.x-GRAPHS[1].mesh.position.x+CONTROL_LAYOUT.graphSize[0]/2)/CONTROL_LAYOUT.graphSize[0]*3),0,2));
  if(d.type==='turn'||d.type==='dial'){
   const delta=d.type==='turn'?p.z-d.start.z:p.x-d.start.x;
   if(Math.abs(delta)>0.035){set('orientation',delta>0?'transverse':'radial');d.moved=true;}
@@ -88,7 +90,7 @@ canvas.addEventListener('pointerdown',event=>{
  if(!QUEST.allows())return;QUEST.touch();S.fly=null;
  if(obj===PLAY_BUTTON){action('play');return;}if(obj===SWITCH){action('cutaway');return;}
  const type=obj===RAIL_HIT?'rail':obj===TURN_HIT?'turn':obj===DIAL.knob?'dial':obj===SLIDER.handle?'slider':obj===GRAPHS[0].mesh?'graph0':'graph1';
- const plane=['rail','turn'].includes(type)?new THREE.Plane(V3(0,1,0),-(type==='turn'?E.y+0.28:railY+0.045)):new THREE.Plane(V3(0,0,1),-1.20);
+ const plane=['rail','turn'].includes(type)?new THREE.Plane(V3(0,1,0),-(type==='turn'?E.y+0.28:railY+0.045)):new THREE.Plane(V3(0,0,1),-obj.getWorldPosition(V3()).z);
  const p=raycaster.ray.intersectPlane(plane,V3());if(!p)return;
  S.drag={id:event.pointerId,type,plane,start:p,u:S.u.target,moved:false};S.playing.target=0;
  controls.enabled=false;canvas.setPointerCapture(event.pointerId);

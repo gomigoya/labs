@@ -32,7 +32,7 @@ const GRAMMAR = (()=>{
  const streakMaterial=new THREE.ShaderMaterial({uniforms:{uT:{value:0},uField:{value:0},uOpacity:{value:0}},
   vertexShader:`varying vec3 vP;void main(){vP=position;gl_Position=projectionMatrix*modelViewMatrix*instanceMatrix*vec4(position,1.0);}`,
   fragmentShader:`uniform float uT;uniform float uField;uniform float uOpacity;varying vec3 vP;
-   void main(){float core=pow(max(0.0,1.0-abs(vP.x)),2.0);gl_FragColor=vec4(vec3(0.20,0.78,0.67)*(0.45+0.45*uField),core*uOpacity*(0.65+0.15*sin(uT+vP.y*4.0)));}`,
+   void main(){float core=pow(max(0.0,1.0-abs(vP.x)),2.0);gl_FragColor=vec4(vec3(0.66,0.85,0.82)*(0.45+0.45*uField),core*uOpacity*(0.65+0.15*sin(uT+vP.y*4.0)));}`,
   transparent:true,depthWrite:false});
  const particles=new THREE.InstancedMesh(new THREE.PlaneGeometry(2,2),streakMaterial,PHYS.GRAMMAR.particles);flow.add(particles);particles.frustumCulled=false;
  const seed=mulberry32(450731),seeds=Array.from({length:PHYS.GRAMMAR.particles},()=>[seed(),seed(),seed()]);

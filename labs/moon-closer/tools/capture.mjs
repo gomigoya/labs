@@ -42,6 +42,7 @@ try {
   for (let i = 1; i <= 8; i++) for (const phase of ['intro', 'predict', 'act', 'event', 'confirm', 'card']) states.push([`q${i}-${phase}`, 0]);
   for (const name of ['teacher-strip', 'teacher-layers', 'teacher-ab', 'teacher-spot', 'teacher-laser', 'teacher-numbers', 'teacher-class-predict', 'attract-1', 'attract-2', 'attract-3', 'touch-pulse', 'thumb']) states.push([name, 0]);
   for (const mode of ['student', 'free', 'teacher', 'attract']) for (let i = 0; i < 3; i++) states.push([`vertical-${mode}-${i + 1}`, 0]);
+  states.push(['environment-wide', 0], ['environment-low', 0]);
   browser = await chromium.launch({ headless: true, args: ['--use-angle=d3d11', '--enable-gpu', '--ignore-gpu-blocklist'] });
   for (const [viewportName, width, height] of [['desktop', 1440, 900], ['laptop', 1280, 720], ['mobile', 375, 812], ['projector', 1920, 1080]]) {
     const mobile = viewportName === 'mobile';
@@ -122,6 +123,8 @@ try {
         else if (name === 'console') lab.shot('console', mobile);
         else if (name === 'rail-close') lab.shot(mobile ? 1 : 2, mobile);
         else lab.shot(mobile ? 0 : 1, mobile);
+        if (name === 'environment-wide') lab.shot(0, false);
+        if (name === 'environment-low') lab.quality('low');
         lab.step(1, 0);
         return { textAudit: lab.textAudit(), coverage: lab.heroCoverage(), perf: lab.perf(),
           closer: lab.state.u.value < 0 ? 0 : lab.PHYS.closerFromRailX(lab.state.u.value), horizontalScroll: document.documentElement.scrollWidth > innerWidth + 1 };

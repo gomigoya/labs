@@ -1,19 +1,25 @@
-scene.add(new THREE.HemisphereLight(THEME.hemisphereSky, THEME.hemisphereGround, 1.25));
-const keyLight = new THREE.SpotLight(THEME.warm, 26, 12, 0.65, 0.7, 1.5);
-keyLight.position.set(-2.2, 4.2, 3.3); keyLight.target.position.copy(E); keyLight.castShadow = true;
-keyLight.shadow.mapSize.set(2048, 2048); keyLight.shadow.bias = -0.0003; keyLight.shadow.normalBias = 0.02;
-scene.add(keyLight, keyLight.target);
-const fillLight = new THREE.RectAreaLight(THEME.cool, 2.8, 2.4, 2.0);
-fillLight.position.set(2.3, 2.8, 0.8); fillLight.lookAt(E); scene.add(fillLight);
-const rimLight = new THREE.PointLight(THEME.cool, 1.1, 4.5, 2);
-rimLight.position.set(-0.4, 2.3, -1.1); scene.add(rimLight);
-
-const composer = new EffectComposer(renderer);
-const renderPass = new RenderPass(scene, camera); composer.addPass(renderPass);
-const aoPass = new GTAOPass(scene, camera, innerWidth, innerHeight);
-aoPass.blendIntensity = 0.75; aoPass.updateGtaoMaterial({ radius: 0.18, samples: 8, distanceFallOff: 1, screenSpaceRadius: false }); composer.addPass(aoPass);
-const bokehPass = new BokehPass(scene, camera, { focus: 3.2, aperture: 0.0013, maxblur: 0.006 }); composer.addPass(bokehPass);
-const bloomPass = new UnrealBloomPass(new THREE.Vector2(innerWidth, innerHeight), 0.36, 0.45, 1.1); composer.addPass(bloomPass);
+// The reference rejects empty background neighbors. Supply a colorless inward
+// depth shell so objects against orbital paper still have silhouette neighbors.
+// It follows the camera without changing any shot, world object or color pixel.
+const inkBackdropGeometry=new THREE.SphereGeometry(camera.far*INK_CFG.depthBackdropRatio,32,16);
+const inkBackdropIndex=inkBackdropGeometry.index;
+for(let i=0;i<inkBackdropIndex.count;i+=3){const a=inkBackdropIndex.getX(i+1);inkBackdropIndex.setX(i+1,inkBackdropIndex.getX(i+2));inkBackdropIndex.setX(i+2,a);}
+inkBackdropGeometry.computeVertexNormals();
+const inkBackdrop=new THREE.Mesh(inkBackdropGeometry,new THREE.MeshBasicMaterial({colorWrite:false}));
+inkBackdrop.userData.inkInner=false;inkBackdrop.frustumCulled=false;camera.add(inkBackdrop);scene.add(camera);
+// One conversion site, after all scene/grammar construction and before lighting.
+KIT.toon=INK.toon;
+for(const name of Object.keys(MAT))MAT[name]=INK.convert(MAT[name]);
+INK.convertMaterials(scene);
+scene.background=new THREE.Color(INK_CFG.paper);scene.fog=new THREE.Fog(INK_CFG.paper,...INK_CFG.fog);
+scene.add(new THREE.AmbientLight(INK_CFG.ambient,INK_CFG.ambientIntensity));
+const keyLight=new THREE.SpotLight(INK_CFG.key,INK_CFG.keyIntensity,30,.65,0,1.5);
+keyLight.position.set(...INK_CFG.keyPosition);keyLight.target.position.set(...INK_CFG.keyTarget);keyLight.castShadow=true;
+keyLight.shadow.mapSize.setScalar(INK_CFG.shadowMap[0]);keyLight.shadow.bias=INK_CFG.shadowBias;keyLight.shadow.normalBias=INK_CFG.shadowNormalBias;
+scene.add(keyLight,keyLight.target);
+const composer=new EffectComposer(renderer);
+const renderPass=new RenderPass(scene,camera);composer.addPass(renderPass);
+const inkPass=INK.makeOutlinePass(scene,camera,{wobble:QS.get('wobble')??.5,lowQuality:()=>S.quality==='low'});composer.addPass(inkPass);
 composer.addPass(new OutputPass());
 const controls = new OrbitControls(camera, canvas);
 controls.enableDamping = true; controls.dampingFactor = 0.10; controls.minDistance = 0.5; controls.maxDistance = 24;
@@ -81,7 +87,6 @@ function shot(index = 1, vertical = innerWidth / innerHeight < 0.9) {
   controls.target.copy(chosen.target); camera.lookAt(chosen.target); camera.updateProjectionMatrix();
   if(chosen.offset||chosen.offsetX)camera.setViewOffset(innerWidth,innerHeight,-(chosen.offsetX||0),-(chosen.offset||0),innerWidth,innerHeight);
   controls.update(); camera.updateMatrixWorld();
-  bokehPass.uniforms.focus.value = camera.position.distanceTo(controls.target);
 }
 function flyTo(index, duration = 1.4) {
   const list = S.vertical ? SHOTS_VERTICAL : SHOTS;
@@ -94,15 +99,13 @@ function resize(refit = true) {
   const low = S.quality === 'low';
   renderer.setPixelRatio(Math.min(devicePixelRatio || 1, low ? 1 : 1.6));
   renderer.setSize(innerWidth, innerHeight, false); composer.setPixelRatio(renderer.getPixelRatio()); composer.setSize(innerWidth, innerHeight);
-  const size = renderer.getDrawingBufferSize(new THREE.Vector2()); bloomPass.setSize(size.x * (low ? 0.5 : 1), size.y * (low ? 0.5 : 1));
   camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix();
   if (refit) { const vertical=innerWidth/innerHeight<0.9; shot(vertical ? 0 : 1,vertical); }
 }
 function setQuality(level) {
   if (!['high', 'low'].includes(level)) throw new RangeError('quality');
   S.quality = level; const low = level === 'low';
-  aoPass.enabled = !low; bokehPass.enabled = !low;
-  keyLight.shadow.mapSize.setScalar(low ? 1024 : 2048);
+  keyLight.shadow.mapSize.setScalar(INK_CFG.shadowMap[low?1:0]);
   if (keyLight.shadow.map) { keyLight.shadow.map.dispose(); keyLight.shadow.map = null; }
   resize(false);
   return level;

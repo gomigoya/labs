@@ -1,3 +1,5 @@
+// Cream and ink tokens share the configured diagram palette.
+if(typeof INK_CFG!=='undefined'&&document.documentElement?.style?.setProperty)for(const [name,value]of Object.entries({'--diagram-paper':css(INK_CFG.diagram.screen),'--diagram-ink':css(INK_CFG.diagram.ink),'--diagram-border':INK_CFG.diagram.borderPx+'px'}))document.documentElement.style.setProperty(name,value);
 // Screen-reader language lives only in this dictionary; no visible text or tooltips.
 const LABELS={
  canvas:{ko:'\ub85c\ucf13 \ubc1c\uc0ac\ub300 \ubaa8\ud615 \uc2e4\ud5d8\uc2e4',en:'Rocket launch model laboratory'},
@@ -121,11 +123,11 @@ function hitRegion(parent,center,radius,kind,index){
  const hit=KIT.ball(radius,new THREE.MeshBasicMaterial({transparent:true,opacity:0,depthWrite:false}),parent,...center,1);
  hit.castShadow=hit.receiveShadow=false;hit.userData={kind,index};hitObjects.push(hit);return hit;
 }
-hitRegion(CONSOLE,[-1.38,.54,.76],.22,'dial');hitRegion(CONSOLE,[.72,.54,.76],.16,'play');
-hitRegion(CONSOLE,[1.17,.54,.76],.16,'gravity');
-const sliderHit=KIT.roundedPanel(SLIDER.width+.18,.18,.10,new THREE.MeshBasicMaterial({transparent:true,opacity:0,depthWrite:false}),CONSOLE,SLIDER.x,SLIDER.y,.75);
+hitRegion(CONTROL_FACE,C.dial.position,C.dial.hit,'dial');hitRegion(CONTROL_FACE,C.play.position,C.play.hit,'play');
+hitRegion(CONTROL_FACE,C.gravity.position,C.gravity.hit,'gravity');
+const sliderHit=KIT.roundedPanel(C.slider.width+.08,C.slider.hitHeight,C.slider.hitDepth,new THREE.MeshBasicMaterial({transparent:true,opacity:0,depthWrite:false}),CONTROL_FACE,...C.slider.position);
 sliderHit.userData.kind='slider';sliderHit.castShadow=sliderHit.receiveShadow=false;hitObjects.push(sliderHit);
-hitRegion(HERO,[-1.22,1.35,.03],.44,'engines');
+hitRegion(ENGINE_HANDLE,[0,0,0],.09,'engines');
 LOAD_SAMPLES.forEach((o,i)=>hitRegion(HERO,[o.position.x,1.14,.13],.12,'load',i));
 GLOBES.forEach((o,i)=>hitRegion(HERO,o.position.toArray(),.16,'globe',i));
 GRAPHS.forEach((o,i)=>{o.mesh.userData={kind:'graph',index:i};hitObjects.push(o.mesh);});
@@ -146,15 +148,17 @@ canvas.addEventListener('pointerdown',event=>{
   if(kind==='load')set('load',PHYS.DETENTS.load[index].value);if(kind==='globe')set('g',PHYS.DETENTS.g[index].value);
   tick();event.stopImmediatePropagation();return;
  }
- const plane=new THREE.Plane(V3(0,0,1),-hit.point.z),start=raycaster.ray.intersectPlane(plane,V3());if(!start)return;
- S.drag={kind,index,id:event.pointerId,plane,start,u:S.engines.target,angle:Math.atan2(start.x+1.38,start.y-.54)};
+ const local=['dial','slider','graph'].includes(kind),normal=local?V3(0,0,1).transformDirection(CONTROL_FACE.matrixWorld):V3(0,0,1);
+ const plane=new THREE.Plane().setFromNormalAndCoplanarPoint(normal,hit.point),start=raycaster.ray.intersectPlane(plane,V3());if(!start)return;
+ if(local)CONTROL_FACE.worldToLocal(start);
+ S.drag={kind,index,id:event.pointerId,plane,local,start,u:S.engines.target,angle:Math.atan2(start.x-C.dial.position[0],start.y-C.dial.position[1])};
  controls.enabled=false;S.fly=null;canvas.setPointerCapture(event.pointerId);event.stopImmediatePropagation();
 },{capture:true});
 canvas.addEventListener('pointermove',event=>{
- const d=S.drag;if(!d||d.id!==event.pointerId)return;rayFromEvent(event);const p=raycaster.ray.intersectPlane(d.plane,V3());if(!p)return;
+ const d=S.drag;if(!d||d.id!==event.pointerId)return;rayFromEvent(event);const p=raycaster.ray.intersectPlane(d.plane,V3());if(!p)return;if(d.local)CONTROL_FACE.worldToLocal(p);
  if(d.kind==='slider'||d.kind==='engines')setRailFromPointer(d.u+(p.x-d.start.x)/(d.kind==='slider'?SLIDER.width:.75));
  if(d.kind==='dial'){
-  const angle=Math.atan2(p.x+1.38,p.y-.54),delta=Math.atan2(Math.sin(angle-d.angle),Math.cos(angle-d.angle));
+  const angle=Math.atan2(p.x-C.dial.position[0],p.y-C.dial.position[1]),delta=Math.atan2(Math.sin(angle-d.angle),Math.cos(angle-d.angle));
   d.u=PHYS.dialRailAfterTurn(d.u,delta);d.angle=angle;setRailFromPointer(d.u);
  }
  if(d.kind==='graph'){

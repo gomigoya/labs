@@ -1,6 +1,7 @@
 function update(dt){
  ATTRACT.update(dt);
  const physicalDt=DIRECTOR.time(dt);
+ ENVIRONMENT.update(physicalDt);
  const k=1-Math.exp(-18*dt);
  for(const name of ['u','species','ground','playing','sound','ui','cassette']){const p=S[name];p.value+=(p.target-p.value)*k;if(Math.abs(p.target-p.value)<1e-8)p.value=p.target;}
  S.t.target+=physicalDt*S.playing.value*(Q.free?1.8:Math.PI/.9);S.t.value+=(S.t.target-S.t.value)*k;
@@ -11,15 +12,7 @@ function update(dt){
   camera.setViewOffset(innerWidth,innerHeight,ox,oy,innerWidth,innerHeight);if(u===1)S.fly=null;}
  controls.update();camera.updateMatrixWorld();DIRECTOR.update(dt);camera.updateMatrixWorld();TEACHER.update(dt);if(T.mode==='teacher')TEACHER_CFG.frameViewport();renderFrame(dt);S.frames++;
 }
-function renderFrame(dt){
- bokehPass.uniforms.focus.value=camera.position.distanceTo(controls.target);const background=scene.background,fog=scene.fog;scene.background=bloomBlack;scene.fog=null;
- scene.traverseVisible(o=>{if(!o.material)return;const original=o.material;
-  const mask=m=>m.isShaderMaterial||(m.emissive&&m.emissiveIntensity>0)?m:o.isSprite?blackSprite:o.isLine?blackLine:blackMesh;
-  bloomMaterials.set(o,original);o.material=Array.isArray(original)?original.map(mask):mask(original);});
- bloomComposer.render(dt);
- bloomMaterials.forEach((material,object)=>object.material=material);bloomMaterials.clear();scene.background=background;scene.fog=fog;
- composer.render(dt);
-}
+function renderFrame(dt){styleDiagramPanels(scene);INK.convertMaterials(scene);composer.render(dt);}
 function step(n=1,dt=1/60){if(!Number.isInteger(n)||n<0||n>120||!Number.isFinite(dt)||dt<0||dt>1)throw new RangeError('step');for(let i=0;i<n;i++)update(dt);return{kids:PHYS.kidsFromRailX(S.u.value),species:SPECIES_KEYS[Math.round(S.species.value)],mu:GROUND_VALUES[Math.round(S.ground.value)]};}
 function layer(name,on){const layers={room:ROOM,console:CONSOLE,hero:HERO,capacities:CAPACITIES,track:TRACK};if(!(name in layers))throw new RangeError(name);S.layers[name]=!!on;layers[name].visible=!!on;}
 async function capture(name='hero'){
@@ -34,14 +27,13 @@ async function capture(name='hero'){
    S.playing.value=S.playing.target=0;S.t.value=S.t.target=representative.phase;S.cassette.value=S.cassette.target=0;
    ROOM.visible=CONSOLE.visible=HERO.visible=TRACK.visible=true;updateHero();
    camera.clearViewOffset();camera.aspect=1200/750;camera.position.copy(TEACHER_CFG.heroShot.pos);controls.target.copy(TEACHER_CFG.heroShot.target);camera.fov=TEACHER_CFG.heroShot.fov;camera.lookAt(controls.target);camera.updateProjectionMatrix();camera.setViewOffset(1200,750,-TEACHER_CFG.heroShot.offsetX,-TEACHER_CFG.heroShot.offset,1200,750);
-   renderer.setPixelRatio(1);renderer.setSize(1200,750,false);composer.setPixelRatio(1);composer.setSize(1200,750);bloomComposer.setPixelRatio(1);bloomComposer.setSize(1200,750);
+   renderer.setPixelRatio(1);renderer.setSize(1200,750,false);composer.setPixelRatio(1);composer.setSize(1200,750);
    drawGraphs();GRAMMAR.update(0);
    // Grammar groups follow the base apparatus in HERO; the thumbnail isolates the tug.
    const end=HERO.children.indexOf(CAPACITIES);HERO.children.forEach((child,i)=>{if(i>=end)child.visible=false;});
    camera.updateMatrixWorld();renderFrame(0);data=canvas.toDataURL('image/jpeg',.94);
   }finally{
-   renderer.setPixelRatio(saved.ratio);renderer.setSize(saved.size.x,saved.size.y,false);composer.setPixelRatio(saved.ratio);composer.setSize(saved.size.x,saved.size.y);bloomComposer.setPixelRatio(saved.ratio);bloomComposer.setSize(saved.size.x,saved.size.y);
-   const buffer=renderer.getDrawingBufferSize(new THREE.Vector2()),bloomScale=S.quality==='low'?.5:1;bloomPass.setSize(buffer.x*bloomScale,buffer.y*bloomScale);
+   renderer.setPixelRatio(saved.ratio);renderer.setSize(saved.size.x,saved.size.y,false);composer.setPixelRatio(saved.ratio);composer.setSize(saved.size.x,saved.size.y);
    camera.copy(saved.camera);controls.target.copy(saved.target);S.fly=saved.fly;T.mode=saved.mode;for(const [k,v]of Object.entries(saved.state))Object.assign(S[k],v);for(const [object,visible]of saved.visibility)object.visible=visible;TEACHER_CFG.ui(saved.ui);updateHero();
   }
   const response=await fetch('/__save/thumb.jpg',{method:'POST',headers:{'Content-Type':'text/plain'},body:data});if(!response.ok)throw new Error('capture '+response.status);return {name,width:1200,height:750};
@@ -50,7 +42,7 @@ const size=renderer.getSize(new THREE.Vector2());
  if(!canvas.width||!canvas.height||size.x!==innerWidth||size.y!==innerHeight)resize(false);
  update(0);const data=canvas.toDataURL('image/jpeg',.94);const r=await fetch('/__save/'+name+'.jpg',{method:'POST',headers:{'Content-Type':'text/plain'},body:data});if(!r.ok)throw new Error('capture '+r.status);return{name,width:canvas.width,height:canvas.height};
 }
-function perf(){return{ms:S.ms,fps:1000/S.ms,frames:S.frames,calls:renderer.info.render.calls,triangles:renderer.info.render.triangles,quality:S.quality,ao:aoPass.enabled,bokeh:bokehPass.enabled,pixelRatio:renderer.getPixelRatio(),geometries:renderer.info.memory.geometries,textures:renderer.info.memory.textures};}
+function perf(){return{ms:S.ms,fps:1000/S.ms,frames:S.frames,calls:renderer.info.render.calls,triangles:renderer.info.render.triangles,quality:S.quality,ao:false,bokeh:false,pixelRatio:renderer.getPixelRatio(),geometries:renderer.info.memory.geometries,textures:renderer.info.memory.textures};}
 window.__lab={state:S,PHYS,quest:QUEST,mode:m=>TEACHER.mode(m==='explore'?'free':m),SHOTS,SHOTS_VERTICAL,set,preset,shot,flyTo,layer,step,quality:setQuality,textAudit,heroCoverage,perf,capture};
 function frame(now){requestAnimationFrame(frame);const elapsed=S.lastTime?now-S.lastTime:16.67;S.lastTime=now;if(document.hidden)return;ATTRACT.health(elapsed);S.ms+=(elapsed-S.ms)*.03;update(Math.min(elapsed/1000,.05));}
 function boot(){

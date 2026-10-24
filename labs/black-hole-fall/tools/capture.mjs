@@ -49,7 +49,8 @@ try {
     ...Array.from({length:6},(_,i)=>[`layer-${i}`,i===5?7:3]),
     ['compare-pin',2],['shader-close',3],
     ...Array.from({length:3},(_,i)=>[`all-near-${i}`,i]),
-    ...Array.from({length:3},(_,i)=>[`all-far-${i}`,i])
+    ...Array.from({length:3},(_,i)=>[`all-far-${i}`,i]),
+    ['attract-4',0],['environment-high',0],['environment-low',0]
   ];
   browser = await chromium.launch({ headless: true, args: ['--use-angle=d3d11', '--enable-gpu', '--ignore-gpu-blocklist'] });
   for (const [viewportName, width, height] of [['teacher',1920,1080], ['compact',1280,720], ['desktop', 1440, 900], ['mobile', 375, 812]]) {
@@ -113,6 +114,7 @@ try {
             smallTargets:[...document.querySelectorAll('button')].filter(el=>el.getClientRects().length).map(el=>({aria:el.getAttribute('aria-label'),r:el.getBoundingClientRect()})).filter(({r})=>r.width<55.9||r.height<55.9).map(({aria})=>aria)};
         }
         lab.quest.mode(true);lab.preset(preset);lab.set('playing',false);
+        if(name.startsWith('environment-'))lab.quality(name==='environment-low'?'low':'high');
         const grammar=window.GRAMMAR;grammar.unpin();grammar.set(grammar.defaults);
         if(name.startsWith('layer-')){grammar.set(Object.fromEntries(grammar.LAYERS.map((n,i)=>[n,i===Number(name.slice(-1))])));}
         if(name.startsWith('all-')){grammar.set(Object.fromEntries(grammar.LAYERS.map(n=>[n,true])));lab.set('massIndex',Number(name.slice(-1)));lab.set('r',name.includes('near')?0.0005:1000);}

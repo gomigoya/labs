@@ -1,5 +1,4 @@
 // Real-time presentation clock; only physical time is slowed at scientific events.
-const questLight=new THREE.PointLight(THEME.warm,0,1.25,2);scene.add(questLight);
 const DIRECTOR={
  clock:0,eventLeft:0,snapshot:null,previewAt:-1,tone:null,
  clear(){this.eventLeft=0;this.snapshot=null;document.body.classList.remove('q-event','q-bars');qOverlay.innerHTML='';},
@@ -28,23 +27,23 @@ const DIRECTOR={
   }else if(this.tone){this.tone.o.stop();this.tone=null;}
   if(Math.floor(this.clock*12)!==this.previewAt){this.previewAt=Math.floor(this.clock*12);qPictures.querySelectorAll('[data-candidate]').forEach(b=>{const d=QUESTS[Q.i];b.innerHTML=CARDS.picture(d.id,d.candidates[+b.dataset.candidate],this.clock);});}
   const d=QUESTS[Q.i],f=Q.flags,project=p=>{const v=p.clone().project(camera);return[(v.x+1)*innerWidth/2,(1-v.y)*innerHeight/2];};
-  const focus=name=>name==='engines'?ENGINE_HANDLE.getWorldPosition(V3()):name==='load'?LOAD_SAMPLES[2].getWorldPosition(V3()):name==='pin'||name==='inspect'?V3(1.25,2.4,.3):PLAY_BUTTON.getWorldPosition(V3());
-  let body='';questLight.intensity=0;
+  const focus=name=>name==='engines'?DIAL.knob.getWorldPosition(V3()):name==='load'?LOAD_SAMPLES[2].getWorldPosition(V3()):name==='pin'||name==='inspect'?V3(1.25,2.4,.3):PLAY_BUTTON.getWorldPosition(V3());
+  let body='';
   if(!Q.free&&Q.phase==='intro'&&f.elapsed<.9)body=`<g transform="translate(${innerWidth/2-42} ${innerHeight/2-42}) scale(3.5)"><defs><clipPath id="q-wipe"><rect width="${Math.min(24,f.elapsed/.65*24)}" height="24"/></clipPath></defs><g clip-path="url(#q-wipe)">${icon(d.icon).replace(/^<svg[^>]*>|<\/svg>$/g,'')}</g></g>`;
   if(!Q.free&&Q.phase==='act'){
    const goal=d.goalMarks.find(g=>g.control==='pin'&&!f.before)||d.goalMarks.find(g=>g.control==='load'&&selection().load!==g.value)||d.goalMarks.find(g=>g.control==='engines'&&selection().n!==g.value)||d.goalMarks.find(g=>g.control==='inspect'&&S.ignited.target)||d.goalMarks[0];
-   const point=focus(goal.control);questLight.position.copy(point).add(V3(0,.12,.15));questLight.intensity=.28;if(goal.control==='engines'&&goal.value)point.x=-1.60+PHYS.engineRailX(goal.value)*.75;
-   const [x,y]=project(point);body=CARDS.path(`M${x-17} ${y-22}h34v44h-34z`,'#ffce8b',true);
-   if(f.demoLeft>0&&!S.drag){const move=(2.2-f.demoLeft)/2.2*45;body+=CARDS.path(`M${x-45} ${y+30}h45m-7-6 7 6-7 6`,'#ffce8b',true)+`<g transform="translate(${x-55+move} ${y+34})">${icon('hand').replace(/^<svg[^>]*>|<\/svg>$/g,'')}</g>`;}
+   const point=focus(goal.control);
+   const [x,y]=project(point);body=CARDS.path(`M${x-17} ${y-22}h34v44h-34z`,'#221d18',true);
+   if(f.demoLeft>0&&!S.drag){const move=(2.2-f.demoLeft)/2.2*45;body+=CARDS.path(`M${x-45} ${y+30}h45m-7-6 7 6-7 6`,'#221d18',true)+`<g transform="translate(${x-55+move} ${y+34})">${icon('hand').replace(/^<svg[^>]*>|<\/svg>$/g,'')}</g>`;}
    // Only the current control receives the extra focus ring; other handles retain their material.
-   const [cx,cy]=project(focus(goal.control));body+=`<circle cx="${cx}" cy="${cy}" r="24" stroke="#ffce8b" opacity=".65"/>`;
+   const [cx,cy]=project(focus(goal.control));body+=`<circle cx="${cx}" cy="${cy}" r="24" stroke="#221d18" opacity=".65"/>`;
   }
   if(this.eventLeft>0&&!Q.free&&Q.i===1&&!S.fly){const dy=(ROCKET.position.y-this.eventLift)*.2;camera.position.y+=dy;controls.target.y+=dy;this.eventLift+=dy;}
   if(this.eventLeft>0&&!Q.free){
    const [x,y]=project(ROCKET.getWorldPosition(V3())),age=1.4-this.eventLeft,w=Math.min(1,age/.45)*60;
    const bx=Math.max(6,Math.min(innerWidth-196,x+40)),by=Math.max(160,Math.min(innerHeight-300,y-110));
    const explanation=d.card(this.snapshot);
-   body=explanation?`<circle cx="${x}" cy="${y}" r="4" fill="#64ead0"/>`+CARDS.path(`M${x} ${y}l${w} -45`,'#64ead0')+(age>.45?`<svg x="${bx}" y="${by}" width="190" height="90">${explanation.replace(/^<svg[^>]*>|<\/svg>$/g,'')}</svg>`:''):'';
+   body=explanation?`<circle cx="${x}" cy="${y}" r="4" fill="#37795d"/>`+CARDS.path(`M${x} ${y}l${w} -45`,'#37795d')+(age>.45?`<svg x="${bx}" y="${by}" width="190" height="90"><rect x="1" y="1" width="188" height="88" rx="12" fill="#f4efe3" stroke="#221d18" stroke-width="1.5"/>${explanation.replace(/^<svg[^>]*>|<\/svg>$/g,'')}</svg>`:''):'';
   }
   qOverlay.innerHTML=body?`<svg viewBox="0 0 ${innerWidth} ${innerHeight}">${body}</svg>`:'';
  }

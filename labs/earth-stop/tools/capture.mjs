@@ -15,6 +15,9 @@ if(!output.startsWith(root+path.sep))throw new Error('Output must stay inside th
 const selected=arg('only','').split(',').filter(Boolean),lite=process.argv.includes('--lite');
 const grammarNames=[...fs.readFileSync(path.join(root,'src/45-grammar.js'),'utf8').match(/const LAYERS=Object.freeze\(\[([^\]]+)\]/)[1].matchAll(/'([^']+)'/g)].map(m=>m[1]);
 const states=[
+ {name:'r9-panels-sudden',preset:0,shot:'console'},
+ {name:'r9-panels-stopped',preset:5,shot:'console'},
+ {name:'r9-orbital-wide',preset:0,shot:0},
  ...['base','numbers','stack','ab','spotlight','laser','predict','result','reset'].map(teacher=>({name:`teacher-${teacher}`,teacher,preset:0})),
  ...[0,1,2].map(stage=>({name:`attract-${stage+1}`,stage,preset:0})),
  {name:'touch-pulse',wake:true,preset:0},{name:'thumb',thumb:true,preset:0},

@@ -102,7 +102,7 @@ function syncUI(){
   if(toolbar.dataset.key===key)return;toolbar.dataset.key=key;
   const i=Math.round(S.body.value),bodyNames=['earth','moon','rock','rock','band','ring','band','star','compact','space'];
   const selected=document.getElementById('tool-body');selected.innerHTML=icon(bodyNames[i]);
-  selected.style.color='#'+new THREE.Color(THEME.bodies[i]).getHexString();selected.setAttribute('aria-label',LABELS.bodies[i][LANG]);
+  selected.style.color='#'+new THREE.Color(INK_CFG.diagram.ink).getHexString();selected.setAttribute('aria-label',LABELS.bodies[i][LANG]);
   document.getElementById('tool-pause').innerHTML=icon(S.playing.target?'pause':'play');
   document.getElementById('tool-pause').setAttribute('aria-pressed',String(!!S.playing.target));
   document.getElementById('tool-sound').innerHTML=icon(S.sound.target?'sound':'muted');
@@ -116,10 +116,9 @@ const HIT_MATERIAL=new THREE.MeshBasicMaterial({visible:false});
 function hitBox(parent,w,h,d,x,y,z,type){const mesh=KIT.mesh(new THREE.BoxGeometry(w,h,d),HIT_MATERIAL,parent,x,y,z);mesh.userData.control=type;mesh.castShadow=false;return mesh;}
 const specimenHits=SPECIMENS.map((s,i)=>{const hit=KIT.ball(0.095,HIT_MATERIAL,s.group);hit.userData.body=i;hit.castShadow=false;return hit;});
 const dragObjects=[
-  hitBox(CONSOLE,0.38,0.38,0.16,-1.40,0.55,0.73,'bodyDial'),
-  hitBox(CONSOLE,1.76,0.19,0.15,-0.22,0.36,0.72,'mass'),
-  hitBox(CONSOLE,0.28,0.29,0.17,1.04,0.55,0.76,'run'),
-  hitBox(CONSOLE,0.18,0.17,0.14,1.43,0.35,0.74,'sound'),
+  ...[['dial','bodyDial'],['slider','mass'],['run','run'],['sound','sound']].map(([key,type])=>{
+    const c=CONTROL_LAYOUT[key];return hitBox(CONTROL_FACE,...c.hit,...c.at,type);
+  }),
   hitBox(BALANCE_RIG,0.95,0.23,0.20,0,1.15,0.30,'massHero'),
   hitBox(SHELF_RIG,1.20,0.22,1.20,0,0.99,0,'carousel'),
   hitBox(JUMP_RIG,0.22,0.23,0.22,0.24,1.16,0.27,'run'),
@@ -143,27 +142,30 @@ canvas.addEventListener('pointerdown',event=>{
   if(!QUEST.allows(control)){event.stopImmediatePropagation();return;}QUEST.touch();
   if(type==='run'||type==='sound'){action(type);event.stopImmediatePropagation();return;}
   const world=hit.object.getWorldPosition(V3());
-  const plane=new THREE.Plane(V3(0,0,1),-world.z),p=raycaster.ray.intersectPlane(plane,V3());if(!p)return;
-  S.drag={type,id:event.pointerId,plane,start:p,body:S.body.target,nWeights:S.nWeights.target,
-    angle:Math.atan2(p.x+1.4,p.y-0.55),object:hit.object};
+  const normal=V3(0,0,1).applyQuaternion(hit.object.getWorldQuaternion(new THREE.Quaternion()));
+  const plane=new THREE.Plane().setFromNormalAndCoplanarPoint(normal,world),p=raycaster.ray.intersectPlane(plane,V3());if(!p)return;
+  const local=hit.object.parent.worldToLocal(p.clone());
+  S.drag={type,id:event.pointerId,plane,start:local,body:S.body.target,nWeights:S.nWeights.target,
+    angle:Math.atan2(local.x-CONTROL_LAYOUT.dial.at[0],local.y-CONTROL_LAYOUT.dial.at[1]),object:hit.object};
   controls.enabled=false;S.fly=null;canvas.setPointerCapture(event.pointerId);event.stopImmediatePropagation();
 },{capture:true});
 canvas.addEventListener('pointermove',event=>{
   const d=S.drag;if(!d||d.id!==event.pointerId)return;
-  rayFromEvent(event);const p=raycaster.ray.intersectPlane(d.plane,V3());if(!p)return;
+  rayFromEvent(event);const world=raycaster.ray.intersectPlane(d.plane,V3());if(!world)return;
+  const p=d.object.parent.worldToLocal(world.clone());
   if(d.type==='mass'||d.type==='massHero'){
-    const width=d.type==='mass'?SLIDER.width:MASS_RAIL.width*BALANCE_RIG.scale.x;
+    const width=d.type==='mass'?SLIDER.width:MASS_RAIL.width;
     setRailFromPointer('nWeights',PHYS.railX(d.nWeights)+(p.x-d.start.x)/width);
   }
   if(d.type==='carousel')setRailFromPointer('body',PHYS.bodyRailX(d.body)+(p.x-d.start.x)/(PHYS.VIEW.carouselRadius*2));
   if(d.type==='bodyDial'){
-    const angle=Math.atan2(p.x+1.4,p.y-0.55),delta=Math.atan2(Math.sin(angle-d.angle),Math.cos(angle-d.angle));
+    const angle=Math.atan2(p.x-CONTROL_LAYOUT.dial.at[0],p.y-CONTROL_LAYOUT.dial.at[1]),delta=Math.atan2(Math.sin(angle-d.angle),Math.cos(angle-d.angle));
     setRailFromPointer('body',PHYS.bodyRailX(d.body)+delta/(Math.PI*1.7));
   }
   if(d.type==='massGraph'||d.type==='bodyGraph'){
-    const local=d.object.worldToLocal(p.clone());
-    // The graph plot occupies [52,724] of a 768px texture, inside a .80-unit plane.
-    const u=(local.x/0.80+0.5-52/768)/((724-52)/768);
+    const local=d.object.worldToLocal(world.clone());
+    // Plot limits stay in texture space; width comes from the shared panel layout.
+    const u=(local.x/CONTROL_LAYOUT.graphs[d.type==='massGraph'?0:1].size[0]+0.5-52/768)/((724-52)/768);
     setRailFromPointer(d.type==='massGraph'?'nWeights':'body',u);
   }
   event.stopImmediatePropagation();
