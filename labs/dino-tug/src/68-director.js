@@ -49,7 +49,7 @@ const DIRECTOR={
   const line=(p,dash=false)=>CARDS.path(p,'#ffce8b',dash);
   let body='';
   const actionFocus=QUEST.focus();document.body.dataset.focus=actionFocus;
-  const focus=actionFocus==='rail'?RAIL_HANDLE:actionFocus==='play'?PLAY_BUTTON:actionFocus==='ground'?CASSETTES[Math.round(S.ground.value)]:actionFocus==='compare'?GRAPHS[1].mesh:DINO_MODELS[Math.round(S.species.value)];
+  const focus=['rail','pull','slip'].includes(actionFocus)?RAIL_HANDLE:actionFocus==='play'?PLAY_BUTTON:actionFocus==='ground'?CASSETTES[Math.round(S.ground.value)]:actionFocus==='compare'?GRAPHS[1].mesh:DINO_MODELS[Math.round(S.species.value)];
   questLight.position.copy(focus.getWorldPosition(V3())).add(V3(0,.18,.15));questLight.intensity=Q.free?0:.4;
   if(!Q.free&&Q.phase==='intro'&&f.elapsed<.9)body=`<defs><clipPath id="q-wipe"><rect x="${innerWidth/2-42}" y="${innerHeight/2-42}" width="${84*Math.min(1,f.elapsed/.65)}" height="84"/></clipPath></defs><g clip-path="url(#q-wipe)"><svg x="${innerWidth/2-42}" y="${innerHeight/2-42}" width="84" height="84" viewBox="0 0 24 24"><path d="${ICONS[d.icon]}"/></svg></g>`;
   if(!Q.free&&Q.phase==='act'){
@@ -59,16 +59,17 @@ const DIRECTOR={
    const sampleId=Q.i===5?(f.visited.includes(SPECIES_KEYS[0])?'tool-s5':'tool-s0'):'tool-s1';
    const target=actionFocus==='ground'?document.getElementById('tool-g0'):actionFocus==='compare'?document.getElementById('tool-compare'):actionFocus==='species'?(document.getElementById(sampleId)||paletteNext):null;
    let [x,y]=project(focus.getWorldPosition(V3()));if(target){const r=target.getBoundingClientRect();x=r.x+r.width/2;y=r.y+r.height/2;}
-   if(f.demoLeft>0&&!S.drag){const direction=actionFocus==='rail'?1:0,shift=(1-f.demoLeft/2.2)*45*direction;body+=line(`M${x} ${y}h${direction?45:1}`,true)+`<svg x="${x+shift-12}" y="${y-12}" width="30" height="30" viewBox="0 0 24 24"><path d="${ICONS.hand}"/></svg>`;}
+   if(f.demoLeft>0&&!S.drag){const direction=['rail','pull','slip'].includes(actionFocus)?1:0,shift=(1-f.demoLeft/2.2)*45*direction;body+=line(`M${x} ${y}h${direction?45:1}`,true)+`<svg x="${x+shift-12}" y="${y-12}" width="30" height="30" viewBox="0 0 24 24"><path d="${ICONS.hand}"/></svg>`;}
   }
-  if(this.eventLeft>0){
+  if(this.eventLeft>0&&s.rivalN===0){
    const [x,y]=project(FLAG.getWorldPosition(V3())),age=1.4-this.eventLeft;
    const sample=this.snapshot,slip=PHYS.outcome(sample.n,sample.species,sample.mu).limiter==='friction';
    const explanation=slip?CARDS.micro(sample):CARDS.principle(Q.free?3:d.id,sample);
    const content=explanation.replace(/^<svg[^>]*>|<\/svg>$/g,'');
    // Draw a single filled explanation only after the actual diagram is ready.
    const usable=content.includes('<path')||content.includes('<circle');
-   const cy=12,w=S.vertical?150:210,h=S.vertical?70:98;
+   const mission=document.getElementById('mission');
+   const cy=mission.getClientRects().length?mission.getBoundingClientRect().bottom+8:12,w=S.vertical?150:210,h=S.vertical?70:98;
    body=age>.45&&usable?`<circle cx="${x}" cy="${y}" r="5"/>`+line(`M${x} ${y}L${innerWidth/2} ${cy+h}`)+`<svg x="${innerWidth/2-w/2}" y="${cy}" width="${w}" height="${h}" viewBox="0 0 300 140"><rect x="1" y="1" width="298" height="138" rx="12" fill="#f4efe3" stroke="#221d18" stroke-width="3"/>${content}</svg>`:'';
   }
   qOverlay.innerHTML=body?`<svg viewBox="0 0 ${innerWidth} ${innerHeight}">${body}</svg>`:'';

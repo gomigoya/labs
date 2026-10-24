@@ -13,6 +13,6 @@ function inkConfig() {
   biome: {mud:0xa49b78,moss:0x87916c,bark:0x686750,stone:0x959887,foliage:0x718260,
    rear:0x9ba78b,middle:0x859573,near:0x718260,cavity:0x626954,litter:0x929574,volcano:0x929b85,crater:0x67715b,
    trail:['#b1a783','#99916f','#c1b795'],sun:0xffe7a0},
-  diagram: {ink:0x221d18,borderPx:1.5,screen:0xf4efe3,grid:0xb2b3a2,reference:0x393e42,kids:0xc57d24,dino:0x37795d,muscle:0x7863a6,friction:0xb55d77}
+  diagram: {pull:0x393e42,ink:0x221d18,borderPx:1.5,screen:0xf4efe3,grid:0xb2b3a2,reference:0x393e42,kids:0xc57d24,rival:0x315fa5,dino:0x37795d,muscle:0x7863a6,friction:0xb55d77}
  }));
 }

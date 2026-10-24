@@ -269,3 +269,185 @@ for(const [w,h,region]of [[1440,900,{left:12,right:1428,top:88,bottom:748}],[375
 }
 console.log('R5 projection-inclusive total '+count+': passed '+(count-failures)+', failed '+failures);
 process.exitCode=failures?1:0;
+
+// Mission reservation: conservative CSS assumptions, not measured browser geometry.
+// 78px quest bottom + 8px gap + 38px desktop / 60px mobile pill + 12px scene gap.
+for(const [w,h,top,bottom]of [[1440,900,136,630],[375,812,158,550],[1440,900,242,888],[375,812,236,800]]){
+ for(const sp of species){
+  const region={left:12,right:w-12,top,bottom},frame=P.dramaFrame(w,h,sp,region),view=frame&&projectDrama(P.dramaBounds(sp),frame,w,h),b=view?.bounds;
+  exact('mission reserved safe projection '+w+'/'+top+'/'+species.indexOf(sp),!!frame&&!view.clipped&&b[1]>=top-1e-6&&b[3]<=bottom+1e-6,true);
+ }
+}
+console.log('Mission-inclusive total '+count+': passed '+(count-failures)+', failed '+failures);
+process.exitCode=failures?1:0;
+
+// U1: 아이 팀끼리의 결과와 장력을 독립 손계산으로 대조한다.
+for (const [nA, nB, mu, winner, limiter] of [
+  [5, 5, .55, 'tie', 'muscle'], [6, 5, .55, 'a', 'muscle'], [5, 6, .55, 'b', 'muscle'],
+  [5, 5, .05, 'tie', 'friction'], [6, 5, .05, 'a', 'friction'],
+]) {
+  const r = P.kidsMatch?.(nA, nB, mu) ?? {}, a = kids(nA, mu), b = kids(nB, mu);
+  const label = `U1 ${nA} 대 ${nB} μ=${mu}`;
+  numeric(label + ' A팀 N', r.a, a, a, 1e-12);
+  numeric(label + ' B팀 N', r.b, b, b, 1e-12);
+  if (nA === nB) exact(label + ' 차 N', r.net, 0);
+  else numeric(label + ' 차 N', r.net, (nA - nB) * kids(1, mu), a - b, 1e-12);
+  exact(label + ' 승자', r.winner, winner);
+  exact(label + ' 한계', r.limiter, limiter);
+  numeric(label + ' 장력 N', r.tension, kids(Math.min(nA, nB), mu), Math.min(a, b), 1e-12);
+}
+const matchCounts = Array.from({ length: 100 }, (_, i) => i + 1);
+for (const mu of [.05, .35, .55, .8]) {
+  exact(`U1 같은 인원 100종 정확한 비김 μ=${mu}`, matchCounts.every(n => {
+    const r = P.kidsMatch?.(n, n, mu);
+    return r?.winner === 'tie' && r.net === 0;
+  }), true);
+  exact(`U1 모든 인원 조합 대칭 μ=${mu}`, matchCounts.every(nA => matchCounts.every(nB => {
+    const a = P.kidsMatch?.(nA, nB, mu), b = P.kidsMatch?.(nB, nA, mu);
+    return !!a && !!b && a.net === -b.net && b.winner === ({ a: 'b', b: 'a', tie: 'tie' })[a.winner];
+  })), true);
+  exact(`U1 모든 인원 조합 장력 μ=${mu}`, matchCounts.every(nA => matchCounts.every(nB => {
+    const r = P.kidsMatch?.(nA, nB, mu);
+    return !!r && r.tension === Math.min(r.a, r.b) && r.tension > 0
+      && r.tension <= r.a && r.tension <= r.b;
+  })), true);
+}
+for (const [a, b] of [[686.7, 686.7], [824.04, 686.7], [686.7, 824.04]]) {
+  numeric(`U1 줄 장력 ${a}/${b}`, P.ropeTension?.(a, b), Math.min(a, b), Math.min(a, b), 1e-12);
+}
+for (const nA of [1, 100]) for (const nB of [1, 100]) {
+  exact(`U1 유효 인원 경계 ${nA}/${nB}`, [.05, .35, .55, .8].every(mu => P.validMatch?.({ nA, nB, mu }) === true), true);
+}
+for (const n of [0, 101, 1.5, NaN, '5']) {
+  exact(`U1 잘못된 A 인원 ${String(n)}`, P.validMatch?.({ nA: n, nB: 5, mu: .55 }), false);
+  exact(`U1 잘못된 B 인원 ${String(n)}`, P.validMatch?.({ nA: 5, nB: n, mu: .55 }), false);
+}
+exact('U1 잘못된 바닥 μ', P.validMatch?.({ nA: 5, nB: 5, mu: .5 }), false);
+// 핵심 계산은 연속 μ도 믿고 계산한다. 1 N 비김 띠의 양 끝을 검사한다.
+for (const [net, winner] of [[-1.00001, 'b'], [-1, 'tie'], [0, 'tie'], [1, 'tie'], [1.00001, 'a']]) {
+  exact(`U1 비김 경계 net=${net}`, P.kidsMatch?.(net < 0 ? 1 : 2, net < 0 ? 2 : 1, Math.abs(net) / (35 * g))?.winner, winner);
+}
+exact('U1 마찰과 근육이 같으면 마찰 한계', P.kidsMatch?.(5, 5, kidMuscle / (35 * g))?.limiter, 'friction');
+// U4a: exhaustively preserve every dinosaur outcome field.
+for (const n of [1,5,49,100]) for (const species of Object.keys(P.SPECIES)) for (const mu of Object.values(P.GROUNDS)) {
+  exact(`U4a legacy outcome ${n}/${species}/${mu}`, P.matchOutcome?.(n,species,0,mu), P.outcome(n,species,mu));
+  for (const fn of ['displayState','dramaState','grammarState'])
+    exact(`U4a default ${fn} ${n}/${species}/${mu}`, P[fn](n,species,mu,Math.PI), P[fn](n,species,mu,Math.PI,0));
+}
+for (const [a,b,mu,winner] of [[5,5,.55,'tie'],[6,5,.55,'kids'],[5,6,.55,'dino'],[5,5,.05,'tie']]) {
+  const d=P.matchOutcome?.(a,species[5],b,mu);
+  exact(`U4a winner ${a}/${b}/${mu}`, d?.winner, winner);
+  exact(`U4a capacities ${a}/${b}/${mu}`, d&&[d.kids,d.dino], [kids(a,mu),kids(b,mu)]);
+}
+for (const mu of Object.values(P.GROUNDS)) for (const fn of ['displayState','dramaState','grammarState']) {
+  const d=P[fn](5,species[5],mu,Math.PI,5);
+  exact(`U4a tie flag ${fn}/${mu}`, d.flagX, 0);
+  exact(`U4a equal lengths ${fn}/${mu}`, d.kidsLength,d.dinoLength);
+  exact(`U4a species irrelevant ${fn}/${mu}`, d,P[fn](5,species[0],mu,Math.PI,5));
+}
+for (const mu of Object.values(P.GROUNDS)) {
+  const d=P.grammarState(6,species[5],mu,Math.PI,5);
+  exact(`U4a right limits ${mu}`, d.forces.slice(4),[P.forceGlyph(5*kidMuscle),P.forceGlyph(ff(5*35,mu))]);
+}
+// U4b: requirements define the expected truth values independently of the judges.
+const observed=(n,rivalN,run=1)=>({run,n,rivalN,species:species[0],mu:.55});
+for(const [n,rivalN,want] of [[5,5,true],[1,1,true],[30,30,true],[5,6,false],[5,0,false]])
+ exact(`U4b Q8 ${n}/${rivalN}`,P.judgeQ8({observations:[observed(n,rivalN)]}),want);
+for(const [n,rivalN,want] of [[6,5,true],[5,6,true],[5,5,false],[7,5,false],[6,0,false]])
+ exact(`U4b Q9 ${n}/${rivalN}`,P.judgeQ9({observations:[observed(n,rivalN)]}),want);
+for(const id of [8,9]){
+ exact(`U4b Q${id} empty`,P[`judgeQ${id}`]({}),false);
+ const good=observed(id===8?5:6,5),bad=observed(7,5,2);
+ exact(`U4b Q${id} last completed wins`,P[`judgeQ${id}`]({observations:[good,bad]}),false);
+ exact(`U4b Q${id} invalid trailing record ignored`,P[`judgeQ${id}`]({observations:[good,{...bad,rivalN:101}]}),true);
+ exact(`U4b Q${id} legacy dinosaur record`,P[`judgeQ${id}`]({observations:[{run:1,n:5,species:species[0],mu:.55}]}),false);
+}
+for(const rivalN of [0,100,-1,101,1.5,null,undefined])
+ exact(`U4b observation rival ${rivalN}`,P.validObservation(observed(5,rivalN)),rivalN===0||rivalN===100);
+exact('U4b legacy observation accepted',P.validObservation({run:1,n:5,species:species[0],mu:.55}),true);
+// U5a: tension is one team's limit, never the sum; both rival directions agree.
+for(const [n,rivalN] of [[5,5],[6,5],[5,6]]){
+ const result=P.matchOutcome(n,species[0],rivalN,.55),value=P.tensionOf(n,species[0],rivalN,.55);
+ exact(`U5a tension ${n}/${rivalN} one team`,value,kids(5,.55));
+ exact(`U5a tension ${n}/${rivalN} match limit`,value,n===rivalN?result.kids:Math.min(result.kids,result.dino));
+ exact(`U5a tension ${n}/${rivalN} not sum`,value<result.kids+result.dino,true);
+}
+for(const name of [species[0],species[4]]){
+ const result=P.matchOutcome(5,name,0,.55);
+ exact(`U5a dinosaur tension ${name}`,P.tensionOf(5,name,0,.55),Math.min(result.kids,result.dino));
+}
+const q10Cases=[
+ ['ordered',[observed(5,5),observed(6,5,2)],true],
+ ['other team',[observed(5,5),observed(5,6,2)],true],
+ ['reversed',[observed(6,5),observed(5,5,2)],false],
+ ['tie only',[observed(5,5)],false],
+ ['difference only',[observed(6,5)],false],
+ ['dinosaurs',[observed(5,0),observed(6,0,2)],false],
+ ['last not one apart',[observed(5,5),observed(6,5,2),observed(7,5,3)],false],
+ ['invalid tie',[{...observed(5,5),mu:.5},observed(6,5,2)],false],
+ ['invalid tail',[observed(5,5),observed(6,5,2),observed(7,101,3)],true],
+ ['empty',[],false]
+];
+for(const [name,observations,want] of q10Cases)exact(`U5a Q10 ${name}`,P.judgeQ10({observations}),want);
+exact('U5a Q10 missing observations',P.judgeQ10({}),false);
+console.log('U5a-inclusive total '+count+': passed '+(count-failures)+', failed '+failures);
+process.exitCode=failures?1:0;
+
+const lensStart=count;
+exact('U5b kinetic ratio',P.C.kineticRatio,.8);
+for(const mu of [.55,.05])for(const [n,r]of [[6,5],[5,5],[5,6]]){
+ const T=Math.min(kids(n,mu),kids(r,mu));
+ for(const object of ['rope','A','B']){
+  const f=P.lensForces(n,species[0],r,mu,object),tag=`U5b ${n}/${r} μ=${mu} ${object}`;
+  const loser=object==='A'?n<r:object==='B'?r<n:false;
+  exact(tag+' balanced',f.balanced,!loser);
+  exact(tag+' directions',f.arrows.map(a=>a.dir),object==='A'?[1,-1]:[-1,1]);
+  exact(tag+' kinds',f.arrows.map(a=>a.kind),object==='rope'?['pull','pull']:['pull','friction']);
+  numeric(tag+' pull',f.arrows[0].value,T,T);
+  numeric(tag+' opposite',f.arrows[1].value,loser?.8*T:T,loser?.8*T:T);
+  row(tag+' signed sum',loser?(object==='A'?'.2T':'-.2T'):'0',fmt(f.sum),
+   Math.abs(f.sum-(loser?(object==='A'?1:-1)*.2*T:0))<1e-10);
+ }
+}
+const visits=['rope','A','B'];
+for(const [name,observations,lensVisited,want]of [
+ ['complete',[observed(6,5)],visits,true],
+ ['reversed',[observed(5,6)],visits,true],
+ ['missing rope',[observed(6,5)],['A','B'],false],
+ ['missing A',[observed(6,5)],['rope','B'],false],
+ ['missing B',[observed(6,5)],['rope','A'],false],
+ ['empty',[],visits,false],
+ ['tie',[observed(5,5)],visits,false],
+ ['dinosaur',[observed(6,0)],visits,false],
+ ['last tie',[observed(6,5),observed(5,5,2)],visits,false],
+ ['invalid tail',[observed(6,5),{...observed(5,5,2),mu:.9}],visits,true]
+])exact('U5b judge '+name,P.judgeQ11({observations,lensVisited}),want);
+exact('U5b judge default',P.judgeQ11({}),false);
+console.log('U5b new rows '+(count-lensStart)+'; total '+count+': passed '+(count-failures)+', failed '+failures);
+process.exitCode=failures?1:0;
+
+// U6: independent static friction expectations, including the strict threshold.
+const pullStart=count;
+exact('U6 staticPull API',typeof P.staticPull,'function');
+if(P.staticPull){
+ const limit=5*35*9.81*.05;
+ for(const p of [0,.3,.6,1/1.5,.7,1]){
+  const f=P.staticPull(5,.05,p),slipped=p>1/1.5;
+  exact('U6 slip '+p,f.slipped,slipped);
+  exact('U6 applied '+p,f.applied,p*1.5*limit);
+  exact('U6 friction '+p,f.friction,slipped?.8*limit:f.applied);
+  exact('U6 net '+p,f.net,f.applied-f.friction);
+  exact('U6 threshold '+p,f.pSlip,1/1.5);
+ }
+ exact('U6 count scaling',P.staticPull(10,.05,.3).limit,2*limit);
+ numeric('U6 ground scaling',P.staticPull(5,.55,.3).limit/limit,.55/.05,.55/.05,1e-12);
+ let previous=0;
+ for(let i=0;i<=100;i++){
+  const f=P.staticPull(5,.05,i/100);
+  exact('U6 monotonic/kinetic '+i,i/100<=1/1.5?f.friction>=previous:f.friction===.8*limit&&f.friction<limit,true);
+  previous=f.friction;
+ }
+ for(const sawStatic of [false,true])for(const sawSlip of [false,true])exact('U6 judge '+sawStatic+'/'+sawSlip,P.judgeQ12({sawStatic,sawSlip}),sawStatic&&sawSlip);
+}
+console.log('U6 new rows '+(count-pullStart)+'; total '+count+': passed '+(count-failures)+', failed '+failures);
+process.exitCode=failures?1:0;

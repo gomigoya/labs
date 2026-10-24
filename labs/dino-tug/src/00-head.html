@@ -10,12 +10,19 @@ button{border:var(--diagram-border,1.5px) solid var(--diagram-ink,#221d18);borde
 button[aria-pressed=true]{background:#e8b23a;color:var(--diagram-ink,#221d18)}button:focus-visible{outline:2px solid #221d18;outline-offset:2px}
 svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 #quests{top:max(12px,env(safe-area-inset-top));max-width:calc(100% - 16px)}
+#mission{position:fixed;z-index:21;left:50%;top:var(--mission-top,86px);transform:translateX(-50%);width:max-content;max-width:calc(100% - 24px);margin:0;padding:7px 16px;border:2px solid #221d18;border-radius:999px;background:#f4efe3;color:#221d18;font:500 17px/1.4 system-ui,sans-serif;text-align:center;white-space:nowrap;pointer-events:none}
+body[data-mode=teacher] #mission,.hide-ui #mission{display:none}
+@media(max-width:600px){#mission{font-size:15px;white-space:normal;word-break:keep-all;overflow-wrap:anywhere;max-width:calc(100% - 24px)}}
 .quest-row{display:flex;max-width:calc(100vw - 196px);overflow:auto;scrollbar-width:none;gap:2px}
+.quest-row .level-gap{margin-left:8px}
 .quest{position:relative;opacity:.85}.quest[aria-disabled=true]{opacity:.65;background:#deded6}.quest.current{opacity:1;color:var(--diagram-ink,#221d18);background:#e8b23a;box-shadow:none}.quest.complete{opacity:1;background:#c7d4b4}.quest.complete svg{fill:#c7d4b4}
 .q-dots{display:flex;gap:2px;position:absolute;bottom:5px}.q-dots i{width:3px;height:3px;border-radius:50%;background:currentColor}
 #tools{bottom:max(12px,env(safe-area-inset-bottom));flex-direction:column;max-width:calc(100% - 16px)}
+#tools[data-rival=true] .tool-row:first-child{max-width:100%;overflow-x:auto;justify-content:flex-start}
 .tool-row{display:flex;gap:0;min-height:56px;justify-content:center}
 #tools .grammar-tool{border-top:2px solid #7863a6}
+#tools .grammar-tool[data-layer="장력계"] svg{stroke-width:2.6}
+.q-bridge{margin:.25em 0;font-size:.9em}
 #tools button[id^=tool-s] svg{width:40px;height:40px;stroke-width:2.6}
 #q-pictures{position:fixed;z-index:12;left:50%;transform:translateX(-50%);bottom:148px;display:flex;align-items:center;justify-content:center;gap:8px;width:min(780px,calc(100% - 16px));color:var(--diagram-ink,#221d18)}
 #q-pictures:empty,#q-pictures.act,#q-pictures.observe{display:none}
@@ -23,11 +30,17 @@ svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2;stroke-l
 #q-pictures button[data-candidate] svg{width:100%;height:100%;stroke-width:3}
 .q-principle,.q-compare{background:var(--diagram-paper,#f4efe3);border:var(--diagram-border,1.5px) solid var(--diagram-ink,#221d18);border-radius:16px;padding:6px;display:flex;align-items:center;position:relative;width:500px;max-width:calc(100% - 64px);animation:q-arrive .5s ease-out}
 .q-principle{flex-direction:column}.q-principle>svg{width:100%;height:72px}
+.q-explain,.q-principle{background:var(--diagram-paper,#f4efe3);border:var(--diagram-border,1.5px) solid var(--diagram-ink,#221d18);border-radius:16px;width:min(500px,calc(100% - 16px));max-width:100%;padding:12px;font:400 16px/1.5 system-ui,sans-serif;max-height:calc(100vh - 280px);overflow:auto;animation:q-arrive .5s ease-out}
+.q-explain{display:flex;flex-direction:column;gap:10px}.q-concept{display:flex;align-items:center;gap:6px;font-weight:600}.q-concept svg{width:20px;height:20px;flex-shrink:0}
+.q-ask,.q-recap,.q-hint{margin:0}.q-recap{margin:8px 0}.q-options{display:flex;flex-direction:column;gap:8px;width:100%}
+.q-options button{width:100%;height:auto;min-height:44px;text-align:left;display:block;font:inherit;white-space:normal;background:var(--diagram-paper,#f4efe3);border:var(--diagram-border,1.5px) solid var(--diagram-ink,#221d18)}
+.q-options button[aria-disabled=true]{opacity:.45;cursor:default}.q-hint{color:var(--diagram-friction,#ad466c)}.q-map{display:flex;gap:8px;margin:8px 0}.q-map svg{width:24px;height:24px}
+@media(max-width:600px){.q-explain,.q-principle{font-size:14px}}
 .q-stars{display:flex;color:#936114;gap:8px}.q-stars svg{width:16px;height:16px;fill:#93611455}
 .q-compare>svg{width:50%;height:72px}.q-compare.matched>svg:nth-child(2){position:absolute;inset:6px;width:calc(100% - 12px);opacity:.55}.q-compare.matched>svg:first-child{width:100%}.q-compare.matched>svg:last-child{position:absolute;right:5px;top:5px;width:32px;height:32px;color:#37795d}
 #q-archive{right:12px;left:auto;bottom:150px;transform:none;max-width:180px;overflow:auto;justify-content:flex-start}
 #q-overlay{position:fixed;inset:0;pointer-events:none;z-index:20;color:#936114}#q-overlay>svg{width:100%;height:100%}#q-overlay>svg>svg{stroke-width:3}
-body:not([data-qphase=free]) #tools button{opacity:.48}body:not([data-qphase=free]) #tool-sound,body[data-focus=play] #tool-play,body[data-focus=species] #tools button[id^=tool-s],body[data-focus=ground] #tools button[id^=tool-g],body[data-focus=rail] #tool-play{opacity:1;box-shadow:none}
+body:not([data-qphase=free]) #tools button{opacity:.48}body:not([data-qphase=free]) #tool-sound,body[data-focus=lens] #lensTool,body[data-focus=lens] #tools button[id^=tool-lens-],body[data-focus=play] #tool-play,body[data-focus=species] #tools button[id^=tool-s],body[data-focus=ground] #tools button[id^=tool-g],body[data-focus=rail] #tool-play{opacity:1;box-shadow:none}
 .q-bars:before,.q-bars:after{content:'';position:fixed;left:0;right:0;height:8vh;background:#e9e8d3;z-index:15;pointer-events:none}.q-bars:before{top:0}.q-bars:after{bottom:0}
 /* Fixed event explanation lane; only the apparatus remains active for this beat. */
 .q-event .hud,.q-event #teacher-strip,.q-event #teacher-numbers,.q-event #teacher-class{visibility:hidden;pointer-events:none}.q-event #q-pictures{display:none}
@@ -69,4 +82,4 @@ body[data-mode=teacher] #quests button{width:72px}body[data-mode=teacher] #quest
 @media(prefers-reduced-motion:reduce){#touch-pulse,#q-pictures *,.class-result *{animation:none!important}}
 </style>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.176.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.176.0/examples/jsm/"}}</script>
-</head><body><canvas id="gl"></canvas><div id="quests" class="hud" aria-hidden="true"></div><div id="tools" class="hud"></div>
+</head><body><canvas id="gl"></canvas><div id="quests" class="hud" aria-hidden="true"></div><p id="mission" data-mission role="status" aria-live="polite" aria-atomic="true"></p><div id="tools" class="hud"></div>

@@ -4,6 +4,7 @@ for(const [name,value]of Object.entries({'--diagram-paper':css(INK_CFG.diagram.s
 const LABELS={
  canvas:{ko:'공룡 줄다리기 실험실',en:'Dinosaur tug laboratory'},play:{ko:'당김 실행 또는 중단',en:'Play or pause pull'},reset:{ko:'시작 상태 복구',en:'Reset'},sound:{ko:'소리 전환',en:'Toggle sound'},
  species:SPECIES_KEYS.map((ko,i)=>({ko,en:['Velociraptor','Dilophosaurus','Stegosaurus','Triceratops','Tyrannosaurus','Argentinosaurus'][i]})),
+ rival:PHYS.C.rivalChoices.map(n=>({ko:'?? ?? '+n+'?',en:'Rival team of '+n+' children'})),
  ground:[{ko:'유리 바닥',en:'Glass ground'},{ko:'모래 바닥',en:'Sand ground'},{ko:'자갈 바닥',en:'Gravel ground'},{ko:'아스팔트 바닥',en:'Asphalt ground'}]
 };
 const ICONS={play:'M8 5l11 7-11 7z',pause:'M8 5v14M16 5v14',reset:'M4 10a8 8 0 1 1 1 8M4 4v6h6',sound:'M3 9h4l5-4v14l-5-4H3zM16 8q6 4 0 8M19 5q9 7 0 14',muted:'M3 9h4l5-4v14l-5-4H3zM16 9l6 6M22 9l-6 6',
@@ -23,6 +24,11 @@ Object.assign(ICONS,{
  q4:'M2 7h8M2 4l3-2m9 15h8m-8-4 3-3 4 3M7 12h10m-3-3 3 3-3 3',
  q5:'M2 19h20M4 15v-4m4 4v-4M13 14h8m-4-3 4 3-4 3M4 6h7m4 0h6',
  q6:'M3 3h7v18H3zM14 3h7v18h-7zM6 18V6m11 12v-3',
+ q8:'M3 12h18M12 12v8m-4 0h8M5 12V9m14 3V9M3 5a1 1 0 1 0 2 0a1 1 0 1 0-2 0M7 5a1 1 0 1 0 2 0a1 1 0 1 0-2 0M15 5a1 1 0 1 0 2 0a1 1 0 1 0-2 0M19 5a1 1 0 1 0 2 0a1 1 0 1 0-2 0',
+ q9:'M3 14l18-4M12 12v8m-4 0h8M5 13V10m14 1V8M3 6a1 1 0 1 0 2 0a1 1 0 1 0-2 0M7 6a1 1 0 1 0 2 0a1 1 0 1 0-2 0M15 4a1 1 0 1 0 2 0a1 1 0 1 0-2 0M19 4a1 1 0 1 0 2 0a1 1 0 1 0-2 0M17 1a1 1 0 1 0 2 0a1 1 0 1 0-2 0',
+ q12:'M3 18l10-10h8M4 4a1 1 0 1 0 0 .01M8 4a1 1 0 1 0 0 .01M12 4a1 1 0 1 0 0 .01',
+ q11:'M2 13h18M3 8a1 1 0 1 0 0 .01M6 8a1 1 0 1 0 0 .01M16 8a1 1 0 1 0 0 .01M19 8a1 1 0 1 0 0 .01M15 15a3 3 0 1 0 6 0a3 3 0 1 0-6 0M20 18l3 4',
+ q10:'M2 16h20M12 16v-3M12 3a5 5 0 1 0 0 10 5 5 0 1 0 0-10M12 8l3-3M9 5l1 1m5 4-1-1',
  q7:'M2 3h20v18H2zM5 8h3m3 0h3m3 0h3M6 14l3 3 6-6M18 12v6'
 });
 for(let i=0;i<12;i++)ICONS['layer'+i]=[
@@ -42,9 +48,11 @@ for(const name of ['play','reset','sound',...SPECIES_KEYS.map((_,i)=>'s'+i),...G
  b.innerHTML=icon(name);b.addEventListener('click',()=>action(name));toolbar.append(b);
 }
 // Wordless layer tools use existing instrument line icons; accessible names stay off screen.
-const grammarIcons=Array.from({length:8},(_,i)=>'layer'+(i+4));
+const grammarIcons=[...Array.from({length:8},(_,i)=>'layer'+(i+4)),'q10','lens','q12'];
+ICONS.lens='M10 3a7 7 0 1 0 0 14 7 7 0 0 0 0-14M15 15l7 7';
+ICONS.layer12=ICONS.q10;ICONS.layer13=ICONS.lens;ICONS.layer14=ICONS.q12;
 for(const [i,name]of GRAMMAR.LAYERS.entries()){
- const b=document.createElement('button');b.className='grammar-tool';b.dataset.layer=name;b.setAttribute('aria-label',({ko:['마디','쌓기와 계단','한계 윤곽','겹치기','접촉 돋보기','시간 흔적','비율 비교','실행 기록'],en:['Force units','Stack and steps','Limits','Overlay','Contact magnifier','Time traces','Ratio comparison','Run records']}[LANG])[i]);b.setAttribute('aria-pressed',String(GRAMMAR.defaults[name]));b.innerHTML=icon(grammarIcons[i]);
+ const b=document.createElement('button');b.className='grammar-tool';b.dataset.layer=name;b.setAttribute('aria-label',({ko:['마디','쌓기와 계단','한계 윤곽','겹치기','접촉 돋보기','시간 흔적','비율 비교','실행 기록','장력계','렌즈','서서히 당기기'],en:['Force units','Stack and steps','Limits','Overlay','Contact magnifier','Time traces','Ratio comparison','Run records','Tension gauges','Object lens','Gradual pull']}[LANG])[i]);b.setAttribute('aria-pressed',String(GRAMMAR.defaults[name]));b.innerHTML=icon(grammarIcons[i]);
  b.addEventListener('click',()=>{if(!Q.free)return;GRAMMAR.set({[name]:!GRAMMAR.enabled[name]});b.setAttribute('aria-pressed',String(GRAMMAR.enabled[name]));});toolbar.append(b);
 }
 for(const [name,glyph]of [['pin','g0'],['record','rail']]){
@@ -64,9 +72,30 @@ function action(name){
  else if(/^g[0-3]$/.test(name))set('ground',+name[1]);
  syncUI();
 }
-function syncUI(){
+function syncUI(missionOnly=false){
+ const mission=document.getElementById('mission');
+ mission.hidden=T.mode==='teacher'||(!Q.free&&Q.phase==='explain'); // 설명 단계는 질문 패널이 안내한다
+ mission.style.setProperty('--mission-top',(document.getElementById('quests').getBoundingClientRect().bottom+8)+'px');
+ const text=missionText(Q.i,Q.phase,{...QUEST.sample(),free:Q.free,focus:QUEST.focus(),pending:Q.flags.pending,right:Q.pick===null||Q.pick===QUESTS[Q.i].answerKey,toolPage,toolGroup});
+ if(mission.textContent!==text){
+  mission.textContent=text;
+  for(const animation of mission.getAnimations())animation.cancel();
+  if(!matchMedia('(prefers-reduced-motion: reduce)').matches)mission.animate([{opacity:0},{opacity:1}],{duration:120});
+ }
+ if(missionOnly)return;
+ for(const b of [...speciesTools,...groundTools,...rivalTools])b.disabled=!!S.pullMode;
+ toolbar.dataset.rival=String(S.rivalN>0);
+ lensTool.hidden=!lensAvailable();
+ lensTool.setAttribute('aria-pressed',String(toolGroup==='lens'));
+ lensTools.forEach((b,i)=>b.setAttribute('aria-pressed',String(S.lens===lensValues[i])));
+ if(!lensAvailable()&&toolGroup==='lens')showTools('species');
+ rivalTool.hidden=S.rivalN===0;
+ rivalTool.setAttribute('aria-pressed',String(toolGroup==='rival'));
+ rivalTools.forEach((b,i)=>b.setAttribute('aria-pressed',String(S.rivalN===PHYS.C.rivalChoices[i])));
+ if(S.rivalN===0&&toolGroup==='rival')showTools('species');
  if(window.__lab&&!window.__lab.GRAMMAR){
   window.__lab.GRAMMAR=GRAMMAR;
+  window.__lab.sample=()=>QUEST.sample();
   window.__lab.layer=(name,on)=>{if(GRAMMAR.LAYERS.includes(name))GRAMMAR.set({[name]:!!on});else layer(name,on);};
  }
  if(window.__lab)toolbar.querySelectorAll('[data-layer]').forEach(b=>b.setAttribute('aria-pressed',String(GRAMMAR.enabled[b.dataset.layer])));
@@ -74,7 +103,9 @@ function syncUI(){
  SPECIES_KEYS.forEach((_,i)=>speciesTools[i].setAttribute('aria-pressed',String(i===S.species.target)));
  GROUND_VALUES.forEach((_,i)=>groundTools[i].setAttribute('aria-pressed',String(i===S.ground.target)));
 }
-function setRailFromPointer(u){QUEST.changed('n');u=clamp(u,0,1);const near=PHYS.DETENTS.reduce((a,b)=>Math.abs(a.x-u)<Math.abs(b.x-u)?a:b);const snap=Math.abs(near.x-u)<=.012;if(snap&&S.snap!==near.n)tick();S.snap=snap?near.n:null;S.u.target=PHYS.railX(PHYS.kidsFromRailX(snap?near.x:u));}
+// One normalized control value feeds all three handles and pointer deltas.
+function controlValue(n=PHYS.kidsFromRailX(S.u.value)){return S.pullMode?S.pullP:PHYS.railX(n);}
+function setRailFromPointer(u){if(S.pullMode){set('pull',clamp(u,0,1));return;}QUEST.changed('n');u=clamp(u,0,1);const near=PHYS.DETENTS.reduce((a,b)=>Math.abs(a.x-u)<Math.abs(b.x-u)?a:b);const snap=Math.abs(near.x-u)<=.012;if(snap&&S.snap!==near.n)tick();S.snap=snap?near.n:null;S.u.target=PHYS.railX(PHYS.kidsFromRailX(snap?near.x:u));}
 const raycaster=new THREE.Raycaster(),pointer=new THREE.Vector2();
 const dragObjects=[RAIL_HANDLE,SLIDER.handle,DIAL.knob,PLAY_BUTTON,SWITCH,...GRAPHS.map(g=>g.mesh)];
 function rayFromEvent(e){const r=canvas.getBoundingClientRect();pointer.set((e.clientX-r.left)/r.width*2-1,-(e.clientY-r.top)/r.height*2+1);raycaster.setFromCamera(pointer,camera);}
@@ -89,12 +120,12 @@ canvas.addEventListener('pointerdown',e=>{
  const local=type!=='rail';
  const plane=local?new THREE.Plane().setFromNormalAndCoplanarPoint(V3(0,0,1).applyQuaternion(CONSOLE.quaternion),object.getWorldPosition(V3())):new THREE.Plane(V3(0,0,1),-PHYS.SCENE.railZ);
  const p=raycaster.ray.intersectPlane(plane,V3());if(!p){controls.enabled=true;return;}if(local)CONSOLE.worldToLocal(p);
- QUEST.changed('drag');S.drag={id:e.pointerId,type,plane,local,start:p,u:S.u.target,angle:Math.atan2(p.x-CONTROL_LAYOUT.dial[0],p.y-CONTROL_LAYOUT.dial[1])};canvas.setPointerCapture(e.pointerId);
+ QUEST.changed('drag');S.drag={id:e.pointerId,type,plane,local,start:p,u:controlValue(PHYS.kidsFromRailX(S.u.target)),angle:Math.atan2(p.x-CONTROL_LAYOUT.dial[0],p.y-CONTROL_LAYOUT.dial[1])};canvas.setPointerCapture(e.pointerId);
 },{capture:true});
 canvas.addEventListener('pointermove',e=>{
  const d=S.drag;if(!d||e.pointerId!==d.id)return;rayFromEvent(e);const p=raycaster.ray.intersectPlane(d.plane,V3());if(!p)return;if(d.local)CONSOLE.worldToLocal(p);
  if(d.type==='rail'||d.type==='slider')setRailFromPointer(d.u+(p.x-d.start.x)/(d.type==='rail'?PHYS.SCENE.railWidth:SLIDER.width));
- if(d.type==='dial'){const a=Math.atan2(p.x-CONTROL_LAYOUT.dial[0],p.y-CONTROL_LAYOUT.dial[1]),delta=Math.atan2(Math.sin(a-d.angle),Math.cos(a-d.angle));setRailFromPointer(S.u.target+delta/(Math.PI*1.7));d.angle=a;}
+ if(d.type==='dial'){const a=Math.atan2(p.x-CONTROL_LAYOUT.dial[0],p.y-CONTROL_LAYOUT.dial[1]),delta=Math.atan2(Math.sin(a-d.angle),Math.cos(a-d.angle));setRailFromPointer(controlValue(PHYS.kidsFromRailX(S.u.target))+delta/(Math.PI*1.7));d.angle=a;}
  if(d.type==='graph')setRailFromPointer((p.x-CONTROL_LAYOUT.graphs[0][0])/CONTROL_LAYOUT.graphSize[0]+.5);
  if(d.type==='ratio'){const u=clamp((p.x-CONTROL_LAYOUT.graphs[1][0])/CONTROL_LAYOUT.graphSize[0]+.5,0,1);set('species',SPECIES_KEYS.reduce((best,s,i)=>Math.abs(PHYS.massGraphX(s)-u)<Math.abs(PHYS.massGraphX(SPECIES_KEYS[best])-u)?i:best,0));}
  e.stopImmediatePropagation();
@@ -103,9 +134,25 @@ function endDrag(e){if(!S.drag||S.drag.id!==e.pointerId)return;S.drag=null;S.sna
 for(const event of ['pointerup','pointercancel','lostpointercapture'])canvas.addEventListener(event,endDrag);
 window.addEventListener('keydown',e=>{if(e.key==='/'&&!e.repeat){S.ui.target=1-S.ui.target;document.body.classList.toggle('hide-ui',!S.ui.target);window.__site?.setVisible(!!S.ui.target);e.preventDefault();}});
 function set(name,v){
+ if(name==='pull'){
+  if(typeof v!=='number'||!Number.isFinite(v))throw new TypeError(name);
+  if(v<0||v>1)throw new RangeError(name);
+  if(!S.pullMode)return;
+  QUEST.touch();S.pullP=v;syncUI();return;
+ }
+ if(S.pullMode&&['kids','n','u','species','ground','mu','rival'].includes(name))return;
+ if(name==='lens'){
+  if(v===null||v===0||v===''||v==='none')v=null;
+  if(v!==null&&!['rope','A','B'].includes(v))throw new RangeError(name);
+  S.lens=S.rivalN>0?v:null;
+  if(S.lens){Q.flags.lensVisited||=[];if(!Q.flags.lensVisited.includes(S.lens))Q.flags.lensVisited.push(S.lens);}
+  syncUI();return;
+ }
+ if(name==='rival'){if(typeof v!=='number'||!Number.isFinite(v))throw new TypeError(name);if(!Number.isInteger(v)||v<0||v>100)throw new RangeError(name);}
  if(name==='quest'){QUEST.go(Number(v));return;}
- if(['species','ground','mu','kids','n','u'].includes(name)&&Q.phase==='act')QUEST.changed('edit');
- if(name==='species'){const i=typeof v==='string'?SPECIES_KEYS.indexOf(v):v;if(!Number.isInteger(i)||i<0||i>=SPECIES_KEYS.length)throw new RangeError(name);S.species.value=S.species.target=i;}
+ if(['species','ground','mu','kids','n','u','rival'].includes(name)&&Q.phase==='act')QUEST.changed('edit');
+ if(name==='rival'){S.rivalN=v;if(v===0)S.lens=null;}
+ else if(name==='species'){const i=typeof v==='string'?SPECIES_KEYS.indexOf(v):v;if(!Number.isInteger(i)||i<0||i>=SPECIES_KEYS.length)throw new RangeError(name);S.species.value=S.species.target=i;}
  else if(name==='ground'||name==='mu'){const i=name==='mu'?GROUND_VALUES.indexOf(Number(v)):typeof v==='string'?Object.keys(PHYS.GROUNDS).indexOf(v):v;if(!Number.isInteger(i)||i<0||i>=GROUND_VALUES.length)throw new RangeError(name);if(i!==S.ground.target)S.previousGround=S.ground.target;S.ground.value=S.ground.target=i;S.cassette.value=1;S.cassette.target=0;}
  else if(['playing','sound'].includes(name))S[name].target=v?1:0;
  else{v=Number(v);if(!Number.isFinite(v))throw new TypeError(name);
@@ -119,6 +166,7 @@ const PRESETS=[[1,0,2],[49,3,2],[59,4,2],[59,4,0],[68,4,1],[30,1,2],[100,5,3]];
 function preset(i){if(!Number.isInteger(i)||!PRESETS[i])throw new RangeError('preset');const [n,s,g]=PRESETS[i];set('kids',n);set('species',s);set('ground',g);S.previousGround=g;S.cassette.value=S.cassette.target=0;S.t.value=S.t.target=0;}
 function textAudit(){const found=[],walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);
  while(walker.nextNode()){const n=walker.currentNode,p=n.parentElement;if(!p||p.closest('script,style,template,[hidden]'))continue;
+ if(p.closest('#mission[data-mission]')||p.closest('[data-learn]'))continue;
  const range=document.createRange();range.selectNodeContents(n);const r=range.getBoundingClientRect();let visible=!!r.width&&!!r.height;
  for(let a=p;a;a=a.parentElement){const s=getComputedStyle(a);if(s.visibility==='hidden'||s.display==='none'||+s.opacity===0)visible=false;}
  if(!visible||r.bottom<0||r.top>innerHeight||r.right<0||r.left>innerWidth)continue;
@@ -131,9 +179,9 @@ Object.assign(ICONS,{
  hand:'M7 12V5a2 2 0 0 1 4 0v7-4a2 2 0 0 1 4 0v4-2a2 2 0 0 1 4 0v5q0 6-6 6-4 0-6-4l-3-4q-1-3 2-2l3 2',
  check:'M4 12l5 5L21 5',next:'M4 12h16m-6-6 6 6-6 6',star:'M12 2l3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1z',
  compare:'M4 5h6v14H4zM14 5h6v14h-6zM6 16v-8m10 8v-3',layers:'M3 7l9-4 9 4-9 4zM3 12l9 4 9-4M3 17l9 4 9-4',
- species:'M3 19h18M5 15V9h5v6m4 0V5h5v10',ground:'M3 17h18M4 12l4-4 4 4 4-4 4 4'
+ rival:'M6 7a1 1 0 1 0 0 .01M12 7a1 1 0 1 0 0 .01M18 7a1 1 0 1 0 0 .01M9 15a1 1 0 1 0 0 .01M15 15a1 1 0 1 0 0 .01',species:'M3 19h18M5 15V9h5v6m4 0V5h5v10',ground:'M3 17h18M4 12l4-4 4 4 4-4 4 4'
 });
-Object.assign(LABELS,{quest:{ko:'퀘스트',en:'Quests'},free:{ko:'자유 실험',en:'Free exploration'},pick:{ko:'예상 선택',en:'Choose prediction'},next:{ko:'다음',en:'Next quest'},replay:{ko:'예상 다시 비교',en:'Replay comparison'},compare:{ko:'비율 비교 열기',en:'Open ratio comparison'},speciesTool:{ko:'종 견본 펼치기',en:'Show species samples'},groundTool:{ko:'바닥 견본 펼치기',en:'Show ground samples'},layersTool:{ko:'층 도구 펼치기',en:'Show layer tools'}});
+Object.assign(LABELS,{quest:{ko:'퀘스트',en:'Quests'},free:{ko:'자유 실험',en:'Free exploration'},pick:{ko:'예상 선택',en:'Choose prediction'},next:{ko:'다음',en:'Next quest'},replay:{ko:'예상 다시 비교',en:'Replay comparison'},compare:{ko:'비율 비교 열기',en:'Open ratio comparison'},rivalTool:{ko:'?? ?? ???',en:'Show rival team sizes'},speciesTool:{ko:'종 견본 펼치기',en:'Show species samples'},groundTool:{ko:'바닥 견본 펼치기',en:'Show ground samples'},layersTool:{ko:'층 도구 펼치기',en:'Show layer tools'}});
 LABELS.play={ko:'당김 실행 또는 중단',en:'Run or interrupt pull'};LABELS.reset={ko:'시작 상태 복구',en:'Restore starting setup'};LABELS.sound={ko:'소리 켜기 또는 끄기',en:'Toggle sound'};
 for(const name of ['play','reset','sound'])document.getElementById('tool-'+name).setAttribute('aria-label',LABELS[name][LANG]);
 const qPictures=document.createElement('div');qPictures.id='q-pictures';document.body.append(qPictures);
@@ -149,13 +197,33 @@ for(const b of sampleButtons.slice(0,3))toolMain.append(b);
 const speciesTools=sampleButtons.filter(b=>/^tool-s[0-5]$/.test(b.id)),groundTools=sampleButtons.filter(b=>/^tool-g/.test(b.id)),layerTools=sampleButtons.filter(b=>b.classList.contains('grammar-tool'));
 for(const b of sampleButtons.slice(3))b.remove();
 let toolGroup='species',toolPage=0;
-const toolBank={species:speciesTools,ground:groundTools,layers:layerTools};
+const rivalTools=PHYS.C.rivalChoices.map((n,i)=>{
+ const b=document.createElement('button');b.id='tool-r'+n;b.setAttribute('aria-label',LABELS.rival[i][LANG]);
+ b.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true">'+Array.from({length:n},(_,j)=>'<circle cx="'+(5+j%4*4.5)+'" cy="'+(8+Math.floor(j/4)*8)+'" r="1.3" fill="currentColor"/>').join('')+'</svg>';
+ b.onclick=()=>{if(!QUEST.allows())return;QUEST.touch();set('rival',n);};return b;
+});
+
+const lensValues=[null,'rope','A','B'];
+LABELS.lensTool={ko:'보는 물체 고르기',en:'Choose what to look at'};
+LABELS.lens=[{ko:'렌즈 해제',en:'Show both teams'},{ko:'줄',en:'Rope'},{ko:'왼쪽 팀',en:'Left team'},{ko:'오른쪽 팀',en:'Right team'}];
+const lensTools=lensValues.map((v,i)=>{
+ const b=document.createElement('button');b.id='tool-lens-'+(v??'none');b.setAttribute('aria-label',LABELS.lens[i][LANG]);
+ const dots=x=>[0,1,2].map(j=>'<circle cx="'+(x+j*3)+'" cy="8" r="1" fill="currentColor"/>').join('');
+ b.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 14h18"/>'+((v===null||v==='A')?dots(3):'')+((v===null||v==='B')?dots(15):'')+'</svg>';
+ b.onclick=()=>{if(!QUEST.allows())return;QUEST.touch();set('lens',v);};return b;
+});
+function lensAvailable(){return S.rivalN>0&&(Q.free||!!QUESTS[Q.i].lens);}
+const toolBank={species:speciesTools,rival:rivalTools,lens:lensTools,ground:groundTools,layers:layerTools};
 qButton('speciesTool','species',()=>showTools('species'),toolMain);
+const rivalTool=qButton('rivalTool','rival',()=>showTools('rival'),toolMain);rivalTool.id='rivalTool';rivalTool.hidden=true;
+const lensTool=qButton('lensTool','lens',()=>showTools('lens'),toolMain);lensTool.id='lensTool';lensTool.hidden=true;
 qButton('groundTool','ground',()=>showTools('ground'),toolMain);
 qButton('compare','compare',()=>QUEST.compare(),toolMain).id='tool-compare';
 const layersToggle=qButton('layersTool','layers',()=>showTools('layers'),toolPalette);
 const paletteNext=qButton('next','next',()=>{toolPage++;showTools(toolGroup,false);},toolPalette);
 function showTools(group,reset=true){
+ if(group==='lens'&&!lensAvailable())group='species';
+ if(group==='rival'&&S.rivalN===0)group='species';
  if(group==='layers'&&!Q.free)group='species';toolGroup=group;if(reset)toolPage=0;
  const bank=toolBank[group],slots=Q.free?4:5,pages=Math.ceil(bank.length/slots);toolPage%=pages;
  toolPalette.replaceChildren();if(Q.free)toolPalette.append(layersToggle);
@@ -163,13 +231,20 @@ function showTools(group,reset=true){
  if(pages>1)toolPalette.append(paletteNext);
  layersToggle.setAttribute('aria-pressed',String(group==='layers'));
 }
+function conceptHTML(id){return '<div class="q-concept">'+icon('star')+text(CONCEPTS.find(c=>c.id===CONCEPTS_OF[id][0]))+'</div>';}
+function cardHTML(i,s,stars){
+ const id=QUESTS[i].id,done=new Set([...Q.completed].flatMap(i=>CONCEPTS_OF[QUESTS[i].id]));
+ const bridge=EXPLAIN[id].bridge?`<p class="q-bridge">${text(EXPLAIN[id].bridge)}</p>`:'';
+ const map='<div class="q-map" aria-hidden="true">'+CONCEPTS.map(c=>'<svg viewBox="0 0 24 24" aria-hidden="true"><circle data-concept="'+c.id+'" cx="12" cy="12" r="8" fill="'+(done.has(c.id)?'currentColor':'none')+'" stroke-width="'+(CONCEPTS_OF[id].includes(c.id)?4:1.5)+'"/></svg>').join('')+'</div>';
+ return `<div class="q-principle" data-learn>${conceptHTML(id)}<p class="q-recap">${text(EXPLAIN[id].recap)}</p>${bridge}${QUESTS[i].card(s)}${map}<span class="q-stars">${icon('star').repeat(stars)}</span></div>`;
+}
 function questUI(){
  const d=QUESTS[Q.i],f=Q.flags,top=document.getElementById('quests');top.removeAttribute('aria-hidden');top.replaceChildren();
  qButton('quest','quest',()=>TEACHER.mode('student'),top).setAttribute('aria-pressed',String(!Q.free));
  qButton('free','free',()=>TEACHER.mode('free'),top).setAttribute('aria-pressed',String(Q.free));
  qButton('teacher','teacher',()=>TEACHER.mode('teacher'),top).setAttribute('aria-pressed',String(T.mode==='teacher'));
  const row=document.createElement('div');row.className='quest-row';top.append(row);
- QUESTS.forEach((d,i)=>{const b=qButton('quest',d.icon,()=>{if(i===0||Q.completed.has(i-1)||Q.completed.has(i))QUEST.go(i);},row,' '+(i+1));b.className='quest'+(Q.i===i?' current':'')+(Q.completed.has(i)?' complete':'');b.setAttribute('aria-disabled',String(i>0&&!Q.completed.has(i-1)&&!Q.completed.has(i)));b.innerHTML+='<span class="q-dots">'+('<i></i>'.repeat(Q.i===i?PHASES.indexOf(Q.phase)+1:1))+'</span>';});
+ SEQUENCE.forEach((i,pos)=>{const b=qButton('quest',QUESTS[i].icon,()=>{if(QUEST.unlocked(i))QUEST.go(i);},row,' '+(pos+1));b.className='quest'+(Q.i===i?' current':'')+(Q.completed.has(i)?' complete':'')+(pos>0&&levelOf(i)!==levelOf(SEQUENCE[pos-1])?' level-gap':'');b.setAttribute('aria-disabled',String(!QUEST.unlocked(i)));b.innerHTML+='<span class="q-dots">'+('<i></i>'.repeat(Q.i===i?PHASES.indexOf(Q.phase)+1:1))+'</span>';});
  qPictures.replaceChildren();qPictures.className=Q.phase;qPictures.hidden=Q.free;
  if(!Q.free&&Q.phase==='predict')d.candidates.forEach((c,k)=>{const b=qButton('pick',d.icon,()=>QUEST.pick(k),qPictures,' '+(k+1));b.dataset.candidate=k;b.innerHTML=CARDS.picture(d.id,c,0,QUEST.sample());});
  if(!Q.free&&Q.phase==='confirm'){
@@ -177,13 +252,21 @@ function questUI(){
   qPictures.innerHTML='<div class="q-compare '+(Q.stars[Q.i]===3?'matched':'')+'">'+CARDS.picture(d.id,chosen,0,f.success)+CARDS.actual(d.id,f.success||QUEST.sample())+(Q.stars[Q.i]===3?icon('check'):'')+'</div>';
   if(Q.stars[Q.i]===2)qButton('replay','reset',()=>QUEST.skip('event'),qPictures);
  }
- if(!Q.free&&Q.phase==='card'){
-  qPictures.innerHTML='<div class="q-principle">'+d.card(f.success||QUEST.sample())+'<span class="q-stars">'+icon('star').repeat(Q.stars[Q.i])+'</span></div>';
-  qButton(Q.i<6?'next':'free',Q.i<6?'next':'free',()=>Q.i<6?QUEST.go(Q.i+1):QUEST.mode(true),qPictures);
+ if(!Q.free&&Q.phase==='explain'){
+  const e=f.explain,data=EXPLAIN[d.id],last=data.options.find(o=>o.key===e.tries.at(-1));
+  qPictures.innerHTML='<div class="q-explain" data-learn>'+conceptHTML(d.id)+'<p class="q-ask">'+text(data.q)+'</p><div class="q-options"></div><p class="q-hint" role="status">'+(last?text(last.hint):'')+'</p></div>';
+  const options=qPictures.querySelector('.q-options');
+  for(const key of e.order){const o=data.options.find(o=>o.key===key),b=document.createElement('button');b.dataset.option=key;b.textContent=text(o);b.setAttribute('aria-label',text(o));b.setAttribute('aria-disabled',String(e.tries.includes(key)));b.onclick=()=>QUEST.answer(key);options.append(b);}
  }
- qArchive.replaceChildren();for(const i of Q.completed){const b=qButton('quest',QUESTS[i].icon,()=>{qPictures.hidden=false;qPictures.className='card';qPictures.innerHTML='<div class="q-principle">'+QUESTS[i].card(Q.results[i].success)+'<span class="q-stars">'+icon('star').repeat(Q.stars[i])+'</span></div>';},qArchive);b.className='archive-card';}
+ if(!Q.free&&Q.phase==='card'){
+  qPictures.innerHTML=cardHTML(Q.i,f.success||QUEST.sample(),Q.stars[Q.i]);
+  const next=QUEST.next(),action=next===null?'free':'next';
+  qButton(action,action,()=>next===null?QUEST.mode(true):QUEST.go(next),qPictures);
+ }
+ qArchive.replaceChildren();for(const i of Q.completed){const b=qButton('quest',QUESTS[i].icon,()=>{qPictures.hidden=false;qPictures.className='card';qPictures.innerHTML=cardHTML(i,Q.results[i].success,Q.stars[i]);},qArchive);b.className='archive-card';}
  qArchive.hidden=!Q.free||!Q.completed.size;
  document.body.dataset.qphase=Q.free?'free':Q.phase;document.body.dataset.focus=QUEST.focus();
- showTools(QUEST.focus()==='ground'?'ground':toolGroup,false);
+ showTools(QUEST.focus()==='lens'?'lens':QUEST.focus()==='ground'?'ground':toolGroup,false);
+ syncUI();
 }
 

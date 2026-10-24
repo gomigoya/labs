@@ -1,3 +1,26 @@
+S.rivalN=0; // One scene-mode state; set() validates subsequent writes.
+// One measured value, three identical dials. The grammar layer owns their lifetime.
+S.lens=null;
+function drawTensionMeters(group,value) {
+ const radius=PHYS.DRAMA.kidHeight*.36,y=PHYS.DRAMA.ropeY+.88;
+ const angle=Math.PI*(.85-1.7*PHYS.forceGlyph(value).length/PHYS.VIS.width);
+ const ink=new THREE.MeshBasicMaterial({color:INK_CFG.diagram.ink,transparent:true,depthWrite:false});
+ const paper=new THREE.MeshBasicMaterial({color:INK_CFG.diagram.screen,transparent:true,depthWrite:false,side:THREE.DoubleSide});
+ // Group z=.72; place the ends beside the front row hands and the centre on the rope.
+ const ends=-(PHYS.dramaChild(5,4).x+.27*PHYS.DRAMA.kidHeight)+radius*2;
+ for(const x of [-ends,0,S.rivalN>0?ends:PHYS.DRAMA.dinoX]){
+  const dial=new THREE.Group();group.add(dial);dial.position.set(x,y,-.64);
+  KIT.rod(V3(0,-.88,0),V3(0,-radius,0),.012,ink,dial);
+  KIT.mesh(new THREE.CircleGeometry(radius,32),paper,dial,0,0,.015);
+  KIT.mesh(new THREE.TorusGeometry(radius,.014,6,32),ink,dial,0,0,.02);
+  for(let i=0;i<=6;i++){
+   const a=Math.PI*(.85-1.7*i/6);
+   KIT.rod(V3(Math.cos(a)*radius*.75,Math.sin(a)*radius*.75,.03),V3(Math.cos(a)*radius*.92,Math.sin(a)*radius*.92,.03),.008,ink,dial);
+  }
+  KIT.rod(V3(0,0,.045),V3(Math.cos(angle)*radius*.70,Math.sin(angle)*radius*.70,.045),.017,ink,dial);
+  KIT.ball(.024,ink,dial,0,0,.045,1);
+ }
+}
 const SPECIES_KEYS=Object.keys(PHYS.SPECIES), GROUND_VALUES=Object.values(PHYS.GROUNDS);
 const TRACK=new THREE.Group();HERO.add(TRACK);
 const groundColors=[THEME.glass,THEME.sand,THEME.gravel,THEME.asphalt];
@@ -54,13 +77,21 @@ for(const side of [-1,1]){
  }
  kidGeo.shoes.push(new THREE.TetrahedronGeometry(1).scale(.12,.042,.085).translate(side<0?-.12:.17,.042/Math.sqrt(3),z));
 }
-const kidParts=[],kidNamed={};
+const kidGeometry={};
 for(const [name,parts]of Object.entries(kidGeo)){
- const geometry=KIT.merge(parts);parts.forEach(g=>g.dispose());geometry.scale(kidScale,kidScale,kidScale);
- const mesh=new THREE.InstancedMesh(geometry,name==='shadow'?kidShadowMat:KIT.toon(0xffffff),PHYS.C.kidsMax);
- mesh.userData.inkInner=false;mesh.name='kid-'+name;mesh.castShadow=name!=='shadow';mesh.receiveShadow=name!=='shadow';mesh.frustumCulled=false;
- mesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage);HERO.add(mesh);kidParts.push(mesh);kidNamed[name]=mesh;
+ const geometry=KIT.merge(parts);parts.forEach(g=>g.dispose());geometry.scale(kidScale,kidScale,kidScale);kidGeometry[name]=geometry;
 }
+function createKidTeam(max,prefix){
+ const parts=[],named={};
+ for(const [name,geometry]of Object.entries(kidGeometry)){
+  const mesh=new THREE.InstancedMesh(geometry,name==='shadow'?kidShadowMat:KIT.toon(0xffffff),max);
+  mesh.userData.inkInner=false;mesh.name=prefix+name;mesh.castShadow=name!=='shadow';mesh.receiveShadow=name!=='shadow';mesh.frustumCulled=false;
+  mesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage);HERO.add(mesh);parts.push(mesh);named[name]=mesh;
+ }
+ return {parts,named};
+}
+const {parts:kidParts,named:kidNamed}=createKidTeam(PHYS.C.kidsMax,'kid-');
+const rivalTeam=createKidTeam(PHYS.C.rivalMax,'rival-');
 const kidColor=new THREE.Color();
 const kidDeform=kidParts.filter(m=>m!==kidNamed.shadow).map(mesh=>({mesh,rest:mesh.geometry.attributes.position.array.slice(),normals:mesh.geometry.attributes.normal.array.slice()}));
 let characterQuality='';
@@ -292,7 +323,7 @@ const DINO_MODELS=SPECIES_KEYS.map((s,i)=>{
  });
  // One animation path for the visible body and details.
  function animateDino(t,load){
-  const low=S.quality==='low',v=variants[low?1:0];
+ const low=S.quality==='low',v=variants[low?1:0];
   for(const [j,lod]of variants.entries())for(const m of [lod.mesh,lod.detailMesh,lod.contact])if(m)m.visible=j===(low?1:0);
   const breath=1+Math.sin(t*(2.4+load*3.2))*.015,pitch=Math.sin(t*(1.8+load))*.025-load*.085;
   const lean=-load*.24,cs=Math.cos(lean),sn=Math.sin(lean),pc=Math.cos(pitch),ps=Math.sin(pitch);
@@ -335,19 +366,24 @@ for(const [j,i] of [0,5].entries()){
 }
 KIT.expansion(CONSOLE,...CONTROL_LAYOUT.expansion);
 // Kid-height comparison post; conversion is PHYS.C.kidHeight times the display scale.
+const STAKE=new THREE.Group();HERO.add(STAKE);
 const stakeHeight=PHYS.DRAMA.kidHeight;
-KIT.rod(V3(2.77,PHYS.SCENE.top+.14,-.40),V3(2.77,PHYS.SCENE.top+.14+stakeHeight,-.40),.025,MAT.bone,HERO);
-for(let j=0;j<=4;j++)KIT.rod(V3(2.71,PHYS.SCENE.top+.14+stakeHeight*j/4,-.40),V3(2.83,PHYS.SCENE.top+.14+stakeHeight*j/4,-.40),.008,MAT.brass,HERO);
+KIT.rod(V3(2.77,PHYS.SCENE.top+.14,-.40),V3(2.77,PHYS.SCENE.top+.14+stakeHeight,-.40),.025,MAT.bone,STAKE);
+for(let j=0;j<=4;j++)KIT.rod(V3(2.71,PHYS.SCENE.top+.14+stakeHeight*j/4,-.40),V3(2.83,PHYS.SCENE.top+.14+stakeHeight*j/4,-.40),.008,MAT.brass,STAKE);
 const SIZE_MARK=KIT.expansion(HERO,PHYS.DRAMA.dinoX,3.4,.2);SIZE_MARK.scale.setScalar(.18);
 // Horizontal harness: paired uncalibrated knots show tautness, never measured tension.
 const ROPE=new THREE.Group();ROPE.position.set(0,PHYS.DRAMA.ropeY,.08);HERO.add(ROPE);
 KIT.rod(V3(-4.5,0,0),V3(PHYS.DRAMA.dinoX,0,0),.05,MAT.bone,ROPE);
 const TEAM_ROPES=[0,1,2].map(row=>KIT.rod(V3(PHYS.DRAMA.kidStart,0,-.86+row*PHYS.DRAMA.rowGap),V3(-.25,0,-.86+row*PHYS.DRAMA.rowGap),.025,MAT.bone,ROPE));
 const TEAM_JOINS=[0,1,2].map(row=>KIT.rod(V3(-.25,0,-.86+row*PHYS.DRAMA.rowGap),V3(.12,0,0),.025,MAT.bone,ROPE));
+const RIVAL_ROPES=new THREE.Group();RIVAL_ROPES.scale.x=-1;ROPE.add(RIVAL_ROPES);
+const rivalRopes=TEAM_ROPES.map(r=>{const copy=r.clone();RIVAL_ROPES.add(copy);return copy;});
+const rivalJoins=TEAM_JOINS.map(r=>{const copy=r.clone();RIVAL_ROPES.add(copy);return copy;});
+const RIVAL_EXTENSION=KIT.rod(V3(PHYS.DRAMA.dinoX,0,0),V3(4.5,0,0),.05,MAT.bone,ROPE);
 const harness=KIT.mesh(new THREE.TorusGeometry(.17,.028,6,16),MAT.brass,HERO,PHYS.DRAMA.dinoX,PHYS.DRAMA.ropeY,PHYS.DRAMA.dinoZ);harness.rotation.y=Math.PI/2;
 const FLAG=new THREE.Group();FLAG.scale.setScalar(1.7);ROPE.add(FLAG);
 KIT.rod(V3(0,-.13,0),V3(0,.27,0),.018,MAT.brass,FLAG);
-KIT.roundedPanel(.24,.22,.032,MAT.glow,FLAG,.12,.24,0,.008);
+const FLAG_PANEL=KIT.roundedPanel(.24,.22,.032,MAT.glow.clone(),FLAG,.12,.24,0,.008);
 const FORCE_KNOTS=Array.from({length:8},(_,i)=>{const x=(i<4?-1:1)*(.32+(i%4)*.20),k=KIT.ball(PHYS.DRAMA.beadRadius,MAT.brass,ROPE,x,0,0,1);k.userData.x=x;return k;});
 for(let i=-4;i<=4;i++)KIT.rod(V3(i*PHYS.DRAMA.flagStep,PHYS.DRAMA.ground,-.15),V3(i*PHYS.DRAMA.flagStep,PHYS.DRAMA.ground,.35),.018,i?MAT.bone:MAT.glow,HERO);
 const SLIP_DUST=new THREE.InstancedMesh(new THREE.IcosahedronGeometry(.035,0),new THREE.MeshStandardMaterial({color:THEME.sand,transparent:true,opacity:.8}),PHYS.VIS.dustCount);SLIP_DUST.frustumCulled=false;HERO.add(SLIP_DUST);
@@ -374,10 +410,20 @@ const BARS=[INK_CFG.diagram.kids,INK_CFG.diagram.dino].map((color,i)=>{
  const cut=KIT.line([V3(-.025,-.06,.041),V3(.005,-.02,.041),V3(-.025,.02,.041),V3(.005,.06,.041)],color,g);cut.position.x=PHYS.SCENE.barWidth-.10;
  return {fill,sign,cut};
 });
+Object.assign(S,{pullP:0,pullMode:false});
+let previousPullForce=0,pullBurstAt=-10,previousPullSession=null;
 function updateHero(){
  CAPACITIES.position.copy(CONSOLE.position);CAPACITIES.rotation.copy(CONSOLE.rotation);
  const n=PHYS.kidsFromRailX(S.u.value),i=Math.round(S.species.value),gi=Math.round(S.ground.value);
- const d=PHYS.dramaState(n,SPECIES_KEYS[i],GROUND_VALUES[gi],S.t.value);
+ const d=PHYS.dramaState(n,SPECIES_KEYS[i],GROUND_VALUES[gi],S.t.value,S.rivalN);
+ if(previousPullSession!==Q.flags){previousPullSession=Q.flags;previousPullForce=0;pullBurstAt=-10;}
+ if(S.pullMode){
+  const f=PHYS.staticPull(n,GROUND_VALUES[gi],S.pullP);
+  const travel=f.slipped?PHYS.DRAMA.flagTravel*(S.pullP-f.pSlip)/(1-f.pSlip):0;
+  Object.assign(d,{flagX:travel,kidSkid:travel,dinoSkid:0,slip:f.slipped,winner:f.slipped?'dino':'tie',lean:-.12*S.pullP,beadAmplitude:0,effort:S.pullP,slipX:PHYS.dramaChild(n,Math.min(n-1,3)).x+travel});
+  if(PHYS.slipOnset(previousPullForce,f.applied,n*PHYS.C.kidMass,GROUND_VALUES[gi]))pullBurstAt=DIRECTOR.clock;
+  previousPullForce=f.applied;
+ }else previousPullForce=0;
  const low=S.quality==='low',load=clamp(-d.lean/.24,0,1),time=S.t.value;
  // Includes the existing specimen clones; new grammar clones inherit current LOD.
  if(characterQuality!==S.quality){
@@ -397,40 +443,50 @@ function updateHero(){
    const nx=normals[k],ny=normals[k+1]+angle*root*grip*nx,nz=normals[k+2],inv=1/Math.hypot(nx,ny,nz);n.setXYZ(j,nx*inv,ny*inv,nz*inv);
   }p.needsUpdate=true;n.needsUpdate=true;
  }
- for(const mesh of kidParts)mesh.count=n;kidNamed.hair.visible=!low;
- for(let k=0;k<n;k++){
-  const p=PHYS.dramaChild(n,k),v=KID_VARIANTS[k],breath=Math.sin(time*(2.4+load*2)+v.phase)*.006;
+ for(const [rival,team,total,skid]of [[false,{parts:kidParts,named:kidNamed},n,d.kidSkid],[true,rivalTeam,Math.min(S.rivalN,PHYS.C.rivalMax),d.dinoSkid]]){
+ for(const mesh of team.parts)mesh.count=total;team.named.hair.visible=!low;
+ for(let k=0;k<total;k++){
+  const p=PHYS.dramaChild(total,k),v=KID_VARIANTS[k],breath=Math.sin(time*(2.4+load*2)+v.phase)*.006;
   // The team's own skid is authoritative; the dinosaur skid also cues a short drag stance.
-  kidDummy.position.set(p.x+d.kidSkid,p.y,p.z);
-  kidDummy.rotation.set(0,0,0);
+  kidDummy.position.set((rival?-p.x:p.x)+skid,p.y,p.z);
+  kidDummy.rotation.set(0,rival?Math.PI:0,0);
   kidDummy.scale.set(v.height,v.height*(1+breath),v.height);kidDummy.updateMatrix();
-  for(const [name,mesh]of Object.entries(kidNamed)){
+  for(const [name,mesh]of Object.entries(team.named)){
    if(name==='shadow'){
     kidDummy.rotation.z=0;kidDummy.scale.set(v.height,1,v.height);kidDummy.updateMatrix();mesh.setMatrixAt(k,kidDummy.matrix);
     kidDummy.rotation.z=0;kidDummy.scale.set(v.height,v.height*(1+breath),v.height);kidDummy.updateMatrix();
    }else mesh.setMatrixAt(k,kidDummy.matrix);
    const palette=name==='head'||name==='arms'?KID_STYLE.skin:name==='shirt'?KID_STYLE.shirts:name==='pants'||name==='legs'?KID_STYLE.pants:name==='hair'?KID_STYLE.hair:KID_STYLE.shoes;
    const index=name==='head'||name==='arms'?v.skin:name==='shirt'?v.shirt:name==='pants'||name==='legs'?v.pants:name==='hair'?v.hair:v.shoes;
-   if(name!=='shadow')mesh.setColorAt(k,kidColor.set(name==='band'?(p.band?THEME.navy:THEME.brass):palette[index]));
+   if(name!=='shadow')mesh.setColorAt(k,kidColor.set(name==='band'?(p.band?THEME.navy:THEME.brass):rival&&name==='shirt'?THEME.cool:palette[index]));
   }
  }
- for(const mesh of kidParts){mesh.instanceMatrix.needsUpdate=true;if(mesh.instanceColor)mesh.instanceColor.needsUpdate=true;}
+ for(const mesh of team.parts){mesh.instanceMatrix.needsUpdate=true;if(mesh.instanceColor)mesh.instanceColor.needsUpdate=true;}
+ }
+ const rival=S.rivalN>0;
+ RIVAL_ROPES.visible=RIVAL_EXTENSION.visible=rival;
+ const rivalRows=PHYS.dramaChild(Math.min(S.rivalN,PHYS.C.rivalMax),0).rows;
+ rivalRopes.forEach((r,j)=>r.visible=j<rivalRows);rivalJoins.forEach((r,j)=>r.visible=j<rivalRows);
+ STAKE.visible=SIZE_MARK.visible=harness.visible=!rival;
  const rows=PHYS.dramaChild(n,0).rows;TEAM_ROPES.forEach((r,j)=>r.visible=j<rows);TEAM_JOINS.forEach((r,j)=>r.visible=j<rows);
- DINO_MODELS.forEach((g,j)=>{g.visible=j===i;if(j===i){g.pose(d.lean);g.position.x=PHYS.DRAMA.dinoX+d.dinoSkid;}});
+ DINO_MODELS.forEach((g,j)=>{g.visible=!rival&&j===i;if(!rival&&j===i){g.pose(d.lean);g.position.x=PHYS.DRAMA.dinoX+d.dinoSkid;}});
  SIZE_MARK.position.y=PHYS.DRAMA.ground+d.height+.10;
  CASSETTES.forEach((g,j)=>{g.visible=j===gi;g.position.x=S.cassette.value*.16;g.userData.surface.uniforms.uTime.value=S.t.value;if(g.userData.grains)g.userData.grains.count=S.quality==='low'?PHYS.VIS.grains/2:PHYS.VIS.grains;});
- RAIL_HANDLE.position.x=PHYS.railWorldX(PHYS.railX(n));
- SLIDER.handle.position.x=SLIDER.x+(PHYS.railX(n)-.5)*SLIDER.width;DIAL.knob.rotation.z=-PHYS.railX(n)*Math.PI*1.7;
+ const u=controlValue(n);RAIL_HANDLE.position.x=PHYS.railWorldX(u);
+ SLIDER.handle.position.x=SLIDER.x+(u-.5)*SLIDER.width;DIAL.knob.rotation.z=-u*Math.PI*1.7;
  FLAG.position.x=d.flagX;
+ FLAG_PANEL.material.color.set(!rival?INK_CFG.diagram.kids:d.winner==='tie'?INK_CFG.diagram.reference:d.winner==='kids'?INK_CFG.diagram.kids:INK_CFG.diagram.rival);FLAG_PANEL.material.emissive.copy(FLAG_PANEL.material.color);
  FORCE_KNOTS.forEach((k,j)=>{k.position.x=k.userData.x+d.flagX*.2;k.position.y=Math.sin((DIRECTOR.eventLeft>0?DIRECTOR.clock*18:S.t.value*30)+j*Math.PI)*d.beadAmplitude;k.scale.setScalar(1+d.effort*.25);});
- const burst=DIRECTOR.eventLeft>0&&d.slip,age=1.4-DIRECTOR.eventLeft;
+ const age=S.pullMode?DIRECTOR.clock-pullBurstAt:1.4-DIRECTOR.eventLeft;
+ const burst=d.slip&&(S.pullMode?age<1.4:DIRECTOR.eventLeft>0);
  SLIP_DUST.visible=burst;SLIP_DUST.material.opacity=Math.max(0,1-age/1.4)*.85;
  for(let k=0;burst&&k<PHYS.VIS.dustCount;k++){
-  const a=k*2.399963,r=(.06+age*.46)*(1+k%7/7),footZ=d.winner==='kids'?PHYS.DRAMA.dinoZ+(k%2?-.28:.28):PHYS.dramaChild(n,k%n).z;
+  const a=k*2.399963,r=(.06+age*.46)*(1+k%7/7),footZ=d.winner==='kids'?(rival?PHYS.dramaChild(Math.min(S.rivalN,PHYS.C.rivalMax),k%Math.min(S.rivalN,PHYS.C.rivalMax)).z:PHYS.DRAMA.dinoZ+(k%2?-.28:.28)):PHYS.dramaChild(n,k%n).z;
   kidDummy.position.set(d.slipX+Math.cos(a)*r,PHYS.DRAMA.ground+.03+Math.sin(Math.min(1,age/1.4)*Math.PI)*(.12+k%5*.045),footZ+Math.sin(a)*r);kidDummy.updateMatrix();SLIP_DUST.setMatrixAt(k,kidDummy.matrix);
  }SLIP_DUST.instanceMatrix.needsUpdate=true;
- const capacity=PHYS.displayState(n,SPECIES_KEYS[i],GROUND_VALUES[gi],S.t.value);
+ const capacity=PHYS.displayState(n,SPECIES_KEYS[i],GROUND_VALUES[gi],S.t.value,S.rivalN);
  for(const [j,length]of [capacity.kidsLength,capacity.dinoLength].entries()){
+  const color=j?(rival?INK_CFG.diagram.rival:INK_CFG.diagram.dino):INK_CFG.diagram.kids;BARS[j].fill.material.uniforms.uColor.value.set(color);BARS[j].cut.material.color.set(color);
   BARS[j].fill.scale.x=Math.max(.001,length);BARS[j].fill.material.uniforms.uTime.value=S.t.value;BARS[j].fill.material.uniforms.uUnit.value=PHYS.forceGlyph(PHYS.C.kidMuscle).length/Math.max(.001,length);BARS[j].fill.material.uniforms.uForce.value=length/PHYS.VIS.width;const compressed=j?capacity.dinoCompressed:capacity.kidsCompressed;
   BARS[j].sign.visible=compressed;BARS[j].cut.visible=compressed;BARS[j].cut.position.x=Math.max(.03,length-.08);
  }

@@ -10,12 +10,19 @@ button{border:var(--diagram-border,1.5px) solid var(--diagram-ink,#221d18);borde
 button[aria-pressed=true]{background:#e8b23a;color:var(--diagram-ink,#221d18)}button:focus-visible{outline:2px solid #221d18;outline-offset:2px}
 svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 #quests{top:max(12px,env(safe-area-inset-top));max-width:calc(100% - 16px)}
+#mission{position:fixed;z-index:21;left:50%;top:var(--mission-top,86px);transform:translateX(-50%);width:max-content;max-width:calc(100% - 24px);margin:0;padding:7px 16px;border:2px solid #221d18;border-radius:999px;background:#f4efe3;color:#221d18;font:500 17px/1.4 system-ui,sans-serif;text-align:center;white-space:nowrap;pointer-events:none}
+body[data-mode=teacher] #mission,.hide-ui #mission{display:none}
+@media(max-width:600px){#mission{font-size:15px;white-space:normal;word-break:keep-all;overflow-wrap:anywhere;max-width:calc(100% - 24px)}}
 .quest-row{display:flex;max-width:calc(100vw - 196px);overflow:auto;scrollbar-width:none;gap:2px}
+.quest-row .level-gap{margin-left:8px}
 .quest{position:relative;opacity:.85}.quest[aria-disabled=true]{opacity:.65;background:#deded6}.quest.current{opacity:1;color:var(--diagram-ink,#221d18);background:#e8b23a;box-shadow:none}.quest.complete{opacity:1;background:#c7d4b4}.quest.complete svg{fill:#c7d4b4}
 .q-dots{display:flex;gap:2px;position:absolute;bottom:5px}.q-dots i{width:3px;height:3px;border-radius:50%;background:currentColor}
 #tools{bottom:max(12px,env(safe-area-inset-bottom));flex-direction:column;max-width:calc(100% - 16px)}
+#tools[data-rival=true] .tool-row:first-child{max-width:100%;overflow-x:auto;justify-content:flex-start}
 .tool-row{display:flex;gap:0;min-height:56px;justify-content:center}
 #tools .grammar-tool{border-top:2px solid #7863a6}
+#tools .grammar-tool[data-layer="장력계"] svg{stroke-width:2.6}
+.q-bridge{margin:.25em 0;font-size:.9em}
 #tools button[id^=tool-s] svg{width:40px;height:40px;stroke-width:2.6}
 #q-pictures{position:fixed;z-index:12;left:50%;transform:translateX(-50%);bottom:148px;display:flex;align-items:center;justify-content:center;gap:8px;width:min(780px,calc(100% - 16px));color:var(--diagram-ink,#221d18)}
 #q-pictures:empty,#q-pictures.act,#q-pictures.observe{display:none}
@@ -23,11 +30,17 @@ svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2;stroke-l
 #q-pictures button[data-candidate] svg{width:100%;height:100%;stroke-width:3}
 .q-principle,.q-compare{background:var(--diagram-paper,#f4efe3);border:var(--diagram-border,1.5px) solid var(--diagram-ink,#221d18);border-radius:16px;padding:6px;display:flex;align-items:center;position:relative;width:500px;max-width:calc(100% - 64px);animation:q-arrive .5s ease-out}
 .q-principle{flex-direction:column}.q-principle>svg{width:100%;height:72px}
+.q-explain,.q-principle{background:var(--diagram-paper,#f4efe3);border:var(--diagram-border,1.5px) solid var(--diagram-ink,#221d18);border-radius:16px;width:min(500px,calc(100% - 16px));max-width:100%;padding:12px;font:400 16px/1.5 system-ui,sans-serif;max-height:calc(100vh - 280px);overflow:auto;animation:q-arrive .5s ease-out}
+.q-explain{display:flex;flex-direction:column;gap:10px}.q-concept{display:flex;align-items:center;gap:6px;font-weight:600}.q-concept svg{width:20px;height:20px;flex-shrink:0}
+.q-ask,.q-recap,.q-hint{margin:0}.q-recap{margin:8px 0}.q-options{display:flex;flex-direction:column;gap:8px;width:100%}
+.q-options button{width:100%;height:auto;min-height:44px;text-align:left;display:block;font:inherit;white-space:normal;background:var(--diagram-paper,#f4efe3);border:var(--diagram-border,1.5px) solid var(--diagram-ink,#221d18)}
+.q-options button[aria-disabled=true]{opacity:.45;cursor:default}.q-hint{color:var(--diagram-friction,#ad466c)}.q-map{display:flex;gap:8px;margin:8px 0}.q-map svg{width:24px;height:24px}
+@media(max-width:600px){.q-explain,.q-principle{font-size:14px}}
 .q-stars{display:flex;color:#936114;gap:8px}.q-stars svg{width:16px;height:16px;fill:#93611455}
 .q-compare>svg{width:50%;height:72px}.q-compare.matched>svg:nth-child(2){position:absolute;inset:6px;width:calc(100% - 12px);opacity:.55}.q-compare.matched>svg:first-child{width:100%}.q-compare.matched>svg:last-child{position:absolute;right:5px;top:5px;width:32px;height:32px;color:#37795d}
 #q-archive{right:12px;left:auto;bottom:150px;transform:none;max-width:180px;overflow:auto;justify-content:flex-start}
 #q-overlay{position:fixed;inset:0;pointer-events:none;z-index:20;color:#936114}#q-overlay>svg{width:100%;height:100%}#q-overlay>svg>svg{stroke-width:3}
-body:not([data-qphase=free]) #tools button{opacity:.48}body:not([data-qphase=free]) #tool-sound,body[data-focus=play] #tool-play,body[data-focus=species] #tools button[id^=tool-s],body[data-focus=ground] #tools button[id^=tool-g],body[data-focus=rail] #tool-play{opacity:1;box-shadow:none}
+body:not([data-qphase=free]) #tools button{opacity:.48}body:not([data-qphase=free]) #tool-sound,body[data-focus=lens] #lensTool,body[data-focus=lens] #tools button[id^=tool-lens-],body[data-focus=play] #tool-play,body[data-focus=species] #tools button[id^=tool-s],body[data-focus=ground] #tools button[id^=tool-g],body[data-focus=rail] #tool-play{opacity:1;box-shadow:none}
 .q-bars:before,.q-bars:after{content:'';position:fixed;left:0;right:0;height:8vh;background:#e9e8d3;z-index:15;pointer-events:none}.q-bars:before{top:0}.q-bars:after{bottom:0}
 /* Fixed event explanation lane; only the apparatus remains active for this beat. */
 .q-event .hud,.q-event #teacher-strip,.q-event #teacher-numbers,.q-event #teacher-class{visibility:hidden;pointer-events:none}.q-event #q-pictures{display:none}
@@ -69,7 +82,7 @@ body[data-mode=teacher] #quests button{width:72px}body[data-mode=teacher] #quest
 @media(prefers-reduced-motion:reduce){#touch-pulse,#q-pictures *,.class-result *{animation:none!important}}
 </style>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.176.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.176.0/examples/jsm/"}}</script>
-</head><body><canvas id="gl"></canvas><div id="quests" class="hud" aria-hidden="true"></div><div id="tools" class="hud"></div>
+</head><body><canvas id="gl"></canvas><div id="quests" class="hud" aria-hidden="true"></div><p id="mission" data-mission role="status" aria-live="polite" aria-atomic="true"></p><div id="tools" class="hud"></div>
 <script type="module">
 // 이 파일은 src/의 조각을 tools/assemble.mjs로 이어 붙여 만든다. 수정은 src/에서.
 import * as THREE from 'three';
@@ -98,6 +111,9 @@ const PHYS = (() => {
     adultMass: 70, kidMass: 35, // kg
     adultPullRatio: 0.5, kidPullRatio: 0.4, // 추정: 체중 대비 근육 힘
     tieN: 1, // N
+    pullRange: 1.5, // 추정: 손잡이 끝의 당기는 힘은 정지마찰 한계의 1.5배.
+    kineticRatio: 0.8, // 추정: 끌려갈 때 접촉이 미끄러져 정지마찰 한계보다 작아지는 효과.
+    rivalMax: 20, rivalChoices: Object.freeze([4,5,6,7]),
     kidsMin: 1, kidsMax: 100, increaseQ5: 10, designKids: 30,
     muscleExponent: 2 / 3,
     railRoundoffUlps: 8,
@@ -118,6 +134,20 @@ const PHYS = (() => {
   const kidCap = (n, mu) => n * Math.min(C.kidMuscle, friction(C.kidMass, mu));
   const dinoCap = (species, mu) => Math.min(muscle(SPECIES[species]), friction(SPECIES[species], mu));
   const weightRatio = species => muscle(SPECIES[species]) / (SPECIES[species] * C.g);
+  // 가벼운 줄 가정에서 줄 장력은 어디서나 같고, 모델에서는 약한 쪽 한계가 정한다.
+  const ropeTension = (capA, capB) => Math.min(capA, capB);
+  function staticPull(n, mu, p) {
+    const limit=friction(n*C.kidMass,mu),applied=p*C.pullRange*limit;
+    const slipped=applied>limit,actualFriction=slipped?C.kineticRatio*limit:applied;
+    return {applied,limit,friction:actualFriction,slipped,net:applied-actualFriction,pSlip:1/C.pullRange};
+  }
+  const judgeQ12 = ({sawStatic,sawSlip}) => sawStatic===true&&sawSlip===true;
+  function kidsMatch(nA, nB, mu) {
+    const a = kidCap(nA, mu), b = kidCap(nB, mu), net = a - b;
+    const winner = Math.abs(net) <= C.tieN ? 'tie' : net > 0 ? 'a' : 'b';
+    const limiter = friction(C.kidMass, mu) <= C.kidMuscle ? 'friction' : 'muscle';
+    return { a, b, net, winner, limiter, tension: ropeTension(a, b) };
+  }
   function outcome(n, species, mu) {
     const kids = kidCap(n, mu), dino = dinoCap(species, mu), net = kids - dino;
     const winner = Math.abs(net) <= C.tieN ? 'tie' : net > 0 ? 'kids' : 'dino';
@@ -127,10 +157,28 @@ const PHYS = (() => {
     const ff = friction(kidsLimited ? C.kidMass : SPECIES[species], mu);
     return { kids, dino, net, winner, limiter: ff <= fm ? 'friction' : 'muscle' };
   }
+  function matchOutcome(n, species, rivalN, mu) {
+    if (rivalN === 0) return outcome(n, species, mu);
+    const {a,b,net,winner,limiter}=kidsMatch(n,rivalN,mu);
+    return {kids:a,dino:b,net,winner:winner==='a'?'kids':winner==='b'?'dino':'tie',limiter};
+  }
   function minKidsToWin(species, mu) {
     // 명세의 엄격한 > 정의다. 1 N 비김 띠와는 별개다.
     const n = Math.floor(dinoCap(species, mu) / kidCap(C.kidsMin, mu)) + 1;
     return n <= C.kidsMax ? n : Infinity;
+  }
+  function tensionOf(n, species, rivalN, mu) {
+    const {kids,dino}=matchOutcome(n,species,rivalN,mu);
+    return ropeTension(kids,dino);
+  }
+  function lensForces(n,species,rivalN,mu,object) {
+    if(!(rivalN>0)||!['rope','A','B'].includes(object))throw new RangeError('lensForces');
+    const m=matchOutcome(n,species,rivalN,mu),T=tensionOf(n,species,rivalN,mu);
+    const center=object==='A'?1:-1,winner=object==='A'?'kids':'dino';
+    const arrows=object==='rope'?[{dir:-1,kind:'pull',value:T},{dir:1,kind:'pull',value:T}]
+      :[{dir:center,kind:'pull',value:T},{dir:-center,kind:'friction',value:(m.winner==='tie'||m.winner===winner)?T:C.kineticRatio*T}];
+    const sum=arrows.reduce((s,a)=>s+a.dir*a.value,0);
+    return {arrows,sum,balanced:Math.abs(sum)<=C.tieN};
   }
   // 각 정수 칸은 레일의 같은 폭을 차지한다. railX는 칸의 중심이다.
   const railX = n => (n - C.kidsMin + 0.5) / (C.kidsMax - C.kidsMin + 1);
@@ -157,7 +205,10 @@ const PHYS = (() => {
   // 검증은 기록·퀘스트 경계에서만 한다. 핵심 계산의 입력은 유효 SI 값이다.
   const validSetup = ({ n, species, mu }) => Number.isInteger(n) && n >= C.kidsMin && n <= C.kidsMax
     && Object.hasOwn(SPECIES, species) && Object.values(GROUNDS).includes(mu);
-  const validObservation = o => o != null && Number.isInteger(o.run) && o.run > 0 && validSetup(o);
+  const validMatch = ({ nA, nB, mu }) => Number.isInteger(nA) && nA >= C.kidsMin && nA <= C.kidsMax
+    && Number.isInteger(nB) && nB >= C.kidsMin && nB <= C.kidsMax && Object.values(GROUNDS).includes(mu);
+  const validObservation = o => o != null && Number.isInteger(o.run) && o.run > 0 && validSetup(o)
+    && (!Object.hasOwn(o, 'rivalN') || Number.isInteger(o.rivalN) && o.rivalN >= 0 && o.rivalN <= 100);
   const judgeQ1 = s => validSetup(s) && s.n === C.kidsMin && s.species === '벨로키랍토르'
     && s.mu === GROUNDS['자갈'] && outcome(s.n, s.species, s.mu).winner === 'kids';
   const judgeQ2 = s => validSetup(s) && s.species === '트리케라톱스' && s.mu === GROUNDS['자갈']
@@ -184,6 +235,27 @@ const PHYS = (() => {
     const winners = Object.keys(SPECIES).filter(t => outcome(s.n, t, s.mu).winner === 'kids');
     return winners.includes(s.species) && !winners.some(t => SPECIES[t] > SPECIES[s.species]);
   }
+  // Current edits are not evidence; only the last valid completed pull counts.
+  const lastObservation = ({observations=[]}) => observations.filter(validObservation).at(-1);
+  function judgeQ8(s) {
+    const o=lastObservation(s);
+    return !!o && o.rivalN>0 && o.n===o.rivalN
+      && matchOutcome(o.n,o.species,o.rivalN,o.mu).winner==='tie';
+  }
+  function judgeQ9(s) {
+    const o=lastObservation(s);
+    return !!o && o.rivalN>0 && Math.abs(o.n-o.rivalN)===1
+      && matchOutcome(o.n,o.species,o.rivalN,o.mu).winner===(o.n>o.rivalN?'kids':'dino');
+  }
+  function judgeQ10({observations=[]}) {
+    const valid=observations.filter(validObservation),last=valid.at(-1);
+    return !!last && last.rivalN>0 && Math.abs(last.n-last.rivalN)===1
+      && valid.slice(0,-1).some(o=>o.rivalN>0 && o.n===o.rivalN);
+  }
+  function judgeQ11({observations=[],lensVisited=[]}) {
+    const o=lastObservation({observations});
+    return !!o&&o.rivalN>0&&Math.abs(o.n-o.rivalN)===1&&['rope','A','B'].every(x=>lensVisited.includes(x));
+  }
   // R1 display mappings only. Dimensions are schematic exhibition units, not recovered anatomy.
   const SCENE = Object.freeze({ top: 1.10, trackWidth: 6.0, trackDepth: 1.24, railStart: -2.70,
     railWidth: 2.2, railY: 1.36, railZ: 0.76, consoleZ: 1.04, barWidth: 2.35,
@@ -198,16 +270,18 @@ const PHYS = (() => {
   const massGraphX = species => Math.log(SPECIES[species] / 15) / Math.log(70000 / 15);
   const forceSceneLength = force => SCENE.barWidth * forceVisual(force).length / forceVisual(muscle(70000)).length;
   const pegPosition = i => ({ x: -2.68 + (i % 10) * 0.205, y: SCENE.top + 0.13, z: -0.43 + Math.floor(i / 10) * 0.085 });
-  function displayState(n, species, mu, phase = 0) {
-    const result = outcome(n, species, mu), i = Object.keys(SPECIES).indexOf(species);
-    return { n, speciesIndex: i, scale: SCENE.modelScales[i], form: SCENE.forms[i],
+  function displayState(n, species, mu, phase = 0, rivalN = 0) {
+    if(rivalN>0)species=Object.keys(SPECIES)[0];
+    const result = matchOutcome(n, species, rivalN, mu), i = Object.keys(SPECIES).indexOf(species);
+    return { ...(rivalN>0?{rivalN}:{}), n, speciesIndex: i, scale: SCENE.modelScales[i], form: SCENE.forms[i],
       kidsLength: forceSceneLength(result.kids), dinoLength: forceSceneLength(result.dino),
       kidsCompressed: forceVisual(result.kids).compressed, dinoCompressed: forceVisual(result.dino).compressed,
       flagX: (result.winner === 'tie' ? 0 : result.winner === 'kids' ? -1 : 1) * SCENE.flagTravel * (0.5 - 0.5 * Math.cos(phase)),
       slip: result.winner !== 'tie' && result.limiter === 'friction', ...result };
   }
   // R2 schematic mappings. Bounds/caps belong here, never in scene callers.
-  const VIS = Object.freeze({ cells: 30, width: 2.35, kidHeight: .22, grains: 180, streamCount: 96, dustCount: 48, recordCap: 3,
+  const VIS = Object.freeze({ forceDetailScale:2.6, // 추정: 렌즈·서서히 당기기 공통 확대
+    cells: 30, width: 2.35, kidHeight: .22, grains: 180, streamCount: 96, dustCount: 48, recordCap: 3,
     min: Object.freeze([-3.25,.035,-.8]), max: Object.freeze([3.25,3.65,1.30]),
     lensWidth: 1.60, lensHeight: .66, ratioHeight: .58, trailCount: 9 });
   const modelScale = species => .38 + .64 * Math.cbrt(SPECIES[species] / 70000);
@@ -223,13 +297,14 @@ const PHYS = (() => {
       cuts: v.compressed, unit: forceSceneLength(C.kidMuscle),
       ticks: Array.from({length: Math.min(VIS.cells, Math.floor(v.beads))}, (_,i) => forceSceneLength((i+1)*C.kidMuscle)) };
   }
-  function grammarState(n, species, mu, phase=0) {
-    const result = displayState(n,species,mu,phase), mass = SPECIES[species];
+  function grammarState(n, species, mu, phase=0, rivalN=0) {
+    if(rivalN>0)species=Object.keys(SPECIES)[0];
+    const result = displayState(n,species,mu,phase,rivalN), mass = rivalN>0?rivalN*C.kidMass:SPECIES[species];
     return { ...result, species, mu, scale: modelScale(species),
-      forces: [result.kids,result.dino,n*C.kidMuscle,friction(n*C.kidMass,mu),muscle(mass),friction(mass,mu)].map(forceGlyph),
-      ratio: weightRatio(species), ratioLength: VIS.ratioHeight*weightRatio(species),
+      forces: [result.kids,result.dino,n*C.kidMuscle,friction(n*C.kidMass,mu),(rivalN>0?rivalN*C.kidMuscle:muscle(mass)),friction(mass,mu)].map(forceGlyph),
+      ratio: rivalN>0?C.kidPullRatio:weightRatio(species), ratioLength: VIS.ratioHeight*(rivalN>0?C.kidPullRatio:weightRatio(species)),
       team: Array.from({length:n},(_,i)=>teamLayout(n,i)),
-      traces: Array.from({length:VIS.trailCount},(_,i)=>displayState(n,species,mu,phase-i*.16).flagX),
+      traces: Array.from({length:VIS.trailCount},(_,i)=>displayState(n,species,mu,phase-i*.16,rivalN).flagX),
       roughness: mu*.08, streamDensity: Math.min(1,Math.max(result.kids,result.dino)/muscle(70000)),
       slipX: result.winner === 'kids' ? 1.36 : -1.55 };
   }
@@ -251,8 +326,9 @@ const PHYS = (() => {
     return {rows,columns,x:DRAMA.kidStart+(columns===1?DRAMA.kidSpan:i%columns*DRAMA.kidSpan/(columns-1)),
       y:DRAMA.ground,z:-.78+row*DRAMA.rowGap,band:Math.floor(i/10)%2};
   }
-  function dramaState(n,species,mu,phase=0) {
-    const result=outcome(n,species,mu),f=SCENE.forms[Object.keys(SPECIES).indexOf(species)];
+  function dramaState(n,species,mu,phase=0,rivalN=0) {
+    if(rivalN>0)species=Object.keys(SPECIES)[0];
+    const result=matchOutcome(n,species,rivalN,mu),f=SCENE.forms[Object.keys(SPECIES).indexOf(species)];
     const scale=Math.min(DRAMA.maxHeight/(f[2]+f[1]/2+f[3]+.32),exhibitionScale(species)*DRAMA.enlargement),ratio=result.kids/Math.max(1,result.dino);
     const effort=Math.min(1,(1-Math.cos(Math.min(Math.PI,phase)))*.5);
     const lean=-(.04+.20*ratio/(1+ratio))*effort;
@@ -262,9 +338,9 @@ const PHYS = (() => {
     const travel=DRAMA.flagTravel*(.5-.5*Math.cos(phase)),step=travel/DRAMA.flagStep;
     const u=step-Math.floor(step),smooth=u*u*(3-2*u),flagX=direction*DRAMA.flagStep*(Math.floor(step)+smooth);
     const slip=result.winner!=='tie'&&result.limiter==='friction',skid=slip?flagX*.18:0;
-    return {...result,scale,lean,height:scale*modelHeight,
+    return {...result,...(rivalN>0?{rivalN,kidsLength:forceSceneLength(result.kids),dinoLength:forceSceneLength(result.dino)}:{}),scale,lean,height:scale*modelHeight,
       flagX,slip,kidSkid:result.winner==='dino'?skid:0,dinoSkid:result.winner==='kids'?skid:0,
-      slipX:(result.winner==='kids'?DRAMA.dinoX:dramaChild(n,Math.min(n-1,3)).x)+skid,
+      slipX:(result.winner==='kids'?(rivalN>0?-dramaChild(Math.min(rivalN,C.rivalMax),Math.min(rivalN-1,3)).x:DRAMA.dinoX):dramaChild(n,Math.min(n-1,3)).x)+skid,
       beadAmplitude:.026*effort,effort};
   }
   function dramaBounds(species) {
@@ -302,9 +378,9 @@ const PHYS = (() => {
     }
     return best;
   }
-  return { dramaFrame, DRAMA, dramaChild, dramaState, dramaBounds, exhibitionScale, exhibitionBounds, VIS, modelScale, teamLayout, forceGlyph, grammarState, SCENE, railWorldX, massGraphX, forceSceneLength, pegPosition, displayState, C, SPECIES, GROUNDS, RANGE, muscle, friction, kidCap, dinoCap, outcome, minKidsToWin,
-    weightRatio, railX, kidsFromRailX, DETENTS, forceVisual, slipOnset,
-    judgeQ1, judgeQ2, judgeQ3, judgeQ4, judgeQ5, judgeQ6, judgeQ7 };
+  return { staticPull, judgeQ12, dramaFrame, DRAMA, dramaChild, dramaState, dramaBounds, exhibitionScale, exhibitionBounds, VIS, modelScale, teamLayout, forceGlyph, grammarState, SCENE, railWorldX, massGraphX, forceSceneLength, pegPosition, displayState, C, SPECIES, GROUNDS, RANGE, muscle, friction, kidCap, dinoCap, outcome, matchOutcome, minKidsToWin,
+    ropeTension, tensionOf, lensForces, kidsMatch, validMatch, weightRatio, railX, kidsFromRailX, DETENTS, forceVisual, slipOnset,
+    judgeQ1, judgeQ2, judgeQ3, judgeQ4, judgeQ5, judgeQ6, judgeQ7, judgeQ8, judgeQ9, judgeQ10, judgeQ11, validObservation };
 })();
 // ==== END PHYSICS ====
 
@@ -613,6 +689,29 @@ function drawGraphs(){
 }
 
 
+S.rivalN=0; // One scene-mode state; set() validates subsequent writes.
+// One measured value, three identical dials. The grammar layer owns their lifetime.
+S.lens=null;
+function drawTensionMeters(group,value) {
+ const radius=PHYS.DRAMA.kidHeight*.36,y=PHYS.DRAMA.ropeY+.88;
+ const angle=Math.PI*(.85-1.7*PHYS.forceGlyph(value).length/PHYS.VIS.width);
+ const ink=new THREE.MeshBasicMaterial({color:INK_CFG.diagram.ink,transparent:true,depthWrite:false});
+ const paper=new THREE.MeshBasicMaterial({color:INK_CFG.diagram.screen,transparent:true,depthWrite:false,side:THREE.DoubleSide});
+ // Group z=.72; place the ends beside the front row hands and the centre on the rope.
+ const ends=-(PHYS.dramaChild(5,4).x+.27*PHYS.DRAMA.kidHeight)+radius*2;
+ for(const x of [-ends,0,S.rivalN>0?ends:PHYS.DRAMA.dinoX]){
+  const dial=new THREE.Group();group.add(dial);dial.position.set(x,y,-.64);
+  KIT.rod(V3(0,-.88,0),V3(0,-radius,0),.012,ink,dial);
+  KIT.mesh(new THREE.CircleGeometry(radius,32),paper,dial,0,0,.015);
+  KIT.mesh(new THREE.TorusGeometry(radius,.014,6,32),ink,dial,0,0,.02);
+  for(let i=0;i<=6;i++){
+   const a=Math.PI*(.85-1.7*i/6);
+   KIT.rod(V3(Math.cos(a)*radius*.75,Math.sin(a)*radius*.75,.03),V3(Math.cos(a)*radius*.92,Math.sin(a)*radius*.92,.03),.008,ink,dial);
+  }
+  KIT.rod(V3(0,0,.045),V3(Math.cos(angle)*radius*.70,Math.sin(angle)*radius*.70,.045),.017,ink,dial);
+  KIT.ball(.024,ink,dial,0,0,.045,1);
+ }
+}
 const SPECIES_KEYS=Object.keys(PHYS.SPECIES), GROUND_VALUES=Object.values(PHYS.GROUNDS);
 const TRACK=new THREE.Group();HERO.add(TRACK);
 const groundColors=[THEME.glass,THEME.sand,THEME.gravel,THEME.asphalt];
@@ -669,13 +768,21 @@ for(const side of [-1,1]){
  }
  kidGeo.shoes.push(new THREE.TetrahedronGeometry(1).scale(.12,.042,.085).translate(side<0?-.12:.17,.042/Math.sqrt(3),z));
 }
-const kidParts=[],kidNamed={};
+const kidGeometry={};
 for(const [name,parts]of Object.entries(kidGeo)){
- const geometry=KIT.merge(parts);parts.forEach(g=>g.dispose());geometry.scale(kidScale,kidScale,kidScale);
- const mesh=new THREE.InstancedMesh(geometry,name==='shadow'?kidShadowMat:KIT.toon(0xffffff),PHYS.C.kidsMax);
- mesh.userData.inkInner=false;mesh.name='kid-'+name;mesh.castShadow=name!=='shadow';mesh.receiveShadow=name!=='shadow';mesh.frustumCulled=false;
- mesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage);HERO.add(mesh);kidParts.push(mesh);kidNamed[name]=mesh;
+ const geometry=KIT.merge(parts);parts.forEach(g=>g.dispose());geometry.scale(kidScale,kidScale,kidScale);kidGeometry[name]=geometry;
 }
+function createKidTeam(max,prefix){
+ const parts=[],named={};
+ for(const [name,geometry]of Object.entries(kidGeometry)){
+  const mesh=new THREE.InstancedMesh(geometry,name==='shadow'?kidShadowMat:KIT.toon(0xffffff),max);
+  mesh.userData.inkInner=false;mesh.name=prefix+name;mesh.castShadow=name!=='shadow';mesh.receiveShadow=name!=='shadow';mesh.frustumCulled=false;
+  mesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage);HERO.add(mesh);parts.push(mesh);named[name]=mesh;
+ }
+ return {parts,named};
+}
+const {parts:kidParts,named:kidNamed}=createKidTeam(PHYS.C.kidsMax,'kid-');
+const rivalTeam=createKidTeam(PHYS.C.rivalMax,'rival-');
 const kidColor=new THREE.Color();
 const kidDeform=kidParts.filter(m=>m!==kidNamed.shadow).map(mesh=>({mesh,rest:mesh.geometry.attributes.position.array.slice(),normals:mesh.geometry.attributes.normal.array.slice()}));
 let characterQuality='';
@@ -907,7 +1014,7 @@ const DINO_MODELS=SPECIES_KEYS.map((s,i)=>{
  });
  // One animation path for the visible body and details.
  function animateDino(t,load){
-  const low=S.quality==='low',v=variants[low?1:0];
+ const low=S.quality==='low',v=variants[low?1:0];
   for(const [j,lod]of variants.entries())for(const m of [lod.mesh,lod.detailMesh,lod.contact])if(m)m.visible=j===(low?1:0);
   const breath=1+Math.sin(t*(2.4+load*3.2))*.015,pitch=Math.sin(t*(1.8+load))*.025-load*.085;
   const lean=-load*.24,cs=Math.cos(lean),sn=Math.sin(lean),pc=Math.cos(pitch),ps=Math.sin(pitch);
@@ -950,19 +1057,24 @@ for(const [j,i] of [0,5].entries()){
 }
 KIT.expansion(CONSOLE,...CONTROL_LAYOUT.expansion);
 // Kid-height comparison post; conversion is PHYS.C.kidHeight times the display scale.
+const STAKE=new THREE.Group();HERO.add(STAKE);
 const stakeHeight=PHYS.DRAMA.kidHeight;
-KIT.rod(V3(2.77,PHYS.SCENE.top+.14,-.40),V3(2.77,PHYS.SCENE.top+.14+stakeHeight,-.40),.025,MAT.bone,HERO);
-for(let j=0;j<=4;j++)KIT.rod(V3(2.71,PHYS.SCENE.top+.14+stakeHeight*j/4,-.40),V3(2.83,PHYS.SCENE.top+.14+stakeHeight*j/4,-.40),.008,MAT.brass,HERO);
+KIT.rod(V3(2.77,PHYS.SCENE.top+.14,-.40),V3(2.77,PHYS.SCENE.top+.14+stakeHeight,-.40),.025,MAT.bone,STAKE);
+for(let j=0;j<=4;j++)KIT.rod(V3(2.71,PHYS.SCENE.top+.14+stakeHeight*j/4,-.40),V3(2.83,PHYS.SCENE.top+.14+stakeHeight*j/4,-.40),.008,MAT.brass,STAKE);
 const SIZE_MARK=KIT.expansion(HERO,PHYS.DRAMA.dinoX,3.4,.2);SIZE_MARK.scale.setScalar(.18);
 // Horizontal harness: paired uncalibrated knots show tautness, never measured tension.
 const ROPE=new THREE.Group();ROPE.position.set(0,PHYS.DRAMA.ropeY,.08);HERO.add(ROPE);
 KIT.rod(V3(-4.5,0,0),V3(PHYS.DRAMA.dinoX,0,0),.05,MAT.bone,ROPE);
 const TEAM_ROPES=[0,1,2].map(row=>KIT.rod(V3(PHYS.DRAMA.kidStart,0,-.86+row*PHYS.DRAMA.rowGap),V3(-.25,0,-.86+row*PHYS.DRAMA.rowGap),.025,MAT.bone,ROPE));
 const TEAM_JOINS=[0,1,2].map(row=>KIT.rod(V3(-.25,0,-.86+row*PHYS.DRAMA.rowGap),V3(.12,0,0),.025,MAT.bone,ROPE));
+const RIVAL_ROPES=new THREE.Group();RIVAL_ROPES.scale.x=-1;ROPE.add(RIVAL_ROPES);
+const rivalRopes=TEAM_ROPES.map(r=>{const copy=r.clone();RIVAL_ROPES.add(copy);return copy;});
+const rivalJoins=TEAM_JOINS.map(r=>{const copy=r.clone();RIVAL_ROPES.add(copy);return copy;});
+const RIVAL_EXTENSION=KIT.rod(V3(PHYS.DRAMA.dinoX,0,0),V3(4.5,0,0),.05,MAT.bone,ROPE);
 const harness=KIT.mesh(new THREE.TorusGeometry(.17,.028,6,16),MAT.brass,HERO,PHYS.DRAMA.dinoX,PHYS.DRAMA.ropeY,PHYS.DRAMA.dinoZ);harness.rotation.y=Math.PI/2;
 const FLAG=new THREE.Group();FLAG.scale.setScalar(1.7);ROPE.add(FLAG);
 KIT.rod(V3(0,-.13,0),V3(0,.27,0),.018,MAT.brass,FLAG);
-KIT.roundedPanel(.24,.22,.032,MAT.glow,FLAG,.12,.24,0,.008);
+const FLAG_PANEL=KIT.roundedPanel(.24,.22,.032,MAT.glow.clone(),FLAG,.12,.24,0,.008);
 const FORCE_KNOTS=Array.from({length:8},(_,i)=>{const x=(i<4?-1:1)*(.32+(i%4)*.20),k=KIT.ball(PHYS.DRAMA.beadRadius,MAT.brass,ROPE,x,0,0,1);k.userData.x=x;return k;});
 for(let i=-4;i<=4;i++)KIT.rod(V3(i*PHYS.DRAMA.flagStep,PHYS.DRAMA.ground,-.15),V3(i*PHYS.DRAMA.flagStep,PHYS.DRAMA.ground,.35),.018,i?MAT.bone:MAT.glow,HERO);
 const SLIP_DUST=new THREE.InstancedMesh(new THREE.IcosahedronGeometry(.035,0),new THREE.MeshStandardMaterial({color:THEME.sand,transparent:true,opacity:.8}),PHYS.VIS.dustCount);SLIP_DUST.frustumCulled=false;HERO.add(SLIP_DUST);
@@ -989,10 +1101,20 @@ const BARS=[INK_CFG.diagram.kids,INK_CFG.diagram.dino].map((color,i)=>{
  const cut=KIT.line([V3(-.025,-.06,.041),V3(.005,-.02,.041),V3(-.025,.02,.041),V3(.005,.06,.041)],color,g);cut.position.x=PHYS.SCENE.barWidth-.10;
  return {fill,sign,cut};
 });
+Object.assign(S,{pullP:0,pullMode:false});
+let previousPullForce=0,pullBurstAt=-10,previousPullSession=null;
 function updateHero(){
  CAPACITIES.position.copy(CONSOLE.position);CAPACITIES.rotation.copy(CONSOLE.rotation);
  const n=PHYS.kidsFromRailX(S.u.value),i=Math.round(S.species.value),gi=Math.round(S.ground.value);
- const d=PHYS.dramaState(n,SPECIES_KEYS[i],GROUND_VALUES[gi],S.t.value);
+ const d=PHYS.dramaState(n,SPECIES_KEYS[i],GROUND_VALUES[gi],S.t.value,S.rivalN);
+ if(previousPullSession!==Q.flags){previousPullSession=Q.flags;previousPullForce=0;pullBurstAt=-10;}
+ if(S.pullMode){
+  const f=PHYS.staticPull(n,GROUND_VALUES[gi],S.pullP);
+  const travel=f.slipped?PHYS.DRAMA.flagTravel*(S.pullP-f.pSlip)/(1-f.pSlip):0;
+  Object.assign(d,{flagX:travel,kidSkid:travel,dinoSkid:0,slip:f.slipped,winner:f.slipped?'dino':'tie',lean:-.12*S.pullP,beadAmplitude:0,effort:S.pullP,slipX:PHYS.dramaChild(n,Math.min(n-1,3)).x+travel});
+  if(PHYS.slipOnset(previousPullForce,f.applied,n*PHYS.C.kidMass,GROUND_VALUES[gi]))pullBurstAt=DIRECTOR.clock;
+  previousPullForce=f.applied;
+ }else previousPullForce=0;
  const low=S.quality==='low',load=clamp(-d.lean/.24,0,1),time=S.t.value;
  // Includes the existing specimen clones; new grammar clones inherit current LOD.
  if(characterQuality!==S.quality){
@@ -1012,40 +1134,50 @@ function updateHero(){
    const nx=normals[k],ny=normals[k+1]+angle*root*grip*nx,nz=normals[k+2],inv=1/Math.hypot(nx,ny,nz);n.setXYZ(j,nx*inv,ny*inv,nz*inv);
   }p.needsUpdate=true;n.needsUpdate=true;
  }
- for(const mesh of kidParts)mesh.count=n;kidNamed.hair.visible=!low;
- for(let k=0;k<n;k++){
-  const p=PHYS.dramaChild(n,k),v=KID_VARIANTS[k],breath=Math.sin(time*(2.4+load*2)+v.phase)*.006;
+ for(const [rival,team,total,skid]of [[false,{parts:kidParts,named:kidNamed},n,d.kidSkid],[true,rivalTeam,Math.min(S.rivalN,PHYS.C.rivalMax),d.dinoSkid]]){
+ for(const mesh of team.parts)mesh.count=total;team.named.hair.visible=!low;
+ for(let k=0;k<total;k++){
+  const p=PHYS.dramaChild(total,k),v=KID_VARIANTS[k],breath=Math.sin(time*(2.4+load*2)+v.phase)*.006;
   // The team's own skid is authoritative; the dinosaur skid also cues a short drag stance.
-  kidDummy.position.set(p.x+d.kidSkid,p.y,p.z);
-  kidDummy.rotation.set(0,0,0);
+  kidDummy.position.set((rival?-p.x:p.x)+skid,p.y,p.z);
+  kidDummy.rotation.set(0,rival?Math.PI:0,0);
   kidDummy.scale.set(v.height,v.height*(1+breath),v.height);kidDummy.updateMatrix();
-  for(const [name,mesh]of Object.entries(kidNamed)){
+  for(const [name,mesh]of Object.entries(team.named)){
    if(name==='shadow'){
     kidDummy.rotation.z=0;kidDummy.scale.set(v.height,1,v.height);kidDummy.updateMatrix();mesh.setMatrixAt(k,kidDummy.matrix);
     kidDummy.rotation.z=0;kidDummy.scale.set(v.height,v.height*(1+breath),v.height);kidDummy.updateMatrix();
    }else mesh.setMatrixAt(k,kidDummy.matrix);
    const palette=name==='head'||name==='arms'?KID_STYLE.skin:name==='shirt'?KID_STYLE.shirts:name==='pants'||name==='legs'?KID_STYLE.pants:name==='hair'?KID_STYLE.hair:KID_STYLE.shoes;
    const index=name==='head'||name==='arms'?v.skin:name==='shirt'?v.shirt:name==='pants'||name==='legs'?v.pants:name==='hair'?v.hair:v.shoes;
-   if(name!=='shadow')mesh.setColorAt(k,kidColor.set(name==='band'?(p.band?THEME.navy:THEME.brass):palette[index]));
+   if(name!=='shadow')mesh.setColorAt(k,kidColor.set(name==='band'?(p.band?THEME.navy:THEME.brass):rival&&name==='shirt'?THEME.cool:palette[index]));
   }
  }
- for(const mesh of kidParts){mesh.instanceMatrix.needsUpdate=true;if(mesh.instanceColor)mesh.instanceColor.needsUpdate=true;}
+ for(const mesh of team.parts){mesh.instanceMatrix.needsUpdate=true;if(mesh.instanceColor)mesh.instanceColor.needsUpdate=true;}
+ }
+ const rival=S.rivalN>0;
+ RIVAL_ROPES.visible=RIVAL_EXTENSION.visible=rival;
+ const rivalRows=PHYS.dramaChild(Math.min(S.rivalN,PHYS.C.rivalMax),0).rows;
+ rivalRopes.forEach((r,j)=>r.visible=j<rivalRows);rivalJoins.forEach((r,j)=>r.visible=j<rivalRows);
+ STAKE.visible=SIZE_MARK.visible=harness.visible=!rival;
  const rows=PHYS.dramaChild(n,0).rows;TEAM_ROPES.forEach((r,j)=>r.visible=j<rows);TEAM_JOINS.forEach((r,j)=>r.visible=j<rows);
- DINO_MODELS.forEach((g,j)=>{g.visible=j===i;if(j===i){g.pose(d.lean);g.position.x=PHYS.DRAMA.dinoX+d.dinoSkid;}});
+ DINO_MODELS.forEach((g,j)=>{g.visible=!rival&&j===i;if(!rival&&j===i){g.pose(d.lean);g.position.x=PHYS.DRAMA.dinoX+d.dinoSkid;}});
  SIZE_MARK.position.y=PHYS.DRAMA.ground+d.height+.10;
  CASSETTES.forEach((g,j)=>{g.visible=j===gi;g.position.x=S.cassette.value*.16;g.userData.surface.uniforms.uTime.value=S.t.value;if(g.userData.grains)g.userData.grains.count=S.quality==='low'?PHYS.VIS.grains/2:PHYS.VIS.grains;});
- RAIL_HANDLE.position.x=PHYS.railWorldX(PHYS.railX(n));
- SLIDER.handle.position.x=SLIDER.x+(PHYS.railX(n)-.5)*SLIDER.width;DIAL.knob.rotation.z=-PHYS.railX(n)*Math.PI*1.7;
+ const u=controlValue(n);RAIL_HANDLE.position.x=PHYS.railWorldX(u);
+ SLIDER.handle.position.x=SLIDER.x+(u-.5)*SLIDER.width;DIAL.knob.rotation.z=-u*Math.PI*1.7;
  FLAG.position.x=d.flagX;
+ FLAG_PANEL.material.color.set(!rival?INK_CFG.diagram.kids:d.winner==='tie'?INK_CFG.diagram.reference:d.winner==='kids'?INK_CFG.diagram.kids:INK_CFG.diagram.rival);FLAG_PANEL.material.emissive.copy(FLAG_PANEL.material.color);
  FORCE_KNOTS.forEach((k,j)=>{k.position.x=k.userData.x+d.flagX*.2;k.position.y=Math.sin((DIRECTOR.eventLeft>0?DIRECTOR.clock*18:S.t.value*30)+j*Math.PI)*d.beadAmplitude;k.scale.setScalar(1+d.effort*.25);});
- const burst=DIRECTOR.eventLeft>0&&d.slip,age=1.4-DIRECTOR.eventLeft;
+ const age=S.pullMode?DIRECTOR.clock-pullBurstAt:1.4-DIRECTOR.eventLeft;
+ const burst=d.slip&&(S.pullMode?age<1.4:DIRECTOR.eventLeft>0);
  SLIP_DUST.visible=burst;SLIP_DUST.material.opacity=Math.max(0,1-age/1.4)*.85;
  for(let k=0;burst&&k<PHYS.VIS.dustCount;k++){
-  const a=k*2.399963,r=(.06+age*.46)*(1+k%7/7),footZ=d.winner==='kids'?PHYS.DRAMA.dinoZ+(k%2?-.28:.28):PHYS.dramaChild(n,k%n).z;
+  const a=k*2.399963,r=(.06+age*.46)*(1+k%7/7),footZ=d.winner==='kids'?(rival?PHYS.dramaChild(Math.min(S.rivalN,PHYS.C.rivalMax),k%Math.min(S.rivalN,PHYS.C.rivalMax)).z:PHYS.DRAMA.dinoZ+(k%2?-.28:.28)):PHYS.dramaChild(n,k%n).z;
   kidDummy.position.set(d.slipX+Math.cos(a)*r,PHYS.DRAMA.ground+.03+Math.sin(Math.min(1,age/1.4)*Math.PI)*(.12+k%5*.045),footZ+Math.sin(a)*r);kidDummy.updateMatrix();SLIP_DUST.setMatrixAt(k,kidDummy.matrix);
  }SLIP_DUST.instanceMatrix.needsUpdate=true;
- const capacity=PHYS.displayState(n,SPECIES_KEYS[i],GROUND_VALUES[gi],S.t.value);
+ const capacity=PHYS.displayState(n,SPECIES_KEYS[i],GROUND_VALUES[gi],S.t.value,S.rivalN);
  for(const [j,length]of [capacity.kidsLength,capacity.dinoLength].entries()){
+  const color=j?(rival?INK_CFG.diagram.rival:INK_CFG.diagram.dino):INK_CFG.diagram.kids;BARS[j].fill.material.uniforms.uColor.value.set(color);BARS[j].cut.material.color.set(color);
   BARS[j].fill.scale.x=Math.max(.001,length);BARS[j].fill.material.uniforms.uTime.value=S.t.value;BARS[j].fill.material.uniforms.uUnit.value=PHYS.forceGlyph(PHYS.C.kidMuscle).length/Math.max(.001,length);BARS[j].fill.material.uniforms.uForce.value=length/PHYS.VIS.width;const compressed=j?capacity.dinoCompressed:capacity.kidsCompressed;
   BARS[j].sign.visible=compressed;BARS[j].cut.visible=compressed;BARS[j].cut.position.x=Math.max(.03,length-.08);
  }
@@ -1055,11 +1187,11 @@ function updateHero(){
 // Exact dictionary expressions from theory-card g. No quest state lives here.
 const GRAMMAR = (() => {
   const defaults = Object.freeze({ '마디':true, '쌓아 채우기·계단':true, '문턱·한계 윤곽':true,
-    '비교·겹치기':false, '숨은 구조·돋보기':false, '같은 시간 간격 흔적':false, '비교':false, '기록':false });
+    '비교·겹치기':false, '숨은 구조·돋보기':false, '같은 시간 간격 흔적':false, '비교':false, '기록':false, '장력계':false, '렌즈':false, '서서히 당기기':false });
   const LAYERS=Object.freeze(Object.keys(defaults)), groups={}, transitions={};
   for(const name of LAYERS){groups[name]=new THREE.Group();HERO.add(groups[name]);
     transitions[name]={value:+defaults[name],from:+defaults[name],target:+defaults[name],elapsed:.3};}
-  const state=()=>PHYS.grammarState(PHYS.kidsFromRailX(S.u.value),SPECIES_KEYS[Math.round(S.species.value)],GROUND_VALUES[Math.round(S.ground.value)],S.t.value);
+  const state=()=>PHYS.grammarState(PHYS.kidsFromRailX(S.u.value),SPECIES_KEYS[Math.round(S.species.value)],GROUND_VALUES[Math.round(S.ground.value)],S.t.value,S.rivalN);
   let baseline=null,key='',clock=0, eventKey='',burstStart=-10;
   const records=[];
   function set(values){
@@ -1079,6 +1211,11 @@ const GRAMMAR = (() => {
     KIT.expansion(group,x+.075,y,.02);
   }
   function arrow(group,glyph,x,y,color,dashed=false,style=0){
+    // Child teams pull in opposite directions, including the stationary tie scene.
+    if(S.rivalN>0&&group===groups[LAYERS[0]]&&color===INK_CFG.diagram.kids){
+      const mirrored=new THREE.Group();mirrored.position.set(x+glyph.length,y,0);mirrored.scale.x=-1;
+      group.add(mirrored);group=mirrored;x=0;y=0;
+    }
     outline(group,x,y-.045,glyph.length,.09,color,dashed,style);
     if(!dashed){KIT.mesh(new THREE.PlaneGeometry(Math.max(.001,glyph.length),.065).translate(glyph.length/2,0,0),(()=>{const material=BARS[0].fill.material.clone();material.uniforms.uColor.value.set(color);material.uniforms.uUnit.value=glyph.unit/Math.max(.001,glyph.length);material.uniforms.uForce.value=glyph.length/PHYS.VIS.width;return material;})(),group,x,y,.007);
       KIT.line([V3(x+glyph.length-.07,y+.08,.01),V3(x+glyph.length,y,.01),V3(x+glyph.length-.07,y-.08,.01)],color,group);
@@ -1096,8 +1233,10 @@ const GRAMMAR = (() => {
   for(const name of LAYERS)groups[name].position.z=.72;
   function rebuild(d){
     for(const group of Object.values(groups))clear(group);
+    if(S.pullMode)drawStaticPull(d);
+    else{
     origins.forEach(([x,y],i)=>{
-      const color=i?INK_CFG.diagram.dino:INK_CFG.diagram.kids;
+      const color=i?(S.rivalN>0?INK_CFG.diagram.rival:INK_CFG.diagram.dino):INK_CFG.diagram.kids;
       arrow(groups[LAYERS[0]],d.forces[i],x,y,color);
       for(const [offset,forceIndex,c,style]of [[.23,i?4:2,INK_CFG.diagram.muscle,0],[.43,i?5:3,INK_CFG.diagram.friction,1]]){
         arrow(groups[LAYERS[2]],d.forces[forceIndex],x,y+offset,c,true,style);
@@ -1145,7 +1284,7 @@ const GRAMMAR = (() => {
     for(const [j,species]of [SPECIES_KEYS[0],d.species].entries()){
       const x=-2.6+j*.65,y=2.73;
       outline(compare,x,y,.27,PHYS.VIS.ratioHeight,INK_CFG.diagram.reference,true);
-      const ratio=PHYS.grammarState(1,species,d.mu).ratioLength;
+      const ratio=PHYS.grammarState(1,species,d.mu,0,S.rivalN).ratioLength;
       KIT.mesh(new THREE.PlaneGeometry(.20,ratio),ink(INK_CFG.diagram.muscle),compare,x+.135,y+ratio/2,.01);
       for(let k=1;k<10;k++)KIT.line([V3(x,y+PHYS.VIS.ratioHeight*k/10,.02),V3(x+.27,y+PHYS.VIS.ratioHeight*k/10,.02)],THEME.graphite,compare);
     }
@@ -1155,15 +1294,49 @@ const GRAMMAR = (() => {
       outline(log,x,y,.59,.72,INK_CFG.diagram.reference,true);
       KIT.ball(.035,ink(INK_CFG.diagram.kids),log,x+.1,y+.57,.01,0);
       KIT.mesh(new THREE.PlaneGeometry(.18,.045),ink(groundColors[GROUND_VALUES.indexOf(r.mu)]),log,x+.13,y+.40,.01);
-      const specimen=DINO_MODELS[r.speciesIndex].clone(true);
-      specimen.traverse(o=>{if(o.geometry)o.geometry=o.geometry.clone();if(o.material)o.material=o.material.clone();});
-      specimen.position.set(x+.37,y+.36,0);specimen.scale.setScalar(.13);log.add(specimen);
-      for(const i of [0,1])KIT.mesh(new THREE.PlaneGeometry(r.forces[i].length*.20,.035),ink(i?INK_CFG.diagram.dino:INK_CFG.diagram.kids),log,x+.04+r.forces[i].length*.10,y+.12+i*.10,.02);
+      if(r.rivalN>0){
+        for(let k=0;k<Math.min(r.rivalN,PHYS.C.rivalMax);k++)KIT.ball(.016,ink(INK_CFG.diagram.rival),log,x+.27+k%5*.045,y+.35+Math.floor(k/5)*.045,.01,0);
+      }else{
+        const specimen=DINO_MODELS[r.speciesIndex].clone(true);
+        specimen.traverse(o=>{if(o.geometry)o.geometry=o.geometry.clone();if(o.material)o.material=o.material.clone();});
+        specimen.position.set(x+.37,y+.36,0);specimen.scale.setScalar(.13);log.add(specimen);
+      }
+      for(const i of [0,1])KIT.mesh(new THREE.PlaneGeometry(r.forces[i].length*.20,.035),ink(i?(r.rivalN>0?INK_CFG.diagram.rival:INK_CFG.diagram.dino):INK_CFG.diagram.kids),log,x+.04+r.forces[i].length*.10,y+.12+i*.10,.02);
       // Changed conditions have a solid border around their specimen slot.
-      if(baseline&&(r.n!==baseline.n||r.species!==baseline.species||r.mu!==baseline.mu))outline(log,x+.02,y+.32,.55,.36,INK_CFG.diagram.kids,false);
+      if(baseline&&(r.n!==baseline.n||r.rivalN!==baseline.rivalN||r.species!==baseline.species||r.mu!==baseline.mu))outline(log,x+.02,y+.32,.55,.36,INK_CFG.diagram.kids,false);
+    }
+    drawTensionMeters(groups['장력계'],PHYS.tensionOf(d.n,d.species,S.rivalN,d.mu));
+    if(S.rivalN>0&&S.lens)drawLens(d);
     }
     // Capture intrinsic opacity once, including deliberately translucent panels.
     for(const group of Object.values(groups))group.traverse(o=>{if(o.material){o.material.transparent=true;o.material.userData.alpha=o.material.opacity;}});
+  }
+  function drawLens(d){
+    const group=groups['렌즈'],f=PHYS.lensForces(d.n,d.species,S.rivalN,d.mu,S.lens);
+    const teamX=n=>{const a=PHYS.dramaChild(n,0),b=PHYS.dramaChild(n,n-1);return (a.x+b.x)/2;};
+    const x=S.lens==='rope'?0:S.lens==='A'?teamX(d.n):-teamX(S.rivalN);
+    const y=S.lens==='rope'?PHYS.DRAMA.ropeY+.30:PHYS.DRAMA.ground+PHYS.DRAMA.kidHeight+.55;
+    const LENS_SCALE=PHYS.VIS.forceDetailScale; // 렌즈 화살표는 아이 팀 크기에서도 읽히도록 키운다(물체끼리 비율은 그대로)
+    function directed(dir,value,y,color,dashed=false,origin=x){
+      const g=new THREE.Group();group.add(g);g.position.set(origin,y,.3);g.scale.set(dir*LENS_SCALE,LENS_SCALE,1);
+      const glyph=PHYS.forceGlyph(value);arrow(g,glyph,0,0,color,dashed,1);
+      if(dashed)KIT.line([V3(glyph.length-.07,.08,.01),V3(glyph.length,0,.01),V3(glyph.length-.07,-.08,.01)],color,g,true);
+    }
+    for(const a of f.arrows)directed(a.dir,a.value,y+(a.kind==='friction'?.22:0),a.kind==='pull'?INK_CFG.diagram.pull:INK_CFG.diagram.friction,false,S.lens==='rope'?a.dir*.12:x);
+    if(f.balanced)KIT.mesh(new THREE.TorusGeometry(.14,.026,6,24),ink(INK_CFG.diagram.ink),group,x,y+(S.lens==='rope'?0:.28),.3);
+    else directed(Math.sign(f.sum),Math.abs(f.sum),y+.43,INK_CFG.diagram.ink,true);
+  }
+  function drawStaticPull(d){
+    // 유리 위 5명의 힘은 전체 눈금에서 아주 작으므로, 한계 눈금이 화면에서 읽히는 길이(LIMIT_LENGTH)가 되도록 길이만 늘린다. 두께와 머리는 그대로.
+    const group=groups['서서히 당기기'],f=PHYS.staticPull(d.n,d.mu,S.pullP),LIMIT_LENGTH=1.6;
+    const k=LIMIT_LENGTH/PHYS.forceGlyph(f.limit).length,x=-1.8,y=PHYS.DRAMA.ground+PHYS.DRAMA.kidHeight+.6;
+    const stretch=value=>{const glyph=PHYS.forceGlyph(value);return {...glyph,length:glyph.length*k,ticks:[]};};
+    for(const [dir,value,color,dy] of [[1,f.applied,INK_CFG.diagram.dino,0],[-1,f.friction,INK_CFG.diagram.friction,.3]]){
+      const g=new THREE.Group();group.add(g);g.position.set(x,y+dy,.3);g.scale.set(dir,2,1);
+      if(value>0)arrow(g,stretch(value),0,0,color);
+    }
+    const limitX=x-LIMIT_LENGTH;
+    KIT.line([V3(limitX,y+.3-.2,.32),V3(limitX,y+.3+.2,.32)],INK_CFG.diagram.friction,group,true);
   }
   // Seeded, additive force streaks; density is schematic display force, never rope flow.
   const stream= new THREE.Group();HERO.add(stream);
@@ -1176,33 +1349,34 @@ const GRAMMAR = (() => {
   
   // Trail gets rebuilt only on state change, then updated without allocating geometry.
   function update(dt){
-    clock+=dt;const d=state(),next=[d.n,d.speciesIndex,d.mu,baseline?.n,baseline?.species,baseline?.mu,records.length].join(':');
+    clock+=dt;const d=state(),next=[S.pullMode,S.pullP,S.lens,d.n,S.rivalN,d.speciesIndex,d.mu,baseline?.n,baseline?.species,baseline?.mu,records.length].join(':');
     if(next!==key){rebuild(d);key=next;
       // Reattach after group disposal; no retained GPU objects from earlier rebuilds.
       for(let i=0;i<PHYS.VIS.trailCount;i++)KIT.ball(.018,ink(THEME.gravel,.7),groups[LAYERS[5]],0,PHYS.SCENE.top+.35,-.64,0);
     }
     const event=[d.n,d.speciesIndex,d.mu].join(':');
     if(event!==eventKey){eventKey=event;}
+    const lensActive=S.rivalN>0&&S.lens&&transitions['렌즈'].target>0;
     const pulling=S.playing.target>0||DIRECTOR.eventLeft>0;
     if(d.slip&&pulling&&S.t.value<.15)burstStart=clock;
     if(d.slip&&DIRECTOR.eventLeft>0&&clock-burstStart>1.1)burstStart=clock;
     for(const [name,t]of Object.entries(transitions)){
       t.elapsed=Math.min(.3,t.elapsed+dt);const u=t.elapsed/.3;t.value=t.from+(t.target-t.from)*u*u*(3-2*u);
       const priority=name===LAYERS[6]?(1-transitions[LAYERS[4]].value)*(1-transitions[LAYERS[7]].value):name===LAYERS[7]?1-transitions[LAYERS[4]].value:1;
-      const alpha=t.value*priority*(DIRECTOR.eventLeft>0?.18:1),group=groups[name];group.visible=alpha>0&&group.children.length>0&&!(DIRECTOR.eventLeft>0&&name===LAYERS[4]);
+      const alpha=t.value*priority*(DIRECTOR.eventLeft>0?.18:1),group=groups[name];group.visible=!((lensActive||S.pullMode)&&[LAYERS[0],LAYERS[2],LAYERS[3]].includes(name))&&!(S.pullMode&&name===LAYERS[1])&&!(name==='서서히 당기기'&&!S.pullMode)&&alpha>0&&group.children.length>0&&!(DIRECTOR.eventLeft>0&&name===LAYERS[4]);
       group.position.y=(1-t.value)*.035;
       group.traverse(o=>{if(o.material){o.material.opacity=(o.material.userData.alpha??1)*alpha;if(o.material.uniforms?.uTime)o.material.uniforms.uTime.value=clock;if(o.material.uniforms?.uOpacity)o.material.uniforms.uOpacity.value=alpha;}});
     }
     groups[LAYERS[5]].children.forEach((o,i)=>{o.position.x=d.traces[i]??0;});
     const opacity=transitions[LAYERS[0]].value*(1-.80*transitions[LAYERS[4]].value);
-    streakMat.opacity=.4*opacity;streaks.count=S.quality==='low'?particles.length/2:particles.length;
+    stream.visible=!lensActive&&!S.pullMode;streakMat.opacity=.4*opacity;streaks.count=S.quality==='low'?particles.length/2:particles.length;
     for(let i=0;i<streaks.count;i++){
       const p=particles[i],side=i%2,glyph=d.forces[side],origin=origins[side];
       dummy.position.set(origin[0]+((p.phase+clock*(.1+d.streamDensity*.2))%1)*glyph.length,origin[1]+(p.height-.5)*.06,.765);
-      dummy.scale.setScalar(p.height<.2+d.streamDensity?1:0);dummy.updateMatrix();streaks.setMatrixAt(i,dummy.matrix);streaks.setColorAt(i,new THREE.Color(side?INK_CFG.diagram.dino:INK_CFG.diagram.kids));
+      dummy.scale.setScalar(p.height<.2+d.streamDensity?1:0);dummy.updateMatrix();streaks.setMatrixAt(i,dummy.matrix);streaks.setColorAt(i,new THREE.Color(side?(S.rivalN>0?INK_CFG.diagram.rival:INK_CFG.diagram.dino):INK_CFG.diagram.kids));
     }
     streaks.instanceMatrix.needsUpdate=true;streaks.instanceColor.needsUpdate=true;
-    const age=clock-burstStart,burst=d.slip&&age<1.1;
+    const age=clock-burstStart,burst=!S.pullMode&&d.slip&&age<1.1;
     dust.visible=burst;dust.count=S.quality==='low'?PHYS.VIS.dustCount/2:PHYS.VIS.dustCount;dustMat.opacity=burst?(1-age/1.1)*(.7-.45*transitions[LAYERS[4]].value):0;
     for(let i=0;burst&&i<dust.count;i++){
       const a=particles[i].phase*Math.PI*2,r=age*(.28+particles[i].height*.35);
@@ -1211,7 +1385,7 @@ const GRAMMAR = (() => {
     }
     dust.instanceMatrix.needsUpdate=true;
     // Replace R1 fills with this layer's same-position calibrated arrows.
-    CAPACITIES.visible=S.layers.capacities===true;
+    CAPACITIES.visible=S.layers.capacities===true&&!lensActive&&!S.pullMode;
   }
   function pin(){baseline=structuredClone(state());set({[LAYERS[3]]:true});key='';return structuredClone(baseline);}
   function unpin(){baseline=null;set({[LAYERS[3]]:false});key='';}
@@ -1237,7 +1411,7 @@ function inkConfig() {
   biome: {mud:0xa49b78,moss:0x87916c,bark:0x686750,stone:0x959887,foliage:0x718260,
    rear:0x9ba78b,middle:0x859573,near:0x718260,cavity:0x626954,litter:0x929574,volcano:0x929b85,crater:0x67715b,
    trail:['#b1a783','#99916f','#c1b795'],sun:0xffe7a0},
-  diagram: {ink:0x221d18,borderPx:1.5,screen:0xf4efe3,grid:0xb2b3a2,reference:0x393e42,kids:0xc57d24,dino:0x37795d,muscle:0x7863a6,friction:0xb55d77}
+  diagram: {pull:0x393e42,ink:0x221d18,borderPx:1.5,screen:0xf4efe3,grid:0xb2b3a2,reference:0x393e42,kids:0xc57d24,rival:0x315fa5,dino:0x37795d,muscle:0x7863a6,friction:0xb55d77}
  }));
 }
 
@@ -1478,19 +1652,22 @@ function heroCoverage() {
     const r = el.getBoundingClientRect(); return b.left < r.right && b.right > r.left && b.top < r.bottom && b.bottom > r.top;
   };
   return { width: (b.right - b.left) / innerWidth, height: (b.bottom - b.top) / innerHeight,
-    overlaps: overlaps('quests')||overlaps('tools'), overlapsTop: overlaps('quests'), overlapsTools: overlaps('tools'), clipped: b.left < 0 || b.right > innerWidth || b.top < 0 || b.bottom > innerHeight || b.behind, bounds: b };
+    overlaps: overlaps('quests')||overlaps('tools')||overlaps('mission'), overlapsTop: overlaps('quests')||overlaps('mission'), overlapsTools: overlaps('tools'), clipped: b.left < 0 || b.right > innerWidth || b.top < 0 || b.bottom > innerHeight || b.behind, bounds: b };
 }
 function stageRegion(event=false){
  const region={left:12,right:innerWidth-12,top:12,bottom:innerHeight-12};
  const visible=id=>{const e=document.getElementById(id);return e&&e.getClientRects().length&&getComputedStyle(e).visibility!=='hidden'?e.getBoundingClientRect():null;};
  const top=visible('quests'),tools=visible('tools'),picture=visible('q-pictures'),strip=visible('teacher-strip'),numbers=visible('teacher-numbers'),classPanel=visible('teacher-class');
  if(top)region.top=top.bottom+12;
+ const mission=visible('mission');
+ if(mission)region.top=Math.max(region.top,mission.bottom+12);
  if(tools)region.bottom=Math.min(region.bottom,tools.top-12);
  if(picture&&!event&&picture.height>0)region.bottom=Math.min(region.bottom,picture.top-12);
  if(strip){if(strip.width>strip.height)region.bottom=Math.min(region.bottom,strip.top-12);else region.right=Math.min(region.right,strip.left-12);}
  if(numbers)region.top=Math.max(region.top,numbers.bottom+12);
  if(classPanel)region.bottom=Math.min(region.bottom,classPanel.top-12);
  if(event)region.top=Math.max(region.top,innerWidth/innerHeight<.9?94:122);
+ if(event&&mission)region.top=Math.max(region.top,mission.bottom+8+(S.vertical?70:98)+12);
  return region;
 }
 function fitHero(eventX=null,region=stageRegion(eventX!==null)) {
@@ -1541,6 +1718,7 @@ for(const [name,value]of Object.entries({'--diagram-paper':css(INK_CFG.diagram.s
 const LABELS={
  canvas:{ko:'공룡 줄다리기 실험실',en:'Dinosaur tug laboratory'},play:{ko:'당김 실행 또는 중단',en:'Play or pause pull'},reset:{ko:'시작 상태 복구',en:'Reset'},sound:{ko:'소리 전환',en:'Toggle sound'},
  species:SPECIES_KEYS.map((ko,i)=>({ko,en:['Velociraptor','Dilophosaurus','Stegosaurus','Triceratops','Tyrannosaurus','Argentinosaurus'][i]})),
+ rival:PHYS.C.rivalChoices.map(n=>({ko:'?? ?? '+n+'?',en:'Rival team of '+n+' children'})),
  ground:[{ko:'유리 바닥',en:'Glass ground'},{ko:'모래 바닥',en:'Sand ground'},{ko:'자갈 바닥',en:'Gravel ground'},{ko:'아스팔트 바닥',en:'Asphalt ground'}]
 };
 const ICONS={play:'M8 5l11 7-11 7z',pause:'M8 5v14M16 5v14',reset:'M4 10a8 8 0 1 1 1 8M4 4v6h6',sound:'M3 9h4l5-4v14l-5-4H3zM16 8q6 4 0 8M19 5q9 7 0 14',muted:'M3 9h4l5-4v14l-5-4H3zM16 9l6 6M22 9l-6 6',
@@ -1560,6 +1738,11 @@ Object.assign(ICONS,{
  q4:'M2 7h8M2 4l3-2m9 15h8m-8-4 3-3 4 3M7 12h10m-3-3 3 3-3 3',
  q5:'M2 19h20M4 15v-4m4 4v-4M13 14h8m-4-3 4 3-4 3M4 6h7m4 0h6',
  q6:'M3 3h7v18H3zM14 3h7v18h-7zM6 18V6m11 12v-3',
+ q8:'M3 12h18M12 12v8m-4 0h8M5 12V9m14 3V9M3 5a1 1 0 1 0 2 0a1 1 0 1 0-2 0M7 5a1 1 0 1 0 2 0a1 1 0 1 0-2 0M15 5a1 1 0 1 0 2 0a1 1 0 1 0-2 0M19 5a1 1 0 1 0 2 0a1 1 0 1 0-2 0',
+ q9:'M3 14l18-4M12 12v8m-4 0h8M5 13V10m14 1V8M3 6a1 1 0 1 0 2 0a1 1 0 1 0-2 0M7 6a1 1 0 1 0 2 0a1 1 0 1 0-2 0M15 4a1 1 0 1 0 2 0a1 1 0 1 0-2 0M19 4a1 1 0 1 0 2 0a1 1 0 1 0-2 0M17 1a1 1 0 1 0 2 0a1 1 0 1 0-2 0',
+ q12:'M3 18l10-10h8M4 4a1 1 0 1 0 0 .01M8 4a1 1 0 1 0 0 .01M12 4a1 1 0 1 0 0 .01',
+ q11:'M2 13h18M3 8a1 1 0 1 0 0 .01M6 8a1 1 0 1 0 0 .01M16 8a1 1 0 1 0 0 .01M19 8a1 1 0 1 0 0 .01M15 15a3 3 0 1 0 6 0a3 3 0 1 0-6 0M20 18l3 4',
+ q10:'M2 16h20M12 16v-3M12 3a5 5 0 1 0 0 10 5 5 0 1 0 0-10M12 8l3-3M9 5l1 1m5 4-1-1',
  q7:'M2 3h20v18H2zM5 8h3m3 0h3m3 0h3M6 14l3 3 6-6M18 12v6'
 });
 for(let i=0;i<12;i++)ICONS['layer'+i]=[
@@ -1579,9 +1762,11 @@ for(const name of ['play','reset','sound',...SPECIES_KEYS.map((_,i)=>'s'+i),...G
  b.innerHTML=icon(name);b.addEventListener('click',()=>action(name));toolbar.append(b);
 }
 // Wordless layer tools use existing instrument line icons; accessible names stay off screen.
-const grammarIcons=Array.from({length:8},(_,i)=>'layer'+(i+4));
+const grammarIcons=[...Array.from({length:8},(_,i)=>'layer'+(i+4)),'q10','lens','q12'];
+ICONS.lens='M10 3a7 7 0 1 0 0 14 7 7 0 0 0 0-14M15 15l7 7';
+ICONS.layer12=ICONS.q10;ICONS.layer13=ICONS.lens;ICONS.layer14=ICONS.q12;
 for(const [i,name]of GRAMMAR.LAYERS.entries()){
- const b=document.createElement('button');b.className='grammar-tool';b.dataset.layer=name;b.setAttribute('aria-label',({ko:['마디','쌓기와 계단','한계 윤곽','겹치기','접촉 돋보기','시간 흔적','비율 비교','실행 기록'],en:['Force units','Stack and steps','Limits','Overlay','Contact magnifier','Time traces','Ratio comparison','Run records']}[LANG])[i]);b.setAttribute('aria-pressed',String(GRAMMAR.defaults[name]));b.innerHTML=icon(grammarIcons[i]);
+ const b=document.createElement('button');b.className='grammar-tool';b.dataset.layer=name;b.setAttribute('aria-label',({ko:['마디','쌓기와 계단','한계 윤곽','겹치기','접촉 돋보기','시간 흔적','비율 비교','실행 기록','장력계','렌즈','서서히 당기기'],en:['Force units','Stack and steps','Limits','Overlay','Contact magnifier','Time traces','Ratio comparison','Run records','Tension gauges','Object lens','Gradual pull']}[LANG])[i]);b.setAttribute('aria-pressed',String(GRAMMAR.defaults[name]));b.innerHTML=icon(grammarIcons[i]);
  b.addEventListener('click',()=>{if(!Q.free)return;GRAMMAR.set({[name]:!GRAMMAR.enabled[name]});b.setAttribute('aria-pressed',String(GRAMMAR.enabled[name]));});toolbar.append(b);
 }
 for(const [name,glyph]of [['pin','g0'],['record','rail']]){
@@ -1601,9 +1786,30 @@ function action(name){
  else if(/^g[0-3]$/.test(name))set('ground',+name[1]);
  syncUI();
 }
-function syncUI(){
+function syncUI(missionOnly=false){
+ const mission=document.getElementById('mission');
+ mission.hidden=T.mode==='teacher'||(!Q.free&&Q.phase==='explain'); // 설명 단계는 질문 패널이 안내한다
+ mission.style.setProperty('--mission-top',(document.getElementById('quests').getBoundingClientRect().bottom+8)+'px');
+ const text=missionText(Q.i,Q.phase,{...QUEST.sample(),free:Q.free,focus:QUEST.focus(),pending:Q.flags.pending,right:Q.pick===null||Q.pick===QUESTS[Q.i].answerKey,toolPage,toolGroup});
+ if(mission.textContent!==text){
+  mission.textContent=text;
+  for(const animation of mission.getAnimations())animation.cancel();
+  if(!matchMedia('(prefers-reduced-motion: reduce)').matches)mission.animate([{opacity:0},{opacity:1}],{duration:120});
+ }
+ if(missionOnly)return;
+ for(const b of [...speciesTools,...groundTools,...rivalTools])b.disabled=!!S.pullMode;
+ toolbar.dataset.rival=String(S.rivalN>0);
+ lensTool.hidden=!lensAvailable();
+ lensTool.setAttribute('aria-pressed',String(toolGroup==='lens'));
+ lensTools.forEach((b,i)=>b.setAttribute('aria-pressed',String(S.lens===lensValues[i])));
+ if(!lensAvailable()&&toolGroup==='lens')showTools('species');
+ rivalTool.hidden=S.rivalN===0;
+ rivalTool.setAttribute('aria-pressed',String(toolGroup==='rival'));
+ rivalTools.forEach((b,i)=>b.setAttribute('aria-pressed',String(S.rivalN===PHYS.C.rivalChoices[i])));
+ if(S.rivalN===0&&toolGroup==='rival')showTools('species');
  if(window.__lab&&!window.__lab.GRAMMAR){
   window.__lab.GRAMMAR=GRAMMAR;
+  window.__lab.sample=()=>QUEST.sample();
   window.__lab.layer=(name,on)=>{if(GRAMMAR.LAYERS.includes(name))GRAMMAR.set({[name]:!!on});else layer(name,on);};
  }
  if(window.__lab)toolbar.querySelectorAll('[data-layer]').forEach(b=>b.setAttribute('aria-pressed',String(GRAMMAR.enabled[b.dataset.layer])));
@@ -1611,7 +1817,9 @@ function syncUI(){
  SPECIES_KEYS.forEach((_,i)=>speciesTools[i].setAttribute('aria-pressed',String(i===S.species.target)));
  GROUND_VALUES.forEach((_,i)=>groundTools[i].setAttribute('aria-pressed',String(i===S.ground.target)));
 }
-function setRailFromPointer(u){QUEST.changed('n');u=clamp(u,0,1);const near=PHYS.DETENTS.reduce((a,b)=>Math.abs(a.x-u)<Math.abs(b.x-u)?a:b);const snap=Math.abs(near.x-u)<=.012;if(snap&&S.snap!==near.n)tick();S.snap=snap?near.n:null;S.u.target=PHYS.railX(PHYS.kidsFromRailX(snap?near.x:u));}
+// One normalized control value feeds all three handles and pointer deltas.
+function controlValue(n=PHYS.kidsFromRailX(S.u.value)){return S.pullMode?S.pullP:PHYS.railX(n);}
+function setRailFromPointer(u){if(S.pullMode){set('pull',clamp(u,0,1));return;}QUEST.changed('n');u=clamp(u,0,1);const near=PHYS.DETENTS.reduce((a,b)=>Math.abs(a.x-u)<Math.abs(b.x-u)?a:b);const snap=Math.abs(near.x-u)<=.012;if(snap&&S.snap!==near.n)tick();S.snap=snap?near.n:null;S.u.target=PHYS.railX(PHYS.kidsFromRailX(snap?near.x:u));}
 const raycaster=new THREE.Raycaster(),pointer=new THREE.Vector2();
 const dragObjects=[RAIL_HANDLE,SLIDER.handle,DIAL.knob,PLAY_BUTTON,SWITCH,...GRAPHS.map(g=>g.mesh)];
 function rayFromEvent(e){const r=canvas.getBoundingClientRect();pointer.set((e.clientX-r.left)/r.width*2-1,-(e.clientY-r.top)/r.height*2+1);raycaster.setFromCamera(pointer,camera);}
@@ -1626,12 +1834,12 @@ canvas.addEventListener('pointerdown',e=>{
  const local=type!=='rail';
  const plane=local?new THREE.Plane().setFromNormalAndCoplanarPoint(V3(0,0,1).applyQuaternion(CONSOLE.quaternion),object.getWorldPosition(V3())):new THREE.Plane(V3(0,0,1),-PHYS.SCENE.railZ);
  const p=raycaster.ray.intersectPlane(plane,V3());if(!p){controls.enabled=true;return;}if(local)CONSOLE.worldToLocal(p);
- QUEST.changed('drag');S.drag={id:e.pointerId,type,plane,local,start:p,u:S.u.target,angle:Math.atan2(p.x-CONTROL_LAYOUT.dial[0],p.y-CONTROL_LAYOUT.dial[1])};canvas.setPointerCapture(e.pointerId);
+ QUEST.changed('drag');S.drag={id:e.pointerId,type,plane,local,start:p,u:controlValue(PHYS.kidsFromRailX(S.u.target)),angle:Math.atan2(p.x-CONTROL_LAYOUT.dial[0],p.y-CONTROL_LAYOUT.dial[1])};canvas.setPointerCapture(e.pointerId);
 },{capture:true});
 canvas.addEventListener('pointermove',e=>{
  const d=S.drag;if(!d||e.pointerId!==d.id)return;rayFromEvent(e);const p=raycaster.ray.intersectPlane(d.plane,V3());if(!p)return;if(d.local)CONSOLE.worldToLocal(p);
  if(d.type==='rail'||d.type==='slider')setRailFromPointer(d.u+(p.x-d.start.x)/(d.type==='rail'?PHYS.SCENE.railWidth:SLIDER.width));
- if(d.type==='dial'){const a=Math.atan2(p.x-CONTROL_LAYOUT.dial[0],p.y-CONTROL_LAYOUT.dial[1]),delta=Math.atan2(Math.sin(a-d.angle),Math.cos(a-d.angle));setRailFromPointer(S.u.target+delta/(Math.PI*1.7));d.angle=a;}
+ if(d.type==='dial'){const a=Math.atan2(p.x-CONTROL_LAYOUT.dial[0],p.y-CONTROL_LAYOUT.dial[1]),delta=Math.atan2(Math.sin(a-d.angle),Math.cos(a-d.angle));setRailFromPointer(controlValue(PHYS.kidsFromRailX(S.u.target))+delta/(Math.PI*1.7));d.angle=a;}
  if(d.type==='graph')setRailFromPointer((p.x-CONTROL_LAYOUT.graphs[0][0])/CONTROL_LAYOUT.graphSize[0]+.5);
  if(d.type==='ratio'){const u=clamp((p.x-CONTROL_LAYOUT.graphs[1][0])/CONTROL_LAYOUT.graphSize[0]+.5,0,1);set('species',SPECIES_KEYS.reduce((best,s,i)=>Math.abs(PHYS.massGraphX(s)-u)<Math.abs(PHYS.massGraphX(SPECIES_KEYS[best])-u)?i:best,0));}
  e.stopImmediatePropagation();
@@ -1640,9 +1848,25 @@ function endDrag(e){if(!S.drag||S.drag.id!==e.pointerId)return;S.drag=null;S.sna
 for(const event of ['pointerup','pointercancel','lostpointercapture'])canvas.addEventListener(event,endDrag);
 window.addEventListener('keydown',e=>{if(e.key==='/'&&!e.repeat){S.ui.target=1-S.ui.target;document.body.classList.toggle('hide-ui',!S.ui.target);window.__site?.setVisible(!!S.ui.target);e.preventDefault();}});
 function set(name,v){
+ if(name==='pull'){
+  if(typeof v!=='number'||!Number.isFinite(v))throw new TypeError(name);
+  if(v<0||v>1)throw new RangeError(name);
+  if(!S.pullMode)return;
+  QUEST.touch();S.pullP=v;syncUI();return;
+ }
+ if(S.pullMode&&['kids','n','u','species','ground','mu','rival'].includes(name))return;
+ if(name==='lens'){
+  if(v===null||v===0||v===''||v==='none')v=null;
+  if(v!==null&&!['rope','A','B'].includes(v))throw new RangeError(name);
+  S.lens=S.rivalN>0?v:null;
+  if(S.lens){Q.flags.lensVisited||=[];if(!Q.flags.lensVisited.includes(S.lens))Q.flags.lensVisited.push(S.lens);}
+  syncUI();return;
+ }
+ if(name==='rival'){if(typeof v!=='number'||!Number.isFinite(v))throw new TypeError(name);if(!Number.isInteger(v)||v<0||v>100)throw new RangeError(name);}
  if(name==='quest'){QUEST.go(Number(v));return;}
- if(['species','ground','mu','kids','n','u'].includes(name)&&Q.phase==='act')QUEST.changed('edit');
- if(name==='species'){const i=typeof v==='string'?SPECIES_KEYS.indexOf(v):v;if(!Number.isInteger(i)||i<0||i>=SPECIES_KEYS.length)throw new RangeError(name);S.species.value=S.species.target=i;}
+ if(['species','ground','mu','kids','n','u','rival'].includes(name)&&Q.phase==='act')QUEST.changed('edit');
+ if(name==='rival'){S.rivalN=v;if(v===0)S.lens=null;}
+ else if(name==='species'){const i=typeof v==='string'?SPECIES_KEYS.indexOf(v):v;if(!Number.isInteger(i)||i<0||i>=SPECIES_KEYS.length)throw new RangeError(name);S.species.value=S.species.target=i;}
  else if(name==='ground'||name==='mu'){const i=name==='mu'?GROUND_VALUES.indexOf(Number(v)):typeof v==='string'?Object.keys(PHYS.GROUNDS).indexOf(v):v;if(!Number.isInteger(i)||i<0||i>=GROUND_VALUES.length)throw new RangeError(name);if(i!==S.ground.target)S.previousGround=S.ground.target;S.ground.value=S.ground.target=i;S.cassette.value=1;S.cassette.target=0;}
  else if(['playing','sound'].includes(name))S[name].target=v?1:0;
  else{v=Number(v);if(!Number.isFinite(v))throw new TypeError(name);
@@ -1656,6 +1880,7 @@ const PRESETS=[[1,0,2],[49,3,2],[59,4,2],[59,4,0],[68,4,1],[30,1,2],[100,5,3]];
 function preset(i){if(!Number.isInteger(i)||!PRESETS[i])throw new RangeError('preset');const [n,s,g]=PRESETS[i];set('kids',n);set('species',s);set('ground',g);S.previousGround=g;S.cassette.value=S.cassette.target=0;S.t.value=S.t.target=0;}
 function textAudit(){const found=[],walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);
  while(walker.nextNode()){const n=walker.currentNode,p=n.parentElement;if(!p||p.closest('script,style,template,[hidden]'))continue;
+ if(p.closest('#mission[data-mission]')||p.closest('[data-learn]'))continue;
  const range=document.createRange();range.selectNodeContents(n);const r=range.getBoundingClientRect();let visible=!!r.width&&!!r.height;
  for(let a=p;a;a=a.parentElement){const s=getComputedStyle(a);if(s.visibility==='hidden'||s.display==='none'||+s.opacity===0)visible=false;}
  if(!visible||r.bottom<0||r.top>innerHeight||r.right<0||r.left>innerWidth)continue;
@@ -1668,9 +1893,9 @@ Object.assign(ICONS,{
  hand:'M7 12V5a2 2 0 0 1 4 0v7-4a2 2 0 0 1 4 0v4-2a2 2 0 0 1 4 0v5q0 6-6 6-4 0-6-4l-3-4q-1-3 2-2l3 2',
  check:'M4 12l5 5L21 5',next:'M4 12h16m-6-6 6 6-6 6',star:'M12 2l3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1z',
  compare:'M4 5h6v14H4zM14 5h6v14h-6zM6 16v-8m10 8v-3',layers:'M3 7l9-4 9 4-9 4zM3 12l9 4 9-4M3 17l9 4 9-4',
- species:'M3 19h18M5 15V9h5v6m4 0V5h5v10',ground:'M3 17h18M4 12l4-4 4 4 4-4 4 4'
+ rival:'M6 7a1 1 0 1 0 0 .01M12 7a1 1 0 1 0 0 .01M18 7a1 1 0 1 0 0 .01M9 15a1 1 0 1 0 0 .01M15 15a1 1 0 1 0 0 .01',species:'M3 19h18M5 15V9h5v6m4 0V5h5v10',ground:'M3 17h18M4 12l4-4 4 4 4-4 4 4'
 });
-Object.assign(LABELS,{quest:{ko:'퀘스트',en:'Quests'},free:{ko:'자유 실험',en:'Free exploration'},pick:{ko:'예상 선택',en:'Choose prediction'},next:{ko:'다음',en:'Next quest'},replay:{ko:'예상 다시 비교',en:'Replay comparison'},compare:{ko:'비율 비교 열기',en:'Open ratio comparison'},speciesTool:{ko:'종 견본 펼치기',en:'Show species samples'},groundTool:{ko:'바닥 견본 펼치기',en:'Show ground samples'},layersTool:{ko:'층 도구 펼치기',en:'Show layer tools'}});
+Object.assign(LABELS,{quest:{ko:'퀘스트',en:'Quests'},free:{ko:'자유 실험',en:'Free exploration'},pick:{ko:'예상 선택',en:'Choose prediction'},next:{ko:'다음',en:'Next quest'},replay:{ko:'예상 다시 비교',en:'Replay comparison'},compare:{ko:'비율 비교 열기',en:'Open ratio comparison'},rivalTool:{ko:'?? ?? ???',en:'Show rival team sizes'},speciesTool:{ko:'종 견본 펼치기',en:'Show species samples'},groundTool:{ko:'바닥 견본 펼치기',en:'Show ground samples'},layersTool:{ko:'층 도구 펼치기',en:'Show layer tools'}});
 LABELS.play={ko:'당김 실행 또는 중단',en:'Run or interrupt pull'};LABELS.reset={ko:'시작 상태 복구',en:'Restore starting setup'};LABELS.sound={ko:'소리 켜기 또는 끄기',en:'Toggle sound'};
 for(const name of ['play','reset','sound'])document.getElementById('tool-'+name).setAttribute('aria-label',LABELS[name][LANG]);
 const qPictures=document.createElement('div');qPictures.id='q-pictures';document.body.append(qPictures);
@@ -1686,13 +1911,33 @@ for(const b of sampleButtons.slice(0,3))toolMain.append(b);
 const speciesTools=sampleButtons.filter(b=>/^tool-s[0-5]$/.test(b.id)),groundTools=sampleButtons.filter(b=>/^tool-g/.test(b.id)),layerTools=sampleButtons.filter(b=>b.classList.contains('grammar-tool'));
 for(const b of sampleButtons.slice(3))b.remove();
 let toolGroup='species',toolPage=0;
-const toolBank={species:speciesTools,ground:groundTools,layers:layerTools};
+const rivalTools=PHYS.C.rivalChoices.map((n,i)=>{
+ const b=document.createElement('button');b.id='tool-r'+n;b.setAttribute('aria-label',LABELS.rival[i][LANG]);
+ b.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true">'+Array.from({length:n},(_,j)=>'<circle cx="'+(5+j%4*4.5)+'" cy="'+(8+Math.floor(j/4)*8)+'" r="1.3" fill="currentColor"/>').join('')+'</svg>';
+ b.onclick=()=>{if(!QUEST.allows())return;QUEST.touch();set('rival',n);};return b;
+});
+
+const lensValues=[null,'rope','A','B'];
+LABELS.lensTool={ko:'보는 물체 고르기',en:'Choose what to look at'};
+LABELS.lens=[{ko:'렌즈 해제',en:'Show both teams'},{ko:'줄',en:'Rope'},{ko:'왼쪽 팀',en:'Left team'},{ko:'오른쪽 팀',en:'Right team'}];
+const lensTools=lensValues.map((v,i)=>{
+ const b=document.createElement('button');b.id='tool-lens-'+(v??'none');b.setAttribute('aria-label',LABELS.lens[i][LANG]);
+ const dots=x=>[0,1,2].map(j=>'<circle cx="'+(x+j*3)+'" cy="8" r="1" fill="currentColor"/>').join('');
+ b.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 14h18"/>'+((v===null||v==='A')?dots(3):'')+((v===null||v==='B')?dots(15):'')+'</svg>';
+ b.onclick=()=>{if(!QUEST.allows())return;QUEST.touch();set('lens',v);};return b;
+});
+function lensAvailable(){return S.rivalN>0&&(Q.free||!!QUESTS[Q.i].lens);}
+const toolBank={species:speciesTools,rival:rivalTools,lens:lensTools,ground:groundTools,layers:layerTools};
 qButton('speciesTool','species',()=>showTools('species'),toolMain);
+const rivalTool=qButton('rivalTool','rival',()=>showTools('rival'),toolMain);rivalTool.id='rivalTool';rivalTool.hidden=true;
+const lensTool=qButton('lensTool','lens',()=>showTools('lens'),toolMain);lensTool.id='lensTool';lensTool.hidden=true;
 qButton('groundTool','ground',()=>showTools('ground'),toolMain);
 qButton('compare','compare',()=>QUEST.compare(),toolMain).id='tool-compare';
 const layersToggle=qButton('layersTool','layers',()=>showTools('layers'),toolPalette);
 const paletteNext=qButton('next','next',()=>{toolPage++;showTools(toolGroup,false);},toolPalette);
 function showTools(group,reset=true){
+ if(group==='lens'&&!lensAvailable())group='species';
+ if(group==='rival'&&S.rivalN===0)group='species';
  if(group==='layers'&&!Q.free)group='species';toolGroup=group;if(reset)toolPage=0;
  const bank=toolBank[group],slots=Q.free?4:5,pages=Math.ceil(bank.length/slots);toolPage%=pages;
  toolPalette.replaceChildren();if(Q.free)toolPalette.append(layersToggle);
@@ -1700,13 +1945,20 @@ function showTools(group,reset=true){
  if(pages>1)toolPalette.append(paletteNext);
  layersToggle.setAttribute('aria-pressed',String(group==='layers'));
 }
+function conceptHTML(id){return '<div class="q-concept">'+icon('star')+text(CONCEPTS.find(c=>c.id===CONCEPTS_OF[id][0]))+'</div>';}
+function cardHTML(i,s,stars){
+ const id=QUESTS[i].id,done=new Set([...Q.completed].flatMap(i=>CONCEPTS_OF[QUESTS[i].id]));
+ const bridge=EXPLAIN[id].bridge?`<p class="q-bridge">${text(EXPLAIN[id].bridge)}</p>`:'';
+ const map='<div class="q-map" aria-hidden="true">'+CONCEPTS.map(c=>'<svg viewBox="0 0 24 24" aria-hidden="true"><circle data-concept="'+c.id+'" cx="12" cy="12" r="8" fill="'+(done.has(c.id)?'currentColor':'none')+'" stroke-width="'+(CONCEPTS_OF[id].includes(c.id)?4:1.5)+'"/></svg>').join('')+'</div>';
+ return `<div class="q-principle" data-learn>${conceptHTML(id)}<p class="q-recap">${text(EXPLAIN[id].recap)}</p>${bridge}${QUESTS[i].card(s)}${map}<span class="q-stars">${icon('star').repeat(stars)}</span></div>`;
+}
 function questUI(){
  const d=QUESTS[Q.i],f=Q.flags,top=document.getElementById('quests');top.removeAttribute('aria-hidden');top.replaceChildren();
  qButton('quest','quest',()=>TEACHER.mode('student'),top).setAttribute('aria-pressed',String(!Q.free));
  qButton('free','free',()=>TEACHER.mode('free'),top).setAttribute('aria-pressed',String(Q.free));
  qButton('teacher','teacher',()=>TEACHER.mode('teacher'),top).setAttribute('aria-pressed',String(T.mode==='teacher'));
  const row=document.createElement('div');row.className='quest-row';top.append(row);
- QUESTS.forEach((d,i)=>{const b=qButton('quest',d.icon,()=>{if(i===0||Q.completed.has(i-1)||Q.completed.has(i))QUEST.go(i);},row,' '+(i+1));b.className='quest'+(Q.i===i?' current':'')+(Q.completed.has(i)?' complete':'');b.setAttribute('aria-disabled',String(i>0&&!Q.completed.has(i-1)&&!Q.completed.has(i)));b.innerHTML+='<span class="q-dots">'+('<i></i>'.repeat(Q.i===i?PHASES.indexOf(Q.phase)+1:1))+'</span>';});
+ SEQUENCE.forEach((i,pos)=>{const b=qButton('quest',QUESTS[i].icon,()=>{if(QUEST.unlocked(i))QUEST.go(i);},row,' '+(pos+1));b.className='quest'+(Q.i===i?' current':'')+(Q.completed.has(i)?' complete':'')+(pos>0&&levelOf(i)!==levelOf(SEQUENCE[pos-1])?' level-gap':'');b.setAttribute('aria-disabled',String(!QUEST.unlocked(i)));b.innerHTML+='<span class="q-dots">'+('<i></i>'.repeat(Q.i===i?PHASES.indexOf(Q.phase)+1:1))+'</span>';});
  qPictures.replaceChildren();qPictures.className=Q.phase;qPictures.hidden=Q.free;
  if(!Q.free&&Q.phase==='predict')d.candidates.forEach((c,k)=>{const b=qButton('pick',d.icon,()=>QUEST.pick(k),qPictures,' '+(k+1));b.dataset.candidate=k;b.innerHTML=CARDS.picture(d.id,c,0,QUEST.sample());});
  if(!Q.free&&Q.phase==='confirm'){
@@ -1714,45 +1966,171 @@ function questUI(){
   qPictures.innerHTML='<div class="q-compare '+(Q.stars[Q.i]===3?'matched':'')+'">'+CARDS.picture(d.id,chosen,0,f.success)+CARDS.actual(d.id,f.success||QUEST.sample())+(Q.stars[Q.i]===3?icon('check'):'')+'</div>';
   if(Q.stars[Q.i]===2)qButton('replay','reset',()=>QUEST.skip('event'),qPictures);
  }
- if(!Q.free&&Q.phase==='card'){
-  qPictures.innerHTML='<div class="q-principle">'+d.card(f.success||QUEST.sample())+'<span class="q-stars">'+icon('star').repeat(Q.stars[Q.i])+'</span></div>';
-  qButton(Q.i<6?'next':'free',Q.i<6?'next':'free',()=>Q.i<6?QUEST.go(Q.i+1):QUEST.mode(true),qPictures);
+ if(!Q.free&&Q.phase==='explain'){
+  const e=f.explain,data=EXPLAIN[d.id],last=data.options.find(o=>o.key===e.tries.at(-1));
+  qPictures.innerHTML='<div class="q-explain" data-learn>'+conceptHTML(d.id)+'<p class="q-ask">'+text(data.q)+'</p><div class="q-options"></div><p class="q-hint" role="status">'+(last?text(last.hint):'')+'</p></div>';
+  const options=qPictures.querySelector('.q-options');
+  for(const key of e.order){const o=data.options.find(o=>o.key===key),b=document.createElement('button');b.dataset.option=key;b.textContent=text(o);b.setAttribute('aria-label',text(o));b.setAttribute('aria-disabled',String(e.tries.includes(key)));b.onclick=()=>QUEST.answer(key);options.append(b);}
  }
- qArchive.replaceChildren();for(const i of Q.completed){const b=qButton('quest',QUESTS[i].icon,()=>{qPictures.hidden=false;qPictures.className='card';qPictures.innerHTML='<div class="q-principle">'+QUESTS[i].card(Q.results[i].success)+'<span class="q-stars">'+icon('star').repeat(Q.stars[i])+'</span></div>';},qArchive);b.className='archive-card';}
+ if(!Q.free&&Q.phase==='card'){
+  qPictures.innerHTML=cardHTML(Q.i,f.success||QUEST.sample(),Q.stars[Q.i]);
+  const next=QUEST.next(),action=next===null?'free':'next';
+  qButton(action,action,()=>next===null?QUEST.mode(true):QUEST.go(next),qPictures);
+ }
+ qArchive.replaceChildren();for(const i of Q.completed){const b=qButton('quest',QUESTS[i].icon,()=>{qPictures.hidden=false;qPictures.className='card';qPictures.innerHTML=cardHTML(i,Q.results[i].success,Q.stars[i]);},qArchive);b.className='archive-card';}
  qArchive.hidden=!Q.free||!Q.completed.size;
  document.body.dataset.qphase=Q.free?'free':Q.phase;document.body.dataset.focus=QUEST.focus();
- showTools(QUEST.focus()==='ground'?'ground':toolGroup,false);
+ showTools(QUEST.focus()==='lens'?'lens':QUEST.focus()==='ground'?'ground':toolGroup,false);
+ syncUI();
 }
 
 
+// 퀘스트 번호는 유지하고, 표시 순서·단계·개념은 이 표에서 정한다.
+const CONCEPTS = [
+ {id:1,ko:'힘에는 크기와 방향이 있어요',en:"Force has size and direction."},
+ {id:2,ko:'크기가 같고 방향이 반대인 힘은 서로 상쇄돼요(평형)',en:"Equal forces in opposite directions cancel out (balanced forces)."},
+ {id:3,ko:'힘이 같지 않으면 더 큰 쪽으로 움직임이 바뀌어요',en:"Unequal forces change motion toward the larger force."},
+ {id:4,ko:'줄 하나의 장력은 어디서나 같아요',en:"Tension is the same all along a single rope."},
+ {id:5,ko:'마찰은 필요한 만큼만 생기고, 한계가 있어요',en:"Friction acts only as much as needed, up to a limit."},
+ {id:6,ko:'당기는 능력은 근육과 마찰 중 작은 쪽이에요',en:"Pulling capacity is the smaller of muscle and friction limits."}
+];
+const LEVELS = [
+ {id:1,quests:[8, 9, 1, 2, 4],standards:{ko:['4과01-01'],us:['3-PS2-1']}},
+ {id:2,quests:[10, 11, 12, 5, 3],standards:{ko:['9과05-01'],us:['MS-PS2-2']}},
+ // 고시 원문 확인 필요
+ {id:3,quests:[6, 7],standards:{ko:[],us:['MS-PS2-1']}}
+];
+const CONCEPTS_OF = {1:[6],2:[3],4:[5],5:[5],3:[3],6:[6],7:[6],8:[2,1],9:[3],10:[4],11:[3,4],12:[5]};
+const SEQUENCE = LEVELS.flatMap(level=>level.quests.map(id=>id-1));
+const firstOfLevel = id=>LEVELS.find(level=>level.id===id).quests[0]-1;
+const levelOf = i=>LEVELS.find(level=>level.quests.includes(i+1)).id;
+// QUESTS 정의 직후 한 번만 검증한다. 이후 호출부는 표를 믿는다.
+function validateCurriculum(quests){
+ if(SEQUENCE.length!==quests.length||new Set(SEQUENCE).size!==quests.length||SEQUENCE.some(i=>!Number.isInteger(i)||quests[i]?.id!==i+1))throw new Error('curriculum: 퀘스트 번호 누락·중복·범위 오류');
+}
+
+// 설명 문구와 검증은 이 경계 한 곳에서 관리한다.
+const text = x=>x[LANG]??x.ko;
+const EXPLAIN = {
+ 1:{q:{ko:'아이 한 명이 작은 공룡을 이긴 건 왜일까요?',en:"Why did a child beat the small dinosaur?"},options:[
+  {key:'a',ko:'공룡이니까 무조건 힘이 세요',en:"Dinosaurs are always strong.",hint:{ko:'방금 장면을 다시 봐요. 작은 공룡은 땅을 붙잡는 힘이 작았어요.',en:"Look again. The small dinosaur had little grip on the ground."}},
+  {key:'b',ko:'작은 공룡은 가벼워서 땅을 붙잡는 힘(마찰)이 작아요',en:"The small dinosaur is light, so its friction is small.",correct:true},
+  {key:'c',ko:'아이가 더 어려서 봐줘요',en:"It lets the younger child win.",hint:{ko:'공룡은 봐주지 않아요. 힘의 크기만 비교해요.',en:"It does not let anyone win. Compare the forces."}}
+ ],recap:{ko:'가벼운 공룡은 땅을 붙잡는 힘이 작아서 아이 한 명에게도 질 수 있어요.',en:"A light dinosaur has little grip, so even a child can beat it."}},
+ 2:{q:{ko:'공룡을 이기려면 왜 여러 명이 필요했을까요?',en:"Why did it take several children to win?"},options:[
+  {key:'a',ko:'아이들 힘을 모은 합이 공룡의 힘을 넘을 때 이겨요',en:"The children win when their total force exceeds the dinosaur's.",correct:true},
+  {key:'b',ko:'아이가 몇 명이든 공룡이 이겨요',en:"The dinosaur wins against any team.",hint:{ko:'아이를 늘리면 힘이 더해져서 공룡을 넘었어요.',en:"More children added enough force to beat the dinosaur."}},
+  {key:'c',ko:'아이가 많으면 서로 방해해서 힘이 줄어요',en:"More children get in each other's way and reduce force.",hint:{ko:'이 실험에서는 아이들 힘이 그대로 더해져요.',en:"In this model, the children's forces add together."}}
+ ],recap:{ko:'힘은 더해져요. 합이 상대보다 크면 그쪽으로 움직여요.',en:"Forces add together. The larger total moves the flag its way."}},
+ 3:{q:{ko:'티라노를 이기려면 왜 그렇게 많은 아이가 필요했을까요?',en:"Why did it take so many children to beat T. rex?"},options:[
+  {key:'a',ko:'아이들 힘의 합이 티라노의 한계를 넘는 인원(약 59명)이 필요해요',en:"About fifty-nine children must combine forces to exceed its limit.",correct:true},
+  {key:'b',ko:'티라노는 아무리 많아도 못 이겨요',en:"No team can beat T. rex.",hint:{ko:'약 59명이 모이면 합이 티라노의 한계를 넘었어요.',en:"About fifty-nine children together exceeded its limit."}},
+  {key:'c',ko:'아이 10명이면 충분해요',en:"Ten children are enough.",hint:{ko:'10명의 힘은 티라노의 한계보다 작아요.',en:"Ten children have less force than its limit."}}
+ ],recap:{ko:'힘의 합을 비교하면 이길 수 있는 사람 수를 알 수 있어요.',en:"Compare total forces to find a team size that can win."}},
+ 4:{q:{ko:'바닥을 유리로 바꾸니 왜 결과가 바뀌었을까요?',en:"Why did changing to glass change the result?"},options:[
+  {key:'a',ko:'미끄러운 바닥은 아이 팀 힘만 줄여요',en:"Slippery ground only weakens the children.",hint:{ko:'바닥은 양쪽에 똑같아요. 줄어든 두 마찰을 다시 비교해 봐요.',en:"Both sides use the same ground. Compare both friction forces."}},
+  {key:'b',ko:'바닥이 미끄러우면 발이 땅을 붙잡는 힘(마찰)이 줄어서, 가벼운 쪽이 먼저 미끄러져요',en:"Slippery ground reduces friction, so the lighter side slips first.",correct:true},
+  {key:'c',ko:'공룡은 발이 커서 안 미끄러워요',en:"The dinosaur has big feet, so it cannot slip.",hint:{ko:'공룡도 같은 바닥이에요. 무거워서 마찰이 더 컸을 뿐이에요.',en:"It uses the same ground. Its greater weight gives it more friction."}}
+ ],recap:{ko:'마찰은 땅이 발을 붙잡는 힘이에요. 바닥이 미끄러우면 마찰이 줄어요.',en:"Friction is the ground gripping the feet. Slippery ground gives less friction."}},
+ 5:{q:{ko:'유리 위에서 인원을 늘리니 왜 이길 수 있었을까요?',en:"Why could adding children help on glass?"},options:[
+  {key:'a',ko:'인원이 늘면 마찰의 한계도 같이 커져요',en:"More children also raise the friction limit.",correct:true},
+  {key:'b',ko:'바닥이 같으면 한계는 인원과 상관없어요',en:"On the same ground, team size cannot change the limit.",hint:{ko:'인원이 늘자 마찰 화살표의 한계도 길어졌어요.',en:"The friction limit arrow grew when children were added."}},
+  {key:'c',ko:'유리에서는 인원이 늘수록 더 미끄러워요',en:"More children slip more on glass.",hint:{ko:'인원이 늘면 땅을 누르는 힘이 커져서 오히려 덜 미끄러워요.',en:"More children press harder on the ground, so they slip less."}}
+ ],recap:{ko:'마찰의 한계는 발이 땅을 누르는 힘에 따라 커져요.',en:"The friction limit grows as feet press harder on the ground."}},
+ 6:{q:{ko:'큰 공룡일수록 몸무게에 비해 근육 힘은 어떨까요?',en:"How does muscle force compare with weight in bigger dinosaurs?"},options:[
+  {key:'a',ko:'클수록 몸무게에 비해서도 힘이 더 세요',en:"Bigger animals are stronger for their weight too.",hint:{ko:'비교 막대를 다시 봐요. 큰 종의 막대가 더 짧아요.',en:"Look at the bars again. The bigger species has a shorter bar."}},
+  {key:'b',ko:'몸이 클수록 몸무게에 비해 근육 힘은 작아져요',en:"Bigger bodies have less muscle force for their weight.",correct:true},
+  {key:'c',ko:'크기와 상관없이 똑같아요',en:"Size makes no difference.",hint:{ko:'두 막대의 길이가 서로 달랐어요.',en:"The bars had different lengths."}}
+ ],recap:{ko:'큰 동물일수록 몸무게에 비해 근육 힘은 작아요. (이 실험의 값은 추정이에요.)',en:"Bigger animals have less muscle force for their weight. (These values are estimates.)"}},
+ 7:{q:{ko:'아이 30명이 이길 수 있는 종은 왜 거기까지일까요?',en:"Why can thirty children beat only some species?"},options:[
+  {key:'a',ko:'가장 무거운 종도 아이 30명이면 이겨요',en:"Thirty children can beat even the heaviest species.",hint:{ko:'가장 무거운 종은 30명의 힘의 합보다 한계가 커요.',en:"The heaviest species has a higher limit than thirty children's total force."}},
+  {key:'b',ko:'30명의 힘의 합 안에 드는 종까지만 이길 수 있어요',en:"Thirty children can beat only species within their total force.",correct:true},
+  {key:'c',ko:'이기고 지는 건 종 이름에 달렸어요',en:"Winning depends on the species name.",hint:{ko:'이름이 아니라 힘의 크기를 비교해서 정해져요.',en:"We compare forces to decide who wins."}}
+ ],recap:{ko:'이기는 쪽은 한계의 합이 큰 쪽이에요.',en:"The side with the greater total capacity wins."}},
+ 8:{q:{ko:'두 팀이 똑같이 당겼는데 왜 깃발이 가운데 멈췄을까요?',en:"Why did equal pulls leave the flag in the middle?"},options:[
+  {key:'a',ko:'힘이 없어서 안 움직여요',en:"It stays still because there is no force.",hint:{ko:'화살표를 다시 봐요. 양쪽 모두 힘이 있어요.',en:"Look at the arrows again. Both sides exert force."}},
+  {key:'b',ko:'두 힘이 같고 방향이 반대라서 서로 상쇄돼요',en:"Equal forces in opposite directions cancel out.",correct:true},
+  {key:'c',ko:'줄이 너무 팽팽해서 못 움직여요',en:"The rope is too tight to move.",hint:{ko:'줄이 팽팽한 건 두 팀이 같은 힘으로 당기고 있다는 뜻이에요.',en:"A tight rope here means both teams pull with equal force."}}
+ ],recap:{ko:'크기가 같고 방향이 반대인 두 힘은 평형을 이뤄서 물체가 움직이지 않아요.',en:"Equal forces in opposite directions are balanced, so the object stays still."}},
+ 9:{q:{ko:'한 명이 더 오니 왜 깃발이 움직였을까요?',en:"Why did the flag move when a child joined?"},options:[
+  {key:'a',ko:'힘이 한쪽만 더 커져서 평형이 깨져요',en:"Only that side's force grew, so the forces are unbalanced.",correct:true},
+  {key:'b',ko:'한 명 정도로는 아무 변화가 없어요',en:"Adding a child makes no change.",hint:{ko:'한 명만 늘어도 그쪽 힘이 더 커져서 깃발이 움직였어요.',en:"Adding a child made that team's force larger and moved the flag."}},
+  {key:'c',ko:'무거운 쪽이 항상 이겨요',en:"The heavier side always wins.",hint:{ko:'이 실험에서는 몸무게가 아니라 당기는 힘의 합으로 정해져요.',en:"Here, total pulling force decides the result, rather than weight alone."}}
+ ],recap:{ko:'힘이 같지 않으면(불균형) 더 큰 쪽으로 움직임이 바뀌어요.',en:"Unbalanced forces change motion toward the larger force."}},
+ 10:{q:{ko:'줄 가운데 저울은 왜 그 값을 가리켰을까요?',en:"Why did the middle gauge show that reading?"},options:[
+  {key:'a',ko:'저울은 양쪽 힘을 더해서 보여 줘요',en:"The gauge adds the forces from both sides.",hint:{ko:'저울 눈금은 한 팀의 화살표와 같았어요. 두 팀 힘의 합이 아니에요.',en:"Its reading matched a team's arrow, rather than both teams' total."}},
+  {key:'b',ko:'줄은 하나라서 양쪽 끝에 걸리는 힘(장력)이 같아요',en:"It is a single rope, so tension is equal at both ends.",correct:true},
+  {key:'c',ko:'이기는 팀 쪽 줄이 더 팽팽해요',en:"The rope is tighter on the winning side.",hint:{ko:'6 대 5에서도 양쪽 끝 저울이 같은 값을 가리켰어요.',en:"Even with six against five, both end gauges gave the same reading."}}
+ ],recap:{ko:'팽팽한 줄의 장력은 어디서나 같아요. 이기는 쪽과 지는 쪽의 줄 힘도 같아요.',en:"Tension is the same along a tight rope, on the winning and losing sides."},bridge:{ko:'그런데 왜 한 팀만 끌려갈까요?',en:"Then why does only the losing team get dragged?"}},
+ 11:{q:{ko:'줄의 힘은 같은데 왜 한 팀만 끌려갈까요?',en:"Why does only the losing team move if rope forces are equal?"},options:[
+  {key:'a',ko:'줄의 힘이 한쪽이 더 커서요',en:"The rope force is greater on that side.",hint:{ko:'줄을 골라 봐요. 줄 양 끝의 힘은 같았어요.',en:"Choose the rope. The forces at its ends were equal."}},
+  {key:'b',ko:'끌려가는 팀은 줄이 당기는 힘이 땅이 붙잡는 힘(마찰)보다 커서 힘의 합이 0이 아니에요',en:"For the dragged team, the rope pulls harder than friction, leaving a net force.",correct:true},
+  {key:'c',ko:'이기는 쪽 줄이 더 힘을 줘요',en:"The rope pulls harder on the winning side.",hint:{ko:'이기는 쪽과 지는 쪽 줄이 당기는 힘은 같았어요.',en:"The rope pulls equally on the winning and losing sides."}}
+ ],recap:{ko:'한 물체의 힘의 합이 0이면 평형이에요. 무엇을 보느냐에 따라 힘의 합이 달라져요.',en:"Forces are balanced when the net force is zero. The net force depends on which object you choose."}},
+ 12:{q:{ko:'마찰 화살표는 왜 처음엔 짧다가 길어졌을까요?',en:"Why did the friction arrow start short and grow?"},options:[
+  {key:'a',ko:'마찰은 처음부터 항상 최대예요',en:"Friction is always at its maximum from the start.",hint:{ko:'손잡이를 처음 올릴 때 마찰 화살표는 짧았어요.',en:"The friction arrow was short when you first raised the handle."}},
+  {key:'b',ko:'마찰은 당기는 힘에 맞춰 커지다가 한계에서 미끄러져요',en:"Friction grows with the pull until its limit, then slipping starts.",correct:true},
+  {key:'c',ko:'마찰은 움직일 때만 생겨요',en:"Friction acts only while moving.",hint:{ko:'아직 안 움직일 때도 마찰 화살표가 있었어요.',en:"The friction arrow was there before anything moved."}}
+ ],recap:{ko:'마찰은 필요한 만큼만 생겨요. 한계를 넘으면 미끄러져요.',en:"Friction acts only as much as needed. Beyond its limit, slipping starts."}}
+};
+// QUESTS 정의 직후 모듈을 읽는 동안 한 번 호출한다.
+function validateExplain(quests){
+ for(const {id} of quests){
+  const d=EXPLAIN[id];
+  const bilingual=x=>['ko','en'].every(lang=>typeof x?.[lang]==='string'&&x[lang].trim());
+  if(d?.bridge!==undefined&&!bilingual(d.bridge))throw new Error('explain: 퀘스트 '+id+' bridge 오류');
+  if(!bilingual(d?.q)||!bilingual(d?.recap)||d.options?.length!==3||d.options.filter(o=>o.correct).length!==1||d.options.some((o,i)=>o.key!=='abc'[i]||!bilingual(o)||!o.correct&&!bilingual(o.hint)))throw new Error('explain: 퀘스트 '+id+' 설명 데이터 오류');
+ }
+}
+
 // One flow state; only completed pulls are scientific observations.
-const Q = { i:0, phase:'intro', pick:null, stars:Array(7).fill(0), completed:new Set(), free:false, flags:{}, run:0, results:[] };
-const PHASES = ['intro','predict','act','observe','confirm','card'];
+const Q = { i:0, phase:'intro', pick:null, stars:[], completed:new Set(), free:false, flags:{}, run:0, results:[], predict:[], explain:[] };
+const PHASES = ['intro','predict','act','observe','confirm','explain','card'];
 const QUESTS = [
  {id:1,icon:'q1',startState:()=>({n:1,species:SPECIES_KEYS[0],mu:PHYS.GROUNDS['자갈']}),candidates:[{key:'A',flag:'dino'},{key:'B',flag:'tie'},{key:'C',flag:'kids'}],answerKey:'C',layers:[0,2,4],goalMarks:[],focus:'play',judge:s=>PHYS.judgeQ1(s),solve:()=>[{pull:true}]},
  {id:2,icon:'q2',startState:()=>({n:1,species:SPECIES_KEYS[3],mu:PHYS.GROUNDS['자갈']}),candidates:[5,20,50].map((n,i)=>({key:'ABC'[i],n})),answerKey:'C',layers:[0,1,2],goalMarks:[PHYS.minKidsToWin(SPECIES_KEYS[3],GROUND_VALUES[2])],focus:'rail',judge:s=>PHYS.judgeQ2(s),solve:s=>[{n:PHYS.minKidsToWin(s.species,s.mu),pull:true}]},
  {id:3,icon:'q3',startState:()=>({n:1,species:SPECIES_KEYS[4],mu:PHYS.GROUNDS['자갈']}),candidates:[{key:'A',n:100,flag:'dino'},{key:'B',n:60,flag:'kids'},{key:'C',n:10,flag:'kids'}],answerKey:'B',layers:[0,1,2,3],goalMarks:[PHYS.minKidsToWin(SPECIES_KEYS[4],GROUND_VALUES[2])],focus:'rail',judge:s=>PHYS.judgeQ3(s),solve:s=>[{n:PHYS.minKidsToWin(s.species,s.mu),pull:true}]},
- {id:4,icon:'q4',startState:()=>({...Q.results[2]||{n:59,species:SPECIES_KEYS[4]},mu:PHYS.GROUNDS['자갈']}),candidates:[{key:'A',flag:'kids'},{key:'B',flag:'same'},{key:'C',flag:'dino'}],answerKey:'C',layers:[0,2,3,7],goalMarks:[],focus:s=>s.observations.length?'ground':'play',judge:s=>PHYS.judgeQ4(s),solve:()=>[{pull:true},{mu:PHYS.GROUNDS['유리'],pull:true}]},
+ {id:4,icon:'q4',startState:()=>({...Q.results[1]||{n:49,species:SPECIES_KEYS[3]},mu:PHYS.GROUNDS['자갈']}),candidates:[{key:'A',flag:'kids'},{key:'B',flag:'same'},{key:'C',flag:'dino'}],answerKey:'C',layers:[0,2,3,7],goalMarks:[],focus:s=>s.observations.length?'ground':'play',judge:s=>PHYS.judgeQ4(s),solve:()=>[{pull:true},{mu:PHYS.GROUNDS['유리'],pull:true}]},
  {id:5,icon:'q5',startState:()=>({...Q.results[3]||{n:59,species:SPECIES_KEYS[4]},mu:PHYS.GROUNDS['유리']}),candidates:['fixed','grow','shrink'].map((limit,i)=>({key:'ABC'[i],limit})),answerKey:'B',layers:[0,1,2,4,7],goalMarks:[],focus:s=>!s.before||s.n-s.before.n>=PHYS.C.increaseQ5?'play':'rail',judge:s=>PHYS.judgeQ5(s),solve:s=>[{pull:true},{n:Math.min(100,s.n+PHYS.C.increaseQ5),pull:true}]},
  {id:6,icon:'q6',startState:()=>({n:1,species:SPECIES_KEYS[0],mu:PHYS.GROUNDS['자갈']}),candidates:['long','equal','short'].map((ratio,i)=>({key:'ABC'[i],ratio})),answerKey:'C',layers:[6],goalMarks:[],focus:s=>[SPECIES_KEYS[0],SPECIES_KEYS[5]].every(t=>s.visited.includes(t))&&!s.compareOpen?'compare':'species',judge:s=>PHYS.judgeQ6(s),solve:()=>[{species:SPECIES_KEYS[0]},{species:SPECIES_KEYS[5]},{compare:true}]},
- {id:7,icon:'q7',startState:()=>({n:30,species:SPECIES_KEYS[0],mu:PHYS.GROUNDS['자갈']}),candidates:[0,1,2].map((si,i)=>({key:'ABC'[i],species:SPECIES_KEYS[si]})),answerKey:'B',layers:[0,2,3],goalMarks:[30],focus:'species',judge:s=>PHYS.judgeQ7(s),solve:s=>[{species:SPECIES_KEYS.filter(t=>PHYS.outcome(s.n,t,s.mu).winner==='kids').sort((a,b)=>PHYS.SPECIES[b]-PHYS.SPECIES[a])[0],pull:true}]}
-].map(d=>({...d,layers:d.layers.map(i=>GRAMMAR.LAYERS[i]),events:s=>d.judge(s),card:s=>CARDS.principle(d.id,s)}));
+ {id:7,icon:'q7',startState:()=>({n:30,species:SPECIES_KEYS[0],mu:PHYS.GROUNDS['자갈']}),candidates:[0,1,2].map((si,i)=>({key:'ABC'[i],species:SPECIES_KEYS[si]})),answerKey:'B',layers:[0,2,3],goalMarks:[30],focus:'species',judge:s=>PHYS.judgeQ7(s),solve:s=>[{species:SPECIES_KEYS.filter(t=>PHYS.outcome(s.n,t,s.mu).winner==='kids').sort((a,b)=>PHYS.SPECIES[b]-PHYS.SPECIES[a])[0],pull:true}]},
+ {id:8,icon:'q8',startState:()=>({n:5,rival:5,species:SPECIES_KEYS[0],mu:PHYS.GROUNDS['자갈']}),candidates:['left','tie','right'].map((flag,i)=>({key:'ABC'[i],flag})),answerKey:'B',layers:[0,2],goalMarks:[],focus:'play',judge:s=>PHYS.judgeQ8(s),solve:()=>[{pull:true}]},
+ {id:9,icon:'q9',startState:()=>({n:5,rival:5,species:SPECIES_KEYS[0],mu:PHYS.GROUNDS['자갈']}),candidates:['tie','more','less'].map((flag,i)=>({key:'ABC'[i],flag})),answerKey:'B',layers:[0,2],goalMarks:[],focus:s=>Math.abs(s.n-s.rivalN)===1?'play':'rail',judge:s=>PHYS.judgeQ9(s),solve:()=>[{n:6,pull:true}]},
+ {id:10,icon:'q10',startState:()=>({n:5,rival:5,species:SPECIES_KEYS[0],mu:PHYS.GROUNDS['자갈']}),candidates:['one','sum','zero'].map((flag,i)=>({key:'ABC'[i],flag})),answerKey:'A',layers:[0,2,'장력계'],goalMarks:[],focus:s=>!s.observations.some(o=>PHYS.validObservation(o)&&o.rivalN>0&&o.n===o.rivalN)||Math.abs(s.n-s.rivalN)===1?'play':'rail',judge:s=>PHYS.judgeQ10(s),solve:()=>[{pull:true},{n:6,pull:true}]}
+,
+ {id:11,icon:'q11',lens:true,startState:()=>({n:6,rival:5,species:SPECIES_KEYS[0],mu:PHYS.GROUNDS['자갈']}),candidates:['rope','winner','loser'].map((flag,i)=>({key:'ABC'[i],flag})),answerKey:'C',layers:[0,2,'렌즈'],goalMarks:[],focus:s=>!s.observations.some(PHYS.validObservation)?'play':['rope','A','B'].every(x=>s.lensVisited.includes(x))?'play':'lens',judge:s=>PHYS.judgeQ11(s),solve:()=>[{pull:true},{lens:'rope'},{lens:'A'},{lens:'B'}]}
+,
+ {id:12,icon:'q12',pullMode:true,startState:()=>({n:5,species:SPECIES_KEYS[3],mu:PHYS.GROUNDS['유리'],rival:0}),candidates:['max','grow','late'].map((flag,i)=>({key:'ABC'[i],flag})),answerKey:'B',layers:['서서히 당기기'],goalMarks:[],focus:s=>!s.sawStatic?'pull':!s.sawSlip?'slip':'pull',judge:s=>PHYS.judgeQ12(s),solve:()=>[{pull:0.4},{hold:0.8},{pull:0.9},{hold:0.8}]}
+].map(d=>({...d,layers:d.layers.map(i=>typeof i==='string'?i:GRAMMAR.LAYERS[i]),events:s=>d.judge(s),card:s=>CARDS.principle(d.id,s)}));
+validateCurriculum(QUESTS);
+validateExplain(QUESTS);
+Q.stars = Array(QUESTS.length).fill(0);
 const QUEST = {
+ first(){return SEQUENCE[0];},
+ next(i=Q.i){return SEQUENCE[SEQUENCE.indexOf(i)+1]??null;},
+ unlocked(i){return i===SEQUENCE[0]||Q.completed.has(SEQUENCE[SEQUENCE.indexOf(i)-1])||Q.completed.has(i);},
  get i(){return Q.i;},get passed(){return Q.completed.has(Q.i);},
  focus(){const d=QUESTS[Q.i],s=this.sample(),focus=typeof d.focus==='function'?d.focus(s):d.focus;return focus==='rail'&&d.goalMarks.length&&s.n>=d.goalMarks[0]||Q.i===6&&d.judge(s)?'play':focus;},
  state(){return structuredClone({...Q,completed:[...Q.completed]});},
- sample(){const f=Q.flags;return {n:PHYS.kidsFromRailX(S.u.value),species:SPECIES_KEYS[Math.round(S.species.value)],mu:GROUND_VALUES[Math.round(S.ground.value)],observations:f.observations||[],before:f.before||null,after:f.after||null,visited:f.visited||[],compareOpen:!!f.compareOpen};},
- phase(p){if(!PHASES.includes(p))throw new RangeError('phase');Q.phase=p;Q.flags.elapsed=0;questUI();},
+ log(){return [...Q.completed].map(i=>({id:QUESTS[i].id,pick:Q.predict[i]?.pick??null,predictRight:Q.predict[i]?.right??false,answerKey:QUESTS[i].answerKey,explainTries:[...(Q.explain[i]?.tries||[])],explainRight:Q.explain[i]?.right??false,stars:Q.stars[i]})).sort((a,b)=>a.id-b.id);},
+ sample(){const f=Q.flags;return {pullP:S.pullP,pullMode:S.pullMode,sawStatic:!!f.sawStatic,sawSlip:!!f.sawSlip,lens:S.lens,lensVisited:f.lensVisited||[],rivalN:S.rivalN,n:PHYS.kidsFromRailX(S.u.value),species:SPECIES_KEYS[Math.round(S.species.value)],mu:GROUND_VALUES[Math.round(S.ground.value)],observations:f.observations||[],before:f.before||null,after:f.after||null,visited:f.visited||[],compareOpen:!!f.compareOpen};},
+ phase(p){if(!PHASES.includes(p))throw new RangeError('phase');Q.phase=p;Q.flags.elapsed=0;
+  if(p==='explain'){
+   const order=EXPLAIN[QUESTS[Q.i].id].options.map(o=>o.key);
+   for(let i=order.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[order[i],order[j]]=[order[j],order[i]];}
+   Q.flags.explain={order,tries:[],right:false};
+  }
+  questUI();},
  go(i){
   if(!Number.isInteger(i)||!QUESTS[i])throw new RangeError('quest');
-  Q.i=i;Q.free=false;Q.pick=null;Q.phase='intro';Q.flags={elapsed:0,idle:0,demoLeft:0,observations:[],visited:[],before:null,after:null,pending:null,events:[],compareOpen:false};
-  S.drag=null;controls.enabled=true;
-  const start=QUESTS[i].startState();for(const k of ['n','species','mu'])set(k,start[k]);S.u.value=S.u.target;
+  Q.i=i;Q.free=false;Q.pick=null;Q.phase='intro';Q.flags={sawStatic:false,sawSlip:false,staticTime:0,slipTime:0,elapsed:0,idle:0,demoLeft:0,observations:[],visited:[],lensVisited:[],before:null,after:null,pending:null,events:[],compareOpen:false};
+  S.pullMode=false;S.pullP=0;S.lens=null;S.drag=null;controls.enabled=true;
+  const start=QUESTS[i].startState();set('rival',start.rival??0);for(const k of ['n','species','mu'])set(k,start[k]);S.u.value=S.u.target;S.pullMode=QUESTS[i].pullMode===true;
   S.t.value=S.t.target=0;S.playing.value=S.playing.target=0;
   GRAMMAR.unpin();GRAMMAR.clearRecords();this.layers();DIRECTOR.clear();this.phase('intro');DIRECTOR.intro();syncUI();
  },
  layers(){GRAMMAR.set(Object.fromEntries(GRAMMAR.LAYERS.map(n=>[n,QUESTS[Q.i].layers.includes(n)])));},
- mode(free){Q.free=!!free;Q.flags.pending=null;S.playing.value=S.playing.target=0;DIRECTOR.clear();if(free)GRAMMAR.set({...GRAMMAR.defaults});else this.layers();questUI();shot(S.vertical?0:1,S.vertical);},
+ mode(free){S.pullMode=!free&&QUESTS[Q.i].pullMode===true;S.pullP=0;Q.free=!!free;Q.flags.pending=null;S.playing.value=S.playing.target=0;DIRECTOR.clear();if(free)GRAMMAR.set({...GRAMMAR.defaults});else this.layers();questUI();shot(S.vertical?0:1,S.vertical);},
  pick(k){if(Q.free||Q.phase!=='predict')return;const c=QUESTS[Q.i].candidates[k];if(!c)throw new RangeError('pick');Q.pick=c.key;this.phase('act');Q.flags.demoLeft=2.2;this.touch();},
  touch(){Q.flags.idle=0;},
  allows(){if(Q.free||['act','card','confirm'].includes(Q.phase))return true;document.getElementById('q-pictures').animate([{transform:'translateX(-5px)'},{transform:'translateX(5px)'},{transform:'translateX(0)'}],{duration:220});return false;},
@@ -1762,10 +2140,11 @@ const QUEST = {
  },
  compare(){if(!this.allows())return;this.touch();Q.flags.compareOpen=!Q.flags.compareOpen;GRAMMAR.set({[GRAMMAR.LAYERS[4]]:false,[GRAMMAR.LAYERS[6]]:Q.flags.compareOpen});questUI();},
  pull(){
+  if(S.pullMode)return;
   if(!this.allows())return;this.touch();
   if(Q.flags.pending){Q.flags.pending=null;S.playing.target=0;return;}
   if(S.drag||Math.abs(S.u.target-S.u.value)>1e-7)return;
-  const s=this.sample();Q.flags.pending={run:++Q.run,n:s.n,species:s.species,mu:s.mu,elapsed:0};S.t.value=S.t.target=0;S.playing.target=1;
+  const s=this.sample();Q.flags.pending={run:++Q.run,n:s.n,species:s.species,mu:s.mu,rivalN:s.rivalN,elapsed:0};S.t.value=S.t.target=0;S.playing.target=1;
  },
  skip(p){this.phase(p==='event'?'observe':p);if(p==='event')DIRECTOR.event(Q.flags.success||this.sample());},
  update(dt){
@@ -1775,54 +2154,72 @@ const QUEST = {
    f.demoLeft=Math.max(0,f.demoLeft-dt);if(S.drag){this.touch();f.demoLeft=0;}
    if(f.idle>=7){f.idle=0;f.demoLeft=2.2;}
    const s=this.sample(),p=f.pending;
+   if(S.pullMode){
+    const pull=PHYS.staticPull(s.n,s.mu,s.pullP);
+    f.staticTime=s.pullP>0&&s.pullP<pull.pSlip&&pull.friction===pull.applied?f.staticTime+dt:0;
+    f.slipTime=pull.slipped?f.slipTime+dt:0;
+    f.sawStatic ||= f.staticTime>=.6;f.sawSlip ||= f.slipTime>=.6;
+   }
    if(p){
-    if(S.drag||s.n!==p.n||s.species!==p.species||s.mu!==p.mu||!S.playing.target){f.pending=null;}
+    if(S.drag||s.n!==p.n||s.species!==p.species||s.mu!==p.mu||s.rivalN!==p.rivalN||!S.playing.target){f.pending=null;}
     else{
      p.elapsed+=DIRECTOR.time(dt);
      if(p.elapsed>=.9){
-      const record={run:p.run,n:p.n,species:p.species,mu:p.mu};f.observations.push(record);f.pending=null;S.playing.value=S.playing.target=0;S.t.value=S.t.target=Math.PI;
+      const record={run:p.run,n:p.n,species:p.species,mu:p.mu,rivalN:p.rivalN};f.observations.push(record);f.pending=null;S.playing.value=S.playing.target=0;S.t.value=S.t.target=Math.PI;
       if(!f.before)f.before=record;else{f.after=record;f.before=f.observations.slice(0,-1).find(before=>PHYS.judgeQ5({before,after:record}))||f.observations.at(-2);}
       // Record the event before any presentation cooldown. No invented acceleration.
-      const result=PHYS.outcome(p.n,p.species,p.mu);f.events.push({...record,...result});GRAMMAR.record();
+      const result=PHYS.matchOutcome(p.n,p.species,p.rivalN,p.mu);f.events.push({...record,...result});GRAMMAR.record();
       if(f.observations.length===1&&Q.i===3)GRAMMAR.pin();questUI();
      }
     }
    }
    const actual=this.sample();
-   if(!S.drag&&(Q.i===5||f.observations.length>0)&&QUESTS[Q.i].judge(actual)){
+   if(!S.drag&&(S.pullMode||Q.i===5||f.observations.length>0)&&QUESTS[Q.i].judge(actual)){
     // Single-state quests must match the last completed pull, not an unexecuted edit.
     const last=f.observations.at(-1);
-    if(Q.i!==5&&![3,4].includes(Q.i)&&(!last||last.n!==actual.n||last.species!==actual.species||last.mu!==actual.mu))return;
-    f.success=structuredClone(actual);Q.results[Q.i]={n:actual.n,species:actual.species,mu:actual.mu,success:structuredClone(actual)};
+    if(!S.pullMode&&Q.i!==5&&![3,4].includes(Q.i)&&(!last||last.n!==actual.n||last.species!==actual.species||last.mu!==actual.mu||last.rivalN!==actual.rivalN))return;
+    f.success=structuredClone(actual);Q.results[Q.i]={n:actual.n,species:actual.species,mu:actual.mu,rivalN:actual.rivalN,success:structuredClone(actual)};
     if(QUESTS[Q.i].events(actual))DIRECTOR.event(actual);this.phase('observe');
    }
-  }else if(Q.phase==='observe'&&f.elapsed>=.8){Q.completed.add(Q.i);Q.stars[Q.i]=Q.pick===null||Q.pick===QUESTS[Q.i].answerKey?3:2;this.phase('confirm');if(Q.stars[Q.i]===3)DIRECTOR.chord();}
-  else if(Q.phase==='confirm'&&f.elapsed>=.6)this.phase('card');
-  else if(Q.phase==='card'&&f.elapsed>=6.1&&Q.i<QUESTS.length-1)this.go(Q.i+1);
+  }else if(Q.phase==='observe'&&f.elapsed>=.8){Q.completed.add(Q.i);Q.stars[Q.i]=Q.pick===null||Q.pick===QUESTS[Q.i].answerKey?3:2;Q.predict[Q.i]={pick:Q.pick,right:Q.stars[Q.i]===3};Q.explain[Q.i]={tries:[],right:false};this.phase('confirm');if(Q.stars[Q.i]===3)DIRECTOR.chord();}
+  else if(Q.phase==='confirm'&&f.elapsed>=.6)this.phase('explain');
+  else if(Q.phase==='card'&&f.elapsed>=6.1&&this.next()!==null)this.go(this.next());
+ },
+ correctKey(id=QUESTS[Q.i].id){return EXPLAIN[id].options.find(o=>o.correct).key;},
+ answer(key){
+  if(Q.free||Q.phase!=='explain')return;
+  const f=Q.flags,e=f.explain,option=EXPLAIN[QUESTS[Q.i].id].options.find(o=>o.key===key);
+  if(!option||e.tries.includes(key))return;
+  if(option.correct){e.right=true;Q.explain[Q.i]={tries:[...e.tries],right:true};this.phase('card');}
+  else{e.tries.push(key);Q.explain[Q.i]={tries:[...e.tries],right:false};DIRECTOR.event(f.success||this.sample());questUI();}
  },
  auto(i){
   this.go(i);step(90,1/30);this.pick(QUESTS[i].candidates.findIndex(c=>c.key===QUESTS[i].answerKey));
   for(const command of QUESTS[i].solve(this.sample())){
-   for(const k of ['n','species','mu'])if(command[k]!==undefined)set(k,command[k]);
-   step(30,1/30);if(command.compare)this.compare();if(command.pull){this.pull();step(40,1/30);}
+   for(const k of ['n','species','mu','lens'])if(command[k]!==undefined)set(k,command[k]);
+   if(typeof command.pull==='number')set('pull',command.pull);
+   if(command.hold!==undefined){for(let t=0;t<Math.ceil(command.hold*30);t++)step(1,1/30);}
+   else if(typeof command.pull!=='number')step(30,1/30);
+   if(command.compare)this.compare();if(command.pull===true){this.pull();step(40,1/30);}
   }
-  for(let n=0;n<3&&Q.phase!=='card';n++)step(30,1/30);
+  for(let n=0;n<3&&!['explain','card'].includes(Q.phase);n++)step(30,1/30);
+  if(Q.phase==='explain')this.answer(this.correctKey());
   return {i,passed:this.passed,phase:Q.phase,judge:QUESTS[i].judge(Q.flags.success||this.sample()),stars:Q.stars[i]};
  }
 };
 
 ﻿// Candidate hypotheses are dashed; measured diagrams use PHYS and solid ink.
 const CARDS = (()=>{
- const palette=typeof INK_CFG==='undefined'?{kids:0xc57d24,dino:0x37795d,friction:0xb55d77,muscle:0x7863a6,ink:0x221d18}:INK_CFG.diagram;
+ const palette=typeof INK_CFG==='undefined'?{kids:0xc57d24,dino:0x37795d,rival:0x377da8,friction:0xb55d77,muscle:0x7863a6,ink:0x221d18}:INK_CFG.diagram;
  const hex=value=>'#'+value.toString(16).padStart(6,'0');
- const orange=hex(palette.kids),green=hex(palette.dino),pink=hex(palette.friction),purple=hex(palette.muscle),white=hex(palette.ink);
+ const rival=hex(palette.rival),orange=hex(palette.kids),green=hex(palette.dino),pink=hex(palette.friction),purple=hex(palette.muscle),white=hex(palette.ink);
  const svg=body=>`<svg viewBox="0 0 300 140" aria-hidden="true">${body}</svg>`;
  const path=(d,color=white,dash=false)=>`<path d="${d}" stroke="${color}"${dash?' stroke-dasharray="4 4"':''}/>`;
  const rect=(x,y,w,h,color=white,dash=false)=>`<rect x="${x}" y="${y}" width="${Math.max(0,w)}" height="${h}" rx="2" stroke="${color}"${dash?' stroke-dasharray="4 4"':''}/>`;
  const dot=(x,y,r=3)=>`<circle cx="${x}" cy="${y}" r="${r}"/>`;
  const arrow=(x,y,dx,color=white)=>path(`M${x} ${y}h${dx}m${-Math.sign(dx)*7} -5l${Math.sign(dx)*7} 5 ${-Math.sign(dx)*7} 5`,color);
  const equal=path('M142 58h16m-16 10h16');
- const pegs=(n,x=18,y=20)=>Array.from({length:n},(_,i)=>rect(x+(i%20)*5,y+Math.floor(i/20)*9,3,7,orange)).join('');
+ const pegs=(n,x=18,y=20,color=orange)=>Array.from({length:n},(_,i)=>rect(x+(i%20)*5,y+Math.floor(i/20)*9,3,7,color)).join('');
  function specimen(species,x=225,y=44,scale=1){
   const i=Object.keys(PHYS.SPECIES).indexOf(species),size=PHYS.exhibitionScale(species)*scale;
   const silhouettes=[
@@ -1846,7 +2243,18 @@ const CARDS = (()=>{
   const shift=winner==='same'||winner==='tie'?0:(winner==='kids'?-1:1)*70*phase;
   return path(`M${x-125} ${y}h250M${x} ${y-10}v20`,white,true)+path(`M${x+shift} ${y+9}v-42h28l-7 10 7 10h-28`,winner==='kids'?orange:green,dash);
  }
- function setup(id,s){return {n:s?.n??(id===7?30:59),species:s?.species||Object.keys(PHYS.SPECIES)[id===1?0:id===2?3:4],mu:s?.mu??PHYS.GROUNDS['자갈']};}
+ function setup(id,s){return {rivalN:s?.rivalN??(id>=8&&id<=11?5:0),n:s?.n??(id===11?6:id>=8?5:id===7?30:59),species:s?.species||Object.keys(PHYS.SPECIES)[id===1?0:id===2?3:4],mu:s?.mu??PHYS.GROUNDS[id===12?'유리':'자갈']};}
+ // Both teams use the same unit and scale; hypotheses move a dashed flag.
+ function teams(s,time=0,hypothesis=null,relation=false){
+  const result=PHYS.matchOutcome(s.n,s.species,s.rivalN,s.mu);
+  const more=s.n>=s.rivalN?'kids':'dino',less=more==='kids'?'dino':'kids';
+  const winner=({left:'kids',right:'dino',more,less})[hypothesis]||hypothesis||result.winner;
+  const max=Math.max(result.kids,result.dino),left=96*result.kids/max,right=96*result.dino/max;
+  return pegs(s.n,16,12,orange)+pegs(s.rivalN,184,12,rival)+
+   force(result.kids,18,60,orange,false,108)+force(result.dino,174,60,rival,false,108)+
+   arrow(126,82,-left,orange)+arrow(174,82,right,rival)+(relation&&result.winner==='tie'?equal:'')+
+   flag(winner,.82+.18*(1-Math.cos(time*2))/2,150,126,!!hypothesis).replaceAll(green,rival);
+ }
  function scene(s,time=0,hypothesis=null){
   const phase=.82+.18*(1-Math.cos(time*2))/2,d=PHYS.displayState(s.n,s.species,s.mu,Math.PI);
   const team=s.n===1?`<g transform="translate(40 60) scale(2)">${rect(-4,-12,8,18,orange)}${dot(0,-18,5)}</g>`:
@@ -1863,6 +2271,10 @@ const CARDS = (()=>{
  }
  function picture(id,c,time=0,source){
   const s=setup(id,source),loop=.8+.2*(time%3)/3;
+  if(id===12)return svg(pullGraph(s,c.flag,true));
+  if(id===11)return svg(lensScene(s,c.flag));
+  if(id===10){const value=PHYS.tensionOf(s.n,s.species,s.rivalN,s.mu);return svg(tensionScene(s,[150],c.flag==='sum'?2*value:c.flag==='zero'?0:value,true));}
+  if(id===8||id===9)return svg(teams(s,time,c.flag));
   if(id===6)return svg(ratios(c.ratio));
   if(id===5){
    const n=Math.min(100,s.n+Math.floor(loop*PHYS.C.increaseQ5)),before=PHYS.friction(s.n*PHYS.C.kidMass,PHYS.GROUNDS['유리']),after=PHYS.friction(n*PHYS.C.kidMass,PHYS.GROUNDS['유리']);
@@ -1875,12 +2287,20 @@ const CARDS = (()=>{
  }
  function actual(id,s){
   const a=setup(id,s);
+  if(id===12)return svg(pullGraph(a));
+  if(id===11)return svg(lensScene(a,'loser'));
+  if(id===10)return svg(tensionScene(a));
+  if(id===8||id===9)return svg(teams(a));
   if(id===6)return svg(ratios());
   if(id===5)return principle(id,s);
   return svg(scene(a));
  }
  function principle(id,s){
-  const a=setup(id,s),result=PHYS.outcome(a.n,a.species,a.mu),mass=PHYS.SPECIES[a.species];
+  const a=setup(id,s),result=PHYS.matchOutcome(a.n,a.species,a.rivalN,a.mu),mass=PHYS.SPECIES[a.species];
+  if(id===12)return svg(pullGraph(a));
+  if(id===11)return svg(lensPrinciple(a));
+  if(id===10)return svg(tensionScene({...a,n:6,rivalN:5}));
+  if(id===8||id===9)return svg(teams(a,0,null,true));
   if(id===1){const width=100*PHYS.VIS.width/PHYS.forceGlyph(result.kids).length;return svg(force(result.kids,16,30,orange,false,width)+force(PHYS.muscle(mass),16,55,purple,true,width)+force(PHYS.friction(mass,a.mu),16,70,pink,true,width)+force(result.dino,16,85,green,false,width)+arrow(136,72,25)+flag(result.winner,1,224,100));}
   if(id===2)return svg(pegs(a.n,10,15)+force(result.kids,10,91,orange,false,270)+force(result.dino,10,110,green,true,270)+arrow(136,68,25));
   if(id===3)return svg(specimen(a.species,44,45)+rect(12,66,70,50,white,true)+force(PHYS.muscle(mass),12,91,purple,true,70)+equal+pegs(a.n,174,12)+force(result.kids,174,88,orange,false,110)+force(result.dino,174,108,green,true,110));
@@ -1889,9 +2309,103 @@ const CARDS = (()=>{
   if(id===6)return svg(ratios());
   return svg(pegs(a.n,15,9)+[Object.keys(PHYS.SPECIES)[1],Object.keys(PHYS.SPECIES)[2]].map((species,i)=>`<g transform="translate(${i*150} 0)">${specimen(species,88,65,.8)}${force(result.kids,12,92,orange,true,125)}${force(PHYS.dinoCap(species,a.mu),12,111,green,false,125)}${i===0?rect(6,44,133,85,orange):''}</g>`).join(''));
  }
+ function pullGraph(s,kind='grow',hypothesis=false){
+  const f=PHYS.staticPull(s.n,s.mu,1),x=30,y=116,w=240,h=86;
+  const point=p=>{const a=PHYS.staticPull(s.n,s.mu,p);return [x+p*w,y-a.friction/f.limit*h];};
+  const at=x+f.pSlip*w;
+  let line;
+  if(kind==='max')line=`M${x} ${y-h}H${x+w}`;
+  else if(kind==='late')line=`M${x} ${y}H${at}V${y-f.friction/f.limit*h}H${x+w}`;
+  else if(hypothesis)line=`M${x} ${y}L${at} ${y-h}H${x+w}`;
+  else line=`M${x} ${y}L${at} ${y-h}L${at} ${point(1)[1]}L${point(1).join(' ')}`;
+  return path(`M${x} 16V${y}H284`)+path(line,pink,hypothesis)+path(`M${at} ${y-h-7}v14`,pink,true);
+ }
+ function lensScene(s,selection){
+  const winner=PHYS.matchOutcome(s.n,s.species,s.rivalN,s.mu).winner==='kids'?'A':'B';
+  const selected=selection==='rope'?'rope':selection==='winner'?winner:winner==='A'?'B':'A';
+  const dots=(n,x,color)=>Array.from({length:n},(_,i)=>'<circle cx="'+(x+i%4*9)+'" cy="'+(48+Math.floor(i/4)*10)+'" r="3" fill="'+color+'"/>').join('');
+  return dots(s.n,24,orange)+dots(s.rivalN,240,rival)+path('M68 70h164')+(selected==='rope'?rect(70,59,160,22,white,true):rect(selected==='A'?16:232,36,52,48,white,true));
+ }
+ function lensPrinciple(s){
+  const winner=PHYS.matchOutcome(s.n,s.species,s.rivalN,s.mu).winner==='kids'?'A':'B';
+  return ['rope',winner,winner==='A'?'B':'A'].map((object,i)=>{
+   const x=50+i*100,f=PHYS.lensForces(s.n,s.species,s.rivalN,s.mu,object);
+   const mark=object==='rope'?path('M'+(x-18)+' 25h36'):Array.from({length:5},(_,j)=>dot(x-16+j*8,25)).join('');
+   return mark+f.arrows.map((a,j)=>arrow(x,55+j*22,a.dir*PHYS.forceGlyph(a.value).length/PHYS.VIS.width*75,a.kind==='pull'?hex(palette.pull??palette.ink):pink)).join('')+
+    (f.balanced?'<circle cx="'+x+'" cy="112" r="5" fill="none" stroke="'+white+'"/>':'<g stroke-dasharray="4 4">'+arrow(x,112,Math.sign(f.sum)*PHYS.forceGlyph(Math.abs(f.sum)).length/PHYS.VIS.width*75)+'</g>');
+  }).join('');
+ }
  function micro(s){const a=setup(1,s),rough=a.mu*.08;return svg(rect(30,18,240,104)+path('M40 65h220',white)+path(Array.from({length:49},(_,i)=>`${i?'L':'M'}${40+i*4.5} ${85+Math.sin(i*2.3)*rough*200}`).join(''),pink)+force(PHYS.friction(a.n*PHYS.C.kidMass,a.mu),40,110,pink,true,200));}
+ function tensionScene(s,positions=[50,150,250],value=PHYS.tensionOf(s.n,s.species,s.rivalN,s.mu),hypothesis=false){
+  const result=PHYS.matchOutcome(s.n,s.species,s.rivalN,s.mu),r=24;
+  const angle=Math.PI*(.85-1.7*PHYS.forceGlyph(value).length/PHYS.VIS.width);
+  return arrow(135,112,-PHYS.forceGlyph(result.kids).length/PHYS.VIS.width*115,orange)
+   +arrow(165,112,PHYS.forceGlyph(result.dino).length/PHYS.VIS.width*115,rival)
+   +path('M20 88h260')+positions.map(x=>path(`M${x} 88v-9`)
+    +`<circle cx="${x}" cy="53" r="${r}" fill="var(--diagram-paper, #fff)" stroke="${white}"${hypothesis?' stroke-dasharray="4 4"':''}/>`
+    +Array.from({length:7},(_,i)=>{const a=Math.PI*(.85-1.7*i/6);return path(`M${x+Math.cos(a)*r*.76} ${53-Math.sin(a)*r*.76}L${x+Math.cos(a)*r*.93} ${53-Math.sin(a)*r*.93}`);}).join('')
+    +`<g stroke-width="4">${path(`M${x} 53L${x+Math.cos(angle)*r*.68} ${53-Math.sin(angle)*r*.68}`,white,hypothesis)}</g>`+dot(x,53)).join('');
+ }
  return {svg,path,picture,actual,principle,micro};
 })();
+
+// All student-visible mission words live here. Existing quest state owns progress.
+const MISSION = [
+ {ask:{ko:'공룡 한 마리와 아이 한 명, 누가 이길까요?',en:"A dinosaur or a child: who wins?"},
+  act:{play:{ko:'삼각형 버튼을 눌러 줄을 당겨 보세요',en:"Press play to pull the rope."}},
+  right:{ko:'아이가 이겼어요. 다음 실험을 기다려요',en:"The child won. Wait for next."},wrong:{ko:'예상과 달리 아이가 이겼어요. 다음을 기다려요',en:"The child won instead. Wait for next."}},
+ {ask:{ko:'뿔 세 개 공룡을 이기려면 몇 명이 필요할까요?',en:"How big a team can beat Triceratops?"},
+  act:{rail:{ko:'아래 손잡이를 오른쪽으로 끌어 아이를 늘려요',en:"Drag below right to add children."},play:{ko:'삼각형 버튼을 눌러 공룡을 이겨 보세요',en:"Press play to beat the dinosaur."}},
+  right:{ko:'아이들이 이겼어요. 다음 실험을 기다려요',en:"The children won. Wait for next."},wrong:{ko:'예상과 달라도 괜찮아요. 다음 실험을 기다려요',en:"A wrong guess is OK. Wait for next."}},
+ {ask:{ko:'티라노를 이기려면 아이 몇 명이 필요할까요?',en:"How big a team can beat T. rex?"},
+  act:{rail:{ko:'아래 손잡이를 오른쪽으로 끌어 아이를 늘려요',en:"Drag below right to add children."},play:{ko:'삼각형 버튼을 눌러 티라노를 이겨 보세요',en:"Press play to beat T. rex."}},
+  right:{ko:'티라노를 이겼어요. 다음 실험을 기다려요',en:"You beat T. rex. Wait for next."},wrong:{ko:'예상과 달라도 괜찮아요. 다음 실험을 기다려요',en:"A wrong guess is OK. Wait for next."}},
+ {ask:{ko:'바닥을 유리로 바꾸면 누가 이길까요?',en:"Who wins on glass?"},
+  act:{play:{ko:'삼각형 버튼으로 자갈 위에서 당겨 보세요',en:"Press play to pull on gravel."},ground:{ko:'빗금 바닥 그림을 눌러 유리로 바꿔요',en:"Tap striped ground for glass."},ready:{ko:'삼각형 버튼으로 유리 위에서 당겨 보세요',en:"Press play to pull on glass."}},
+  right:{ko:'유리에서는 공룡이 이겨요. 다음을 기다려요',en:"The dinosaur wins on glass. Wait."},wrong:{ko:'예상과 달리 공룡이 이겨요. 다음을 기다려요',en:"The dinosaur wins instead. Wait."}},
+ {ask:{ko:'유리 위에서 아이를 늘리면 힘도 커질까요?',en:"Do more children add force on glass?"},
+  act:{play:{ko:'삼각형 버튼으로 먼저 줄을 당겨 보세요',en:"Press play to pull first."},rail:{ko:'아래 손잡이를 끌어 아이를 열 명 더 늘려요',en:"Drag to add ten more children."},ready:{ko:'삼각형 버튼을 눌러 다시 당겨 보세요',en:"Press play to pull again."}},
+  right:{ko:'아이를 늘리니 힘도 커져요. 다음을 기다려요',en:"More children add force. Wait."},wrong:{ko:'예상과 달리 힘도 커져요. 다음을 기다려요',en:"Force grew instead. Wait for next."}},
+ {ask:{ko:'큰 공룡은 몸무게에 비해 힘도 셀까요?',en:"Big dinosaurs: strong for weight?"},
+  act:{species:{ko:'맨 앞 공룡과 긴 목 공룡 그림을 찾아 눌러요',en:"Tap the first and long-neck dinosaurs."},page:{ko:'오른쪽 화살표로 긴 목 공룡 그림을 찾아요',en:"Right arrow: find the long neck."},long:{ko:'긴 목 공룡 그림을 눌러 보세요',en:"Tap the long-neck dinosaur."},compare:{ko:'막대 두 개 그림을 눌러 힘을 비교해요',en:"Tap two bars to compare forces."}},
+  right:{ko:'큰 공룡은 몸무게에 비해 힘이 작아요. 다음을 기다려요',en:"Big ones: less force for their weight. Wait."},wrong:{ko:'예상과 달리 힘의 비율이 작아요. 다음을 기다려요',en:"Less force for their weight. Wait for next."}},
+ {ask:{ko:'아이 서른 명이 이길 가장 큰 공룡은 뭘까요?',en:"Biggest dinosaur thirty children beat?"},
+  act:{species:{ko:'공룡 그림을 눌러 이길 가장 큰 공룡을 골라요',en:"Tap the biggest dinosaur you can beat."},play:{ko:'삼각형 버튼을 눌러 승부를 확인해요',en:"Tap play to see who wins."}},
+  right:{ko:'딜로포사우루스까지 이겨요. 더하기를 눌러요',en:"You beat Dilophosaurus. Tap plus."},wrong:{ko:'딜로포사우루스까지 이겨요. 더하기를 눌러요',en:"You beat Dilophosaurus. Tap plus."}},
+ {ask:{ko:'두 팀이 똑같이 당기면 어떻게 될까요?',en:"What if both teams pull equally?"},
+  act:{play:{ko:'삼각형 버튼을 눌러 줄을 당겨 보세요',en:"Press play to pull the rope."}},
+  right:{ko:'깃발이 가운데 멈췄어요. 두 힘이 같아요',en:"Flag centered. Equal forces."},wrong:{ko:'깃발이 가운데 멈췄어요. 두 힘이 같았어요',en:"Flag centered. Forces were equal."}},
+ {ask:{ko:'한 팀에 한 명만 더 오면 어떻게 될까요?',en:"What if a child joins a team?"},
+  act:{rail:{ko:'손잡이로 한 팀을 한 명 늘려 보세요',en:"Use the handle to add a child."},play:{ko:'이제 당기기를 눌러 보세요',en:"Now tap play to pull."}},
+  right:{ko:'많은 쪽으로 깃발이 움직였어요',en:"Flag went to more kids."},wrong:{ko:'한 명만 더 많아도 그쪽으로 움직여요',en:"An extra child moved the flag."}},
+ {ask:{ko:'줄 가운데 저울은 몇을 가리킬까요?',en:"Middle gauge: what reading?"},
+  act:{play:{ko:'당기기를 눌러 저울을 보세요',en:"Tap play. Watch gauge."},rail:{ko:'한 팀을 한 명 늘려 다시 당겨 보세요',en:"Add a child and pull again."}},
+  right:{ko:'저울이 한 팀 힘만큼 가리켜요',en:"It reads a team's force."},wrong:{ko:'저울이 한 팀 힘만큼 가리켰어요',en:"It read a team's force."}}
+,
+ {ask:{ko:'힘의 합이 0이 아닌 물체는 무엇일까요?',en:"Which object has a net force?"},
+  act:{play:{ko:'당기기를 눌러 승부를 보세요',en:"Tap play. See who wins."},lens:{ko:'줄, 왼쪽 팀, 오른쪽 팀을 차례로 눌러 보세요',en:"Tap rope, left team, then right team."}},
+  right:{ko:'진 팀만 힘의 합이 0이 아니에요',en:"Only losers have net force."},wrong:{ko:'진 팀만 힘의 합이 0이 아니었어요',en:"Only losers had a net force."}}
+,
+ {ask:{ko:'마찰은 처음부터 가장 크게 버틸까요?',en:"Is friction greatest at first?"},
+  act:{pull:{ko:'손잡이를 천천히 올려 보세요',en:"Raise the handle slowly."},slip:{ko:'계속 올려서 미끄러지는 순간을 보세요',en:"Raise more. Watch for slipping."}},
+  right:{ko:'마찰은 당기는 힘과 같다가 한계에서 미끄러졌어요',en:"Friction matched pull; slip past limit."},wrong:{ko:'마찰은 당기는 힘과 같다가 한계에서 미끄러졌어요',en:"Friction matched pull; slip past limit."}}
+].map(row=>({pick:{ko:'그림 중 하나를 눌러 예상해 보세요',en:"Tap a picture to predict."},running:{ko:'승부를 보고 결과 그림을 기다려요',en:"Watch. Wait for the result."},watch:{ko:'목표를 이뤘어요. 결과 그림을 기다려요',en:"Goal met. Wait for the result."},free:{ko:'마음대로 만져 보세요',en:"Explore freely."},...row}));
+
+function missionText(questIndex, phase, ctx={}) {
+ if(!Number.isInteger(questIndex)||!MISSION[questIndex]||!PHASES.includes(phase))throw new RangeError('mission');
+ const row=MISSION[questIndex],say=text;
+ if(ctx.free)return say(row.free);
+ if(phase==='intro')return say(row.ask);
+ if(phase==='predict')return say(row.pick||row.ask);
+ if(phase==='observe')return say(row.watch);
+ if(ctx.pending)return say(row.running);
+ if(phase==='confirm'||phase==='card')return say(row[ctx.right===false?'wrong':'right']);
+ let focus=ctx.focus;
+ if(questIndex===3&&ctx.observations?.length&&ctx.mu===PHYS.GROUNDS['유리'])focus='ready';
+ if(questIndex===4&&ctx.before&&ctx.n-ctx.before.n>=PHYS.C.increaseQ5)focus='ready';
+ if(questIndex===5&&focus==='species'&&ctx.visited?.includes(SPECIES_KEYS[0])&&!ctx.visited.includes(SPECIES_KEYS[5]))focus=ctx.toolGroup==='species'&&ctx.toolPage===0?'page':'long';
+ return say(row.act[focus]||Object.values(row.act)[0]);
+}
 
 // Presentation consumes model snapshots and never decides completion.
 const questLight=new THREE.PointLight(THEME.cool,0,.8,2);scene.add(questLight);
@@ -1944,7 +2458,7 @@ const DIRECTOR={
   const line=(p,dash=false)=>CARDS.path(p,'#ffce8b',dash);
   let body='';
   const actionFocus=QUEST.focus();document.body.dataset.focus=actionFocus;
-  const focus=actionFocus==='rail'?RAIL_HANDLE:actionFocus==='play'?PLAY_BUTTON:actionFocus==='ground'?CASSETTES[Math.round(S.ground.value)]:actionFocus==='compare'?GRAPHS[1].mesh:DINO_MODELS[Math.round(S.species.value)];
+  const focus=['rail','pull','slip'].includes(actionFocus)?RAIL_HANDLE:actionFocus==='play'?PLAY_BUTTON:actionFocus==='ground'?CASSETTES[Math.round(S.ground.value)]:actionFocus==='compare'?GRAPHS[1].mesh:DINO_MODELS[Math.round(S.species.value)];
   questLight.position.copy(focus.getWorldPosition(V3())).add(V3(0,.18,.15));questLight.intensity=Q.free?0:.4;
   if(!Q.free&&Q.phase==='intro'&&f.elapsed<.9)body=`<defs><clipPath id="q-wipe"><rect x="${innerWidth/2-42}" y="${innerHeight/2-42}" width="${84*Math.min(1,f.elapsed/.65)}" height="84"/></clipPath></defs><g clip-path="url(#q-wipe)"><svg x="${innerWidth/2-42}" y="${innerHeight/2-42}" width="84" height="84" viewBox="0 0 24 24"><path d="${ICONS[d.icon]}"/></svg></g>`;
   if(!Q.free&&Q.phase==='act'){
@@ -1954,16 +2468,17 @@ const DIRECTOR={
    const sampleId=Q.i===5?(f.visited.includes(SPECIES_KEYS[0])?'tool-s5':'tool-s0'):'tool-s1';
    const target=actionFocus==='ground'?document.getElementById('tool-g0'):actionFocus==='compare'?document.getElementById('tool-compare'):actionFocus==='species'?(document.getElementById(sampleId)||paletteNext):null;
    let [x,y]=project(focus.getWorldPosition(V3()));if(target){const r=target.getBoundingClientRect();x=r.x+r.width/2;y=r.y+r.height/2;}
-   if(f.demoLeft>0&&!S.drag){const direction=actionFocus==='rail'?1:0,shift=(1-f.demoLeft/2.2)*45*direction;body+=line(`M${x} ${y}h${direction?45:1}`,true)+`<svg x="${x+shift-12}" y="${y-12}" width="30" height="30" viewBox="0 0 24 24"><path d="${ICONS.hand}"/></svg>`;}
+   if(f.demoLeft>0&&!S.drag){const direction=['rail','pull','slip'].includes(actionFocus)?1:0,shift=(1-f.demoLeft/2.2)*45*direction;body+=line(`M${x} ${y}h${direction?45:1}`,true)+`<svg x="${x+shift-12}" y="${y-12}" width="30" height="30" viewBox="0 0 24 24"><path d="${ICONS.hand}"/></svg>`;}
   }
-  if(this.eventLeft>0){
+  if(this.eventLeft>0&&s.rivalN===0){
    const [x,y]=project(FLAG.getWorldPosition(V3())),age=1.4-this.eventLeft;
    const sample=this.snapshot,slip=PHYS.outcome(sample.n,sample.species,sample.mu).limiter==='friction';
    const explanation=slip?CARDS.micro(sample):CARDS.principle(Q.free?3:d.id,sample);
    const content=explanation.replace(/^<svg[^>]*>|<\/svg>$/g,'');
    // Draw a single filled explanation only after the actual diagram is ready.
    const usable=content.includes('<path')||content.includes('<circle');
-   const cy=12,w=S.vertical?150:210,h=S.vertical?70:98;
+   const mission=document.getElementById('mission');
+   const cy=mission.getClientRects().length?mission.getBoundingClientRect().bottom+8:12,w=S.vertical?150:210,h=S.vertical?70:98;
    body=age>.45&&usable?`<circle cx="${x}" cy="${y}" r="5"/>`+line(`M${x} ${y}L${innerWidth/2} ${cy+h}`)+`<svg x="${innerWidth/2-w/2}" y="${cy}" width="${w}" height="${h}" viewBox="0 0 300 140"><rect x="1" y="1" width="298" height="138" rx="12" fill="#f4efe3" stroke="#221d18" stroke-width="3"/>${content}</svg>`:'';
   }
   qOverlay.innerHTML=body?`<svg viewBox="0 0 ${innerWidth} ${innerHeight}">${body}</svg>`:'';
@@ -1977,7 +2492,7 @@ function update(dt){
  const k=1-Math.exp(-18*dt);
  for(const name of ['u','species','ground','playing','sound','ui','cassette']){const p=S[name];p.value+=(p.target-p.value)*k;if(Math.abs(p.target-p.value)<1e-8)p.value=p.target;}
  S.t.target+=physicalDt*S.playing.value*(Q.free?1.8:Math.PI/.9);S.t.value+=(S.t.target-S.t.value)*k;
- updateHero();drawGraphs();QUEST.update(dt);GRAMMAR.update(physicalDt);
+ updateHero();drawGraphs();QUEST.update(dt);syncUI(true);GRAMMAR.update(physicalDt);
  if(S.fly){const f=S.fly;f.elapsed+=dt;const u=clamp(f.elapsed/f.duration,0,1),smooth=1-(1-u)**3;
   camera.position.lerpVectors(f.from,f.to.pos,smooth);controls.target.lerpVectors(f.fromTarget,f.to.target,smooth);camera.fov=THREE.MathUtils.lerp(f.fromFov,f.to.fov,smooth);camera.updateProjectionMatrix();
   const ox=THREE.MathUtils.lerp(f.fromView?.offsetX||0,f.to.view?.offsetX??-(f.to.offsetX||0),smooth),oy=THREE.MathUtils.lerp(f.fromView?.offsetY||0,f.to.view?.offsetY??-(f.to.offset||0),smooth);
@@ -2023,14 +2538,14 @@ function boot(){
   const region=stageRegion(),key=[innerWidth,innerHeight,S.species.value,...Object.values(region)].join(':');
   if(T.mode==='teacher'&&!S.fly&&!S.drag&&DIRECTOR.eventLeft<=0&&key!==TEACHER_CFG.stageKey){shot(S.vertical?0:1,S.vertical);TEACHER_CFG.stageKey=key;}
  };
- showTools('species');syncUI();setQuality(QS.get('lite')==='1'||window.__SITE__?.quality==='low'?'low':'high');updateHero();shot(S.vertical?0:1,S.vertical);QUEST.go(0);TEACHER.mode(QS.get('teacher')==='1'?'teacher':'student');update(0);requestAnimationFrame(frame);}
+ showTools('species');syncUI();setQuality(QS.get('lite')==='1'||window.__SITE__?.quality==='low'?'low':'high');updateHero();shot(S.vertical?0:1,S.vertical);QUEST.go(QUEST.first());TEACHER.mode(QS.get('teacher')==='1'?'teacher':'student');update(0);requestAnimationFrame(frame);}
 
 // Lab-specific bindings stop at this object. The controller below is portable.
 const TEACHER_CFG = {
   idleSeconds: 90,
   layerOrder: ['hero','console','track','capacities',...GRAMMAR.LAYERS],
   get layerIcons(){return Object.fromEntries(this.layerOrder.map((n,i)=>[n,'layer'+i]));},
-  get layerLabels(){return Object.fromEntries(this.layerOrder.map((n,i)=>[n,{ko:['장치','콘솔','트랙','기본 능력 막대','마디','쌓아 채우기·계단','문턱·한계 윤곽','비교·겹치기','숨은 구조·돋보기','같은 시간 간격 흔적','비교','기록'][i],en:['Apparatus','Console','Track','Basic capacity bars','Force units','Stack and steps','Limits','Overlay','Contact section','Time traces','Ratio comparison','Run records'][i]}]));},
+  get layerLabels(){return Object.fromEntries(this.layerOrder.map((n,i)=>[n,{ko:['장치','콘솔','트랙','기본 능력 막대','마디','쌓아 채우기·계단','문턱·한계 윤곽','비교·겹치기','숨은 구조·돋보기','같은 시간 간격 흔적','비교','기록','장력계','렌즈','서서히 당기기'][i],en:['Apparatus','Console','Track','Basic capacity bars','Force units','Stack and steps','Limits','Overlay','Contact section','Time traces','Ratio comparison','Run records','Tension gauges','Object lens','Gradual pull'][i]}]));},
   numbers: [
     {label:'rail',fn:()=>PHYS.kidsFromRailX(S.u.value),unit:'×'},
     {label:'species',fn:()=>PHYS.SPECIES[SPECIES_KEYS[Math.round(S.species.value)]],unit:'kg'},
@@ -2049,7 +2564,7 @@ const TEACHER_CFG = {
   layerOn:name=>name in GRAMMAR.enabled?GRAMMAR.enabled[name]:name==='capacities'?S.layers[name]===true:S.layers[name]!==false,
   // The portable scalar is the continuous rail coordinate; PHYS owns integer detents.
   getCloser:()=>S.u.value,
-  setCloser(value,immediate=false){S.u.target=clamp(value,PHYS.railX(PHYS.C.kidsMin),PHYS.railX(PHYS.C.kidsMax));if(immediate)S.u.value=S.u.target;},
+  setCloser(value,immediate=false){if(S.pullMode){set('pull',clamp(value,0,1));return;}S.u.target=clamp(value,PHYS.railX(PHYS.C.kidsMin),PHYS.railX(PHYS.C.kidsMax));if(immediate)S.u.value=S.u.target;},
   getPlaying:()=>!!S.playing.target,
   play(on){S.playing.value=S.playing.target=+on;syncUI();},
   oneFrame(){const p=S.playing.target;S.playing.value=S.playing.target=1;step(1);S.playing.value=S.playing.target=p;syncUI();},
@@ -2057,20 +2572,27 @@ const TEACHER_CFG = {
   getUI:()=>!!S.ui.target,
   fly(spec,duration){flyTo(spec,duration);},
   shotForStage(row){set('species',row.species);set('ground',row.ground);S.species.value=S.species.target;S.ground.value=S.ground.target;S.t.value=S.t.target=0;return S.vertical?SHOTS_VERTICAL[row.shot===3?2:0]:SHOTS[row.shot];},
-  quests:QUESTS,getQuest:()=>Q.i,
+  get levels(){return LEVELS;},firstOfLevel,levelOf,
+  quests:QUESTS,get questOrder(){return SEQUENCE;},getQuest:()=>Q.i,
   bindMode(state){Object.defineProperty(Q,'free',{get:()=>state.mode!=='student',set(value){if(state.mode!=='teacher')state.mode=value?'free':'student';},enumerable:true,configurable:true});},
   questMode(free){for(const n of ['hero','console','track'])layer(n,true);QUEST.mode(free);},
   selectQuest(i){QUEST.go(i);Q.free=true;Q.phase='act';DIRECTOR.clear();TEACHER.layers(['hero','console','track',...QUESTS[i].layers]);shot(S.vertical?0:1,S.vertical);questUI();},
-  cardBusy:()=>!Q.free&&['intro','predict','observe','confirm','card'].includes(Q.phase),
+  cardBusy:()=>!Q.free&&['intro','predict','observe','confirm','explain','card'].includes(Q.phase),
+  exportLog(){
+    const data={app:'dino-tug',version:1,exportedAt:new Date().toISOString(),entries:QUEST.log()};
+    const url=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:'application/json'}));
+    const a=document.createElement('a');a.href=url;a.download='dino-tug-log.json';document.body.append(a);
+    try{a.click();}finally{a.remove();setTimeout(()=>URL.revokeObjectURL(url),0);}
+  },
   reset(){
     if(S.drag)endDrag({pointerId:S.drag.id});S.fly=null;controls.enabled=true;
-    Q.completed.clear();Q.stars.fill(0);Q.results=[];Q.run=0;Q.pick=null;
-    GRAMMAR.unpin();GRAMMAR.clearRecords();DIRECTOR.clear();QUEST.go(0);Q.free=true;Q.phase='act';
+    Q.completed.clear();Q.stars.fill(0);Q.results=[];Q.predict=[];Q.explain=[];Q.run=0;Q.pick=null;
+    GRAMMAR.unpin();GRAMMAR.clearRecords();DIRECTOR.clear();QUEST.go(QUEST.first());Q.free=true;Q.phase='act';
     preset(0);S.u.value=S.u.target;S.species.value=S.species.target;S.ground.value=S.ground.target;
     S.playing.value=S.playing.target=0;S.sound.value=S.sound.target=0;
     updateHero();GRAMMAR.update(0);shot(S.vertical?0:1,S.vertical);syncUI();
   },
-  startStudent(){for(const n of ['hero','console','track'])layer(n,true);QUEST.go(0);},
+  startStudent(){for(const n of ['hero','console','track'])layer(n,true);QUEST.go(QUEST.first());},
   refresh(){for(const n of ['hero','console','track'])layer(n,true);questUI();},visibilityReset(){S.lastTime=0;},
   frameViewport(){
     if(!this.getUI()){camera.clearViewOffset();return;}
@@ -2091,9 +2613,10 @@ const TEACHER_CFG = {
       const observations=[];
       // Use the same declarative solution as students, without issuing completed runs or stars.
       for(const command of d.solve(QUEST.sample())){
-        for(const k of ['n','species','mu'])if(command[k]!==undefined)set(k,command[k]);
+        for(const k of ['n','species','mu','lens'])if(command[k]!==undefined)set(k,command[k]);
         S.u.value=S.u.target;S.species.value=S.species.target;S.ground.value=S.ground.target;
-        const s=QUEST.sample();if(command.pull)observations.push({n:s.n,species:s.species,mu:s.mu});
+        if(typeof command.pull==='number')set('pull',command.pull);
+        const s=QUEST.sample();if(command.pull===true)observations.push({n:s.n,species:s.species,mu:s.mu,rivalN:s.rivalN});
         if(command.compare)GRAMMAR.set({[GRAMMAR.LAYERS[6]]:true});
       }
       f.classSample={...QUEST.sample(),observations,before:observations[0]||null,after:observations[1]||null};
@@ -2101,7 +2624,7 @@ const TEACHER_CFG = {
     }
     if(Q.phase==='observe'){f.classElapsed+=dt;if(f.classElapsed>=2.5)Q.phase='confirm';}
     return {phase:Q.phase,candidates:d.candidates,picture:c=>CARDS.picture(d.id,c,DIRECTOR.clock,QUEST.sample()),compare:()=>{
-      const c=d.candidates.find(c=>c.key===Q.pick)||d.candidates[0];return `<div class="q-compare">${CARDS.picture(d.id,c)}${CARDS.actual(d.id,f.classSample||QUEST.sample())}</div>`;
+      const c=d.candidates.find(c=>c.key===Q.pick)||d.candidates[0],sample=f.classSample||QUEST.sample();return `<div class="q-compare">${CARDS.picture(d.id,c,0,sample)}${CARDS.actual(d.id,sample)}</div>`;
     }};
   }
 };
@@ -2111,6 +2634,8 @@ TEACHER_CFG.bindMode(T);
 // Compatibility view, never a second stored snapshot.
 Object.defineProperty(S, 'ab', { get: () => T.ab, set: value => { T.ab = value; } });
 const TEACHER_LABELS = {
+  export: { ko: '기록 내보내기', en: 'Export log' },
+  level: { ko: '단계', en: 'Level' },
   teacher: { ko: '교사 시연', en: 'Teacher demonstration' },
   ui: { ko: '화면 조작 숨기기 또는 보이기', en: 'Hide or show controls' },
   frame: { ko: '한 프레임', en: 'One frame' }, slow: { ko: '사분의 일 속도', en: 'Quarter speed' },
@@ -2123,6 +2648,7 @@ const TEACHER_LABELS = {
 };
 Object.assign(LABELS, TEACHER_LABELS);
 Object.assign(ICONS, {
+  export: 'M4 9v12h16V9M12 2v12m-4-4 4 4 4-4',
   teacher: 'M6 3h12v18H6zM9 6h6M9 10h6M9 15h1m4 0h1M9 18h6',
   frame: 'M4 5v14l8-7zM14 5l8 7-8 7z', slow: 'M3 14h18M6 14V9h12v5M8 9V6m8 3V6M7 18h1m8 0h1',
   ab: 'M3 5h7v14H3zM14 5h7v14h-7zM10 12h4', clear: 'M5 5l14 14M19 5L5 19',
@@ -2130,6 +2656,12 @@ Object.assign(ICONS, {
   laser: 'M3 21l9-9m-2-2 4 4M16 2v4m2 2h4M18 6l3-3',
   numbers: 'M7 3L5 21M16 3l-2 18M2 9h19M1 15h19', predict: 'M3 4h18v13H3zM8 21l4-4 4 4M7 8h3m4 0h3M7 12h10', close: 'M5 5l14 14M19 5L5 19'
 });
+const TEACHER_ICONS = {
+  level1:'M14 12a2 2 0 1 0-4 0 2 2 0 1 0 4 0',
+  level2:'M9 12a2 2 0 1 0-4 0 2 2 0 1 0 4 0M19 12a2 2 0 1 0-4 0 2 2 0 1 0 4 0',
+  level3:'M6 12a2 2 0 1 0-4 0 2 2 0 1 0 4 0M14 12a2 2 0 1 0-4 0 2 2 0 1 0 4 0M22 12a2 2 0 1 0-4 0 2 2 0 1 0 4 0'
+};
+Object.assign(ICONS,TEACHER_ICONS);
 const TEACHER_KEYS = { Space: 'play', '.': 'frame', '/': 'ui', Escape: 'reset' };
 const teacherStrip = document.createElement('aside'); teacherStrip.id = 'teacher-strip'; document.body.append(teacherStrip);
 const numericLayer = document.createElement('div'); numericLayer.id = 'teacher-numbers'; document.body.append(numericLayer);
@@ -2170,6 +2702,7 @@ const TEACHER = {
   },
   command(name) {
     if (name === 'reset') this.reset();
+    else if (name === 'export') TEACHER_CFG.exportLog();
     else if (name === 'play') TEACHER_CFG.play(!TEACHER_CFG.getPlaying());
     else if (name === 'frame') TEACHER_CFG.oneFrame();
     else if (name === 'stack') this.stack();
@@ -2196,9 +2729,15 @@ const TEACHER = {
     group = section();
     for (const name of ['ab', 'clear', 'spotlight', 'laser', 'numbers']) teacherButton(name, name, () => this.command(name), group).setAttribute('aria-pressed', String(name === 'ab' ? !!T.ab : !!T[name]));
     group = section();
-    TEACHER_CFG.quests.forEach((d, i) => { const b = teacherButton('quest', d.icon, () => this.select(i), group); b.setAttribute('aria-label', `${TEACHER_LABELS.quest[TEACHER_CFG.language]} ${i + 1}`); });
+    for (const level of TEACHER_CFG.levels) {
+      const b = teacherButton('level', 'level'+level.id, () => { T.numbers=level.id>=2; this.select(TEACHER_CFG.firstOfLevel(level.id)); }, group);
+      b.setAttribute('aria-label', TEACHER_LABELS.level[TEACHER_CFG.language]+' '+level.id);
+      b.setAttribute('aria-pressed', String(TEACHER_CFG.levelOf(TEACHER_CFG.getQuest())===level.id));
+    }
     group = section();
-    for (const name of ['predict', 'reset']) teacherButton(name, name, () => this.command(name), group);
+    TEACHER_CFG.questOrder.forEach((i, pos) => { const b = teacherButton('quest', TEACHER_CFG.quests[i].icon, () => this.select(i), group); b.setAttribute('aria-label', `${TEACHER_LABELS.quest[TEACHER_CFG.language]} ${pos + 1}`); });
+    group = section();
+    for (const name of ['predict', 'reset', 'export']) teacherButton(name, name, () => this.command(name), group);
     if (focusLabel) [...teacherStrip.querySelectorAll('button')].find(b => b.getAttribute('aria-label') === focusLabel)?.focus({ preventScroll: true });
     this.update(0);
   },

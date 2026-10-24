@@ -5,7 +5,7 @@ function update(dt){
  const k=1-Math.exp(-18*dt);
  for(const name of ['u','species','ground','playing','sound','ui','cassette']){const p=S[name];p.value+=(p.target-p.value)*k;if(Math.abs(p.target-p.value)<1e-8)p.value=p.target;}
  S.t.target+=physicalDt*S.playing.value*(Q.free?1.8:Math.PI/.9);S.t.value+=(S.t.target-S.t.value)*k;
- updateHero();drawGraphs();QUEST.update(dt);GRAMMAR.update(physicalDt);
+ updateHero();drawGraphs();QUEST.update(dt);syncUI(true);GRAMMAR.update(physicalDt);
  if(S.fly){const f=S.fly;f.elapsed+=dt;const u=clamp(f.elapsed/f.duration,0,1),smooth=1-(1-u)**3;
   camera.position.lerpVectors(f.from,f.to.pos,smooth);controls.target.lerpVectors(f.fromTarget,f.to.target,smooth);camera.fov=THREE.MathUtils.lerp(f.fromFov,f.to.fov,smooth);camera.updateProjectionMatrix();
   const ox=THREE.MathUtils.lerp(f.fromView?.offsetX||0,f.to.view?.offsetX??-(f.to.offsetX||0),smooth),oy=THREE.MathUtils.lerp(f.fromView?.offsetY||0,f.to.view?.offsetY??-(f.to.offset||0),smooth);
@@ -51,4 +51,4 @@ function boot(){
   const region=stageRegion(),key=[innerWidth,innerHeight,S.species.value,...Object.values(region)].join(':');
   if(T.mode==='teacher'&&!S.fly&&!S.drag&&DIRECTOR.eventLeft<=0&&key!==TEACHER_CFG.stageKey){shot(S.vertical?0:1,S.vertical);TEACHER_CFG.stageKey=key;}
  };
- showTools('species');syncUI();setQuality(QS.get('lite')==='1'||window.__SITE__?.quality==='low'?'low':'high');updateHero();shot(S.vertical?0:1,S.vertical);QUEST.go(0);TEACHER.mode(QS.get('teacher')==='1'?'teacher':'student');update(0);requestAnimationFrame(frame);}
+ showTools('species');syncUI();setQuality(QS.get('lite')==='1'||window.__SITE__?.quality==='low'?'low':'high');updateHero();shot(S.vertical?0:1,S.vertical);QUEST.go(QUEST.first());TEACHER.mode(QS.get('teacher')==='1'?'teacher':'student');update(0);requestAnimationFrame(frame);}

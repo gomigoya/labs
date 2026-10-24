@@ -1,11 +1,11 @@
 // Exact dictionary expressions from theory-card g. No quest state lives here.
 const GRAMMAR = (() => {
   const defaults = Object.freeze({ '마디':true, '쌓아 채우기·계단':true, '문턱·한계 윤곽':true,
-    '비교·겹치기':false, '숨은 구조·돋보기':false, '같은 시간 간격 흔적':false, '비교':false, '기록':false });
+    '비교·겹치기':false, '숨은 구조·돋보기':false, '같은 시간 간격 흔적':false, '비교':false, '기록':false, '장력계':false, '렌즈':false, '서서히 당기기':false });
   const LAYERS=Object.freeze(Object.keys(defaults)), groups={}, transitions={};
   for(const name of LAYERS){groups[name]=new THREE.Group();HERO.add(groups[name]);
     transitions[name]={value:+defaults[name],from:+defaults[name],target:+defaults[name],elapsed:.3};}
-  const state=()=>PHYS.grammarState(PHYS.kidsFromRailX(S.u.value),SPECIES_KEYS[Math.round(S.species.value)],GROUND_VALUES[Math.round(S.ground.value)],S.t.value);
+  const state=()=>PHYS.grammarState(PHYS.kidsFromRailX(S.u.value),SPECIES_KEYS[Math.round(S.species.value)],GROUND_VALUES[Math.round(S.ground.value)],S.t.value,S.rivalN);
   let baseline=null,key='',clock=0, eventKey='',burstStart=-10;
   const records=[];
   function set(values){
@@ -25,6 +25,11 @@ const GRAMMAR = (() => {
     KIT.expansion(group,x+.075,y,.02);
   }
   function arrow(group,glyph,x,y,color,dashed=false,style=0){
+    // Child teams pull in opposite directions, including the stationary tie scene.
+    if(S.rivalN>0&&group===groups[LAYERS[0]]&&color===INK_CFG.diagram.kids){
+      const mirrored=new THREE.Group();mirrored.position.set(x+glyph.length,y,0);mirrored.scale.x=-1;
+      group.add(mirrored);group=mirrored;x=0;y=0;
+    }
     outline(group,x,y-.045,glyph.length,.09,color,dashed,style);
     if(!dashed){KIT.mesh(new THREE.PlaneGeometry(Math.max(.001,glyph.length),.065).translate(glyph.length/2,0,0),(()=>{const material=BARS[0].fill.material.clone();material.uniforms.uColor.value.set(color);material.uniforms.uUnit.value=glyph.unit/Math.max(.001,glyph.length);material.uniforms.uForce.value=glyph.length/PHYS.VIS.width;return material;})(),group,x,y,.007);
       KIT.line([V3(x+glyph.length-.07,y+.08,.01),V3(x+glyph.length,y,.01),V3(x+glyph.length-.07,y-.08,.01)],color,group);
@@ -42,8 +47,10 @@ const GRAMMAR = (() => {
   for(const name of LAYERS)groups[name].position.z=.72;
   function rebuild(d){
     for(const group of Object.values(groups))clear(group);
+    if(S.pullMode)drawStaticPull(d);
+    else{
     origins.forEach(([x,y],i)=>{
-      const color=i?INK_CFG.diagram.dino:INK_CFG.diagram.kids;
+      const color=i?(S.rivalN>0?INK_CFG.diagram.rival:INK_CFG.diagram.dino):INK_CFG.diagram.kids;
       arrow(groups[LAYERS[0]],d.forces[i],x,y,color);
       for(const [offset,forceIndex,c,style]of [[.23,i?4:2,INK_CFG.diagram.muscle,0],[.43,i?5:3,INK_CFG.diagram.friction,1]]){
         arrow(groups[LAYERS[2]],d.forces[forceIndex],x,y+offset,c,true,style);
@@ -91,7 +98,7 @@ const GRAMMAR = (() => {
     for(const [j,species]of [SPECIES_KEYS[0],d.species].entries()){
       const x=-2.6+j*.65,y=2.73;
       outline(compare,x,y,.27,PHYS.VIS.ratioHeight,INK_CFG.diagram.reference,true);
-      const ratio=PHYS.grammarState(1,species,d.mu).ratioLength;
+      const ratio=PHYS.grammarState(1,species,d.mu,0,S.rivalN).ratioLength;
       KIT.mesh(new THREE.PlaneGeometry(.20,ratio),ink(INK_CFG.diagram.muscle),compare,x+.135,y+ratio/2,.01);
       for(let k=1;k<10;k++)KIT.line([V3(x,y+PHYS.VIS.ratioHeight*k/10,.02),V3(x+.27,y+PHYS.VIS.ratioHeight*k/10,.02)],THEME.graphite,compare);
     }
@@ -101,15 +108,49 @@ const GRAMMAR = (() => {
       outline(log,x,y,.59,.72,INK_CFG.diagram.reference,true);
       KIT.ball(.035,ink(INK_CFG.diagram.kids),log,x+.1,y+.57,.01,0);
       KIT.mesh(new THREE.PlaneGeometry(.18,.045),ink(groundColors[GROUND_VALUES.indexOf(r.mu)]),log,x+.13,y+.40,.01);
-      const specimen=DINO_MODELS[r.speciesIndex].clone(true);
-      specimen.traverse(o=>{if(o.geometry)o.geometry=o.geometry.clone();if(o.material)o.material=o.material.clone();});
-      specimen.position.set(x+.37,y+.36,0);specimen.scale.setScalar(.13);log.add(specimen);
-      for(const i of [0,1])KIT.mesh(new THREE.PlaneGeometry(r.forces[i].length*.20,.035),ink(i?INK_CFG.diagram.dino:INK_CFG.diagram.kids),log,x+.04+r.forces[i].length*.10,y+.12+i*.10,.02);
+      if(r.rivalN>0){
+        for(let k=0;k<Math.min(r.rivalN,PHYS.C.rivalMax);k++)KIT.ball(.016,ink(INK_CFG.diagram.rival),log,x+.27+k%5*.045,y+.35+Math.floor(k/5)*.045,.01,0);
+      }else{
+        const specimen=DINO_MODELS[r.speciesIndex].clone(true);
+        specimen.traverse(o=>{if(o.geometry)o.geometry=o.geometry.clone();if(o.material)o.material=o.material.clone();});
+        specimen.position.set(x+.37,y+.36,0);specimen.scale.setScalar(.13);log.add(specimen);
+      }
+      for(const i of [0,1])KIT.mesh(new THREE.PlaneGeometry(r.forces[i].length*.20,.035),ink(i?(r.rivalN>0?INK_CFG.diagram.rival:INK_CFG.diagram.dino):INK_CFG.diagram.kids),log,x+.04+r.forces[i].length*.10,y+.12+i*.10,.02);
       // Changed conditions have a solid border around their specimen slot.
-      if(baseline&&(r.n!==baseline.n||r.species!==baseline.species||r.mu!==baseline.mu))outline(log,x+.02,y+.32,.55,.36,INK_CFG.diagram.kids,false);
+      if(baseline&&(r.n!==baseline.n||r.rivalN!==baseline.rivalN||r.species!==baseline.species||r.mu!==baseline.mu))outline(log,x+.02,y+.32,.55,.36,INK_CFG.diagram.kids,false);
+    }
+    drawTensionMeters(groups['장력계'],PHYS.tensionOf(d.n,d.species,S.rivalN,d.mu));
+    if(S.rivalN>0&&S.lens)drawLens(d);
     }
     // Capture intrinsic opacity once, including deliberately translucent panels.
     for(const group of Object.values(groups))group.traverse(o=>{if(o.material){o.material.transparent=true;o.material.userData.alpha=o.material.opacity;}});
+  }
+  function drawLens(d){
+    const group=groups['렌즈'],f=PHYS.lensForces(d.n,d.species,S.rivalN,d.mu,S.lens);
+    const teamX=n=>{const a=PHYS.dramaChild(n,0),b=PHYS.dramaChild(n,n-1);return (a.x+b.x)/2;};
+    const x=S.lens==='rope'?0:S.lens==='A'?teamX(d.n):-teamX(S.rivalN);
+    const y=S.lens==='rope'?PHYS.DRAMA.ropeY+.30:PHYS.DRAMA.ground+PHYS.DRAMA.kidHeight+.55;
+    const LENS_SCALE=PHYS.VIS.forceDetailScale; // 렌즈 화살표는 아이 팀 크기에서도 읽히도록 키운다(물체끼리 비율은 그대로)
+    function directed(dir,value,y,color,dashed=false,origin=x){
+      const g=new THREE.Group();group.add(g);g.position.set(origin,y,.3);g.scale.set(dir*LENS_SCALE,LENS_SCALE,1);
+      const glyph=PHYS.forceGlyph(value);arrow(g,glyph,0,0,color,dashed,1);
+      if(dashed)KIT.line([V3(glyph.length-.07,.08,.01),V3(glyph.length,0,.01),V3(glyph.length-.07,-.08,.01)],color,g,true);
+    }
+    for(const a of f.arrows)directed(a.dir,a.value,y+(a.kind==='friction'?.22:0),a.kind==='pull'?INK_CFG.diagram.pull:INK_CFG.diagram.friction,false,S.lens==='rope'?a.dir*.12:x);
+    if(f.balanced)KIT.mesh(new THREE.TorusGeometry(.14,.026,6,24),ink(INK_CFG.diagram.ink),group,x,y+(S.lens==='rope'?0:.28),.3);
+    else directed(Math.sign(f.sum),Math.abs(f.sum),y+.43,INK_CFG.diagram.ink,true);
+  }
+  function drawStaticPull(d){
+    // 유리 위 5명의 힘은 전체 눈금에서 아주 작으므로, 한계 눈금이 화면에서 읽히는 길이(LIMIT_LENGTH)가 되도록 길이만 늘린다. 두께와 머리는 그대로.
+    const group=groups['서서히 당기기'],f=PHYS.staticPull(d.n,d.mu,S.pullP),LIMIT_LENGTH=1.6;
+    const k=LIMIT_LENGTH/PHYS.forceGlyph(f.limit).length,x=-1.8,y=PHYS.DRAMA.ground+PHYS.DRAMA.kidHeight+.6;
+    const stretch=value=>{const glyph=PHYS.forceGlyph(value);return {...glyph,length:glyph.length*k,ticks:[]};};
+    for(const [dir,value,color,dy] of [[1,f.applied,INK_CFG.diagram.dino,0],[-1,f.friction,INK_CFG.diagram.friction,.3]]){
+      const g=new THREE.Group();group.add(g);g.position.set(x,y+dy,.3);g.scale.set(dir,2,1);
+      if(value>0)arrow(g,stretch(value),0,0,color);
+    }
+    const limitX=x-LIMIT_LENGTH;
+    KIT.line([V3(limitX,y+.3-.2,.32),V3(limitX,y+.3+.2,.32)],INK_CFG.diagram.friction,group,true);
   }
   // Seeded, additive force streaks; density is schematic display force, never rope flow.
   const stream= new THREE.Group();HERO.add(stream);
@@ -122,33 +163,34 @@ const GRAMMAR = (() => {
   
   // Trail gets rebuilt only on state change, then updated without allocating geometry.
   function update(dt){
-    clock+=dt;const d=state(),next=[d.n,d.speciesIndex,d.mu,baseline?.n,baseline?.species,baseline?.mu,records.length].join(':');
+    clock+=dt;const d=state(),next=[S.pullMode,S.pullP,S.lens,d.n,S.rivalN,d.speciesIndex,d.mu,baseline?.n,baseline?.species,baseline?.mu,records.length].join(':');
     if(next!==key){rebuild(d);key=next;
       // Reattach after group disposal; no retained GPU objects from earlier rebuilds.
       for(let i=0;i<PHYS.VIS.trailCount;i++)KIT.ball(.018,ink(THEME.gravel,.7),groups[LAYERS[5]],0,PHYS.SCENE.top+.35,-.64,0);
     }
     const event=[d.n,d.speciesIndex,d.mu].join(':');
     if(event!==eventKey){eventKey=event;}
+    const lensActive=S.rivalN>0&&S.lens&&transitions['렌즈'].target>0;
     const pulling=S.playing.target>0||DIRECTOR.eventLeft>0;
     if(d.slip&&pulling&&S.t.value<.15)burstStart=clock;
     if(d.slip&&DIRECTOR.eventLeft>0&&clock-burstStart>1.1)burstStart=clock;
     for(const [name,t]of Object.entries(transitions)){
       t.elapsed=Math.min(.3,t.elapsed+dt);const u=t.elapsed/.3;t.value=t.from+(t.target-t.from)*u*u*(3-2*u);
       const priority=name===LAYERS[6]?(1-transitions[LAYERS[4]].value)*(1-transitions[LAYERS[7]].value):name===LAYERS[7]?1-transitions[LAYERS[4]].value:1;
-      const alpha=t.value*priority*(DIRECTOR.eventLeft>0?.18:1),group=groups[name];group.visible=alpha>0&&group.children.length>0&&!(DIRECTOR.eventLeft>0&&name===LAYERS[4]);
+      const alpha=t.value*priority*(DIRECTOR.eventLeft>0?.18:1),group=groups[name];group.visible=!((lensActive||S.pullMode)&&[LAYERS[0],LAYERS[2],LAYERS[3]].includes(name))&&!(S.pullMode&&name===LAYERS[1])&&!(name==='서서히 당기기'&&!S.pullMode)&&alpha>0&&group.children.length>0&&!(DIRECTOR.eventLeft>0&&name===LAYERS[4]);
       group.position.y=(1-t.value)*.035;
       group.traverse(o=>{if(o.material){o.material.opacity=(o.material.userData.alpha??1)*alpha;if(o.material.uniforms?.uTime)o.material.uniforms.uTime.value=clock;if(o.material.uniforms?.uOpacity)o.material.uniforms.uOpacity.value=alpha;}});
     }
     groups[LAYERS[5]].children.forEach((o,i)=>{o.position.x=d.traces[i]??0;});
     const opacity=transitions[LAYERS[0]].value*(1-.80*transitions[LAYERS[4]].value);
-    streakMat.opacity=.4*opacity;streaks.count=S.quality==='low'?particles.length/2:particles.length;
+    stream.visible=!lensActive&&!S.pullMode;streakMat.opacity=.4*opacity;streaks.count=S.quality==='low'?particles.length/2:particles.length;
     for(let i=0;i<streaks.count;i++){
       const p=particles[i],side=i%2,glyph=d.forces[side],origin=origins[side];
       dummy.position.set(origin[0]+((p.phase+clock*(.1+d.streamDensity*.2))%1)*glyph.length,origin[1]+(p.height-.5)*.06,.765);
-      dummy.scale.setScalar(p.height<.2+d.streamDensity?1:0);dummy.updateMatrix();streaks.setMatrixAt(i,dummy.matrix);streaks.setColorAt(i,new THREE.Color(side?INK_CFG.diagram.dino:INK_CFG.diagram.kids));
+      dummy.scale.setScalar(p.height<.2+d.streamDensity?1:0);dummy.updateMatrix();streaks.setMatrixAt(i,dummy.matrix);streaks.setColorAt(i,new THREE.Color(side?(S.rivalN>0?INK_CFG.diagram.rival:INK_CFG.diagram.dino):INK_CFG.diagram.kids));
     }
     streaks.instanceMatrix.needsUpdate=true;streaks.instanceColor.needsUpdate=true;
-    const age=clock-burstStart,burst=d.slip&&age<1.1;
+    const age=clock-burstStart,burst=!S.pullMode&&d.slip&&age<1.1;
     dust.visible=burst;dust.count=S.quality==='low'?PHYS.VIS.dustCount/2:PHYS.VIS.dustCount;dustMat.opacity=burst?(1-age/1.1)*(.7-.45*transitions[LAYERS[4]].value):0;
     for(let i=0;burst&&i<dust.count;i++){
       const a=particles[i].phase*Math.PI*2,r=age*(.28+particles[i].height*.35);
@@ -157,7 +199,7 @@ const GRAMMAR = (() => {
     }
     dust.instanceMatrix.needsUpdate=true;
     // Replace R1 fills with this layer's same-position calibrated arrows.
-    CAPACITIES.visible=S.layers.capacities===true;
+    CAPACITIES.visible=S.layers.capacities===true&&!lensActive&&!S.pullMode;
   }
   function pin(){baseline=structuredClone(state());set({[LAYERS[3]]:true});key='';return structuredClone(baseline);}
   function unpin(){baseline=null;set({[LAYERS[3]]:false});key='';}

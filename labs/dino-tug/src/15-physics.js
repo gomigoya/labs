@@ -5,6 +5,9 @@ const PHYS = (() => {
     adultMass: 70, kidMass: 35, // kg
     adultPullRatio: 0.5, kidPullRatio: 0.4, // 추정: 체중 대비 근육 힘
     tieN: 1, // N
+    pullRange: 1.5, // 추정: 손잡이 끝의 당기는 힘은 정지마찰 한계의 1.5배.
+    kineticRatio: 0.8, // 추정: 끌려갈 때 접촉이 미끄러져 정지마찰 한계보다 작아지는 효과.
+    rivalMax: 20, rivalChoices: Object.freeze([4,5,6,7]),
     kidsMin: 1, kidsMax: 100, increaseQ5: 10, designKids: 30,
     muscleExponent: 2 / 3,
     railRoundoffUlps: 8,
@@ -25,6 +28,20 @@ const PHYS = (() => {
   const kidCap = (n, mu) => n * Math.min(C.kidMuscle, friction(C.kidMass, mu));
   const dinoCap = (species, mu) => Math.min(muscle(SPECIES[species]), friction(SPECIES[species], mu));
   const weightRatio = species => muscle(SPECIES[species]) / (SPECIES[species] * C.g);
+  // 가벼운 줄 가정에서 줄 장력은 어디서나 같고, 모델에서는 약한 쪽 한계가 정한다.
+  const ropeTension = (capA, capB) => Math.min(capA, capB);
+  function staticPull(n, mu, p) {
+    const limit=friction(n*C.kidMass,mu),applied=p*C.pullRange*limit;
+    const slipped=applied>limit,actualFriction=slipped?C.kineticRatio*limit:applied;
+    return {applied,limit,friction:actualFriction,slipped,net:applied-actualFriction,pSlip:1/C.pullRange};
+  }
+  const judgeQ12 = ({sawStatic,sawSlip}) => sawStatic===true&&sawSlip===true;
+  function kidsMatch(nA, nB, mu) {
+    const a = kidCap(nA, mu), b = kidCap(nB, mu), net = a - b;
+    const winner = Math.abs(net) <= C.tieN ? 'tie' : net > 0 ? 'a' : 'b';
+    const limiter = friction(C.kidMass, mu) <= C.kidMuscle ? 'friction' : 'muscle';
+    return { a, b, net, winner, limiter, tension: ropeTension(a, b) };
+  }
   function outcome(n, species, mu) {
     const kids = kidCap(n, mu), dino = dinoCap(species, mu), net = kids - dino;
     const winner = Math.abs(net) <= C.tieN ? 'tie' : net > 0 ? 'kids' : 'dino';
@@ -34,10 +51,28 @@ const PHYS = (() => {
     const ff = friction(kidsLimited ? C.kidMass : SPECIES[species], mu);
     return { kids, dino, net, winner, limiter: ff <= fm ? 'friction' : 'muscle' };
   }
+  function matchOutcome(n, species, rivalN, mu) {
+    if (rivalN === 0) return outcome(n, species, mu);
+    const {a,b,net,winner,limiter}=kidsMatch(n,rivalN,mu);
+    return {kids:a,dino:b,net,winner:winner==='a'?'kids':winner==='b'?'dino':'tie',limiter};
+  }
   function minKidsToWin(species, mu) {
     // 명세의 엄격한 > 정의다. 1 N 비김 띠와는 별개다.
     const n = Math.floor(dinoCap(species, mu) / kidCap(C.kidsMin, mu)) + 1;
     return n <= C.kidsMax ? n : Infinity;
+  }
+  function tensionOf(n, species, rivalN, mu) {
+    const {kids,dino}=matchOutcome(n,species,rivalN,mu);
+    return ropeTension(kids,dino);
+  }
+  function lensForces(n,species,rivalN,mu,object) {
+    if(!(rivalN>0)||!['rope','A','B'].includes(object))throw new RangeError('lensForces');
+    const m=matchOutcome(n,species,rivalN,mu),T=tensionOf(n,species,rivalN,mu);
+    const center=object==='A'?1:-1,winner=object==='A'?'kids':'dino';
+    const arrows=object==='rope'?[{dir:-1,kind:'pull',value:T},{dir:1,kind:'pull',value:T}]
+      :[{dir:center,kind:'pull',value:T},{dir:-center,kind:'friction',value:(m.winner==='tie'||m.winner===winner)?T:C.kineticRatio*T}];
+    const sum=arrows.reduce((s,a)=>s+a.dir*a.value,0);
+    return {arrows,sum,balanced:Math.abs(sum)<=C.tieN};
   }
   // 각 정수 칸은 레일의 같은 폭을 차지한다. railX는 칸의 중심이다.
   const railX = n => (n - C.kidsMin + 0.5) / (C.kidsMax - C.kidsMin + 1);
@@ -64,7 +99,10 @@ const PHYS = (() => {
   // 검증은 기록·퀘스트 경계에서만 한다. 핵심 계산의 입력은 유효 SI 값이다.
   const validSetup = ({ n, species, mu }) => Number.isInteger(n) && n >= C.kidsMin && n <= C.kidsMax
     && Object.hasOwn(SPECIES, species) && Object.values(GROUNDS).includes(mu);
-  const validObservation = o => o != null && Number.isInteger(o.run) && o.run > 0 && validSetup(o);
+  const validMatch = ({ nA, nB, mu }) => Number.isInteger(nA) && nA >= C.kidsMin && nA <= C.kidsMax
+    && Number.isInteger(nB) && nB >= C.kidsMin && nB <= C.kidsMax && Object.values(GROUNDS).includes(mu);
+  const validObservation = o => o != null && Number.isInteger(o.run) && o.run > 0 && validSetup(o)
+    && (!Object.hasOwn(o, 'rivalN') || Number.isInteger(o.rivalN) && o.rivalN >= 0 && o.rivalN <= 100);
   const judgeQ1 = s => validSetup(s) && s.n === C.kidsMin && s.species === '벨로키랍토르'
     && s.mu === GROUNDS['자갈'] && outcome(s.n, s.species, s.mu).winner === 'kids';
   const judgeQ2 = s => validSetup(s) && s.species === '트리케라톱스' && s.mu === GROUNDS['자갈']
@@ -91,6 +129,27 @@ const PHYS = (() => {
     const winners = Object.keys(SPECIES).filter(t => outcome(s.n, t, s.mu).winner === 'kids');
     return winners.includes(s.species) && !winners.some(t => SPECIES[t] > SPECIES[s.species]);
   }
+  // Current edits are not evidence; only the last valid completed pull counts.
+  const lastObservation = ({observations=[]}) => observations.filter(validObservation).at(-1);
+  function judgeQ8(s) {
+    const o=lastObservation(s);
+    return !!o && o.rivalN>0 && o.n===o.rivalN
+      && matchOutcome(o.n,o.species,o.rivalN,o.mu).winner==='tie';
+  }
+  function judgeQ9(s) {
+    const o=lastObservation(s);
+    return !!o && o.rivalN>0 && Math.abs(o.n-o.rivalN)===1
+      && matchOutcome(o.n,o.species,o.rivalN,o.mu).winner===(o.n>o.rivalN?'kids':'dino');
+  }
+  function judgeQ10({observations=[]}) {
+    const valid=observations.filter(validObservation),last=valid.at(-1);
+    return !!last && last.rivalN>0 && Math.abs(last.n-last.rivalN)===1
+      && valid.slice(0,-1).some(o=>o.rivalN>0 && o.n===o.rivalN);
+  }
+  function judgeQ11({observations=[],lensVisited=[]}) {
+    const o=lastObservation({observations});
+    return !!o&&o.rivalN>0&&Math.abs(o.n-o.rivalN)===1&&['rope','A','B'].every(x=>lensVisited.includes(x));
+  }
   // R1 display mappings only. Dimensions are schematic exhibition units, not recovered anatomy.
   const SCENE = Object.freeze({ top: 1.10, trackWidth: 6.0, trackDepth: 1.24, railStart: -2.70,
     railWidth: 2.2, railY: 1.36, railZ: 0.76, consoleZ: 1.04, barWidth: 2.35,
@@ -105,16 +164,18 @@ const PHYS = (() => {
   const massGraphX = species => Math.log(SPECIES[species] / 15) / Math.log(70000 / 15);
   const forceSceneLength = force => SCENE.barWidth * forceVisual(force).length / forceVisual(muscle(70000)).length;
   const pegPosition = i => ({ x: -2.68 + (i % 10) * 0.205, y: SCENE.top + 0.13, z: -0.43 + Math.floor(i / 10) * 0.085 });
-  function displayState(n, species, mu, phase = 0) {
-    const result = outcome(n, species, mu), i = Object.keys(SPECIES).indexOf(species);
-    return { n, speciesIndex: i, scale: SCENE.modelScales[i], form: SCENE.forms[i],
+  function displayState(n, species, mu, phase = 0, rivalN = 0) {
+    if(rivalN>0)species=Object.keys(SPECIES)[0];
+    const result = matchOutcome(n, species, rivalN, mu), i = Object.keys(SPECIES).indexOf(species);
+    return { ...(rivalN>0?{rivalN}:{}), n, speciesIndex: i, scale: SCENE.modelScales[i], form: SCENE.forms[i],
       kidsLength: forceSceneLength(result.kids), dinoLength: forceSceneLength(result.dino),
       kidsCompressed: forceVisual(result.kids).compressed, dinoCompressed: forceVisual(result.dino).compressed,
       flagX: (result.winner === 'tie' ? 0 : result.winner === 'kids' ? -1 : 1) * SCENE.flagTravel * (0.5 - 0.5 * Math.cos(phase)),
       slip: result.winner !== 'tie' && result.limiter === 'friction', ...result };
   }
   // R2 schematic mappings. Bounds/caps belong here, never in scene callers.
-  const VIS = Object.freeze({ cells: 30, width: 2.35, kidHeight: .22, grains: 180, streamCount: 96, dustCount: 48, recordCap: 3,
+  const VIS = Object.freeze({ forceDetailScale:2.6, // 추정: 렌즈·서서히 당기기 공통 확대
+    cells: 30, width: 2.35, kidHeight: .22, grains: 180, streamCount: 96, dustCount: 48, recordCap: 3,
     min: Object.freeze([-3.25,.035,-.8]), max: Object.freeze([3.25,3.65,1.30]),
     lensWidth: 1.60, lensHeight: .66, ratioHeight: .58, trailCount: 9 });
   const modelScale = species => .38 + .64 * Math.cbrt(SPECIES[species] / 70000);
@@ -130,13 +191,14 @@ const PHYS = (() => {
       cuts: v.compressed, unit: forceSceneLength(C.kidMuscle),
       ticks: Array.from({length: Math.min(VIS.cells, Math.floor(v.beads))}, (_,i) => forceSceneLength((i+1)*C.kidMuscle)) };
   }
-  function grammarState(n, species, mu, phase=0) {
-    const result = displayState(n,species,mu,phase), mass = SPECIES[species];
+  function grammarState(n, species, mu, phase=0, rivalN=0) {
+    if(rivalN>0)species=Object.keys(SPECIES)[0];
+    const result = displayState(n,species,mu,phase,rivalN), mass = rivalN>0?rivalN*C.kidMass:SPECIES[species];
     return { ...result, species, mu, scale: modelScale(species),
-      forces: [result.kids,result.dino,n*C.kidMuscle,friction(n*C.kidMass,mu),muscle(mass),friction(mass,mu)].map(forceGlyph),
-      ratio: weightRatio(species), ratioLength: VIS.ratioHeight*weightRatio(species),
+      forces: [result.kids,result.dino,n*C.kidMuscle,friction(n*C.kidMass,mu),(rivalN>0?rivalN*C.kidMuscle:muscle(mass)),friction(mass,mu)].map(forceGlyph),
+      ratio: rivalN>0?C.kidPullRatio:weightRatio(species), ratioLength: VIS.ratioHeight*(rivalN>0?C.kidPullRatio:weightRatio(species)),
       team: Array.from({length:n},(_,i)=>teamLayout(n,i)),
-      traces: Array.from({length:VIS.trailCount},(_,i)=>displayState(n,species,mu,phase-i*.16).flagX),
+      traces: Array.from({length:VIS.trailCount},(_,i)=>displayState(n,species,mu,phase-i*.16,rivalN).flagX),
       roughness: mu*.08, streamDensity: Math.min(1,Math.max(result.kids,result.dino)/muscle(70000)),
       slipX: result.winner === 'kids' ? 1.36 : -1.55 };
   }
@@ -158,8 +220,9 @@ const PHYS = (() => {
     return {rows,columns,x:DRAMA.kidStart+(columns===1?DRAMA.kidSpan:i%columns*DRAMA.kidSpan/(columns-1)),
       y:DRAMA.ground,z:-.78+row*DRAMA.rowGap,band:Math.floor(i/10)%2};
   }
-  function dramaState(n,species,mu,phase=0) {
-    const result=outcome(n,species,mu),f=SCENE.forms[Object.keys(SPECIES).indexOf(species)];
+  function dramaState(n,species,mu,phase=0,rivalN=0) {
+    if(rivalN>0)species=Object.keys(SPECIES)[0];
+    const result=matchOutcome(n,species,rivalN,mu),f=SCENE.forms[Object.keys(SPECIES).indexOf(species)];
     const scale=Math.min(DRAMA.maxHeight/(f[2]+f[1]/2+f[3]+.32),exhibitionScale(species)*DRAMA.enlargement),ratio=result.kids/Math.max(1,result.dino);
     const effort=Math.min(1,(1-Math.cos(Math.min(Math.PI,phase)))*.5);
     const lean=-(.04+.20*ratio/(1+ratio))*effort;
@@ -169,9 +232,9 @@ const PHYS = (() => {
     const travel=DRAMA.flagTravel*(.5-.5*Math.cos(phase)),step=travel/DRAMA.flagStep;
     const u=step-Math.floor(step),smooth=u*u*(3-2*u),flagX=direction*DRAMA.flagStep*(Math.floor(step)+smooth);
     const slip=result.winner!=='tie'&&result.limiter==='friction',skid=slip?flagX*.18:0;
-    return {...result,scale,lean,height:scale*modelHeight,
+    return {...result,...(rivalN>0?{rivalN,kidsLength:forceSceneLength(result.kids),dinoLength:forceSceneLength(result.dino)}:{}),scale,lean,height:scale*modelHeight,
       flagX,slip,kidSkid:result.winner==='dino'?skid:0,dinoSkid:result.winner==='kids'?skid:0,
-      slipX:(result.winner==='kids'?DRAMA.dinoX:dramaChild(n,Math.min(n-1,3)).x)+skid,
+      slipX:(result.winner==='kids'?(rivalN>0?-dramaChild(Math.min(rivalN,C.rivalMax),Math.min(rivalN-1,3)).x:DRAMA.dinoX):dramaChild(n,Math.min(n-1,3)).x)+skid,
       beadAmplitude:.026*effort,effort};
   }
   function dramaBounds(species) {
@@ -209,8 +272,8 @@ const PHYS = (() => {
     }
     return best;
   }
-  return { dramaFrame, DRAMA, dramaChild, dramaState, dramaBounds, exhibitionScale, exhibitionBounds, VIS, modelScale, teamLayout, forceGlyph, grammarState, SCENE, railWorldX, massGraphX, forceSceneLength, pegPosition, displayState, C, SPECIES, GROUNDS, RANGE, muscle, friction, kidCap, dinoCap, outcome, minKidsToWin,
-    weightRatio, railX, kidsFromRailX, DETENTS, forceVisual, slipOnset,
-    judgeQ1, judgeQ2, judgeQ3, judgeQ4, judgeQ5, judgeQ6, judgeQ7 };
+  return { staticPull, judgeQ12, dramaFrame, DRAMA, dramaChild, dramaState, dramaBounds, exhibitionScale, exhibitionBounds, VIS, modelScale, teamLayout, forceGlyph, grammarState, SCENE, railWorldX, massGraphX, forceSceneLength, pegPosition, displayState, C, SPECIES, GROUNDS, RANGE, muscle, friction, kidCap, dinoCap, outcome, matchOutcome, minKidsToWin,
+    ropeTension, tensionOf, lensForces, kidsMatch, validMatch, weightRatio, railX, kidsFromRailX, DETENTS, forceVisual, slipOnset,
+    judgeQ1, judgeQ2, judgeQ3, judgeQ4, judgeQ5, judgeQ6, judgeQ7, judgeQ8, judgeQ9, judgeQ10, judgeQ11, validObservation };
 })();
 // ==== END PHYSICS ====

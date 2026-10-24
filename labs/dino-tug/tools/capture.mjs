@@ -41,7 +41,7 @@ try {
     await new Promise(resolve => server.listen(5181, '127.0.0.1', resolve)); url = 'http://127.0.0.1:5181/';
   }
   const states = [ ['hero',0],['triceratops-threshold',1],['tyrannosaurus-gravel',2],['tyrannosaurus-glass',3],['tyrannosaurus-sand',4],['design-team',5],['largest-max-team',6],['queue',0],['contact',2],['free-event',3],['capacity',2],['ratio',6],['console',0], ...Array.from({length:8},(_,i)=>['layer-'+i,2]), ['comparison-pin',2],['extreme-min',0],['extreme-max',6],['layers-together',6],['force-shader-close',2],['surface-glass',3],['surface-sand',4],['surface-gravel',2],['surface-asphalt',6] ];
-  for(let i=1;i<=7;i++)for(const phase of ['intro','predict','act','event','confirm','card'])states.push([`q${i}-${phase}`,0]);
+  for(let i=1;i<=9;i++)for(const phase of ['intro','predict','act','event','confirm','explain','card'])states.push([`q${i}-${phase}`,0]);
   for(const name of ['teacher-strip','teacher-layers','teacher-ab','teacher-spot','teacher-laser','teacher-numbers','teacher-class-predict','teacher-class-result','attract-1','attract-2','attract-3','touch-pulse','thumb'])states.push([name,name==='thumb'?2:0]);
   for(const mode of ['student','free','teacher','attract'])for(let i=1;i<=3;i++)states.push([`vertical-${mode}-${i}`,0]);
   browser = await chromium.launch({ headless: true, args: ['--use-angle=d3d11', '--enable-gpu', '--ignore-gpu-blocklist'] });
@@ -56,6 +56,55 @@ try {
     await page.goto(parsed.href, { waitUntil: 'load' });
     try { await page.waitForFunction(() => !!window.__lab, null, { timeout: 60000 }); }
     catch (error) { report.push({ viewportName, startupConsoleErrors: consoleErrors, startupPageErrors: pageErrors, requestErrors }); console.error(JSON.stringify(report.at(-1))); throw error; }
+    // Real browser checks for mission/learning text boundaries and phase changes.
+    await page.evaluate(()=>{
+      const lab=window.__lab,banner=document.getElementById('mission');
+      const require=(ok,label)=>{if(!ok)throw new Error('mission: '+label);};
+      require(banner?.getAttribute('role')==='status'&&banner.getAttribute('aria-live')==='polite','polite status');
+      lab.mode('student');
+      for(let i=0;i<9;i++){
+        lab.quest.auto(i);
+        for(const phase of ['intro','predict','act','observe','confirm','explain','card']){
+          lab.quest.skip(phase);lab.step(1,0);
+          require(banner.getClientRects().length>0&&banner.textContent.trim().length>0&&Array.from(banner.textContent).length<=32,`Q${i+1}/${phase} visible words`);
+          const r=banner.getBoundingClientRect(),top=document.getElementById('quests').getBoundingClientRect(),bottom=document.getElementById('tools').getBoundingClientRect();
+          require(r.top>=top.bottom&&r.bottom<=bottom.top&&r.left>=0&&r.right<=innerWidth,'pill stays between control bars');
+          const card=document.getElementById('q-pictures');
+          if(card.getClientRects().length)require(r.bottom<=card.getBoundingClientRect().top,'pill clears card');
+          require(parseFloat(getComputedStyle(banner).fontSize)>=15&&getComputedStyle(banner).pointerEvents==='none','readable and click through');
+          require(lab.textAudit().length===0,'no other visible words');
+          const learn=[...document.querySelectorAll('[data-learn]')];
+          require(learn.every(el=>el.parentElement===card&&el.matches('.q-explain,.q-principle')),'learning roots only inside pictures');
+          if(phase==='explain'){
+            require(card.querySelectorAll('[data-option]').length===3,'three explanation choices');
+            // Disable just the exception to ensure the audit sees real panel text.
+            learn.forEach(el=>el.removeAttribute('data-learn'));
+            const words=lab.textAudit();
+            learn.forEach(el=>el.setAttribute('data-learn',''));
+            require(words.length>0&&words.every(w=>learn.some(el=>{const r=el.getBoundingClientRect();return w.x>=r.left&&w.x<=r.right&&w.y>=r.top&&w.y<=r.bottom;})),'all learning words in panel');
+            const wrong=[...card.querySelectorAll('[data-option]')].find(b=>b.dataset.option!==lab.quest.correctKey());
+            wrong.click();lab.step(60,1/30);
+            require(lab.quest.state().phase==='explain'&&getComputedStyle(card).display!=='none','replay restores explanation');
+            require(card.querySelector('.q-hint').textContent.length>0,'hint survives replay');
+          }
+        }
+        lab.quest.go(i);lab.quest.skip('predict');const previous=banner.textContent;
+        lab.quest.pick(0);require(banner.textContent!==previous,'prediction to action changes words');
+      }
+      lab.mode('free');require(banner.textContent==='마음대로 만져 보세요'&&banner.getClientRects().length>0,'free mission');
+      lab.mode('teacher');require(banner.getClientRects().length===0,'teacher hides mission');
+      lab.mode('student');lab.quest.go(0);
+    });
+    // 실제 ?lang=en 로드에서도 새 학습 문구는 한국어로 대체한다.
+    if(viewportName==='desktop'){
+      const en=await browser.newPage({viewport:{width,height}}),enUrl=new URL(parsed.href),errors=[];
+      enUrl.searchParams.set('lang','en');en.on('pageerror',e=>errors.push(String(e)));
+      try{
+        await en.goto(enUrl.href,{waitUntil:'load'});await en.waitForFunction(()=>!!window.__lab,null,{timeout:60000});
+        await en.evaluate(()=>{window.__lab.mode('student');window.__lab.quest.go(0);window.__lab.quest.skip('explain');if(document.querySelector('.q-ask')?.textContent!=='아이 한 명이 작은 공룡을 이긴 건 왜일까요?')throw Error('English explanation fallback');});
+        if(errors.length)throw Error(errors.join('\n'));
+      }finally{await en.close();}
+    }
     for (const [name, preset] of states) {
       if(['projector','compact'].includes(viewportName)&&name!=='teacher-strip')continue;
       if(name==='thumb'&&viewportName!=='desktop')continue;
@@ -85,7 +134,7 @@ try {
           if (!name.startsWith('attract-') && name !== 'touch-pulse') lab.step(100, 1 / 30);
           lab.step(1, 0);
           return { textAudit: lab.textAudit(), coverage: lab.heroCoverage(), perf: lab.perf(),
-            occlusion: [...document.querySelectorAll('#quests,#teacher-strip,#teacher-numbers,#q-pictures')].filter(el => el.getClientRects().length && getComputedStyle(el).visibility !== 'hidden').map(el => {
+            occlusion: [...document.querySelectorAll('#quests,#mission,#teacher-strip,#teacher-numbers,#q-pictures')].filter(el => el.getClientRects().length && getComputedStyle(el).visibility !== 'hidden').map(el => {
               const r = el.getBoundingClientRect(), b = lab.heroCoverage().bounds;
               return { id: el.id, intentional: !document.getElementById('teacher-class').hidden, overlaps: b.left < r.right && b.right > r.left && b.top < r.bottom && b.bottom > r.top };
             }),
@@ -105,7 +154,7 @@ try {
           lab.step(1,0);
           const bounds=lab.heroCoverage().bounds;
           return {quest:lab.quest.state(),textAudit:lab.textAudit(),coverage:lab.heroCoverage(),perf:lab.perf(),
-            occlusion:[...document.querySelectorAll('#quests,#tools,#q-pictures')].filter(el=>el.getClientRects().length&&getComputedStyle(el).visibility!=='hidden').map(el=>{const r=el.getBoundingClientRect();return {id:el.id,overlaps:bounds.left<r.right&&bounds.right>r.left&&bounds.top<r.bottom&&bounds.bottom>r.top};}),
+            occlusion:[...document.querySelectorAll('#quests,#mission,#tools,#q-pictures')].filter(el=>el.getClientRects().length&&getComputedStyle(el).visibility!=='hidden').map(el=>{const r=el.getBoundingClientRect();return {id:el.id,overlaps:bounds.left<r.right&&bounds.right>r.left&&bounds.top<r.bottom&&bounds.bottom>r.top};}),
             touchTargets:[...document.querySelectorAll('button')].filter(b=>b.getClientRects().length).map(b=>({label:b.getAttribute('aria-label'),width:b.getBoundingClientRect().width,height:b.getBoundingClientRect().height})),
             horizontalScroll:document.documentElement.scrollWidth>innerWidth+1};
         }

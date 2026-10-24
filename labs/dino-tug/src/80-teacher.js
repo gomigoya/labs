@@ -3,7 +3,7 @@ const TEACHER_CFG = {
   idleSeconds: 90,
   layerOrder: ['hero','console','track','capacities',...GRAMMAR.LAYERS],
   get layerIcons(){return Object.fromEntries(this.layerOrder.map((n,i)=>[n,'layer'+i]));},
-  get layerLabels(){return Object.fromEntries(this.layerOrder.map((n,i)=>[n,{ko:['장치','콘솔','트랙','기본 능력 막대','마디','쌓아 채우기·계단','문턱·한계 윤곽','비교·겹치기','숨은 구조·돋보기','같은 시간 간격 흔적','비교','기록'][i],en:['Apparatus','Console','Track','Basic capacity bars','Force units','Stack and steps','Limits','Overlay','Contact section','Time traces','Ratio comparison','Run records'][i]}]));},
+  get layerLabels(){return Object.fromEntries(this.layerOrder.map((n,i)=>[n,{ko:['장치','콘솔','트랙','기본 능력 막대','마디','쌓아 채우기·계단','문턱·한계 윤곽','비교·겹치기','숨은 구조·돋보기','같은 시간 간격 흔적','비교','기록','장력계','렌즈','서서히 당기기'][i],en:['Apparatus','Console','Track','Basic capacity bars','Force units','Stack and steps','Limits','Overlay','Contact section','Time traces','Ratio comparison','Run records','Tension gauges','Object lens','Gradual pull'][i]}]));},
   numbers: [
     {label:'rail',fn:()=>PHYS.kidsFromRailX(S.u.value),unit:'×'},
     {label:'species',fn:()=>PHYS.SPECIES[SPECIES_KEYS[Math.round(S.species.value)]],unit:'kg'},
@@ -22,7 +22,7 @@ const TEACHER_CFG = {
   layerOn:name=>name in GRAMMAR.enabled?GRAMMAR.enabled[name]:name==='capacities'?S.layers[name]===true:S.layers[name]!==false,
   // The portable scalar is the continuous rail coordinate; PHYS owns integer detents.
   getCloser:()=>S.u.value,
-  setCloser(value,immediate=false){S.u.target=clamp(value,PHYS.railX(PHYS.C.kidsMin),PHYS.railX(PHYS.C.kidsMax));if(immediate)S.u.value=S.u.target;},
+  setCloser(value,immediate=false){if(S.pullMode){set('pull',clamp(value,0,1));return;}S.u.target=clamp(value,PHYS.railX(PHYS.C.kidsMin),PHYS.railX(PHYS.C.kidsMax));if(immediate)S.u.value=S.u.target;},
   getPlaying:()=>!!S.playing.target,
   play(on){S.playing.value=S.playing.target=+on;syncUI();},
   oneFrame(){const p=S.playing.target;S.playing.value=S.playing.target=1;step(1);S.playing.value=S.playing.target=p;syncUI();},
@@ -30,20 +30,27 @@ const TEACHER_CFG = {
   getUI:()=>!!S.ui.target,
   fly(spec,duration){flyTo(spec,duration);},
   shotForStage(row){set('species',row.species);set('ground',row.ground);S.species.value=S.species.target;S.ground.value=S.ground.target;S.t.value=S.t.target=0;return S.vertical?SHOTS_VERTICAL[row.shot===3?2:0]:SHOTS[row.shot];},
-  quests:QUESTS,getQuest:()=>Q.i,
+  get levels(){return LEVELS;},firstOfLevel,levelOf,
+  quests:QUESTS,get questOrder(){return SEQUENCE;},getQuest:()=>Q.i,
   bindMode(state){Object.defineProperty(Q,'free',{get:()=>state.mode!=='student',set(value){if(state.mode!=='teacher')state.mode=value?'free':'student';},enumerable:true,configurable:true});},
   questMode(free){for(const n of ['hero','console','track'])layer(n,true);QUEST.mode(free);},
   selectQuest(i){QUEST.go(i);Q.free=true;Q.phase='act';DIRECTOR.clear();TEACHER.layers(['hero','console','track',...QUESTS[i].layers]);shot(S.vertical?0:1,S.vertical);questUI();},
-  cardBusy:()=>!Q.free&&['intro','predict','observe','confirm','card'].includes(Q.phase),
+  cardBusy:()=>!Q.free&&['intro','predict','observe','confirm','explain','card'].includes(Q.phase),
+  exportLog(){
+    const data={app:'dino-tug',version:1,exportedAt:new Date().toISOString(),entries:QUEST.log()};
+    const url=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:'application/json'}));
+    const a=document.createElement('a');a.href=url;a.download='dino-tug-log.json';document.body.append(a);
+    try{a.click();}finally{a.remove();setTimeout(()=>URL.revokeObjectURL(url),0);}
+  },
   reset(){
     if(S.drag)endDrag({pointerId:S.drag.id});S.fly=null;controls.enabled=true;
-    Q.completed.clear();Q.stars.fill(0);Q.results=[];Q.run=0;Q.pick=null;
-    GRAMMAR.unpin();GRAMMAR.clearRecords();DIRECTOR.clear();QUEST.go(0);Q.free=true;Q.phase='act';
+    Q.completed.clear();Q.stars.fill(0);Q.results=[];Q.predict=[];Q.explain=[];Q.run=0;Q.pick=null;
+    GRAMMAR.unpin();GRAMMAR.clearRecords();DIRECTOR.clear();QUEST.go(QUEST.first());Q.free=true;Q.phase='act';
     preset(0);S.u.value=S.u.target;S.species.value=S.species.target;S.ground.value=S.ground.target;
     S.playing.value=S.playing.target=0;S.sound.value=S.sound.target=0;
     updateHero();GRAMMAR.update(0);shot(S.vertical?0:1,S.vertical);syncUI();
   },
-  startStudent(){for(const n of ['hero','console','track'])layer(n,true);QUEST.go(0);},
+  startStudent(){for(const n of ['hero','console','track'])layer(n,true);QUEST.go(QUEST.first());},
   refresh(){for(const n of ['hero','console','track'])layer(n,true);questUI();},visibilityReset(){S.lastTime=0;},
   frameViewport(){
     if(!this.getUI()){camera.clearViewOffset();return;}
@@ -64,9 +71,10 @@ const TEACHER_CFG = {
       const observations=[];
       // Use the same declarative solution as students, without issuing completed runs or stars.
       for(const command of d.solve(QUEST.sample())){
-        for(const k of ['n','species','mu'])if(command[k]!==undefined)set(k,command[k]);
+        for(const k of ['n','species','mu','lens'])if(command[k]!==undefined)set(k,command[k]);
         S.u.value=S.u.target;S.species.value=S.species.target;S.ground.value=S.ground.target;
-        const s=QUEST.sample();if(command.pull)observations.push({n:s.n,species:s.species,mu:s.mu});
+        if(typeof command.pull==='number')set('pull',command.pull);
+        const s=QUEST.sample();if(command.pull===true)observations.push({n:s.n,species:s.species,mu:s.mu,rivalN:s.rivalN});
         if(command.compare)GRAMMAR.set({[GRAMMAR.LAYERS[6]]:true});
       }
       f.classSample={...QUEST.sample(),observations,before:observations[0]||null,after:observations[1]||null};
@@ -74,7 +82,7 @@ const TEACHER_CFG = {
     }
     if(Q.phase==='observe'){f.classElapsed+=dt;if(f.classElapsed>=2.5)Q.phase='confirm';}
     return {phase:Q.phase,candidates:d.candidates,picture:c=>CARDS.picture(d.id,c,DIRECTOR.clock,QUEST.sample()),compare:()=>{
-      const c=d.candidates.find(c=>c.key===Q.pick)||d.candidates[0];return `<div class="q-compare">${CARDS.picture(d.id,c)}${CARDS.actual(d.id,f.classSample||QUEST.sample())}</div>`;
+      const c=d.candidates.find(c=>c.key===Q.pick)||d.candidates[0],sample=f.classSample||QUEST.sample();return `<div class="q-compare">${CARDS.picture(d.id,c,0,sample)}${CARDS.actual(d.id,sample)}</div>`;
     }};
   }
 };
@@ -84,6 +92,8 @@ TEACHER_CFG.bindMode(T);
 // Compatibility view, never a second stored snapshot.
 Object.defineProperty(S, 'ab', { get: () => T.ab, set: value => { T.ab = value; } });
 const TEACHER_LABELS = {
+  export: { ko: '기록 내보내기', en: 'Export log' },
+  level: { ko: '단계', en: 'Level' },
   teacher: { ko: '교사 시연', en: 'Teacher demonstration' },
   ui: { ko: '화면 조작 숨기기 또는 보이기', en: 'Hide or show controls' },
   frame: { ko: '한 프레임', en: 'One frame' }, slow: { ko: '사분의 일 속도', en: 'Quarter speed' },
@@ -96,6 +106,7 @@ const TEACHER_LABELS = {
 };
 Object.assign(LABELS, TEACHER_LABELS);
 Object.assign(ICONS, {
+  export: 'M4 9v12h16V9M12 2v12m-4-4 4 4 4-4',
   teacher: 'M6 3h12v18H6zM9 6h6M9 10h6M9 15h1m4 0h1M9 18h6',
   frame: 'M4 5v14l8-7zM14 5l8 7-8 7z', slow: 'M3 14h18M6 14V9h12v5M8 9V6m8 3V6M7 18h1m8 0h1',
   ab: 'M3 5h7v14H3zM14 5h7v14h-7zM10 12h4', clear: 'M5 5l14 14M19 5L5 19',
@@ -103,6 +114,12 @@ Object.assign(ICONS, {
   laser: 'M3 21l9-9m-2-2 4 4M16 2v4m2 2h4M18 6l3-3',
   numbers: 'M7 3L5 21M16 3l-2 18M2 9h19M1 15h19', predict: 'M3 4h18v13H3zM8 21l4-4 4 4M7 8h3m4 0h3M7 12h10', close: 'M5 5l14 14M19 5L5 19'
 });
+const TEACHER_ICONS = {
+  level1:'M14 12a2 2 0 1 0-4 0 2 2 0 1 0 4 0',
+  level2:'M9 12a2 2 0 1 0-4 0 2 2 0 1 0 4 0M19 12a2 2 0 1 0-4 0 2 2 0 1 0 4 0',
+  level3:'M6 12a2 2 0 1 0-4 0 2 2 0 1 0 4 0M14 12a2 2 0 1 0-4 0 2 2 0 1 0 4 0M22 12a2 2 0 1 0-4 0 2 2 0 1 0 4 0'
+};
+Object.assign(ICONS,TEACHER_ICONS);
 const TEACHER_KEYS = { Space: 'play', '.': 'frame', '/': 'ui', Escape: 'reset' };
 const teacherStrip = document.createElement('aside'); teacherStrip.id = 'teacher-strip'; document.body.append(teacherStrip);
 const numericLayer = document.createElement('div'); numericLayer.id = 'teacher-numbers'; document.body.append(numericLayer);
@@ -143,6 +160,7 @@ const TEACHER = {
   },
   command(name) {
     if (name === 'reset') this.reset();
+    else if (name === 'export') TEACHER_CFG.exportLog();
     else if (name === 'play') TEACHER_CFG.play(!TEACHER_CFG.getPlaying());
     else if (name === 'frame') TEACHER_CFG.oneFrame();
     else if (name === 'stack') this.stack();
@@ -169,9 +187,15 @@ const TEACHER = {
     group = section();
     for (const name of ['ab', 'clear', 'spotlight', 'laser', 'numbers']) teacherButton(name, name, () => this.command(name), group).setAttribute('aria-pressed', String(name === 'ab' ? !!T.ab : !!T[name]));
     group = section();
-    TEACHER_CFG.quests.forEach((d, i) => { const b = teacherButton('quest', d.icon, () => this.select(i), group); b.setAttribute('aria-label', `${TEACHER_LABELS.quest[TEACHER_CFG.language]} ${i + 1}`); });
+    for (const level of TEACHER_CFG.levels) {
+      const b = teacherButton('level', 'level'+level.id, () => { T.numbers=level.id>=2; this.select(TEACHER_CFG.firstOfLevel(level.id)); }, group);
+      b.setAttribute('aria-label', TEACHER_LABELS.level[TEACHER_CFG.language]+' '+level.id);
+      b.setAttribute('aria-pressed', String(TEACHER_CFG.levelOf(TEACHER_CFG.getQuest())===level.id));
+    }
     group = section();
-    for (const name of ['predict', 'reset']) teacherButton(name, name, () => this.command(name), group);
+    TEACHER_CFG.questOrder.forEach((i, pos) => { const b = teacherButton('quest', TEACHER_CFG.quests[i].icon, () => this.select(i), group); b.setAttribute('aria-label', `${TEACHER_LABELS.quest[TEACHER_CFG.language]} ${pos + 1}`); });
+    group = section();
+    for (const name of ['predict', 'reset', 'export']) teacherButton(name, name, () => this.command(name), group);
     if (focusLabel) [...teacherStrip.querySelectorAll('button')].find(b => b.getAttribute('aria-label') === focusLabel)?.focus({ preventScroll: true });
     this.update(0);
   },

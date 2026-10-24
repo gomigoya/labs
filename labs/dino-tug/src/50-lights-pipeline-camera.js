@@ -66,19 +66,22 @@ function heroCoverage() {
     const r = el.getBoundingClientRect(); return b.left < r.right && b.right > r.left && b.top < r.bottom && b.bottom > r.top;
   };
   return { width: (b.right - b.left) / innerWidth, height: (b.bottom - b.top) / innerHeight,
-    overlaps: overlaps('quests')||overlaps('tools'), overlapsTop: overlaps('quests'), overlapsTools: overlaps('tools'), clipped: b.left < 0 || b.right > innerWidth || b.top < 0 || b.bottom > innerHeight || b.behind, bounds: b };
+    overlaps: overlaps('quests')||overlaps('tools')||overlaps('mission'), overlapsTop: overlaps('quests')||overlaps('mission'), overlapsTools: overlaps('tools'), clipped: b.left < 0 || b.right > innerWidth || b.top < 0 || b.bottom > innerHeight || b.behind, bounds: b };
 }
 function stageRegion(event=false){
  const region={left:12,right:innerWidth-12,top:12,bottom:innerHeight-12};
  const visible=id=>{const e=document.getElementById(id);return e&&e.getClientRects().length&&getComputedStyle(e).visibility!=='hidden'?e.getBoundingClientRect():null;};
  const top=visible('quests'),tools=visible('tools'),picture=visible('q-pictures'),strip=visible('teacher-strip'),numbers=visible('teacher-numbers'),classPanel=visible('teacher-class');
  if(top)region.top=top.bottom+12;
+ const mission=visible('mission');
+ if(mission)region.top=Math.max(region.top,mission.bottom+12);
  if(tools)region.bottom=Math.min(region.bottom,tools.top-12);
  if(picture&&!event&&picture.height>0)region.bottom=Math.min(region.bottom,picture.top-12);
  if(strip){if(strip.width>strip.height)region.bottom=Math.min(region.bottom,strip.top-12);else region.right=Math.min(region.right,strip.left-12);}
  if(numbers)region.top=Math.max(region.top,numbers.bottom+12);
  if(classPanel)region.bottom=Math.min(region.bottom,classPanel.top-12);
  if(event)region.top=Math.max(region.top,innerWidth/innerHeight<.9?94:122);
+ if(event&&mission)region.top=Math.max(region.top,mission.bottom+8+(S.vertical?70:98)+12);
  return region;
 }
 function fitHero(eventX=null,region=stageRegion(eventX!==null)) {
