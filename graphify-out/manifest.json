@@ -600,9 +600,9 @@
     "semantic_hash": ""
   },
   "labs/dino-tug/src/15-physics.js": {
-    "mtime": 1792843676.0115156,
-    "seen": 1792845566.8555627,
-    "ast_hash": "79b4883509d1573e9751d9425c19279e",
+    "mtime": 1792859573.047288,
+    "seen": 1792859721.262326,
+    "ast_hash": "610f6a4a7229608dc25269bde7aa8e2e",
     "semantic_hash": ""
   },
   "labs/dino-tug/src/20-scene-kit.js": {
@@ -612,15 +612,15 @@
     "semantic_hash": ""
   },
   "labs/dino-tug/src/30-room-console.js": {
-    "mtime": 1792764301.946221,
-    "seen": 1792766278.389338,
-    "ast_hash": "f88379d3db515f5a5ef22398729240ed",
+    "mtime": 1792858865.1070232,
+    "seen": 1792859721.262326,
+    "ast_hash": "455df2f95afb3e7d43da45ff88774443",
     "semantic_hash": ""
   },
   "labs/dino-tug/src/40-hero.js": {
-    "mtime": 1792843902.8567386,
-    "seen": 1792845566.8555627,
-    "ast_hash": "d6e17fc16508c9690ec6d140dcb42d4b",
+    "mtime": 1792857982.9618373,
+    "seen": 1792859721.262326,
+    "ast_hash": "7bdf9172399fb2a227bd34332ebe8636",
     "semantic_hash": ""
   },
   "labs/dino-tug/src/45-grammar.js": {
@@ -630,21 +630,21 @@
     "semantic_hash": ""
   },
   "labs/dino-tug/src/50-lights-pipeline-camera.js": {
-    "mtime": 1792821897.8397727,
-    "seen": 1792822693.0992002,
-    "ast_hash": "3c19d7fb2c6a3d5f06f62cf4d406558f",
+    "mtime": 1792862867.2548852,
+    "seen": 1792863157.381059,
+    "ast_hash": "3a218f9ac339ace58fcf6e2ae6ce211a",
     "semantic_hash": ""
   },
   "labs/dino-tug/src/60-interaction-hud.js": {
-    "mtime": 1792844473.9983711,
-    "seen": 1792845566.8555627,
-    "ast_hash": "72287f046b3a8f15f1b9b3100d947f30",
+    "mtime": 1792862841.7681174,
+    "seen": 1792863157.381059,
+    "ast_hash": "31cc3125d6de7e4c5ba9a6f8129d3a8c",
     "semantic_hash": ""
   },
   "labs/dino-tug/src/65-quests.js": {
-    "mtime": 1792845200.034312,
-    "seen": 1792845566.8555627,
-    "ast_hash": "1f757d7cc07e92d68c18223da6f3a5f6",
+    "mtime": 1792859451.6083806,
+    "seen": 1792859721.2633278,
+    "ast_hash": "3c7be5358e13221341e91b495f20a9e6",
     "semantic_hash": ""
   },
   "labs/dino-tug/src/66-cards.js": {
@@ -654,21 +654,21 @@
     "semantic_hash": ""
   },
   "labs/dino-tug/src/68-director.js": {
-    "mtime": 1792843627.9313083,
-    "seen": 1792845566.8555627,
-    "ast_hash": "4417674eaa07ad1b64afb59bafecd166",
+    "mtime": 1792859090.7085989,
+    "seen": 1792859721.2633278,
+    "ast_hash": "0af2a230cd80e752bc21b272561d4147",
     "semantic_hash": ""
   },
   "labs/dino-tug/src/70-loop.js": {
-    "mtime": 1792824649.6518319,
-    "seen": 1792828039.9638598,
-    "ast_hash": "ac6b2479522fca2b5d5ab52e5a4e1f6a",
+    "mtime": 1792862856.3052232,
+    "seen": 1792863157.381059,
+    "ast_hash": "5c3c9eba029e5952443651419a9a33b0",
     "semantic_hash": ""
   },
   "labs/dino-tug/src/80-teacher.js": {
-    "mtime": 1792845201.745425,
-    "seen": 1792845566.8555627,
-    "ast_hash": "fc84bd26bf42f061a4f029f492af7b77",
+    "mtime": 1792862856.3042216,
+    "seen": 1792863157.381059,
+    "ast_hash": "74dbd2789f8dc31bdbe2a3669e7e731c",
     "semantic_hash": ""
   },
   "labs/dino-tug/src/85-attract.js": {
@@ -684,27 +684,27 @@
     "semantic_hash": ""
   },
   "labs/dino-tug/tools/capture.mjs": {
-    "mtime": 1792841403.4060018,
-    "seen": 1792845566.8555627,
-    "ast_hash": "8137125986e8d0e7a5d6ff08f46b0d9e",
+    "mtime": 1792858564.5670905,
+    "seen": 1792859721.2633278,
+    "ast_hash": "2d607d75b96adccb381e06684fb6fc55",
     "semantic_hash": ""
   },
   "labs/dino-tug/tools/hand-check.mjs": {
-    "mtime": 1792843707.9800768,
-    "seen": 1792845566.8555627,
-    "ast_hash": "7d3013cf2d782509bc261135a41044d8",
+    "mtime": 1792862968.5301826,
+    "seen": 1792863157.381059,
+    "ast_hash": "0f7899f6a0d2ff2a38a7c932cdf58e0d",
     "semantic_hash": ""
   },
   "labs/dino-tug/tools/quest-check.mjs": {
-    "mtime": 1792845372.5624943,
-    "seen": 1792845566.8555627,
-    "ast_hash": "0cf4e2bc5848733bc24b9b2f8201a06a",
+    "mtime": 1792859451.6904702,
+    "seen": 1792859721.2633278,
+    "ast_hash": "ce2a6f00ffa89f97f97546064eb24978",
     "semantic_hash": ""
   },
   "labs/dino-tug/tools/teacher-check.mjs": {
-    "mtime": 1792845425.053727,
-    "seen": 1792845566.8555627,
-    "ast_hash": "48e18e60d8ced2e820efcee7ae93a424",
+    "mtime": 1792862939.2378116,
+    "seen": 1792863157.381059,
+    "ast_hash": "536cdfd45d9bc18d5e1f50ae69c3daee",
     "semantic_hash": ""
   },
   "labs/earth-stop/meta.json": {
@@ -1230,15 +1230,15 @@
     "semantic_hash": ""
   },
   "labs/dino-tug/README.md": {
-    "mtime": 1792844940.1921592,
-    "seen": 1792845566.856562,
-    "ast_hash": "99993739fd9f73c9341535643e9b36a2",
+    "mtime": 1792862628.9892397,
+    "seen": 1792863157.3816016,
+    "ast_hash": "344bc9f09b9403f4c6c277d3b53b5047",
     "semantic_hash": ""
   },
   "labs/dino-tug/docs/quest-map.md": {
-    "mtime": 1792845428.3145044,
-    "seen": 1792845566.856562,
-    "ast_hash": "35c28a4a8d45c1d555cc7c9a20f13423",
+    "mtime": 1792858564.5680902,
+    "seen": 1792859721.2633278,
+    "ast_hash": "5a80ed4bf4a55264222532889acbd27a",
     "semantic_hash": ""
   },
   "labs/dino-tug/docs/reviewer-brief.md": {
@@ -1248,9 +1248,9 @@
     "semantic_hash": ""
   },
   "labs/dino-tug/docs/teacher-interface.md": {
-    "mtime": 1792845428.313614,
-    "seen": 1792845566.856562,
-    "ast_hash": "4fd69844e3b98f63723e28c4a8edd714",
+    "mtime": 1792862613.8800228,
+    "seen": 1792863157.3816016,
+    "ast_hash": "34a987916282a9b72ac4cfbb7eb2c35a",
     "semantic_hash": ""
   },
   "labs/dino-tug/docs/theory-card.md": {
@@ -1260,9 +1260,9 @@
     "semantic_hash": ""
   },
   "labs/dino-tug/docs/visual-grammar.md": {
-    "mtime": 1792765585.545605,
-    "seen": 1792766278.389338,
-    "ast_hash": "830e90df1b033af23aa0ef9313cc01da",
+    "mtime": 1792858704.0236447,
+    "seen": 1792859721.2633278,
+    "ast_hash": "140bbf1027a127a227c52ba0f5015c77",
     "semantic_hash": ""
   },
   "labs/dino-tug/guide.html": {
@@ -1272,15 +1272,15 @@
     "semantic_hash": ""
   },
   "labs/dino-tug/index.html": {
-    "mtime": 1792845474.6375227,
-    "seen": 1792845566.856562,
-    "ast_hash": "2f5214e88b372dcd83a92bd520ab2598",
+    "mtime": 1792863073.604616,
+    "seen": 1792863157.3816016,
+    "ast_hash": "3ba2d3b496cc87a262f6cd31fcd57c7e",
     "semantic_hash": ""
   },
   "labs/dino-tug/src/00-head.html": {
-    "mtime": 1792842803.843918,
-    "seen": 1792845566.856562,
-    "ast_hash": "aebf2404c404a59ccf062ba36045434f",
+    "mtime": 1792862292.840699,
+    "seen": 1792863157.3816016,
+    "ast_hash": "0fc700fc4310d8f35a0ecc7dc9b1e98e",
     "semantic_hash": ""
   },
   "labs/earth-stop/README.md": {
@@ -1638,9 +1638,9 @@
     "semantic_hash": ""
   },
   "labs/dino-tug/src/67-mission.js": {
-    "mtime": 1792845017.135616,
-    "seen": 1792845566.8555627,
-    "ast_hash": "0323a30e425200ac006acd3ec085a61c",
+    "mtime": 1792859344.5954764,
+    "seen": 1792859721.2633278,
+    "ast_hash": "f52fffd52657bee8d9cf36d8abae0e0c",
     "semantic_hash": ""
   },
   "labs/earth-stop/src/67-mission.js": {
@@ -1707,6 +1707,18 @@
     "mtime": 1792845333.2805407,
     "seen": 1792845566.856562,
     "ast_hash": "81e0e894459c4af005e31a0115fb2003",
+    "semantic_hash": ""
+  },
+  "labs/dino-tug/src/64-ui-text.js": {
+    "mtime": 1792862856.303223,
+    "seen": 1792863157.381059,
+    "ast_hash": "c4380cfac2dd8addf72e8589648445ef",
+    "semantic_hash": ""
+  },
+  "labs/dino-tug/tools/hud-check.mjs": {
+    "mtime": 1792858611.4317675,
+    "seen": 1792859721.2633278,
+    "ast_hash": "582ff3ebab5e78ae8ae371bd51c4304c",
     "semantic_hash": ""
   }
 }
