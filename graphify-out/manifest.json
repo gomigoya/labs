@@ -444,9 +444,9 @@
     "semantic_hash": ""
   },
   "labs/moon-closer/tools/hand-check.mjs": {
-    "mtime": 1792718249.0433939,
-    "seen": 1792719776.4849641,
-    "ast_hash": "c37d2252eeb3282b2640d4c5bc4179e8",
+    "mtime": 1792821939.3209176,
+    "seen": 1792822693.0992002,
+    "ast_hash": "9c2bdbdc4427d5be29897e95adeca8c2",
     "semantic_hash": ""
   },
   "labs/moon-closer/docs/quest-map.md": {
@@ -510,15 +510,15 @@
     "semantic_hash": ""
   },
   "labs/black-hole-fall/src/50-lights-pipeline-camera.js": {
-    "mtime": 1792765236.5212388,
-    "seen": 1792766278.389338,
-    "ast_hash": "05a4061339a107dc505ad255c0bfa692",
+    "mtime": 1792822008.7362244,
+    "seen": 1792822693.0992002,
+    "ast_hash": "eab4be9c26e556f214e42262be789aba",
     "semantic_hash": ""
   },
   "labs/black-hole-fall/src/60-interaction-hud.js": {
-    "mtime": 1792765115.2909608,
-    "seen": 1792766278.389338,
-    "ast_hash": "98b98c9cd057a4629c0050e5eef74bdc",
+    "mtime": 1792821904.3533297,
+    "seen": 1792822693.0992002,
+    "ast_hash": "fc75ea7866a3b1381f4a597ca90e3146",
     "semantic_hash": ""
   },
   "labs/black-hole-fall/src/65-quests.js": {
@@ -534,15 +534,15 @@
     "semantic_hash": ""
   },
   "labs/black-hole-fall/src/68-director.js": {
-    "mtime": 1792716073.8323057,
-    "seen": 1792719776.4849641,
-    "ast_hash": "92e4f93bf761daef94558af5f882e81e",
+    "mtime": 1792821904.3553286,
+    "seen": 1792822693.0992002,
+    "ast_hash": "c0f188ae82248524f57e6f4578c4b066",
     "semantic_hash": ""
   },
   "labs/black-hole-fall/src/70-loop.js": {
-    "mtime": 1792765115.2929616,
-    "seen": 1792766278.389338,
-    "ast_hash": "05da747f4a20ccb26b9ce03feab60abd",
+    "mtime": 1792821904.3543308,
+    "seen": 1792822693.0992002,
+    "ast_hash": "de9895909d9515fcdb383a0ea36b3e63",
     "semantic_hash": ""
   },
   "labs/black-hole-fall/src/80-teacher.js": {
@@ -564,27 +564,27 @@
     "semantic_hash": ""
   },
   "labs/black-hole-fall/tools/capture.mjs": {
-    "mtime": 1792753950.057295,
-    "seen": 1792755977.0987277,
-    "ast_hash": "3c6eecc1cfca88a270486010af1ecc4c",
+    "mtime": 1792822100.1746624,
+    "seen": 1792822693.0992002,
+    "ast_hash": "b2a78b46aa2e244d3d4789a1f968359b",
     "semantic_hash": ""
   },
   "labs/black-hole-fall/tools/hand-check.mjs": {
-    "mtime": 1792718163.2790878,
-    "seen": 1792719776.4849641,
-    "ast_hash": "efc6a42d523c743c7f7ec58c9cf15671",
+    "mtime": 1792821904.3553286,
+    "seen": 1792822693.0992002,
+    "ast_hash": "d86f51a3724a3fa5a90b24bebc4e4a5c",
     "semantic_hash": ""
   },
   "labs/black-hole-fall/tools/quest-check.mjs": {
-    "mtime": 1792715035.5414734,
-    "seen": 1792719776.4849641,
-    "ast_hash": "e8dd5e012edc10b3b685ae0e99b306e6",
+    "mtime": 1792822170.534513,
+    "seen": 1792822693.0992002,
+    "ast_hash": "94629de68b17a855dddf266738b27bc5",
     "semantic_hash": ""
   },
   "labs/black-hole-fall/tools/teacher-check.mjs": {
-    "mtime": 1792716176.5849774,
-    "seen": 1792719776.4849641,
-    "ast_hash": "94ba91929149454be461925a798db26e",
+    "mtime": 1792822005.967967,
+    "seen": 1792822693.0992002,
+    "ast_hash": "d634f493f6a595a748b92e51918173ce",
     "semantic_hash": ""
   },
   "labs/dino-tug/meta.json": {
@@ -600,9 +600,9 @@
     "semantic_hash": ""
   },
   "labs/dino-tug/src/15-physics.js": {
-    "mtime": 1792719389.1229877,
-    "seen": 1792719776.4849641,
-    "ast_hash": "a8610a197076dd0e714980ba2d2867b0",
+    "mtime": 1792843676.0115156,
+    "seen": 1792845566.8555627,
+    "ast_hash": "79b4883509d1573e9751d9425c19279e",
     "semantic_hash": ""
   },
   "labs/dino-tug/src/20-scene-kit.js": {
@@ -618,57 +618,57 @@
     "semantic_hash": ""
   },
   "labs/dino-tug/src/40-hero.js": {
-    "mtime": 1792765103.4563484,
-    "seen": 1792766278.389338,
-    "ast_hash": "fe6e27c76e9e55aa03d64ddc3e521997",
+    "mtime": 1792843902.8567386,
+    "seen": 1792845566.8555627,
+    "ast_hash": "d6e17fc16508c9690ec6d140dcb42d4b",
     "semantic_hash": ""
   },
   "labs/dino-tug/src/45-grammar.js": {
-    "mtime": 1792764524.7160957,
-    "seen": 1792766278.389338,
-    "ast_hash": "37b05392f4fa38ee23fad992866afcf2",
+    "mtime": 1792844203.0325875,
+    "seen": 1792845566.8555627,
+    "ast_hash": "ade85e539061757da75389e0144039ce",
     "semantic_hash": ""
   },
   "labs/dino-tug/src/50-lights-pipeline-camera.js": {
-    "mtime": 1792764433.737247,
-    "seen": 1792766278.389338,
-    "ast_hash": "b52ac8d1e38e6734b67204d532dea252",
+    "mtime": 1792821897.8397727,
+    "seen": 1792822693.0992002,
+    "ast_hash": "3c19d7fb2c6a3d5f06f62cf4d406558f",
     "semantic_hash": ""
   },
   "labs/dino-tug/src/60-interaction-hud.js": {
-    "mtime": 1792764390.6406076,
-    "seen": 1792766278.389338,
-    "ast_hash": "447d79afc350d3c37407f825b587f0c7",
+    "mtime": 1792844473.9983711,
+    "seen": 1792845566.8555627,
+    "ast_hash": "72287f046b3a8f15f1b9b3100d947f30",
     "semantic_hash": ""
   },
   "labs/dino-tug/src/65-quests.js": {
-    "mtime": 1792716388.9932601,
-    "seen": 1792719776.4849641,
-    "ast_hash": "3332a12a185fefd911d3157589da766a",
+    "mtime": 1792845200.034312,
+    "seen": 1792845566.8555627,
+    "ast_hash": "1f757d7cc07e92d68c18223da6f3a5f6",
     "semantic_hash": ""
   },
   "labs/dino-tug/src/66-cards.js": {
-    "mtime": 1792764390.8872283,
-    "seen": 1792766278.389338,
-    "ast_hash": "2be39a14d6ad546ca8a155dd104c9c3f",
+    "mtime": 1792843707.9470203,
+    "seen": 1792845566.8555627,
+    "ast_hash": "04a7e2e53d9cfa4c741ed503bcaf0f68",
     "semantic_hash": ""
   },
   "labs/dino-tug/src/68-director.js": {
-    "mtime": 1792764759.5850935,
-    "seen": 1792766278.389338,
-    "ast_hash": "10304ab46fdb9101ee76553ebc966af8",
+    "mtime": 1792843627.9313083,
+    "seen": 1792845566.8555627,
+    "ast_hash": "4417674eaa07ad1b64afb59bafecd166",
     "semantic_hash": ""
   },
   "labs/dino-tug/src/70-loop.js": {
-    "mtime": 1792764433.737247,
-    "seen": 1792766278.389338,
-    "ast_hash": "ccec6bb990ec25adbbaa905a8fdd9e66",
+    "mtime": 1792824649.6518319,
+    "seen": 1792828039.9638598,
+    "ast_hash": "ac6b2479522fca2b5d5ab52e5a4e1f6a",
     "semantic_hash": ""
   },
   "labs/dino-tug/src/80-teacher.js": {
-    "mtime": 1792717141.3372416,
-    "seen": 1792719776.4849641,
-    "ast_hash": "30c9ee78fed603f7a37573b3aa821321",
+    "mtime": 1792845201.745425,
+    "seen": 1792845566.8555627,
+    "ast_hash": "fc84bd26bf42f061a4f029f492af7b77",
     "semantic_hash": ""
   },
   "labs/dino-tug/src/85-attract.js": {
@@ -684,27 +684,27 @@
     "semantic_hash": ""
   },
   "labs/dino-tug/tools/capture.mjs": {
-    "mtime": 1792719501.3748078,
-    "seen": 1792719776.4849641,
-    "ast_hash": "58208a59fc4355f370891f3f95b45e8a",
+    "mtime": 1792841403.4060018,
+    "seen": 1792845566.8555627,
+    "ast_hash": "8137125986e8d0e7a5d6ff08f46b0d9e",
     "semantic_hash": ""
   },
   "labs/dino-tug/tools/hand-check.mjs": {
-    "mtime": 1792718999.6935358,
-    "seen": 1792719776.4849641,
-    "ast_hash": "8fa66aeb4b4347df047f5ff8eb07f019",
+    "mtime": 1792843707.9800768,
+    "seen": 1792845566.8555627,
+    "ast_hash": "7d3013cf2d782509bc261135a41044d8",
     "semantic_hash": ""
   },
   "labs/dino-tug/tools/quest-check.mjs": {
-    "mtime": 1792715568.9679377,
-    "seen": 1792719776.4849641,
-    "ast_hash": "9a20731a1092963e65d06c447a54b38f",
+    "mtime": 1792845372.5624943,
+    "seen": 1792845566.8555627,
+    "ast_hash": "0cf4e2bc5848733bc24b9b2f8201a06a",
     "semantic_hash": ""
   },
   "labs/dino-tug/tools/teacher-check.mjs": {
-    "mtime": 1792717214.076553,
-    "seen": 1792719776.4849641,
-    "ast_hash": "76abdf54af5eda602da34013a0125541",
+    "mtime": 1792845425.053727,
+    "seen": 1792845566.8555627,
+    "ast_hash": "48e18e60d8ced2e820efcee7ae93a424",
     "semantic_hash": ""
   },
   "labs/earth-stop/meta.json": {
@@ -750,15 +750,15 @@
     "semantic_hash": ""
   },
   "labs/earth-stop/src/50-lights-pipeline-camera.js": {
-    "mtime": 1792765440.7793632,
-    "seen": 1792766278.389338,
-    "ast_hash": "7f016f152bfead2639090b3db78aacd8",
+    "mtime": 1792821979.807346,
+    "seen": 1792822693.0992002,
+    "ast_hash": "925167395f94e830c9221d548df6ec46",
     "semantic_hash": ""
   },
   "labs/earth-stop/src/60-interaction-hud.js": {
-    "mtime": 1792765162.4220831,
-    "seen": 1792766278.389338,
-    "ast_hash": "285830ebe38dbd665f60bde522ec7805",
+    "mtime": 1792821943.6278589,
+    "seen": 1792822693.0992002,
+    "ast_hash": "c69b8317e02530eb71d1c5f2c0a0010e",
     "semantic_hash": ""
   },
   "labs/earth-stop/src/65-quests.js": {
@@ -774,15 +774,15 @@
     "semantic_hash": ""
   },
   "labs/earth-stop/src/68-director.js": {
-    "mtime": 1792765256.891242,
-    "seen": 1792766278.389338,
-    "ast_hash": "46f03d29b75b89e859002fa8007c2f42",
+    "mtime": 1792821983.7910783,
+    "seen": 1792822693.0992002,
+    "ast_hash": "b1502ee6dd82e58c48ea3798fb8ac616",
     "semantic_hash": ""
   },
   "labs/earth-stop/src/70-loop.js": {
-    "mtime": 1792765200.71749,
-    "seen": 1792766278.389338,
-    "ast_hash": "f2aba06849d73dc8787e8cbeef0fa487",
+    "mtime": 1792821975.8323967,
+    "seen": 1792822693.0992002,
+    "ast_hash": "f292a7d2e146a54016dffdb2492b09ec",
     "semantic_hash": ""
   },
   "labs/earth-stop/src/80-teacher.js": {
@@ -804,27 +804,27 @@
     "semantic_hash": ""
   },
   "labs/earth-stop/tools/capture.mjs": {
-    "mtime": 1792754748.5513384,
-    "seen": 1792755977.0987277,
-    "ast_hash": "f5975c88f84628a5db05ff605ef35476",
+    "mtime": 1792822262.9777534,
+    "seen": 1792822693.0992002,
+    "ast_hash": "ea680abf841eddf9750c4d988c8a7bca",
     "semantic_hash": ""
   },
   "labs/earth-stop/tools/hand-check.mjs": {
-    "mtime": 1792713575.4385364,
-    "seen": 1792719776.4849641,
-    "ast_hash": "17b459c711415a5d20d554edb5f70807",
+    "mtime": 1792821881.5797286,
+    "seen": 1792822693.0992002,
+    "ast_hash": "efd8f6007b01fc3b0c51d78ef0eae9c7",
     "semantic_hash": ""
   },
   "labs/earth-stop/tools/quest-check.mjs": {
-    "mtime": 1792715534.3982165,
-    "seen": 1792719776.4849641,
-    "ast_hash": "9f9eceeb934ab2a388bc084fce492e73",
+    "mtime": 1792821987.3992298,
+    "seen": 1792822693.0992002,
+    "ast_hash": "634ee0d6f9e8fa0129615759eaf76a13",
     "semantic_hash": ""
   },
   "labs/earth-stop/tools/teacher-check.mjs": {
-    "mtime": 1792716969.1854122,
-    "seen": 1792719776.4849641,
-    "ast_hash": "d890b99918a62ae8b9b6d6cfe1396f30",
+    "mtime": 1792822033.7512677,
+    "seen": 1792822693.0992002,
+    "ast_hash": "18769029fe934566ee39b92d83900bcb",
     "semantic_hash": ""
   },
   "labs/moon-closer/meta.json": {
@@ -870,9 +870,9 @@
     "semantic_hash": ""
   },
   "labs/moon-closer/src/60-interaction-hud.js": {
-    "mtime": 1792754783.5481095,
-    "seen": 1792755977.0987277,
-    "ast_hash": "64c9bb2ea029e84fe81a7caae9dbf03d",
+    "mtime": 1792821873.5041752,
+    "seen": 1792822693.0992002,
+    "ast_hash": "052c722dd1b3ee2a28f12434e64e1da5",
     "semantic_hash": ""
   },
   "labs/moon-closer/src/65-quests.js": {
@@ -888,9 +888,9 @@
     "semantic_hash": ""
   },
   "labs/moon-closer/src/68-director.js": {
-    "mtime": 1792765197.6507752,
-    "seen": 1792766278.389338,
-    "ast_hash": "1273e0b3f03acd59cca236077cae97aa",
+    "mtime": 1792822000.0336578,
+    "seen": 1792822693.0992002,
+    "ast_hash": "a0a31bb42620000032f40fa694b5f57c",
     "semantic_hash": ""
   },
   "labs/moon-closer/src/70-loop.js": {
@@ -918,9 +918,9 @@
     "semantic_hash": ""
   },
   "labs/moon-closer/tools/capture.mjs": {
-    "mtime": 1792753947.549301,
-    "seen": 1792755977.0987277,
-    "ast_hash": "bfa87b8ed5b90e896022e5069a109911",
+    "mtime": 1792822003.8393795,
+    "seen": 1792822693.0992002,
+    "ast_hash": "aa02fc78b6fe06d067e0a7653ee07bf8",
     "semantic_hash": ""
   },
   "labs/moon-closer/tools/quest-check.mjs": {
@@ -930,9 +930,9 @@
     "semantic_hash": ""
   },
   "labs/moon-closer/tools/teacher-check.mjs": {
-    "mtime": 1792711981.1975205,
-    "seen": 1792719776.4849641,
-    "ast_hash": "05cac5e47de8debc7442e62c17d14d9a",
+    "mtime": 1792821944.1677966,
+    "seen": 1792822693.0992002,
+    "ast_hash": "19925c079d94e5a79e2872a544f6e5b2",
     "semantic_hash": ""
   },
   "labs/rocket-liftoff/meta.json": {
@@ -978,15 +978,15 @@
     "semantic_hash": ""
   },
   "labs/rocket-liftoff/src/50-lights-pipeline-camera.js": {
-    "mtime": 1792765106.426739,
-    "seen": 1792766278.389338,
-    "ast_hash": "91d340c105f19c9bf6b8c6e708ea51ca",
+    "mtime": 1792821954.9345188,
+    "seen": 1792822693.0992002,
+    "ast_hash": "23edd2da9c69abc983b0bb6d78386592",
     "semantic_hash": ""
   },
   "labs/rocket-liftoff/src/60-interaction-hud.js": {
-    "mtime": 1792765204.5615227,
-    "seen": 1792766278.389338,
-    "ast_hash": "030a9af358a49bd3f286e964b7bd1c7c",
+    "mtime": 1792821941.246256,
+    "seen": 1792822693.0992002,
+    "ast_hash": "425993f18007549247d49ea8b72dc9ee",
     "semantic_hash": ""
   },
   "labs/rocket-liftoff/src/65-quests.js": {
@@ -1008,9 +1008,9 @@
     "semantic_hash": ""
   },
   "labs/rocket-liftoff/src/70-loop.js": {
-    "mtime": 1792765106.4277365,
-    "seen": 1792766278.389338,
-    "ast_hash": "2b06f20d1042d0fe9c6b8cfb105f3e25",
+    "mtime": 1792821951.4748402,
+    "seen": 1792822693.0992002,
+    "ast_hash": "513b09bed68d9ea6900479434e0f65f0",
     "semantic_hash": ""
   },
   "labs/rocket-liftoff/src/80-teacher.js": {
@@ -1032,27 +1032,27 @@
     "semantic_hash": ""
   },
   "labs/rocket-liftoff/tools/capture.mjs": {
-    "mtime": 1792753953.6991062,
-    "seen": 1792755977.0987277,
-    "ast_hash": "b38701ab2e42875dba762e511e8f47e8",
+    "mtime": 1792822033.7512677,
+    "seen": 1792822693.0992002,
+    "ast_hash": "216fc22686bbb86ed1145f1802246254",
     "semantic_hash": ""
   },
   "labs/rocket-liftoff/tools/hand-check.mjs": {
-    "mtime": 1792718207.7283642,
-    "seen": 1792719776.4849641,
-    "ast_hash": "e05d5b711354b117df9fd0c391a70db1",
+    "mtime": 1792821994.6931605,
+    "seen": 1792822693.0992002,
+    "ast_hash": "6585e93f52c727d5a9a5502dbf2a6385",
     "semantic_hash": ""
   },
   "labs/rocket-liftoff/tools/quest-check.mjs": {
-    "mtime": 1792715477.5206525,
-    "seen": 1792719776.4849641,
-    "ast_hash": "431b67ab8a60a758b98d89e5a073b5a4",
+    "mtime": 1792822087.1289723,
+    "seen": 1792822693.0992002,
+    "ast_hash": "42ee9661f50cf8a8be7eca1ad83fdf6d",
     "semantic_hash": ""
   },
   "labs/rocket-liftoff/tools/teacher-check.mjs": {
-    "mtime": 1792716023.5455375,
-    "seen": 1792719776.4849641,
-    "ast_hash": "0c176932b07f7130dbfd9a7379cdf5da",
+    "mtime": 1792822030.513061,
+    "seen": 1792822693.0992002,
+    "ast_hash": "fd397040cbb22b87cec56ce270bf9b94",
     "semantic_hash": ""
   },
   "labs/weight-worlds/meta.json": {
@@ -1104,9 +1104,9 @@
     "semantic_hash": ""
   },
   "labs/weight-worlds/src/60-interaction-hud.js": {
-    "mtime": 1792765436.0279982,
-    "seen": 1792766278.389338,
-    "ast_hash": "2abecc9a06a781270f298f718be33584",
+    "mtime": 1792821890.406989,
+    "seen": 1792822693.0992002,
+    "ast_hash": "2f5dcc63c4417ac1e437fab3e50e0690",
     "semantic_hash": ""
   },
   "labs/weight-worlds/src/65-quests.js": {
@@ -1122,9 +1122,9 @@
     "semantic_hash": ""
   },
   "labs/weight-worlds/src/68-director.js": {
-    "mtime": 1792765205.4490604,
-    "seen": 1792766278.389338,
-    "ast_hash": "3182edac7487245991e9d4a6887dbb7c",
+    "mtime": 1792821949.0169494,
+    "seen": 1792822693.0992002,
+    "ast_hash": "3b6b9e928fe0fef727180912a4ab6dcf",
     "semantic_hash": ""
   },
   "labs/weight-worlds/src/70-loop.js": {
@@ -1152,15 +1152,15 @@
     "semantic_hash": ""
   },
   "labs/weight-worlds/tools/capture.mjs": {
-    "mtime": 1792754780.7261202,
-    "seen": 1792755977.0987277,
-    "ast_hash": "faaea238a00dce8bcddce8581a2f47c3",
+    "mtime": 1792821990.7067418,
+    "seen": 1792822693.0992002,
+    "ast_hash": "78dde078813a0318003ec8fb7d6b3b4d",
     "semantic_hash": ""
   },
   "labs/weight-worlds/tools/hand-check.mjs": {
-    "mtime": 1792717264.2541542,
-    "seen": 1792719776.4849641,
-    "ast_hash": "fccec02ce5cd92762566223a7281edc2",
+    "mtime": 1792821901.5055156,
+    "seen": 1792822693.0992002,
+    "ast_hash": "40818b17ffe689442e560cd99f7c05e5",
     "semantic_hash": ""
   },
   "labs/weight-worlds/tools/quest-check.mjs": {
@@ -1170,15 +1170,15 @@
     "semantic_hash": ""
   },
   "labs/weight-worlds/tools/teacher-check.mjs": {
-    "mtime": 1792717378.711489,
-    "seen": 1792719776.4849641,
-    "ast_hash": "7ee8816f0fe7fda66e8e64393306b106",
+    "mtime": 1792821987.3552296,
+    "seen": 1792822693.0992002,
+    "ast_hash": "ae05f3f8f8db289f2bb46d61f4aac93c",
     "semantic_hash": ""
   },
   "labs/black-hole-fall/README.md": {
-    "mtime": 1792765385.851042,
-    "seen": 1792766278.389338,
-    "ast_hash": "7a8d1f317c648d46c999b228a8a48fc6",
+    "mtime": 1792822014.1902502,
+    "seen": 1792822693.0992002,
+    "ast_hash": "cff6597ebad62b0ee64a39476f6f2429",
     "semantic_hash": ""
   },
   "labs/black-hole-fall/docs/quest-map.md": {
@@ -1218,27 +1218,27 @@
     "semantic_hash": ""
   },
   "labs/black-hole-fall/index.html": {
-    "mtime": 1792766119.1034102,
-    "seen": 1792766278.389338,
-    "ast_hash": "8a7bcc8dcf2d489c24409f12bf9307f0",
+    "mtime": 1792822273.520501,
+    "seen": 1792822693.0992002,
+    "ast_hash": "a63f67cad0da4178fb9315f0ee96907f",
     "semantic_hash": ""
   },
   "labs/black-hole-fall/src/00-head.html": {
-    "mtime": 1792765384.4146357,
-    "seen": 1792766278.389338,
-    "ast_hash": "68bf4d701ee643efc4ff4aa219d852e7",
+    "mtime": 1792821904.35233,
+    "seen": 1792822693.0992002,
+    "ast_hash": "beba44a4fcdedd3db0a51f8441c0a924",
     "semantic_hash": ""
   },
   "labs/dino-tug/README.md": {
-    "mtime": 1792764564.3277493,
-    "seen": 1792766278.389338,
-    "ast_hash": "0f506714271c1703cbb1e22f285236a6",
+    "mtime": 1792844940.1921592,
+    "seen": 1792845566.856562,
+    "ast_hash": "99993739fd9f73c9341535643e9b36a2",
     "semantic_hash": ""
   },
   "labs/dino-tug/docs/quest-map.md": {
-    "mtime": 1792710513.2117033,
-    "seen": 1792719776.4849641,
-    "ast_hash": "eea557ac15f7745058e51179a9e3b86b",
+    "mtime": 1792845428.3145044,
+    "seen": 1792845566.856562,
+    "ast_hash": "35c28a4a8d45c1d555cc7c9a20f13423",
     "semantic_hash": ""
   },
   "labs/dino-tug/docs/reviewer-brief.md": {
@@ -1248,9 +1248,9 @@
     "semantic_hash": ""
   },
   "labs/dino-tug/docs/teacher-interface.md": {
-    "mtime": 1792717003.11437,
-    "seen": 1792719776.4849641,
-    "ast_hash": "656fc447c35396e06d169303b6d38ee6",
+    "mtime": 1792845428.313614,
+    "seen": 1792845566.856562,
+    "ast_hash": "4fd69844e3b98f63723e28c4a8edd714",
     "semantic_hash": ""
   },
   "labs/dino-tug/docs/theory-card.md": {
@@ -1266,27 +1266,27 @@
     "semantic_hash": ""
   },
   "labs/dino-tug/guide.html": {
-    "mtime": 1792717270.508585,
-    "seen": 1792719776.4849641,
-    "ast_hash": "85ca37a80f5c939ba724401363b78bc4",
+    "mtime": 1792845428.3109906,
+    "seen": 1792845566.856562,
+    "ast_hash": "60bc4ec639f034149db388c3a5a24b0d",
     "semantic_hash": ""
   },
   "labs/dino-tug/index.html": {
-    "mtime": 1792766091.906368,
-    "seen": 1792766278.389338,
-    "ast_hash": "8a19e5b7dcf015a4bd46a7d6d5db08dc",
+    "mtime": 1792845474.6375227,
+    "seen": 1792845566.856562,
+    "ast_hash": "2f5214e88b372dcd83a92bd520ab2598",
     "semantic_hash": ""
   },
   "labs/dino-tug/src/00-head.html": {
-    "mtime": 1792764390.6406076,
-    "seen": 1792766278.389338,
-    "ast_hash": "74201babbaccb1dfdfb5b175d4539b56",
+    "mtime": 1792842803.843918,
+    "seen": 1792845566.856562,
+    "ast_hash": "aebf2404c404a59ccf062ba36045434f",
     "semantic_hash": ""
   },
   "labs/earth-stop/README.md": {
-    "mtime": 1792765384.4126334,
-    "seen": 1792766278.389338,
-    "ast_hash": "68fc1680407cdd1ccc4d30a44e60bd35",
+    "mtime": 1792822179.6473303,
+    "seen": 1792822693.0992002,
+    "ast_hash": "9922a087db21c701bff7f9a580a8461e",
     "semantic_hash": ""
   },
   "labs/earth-stop/docs/quest-map.md": {
@@ -1326,21 +1326,21 @@
     "semantic_hash": ""
   },
   "labs/earth-stop/index.html": {
-    "mtime": 1792766129.203448,
-    "seen": 1792766278.389338,
-    "ast_hash": "818b5874fa35315559330d550e45bbec",
+    "mtime": 1792822342.1308813,
+    "seen": 1792822693.0992002,
+    "ast_hash": "65c915edd40673a6a6191650df59da2c",
     "semantic_hash": ""
   },
   "labs/earth-stop/src/00-head.html": {
-    "mtime": 1792765162.4200814,
-    "seen": 1792766278.389338,
-    "ast_hash": "88e19d1f8982efee719f77d9174235af",
+    "mtime": 1792821948.929947,
+    "seen": 1792822693.0992002,
+    "ast_hash": "53321a5206de389a859de7715dcedbec",
     "semantic_hash": ""
   },
   "labs/moon-closer/README.md": {
-    "mtime": 1792765573.25392,
-    "seen": 1792766278.389338,
-    "ast_hash": "7a317cf9eed17ccc38cfb70e35bb8d54",
+    "mtime": 1792822055.1780903,
+    "seen": 1792822693.0992002,
+    "ast_hash": "6d784391a5a3e589e4195e9287f4b4d0",
     "semantic_hash": ""
   },
   "labs/moon-closer/docs/reviewer-brief.md": {
@@ -1368,15 +1368,15 @@
     "semantic_hash": ""
   },
   "labs/moon-closer/index.html": {
-    "mtime": 1792766109.400522,
-    "seen": 1792766278.389338,
-    "ast_hash": "1514345425baf6dc328a3bee15ea7408",
+    "mtime": 1792822265.2006125,
+    "seen": 1792822693.0992002,
+    "ast_hash": "b643170b6913247c4f1a6d8fc281493f",
     "semantic_hash": ""
   },
   "labs/moon-closer/src/00-head.html": {
-    "mtime": 1792765270.9324596,
-    "seen": 1792766278.389338,
-    "ast_hash": "7e77937d85b585517ed4999e005102fa",
+    "mtime": 1792821892.7538438,
+    "seen": 1792822693.0992002,
+    "ast_hash": "22e00ec000df9a92484b8eafe7e69b7a",
     "semantic_hash": ""
   },
   "labs/rocket-liftoff/README.md": {
@@ -1422,15 +1422,15 @@
     "semantic_hash": ""
   },
   "labs/rocket-liftoff/index.html": {
-    "mtime": 1792766136.3003004,
-    "seen": 1792766278.389338,
-    "ast_hash": "c3170e6be972990784a2135cd9320ea7",
+    "mtime": 1792822288.3772159,
+    "seen": 1792822693.0992002,
+    "ast_hash": "6a6cb1ea1cf661d590ea8b7e6e42f672",
     "semantic_hash": ""
   },
   "labs/rocket-liftoff/src/00-head.html": {
-    "mtime": 1792765204.6210344,
-    "seen": 1792766278.389338,
-    "ast_hash": "9246a9304b3ca6374c31d672cce918a0",
+    "mtime": 1792821935.778574,
+    "seen": 1792822693.0992002,
+    "ast_hash": "a3dfbea88db0958f25b9e3bdbc3b3021",
     "semantic_hash": ""
   },
   "labs/weight-worlds/README.md": {
@@ -1476,15 +1476,15 @@
     "semantic_hash": ""
   },
   "labs/weight-worlds/index.html": {
-    "mtime": 1792766073.4439337,
-    "seen": 1792766278.389338,
-    "ast_hash": "5f3d483a9e7097e93408a410daa5856b",
+    "mtime": 1792822281.6789207,
+    "seen": 1792822693.0992002,
+    "ast_hash": "d7169e375edf068e0320879407aae4f3",
     "semantic_hash": ""
   },
   "labs/weight-worlds/src/00-head.html": {
-    "mtime": 1792765205.4540591,
-    "seen": 1792766278.389338,
-    "ast_hash": "ee78d734050a5d9ebb09be413e6f1534",
+    "mtime": 1792822036.3005464,
+    "seen": 1792822693.0992002,
+    "ast_hash": "ae152c812b25e5a7362ee5467bac9094",
     "semantic_hash": ""
   },
   "topics/specs/black-hole-fall.md": {
@@ -1566,9 +1566,9 @@
     "semantic_hash": ""
   },
   "labs/dino-tug/src/46-ink-config.js": {
-    "mtime": 1792764825.3886838,
-    "seen": 1792766278.389338,
-    "ast_hash": "ee07e00a1d61d2da55b72a6492327b2a",
+    "mtime": 1792842759.7430732,
+    "seen": 1792845566.8555627,
+    "ast_hash": "f08c92324f0deb79323632b647ccb3ea",
     "semantic_hash": ""
   },
   "labs/dino-tug/src/47-ink-style.js": {
@@ -1623,6 +1623,90 @@
     "mtime": 1792766047.7377024,
     "seen": 1792766278.389338,
     "ast_hash": "0c313c7ecbbb6236e2eea0e41b4b9021",
+    "semantic_hash": ""
+  },
+  "labs/black-hole-fall/src/67-mission.js": {
+    "mtime": 1792821884.9172962,
+    "seen": 1792822693.0992002,
+    "ast_hash": "a6e0a3063a7679e442b5d084bc847423",
+    "semantic_hash": ""
+  },
+  "labs/black-hole-fall/tools/mission-check.mjs": {
+    "mtime": 1792821854.2001631,
+    "seen": 1792822693.0992002,
+    "ast_hash": "1e71e3cbf76f74bf14c50da2e054f994",
+    "semantic_hash": ""
+  },
+  "labs/dino-tug/src/67-mission.js": {
+    "mtime": 1792845017.135616,
+    "seen": 1792845566.8555627,
+    "ast_hash": "0323a30e425200ac006acd3ec085a61c",
+    "semantic_hash": ""
+  },
+  "labs/earth-stop/src/67-mission.js": {
+    "mtime": 1792822074.4049852,
+    "seen": 1792822693.0992002,
+    "ast_hash": "6a4a9071a76c70b96e6f24f026935ad8",
+    "semantic_hash": ""
+  },
+  "labs/earth-stop/tools/mission-check.mjs": {
+    "mtime": 1792822259.8559906,
+    "seen": 1792822693.0992002,
+    "ast_hash": "14781ae41c05918a581043ed2da91063",
+    "semantic_hash": ""
+  },
+  "labs/moon-closer/src/67-mission.js": {
+    "mtime": 1792822051.877887,
+    "seen": 1792822693.0992002,
+    "ast_hash": "0cd9f15154a52c1e115229b92b138c40",
+    "semantic_hash": ""
+  },
+  "labs/moon-closer/tools/mission-check.mjs": {
+    "mtime": 1792821934.8522315,
+    "seen": 1792822693.0992002,
+    "ast_hash": "22a35052dc9fbbc7131c090b63a1f8f5",
+    "semantic_hash": ""
+  },
+  "labs/rocket-liftoff/src/67-mission.js": {
+    "mtime": 1792821947.5478952,
+    "seen": 1792822693.0992002,
+    "ast_hash": "5c4c630548dff0d90c3a4e6a3c43de49",
+    "semantic_hash": ""
+  },
+  "labs/weight-worlds/src/67-mission.js": {
+    "mtime": 1792821886.8968756,
+    "seen": 1792822693.0992002,
+    "ast_hash": "94b3d81720ae718a3d2d76d2f00b50cc",
+    "semantic_hash": ""
+  },
+  "labs/weight-worlds/tools/mission-check.mjs": {
+    "mtime": 1792822039.7997506,
+    "seen": 1792822693.0992002,
+    "ast_hash": "fd33e9ea38e96cb3f96e9545e7e6e732",
+    "semantic_hash": ""
+  },
+  "labs/dino-tug/src/62-curriculum.js": {
+    "mtime": 1792844473.994849,
+    "seen": 1792845566.8555627,
+    "ast_hash": "3feebd966ace2d1b91645aaa4f4936ff",
+    "semantic_hash": ""
+  },
+  "labs/dino-tug/src/63-explain.js": {
+    "mtime": 1792844759.3362515,
+    "seen": 1792845566.8555627,
+    "ast_hash": "5a02c2d3337d5bc3849c332f9dd6d5b3",
+    "semantic_hash": ""
+  },
+  "labs/dino-tug/docs/design-v2.md": {
+    "mtime": 1792823747.211033,
+    "seen": 1792828039.9648592,
+    "ast_hash": "fc3573c55c14a6ec20325d8aaf359909",
+    "semantic_hash": ""
+  },
+  "labs/dino-tug/docs/diagnostic-items.md": {
+    "mtime": 1792845333.2805407,
+    "seen": 1792845566.856562,
+    "ast_hash": "81e0e894459c4af005e31a0115fb2003",
     "semantic_hash": ""
   }
 }

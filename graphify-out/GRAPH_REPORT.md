@@ -1,17 +1,17 @@
-# Graph Report - labs  (2026-10-23)
+# Graph Report - labs  (2026-10-24)
 
 ## Corpus Check
-- 239 files · ~436,326 words
+- 253 files · ~460,840 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 4 file(s) not represented in the graph (top: (none) 2, .csv 1, .toml 1)
 
 ## Summary
-- 2624 nodes · 3251 edges · 195 communities (157 shown, 38 thin omitted)
-- Extraction: 95% EXTRACTED · 5% INFERRED · 0% AMBIGUOUS · INFERRED: 176 edges (avg confidence: 0.86)
+- 2856 nodes · 3542 edges · 235 communities (184 shown, 51 thin omitted)
+- Extraction: 95% EXTRACTED · 5% INFERRED · 0% AMBIGUOUS · INFERRED: 189 edges (avg confidence: 0.87)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `804f9d73`
+- Built from commit: `e36beed2`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -34,7 +34,7 @@
 - 69-depict.js
 - build.mjs
 - 달이 가까워지면 — 이론 카드 (설계서 1/2)
-- ref_node_url
+- forces/tools/assemble.mjs
 - 비평 로그 — 수격펌프
 - moon-closer/tools/hand-check.mjs
 - hydraulic-ram/src/30-room-console.js
@@ -49,7 +49,7 @@
 - 검수자용 요약 — 수격펌프 (Hydraulic Ram)
 - 수격펌프 관측대 (Hydraulic Ram)
 - ref_node_fs
-- hydraulic-ram/tools/hand-check.mjs
+- 5. 퀘스트 카드 (질문, 설명 보기 초안)
 - 기획: 글 없이 읽히는 과학 실험실 (마스터 프롬프트 개정)
 - 검수자용 요약 — 힘의 작용 (9과05)
 - 71-cues.js
@@ -63,7 +63,7 @@
 - forces/src/15-physics.js
 - hydraulic-ram/src/15-physics.js
 - fetch
-- state
+- 달이 가까워지면
 - 3. 개선 항목
 - text-audit.mjs
 - i-scream 「물체의 무게」 가상실험 두 개 분석과 반영
@@ -94,7 +94,7 @@
 - black-hole-fall/src/20-scene-kit.js
 - earth-stop/src/20-scene-kit.js
 - moon-closer/src/20-scene-kit.js
-- ref_node_child_process
+- black-hole-fall/tools/quest-check.mjs
 - dino-tug/tools/hand-check.mjs
 - moon-closer/tools/teacher-check.mjs
 - black-hole-fall/src/60-interaction-hud.js
@@ -146,8 +146,8 @@
 - rocket-liftoff/tools/quest-check.mjs
 - weight-worlds/src/85-attract.js
 - 공룡과 줄다리기 — 실험실 명세 (slug: dino-tug)
-- init
-- moon-closer/src/68-director.js
+- dino-tug/tools/quest-check.mjs
+- earth-stop/tools/mission-check.mjs
 - rocket-liftoff/README.md
 - 로켓은 언제 땅에서 떠오를까
 - rocket-liftoff/tools/capture.mjs
@@ -157,16 +157,16 @@
 - 로켓은 언제 땅에서 떠오를까? — 실험실 명세 (slug: rocket-liftoff)
 - 다른 별에서 내 몸무게는? — 실험실 명세 (slug: weight-worlds)
 - Element
-- applyPreset
-- 블랙홀에 떨어지면 — 퀘스트 지도 (설계서 2/2)
+- 한국어
+- showTools
 - weight-worlds/README.md
-- black-hole-fall/README.md
-- 원리와 표현 — 블랙홀에 빠지면
+- U5 — 캔버스·3D·조건부 글 (2026-10-21)
+- 공룡과 줄다리기 v2 — 개편 설계안 (초안, 사용자 검토용)
 - hydraulic-ram/tools/assemble.mjs
-- ref_node_path
+- ref_node_url
 - 다른 별에서 내 몸무게는
 - black-hole-fall/src/65-quests.js
-- 블랙홀에 빠지면
+- 공룡과 줄다리기 — 퀘스트 지도
 - dino-tug/src/65-quests.js
 - moon-closer/src/65-quests.js
 - 검수 요약 — 로켓은 언제 땅에서 떠오를까
@@ -185,15 +185,15 @@
 - earth-stop/src/15-physics.js
 - earth-stop/src/66-cards.js
 - moon-closer/src/66-cards.js
-- Element
+- ToolNode
 - rocket-liftoff/src/15-physics.js
 - rocket-liftoff/src/66-cards.js
 - weight-worlds/src/15-physics.js
 - weight-worlds/src/66-cards.js
-- Element
-- moon-closer/tools/assemble.mjs
-- weight-worlds/tools/quest-check.mjs
-- 블랙홀에 빠지면 — 30분 검수 요약
+- 원리에서 표현으로 — 공룡과 줄다리기
+- dino-tug/tools/capture.mjs
+- ref_node_assert
+- 지구 자전이 멈추면
 - rocket-liftoff/tools/assemble.mjs
 - 검수 요약 — 다른 별에서 내 몸무게는
 - 원리에서 표현으로 — 다른 별에서 내 몸무게는
@@ -204,6 +204,44 @@
 - moon-closer/src/47-ink-style.js
 - rocket-liftoff/src/47-ink-style.js
 - weight-worlds/src/47-ink-style.js
+- icon
+- ref_node_child_process
+- Element
+- 62-curriculum.js
+- hydraulic-ram/tools/hand-check.mjs
+- black-hole-fall/src/67-mission.js
+- English
+- earth-stop/src/67-mission.js
+- dino-tug/src/67-mission.js
+- kids
+- moon-closer/src/67-mission.js
+- rocket-liftoff/src/67-mission.js
+- weight-worlds/src/67-mission.js
+- 공룡과 줄다리기
+- 지구 자전이 멈추면 — 퀘스트 지도
+- moon-closer/README.md
+- 원리에서 표현으로 — 달이 가까워지면
+- moon-closer/src/68-director.js
+- Element
+- weight-worlds/tools/quest-check.mjs
+- 달이 가까워지면 — 퀘스트 지도 (설계서 2/2)
+- weight-worlds/tools/assemble.mjs
+- fmt
+- 공룡과 줄다리기 — 30분 검수 요약
+- DINO_MODELS
+- LensGroup
+- 검수 요약 — 지구 자전이 멈추면
+- 검수 요약 — 달이 가까워지면
+- exact
+- 원리에서 표현으로 — 지구 자전이 멈추면
+- handRs
+- bilingual
+- run
+- MeterGroup
+- earth-stop/docs/teacher-interface.md
+- KID_VARIANTS
+- checkWords
+- e. 지배 방정식과 API 계약
 
 ## God Nodes (most connected - your core abstractions)
 1. `블랙홀에 떨어지면 — 이론 카드 (설계서 1/2)` - 19 edges
@@ -214,33 +252,33 @@
 6. `공룡과 줄다리기 — 이론 카드` - 18 edges
 7. `로켓은 언제 땅에서 떠오를까 — 이론 카드 (설계서 1/2)` - 18 edges
 8. `다른 별에서 내 몸무게는 — 이론 카드 (설계서 1/2)` - 18 edges
-9. `init()` - 11 edges
-10. `onPointerDown()` - 10 edges
+9. `Element` - 13 edges
+10. `5. 퀘스트 카드 (질문, 설명 보기 초안)` - 13 edges
 
 ## Surprising Connections (you probably didn't know these)
+- `구현 분할` --references--> `cardHTML()`  [INFERRED]
+  labs/dino-tug/docs/quest-map.md → labs/dino-tug/src/60-interaction-hud.js
 - `실제 window.__lab 훅` --references--> `state()`  [INFERRED]
   labs/black-hole-fall/README.md → labs/forces/src/70-loop.js
-- `직접 써 보고 고친 것 (조작 원칙)` --references--> `applyViewOffset()`  [INFERRED]
-  labs/forces/docs/quest-map.md → labs/forces/src/50-lights-pipeline-camera.js
-- `직접 써 보고 고친 것 (조작 원칙)` --references--> `khFresh()`  [INFERRED]
-  labs/forces/docs/quest-map.md → labs/forces/src/67-kid-handles.js
-- `연출 기법 → 구현` --references--> `dirGrab()`  [INFERRED]
-  labs/forces/docs/quest-map.md → labs/forces/src/68-director.js
-- `window.__lab 실제 훅` --references--> `state()`  [INFERRED]
-  labs/dino-tug/README.md → labs/forces/src/70-loop.js
+- `공개 훅` --references--> `state()`  [INFERRED]
+  labs/earth-stop/README.md → labs/forces/src/70-loop.js
+- `디버그 훅` --references--> `state()`  [INFERRED]
+  labs/moon-closer/README.md → labs/forces/src/70-loop.js
+- `원리에서 표현으로 — 공룡과 줄다리기` --references--> `q1()`  [INFERRED]
+  labs/dino-tug/docs/visual-grammar.md → labs/black-hole-fall/tools/hand-check.mjs
 
 ## Import Cycles
 - None detected.
 
-## Communities (195 total, 38 thin omitted)
+## Communities (235 total, 51 thin omitted)
 
 ### Community 0 - "forces/src/60-interaction-hud.js"
 Cohesion: 0.09
-Nodes (31): AUD, cycle(), DRAG, ensureAudio(), FLUIDS, HANG_KINDS, hoverUpdate(), KEYMAP (+23 more)
+Nodes (27): AUD, cycle(), DRAG, ensureAudio(), FLUIDS, HANG_KINDS, hoverUpdate(), KEYMAP (+19 more)
 
 ### Community 1 - "forces/src/70-loop.js"
 Cohesion: 0.09
-Nodes (10): DEC, lastT, LESSON, lessonEnd(), lessonGo(), PERF, PRESETS, S (+2 more)
+Nodes (22): applyPreset(), clampJack(), DEC, hangParams(), lastT, LESSON, lessonEnd(), lessonGo() (+14 more)
 
 ### Community 2 - "forces/src/20-scene-kit.js"
 Cohesion: 0.07
@@ -252,7 +290,7 @@ Nodes (38): bevelFrame(), bigButton(), camera, canvas, canvasTex(), engravedPlat
 
 ### Community 4 - "hydraulic-ram/src/70-loop.js"
 Cohesion: 0.08
-Nodes (35): applyPreset(), buildWeights(), capture(), drawScreenA(), drawScreenB(), IDLE, inHammerWindow(), lastT (+27 more)
+Nodes (35): onKeyUp(), onPointerUp(), applyPreset(), buildStudio(), buildWeights(), capture(), frame(), IDLE (+27 more)
 
 ### Community 5 - "65-kid.js"
 Cohesion: 0.09
@@ -263,8 +301,8 @@ Cohesion: 0.07
 Nodes (37): _am, ARROW_GEO, _ax, _ay, _az, blockX(), buildHangStation(), buildHero() (+29 more)
 
 ### Community 7 - "68-director.js"
-Cohesion: 0.05
-Nodes (52): 1. 과정 묘사, 2. 보이지 않는 것을 보이게, 3. 결과 묘사, 4. 그림 규칙: 실험실에는 삽화를 넣지 않는다, 5. 글 없이 읽히는 장면 문법 (쉬운 모드·자세히 모드 공통, `src/71-cues.js`), 실험 과정과 결과를 한눈에 — 과학 실험실 묘사 원칙, U3 쉬운 모드 퀘스트 그림 문법, 과정·결과 묘사 (`src/69-depict.js`) (+44 more)
+Cohesion: 0.07
+Nodes (41): 1. 과정 묘사, 2. 보이지 않는 것을 보이게, 3. 결과 묘사, 4. 그림 규칙: 실험실에는 삽화를 넣지 않는다, 5. 글 없이 읽히는 장면 문법 (쉬운 모드·자세히 모드 공통, `src/71-cues.js`), 실험 과정과 결과를 한눈에 — 과학 실험실 묘사 원칙, U3 쉬운 모드 퀘스트 그림 문법, 과정·결과 묘사 (`src/69-depict.js`) (+33 more)
 
 ### Community 8 - "forces/src/50-lights-pipeline-camera.js"
 Cohesion: 0.08
@@ -303,12 +341,12 @@ Cohesion: 0.13
 Nodes (16): ALL, BASE, cfg, copyDir(), DIST, esc(), galleryHtml(), injectLab() (+8 more)
 
 ### Community 17 - "달이 가까워지면 — 이론 카드 (설계서 1/2)"
-Cohesion: 0.05
-Nodes (38): 구현 분할 (Codex 워커 브리프 후보), 달이 가까워지면 — 퀘스트 지도 (설계서 2/2), 손계산 검증 대표 상태 (reviewer-brief에 들어갈 값), 예상 그림 후보 (퀘스트마다 2~3개, 오개념 1개 포함), 원리 카드 (글 없는 그림 등식), 퀘스트 진행 규칙, 검수 요약 — 달이 가까워지면, 검수 질문 (+30 more)
+Cohesion: 0.11
+Nodes (19): a. 한 줄 통찰, b. 3단계 학습 경로, c. 보이지 않는 주인공과 시각 형태, d. 영웅 장치와 방, e. 지배 방정식 (모두 `physics.js` 순수 함수 한 곳), f. 조작 변수 (장면 속 손잡이), g. 원리 → 시각 문법 대응표, h. 퀘스트 (+11 more)
 
-### Community 18 - "ref_node_url"
-Cohesion: 0.15
-Nodes (10): dir, files, head, js, src, dir, files, head (+2 more)
+### Community 18 - "forces/tools/assemble.mjs"
+Cohesion: 0.33
+Nodes (5): dir, files, head, js, src
 
 ### Community 19 - "비평 로그 — 수격펌프"
 Cohesion: 0.17
@@ -319,8 +357,8 @@ Cohesion: 0.06
 Nodes (26): all, atRatio(), boundaryC, bulgeSamples, cardsSource, cfg, css, detentGaps (+18 more)
 
 ### Community 21 - "hydraulic-ram/src/30-room-console.js"
-Cohesion: 0.31
-Nodes (10): buildConsole(), buildRoom(), CONSOLE, drawDiagramEfficiency(), drawDiagramHammer(), drawDiagramSection(), floorTexture(), gaugeFaceTexture() (+2 more)
+Cohesion: 0.19
+Nodes (15): buildConsole(), buildRoom(), CONSOLE, drawDiagramEfficiency(), drawDiagramHammer(), drawDiagramSection(), floorTexture(), gaugeFaceTexture() (+7 more)
 
 ### Community 22 - "capture.mjs"
 Cohesion: 0.20
@@ -335,7 +373,7 @@ Cohesion: 0.20
 Nodes (9): name, private, scripts, build, build:all, deploy, deploy:proxy, serve (+1 more)
 
 ### Community 25 - "serve.mjs"
-Cohesion: 0.28
+Cohesion: 0.24
 Nodes (7): port, ROOT, save(), serveFile(), server, SHOTS, TYPES
 
 ### Community 26 - "forces/tools/hand-check.mjs"
@@ -366,9 +404,9 @@ Nodes (6): 결정 기록, 과장 스케일, 근사와 한계, 수격펌프 관�
 Cohesion: 0.15
 Nodes (10): dir, files, head, js, src, m, p, PHYS (+2 more)
 
-### Community 33 - "hydraulic-ram/tools/hand-check.mjs"
-Cohesion: 0.29
-Nodes (3): PHYS, rows, src
+### Community 33 - "5. 퀘스트 카드 (질문, 설명 보기 초안)"
+Cohesion: 0.15
+Nodes (13): 5. 퀘스트 카드 (질문, 설명 보기 초안), N1 맞잡기 (개념 ①②), N2 한 명 더 (개념 ③), N3 줄 한가운데 저울 (개념 ④) — 단계 2, N4 팀을 따로 보기 (개념 ③④) — 단계 2, N5 서서히 당기기 (개념 ⑤) — 단계 2, Q1 작은 공룡 (개념 ⑥ 맛보기), Q2 트리케라톱스 (개념 ③) (+5 more)
 
 ### Community 34 - "기획: 글 없이 읽히는 과학 실험실 (마스터 프롬프트 개정)"
 Cohesion: 0.29
@@ -402,9 +440,9 @@ Nodes (3): 단계별 설명 문장 규칙, 비유·과장 구분, 퀘스트 지�
 Cohesion: 0.06
 Nodes (16): THEME, camera, canvas, CONSOLE, HERO, QS, rand, renderer (+8 more)
 
-### Community 48 - "state"
-Cohesion: 0.12
-Nodes (17): 결정 기록, 공개 훅, 과장과 한계, 실행, 조작과 URL, 지구 자전이 멈추면, state(), step() (+9 more)
+### Community 48 - "달이 가까워지면"
+Cohesion: 0.25
+Nodes (8): URL 옵션과 문서, 결정 기록, 과장 스케일 — 설계 원문, 근사와 한계 — 설계 원문, 달이 가까워지면, 디버그 훅, 실행, 조작
 
 ### Community 49 - "3. 개선 항목"
 Cohesion: 0.13
@@ -431,44 +469,44 @@ Cohesion: 0.44
 Nodes (8): balancePicture(), cardArrow(), cardBeam(), cardDots(), cardSVG(), kidAlbum(), kidForceGlyph(), kidPrincipleCard()
 
 ### Community 56 - "지구 자전이 멈추면 — 이론 카드"
-Cohesion: 0.05
-Nodes (38): 구현 분할과 이번 실행 계획, 손계산 검증 대표 상태, 예상 그림 후보, 원리 카드 — 글 없는 그림 등식, 지구 자전이 멈추면 — 퀘스트 지도, 퀘스트 진행과 측정 경계, 퀘스트 표, 검수 요약 — 지구 자전이 멈추면 (+30 more)
+Cohesion: 0.11
+Nodes (18): a. 한 줄 통찰, b. 3단계 학습 경로, c. 보이지 않는 주인공과 시각 형태, d. 영웅 장치와 방, f. 조작 변수와 손잡이, g. 원리 → 시각 문법 대응표, h. 퀘스트, i. 예상 그림 후보와 오개념 (+10 more)
 
 ### Community 57 - "다른 별에서 내 몸무게는 — 이론 카드 (설계서 1/2)"
 Cohesion: 0.11
 Nodes (18): a. 한 줄 통찰, b. 3단계 학습 경로, c. 보이지 않는 주인공과 시각 형태, d. 영웅 장치와 방, e. 지배 방정식과 실제 상수, f. 조작 변수와 손잡이, g. 원리 → 시각 문법, h. 퀘스트 (+10 more)
 
 ### Community 58 - "dino-tug/src/60-interaction-hud.js"
-Cohesion: 0.09
-Nodes (31): action(), dragObjects, endDrag(), grammarIcons, groundTools, icon(), ICONS, LABELS (+23 more)
+Cohesion: 0.08
+Nodes (25): action(), dragObjects, grammarIcons, groundTools, ICONS, LABELS, layerTools, lensTools (+17 more)
 
 ### Community 59 - "블랙홀에 떨어지면 — 이론 카드 (설계서 1/2)"
-Cohesion: 0.11
-Nodes (19): a. 한 줄 통찰, b. 3단계 학습 경로, c. 보이지 않는 주인공과 시각 형태, d. 영웅 장치와 방, e. 지배 방정식과 실제 API, f. 조작 변수와 손잡이, g. 원리 → 시각 문법 대응표, h. 퀘스트 (+11 more)
+Cohesion: 0.04
+Nodes (40): 검수 질문 다섯 가지, 근사·과장과 검수 한계, 블랙홀에 빠지면 — 30분 검수 요약, 입력 → PHYS 계산값, 지배 방정식과 상수, 교사·대기 이식 인터페이스 — black-hole-fall, 교사·전시 모듈 이식 인터페이스 (M5), 보존한 원본 계약 (+32 more)
 
 ### Community 60 - "dino-tug/src/50-lights-pipeline-camera.js"
 Cohesion: 0.12
 Nodes (18): composer, CONSOLE_SHOT, controls, diagramMaterials, fitHero(), flyTo(), heroBox(), heroComposition (+10 more)
 
 ### Community 61 - "black-hole-fall/tools/hand-check.mjs"
-Cohesion: 0.06
-Nodes (32): arrows, block, cards, choices, exact(), expectedDA, expectedRs, expectedSp (+24 more)
+Cohesion: 0.07
+Nodes (24): arrows, block, cards, choices, expectedDA, expectedRs, expectedSp, gaps (+16 more)
 
 ### Community 62 - "weight-worlds/src/40-hero.js"
 Cohesion: 0.06
 Nodes (34): APEX, APPARATUS_CONTACTS, apparatusMat, BALANCE_ARM, BALANCE_RIG, BALANCE_WEIGHTS, BREAK_SIGN, CAROUSEL (+26 more)
 
 ### Community 63 - "black-hole-fall/tools/teacher-check.mjs"
-Cohesion: 0.06
-Nodes (21): actual, attract, auditContext, body, cards, config, context, definitions (+13 more)
+Cohesion: 0.07
+Nodes (20): actual, attract, auditContext, body, cards, config, context, definitions (+12 more)
 
 ### Community 64 - "dino-tug/tools/teacher-check.mjs"
-Cohesion: 0.06
-Nodes (21): actual, attract, auditContext, body, config, context, css, defaultSource (+13 more)
+Cohesion: 0.04
+Nodes (26): actual, attract, auditContext, body, config, context, css, defaultSource (+18 more)
 
 ### Community 65 - "earth-stop/tools/hand-check.mjs"
-Cohesion: 0.13
-Nodes (14): block, exact(), fmt(), gaps, liteTrace, numeric(), PHYS, railActual (+6 more)
+Cohesion: 0.08
+Nodes (24): 결정 기록과 명세 대조, 구현 분할, 블랙홀에 떨어지면 — 퀘스트 지도 (설계서 2/2), 손계산 검증 대표 상태, 예상 그림 후보, 원리 카드: 글 없는 그림 등식, 퀘스트 진행 규칙과 입력 계약, 퀘스트 표 (+16 more)
 
 ### Community 66 - "weight-worlds/tools/teacher-check.mjs"
 Cohesion: 0.06
@@ -479,7 +517,7 @@ Cohesion: 0.07
 Nodes (27): BEAD_SIGN, BEADS, continentCenters, continentGeo, CRACKS, dummy, EARTH_SPIN, gridMaterial (+19 more)
 
 ### Community 68 - "weight-worlds/src/60-interaction-hud.js"
-Cohesion: 0.10
+Cohesion: 0.11
 Nodes (22): action(), dragObjects, HIT_MATERIAL, icon(), ICONS, LABELS, layerGroup, layerToggle (+14 more)
 
 ### Community 69 - "black-hole-fall/src/40-hero.js"
@@ -491,8 +529,8 @@ Cohesion: 0.08
 Nodes (19): actual, attract, auditContext, body, cfg, config, context, css (+11 more)
 
 ### Community 71 - "dino-tug/src/40-hero.js"
-Cohesion: 0.06
-Nodes (33): R14: Character paint with curved three-band boundaries, BARS, CAPACITIES, CASSETTES, DINO_BANDS, DINO_MODELS, DINO_SHAPES, dinoBand() (+25 more)
+Cohesion: 0.05
+Nodes (33): BARS, CAPACITIES, CASSETTES, DINO_BANDS, DINO_SHAPES, FLAG, FLAG_PANEL, FORCE_KNOTS (+25 more)
 
 ### Community 72 - "earth-stop/src/40-hero.js"
 Cohesion: 0.08
@@ -503,8 +541,8 @@ Cohesion: 0.13
 Nodes (22): action(), dragObjects, endDrag(), executeStop(), icon(), ICONS, LABELS, pointer (+14 more)
 
 ### Community 74 - "earth-stop/tools/teacher-check.mjs"
-Cohesion: 0.08
-Nodes (18): actual, attract, auditContext, body, cfg, config, context, definitions (+10 more)
+Cohesion: 0.06
+Nodes (19): actual, attract, auditContext, body, cfg, config, context, definitions (+11 more)
 
 ### Community 75 - "rocket-liftoff/src/60-interaction-hud.js"
 Cohesion: 0.12
@@ -522,17 +560,17 @@ Nodes (15): camera, canvas, CONSOLE, CSS, E, HERO, KIT, MAT (+7 more)
 Cohesion: 0.10
 Nodes (16): camera, canvas, closerAt(), CONSOLE, E, HERO, KIT, MAT (+8 more)
 
-### Community 79 - "ref_node_child_process"
-Cohesion: 0.10
-Nodes (12): context, root, rows, context, hand, projectBox, root, context (+4 more)
+### Community 79 - "black-hole-fall/tools/quest-check.mjs"
+Cohesion: 0.29
+Nodes (4): context, missionNode, root, rows
 
 ### Community 80 - "dino-tug/tools/hand-check.mjs"
-Cohesion: 0.09
-Nodes (24): R9: 책상 없는 밀림, window.__lab 실제 훅, 결정 기록, 공룡과 줄다리기, 과장·근사·한계, 실행, 조작과 URL, block (+16 more)
+Cohesion: 0.11
+Nodes (12): block, dramaViewports, gaps, masses, matchCounts, obs(), P, q10Cases (+4 more)
 
 ### Community 81 - "moon-closer/tools/teacher-check.mjs"
-Cohesion: 0.09
-Nodes (16): actual, attract, auditContext, body, cfg, config, context, definitions (+8 more)
+Cohesion: 0.07
+Nodes (17): actual, attract, auditContext, body, cfg, config, context, definitions (+9 more)
 
 ### Community 82 - "black-hole-fall/src/60-interaction-hud.js"
 Cohesion: 0.14
@@ -567,8 +605,8 @@ Cohesion: 0.17
 Nodes (9): CONTROL_LAYOUT, DIAL, GRAPHS, PLAY_BUTTON, PLAY_GLYPH, PLAY_TRIANGLE, playShape, { skyTexture, update: updateEnvironment } (+1 more)
 
 ### Community 90 - "moon-closer/src/50-lights-pipeline-camera.js"
-Cohesion: 0.16
-Nodes (16): composer, CONSOLE_SHOT, controls, diagramMaterials, fitHero(), heroBox(), heroCoverage(), inkPass (+8 more)
+Cohesion: 0.15
+Nodes (17): composer, CONSOLE_SHOT, controls, diagramMaterials, fitHero(), flyTo(), heroBox(), heroCoverage() (+9 more)
 
 ### Community 91 - "weight-worlds/src/50-lights-pipeline-camera.js"
 Cohesion: 0.16
@@ -579,8 +617,8 @@ Cohesion: 0.12
 Nodes (12): camera, canvas, CONSOLE, HERO, KIT, MAT, QS, rand (+4 more)
 
 ### Community 93 - "공룡과 줄다리기 — 이론 카드"
-Cohesion: 0.05
-Nodes (39): q1(), 공룡과 줄다리기 — 퀘스트 지도, 구현 분할, 손계산 검증 대표 상태, 예상 그림 후보, 원리 카드 — 글 없는 그림 등식, 퀘스트 진행 규칙과 측정 경계, 검수 질문 다섯 가지 (+31 more)
+Cohesion: 0.11
+Nodes (18): a. 한 줄 통찰, b. 3단계 학습 경로, c. 보이지 않는 주인공과 시각 형태, d. 영웅 장치와 방, e. 지배 방정식, f. 조작 변수와 손잡이, g. 원리 → 시각 문법 대응표, h. 퀘스트 목록 (+10 more)
 
 ### Community 94 - "earth-stop/src/30-room-console.js"
 Cohesion: 0.17
@@ -607,8 +645,8 @@ Cohesion: 0.12
 Nodes (14): contactMaterial, CONTROL_FACE, CONTROL_LAYOUT, CONTROL_PANEL, DIAL, ENVIRONMENT, GRAPHS, GROUND_HARDWARE (+6 more)
 
 ### Community 100 - "init"
-Cohesion: 0.29
-Nodes (8): capture(), frame(), lessonUpdate(), onResize(), recordFriction(), recordHang(), shot(), update()
+Cohesion: 0.15
+Nodes (15): onKeyUp(), onPointerUp(), buildStudio(), capture(), frame(), init(), lessonUpdate(), onResize() (+7 more)
 
 ### Community 101 - "earth-stop/src/80-teacher.js"
 Cohesion: 0.14
@@ -635,12 +673,12 @@ Cohesion: 0.15
 Nodes (11): classPanel, laserCanvas, laserTrail, numericLayer, spotMask, T, TEACHER, TEACHER_CFG (+3 more)
 
 ### Community 107 - "dino-tug/src/80-teacher.js"
-Cohesion: 0.15
-Nodes (11): classPanel, laserCanvas, laserTrail, numericLayer, spotMask, T, TEACHER, TEACHER_CFG (+3 more)
+Cohesion: 0.14
+Nodes (12): classPanel, laserCanvas, laserTrail, numericLayer, spotMask, T, TEACHER, TEACHER_CFG (+4 more)
 
 ### Community 108 - "moon-closer/src/70-loop.js"
-Cohesion: 0.23
-Nodes (9): GRAMMAR, flyTo(), textAudit(), boot(), capture(), frame(), layer(), step() (+1 more)
+Cohesion: 0.26
+Nodes (8): GRAMMAR, textAudit(), boot(), capture(), frame(), layer(), step(), update()
 
 ### Community 109 - "weight-worlds/src/20-scene-kit.js"
 Cohesion: 0.18
@@ -679,8 +717,8 @@ Cohesion: 0.22
 Nodes (8): A, ATTRACT, ATTRACT_LABELS, attractStart, idleOption, lastInput, recovery, touchPulse
 
 ### Community 118 - "black-hole-fall/tools/capture.mjs"
-Cohesion: 0.12
-Nodes (12): lite, output, report, require, root, selected, lite, output (+4 more)
+Cohesion: 0.22
+Nodes (6): lite, output, report, require, root, selected
 
 ### Community 119 - "dino-tug/src/70-loop.js"
 Cohesion: 0.27
@@ -730,13 +768,13 @@ Nodes (8): A, ATTRACT, ATTRACT_LABELS, attractStart, idleOption, lastInput, reco
 Cohesion: 0.22
 Nodes (8): 공룡과 줄다리기 — 실험실 명세 (slug: dino-tug), 근사와 한계 (guide와 reviewer-brief에 명시), 물리 모델 (`src/15-physics.js`, 순수 함수, 단위 N·kg·m·s), 시각 문법, 영웅 장치와 방, 조작 변수, 퀘스트 (예상 → 조작 → 판정, 오개념 후보 포함), 한 줄 통찰
 
-### Community 131 - "init"
-Cohesion: 0.40
-Nodes (5): onKeyUp(), onPointerUp(), buildStudio(), frame(), init()
+### Community 131 - "dino-tug/tools/quest-check.mjs"
+Cohesion: 0.03
+Nodes (45): a12, actualLayers, allLog, archive, auditSource, banner, bodyNode, buttons (+37 more)
 
-### Community 132 - "moon-closer/src/68-director.js"
-Cohesion: 0.33
-Nodes (6): DIRECTOR, qButton(), qExtra, qOverlay, qPictures, questUI()
+### Community 132 - "earth-stop/tools/mission-check.mjs"
+Cohesion: 0.20
+Nodes (6): banner(), context, copy(), document, elements, hud
 
 ### Community 134 - "로켓은 언제 땅에서 떠오를까"
 Cohesion: 0.25
@@ -766,29 +804,29 @@ Nodes (7): 근사와 한계, 로켓은 언제 땅에서 떠오를까? — 실험
 Cohesion: 0.25
 Nodes (7): 근사와 한계, 다른 별에서 내 몸무게는? — 실험실 명세 (slug: weight-worlds), 물리 모델 (`src/15-physics.js`), 영웅 장치와 방, 조작 변수, 퀘스트, 한 줄 통찰
 
-### Community 142 - "applyPreset"
-Cohesion: 0.27
-Nodes (12): applyPreset(), clampJack(), hangParams(), preset(), resetTrack(), set(), setFluid(), setObj() (+4 more)
+### Community 142 - "한국어"
+Cohesion: 0.22
+Nodes (9): 기록 내보내기와 문항 결과를 합치는 방법 / Combining exported logs and item results, 문항 1 — 개념 1, 문항 2 — 개념 2, 문항 3 — 개념 3, 문항 4 — 개념 4, 문항 5 — 개념 5, 문항 6 — 개념 6, 사전·사후 진단 문항 / Pre/post diagnostic items (+1 more)
 
-### Community 143 - "블랙홀에 떨어지면 — 퀘스트 지도 (설계서 2/2)"
-Cohesion: 0.18
-Nodes (10): 결정 기록과 명세 대조, 구현 분할, 블랙홀에 떨어지면 — 퀘스트 지도 (설계서 2/2), 손계산 검증 대표 상태, 예상 그림 후보, 원리 카드: 글 없는 그림 등식, 퀘스트 진행 규칙과 입력 계약, 퀘스트 표 (+2 more)
+### Community 143 - "showTools"
+Cohesion: 0.25
+Nodes (9): endDrag(), layersToggle, lensAvailable(), lensTool, paletteNext, rivalTool, set(), showTools() (+1 more)
 
-### Community 145 - "black-hole-fall/README.md"
-Cohesion: 0.33
-Nodes (3): 교사·대기 이식 인터페이스 — black-hole-fall, 교사·전시 모듈 이식 인터페이스 (M5), 보존한 원본 계약
+### Community 145 - "U5 — 캔버스·3D·조건부 글 (2026-10-21)"
+Cohesion: 0.17
+Nodes (11): 1. 지금과 새 기준의 차이 (코드 확인 사실), 2. 설계 결정 (사용자가 번복할 수 있음), 3. 작업 단위 (각 단위는 검증 가능한 상태로 끝난다), 4. 지키는 것, 5. 위험, forces 실험실 '글 없는 기준' 이전 설계 (P0-1), U5 — 캔버스·3D·조건부 글 (2026-10-21), U6 — 5초 테스트 가독성 수정 (2026-10-22, 브라우저 확인 대기) (+3 more)
 
-### Community 146 - "원리와 표현 — 블랙홀에 빠지면"
-Cohesion: 0.29
-Nodes (6): R15 ? Colorfigures ink / black-hole space, R7 환경 — 블랙홀 곁 우주, R9: 격자 자체가 장치, 조작부는 공중 패널, 색과 선 규칙, 쓰지 않은 표현과 이유, 원리와 표현 — 블랙홀에 빠지면
+### Community 146 - "공룡과 줄다리기 v2 — 개편 설계안 (초안, 사용자 검토용)"
+Cohesion: 0.22
+Nodes (8): 1. 설계 원칙, 2. 단계와 성취기준 표지, 3. 개념 6개 (개념 지도), 4. 퀘스트 목록과 순서, 7. 모델과 물리 한계 (교사 안내에 명시), 8. 구현 순서 (각 단위가 끝나면 검증 가능한 상태), 9. 사용자 검토가 필요한 것, 공룡과 줄다리기 v2 — 개편 설계안 (초안, 사용자 검토용)
 
 ### Community 147 - "hydraulic-ram/tools/assemble.mjs"
 Cohesion: 0.33
 Nodes (5): dir, files, head, js, src
 
-### Community 148 - "ref_node_path"
-Cohesion: 0.15
-Nodes (10): dir, files, head, js, src, dir, files, head (+2 more)
+### Community 148 - "ref_node_url"
+Cohesion: 0.11
+Nodes (15): dir, files, head, js, src, dir, files, head (+7 more)
 
 ### Community 149 - "다른 별에서 내 몸무게는"
 Cohesion: 0.29
@@ -798,9 +836,9 @@ Nodes (7): R9 ?? ?? ?? ??, 결정 기록, 과장·근사·한계, 다른 별에�
 Cohesion: 0.40
 Nodes (4): PHASES, Q, QUEST, QUESTS
 
-### Community 151 - "블랙홀에 빠지면"
-Cohesion: 0.29
-Nodes (7): URL과 문서, 결정 기록, 과장·근사·한계, 블랙홀에 빠지면, 실제 window.__lab 훅, 실행과 검사, 조작
+### Community 151 - "공룡과 줄다리기 — 퀘스트 지도"
+Cohesion: 0.14
+Nodes (12): N4 팀을 따로 보기 (id 11, 개념 ③④), N5 / id 12 — 서서히 당기기 (개념 ⑤), U4b — N1 맞잡기와 N2 한 명 더, U5a — N3 줄 한가운데 저울, 공룡과 줄다리기 — 퀘스트 지도, 구현 분할, 손계산 검증 대표 상태, 예상 그림 후보 (+4 more)
 
 ### Community 152 - "dino-tug/src/65-quests.js"
 Cohesion: 0.40
@@ -834,17 +872,21 @@ Nodes (3): Q, QUEST, QUESTS
 Cohesion: 0.33
 Nodes (4): dawn, KIT, MAT, PAINT
 
-### Community 176 - "moon-closer/tools/assemble.mjs"
-Cohesion: 0.33
-Nodes (5): dir, files, head, js, src
+### Community 175 - "원리에서 표현으로 — 공룡과 줄다리기"
+Cohesion: 0.25
+Nodes (8): INK_CFG reference, R10: ??? ??? ???, R11: 캐릭터 색과 다리·몸통 비례, R12 — Colorfigures ink rendering, R13 — distance ink and portable engine, R9: 밀림 지면과 독립 돌 토템, Shader input/output contract, 원리에서 표현으로 — 공룡과 줄다리기
 
-### Community 177 - "weight-worlds/tools/quest-check.mjs"
-Cohesion: 0.29
-Nodes (4): context, pending, root, success
+### Community 176 - "dino-tug/tools/capture.mjs"
+Cohesion: 0.25
+Nodes (6): lite, output, report, require, root, selected
 
-### Community 178 - "블랙홀에 빠지면 — 30분 검수 요약"
+### Community 177 - "ref_node_assert"
+Cohesion: 0.16
+Nodes (6): context, node, checkMissions(), read(), banner, ctx
+
+### Community 178 - "지구 자전이 멈추면"
 Cohesion: 0.33
-Nodes (5): 검수 질문 다섯 가지, 근사·과장과 검수 한계, 블랙홀에 빠지면 — 30분 검수 요약, 입력 → PHYS 계산값, 지배 방정식과 상수
+Nodes (6): 결정 기록, 공개 훅, 과장과 한계, 실행, 조작과 URL, 지구 자전이 멈추면
 
 ### Community 179 - "rocket-liftoff/tools/assemble.mjs"
 Cohesion: 0.33
@@ -862,22 +904,126 @@ Nodes (5): R15 - Colorfigures ink transplant, R7 — 선택 천체의 현장 환
 Cohesion: 0.40
 Nodes (4): R15 coastal ink, R7 해안 발사장 환경, R9 지면과 독립 관제 단말, 원리와 시각 문법 — 로켓 발사대
 
+### Community 195 - "icon"
+Cohesion: 0.80
+Nodes (5): cardHTML(), conceptHTML(), icon(), qButton(), questUI()
+
+### Community 196 - "ref_node_child_process"
+Cohesion: 0.25
+Nodes (5): context, pictures, required, root, rows
+
+### Community 198 - "62-curriculum.js"
+Cohesion: 0.20
+Nodes (8): q1(), 교사·대기 이식 계약 — 공룡과 줄다리기, CONCEPTS, CONCEPTS_OF, firstOfLevel(), levelOf(), LEVELS, SEQUENCE
+
+### Community 199 - "hydraulic-ram/tools/hand-check.mjs"
+Cohesion: 0.29
+Nodes (3): PHYS, rows, src
+
+### Community 201 - "black-hole-fall/src/67-mission.js"
+Cohesion: 0.67
+Nodes (3): MISSION, missionText(), syncMission()
+
+### Community 202 - "English"
+Cohesion: 0.29
+Nodes (7): English, Item 1 — Concept 1, Item 2 — Concept 2, Item 3 — Concept 3, Item 4 — Concept 4, Item 5 — Concept 5, Item 6 — Concept 6
+
+### Community 203 - "earth-stop/src/67-mission.js"
+Cohesion: 0.67
+Nodes (3): MISSION, missionText(), syncMission()
+
+### Community 205 - "kids"
+Cohesion: 0.33
+Nodes (6): 6. 새로 만드는 구성요소, window.__lab 실제 훅, dino(), ff(), fm(), kids()
+
+### Community 209 - "공룡과 줄다리기"
+Cohesion: 0.33
+Nodes (6): R9: 책상 없는 밀림, 결정 기록, 공룡과 줄다리기, 과장·근사·한계, 실행, 조작과 URL
+
+### Community 210 - "지구 자전이 멈추면 — 퀘스트 지도"
+Cohesion: 0.29
+Nodes (7): 구현 분할과 이번 실행 계획, 손계산 검증 대표 상태, 예상 그림 후보, 원리 카드 — 글 없는 그림 등식, 지구 자전이 멈추면 — 퀘스트 지도, 퀘스트 진행과 측정 경계, 퀘스트 표
+
+### Community 212 - "원리에서 표현으로 — 달이 가까워지면"
+Cohesion: 0.29
+Nodes (7): R15 - Colorfigures ink rendering, R9 환경 — 갑판 없는 지구·달 궤도, 공통 규칙, 쓰지 않은 표현과 이유, 원리에서 표현으로 — 달이 가까워지면, 장면의 읽는 순서, 화면 길이의 해석
+
+### Community 213 - "moon-closer/src/68-director.js"
+Cohesion: 0.33
+Nodes (6): DIRECTOR, qButton(), qExtra, qOverlay, qPictures, questUI()
+
+### Community 215 - "weight-worlds/tools/quest-check.mjs"
+Cohesion: 0.29
+Nodes (4): context, pending, root, success
+
+### Community 216 - "달이 가까워지면 — 퀘스트 지도 (설계서 2/2)"
+Cohesion: 0.33
+Nodes (6): 구현 분할 (Codex 워커 브리프 후보), 달이 가까워지면 — 퀘스트 지도 (설계서 2/2), 손계산 검증 대표 상태 (reviewer-brief에 들어갈 값), 예상 그림 후보 (퀘스트마다 2~3개, 오개념 1개 포함), 원리 카드 (글 없는 그림 등식), 퀘스트 진행 규칙
+
+### Community 217 - "weight-worlds/tools/assemble.mjs"
+Cohesion: 0.33
+Nodes (5): dir, files, head, js, src
+
+### Community 218 - "fmt"
+Cohesion: 0.60
+Nodes (5): exact(), fmt(), near(), numeric(), row()
+
+### Community 219 - "공룡과 줄다리기 — 30분 검수 요약"
+Cohesion: 0.40
+Nodes (5): 검수 질문 다섯 가지, 공룡과 줄다리기 — 30분 검수 요약, 근사와 과장, 대표 입력 → PHYS 계산값, 실제 식과 상수
+
+### Community 220 - "DINO_MODELS"
+Cohesion: 0.40
+Nodes (5): R14: Character paint with curved three-band boundaries, DINO_MODELS, dinoBand(), dinoPaintMaterial(), mergeDinoPaint()
+
+### Community 221 - "LensGroup"
+Cohesion: 0.40
+Nodes (3): drawContext, LensGroup, meterContext
+
+### Community 223 - "검수 요약 — 지구 자전이 멈추면"
+Cohesion: 0.40
+Nodes (5): 검수 요약 — 지구 자전이 멈추면, 검수 질문, 근사·표현 과장, 대표 상태: 입력 → 계산값, 식·상수
+
+### Community 224 - "검수 요약 — 달이 가까워지면"
+Cohesion: 0.40
+Nodes (5): 검수 요약 — 달이 가까워지면, 검수 질문, 근사와 과장, 대표 상태: 입력 → 계산값, 식과 실제 상수
+
+### Community 225 - "exact"
+Cohesion: 0.67
+Nodes (4): exact(), fmt(), numeric(), row()
+
+### Community 226 - "원리에서 표현으로 — 지구 자전이 멈추면"
+Cohesion: 0.50
+Nodes (4): R15 ? Colorfigures ink rendering, R7 ?? ??, R9 공중 장치와 조작부, 원리에서 표현으로 — 지구 자전이 멈추면
+
+### Community 227 - "handRs"
+Cohesion: 0.67
+Nodes (3): handDA(), handRs(), handSp()
+
+### Community 228 - "bilingual"
+Cohesion: 0.67
+Nodes (3): bilingual(), noKorean(), u7()
+
+### Community 229 - "run"
+Cohesion: 0.67
+Nodes (3): complete8(), run(), wrongButton
+
 ## Knowledge Gaps
-- **38 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **51 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `state()` connect `state` to `forces/src/70-loop.js`, `weight-worlds/tools/capture.mjs`, `블랙홀에 떨어지면 — 퀘스트 지도 (설계서 2/2)`, `dino-tug/tools/hand-check.mjs`, `earth-stop/tools/capture.mjs`, `블랙홀에 빠지면`?**
-  _High betweenness centrality (0.202) - this node is a cross-community bridge._
+- **Why does `state()` connect `init` to `earth-stop/tools/hand-check.mjs`, `forces/src/70-loop.js`, `weight-worlds/tools/capture.mjs`, `kids`, `달이 가까워지면`, `지구 자전이 멈추면`, `earth-stop/tools/capture.mjs`, `블랙홀에 떨어지면 — 이론 카드 (설계서 1/2)`?**
+  _High betweenness centrality (0.164) - this node is a cross-community bridge._
 - **Should `forces/src/60-interaction-hud.js` be split into smaller, more focused modules?**
-  _Cohesion score 0.08558558558558559 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.0928030303030303 - nodes in this community are weakly interconnected._
 - **Why does `time()` connect `rocket-liftoff/tools/hand-check.mjs` to `hydraulic-ram/src/70-loop.js`?**
-  _High betweenness centrality (0.054) - this node is a cross-community bridge._
+  _High betweenness centrality (0.061) - this node is a cross-community bridge._
 - **Should `forces/src/70-loop.js` be split into smaller, more focused modules?**
-  _Cohesion score 0.08666666666666667 - nodes in this community are weakly interconnected._
-- **Why does `applyViewOffset()` connect `forces/src/50-lights-pipeline-camera.js` to `68-director.js`?**
-  _High betweenness centrality (0.053) - this node is a cross-community bridge._
+  _Cohesion score 0.08708708708708708 - nodes in this community are weakly interconnected._
+- **Why does `preset()` connect `dino-tug/src/60-interaction-hud.js` to `dino-tug/tools/capture.mjs`, `dino-tug/src/70-loop.js`?**
+  _High betweenness centrality (0.040) - this node is a cross-community bridge._
 - **Should `forces/src/20-scene-kit.js` be split into smaller, more focused modules?**
   _Cohesion score 0.0666049953746531 - nodes in this community are weakly interconnected._
 - **Should `hydraulic-ram/src/20-scene-kit.js` be split into smaller, more focused modules?**
