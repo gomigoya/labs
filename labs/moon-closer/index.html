@@ -114,10 +114,17 @@ body[data-mode=teacher] #teacher-class>button[data-choice]>svg{stroke-width:3;fi
  #q-pictures>button[data-candidate]{min-width:0;width:calc((100vw - 32px)/3);height:calc((100vw - 32px)*.1556);padding:2px}
 }
 </style>
+<style>
+#mission{position:fixed;z-index:20;left:50%;transform:translateX(-50%);width:max-content;max-width:calc(100vw - 24px);padding:8px 16px;border:2px solid #221d18;border-radius:24px;background:#f4efe3;color:#221d18;font:500 17px/1.4 system-ui,sans-serif;text-align:center;white-space:nowrap;pointer-events:none}
+body[data-mode=teacher] #mission,.hide-ui #mission{display:none}
+#q-pictures.act,#q-pictures.observe{top:calc(var(--mission-bottom,130px) + 8px)}
+@media(max-width:980px){#mission{font-size:15px;white-space:normal;word-break:keep-all;overflow-wrap:break-word;padding:7px 12px}}
+</style>
 </head>
 <body>
 <canvas id="gl"></canvas>
 <div id="quests" class="hud" aria-hidden="true"></div>
+<div id="mission" data-mission role="status" aria-live="polite" aria-atomic="true"></div>
 <div id="tools" class="hud"></div>
 <script type="module">
 // 이 파일은 src/의 조각을 tools/assemble.mjs로 이어 붙여 만든다. 수정은 src/에서.
@@ -1247,6 +1254,17 @@ function action(name) {
   syncUI();
 }
 function syncUI() {
+  const mission = document.getElementById('mission');
+  mission.hidden = T.mode === 'teacher';
+  const text = missionText(Q.i, Q.phase, { free: Q.free, pick: Q.pick, answerKey: QUESTS[Q.i].answerKey });
+  if (mission.textContent !== text) {
+    mission.getAnimations().forEach(animation => animation.cancel());
+    mission.textContent = text;
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) mission.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 120 });
+  }
+  const missionTop = document.getElementById('quests').getBoundingClientRect().bottom + 8;
+  mission.style.top = `${missionTop}px`;
+  document.documentElement.style.setProperty('--mission-bottom', `${missionTop + mission.getBoundingClientRect().height}px`);
   document.getElementById('tool-play').innerHTML = icon(S.playing.target ? 'pause' : 'play');
   document.getElementById('tool-play').setAttribute('aria-pressed', String(!!S.playing.target));
   document.getElementById('tool-lens').setAttribute('aria-pressed', String(!!S.lens.target));
@@ -1340,7 +1358,7 @@ function textAudit() {
   const found = [], walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
   while (walker.nextNode()) {
     const node = walker.currentNode, parent = node.parentElement;
-    if (!parent || parent.closest('script,style,template,[hidden]')) continue;
+    if (!parent || parent.closest('script,style,template,[hidden]') || parent.closest('#mission[data-mission]')) continue;
     const range = document.createRange(); range.selectNodeContents(node);
     const r = range.getBoundingClientRect(), style = getComputedStyle(parent);
     if (!r.width || !r.height || style.visibility === 'hidden' || style.display === 'none' || +style.opacity === 0 || r.bottom < 0 || r.top > innerHeight || r.right < 0 || r.left > innerWidth) continue;
@@ -1551,6 +1569,31 @@ const CARDS = (() => {
   return { picture, actual, principle, micro, bar, svg };
 })();
 
+// Copy lives here; the display derives everything from the existing quest state.
+const MISSION = [
+  { ask: '달이 조금 다가오면 바다는 얼마나 달라질까요?', act: '달을 왼쪽 깃발로 끌고 돋보기를 눌러 봐요', done: { right: '거의 그대로예요. 다음 화살표를 눌러요', wrong: '예상과 달리 거의 그대로예요. 다음으로 가요' } },
+  { ask: '달이 얼마나 다가와야 바다가 달라질까요?', act: '달을 끌어 눈금 여섯 곳과 끝 깃발을 지나 봐요', done: { right: '멀리 끌수록 달라져요. 다음 화살표를 눌러요', wrong: '예상보다 멀리 끌어야 해요. 다음으로 가요' } },
+  { ask: '달까지 거리가 반이면 바다는 얼마나 높아질까요?', act: '달을 왼쪽 깃발까지 끌어 거리를 반으로 해요', done: { right: '바다가 여덟 배 높아져요. 다음으로 가요', wrong: '예상과 달리 여덟 배예요. 다음으로 가요' } },
+  { ask: '달이 다가오면 바다는 어느 쪽이 부풀까요?', act: '돋보기를 누르고 시계를 돌려 두 봉우리를 봐요', done: { right: '양쪽 바다가 부풀어요. 다음 화살표를 눌러요', wrong: '예상과 달리 양쪽이 부풀어요. 다음으로 가요' } },
+  { ask: '달이 다가오면 사람도 둥둥 뜰까요?', act: '달을 깃발로 끌고 사람과 물결 버튼을 눌러요', done: { right: '사람은 거의 그대로예요. 다음으로 가요', wrong: '예상과 달리 사람은 안 떠요. 다음으로 가요' } },
+  { ask: '가까운 달은 크기와 움직임이 어떻게 바뀔까요?', act: '별 모양 버튼을 누르고 달을 깃발로 끌어요', done: { right: '달이 커지고 빨라져요. 다음으로 가요', wrong: '크기와 빠르기 모두 바뀌어요. 다음으로 가요' } },
+  { ask: '달이 아주 가까워지면 어떤 모습이 될까요?', act: '달을 왼쪽 끝까지 끌어 모양을 바꿔 봐요', done: { right: '달이 부서져 고리가 돼요. 다음으로 가요', wrong: '예상과 달리 고리가 돼요. 다음으로 가요' } },
+  { ask: '바닷물이 벽을 넘기 직전은 어디일까요?', act: '달을 끌어 물 높이를 벽에 맞추고 멈춰요', done: { right: '벽 높이에 맞췄어요. 네모 버튼으로 더 해 봐요', wrong: '예상과 달라도 맞췄어요. 네모 버튼을 눌러요' } }
+].map(row => ({ ...row, pick: '그림 중 하나를 눌러 예상해 보세요', watch: '목표를 이뤘어요. 바뀐 모습을 지켜봐요', free: '마음대로 만져 보세요' }));
+
+function missionText(questIndex, phase, ctx = {}) {
+  if (!Number.isInteger(questIndex) || !MISSION[questIndex] || !['intro', 'predict', 'act', 'observe', 'confirm', 'card'].includes(phase)) throw new RangeError('mission quest/phase');
+  const row = MISSION[questIndex];
+  if (ctx.free) return row.free;
+  if (phase === 'intro') return row.ask;
+  if (phase === 'predict') return row.pick || row.ask;
+  if (phase === 'act') return row.act;
+  if (phase === 'observe') return row.watch;
+  return row.done[ctx.pick === null || ctx.pick === ctx.answerKey ? 'right' : 'wrong'];
+}
+
+window.addEventListener('resize', syncUI);
+
 // Camera, sound, explanations and HUD consume Q; they never decide success.
 Object.assign(ICONS, {
   hand: 'M8 12V4a2 2 0 0 1 4 0v7-4a2 2 0 0 1 4 0v4-2a2 2 0 0 1 4 0v6q0 7-7 7-4 0-7-5l-3-4q-1-3 2-2l3 2',
@@ -1616,6 +1659,7 @@ function questUI() {
   qButton('reset', 'reset', () => { set('closer', 0); S.u.value = S.u.target; f.hold = 0; }, qExtra).className = 'q-restore';
   document.body.dataset.qphase = Q.free ? 'free' : Q.phase;
   document.getElementById('person-card').style.pointerEvents = 'auto';
+  syncUI();
 }
 document.getElementById('person-card').addEventListener('pointerdown', e => {
   if (Q.i !== 4 || Q.phase !== 'act') return;
@@ -1629,7 +1673,7 @@ const DIRECTOR = {
     document.body.classList.remove('q-bars');
     const from = camera.position.clone(), fromTarget = controls.target.clone(), fromFov = camera.fov;
     shot(S.vertical ? 0 : 1, S.vertical); camera.clearViewOffset();
-    const top = S.vertical ? 160 : 110, bottom = innerHeight - (S.vertical ? 315 : 335), available = Math.max(170, bottom - top);
+    const top = Math.max(S.vertical ? 160 : 110, document.getElementById('mission').getBoundingClientRect().bottom + 90), bottom = innerHeight - (S.vertical ? 315 : 335), available = Math.max(170, bottom - top);
     const box = heroBox(true), target = box.getCenter(V3()); controls.target.copy(target); camera.lookAt(target); camera.updateMatrixWorld();
     for (let i = 0; i < 12; i++) { const b = projectedBox(box); if (b.bottom - b.top < available && b.right - b.left < innerWidth * .87) break; camera.position.sub(target).multiplyScalar(1.08).add(target); camera.lookAt(target); camera.updateMatrixWorld(); }
     const to = { pos: camera.position.clone(), target: target.clone(), fov: camera.fov };
@@ -1661,12 +1705,13 @@ const DIRECTOR = {
     const focus = Q.i === 3 ? DIAL.knob.getWorldPosition(V3()) : MOON_CARRIAGE.position.clone().setY(E.y);
     if (!Q.free && f.pushed && !S.drag && !GRAMMAR.enabled.sky && Q.phase !== 'intro') {
       camera.clearViewOffset(); camera.updateMatrixWorld(); const b = projectedBox(heroBox(true));
-      const offset = ((S.vertical ? 160 : 110) + innerHeight - (S.vertical ? 315 : 335) - b.top - b.bottom) / 2;
+      const top = Math.max(S.vertical ? 160 : 110, document.getElementById('mission').getBoundingClientRect().bottom + 8, ['act', 'observe'].includes(Q.phase) ? qPictures.getBoundingClientRect().bottom + 8 : 0);
+      const offset = (top + innerHeight - (S.vertical ? 315 : 335) - b.top - b.bottom) / 2;
       camera.setViewOffset(innerWidth, innerHeight, 0, -offset, innerWidth, innerHeight);
     }
     if (!Q.free && Q.phase === 'intro' && f.elapsed < 0.9) body = `<g transform="translate(${innerWidth / 2 - 42} ${innerHeight / 2 - 42}) scale(3.5)"><defs><clipPath id="q-wipe"><rect width="${Math.min(24, f.elapsed / .65 * 24)}" height="24"/></clipPath></defs><g clip-path="url(#q-wipe)">${icon(d.icon).replace(/^<svg[^>]*>|<\/svg>$/g, '')}</g></g>`;
     if ((Q.free || ['act', 'observe', 'confirm', 'card'].includes(Q.phase))) {
-      if (f.lensOpen && (Q.free || Q.i === 0)) body += `<svg x="${innerWidth / 2 - 150}" y="${S.vertical ? 170 : 135}" width="300" height="140">${CARDS.micro().replace(/^<svg[^>]*>|<\/svg>$/g, '')}</svg>`;
+      if (f.lensOpen && (Q.free || Q.i === 0)) body += `<svg x="${innerWidth / 2 - 150}" y="${Math.max(S.vertical ? 170 : 135, document.getElementById('mission').getBoundingClientRect().bottom + 8)}" width="300" height="140">${CARDS.micro().replace(/^<svg[^>]*>|<\/svg>$/g, '')}</svg>`;
       const goals = Q.i === 7 ? [closerForRatio(f.wall)] : d.goalMarks;
       if (!Q.free && Q.phase === 'act') for (const closer of goals) {
         const [x, y] = project(V3(railAt(PHYS.railX(closer)), railY, 0.07));

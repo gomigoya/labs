@@ -44,8 +44,9 @@ const DIRECTOR={
   const focus=Q.i===0?PIN.position:Q.i===1||Q.i===5?SLIDER.handle.getWorldPosition(V3()):Q.i===2?PLAY_BUTTON.getWorldPosition(V3()):DIAL.knob.getWorldPosition(V3());
   questLight.position.copy(focus).add(V3(0,.12,.18));questLight.intensity=Q.free?0:.5;
   let body='';
+  const contentTop=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--quest-content-top'));
   if(!Q.free&&Q.phase==='intro'&&f.elapsed<.9)body=`<g transform="translate(${innerWidth/2-42} ${innerHeight/2-42}) scale(3.5)"><defs><clipPath id="q-wipe"><rect width="${Math.min(24,f.elapsed/.65*24)}" height="24"/></clipPath></defs><g clip-path="url(#q-wipe)">${symbol(d.icon)}</g></g>`;
-  if(Q.free&&f.lens)body+=`<svg x="${innerWidth/2-120}" y="${innerWidth<=980?202:110}" width="240" height="${innerWidth<=980?56:112}" viewBox="0 0 300 140">${CARDS.micro(f.lens==='day'?4:1,QUEST.sample()).replace(/^<svg[^>]*>|<\/svg>$/g,'')}</svg>`;
+  if(Q.free&&f.lens)body+=`<svg x="${innerWidth/2-120}" y="${contentTop}" width="240" height="${innerWidth<=980?56:112}" viewBox="0 0 300 140">${CARDS.micro(f.lens==='day'?4:1,QUEST.sample()).replace(/^<svg[^>]*>|<\/svg>$/g,'')}</svg>`;
   if(!Q.free&&Q.phase==='act'){
    for(const value of d.goalMarks){
     const point=Q.i===0?V3(...PHYS.scenePoint(value,S.spin.value,MODEL.pinReach)):Q.i===3||Q.i===4?DIAL.knob.getWorldPosition(V3()).add(V3(Math.sin(-PHYS.periodRailX(value)*Math.PI*1.5)*CONTROL_LAYOUT.dial.cueRadius,Math.cos(-PHYS.periodRailX(value)*Math.PI*1.5)*CONTROL_LAYOUT.dial.cueRadius,CONTROL_LAYOUT.dial.cueDepth)):V3(SLIDER.x+(PHYS.phiRailX(value)-.5)*SLIDER.width,SLIDER.y,SLIDER.z+CONTROL_LAYOUT.slider.cueDepth);
@@ -57,10 +58,10 @@ const DIRECTOR={
     const dx=Q.i===1||Q.i===5?65:Q.i===3||Q.i===4?-40:0,dy=dx?-25:-12;
     body+=line(`M${x} ${y}l${dx} ${dy}`,true)+`<g transform="translate(${x+dx*u-12} ${y+dy*u})">${symbol('hand')}</g>`;
    }
-   if(f.lens){const actual=QUEST.sample();body+=`<svg x="${innerWidth/2-120}" y="${innerWidth<=980?202:110}" width="240" height="${innerWidth<=980?56:112}" viewBox="0 0 300 140">${CARDS.micro(d.id,actual).replace(/^<svg[^>]*>|<\/svg>$/g,'')}</svg>`;}
+   if(f.lens){const actual=QUEST.sample();body+=`<svg x="${innerWidth/2-120}" y="${contentTop}" width="240" height="${innerWidth<=980?56:112}" viewBox="0 0 300 140">${CARDS.micro(d.id,actual).replace(/^<svg[^>]*>|<\/svg>$/g,'')}</svg>`;}
   }
   if(this.eventLeft>0){
-   const [x,y]=project(E),age=1.4-this.eventLeft,u=Math.min(1,age/.45),cx=innerWidth/2,cy=innerWidth<=980?220:164;
+   const [x,y]=project(E),age=1.4-this.eventLeft,u=Math.min(1,age/.45),cx=innerWidth/2,cy=contentTop+(innerWidth<=980?28:56);
    body=`<circle cx="${x}" cy="${y}" r="5" fill="#37795d"/>`+line(`M${x} ${y}L${x+(cx-x)*u} ${y+(cy-y)*u}`)+(age>.45?`<svg x="${cx-120}" y="${cy-(innerWidth<=980?28:56)}" width="240" height="${innerWidth<=980?56:112}" viewBox="0 0 300 140"><rect x="1" y="1" width="298" height="138" rx="16" fill="#f4efe3" stroke="#221d18" stroke-width="1.5"/>${d.card(this.snapshot).replace(/^<svg[^>]*>|<\/svg>$/g,'')}</svg>`:'');
   }
   qOverlay.innerHTML=`<svg viewBox="0 0 ${innerWidth} ${innerHeight}">${body}</svg>`;

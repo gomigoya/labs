@@ -10,6 +10,7 @@ function update(dt){
  S.t.value+=(S.t.target-S.t.value)*k;if(Math.abs(S.t.target-S.t.value)<1e-7)S.t.value=S.t.target;
  updateHero();drawGraphs();GRAMMAR.update(DIRECTOR.time(dt));QUEST.update(dt);DIRECTOR.update(dt);if(typeof TEACHER!=='undefined')TEACHER.update(dt);
  if(typeof ENVIRONMENT!=='undefined')ENVIRONMENT.update(DIRECTOR.time(dt));
+ syncUI();
  if(S.fly){
   const f=S.fly;f.elapsed+=dt;const u=clamp(f.elapsed/f.duration,0,1),smooth=1-(1-u)**3;
   camera.position.lerpVectors(f.from,f.to.pos,smooth);controls.target.lerpVectors(f.fromTarget,f.to.target,smooth);

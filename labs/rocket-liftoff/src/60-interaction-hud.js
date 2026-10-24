@@ -80,6 +80,16 @@ function action(name){
  syncUI();
 }
 function syncUI(){
+ const mission=document.getElementById('mission');
+ mission.hidden=document.body.dataset.mode==='teacher';
+ const text=missionText(Q.i,Q.phase,{...selection(),free:Q.free,before:Q.flags.before,ignited:!!S.ignited.target,correct:Q.pick===null||Q.pick===QUESTS[Q.i].answerKey});
+ if(mission.textContent!==text){
+  mission.textContent=text;
+  if(!mission.hidden&&typeof matchMedia==='function'&&!matchMedia('(prefers-reduced-motion: reduce)').matches){
+   mission.getAnimations().forEach(a=>a.cancel());
+   mission.animate([{opacity:0},{opacity:1}],{duration:120});
+  }
+ }
  const {n,load,g}=selection(),key=[n,load,g,S.playing.target,S.sound.target].join(':');if(S.uiKey===key)return;S.uiKey=key;
  const play=document.getElementById('tool-play'),sound=document.getElementById('tool-sound');
  play.innerHTML=icon(S.playing.target?'pause':'play');play.setAttribute('aria-pressed',String(!!S.playing.target));
@@ -176,7 +186,7 @@ window.addEventListener('keydown',event=>{if(event.key!=='/'||event.repeat)retur
 function textAudit(){
  const found=[],walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);
  while(walker.nextNode()){
-  const node=walker.currentNode,parent=node.parentElement;if(!parent||parent.closest('script,style,template,[hidden]'))continue;
+  const node=walker.currentNode,parent=node.parentElement;if(!parent||parent.closest('script,style,template,[hidden]')||parent.closest('#mission[data-mission]'))continue;
   const range=document.createRange();range.selectNodeContents(node);const r=range.getBoundingClientRect();
   let visible=true;for(let e=parent;e;e=e.parentElement){const style=getComputedStyle(e);if(style.visibility==='hidden'||style.display==='none'||+style.opacity===0)visible=false;}
   if(!visible||!r.width||!r.height||r.bottom<0||r.top>innerHeight||r.right<0||r.left>innerWidth)continue;
@@ -230,4 +240,5 @@ function questUI(){
  }
  layerGroup.hidden=!Q.free;document.body.dataset.qphase=Q.free?'free':Q.phase;
  for(const b of toolbar.querySelectorAll('button')){const name=b.id.replace('tool-','');b.classList.toggle('sub',!Q.free&&name!=='sound'&&name!=='reset'&&!d.controls.includes(({plus:'engines',minus:'engines',load0:'load',load1:'load',load2:'load',earth:'g',moon:'g'})[name]||name));}
+ syncUI();
 }

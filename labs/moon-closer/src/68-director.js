@@ -63,6 +63,7 @@ function questUI() {
   qButton('reset', 'reset', () => { set('closer', 0); S.u.value = S.u.target; f.hold = 0; }, qExtra).className = 'q-restore';
   document.body.dataset.qphase = Q.free ? 'free' : Q.phase;
   document.getElementById('person-card').style.pointerEvents = 'auto';
+  syncUI();
 }
 document.getElementById('person-card').addEventListener('pointerdown', e => {
   if (Q.i !== 4 || Q.phase !== 'act') return;
@@ -76,7 +77,7 @@ const DIRECTOR = {
     document.body.classList.remove('q-bars');
     const from = camera.position.clone(), fromTarget = controls.target.clone(), fromFov = camera.fov;
     shot(S.vertical ? 0 : 1, S.vertical); camera.clearViewOffset();
-    const top = S.vertical ? 160 : 110, bottom = innerHeight - (S.vertical ? 315 : 335), available = Math.max(170, bottom - top);
+    const top = Math.max(S.vertical ? 160 : 110, document.getElementById('mission').getBoundingClientRect().bottom + 90), bottom = innerHeight - (S.vertical ? 315 : 335), available = Math.max(170, bottom - top);
     const box = heroBox(true), target = box.getCenter(V3()); controls.target.copy(target); camera.lookAt(target); camera.updateMatrixWorld();
     for (let i = 0; i < 12; i++) { const b = projectedBox(box); if (b.bottom - b.top < available && b.right - b.left < innerWidth * .87) break; camera.position.sub(target).multiplyScalar(1.08).add(target); camera.lookAt(target); camera.updateMatrixWorld(); }
     const to = { pos: camera.position.clone(), target: target.clone(), fov: camera.fov };
@@ -108,12 +109,13 @@ const DIRECTOR = {
     const focus = Q.i === 3 ? DIAL.knob.getWorldPosition(V3()) : MOON_CARRIAGE.position.clone().setY(E.y);
     if (!Q.free && f.pushed && !S.drag && !GRAMMAR.enabled.sky && Q.phase !== 'intro') {
       camera.clearViewOffset(); camera.updateMatrixWorld(); const b = projectedBox(heroBox(true));
-      const offset = ((S.vertical ? 160 : 110) + innerHeight - (S.vertical ? 315 : 335) - b.top - b.bottom) / 2;
+      const top = Math.max(S.vertical ? 160 : 110, document.getElementById('mission').getBoundingClientRect().bottom + 8, ['act', 'observe'].includes(Q.phase) ? qPictures.getBoundingClientRect().bottom + 8 : 0);
+      const offset = (top + innerHeight - (S.vertical ? 315 : 335) - b.top - b.bottom) / 2;
       camera.setViewOffset(innerWidth, innerHeight, 0, -offset, innerWidth, innerHeight);
     }
     if (!Q.free && Q.phase === 'intro' && f.elapsed < 0.9) body = `<g transform="translate(${innerWidth / 2 - 42} ${innerHeight / 2 - 42}) scale(3.5)"><defs><clipPath id="q-wipe"><rect width="${Math.min(24, f.elapsed / .65 * 24)}" height="24"/></clipPath></defs><g clip-path="url(#q-wipe)">${icon(d.icon).replace(/^<svg[^>]*>|<\/svg>$/g, '')}</g></g>`;
     if ((Q.free || ['act', 'observe', 'confirm', 'card'].includes(Q.phase))) {
-      if (f.lensOpen && (Q.free || Q.i === 0)) body += `<svg x="${innerWidth / 2 - 150}" y="${S.vertical ? 170 : 135}" width="300" height="140">${CARDS.micro().replace(/^<svg[^>]*>|<\/svg>$/g, '')}</svg>`;
+      if (f.lensOpen && (Q.free || Q.i === 0)) body += `<svg x="${innerWidth / 2 - 150}" y="${Math.max(S.vertical ? 170 : 135, document.getElementById('mission').getBoundingClientRect().bottom + 8)}" width="300" height="140">${CARDS.micro().replace(/^<svg[^>]*>|<\/svg>$/g, '')}</svg>`;
       const goals = Q.i === 7 ? [closerForRatio(f.wall)] : d.goalMarks;
       if (!Q.free && Q.phase === 'act') for (const closer of goals) {
         const [x, y] = project(V3(railAt(PHYS.railX(closer)), railY, 0.07));

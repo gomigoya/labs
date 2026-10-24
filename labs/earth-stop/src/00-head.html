@@ -124,6 +124,12 @@ body[data-mode=teacher] #quests{left:12px;transform:none}
  body[data-mode=teacher] #teacher-strip svg{width:min(34px,calc(var(--cell) - 8px));height:min(34px,calc(var(--cell) - 8px))}
 }
 
+/* Student mission reserves its own band between the quest strip and cards. */
+:root{--mission-top:92px;--quest-content-top:144px}
+#mission{position:fixed;z-index:15;left:50%;top:var(--mission-top);transform:translateX(-50%);max-width:calc(100vw - 24px);width:max-content;padding:8px 16px;border:2px solid #221d18;border-radius:999px;background:#f4efe3;color:#221d18;font:500 16px/1.4 system-ui,sans-serif;text-align:center;white-space:nowrap;pointer-events:none}
+body[data-mode=teacher] #mission,.hide-ui #mission{display:none}
+#q-pictures,body[data-qphase=free] #comparison-card{top:var(--quest-content-top)}
+@media(max-width:980px){#mission{font-size:15px;white-space:normal;word-break:keep-all;width:max-content;padding:7px 12px}}
 </style>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.176.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.176.0/examples/jsm/"}}</script>
 </head>

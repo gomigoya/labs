@@ -24,8 +24,26 @@ function shot(){}function updateHero(){}function drawGraphs(){}
 const DIRECTOR={eventLeft:0,clear(){this.eventLeft=0;},intro(){},push(){},event(){this.eventLeft=1.4;},chord(){},time(dt){return dt*(this.eventLeft>0?.18:1);},update(dt){this.eventLeft=Math.max(0,this.eventLeft-dt);}};
 const GRAMMAR=(()=>{${grammar.match(/const LAYERS=[^;]+;/)[0]}let baseline=null;const enabled={};return{LAYERS,defaults:{},enabled,set(v){Object.assign(enabled,v);},unpin(){baseline=null;},${grammar.match(/function pin\(record\)\{[^\n]+/)[0].replace('function pin(record)','pin(record)').replace("curveKey='';",'')},get baseline(){return baseline;},update(){}};})();
 `;
-vm.runInContext(read('src/15-physics.js')+setup+hud.slice(0,hud.indexOf('// Enlarged geometric hit regions'))+read('src/66-cards.js')+read('src/65-quests.js')+hud.slice(hud.indexOf('Object.assign(LABELS,'))+loop.slice(0,loop.indexOf('function layer(')),context);
+vm.runInContext(read('src/15-physics.js')+setup+hud.slice(0,hud.indexOf('// Enlarged geometric hit regions'))+read('src/66-cards.js')+read('src/65-quests.js')+read('src/67-mission.js')+hud.slice(hud.indexOf('Object.assign(LABELS,'))+loop.slice(0,loop.indexOf('function layer(')),context);
 const run=code=>vm.runInContext(code,context);
+assert(read('src/00-head.html').includes('id="mission"'), 'student mission status banner is required');
+for(let i=0;i<6;i++){
+ let previous='';
+ for(const phase of ['intro','predict','act','observe','confirm','card']){
+  run(`QUEST.go(${i});QUEST.phase('${phase}');`);
+  const text=run(`document.getElementById('mission').textContent`);
+  assert(text?.trim(),`Q${i+1}/${phase}: mission is empty`);
+  assert([...text].length<=32,`Q${i+1}/${phase}: mission exceeds 32 characters`);
+  assert.notEqual(text,previous,`Q${i+1}/${phase}: phase must change the displayed instruction`);
+  assert.equal(run(`document.getElementById('mission').hidden`),false);
+  previous=text;
+ }
+ run('QUEST.mode(true)');assert.equal(run(`document.getElementById('mission').textContent`),'마음대로 만져 보세요');
+}
+run(`document.body.dataset.mode='teacher';syncUI();`);
+assert.equal(run(`document.getElementById('mission').hidden`),true);
+run(`document.body.dataset.mode='student';QUEST.go(0);`);
+console.log('PASS: 36 quest/phase banners are nonempty, short and change with phase; free instruction and teacher hiding');
 const rows=run('QUESTS.map(d=>({id:d.id,candidates:d.candidates.map(c=>c.key),answerKey:d.answerKey}))');
 assert.equal(rows.length,6);
 for(const [i,row]of rows.entries()){
@@ -57,7 +75,9 @@ assert.equal(run('QUESTS[3].judge(QUEST.sample())'),false);
 run(`QUEST.open('inspect');step(120,1/30);`);assert(run('QUESTS[3].judge(QUEST.sample())'));assert(run('Q.flags.before.runId===first'));
 console.log('PASS: comparison needs a newer run and explicit observation; pinned record is immutable');
 run(`QUEST.go(1);step(90,1/30);const old=S.engines.target;action('plus');`);assert(run('S.engines.target===old'));assert.equal(run('Q.phase'),'predict');
-run(`QUEST.pick(2);set('engines',5);step(30,1/30);action('play');step(120,1/30);`);assert.equal(run('selection().n'),5);
+run(`QUEST.pick(2);set('engines',5);step(30,1/30);`);
+assert.equal(run(`document.getElementById('mission').textContent`),'▶를 눌러 바로 뜨는지 살펴보세요');
+run(`action('play');step(120,1/30);`);assert.equal(run('selection().n'),5);
 run(`QUEST.mode(true);action('minus');step(30,1/30);`);assert.equal(run('selection().n'),4);
 console.log('PASS: prediction input lock, success state preservation and free controls');
 for(let i=0;i<6;i++)for(const phase of ['intro','predict','act','event','confirm','card']){

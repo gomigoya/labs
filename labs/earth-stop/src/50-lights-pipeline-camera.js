@@ -51,13 +51,15 @@ function heroCoverage() {
     const r = el.getBoundingClientRect(); return b.left < r.right && b.right > r.left && b.top < r.bottom && b.bottom > r.top;
   };
   return { width: (b.right - b.left) / innerWidth, height: (b.bottom - b.top) / innerHeight,
-    overlaps: overlaps('quests') || overlaps('tools'), overlapsTop: overlaps('quests'), overlapsTools: overlaps('tools'), clipped: b.left < 0 || b.right > innerWidth || b.top < 0 || b.bottom > innerHeight || b.behind, bounds: b };
+    overlaps: overlaps('quests') || overlaps('tools') || overlaps('mission'), overlapsTop: overlaps('quests'), overlapsTools: overlaps('tools'), overlapsMission: overlaps('mission'), clipped: b.left < 0 || b.right > innerWidth || b.top < 0 || b.bottom > innerHeight || b.behind, bounds: b };
 }
 function fitHero(portrait) {
   const envelope=PHYS.sceneEnvelope(),target=E.clone();
   const deck=document.getElementById('q-pictures'),dr=deck.getBoundingClientRect();
   const deckOn=!deck.hidden&&!!deck.children.length&&getComputedStyle(deck).display!=='none';
-  const top=Math.max(document.getElementById('quests').getBoundingClientRect().bottom+14,portrait&&deckOn?dr.bottom+12:0);
+  const banner=document.getElementById('mission'),mr=banner.getBoundingClientRect();
+  const top=Math.max(document.getElementById('quests').getBoundingClientRect().bottom+14,
+    banner.getClientRects().length?mr.bottom+14:0,deckOn&&(portrait||Q.phase!=='predict')?dr.bottom+12:0);
   const tools=document.getElementById('tools');
   const bottom=getComputedStyle(tools).display==='none'?innerHeight-12:tools.getBoundingClientRect().top-14;
   const left=!portrait&&deckOn&&Q.phase==='predict'?dr.right+16:12;
@@ -100,7 +102,7 @@ function resize(refit = true) {
   renderer.setPixelRatio(Math.min(devicePixelRatio || 1, low ? 1 : 1.6));
   renderer.setSize(innerWidth, innerHeight, false); composer.setPixelRatio(renderer.getPixelRatio()); composer.setSize(innerWidth, innerHeight);
   camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix();
-  if (refit) { const vertical=innerWidth/innerHeight<0.9; shot(vertical ? 0 : 1,vertical); }
+  if (refit) { syncMission();const vertical=innerWidth/innerHeight<0.9; shot(vertical ? 0 : 1,vertical); }
 }
 function setQuality(level) {
   if (!['high', 'low'].includes(level)) throw new RangeError('quality');

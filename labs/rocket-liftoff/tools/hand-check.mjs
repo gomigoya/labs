@@ -1,4 +1,5 @@
 // node tools/hand-check.mjs
+process.env.TEMP=process.env.TMP='D:/CodexWork/Temp';
 import fs from 'node:fs';
 
 let total = 0, failed = 0;
@@ -244,5 +245,20 @@ if (P) {
   }
   exact('R5 both console curves + current dots + cursor without quest layer',graphsOK,true);
   }
+  const missionSource=fs.readFileSync('src/67-mission.js','utf8');
+  const mission=new Function(missionSource+';return missionText;')();
+  const phases=['intro','predict','act','observe','confirm','card','free'];
+  for(let i=0;i<6;i++){
+    const texts=[];
+    for(const phase of phases)for(const correct of [true,false])for(const n of [1,5])for(const load of [200000,500000])for(const before of [null,{}])for(const ignited of [false,true]){
+      texts.push(mission(i,phase,{correct,n,load,before,ignited}));
+    }
+    row(`미션 Q${i+1} 모든 단계·조작·예상 결과`,'빈 문구 0, 최대 32자',
+      {empty:texts.filter(t=>!t?.trim()).length,max:Math.max(...texts.map(t=>[...t].length))},
+      texts.every(t=>t.trim()&&[...t].length<=32));
+  }
+  exact('미션 엔진 목표 달성 후 다음 행동',mission(1,'act',{n:5,ignited:false}),'▶를 눌러 바로 뜨는지 살펴보세요');
+  exact('미션 짐 기록 후 다음 행동',mission(3,'act',{before:{},load:200000}),'아래 큰 상자 버튼을 눌러 짐을 늘려요');
+  exact('미션 짐 증가 후 다음 행동',mission(3,'act',{before:{},load:500000}),'▶를 눌러 큰 짐을 싣고 날려 보세요');
   finish();
 }

@@ -56,6 +56,7 @@ function action(name){
  syncUI();
 }
 function syncUI(){
+ syncMission();
  for(const name of ['play','sound','sudden','gradual'])document.getElementById(`tool-${name}`).setAttribute('aria-pressed',String(name==='play'?!!S.playing.target:name==='sound'?!!S.sound.target:name==='sudden'?S.mode.target===0:S.mode.target===1));
  document.getElementById('tool-play').innerHTML=icon(S.playing.target?'pause':'play');
  document.getElementById('tool-sound').innerHTML=icon(S.sound.target?'sound':'muted');
@@ -157,7 +158,7 @@ function textAudit() {
   const found = [], walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
   while (walker.nextNode()) {
     const node = walker.currentNode, parent = node.parentElement;
-    if (!parent || parent.closest('script,style,template,[hidden]')) continue;
+    if (!parent || parent.closest('script,style,template,[hidden],#mission[data-mission]')) continue;
     const range = document.createRange(); range.selectNodeContents(node);
     const r = range.getBoundingClientRect(), style = getComputedStyle(parent);
     if (!r.width || !r.height || style.visibility === 'hidden' || style.display === 'none' || +style.opacity === 0 || r.bottom < 0 || r.top > innerHeight || r.right < 0 || r.left > innerWidth) continue;
@@ -239,6 +240,7 @@ function questUI(){
  qLayers.hidden=!Q.free;
  for(const name of ['play','execute','sudden','gradual'])document.getElementById(`tool-${name}`).classList.toggle('sub',!Q.free&&!d.handles.includes(name));
  document.body.dataset.qphase=Q.free?'free':Q.phase;
+ syncMission();
  DIRECTOR.layoutDirty=true;
 }
 

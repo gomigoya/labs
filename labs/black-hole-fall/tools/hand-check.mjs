@@ -1,3 +1,4 @@
+import './mission-check.mjs';
 // node tools/hand-check.mjs
 import fs from 'node:fs';
 const source = fs.readFileSync('src/15-physics.js', 'utf8');

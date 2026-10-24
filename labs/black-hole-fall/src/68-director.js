@@ -16,7 +16,7 @@ const DIRECTOR={
   const to={pos:camera.position.clone(),target:target.clone(),fov:camera.fov};
   camera.position.copy(from);controls.target.copy(fromTarget);camera.fov=fromFov;flyTo(to,1.8);
  },
- viewport(){return {top:document.getElementById('quests').getBoundingClientRect().bottom+12,bottom:toolbar.getBoundingClientRect().top-(innerWidth<=980?150:190)};},
+ viewport(){return {top:Math.max(document.getElementById('quests').getBoundingClientRect().bottom,mission.hidden?0:mission.getBoundingClientRect().bottom)+12,bottom:toolbar.getBoundingClientRect().top-(innerWidth<=980?150:190)};},
  event(s){this.eventReturn={pos:camera.position.clone(),target:controls.target.clone(),fov:camera.fov};this.snapshot=structuredClone(s);this.eventLeft=.8;S.fly=null;camera.clearViewOffset();document.body.classList.add('q-event');this.sound([220,330],.45);},
  time(dt){return dt*(this.eventLeft>0?.18:1)*(T.slow ? 0.25 : 1);},
  sound(notes,duration=.35){

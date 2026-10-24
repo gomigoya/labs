@@ -1,6 +1,6 @@
 // Shared diagram colors; no visible labels added.
 for(const [name,value]of Object.entries({'--diagram-paper':'#'+INK_CFG.diagram.screen.toString(16),'--diagram-ink':'#'+INK_CFG.diagram.ink.toString(16),'--diagram-border':INK_CFG.diagram.borderPx+'px'}))document.documentElement.style.setProperty(name,value);
-// All user-facing language lives only in this accessibility dictionary.
+// Accessible control names; visible mission copy lives in 67-mission.js.
 const LABELS={
  canvas:{ko:'\uBE14\uB799\uD640 \uC870\uC11D \uC2E4\uD5D8\uC2E4',en:'Black hole tidal laboratory'},
  play:{ko:'\uAC70\uB9AC \uC790\uB3D9 \uC2A4\uCE94',en:'Scan or pause distance'},
@@ -56,6 +56,7 @@ function action(name){
  syncUI();
 }
 function syncUI(){
+ syncMission();
  for(const name of ['play','sound','orientation','cutaway','mass0','mass1','mass2']){
   const b=document.getElementById(`tool-${name}`);
   const on=name==='play'?!!S.playing.target:name==='sound'?!!S.sound.target:name==='orientation'?!!S.orientation.target:name==='cutaway'?!!S.cutaway.target:S.massIndex.target===Number(name.slice(-1));
@@ -146,6 +147,7 @@ function textAudit(){
   const range=document.createRange();range.selectNodeContents(node);const r=range.getBoundingClientRect(),style=getComputedStyle(parent);
   if(!r.width||!r.height||style.visibility==='hidden'||style.display==='none'||+style.opacity===0||r.bottom<0||r.top>innerHeight||r.right<0||r.left>innerWidth)continue;
   if(parent.closest('[data-numeric]')&&T.mode==='teacher'&&T.numbers&&/^\s*-?\d+(?:\.\d+)?\s*(?:km|m|s|h|\u00b0|\u00d7|m\/s\u00b2)\s*$/.test(node.textContent))continue;
+  if(parent.closest('#mission[data-mission]'))continue;
   const words=node.textContent.match(/[\p{L}\p{N}]+/gu);
   if(words)found.push({words,x:r.x,y:r.y,width:r.width,height:r.height});
  }
@@ -197,6 +199,7 @@ function questUI(){
   document.getElementById(`tool-${name}`).classList.toggle('sub',!relevant);
  }
  document.body.dataset.qphase=Q.free?'free':Q.phase;
+ syncMission();
 }
 
 Object.assign(ICONS,Object.fromEntries([

@@ -68,6 +68,29 @@ try {
     await page.goto(parsed.href, { waitUntil: 'load' });
     try { await page.waitForFunction(() => !!window.__lab, null, { timeout: 60000 }); }
     catch (error) { report.push({ viewportName, startupConsoleErrors: consoleErrors, startupPageErrors: pageErrors, requestErrors }); console.error(JSON.stringify(report.at(-1))); throw error; }
+    // Browser contract: visible language follows every real phase; teacher mode hides it.
+    const missionChecks=await page.evaluate(()=>{
+      const lab=window.__lab,failures=[],banner=document.getElementById('mission');
+      lab.teacher.mode('student');
+      if(banner.getAttribute('role')!=='status'||banner.getAttribute('aria-live')!=='polite')failures.push('mission accessibility');
+      for(let i=0;i<6;i++){
+        let previous='';
+        for(const phase of ['intro','predict','act','observe','confirm','card']){
+          lab.quest.go(i);lab.quest.phase(phase);
+          const text=banner.textContent;
+          if(!text.trim()||[...text].length>32||text===previous||!banner.getClientRects().length)failures.push(`Q${i+1}/${phase}`);
+          previous=text;
+          if(lab.textAudit().length)failures.push(`Q${i+1}/${phase}: unexpected text`);
+        }
+      }
+      lab.teacher.mode('free');
+      if(banner.textContent!=='마음대로 만져 보세요'||!banner.getClientRects().length)failures.push('free mission');
+      lab.teacher.mode('teacher');
+      if(banner.getClientRects().length)failures.push('teacher mission visible');
+      lab.teacher.mode('student');
+      return{viewportName,missionContract:true,failures};
+    });
+    report.push(missionChecks);if(missionChecks.failures.length)process.exitCode=1;
     for (const [name, preset, shotIndex, config = {}] of states) {
       if((viewportName==='projector'||viewportName==='small-desktop')&&name!=='teacher-strip')continue;
       if(name==='thumb'&&viewportName!=='desktop')continue;
@@ -110,7 +133,7 @@ try {
           lab.step(1,0);
           const bounds=lab.heroCoverage().bounds;
           return {quest:lab.quest.state(),textAudit:lab.textAudit(),coverage:lab.heroCoverage(),perf:lab.perf(),
-            occlusion:[...document.querySelectorAll('#quests,#tools,#q-pictures')].filter(e=>!e.hidden&&getComputedStyle(e).visibility!=='hidden').map(e=>{const r=e.getBoundingClientRect();return{id:e.id,overlaps:bounds.left<r.right&&bounds.right>r.left&&bounds.top<r.bottom&&bounds.bottom>r.top};}),
+            occlusion:[...document.querySelectorAll('#quests,#mission,#tools,#q-pictures')].filter(e=>!e.hidden&&getComputedStyle(e).visibility!=='hidden').map(e=>{const r=e.getBoundingClientRect();return{id:e.id,overlaps:bounds.left<r.right&&bounds.right>r.left&&bounds.top<r.bottom&&bounds.bottom>r.top};}),
             touchTargets:[...document.querySelectorAll('button')].filter(e=>e.getClientRects().length).map(e=>{const r=e.getBoundingClientRect();return{label:e.getAttribute('aria-label'),width:r.width,height:r.height};}),
             horizontalScroll:document.documentElement.scrollWidth>innerWidth+1};
         }
@@ -136,6 +159,14 @@ try {
           input:{...input,t:t.value,ignited:!!ignited.target},
           horizontalScroll:document.documentElement.scrollWidth>innerWidth+1};
       }, { name, preset, mobile, shotIndex, config });
+      // Let responsive strip measurement settle before checking the banner geometry.
+      await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+      result.mission=await page.evaluate(()=>{
+        const e=document.getElementById('mission'),r=e.getBoundingClientRect(),visible=!!e.getClientRects().length&&getComputedStyle(e).visibility!=='hidden';
+        const overlaps=visible?[...document.querySelectorAll('#quests,#tools,#q-pictures')].filter(n=>n.getClientRects().length&&getComputedStyle(n).visibility!=='hidden').filter(n=>{const b=n.getBoundingClientRect();return r.left<b.right&&r.right>b.left&&r.top<b.bottom&&r.bottom>b.top;}).map(n=>n.id):[];
+        return{text:e.textContent,visible,overlaps,fontSize:parseFloat(getComputedStyle(e).fontSize),inViewport:!visible||(r.left>=0&&r.right<=innerWidth&&r.top>=0&&r.bottom<=innerHeight),teacher:document.body.dataset.mode==='teacher'};
+      });
+      if(result.mission.overlaps.length||!result.mission.inViewport||result.mission.visible&&result.mission.fontSize<15||result.mission.teacher&&result.mission.visible)process.exitCode=1;
       if(name==='teacher-spot'||name==='teacher-laser'){await page.mouse.move(width*.4,height*.4);await page.mouse.move(width*.5,height*.5,{steps:8});}
       if(name==='touch-pulse')await page.evaluate(()=>{const e=document.getElementById('touch-pulse');e.hidden=false;e.style.animation='none';e.style.opacity='1';});
       if(name==='thumb'){

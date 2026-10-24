@@ -15,6 +15,7 @@ function update(dt){
  updateHero();
  if(typeof ENVIRONMENT!=='undefined')ENVIRONMENT.update(physicalDt);
  QUEST.update(dt);
+ syncMission();
  GRAMMAR.update(dt);
  for(const [name,on] of Object.entries(S.layers))if(!on)LAYERS[name].visible=false;
  drawGraphs();

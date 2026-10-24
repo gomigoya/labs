@@ -96,9 +96,15 @@ body[data-mode=teacher] #tools{display:none}
  #q-pictures button[data-candidate] svg{aspect-ratio:1;height:100%}
 }
 </style>
+<style>
+#mission{position:fixed;z-index:16;left:50%;transform:translateX(-50%);width:max-content;max-width:calc(100vw - 24px);padding:7px 16px;border:2px solid #221d18;border-radius:24px;background:#f4efe3;color:#221d18;font:500 16px/1.4 system-ui,sans-serif;text-align:center;white-space:nowrap;pointer-events:none}
+body[data-mode=teacher] #mission,.hide-ui #mission{display:none}
+@media(max-width:980px){#mission{font-size:15px;white-space:normal;word-break:keep-all;max-width:calc(100vw - 24px);min-height:60px;display:grid;place-items:center}}
+</style>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.176.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.176.0/examples/jsm/"}}</script>
 </head>
 <body>
 <canvas id="gl"></canvas>
 <div id="quests" class="hud" aria-hidden="true"></div>
+<div id="mission" data-mission role="status" aria-live="polite" aria-atomic="true"></div>
 <div id="tools" class="hud"></div>

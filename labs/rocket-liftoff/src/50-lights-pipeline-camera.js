@@ -44,12 +44,13 @@ function heroCoverage() {
     const r = el.getBoundingClientRect(); return b.left < r.right && b.right > r.left && b.top < r.bottom && b.bottom > r.top;
   };
   return { width: (b.right - b.left) / innerWidth, height: (b.bottom - b.top) / innerHeight,
-    overlaps: overlaps('quests') || overlaps('tools'), overlapsTop: overlaps('quests'), overlapsTools: overlaps('tools'), clipped: b.left < 0 || b.right > innerWidth || b.top < 0 || b.bottom > innerHeight || b.behind, bounds: b };
+    overlaps: overlaps('quests') || overlaps('mission') || overlaps('tools'), overlapsTop: overlaps('quests') || overlaps('mission'), overlapsTools: overlaps('tools'), clipped: b.left < 0 || b.right > innerWidth || b.top < 0 || b.bottom > innerHeight || b.behind, bounds: b };
 }
 function fitHero(portrait) {
   // Projection-only candidate search; no render in this loop. Fit the maximum extent as well.
   const box = heroBox(), maximumBox = box.clone(), target = box.getCenter(V3());
-  const top = document.getElementById('quests').getBoundingClientRect().bottom + 14;
+  const stripBottom=document.getElementById('quests').getBoundingClientRect().bottom,mission=document.getElementById('mission');
+  const top = stripBottom + (mission.getClientRects().length ? 10+mission.getBoundingClientRect().height : 0) + 14;
   const tools=document.getElementById('tools').getBoundingClientRect(),pictures=document.getElementById('q-pictures').getBoundingClientRect();
   const bottom=(tools.height?tools.top:innerHeight)-12;
   const pictureTop=portrait?(pictures.height?pictures.top:bottom-112):bottom;

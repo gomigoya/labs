@@ -1,5 +1,6 @@
 // node tools/hand-check.mjs
 import fs from 'node:fs';
+import './mission-check.mjs';
 
 let count = 0, failures = 0;
 const fmt = v => typeof v === 'number' ? Number(v.toPrecision(10)).toString()

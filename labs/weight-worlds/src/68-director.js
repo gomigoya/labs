@@ -15,7 +15,7 @@ const DIRECTOR={
   chord(){this.sound([523.25,659.25,783.99],.7);},
   fit(animate=false){
     // Reserve the actual DOM bands, including cards and the expanded free-mode layer group.
-    const top=document.getElementById('quests').getBoundingClientRect().bottom+12;
+    const top=document.getElementById('mission').getBoundingClientRect().bottom+12;
     let bottom=document.body.classList.contains('q-event')?innerHeight-24:toolbar.getBoundingClientRect().top-12;
     if(!document.body.classList.contains('q-event')&&!qPictures.hidden&&qPictures.children.length)bottom=Math.min(bottom,qPictures.getBoundingClientRect().top-12);
     if(!layerGroup.hidden)bottom=Math.min(bottom,layerGroup.getBoundingClientRect().top-12);
@@ -76,7 +76,7 @@ const DIRECTOR={
       if(needsInspect){const r=document.getElementById('tool-inspect').getBoundingClientRect();body+=`<rect x="${r.x+2}" y="${r.y+2}" width="${r.width-4}" height="${r.height-4}" rx="12" stroke-dasharray="4 4"/>`;}
     }
     if(this.eventLeft>0&&!Q.free){
-      const [x,y]=project(focus),age=1.4-this.eventLeft,endX=Math.min(innerWidth-112,Math.max(112,x+75)),endY=Math.max(170,y-65),u=Math.min(1,age/.45);
+      const [x,y]=project(focus),age=1.4-this.eventLeft,endX=Math.min(innerWidth-112,Math.max(112,x+75)),endY=Math.max(document.getElementById('mission').getBoundingClientRect().bottom+106,y-65),u=Math.min(1,age/.45);
       const mini=Q.i===3||Q.i===5?CARDS.micro(this.snapshot):d.card(this.snapshot);
       body=`<circle cx="${x}" cy="${y}" r="4" fill="#37795d"/>`+path(`M${x} ${y}L${x+(endX-x)*u} ${y+(endY-y)*u}`)+(age>.45?`<svg x="${endX-100}" y="${endY-94}" width="200" height="94" viewBox="0 0 300 140"><rect x="0.75" y="0.75" width="298.5" height="138.5" rx="12" fill="#f4efe3" stroke="#221d18" stroke-width="2.25"/>${mini.replace(/^<svg[^>]*>|<\/svg>$/g,'')}</svg>`:'');
     }

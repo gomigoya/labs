@@ -19,6 +19,7 @@ function update(dt){
   camera.fov=THREE.MathUtils.lerp(f.fromFov,f.to.fov,ease);camera.updateProjectionMatrix();if(u===1)S.fly=null;
  }
  controls.update();scene.updateMatrixWorld(true);updateHero();QUEST.update(dt);GRAMMAR.update(physicalDt);drawGraphs();DIRECTOR.update(dt);TEACHER.update(dt);
+ syncMission();
  if(T.mode==='teacher')TEACHER_CFG.frameViewport();
  composer.render(dt);S.frames++;
 }

@@ -11,7 +11,9 @@ const teacher = read('src/80-teacher.js'), attract = read('src/85-attract.js');
 for (const name of fs.readdirSync(new URL('src/', root)).filter(n => n.endsWith('.js'))) {
   execFileSync(process.execPath, ['--check', fileURLToPath(new URL(`src/${name}`, root))]);
   const source = read(`src/${name}`);
-  assert(!/Math\.random|<text\b|fillText\s*\(|<img\b|\p{Extended_Pictographic}/u.test(source), `${name}: prohibited visual API`);
+  assert(!/Math\.random|<text\b|fillText\s*\(|<img\b/.test(source), `${name}: prohibited visual API`);
+  // The requested plain play glyph is a Unicode pictograph too; it is not an emoji asset.
+  assert(!/\p{Extended_Pictographic}/u.test(source.replace(/▶/g,'')), `${name}: emoji`);
 }
 for (const source of [teacher, attract]) {
   assert(!/\.textContent\s*=\s*['"][^'"]*[\p{L}]/u.test(source), 'literal visible words');
@@ -104,16 +106,19 @@ assert(nodes.filter(n => n.attributes['aria-label']).every(n => !!n.attributes['
 console.log(`PASS: ${Object.keys(labels).length} bilingual labels and all shortcuts; stacking, A/B alias, reset, idle exclusions/override, loop, wake, five-frame stall, onerror, exact T/A schemas`);
 
 // Exercise the actual textAudit function with rendered-text boundaries stubbed.
-let content = '12.50 km', numeric = true;
+let content = '12.50 km', numeric = true, mission = false;
 const auditContext = vm.createContext({ T: { mode: 'teacher', numbers: true }, NodeFilter: { SHOW_TEXT: 4 }, innerWidth: 1000, innerHeight: 1000,
   getComputedStyle: () => ({ visibility: 'visible', display: 'block', opacity: '1' }),
   document: { body: {}, createRange: () => ({ selectNodeContents() {}, getBoundingClientRect: () => ({ width: 50, height: 20, x: 1, y: 1, top: 1, bottom: 21, left: 1, right: 51 }) }),
     createTreeWalker: () => { let seen = false; return { nextNode() { if (seen) return false; seen = true; return true; },
-      get currentNode() { return { textContent: content, parentElement: { closest: selector => selector === '[data-numeric]' && numeric ? {} : null } }; } }; } } });
+      get currentNode() { return { textContent: content, parentElement: { closest: selector => (selector === '[data-numeric]' && numeric)||(selector === '#mission[data-mission]' && mission) ? {} : null } }; } }; } } });
 vm.runInContext(read('src/60-interaction-hud.js').slice(read('src/60-interaction-hud.js').indexOf('function textAudit()'),read('src/60-interaction-hud.js').indexOf('Object.assign(LABELS,')), auditContext);
 const audit = () => vm.runInContext('textAudit()', auditContext);
 assert.equal(audit().length, 0); content='12 kg';assert.equal(audit().length,0);content='12 N';assert.equal(audit().length,0);content='12 m/s²';assert.equal(audit().length,0);content = '12 moons'; assert.equal(audit().length, 1);
 content = '12 km'; vm.runInContext('T.numbers=false', auditContext); assert.equal(audit().length, 1);
 numeric = false; content = '7'; assert.equal(audit().length, 1);
 console.log('PASS: textAudit accepts only enabled teacher numeric units; rejects words and unmarked numbers');
+mission=true;content='마음대로 만져 보세요';assert.equal(audit().length,0);
+mission=false;assert.equal(audit().length,1,'same Korean words outside the mission must remain violations');
+console.log('PASS: textAudit exempts mission words only; identical unmarked words remain violations');
 console.log('NOT RUN: WebGL rendering, browser events/focus, contrast, target geometry, portrait occlusion, thumbnail pixels, screenshots. Run tools/capture.mjs on the browser host.');

@@ -47,6 +47,17 @@ function action(name) {
   syncUI();
 }
 function syncUI() {
+  const mission = document.getElementById('mission');
+  mission.hidden = T.mode === 'teacher';
+  const text = missionText(Q.i, Q.phase, { free: Q.free, pick: Q.pick, answerKey: QUESTS[Q.i].answerKey });
+  if (mission.textContent !== text) {
+    mission.getAnimations().forEach(animation => animation.cancel());
+    mission.textContent = text;
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) mission.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 120 });
+  }
+  const missionTop = document.getElementById('quests').getBoundingClientRect().bottom + 8;
+  mission.style.top = `${missionTop}px`;
+  document.documentElement.style.setProperty('--mission-bottom', `${missionTop + mission.getBoundingClientRect().height}px`);
   document.getElementById('tool-play').innerHTML = icon(S.playing.target ? 'pause' : 'play');
   document.getElementById('tool-play').setAttribute('aria-pressed', String(!!S.playing.target));
   document.getElementById('tool-lens').setAttribute('aria-pressed', String(!!S.lens.target));
@@ -140,7 +151,7 @@ function textAudit() {
   const found = [], walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
   while (walker.nextNode()) {
     const node = walker.currentNode, parent = node.parentElement;
-    if (!parent || parent.closest('script,style,template,[hidden]')) continue;
+    if (!parent || parent.closest('script,style,template,[hidden]') || parent.closest('#mission[data-mission]')) continue;
     const range = document.createRange(); range.selectNodeContents(node);
     const r = range.getBoundingClientRect(), style = getComputedStyle(parent);
     if (!r.width || !r.height || style.visibility === 'hidden' || style.display === 'none' || +style.opacity === 0 || r.bottom < 0 || r.top > innerHeight || r.right < 0 || r.left > innerWidth) continue;

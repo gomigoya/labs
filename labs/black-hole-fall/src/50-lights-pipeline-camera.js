@@ -68,7 +68,8 @@ function heroCoverage() {
 function fitHero(portrait) {
   // Projection-only candidate search; no render in this loop. Fit the maximum extent as well.
   const box = heroBox(), target = box.getCenter(V3());
-  const top = document.getElementById('quests').getBoundingClientRect().bottom + 14;
+  syncMission();
+  const top = Math.max(document.getElementById('quests').getBoundingClientRect().bottom,mission.hidden?0:mission.getBoundingClientRect().bottom) + 14;
   const bottom = document.getElementById('tools').getBoundingClientRect().top - 14;
   const cam = camera.clone(); cam.fov = portrait ? 38 : 34; cam.aspect = innerWidth / innerHeight;
   cam.clearViewOffset(); cam.updateProjectionMatrix();

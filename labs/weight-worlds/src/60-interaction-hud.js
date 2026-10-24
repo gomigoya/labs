@@ -98,6 +98,17 @@ function action(name){
   syncUI();
 }
 function syncUI(){
+  const mission=document.getElementById('mission');
+  mission.hidden=T.mode==='teacher';
+  if(!mission.hidden){
+    mission.style.top=`${document.getElementById('quests').getBoundingClientRect().bottom+8}px`;
+    const text=missionText(Q.i,Q.free?'free':Q.phase,{flags:Q.flags,body:S.body.target,nWeights:S.nWeights.target});
+    if(mission.textContent!==text){
+      mission.getAnimations().forEach(animation=>animation.cancel());
+      mission.textContent=text;
+      if(!matchMedia('(prefers-reduced-motion: reduce)').matches)mission.animate([{opacity:0},{opacity:1}],{duration:120});
+    }
+  }
   const key=`${Math.round(S.body.value)}:${Math.round(S.nWeights.value)}:${S.playing.target}:${S.sound.target}`;
   if(toolbar.dataset.key===key)return;toolbar.dataset.key=key;
   const i=Math.round(S.body.value),bodyNames=['earth','moon','rock','rock','band','ring','band','star','compact','space'];
@@ -201,7 +212,7 @@ function textAudit(){
   const found=[],walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);
   while(walker.nextNode()){
     const node=walker.currentNode,parent=node.parentElement;
-    if(!parent||parent.closest('script,style,template,[hidden]'))continue;
+    if(!parent||parent.closest('script,style,template,[hidden],#mission[data-mission]'))continue;
     const range=document.createRange();range.selectNodeContents(node);const r=range.getBoundingClientRect();
     let visible=!!r.width&&!!r.height&&r.bottom>=0&&r.top<=innerHeight&&r.right>=0&&r.left<=innerWidth;
     for(let el=parent;el&&visible;el=el.parentElement){const style=getComputedStyle(el);visible=style.visibility!=='hidden'&&style.display!=='none'&&+style.opacity!==0;}
@@ -247,4 +258,5 @@ function questUI(){
   qPictures.hidden=Q.free||!qPictures.children.length;
   document.body.dataset.qphase=Q.free?'free':Q.phase;
   DIRECTOR.refit=true;
+  syncUI();
 }

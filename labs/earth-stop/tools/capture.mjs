@@ -75,6 +75,27 @@ try{
   try{await page.waitForFunction(()=>!!window.__lab,null,{timeout:60000});}
   catch(error){report.push({viewportName,startupConsoleErrors:consoleErrors,startupPageErrors:pageErrors,requestErrors});throw error;}
   const startupConsoleErrors=[...consoleErrors],startupPageErrors=[...pageErrors];
+  // Browser host verifies the rendered mission through the actual public quest flow.
+  const missionChecks=await page.evaluate(()=>{
+   const lab=window.__lab,el=document.getElementById('mission');let count=0;
+   const check=condition=>{if(!condition)throw new Error('Mission contract failed');count++;};
+   check(!!el&&el.getAttribute('role')==='status'&&el.getAttribute('aria-live')==='polite'&&getComputedStyle(el).pointerEvents==='none');
+   lab.teacher.mode('student');
+   for(let i=0;i<6;i++){
+    lab.quest.go(i);const seen=[];
+    for(const phase of ['intro','predict','act','observe','confirm','card']){
+     lab.quest.skip(phase);const text=el.textContent;seen.push(text);
+     check(!!text.trim()&&[...text].length<=32&&!!el.getClientRects().length);
+     check(lab.textAudit().length===0);
+    }
+    check(seen[0]!==seen[1]&&seen[1]!==seen[2]&&seen[2]!==seen[3]);
+   }
+   lab.teacher.mode('teacher');check(!el.getClientRects().length);
+   lab.teacher.mode('free');check(!!el.getClientRects().length&&el.textContent==='마음대로 만져 보세요');
+   lab.teacher.mode('student');lab.teacher.reset();
+   return count;
+  });
+  console.log(`${viewportName}: mission ${missionChecks} browser checks passed`);
   for(const state of states){
    if(['wide','compact'].includes(viewportName)&&!state.teacher)continue;
    if(mobile&&state.quest!==undefined&&!['predict','card'].includes(state.phase))continue;
@@ -124,7 +145,15 @@ try{
     }
     return {quest:lab.quest.state(),textAudit:lab.textAudit(),heroCoverage:lab.heroCoverage(),perf:lab.perf(),
      touchTargets:[...document.querySelectorAll('button')].filter(el=>el.getClientRects().length&&getComputedStyle(el).visibility!=='hidden').map(el=>{const r=el.getBoundingClientRect();return {label:el.getAttribute('aria-label'),width:r.width,height:r.height,left:r.left,right:r.right,top:r.top,bottom:r.bottom}}),
-     uiBounds:Object.fromEntries(['quests','tools','q-pictures','teacher-strip'].map(id=>{const el=document.getElementById(id),r=el.getBoundingClientRect();return [id,{left:r.left,right:r.right,top:r.top,bottom:r.bottom,hidden:el.hidden}]})),
+     uiBounds:Object.fromEntries(['quests','tools','q-pictures','teacher-strip','mission'].map(id=>{const el=document.getElementById(id),r=el.getBoundingClientRect();return [id,{left:r.left,right:r.right,top:r.top,bottom:r.bottom,hidden:el.hidden}]})),
+     mission:(()=>{
+      const el=document.getElementById('mission'),r=el.getBoundingClientRect(),visible=!!el.getClientRects().length,css=getComputedStyle(el);
+      const overlaps=id=>{const other=document.getElementById(id),b=other.getBoundingClientRect();return visible&&!!other.getClientRects().length&&r.left<b.right&&r.right>b.left&&r.top<b.bottom&&r.bottom>b.top;};
+      return {text:el.textContent,visible,expectedVisible:lab.teacher.state.mode!=='teacher'&&!!lab.state.ui.target,
+       overlapsUI:['quests','tools','q-pictures','comparison-card'].some(overlaps),
+       clipped:visible&&(r.left<0||r.right>innerWidth||r.top<0||r.bottom>innerHeight),fontSize:parseFloat(css.fontSize),
+       lines:visible?Math.round((r.height-parseFloat(css.paddingTop)-parseFloat(css.paddingBottom)-parseFloat(css.borderTopWidth)-parseFloat(css.borderBottomWidth))/parseFloat(css.lineHeight)):0};
+     })(),
      cardOverlapsHero:(()=>{const el=document.getElementById('q-pictures'),r=el.getBoundingClientRect(),b=lab.heroCoverage().bounds;return !el.hidden&&!!el.children.length&&b.left<r.right&&b.right>r.left&&b.top<r.bottom&&b.bottom>r.top;})(),
      horizontalScroll:document.documentElement.scrollWidth>innerWidth+1,
      grammar:{enabled:{...GRAMMAR.enabled},pinned:!!GRAMMAR.baseline},
@@ -140,6 +169,8 @@ try{
     consoleErrors:consoleErrors.slice(c0),pageErrors:pageErrors.slice(p0),requestErrors:requestErrors.slice(r0),startupConsoleErrors,startupPageErrors};
    row.touchTargetFailures=row.touchTargets.filter(t=>!t.label||t.width<(state.teacher&&mobile?20:state.teacher?71.9:55.9)||t.height<(state.teacher&&mobile?20:state.teacher?71.9:55.9));
    row.consoleErrorCount=row.consoleErrors.length;row.pageErrorCount=row.pageErrors.length;
+   row.missionFailure=row.mission.visible!==row.mission.expectedVisible||row.mission.overlapsUI||row.mission.clipped||(row.mission.visible&&(!row.mission.text.trim()||[...row.mission.text].length>32||row.mission.fontSize<15||row.mission.lines>(mobile?2:1)));
+   if(row.missionFailure)process.exitCode=1;
    report.push(row);
    console.log(`${file}: console.error=${row.consoleErrorCount}, pageerror=${row.pageErrorCount}, hscroll=${row.horizontalScroll}, textWords=${row.textWordCount}, heroCoverage=${JSON.stringify(row.heroCoverage)}`);
    if(teacherStripClipped||row.touchTargetFailures.length||row.cardOverlapsHero||row.consoleErrorCount||row.pageErrorCount||row.horizontalScroll||row.textWordCount||(mobile&&!state.teacher&&!state.wake&&state.stage===undefined&&!state.thumb&&state.shot!=='console'&&(row.heroCoverage.clipped||row.heroCoverage.overlaps||row.heroCoverage.width>.75))||startupConsoleErrors.length||startupPageErrors.length||row.requestErrors.length)process.exitCode=1;

@@ -107,12 +107,16 @@ body[data-mode=teacher] #tools,body[data-mode=teacher] #q-extra{display:none}
  #q-pictures .q-compare>svg{width:100%;height:45%}
  .q-principle{width:100%;height:180px}
 }
+#mission{position:fixed;z-index:16;left:50%;top:var(--mission-top,92px);transform:translateX(-50%);width:max-content;max-width:min(600px,calc(100vw - 24px));padding:8px 16px;border:2px solid #221d18;border-radius:999px;background:#f4efe3;color:#221d18;font:500 17px/1.4 system-ui,sans-serif;text-align:center;word-break:keep-all;overflow-wrap:break-word;pointer-events:none}
+body[data-mode=teacher] #mission,.hide-ui #mission{display:none}
+@media(max-width:980px){#mission{top:var(--mission-top,148px);max-width:calc(100vw - 24px);font-size:15px;padding:7px 12px}}
 </style>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.176.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.176.0/examples/jsm/"}}</script>
 </head>
 <body>
 <canvas id="gl" tabindex="0"></canvas>
 <div id="quests" class="hud" aria-hidden="true"></div>
+<div id="mission" data-mission role="status" aria-live="polite" aria-atomic="true"></div>
 <div id="tools" class="hud"></div>
 <script type="module">
 // 이 파일은 src/의 조각을 tools/assemble.mjs로 이어 붙여 만든다. 수정은 src/에서.
@@ -1273,12 +1277,13 @@ function heroCoverage() {
     const r = el.getBoundingClientRect(); return b.left < r.right && b.right > r.left && b.top < r.bottom && b.bottom > r.top;
   };
   return { width: (b.right - b.left) / innerWidth, height: (b.bottom - b.top) / innerHeight,
-    overlaps: overlaps('quests') || overlaps('tools'), overlapsTop: overlaps('quests'), overlapsTools: overlaps('tools'), clipped: b.left < 0 || b.right > innerWidth || b.top < 0 || b.bottom > innerHeight || b.behind, bounds: b };
+    overlaps: overlaps('quests') || overlaps('mission') || overlaps('tools'), overlapsTop: overlaps('quests') || overlaps('mission'), overlapsTools: overlaps('tools'), clipped: b.left < 0 || b.right > innerWidth || b.top < 0 || b.bottom > innerHeight || b.behind, bounds: b };
 }
 function fitHero(portrait) {
   // Projection-only candidate search; no render in this loop. Fit the maximum extent as well.
   const box = heroBox(), maximumBox = box.clone(), target = box.getCenter(V3());
-  const top = document.getElementById('quests').getBoundingClientRect().bottom + 14;
+  const stripBottom=document.getElementById('quests').getBoundingClientRect().bottom,mission=document.getElementById('mission');
+  const top = stripBottom + (mission.getClientRects().length ? 10+mission.getBoundingClientRect().height : 0) + 14;
   const tools=document.getElementById('tools').getBoundingClientRect(),pictures=document.getElementById('q-pictures').getBoundingClientRect();
   const bottom=(tools.height?tools.top:innerHeight)-12;
   const pictureTop=portrait?(pictures.height?pictures.top:bottom-112):bottom;
@@ -1418,6 +1423,16 @@ function action(name){
  syncUI();
 }
 function syncUI(){
+ const mission=document.getElementById('mission');
+ mission.hidden=document.body.dataset.mode==='teacher';
+ const text=missionText(Q.i,Q.phase,{...selection(),free:Q.free,before:Q.flags.before,ignited:!!S.ignited.target,correct:Q.pick===null||Q.pick===QUESTS[Q.i].answerKey});
+ if(mission.textContent!==text){
+  mission.textContent=text;
+  if(!mission.hidden&&typeof matchMedia==='function'&&!matchMedia('(prefers-reduced-motion: reduce)').matches){
+   mission.getAnimations().forEach(a=>a.cancel());
+   mission.animate([{opacity:0},{opacity:1}],{duration:120});
+  }
+ }
  const {n,load,g}=selection(),key=[n,load,g,S.playing.target,S.sound.target].join(':');if(S.uiKey===key)return;S.uiKey=key;
  const play=document.getElementById('tool-play'),sound=document.getElementById('tool-sound');
  play.innerHTML=icon(S.playing.target?'pause':'play');play.setAttribute('aria-pressed',String(!!S.playing.target));
@@ -1514,7 +1529,7 @@ window.addEventListener('keydown',event=>{if(event.key!=='/'||event.repeat)retur
 function textAudit(){
  const found=[],walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);
  while(walker.nextNode()){
-  const node=walker.currentNode,parent=node.parentElement;if(!parent||parent.closest('script,style,template,[hidden]'))continue;
+  const node=walker.currentNode,parent=node.parentElement;if(!parent||parent.closest('script,style,template,[hidden]')||parent.closest('#mission[data-mission]'))continue;
   const range=document.createRange();range.selectNodeContents(node);const r=range.getBoundingClientRect();
   let visible=true;for(let e=parent;e;e=e.parentElement){const style=getComputedStyle(e);if(style.visibility==='hidden'||style.display==='none'||+style.opacity===0)visible=false;}
   if(!visible||!r.width||!r.height||r.bottom<0||r.top>innerHeight||r.right<0||r.left>innerWidth)continue;
@@ -1568,6 +1583,7 @@ function questUI(){
  }
  layerGroup.hidden=!Q.free;document.body.dataset.qphase=Q.free?'free':Q.phase;
  for(const b of toolbar.querySelectorAll('button')){const name=b.id.replace('tool-','');b.classList.toggle('sub',!Q.free&&name!=='sound'&&name!=='reset'&&!d.controls.includes(({plus:'engines',minus:'engines',load0:'load',load1:'load',load2:'load',earth:'g',moon:'g'})[name]||name));}
+ syncUI();
 }
 
 // One state machine, six authoritative model judges; no rendered text.
@@ -1725,6 +1741,64 @@ const CARDS=(()=>{
  return {svg,path,picture,actual,principle};
 })();
 
+// All visible student language. Extra act entries describe the next available control.
+const MISSION = [
+ {ask:'엔진 하나로 로켓이 땅에서 뜰까요?',pick:'그림을 눌러 로켓의 모습을 예상해 보세요',
+  act:'▶를 눌러 엔진 하나에 불을 붙여 보세요',running:'연료가 다 탈 때까지 지켜보세요',
+  watch:'로켓이 땅에 있는지 살펴보세요',
+  done:{right:'예상과 같아요. 결과 그림을 살펴보세요',wrong:'예상과 달라요. 결과 그림을 살펴보세요'},
+  next:'뜨지 않았어요. →로 다음 실험을 해요',free:'마음대로 만져 보세요'},
+ {ask:'엔진 몇 개면 로켓이 바로 뜰까요?',pick:'그림을 눌러 필요한 엔진 수를 골라 보세요',
+  act:'아래 +를 눌러 엔진 수를 늘려 보세요',ready:'▶를 눌러 바로 뜨는지 살펴보세요',running:'로켓이 바로 뜨는지 지켜보세요',
+  watch:'로켓이 땅을 떠나는 순간을 살펴보세요',
+  done:{right:'예상과 같아요. 결과 그림을 살펴보세요',wrong:'예상과 달라요. 결과 그림을 살펴보세요'},
+  next:'다섯 개면 떠요. →로 다음 실험을 해요',free:'마음대로 만져 보세요'},
+ {ask:'날아가는 로켓의 점 간격은 어떨까요?',pick:'그림을 눌러 점 간격을 예상해 보세요',
+  act:'▶를 눌러 로켓을 날려 보세요',running:'점이 생기면 아래 돋보기를 눌러 보세요',
+  watch:'점 사이가 점점 벌어지는지 살펴보세요',
+  done:{right:'예상과 같아요. 결과 그림을 살펴보세요',wrong:'예상과 달라요. 결과 그림을 살펴보세요'},
+  next:'점 간격이 벌어져요. →로 다음 실험을 해요',free:'마음대로 만져 보세요'},
+ {ask:'짐이 커져도 같은 엔진으로 뜰까요?',pick:'그림을 눌러 큰 짐의 로켓을 예상해 보세요',
+  act:'아래 압정을 눌러 작은 짐을 기록해요',pinned:'아래 큰 상자 버튼을 눌러 짐을 늘려요',
+  ready:'▶를 눌러 큰 짐을 싣고 날려 보세요',running:'아래 돋보기를 눌러 두 짐을 비교해요',
+  watch:'짐을 늘린 뒤 남는 힘을 살펴보세요',
+  done:{right:'예상과 같아요. 결과 그림을 살펴보세요',wrong:'예상과 달라요. 결과 그림을 살펴보세요'},
+  next:'같은 엔진으로 떠요. →로 다음 실험을 해요',free:'마음대로 만져 보세요'},
+ {ask:'달에서는 엔진 하나로 뜰까요?',pick:'그림을 눌러 달의 로켓을 예상해 보세요',
+  act:'▶를 눌러 달에서 로켓을 날려 보세요',running:'달에서 로켓이 뜨는지 지켜보세요',
+  watch:'엔진 하나로 떠오르는 모습을 살펴보세요',
+  done:{right:'예상과 같아요. 결과 그림을 살펴보세요',wrong:'예상과 달라요. 결과 그림을 살펴보세요'},
+  next:'달에서는 하나로 떠요. →로 다음 실험을 해요',free:'마음대로 만져 보세요'},
+ {ask:'큰 짐을 싣고 바로 뜨려면 몇 개일까요?',pick:'그림을 눌러 필요한 엔진 수를 골라 보세요',
+  act:'아래 +를 눌러 엔진 수를 늘려 보세요',ready:'▶를 눌러 큰 짐을 싣고 날려 보세요',running:'큰 짐을 싣고 바로 뜨는지 지켜보세요',
+  watch:'큰 짐을 싣고 땅을 떠나는지 살펴보세요',
+  done:{right:'예상과 같아요. 결과 그림을 살펴보세요',wrong:'예상과 달라요. 결과 그림을 살펴보세요'},
+  next:'다섯 개면 떠요. 물결 버튼으로 더 해 봐요',free:'마음대로 만져 보세요'}
+];
+function missionText(questIndex,phase,ctx={}){
+ // Validate the public boundary once; all branches below use this row.
+ if(!Number.isInteger(questIndex)||!MISSION[questIndex]||!['intro','predict','act','observe','confirm','card','free'].includes(phase))throw new RangeError('mission');
+ const m=MISSION[questIndex];
+ if(ctx.free||phase==='free')return m.free;
+ if(phase==='intro')return m.ask;
+ if(phase==='predict')return m.pick||m.ask;
+ if(phase==='observe')return m.watch;
+ if(phase==='confirm')return m.done[ctx.correct?'right':'wrong'];
+ if(phase==='card')return m.next;
+ if(questIndex===3){
+  if(!ctx.before)return m.act;
+  if(ctx.load!==500000)return m.pinned;
+  return ctx.ignited?m.running:m.ready;
+ }
+ if((questIndex===1||questIndex===5)&&ctx.n!==5)return m.act;
+ if(ctx.ignited)return m.running;
+ return m.ready||m.act;
+}
+// Follow the actual quest strip height, including responsive wrapping and safe areas.
+if(typeof ResizeObserver==='function')new ResizeObserver(()=>{
+ document.getElementById('mission').style.top=(document.getElementById('quests').getBoundingClientRect().bottom+10)+'px';
+}).observe(document.getElementById('quests'));
+
 // Real-time presentation clock; only physical time is slowed at scientific events.
 const DIRECTOR={
  clock:0,eventLeft:0,snapshot:null,previewAt:-1,tone:null,
@@ -1790,6 +1864,7 @@ function update(dt){
  S.t.value+=(S.t.target-S.t.value)*k;if(Math.abs(S.t.target-S.t.value)<1e-7)S.t.value=S.t.target;
  updateHero();drawGraphs();GRAMMAR.update(DIRECTOR.time(dt));QUEST.update(dt);DIRECTOR.update(dt);if(typeof TEACHER!=='undefined')TEACHER.update(dt);
  if(typeof ENVIRONMENT!=='undefined')ENVIRONMENT.update(DIRECTOR.time(dt));
+ syncUI();
  if(S.fly){
   const f=S.fly;f.elapsed+=dt;const u=clamp(f.elapsed/f.duration,0,1),smooth=1-(1-u)**3;
   camera.position.lerpVectors(f.from,f.to.pos,smooth);controls.target.lerpVectors(f.fromTarget,f.to.target,smooth);

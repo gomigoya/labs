@@ -7,6 +7,7 @@ import path from 'node:path';
 import http from 'node:http';
 import { fileURLToPath } from 'node:url';
 import { createRequire } from 'node:module';
+import assert from 'node:assert/strict';
 const require = createRequire(import.meta.url);
 let chromium;
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -65,6 +66,41 @@ try {
     try { await page.waitForFunction(() => !!window.__lab, null, { timeout: 60000 }); }
     catch (error) { report.push({ viewportName, startupConsoleErrors: consoleErrors, startupPageErrors: pageErrors, requestErrors }); console.error(JSON.stringify(report.at(-1))); throw error; }
     const startupConsoleErrors=[...consoleErrors],startupPageErrors=[...pageErrors];
+    // Requirements-driven browser checks at every viewport, including 375x812.
+    const missionChecks=await page.evaluate(()=>{
+      const lab=window.__lab,banner=document.getElementById('mission');
+      const visible=el=>!!el.getClientRects().length&&getComputedStyle(el).display!=='none'&&getComputedStyle(el).visibility!=='hidden';
+      const overlap=(a,b)=>a.left<b.right&&a.right>b.left&&a.top<b.bottom&&a.bottom>b.top;
+      const failures=[];
+      lab.teacher.mode('student');
+      for(let i=0;i<6;i++){
+        lab.quest.go(i);
+        let previous='';
+        for(const phase of ['intro','predict','act','observe','confirm','card']){
+          lab.quest.skip(phase);lab.step(1,0);
+          const text=banner.textContent,r=banner.getBoundingClientRect();
+          if(!visible(banner)||!text.trim()||[...text].length>32)failures.push(`q${i+1}/${phase}: missing or long mission`);
+          if(['predict','act','observe','confirm'].includes(phase)&&text===previous)failures.push(`q${i+1}/${phase}: unchanged mission`);
+          previous=text;
+          for(const id of ['quests','tools','q-pictures']){
+            const el=document.getElementById(id);
+            if(visible(el)&&overlap(r,el.getBoundingClientRect()))failures.push(`q${i+1}/${phase}: overlaps ${id}`);
+          }
+          if(r.left<0||r.right>innerWidth||r.top<0||r.bottom>innerHeight)failures.push(`q${i+1}/${phase}: clipped`);
+          if(parseFloat(getComputedStyle(banner).fontSize)<15)failures.push('mission font below 15px');
+          if(lab.textAudit().length)failures.push(`q${i+1}/${phase}: unexpected visible text`);
+        }
+      }
+      lab.teacher.mode('free');
+      if(!visible(banner)||banner.textContent!=='마음대로 만져 보세요')failures.push('free mission');
+      lab.teacher.mode('teacher');if(visible(banner))failures.push('teacher mission must be hidden');
+      lab.teacher.mode('student');
+      if(banner.getAttribute('role')!=='status'||banner.getAttribute('aria-live')!=='polite')failures.push('mission accessibility');
+      if(getComputedStyle(banner).pointerEvents!=='none')failures.push('mission intercepts controls');
+      return failures;
+    });
+    report.push({viewportName,missionFailures:missionChecks});
+    assert.deepEqual(missionChecks,[],`${viewportName}: mission requirements`);
     for (const [name, preset] of states) {
       if (selected.length && !selected.includes(name)) continue;
       if(mobile&&/^q[1-6]-/.test(name)&&!/(predict|card)$/.test(name))continue;
@@ -144,6 +180,14 @@ try {
       const row = { file, ...result, consoleErrorCount: consoleErrors.length - c0, pageErrorCount: pageErrors.length - p0,
         textWordCount: result.textAudit.reduce((n, r) => n + r.words.length, 0), consoleErrors: consoleErrors.slice(c0), pageErrors: pageErrors.slice(p0),
         startupConsoleErrors,startupPageErrors,requestErrors:requestErrors.slice(r0) };
+      row.mission=await page.evaluate(()=>{
+        const el=document.getElementById('mission'),r=el.getBoundingClientRect(),b=window.__lab.heroCoverage().bounds;
+        const visible=!!el.getClientRects().length&&getComputedStyle(el).visibility!=='hidden';
+        return {text:el.textContent,visible,bounds:{left:r.left,top:r.top,right:r.right,bottom:r.bottom},
+          overlapsHero:visible&&r.left<b.right&&r.right>b.left&&r.top<b.bottom&&r.bottom>b.top};
+      });
+      assert.equal(row.textWordCount,0,'only exempt mission/teacher numbers may be visible');
+      if(/^q[1-6]-(act|card)$/.test(name))assert.equal(row.mission.overlapsHero,false,`${file}: mission covers apparatus`);
       report.push(row);
       console.log(`${file}: console.error=${row.consoleErrorCount}, pageerror=${row.pageErrorCount}, startup=${row.startupConsoleErrors.length + row.startupPageErrors.length}, hscroll=${row.horizontalScroll}, textWords=${row.textWordCount}, coverage=${JSON.stringify(row.coverage)}`);
     }

@@ -78,6 +78,27 @@ try {
     try { await page.waitForFunction(() => !!window.__lab, null, { timeout: 60000 }); }
     catch (error) { report.push({ viewportName, startupConsoleErrors: consoleErrors, startupPageErrors: pageErrors, requestErrors }); console.error(JSON.stringify(report.at(-1))); throw error; }
     const startupConsoleErrors=consoleErrors.slice(),startupPageErrors=pageErrors.slice(),startupRequestErrors=requestErrors.slice();
+    // Requirements-derived browser checks; textAudit itself owns the sole copy exception.
+    await page.evaluate(() => {
+      const lab=window.__lab, banner=document.getElementById('mission');
+      if(!banner||banner.getAttribute('role')!=='status'||banner.getAttribute('aria-live')!=='polite')throw new Error('mission status accessibility');
+      const visible=()=>!!banner.getClientRects().length&&getComputedStyle(banner).display!=='none';
+      lab.teacher.mode('student');
+      for(let i=0;i<7;i++){
+        lab.quest.go(i);const intro=banner.textContent;
+        for(const phase of ['intro','predict','act','observe','confirm','card']){
+          lab.quest.skip(phase);
+          if(!visible()||!banner.textContent.trim()||[...banner.textContent].length>32)throw new Error(`mission ${i}/${phase}`);
+          if(phase==='predict'&&banner.textContent===intro)throw new Error('mission phase text must change');
+          if(lab.textAudit().length)throw new Error('non-mission visible words');
+        }
+      }
+      lab.teacher.mode('free');
+      if(!visible()||banner.textContent!=='마음대로 만져 보세요')throw new Error('free mission');
+      lab.teacher.mode('teacher');
+      if(visible())throw new Error('teacher mission must be hidden');
+      lab.teacher.mode('student');lab.quest.go(0);
+    });
     for (const state of states) {
       const {name}=state;
       if (selected.length && !selected.includes(name)) continue;
@@ -126,7 +147,7 @@ try {
           }
           lab.step(1,0);
           const b=lab.heroCoverage().bounds;
-          const occlusion=[...document.querySelectorAll('#quests,#tools,#q-pictures')].filter(el=>el.getClientRects().length&&getComputedStyle(el).visibility!=='hidden').map(el=>{
+          const occlusion=[...document.querySelectorAll('#quests,#mission,#tools,#q-pictures')].filter(el=>el.getClientRects().length&&getComputedStyle(el).visibility!=='hidden').map(el=>{
             const r=el.getBoundingClientRect();return {id:el.id,overlaps:b.left<r.right&&b.right>r.left&&b.top<r.bottom&&b.bottom>r.top};
           });
           return {quest:lab.quest.state(),textAudit:lab.textAudit(),coverage:lab.heroCoverage(),perf:lab.perf(),occlusion,

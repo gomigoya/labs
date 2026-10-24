@@ -96,11 +96,17 @@ body[data-mode=teacher] #tools{display:none}
  #q-pictures button[data-candidate] svg{aspect-ratio:1;height:100%}
 }
 </style>
+<style>
+#mission{position:fixed;z-index:16;left:50%;transform:translateX(-50%);width:max-content;max-width:calc(100vw - 24px);padding:7px 16px;border:2px solid #221d18;border-radius:24px;background:#f4efe3;color:#221d18;font:500 16px/1.4 system-ui,sans-serif;text-align:center;white-space:nowrap;pointer-events:none}
+body[data-mode=teacher] #mission,.hide-ui #mission{display:none}
+@media(max-width:980px){#mission{font-size:15px;white-space:normal;word-break:keep-all;max-width:calc(100vw - 24px);min-height:60px;display:grid;place-items:center}}
+</style>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.176.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.176.0/examples/jsm/"}}</script>
 </head>
 <body>
 <canvas id="gl"></canvas>
 <div id="quests" class="hud" aria-hidden="true"></div>
+<div id="mission" data-mission role="status" aria-live="polite" aria-atomic="true"></div>
 <div id="tools" class="hud"></div>
 <script type="module">
 // 이 파일은 src/의 조각을 tools/assemble.mjs로 이어 붙여 만든다. 수정은 src/에서.
@@ -1499,6 +1505,17 @@ function action(name){
   syncUI();
 }
 function syncUI(){
+  const mission=document.getElementById('mission');
+  mission.hidden=T.mode==='teacher';
+  if(!mission.hidden){
+    mission.style.top=`${document.getElementById('quests').getBoundingClientRect().bottom+8}px`;
+    const text=missionText(Q.i,Q.free?'free':Q.phase,{flags:Q.flags,body:S.body.target,nWeights:S.nWeights.target});
+    if(mission.textContent!==text){
+      mission.getAnimations().forEach(animation=>animation.cancel());
+      mission.textContent=text;
+      if(!matchMedia('(prefers-reduced-motion: reduce)').matches)mission.animate([{opacity:0},{opacity:1}],{duration:120});
+    }
+  }
   const key=`${Math.round(S.body.value)}:${Math.round(S.nWeights.value)}:${S.playing.target}:${S.sound.target}`;
   if(toolbar.dataset.key===key)return;toolbar.dataset.key=key;
   const i=Math.round(S.body.value),bodyNames=['earth','moon','rock','rock','band','ring','band','star','compact','space'];
@@ -1602,7 +1619,7 @@ function textAudit(){
   const found=[],walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);
   while(walker.nextNode()){
     const node=walker.currentNode,parent=node.parentElement;
-    if(!parent||parent.closest('script,style,template,[hidden]'))continue;
+    if(!parent||parent.closest('script,style,template,[hidden],#mission[data-mission]'))continue;
     const range=document.createRange();range.selectNodeContents(node);const r=range.getBoundingClientRect();
     let visible=!!r.width&&!!r.height&&r.bottom>=0&&r.top<=innerHeight&&r.right>=0&&r.left<=innerWidth;
     for(let el=parent;el&&visible;el=el.parentElement){const style=getComputedStyle(el);visible=style.visibility!=='hidden'&&style.display!=='none'&&+style.opacity!==0;}
@@ -1648,6 +1665,7 @@ function questUI(){
   qPictures.hidden=Q.free||!qPictures.children.length;
   document.body.dataset.qphase=Q.free?'free':Q.phase;
   DIRECTOR.refit=true;
+  syncUI();
 }
 
 // One flow state; all science decisions are delegated to PHYS.
@@ -1858,6 +1876,34 @@ const CARDS = (()=>{
   return {picture,actual,principle,micro};
 })();
 
+// Copy lives here; presentation derives everything from the existing quest state.
+const MISSION = [
+  {ask:'어느 별에서 몸무게가 더 가벼울까요?',pick:'아래 그림을 눌러 가벼운 별을 골라요',act:'둥근 손잡이를 돌려 달을 찾아보세요',watch:'달에서 줄어든 무게를 지켜보세요',done:'달에서는 가벼워져요. 다음 화살표를 눌러요',free:'마음대로 만져 보세요'},
+  {ask:'달로 가면 양팔 저울이 기울까요?',pick:'아래 그림을 눌러 저울 모습을 골라요',act:'지구와 달에서 양팔 저울 버튼을 눌러요',actMove:'둥근 손잡이를 돌려 달에서도 확인해요',actEarth:'둥근 손잡이를 돌려 지구에서도 확인해요',watch:'두 별의 양팔 저울을 지켜보세요',done:'두 별 모두 수평이에요. 다음 화살표를 눌러요',free:'마음대로 만져 보세요'},
+  {ask:'세 별 중 어디에서 가장 무거울까요?',pick:'아래 그림을 눌러 가장 무거운 별을 골라요',act:'둥근 손잡이를 돌려 가장 무거운 별을 찾아요',watch:'목성에서 늘어난 무게를 지켜보세요',done:'목성에서 가장 무거워요. 다음 화살표를 눌러요',free:'마음대로 만져 보세요'},
+  {ask:'태양에서는 무게를 끝까지 잴 수 있을까요?',pick:'아래 그림을 눌러 태양의 무게를 예상해요',act:'둥근 손잡이를 태양으로 돌려 체크를 눌러요',actMass:'더하기 버튼으로 추를 늘려 체크를 눌러요',watch:'무게 눈금의 끝을 지켜보세요',done:'눈금의 끝을 넘었어요. 다음 화살표를 눌러요',free:'마음대로 만져 보세요'},
+  {ask:'어느 별에서 더 높이 뛸 수 있을까요?',pick:'아래 그림을 눌러 높이 뛸 별을 골라요',act:'지구에서 위쪽 화살표 버튼을 눌러 뛰어요',actMove:'둥근 손잡이를 달로 돌려 화살표를 눌러요',actEarth:'둥근 손잡이를 지구로 돌려 화살표를 눌러요',watch:'두 별에서 뛴 높이를 비교해 보세요',done:'달에서 더 높이 뛰어요. 다음 화살표를 눌러요',free:'마음대로 만져 보세요'},
+  {ask:'아주 작은 별에서도 무거워질까요?',pick:'아래 그림을 눌러 가장 무거운 별을 골라요',act:'둥근 손잡이를 돌려 작은 중성자별을 찾아요',watch:'작은 별에서 늘어난 무게를 지켜보세요',done:'작아도 무거워져요. 다음 화살표를 눌러요',free:'마음대로 만져 보세요'},
+  {ask:'지구와 몸무게가 비슷한 별은 어디일까요?',pick:'아래 그림을 눌러 비슷한 무게를 골라요',act:'둥근 손잡이를 돌려 점선 안의 무게를 찾아요',watch:'점선 안에 들어온 무게를 지켜보세요',done:'비슷한 별을 찾았어요. 자유 실험 버튼을 눌러요',free:'마음대로 만져 보세요'}
+];
+function missionText(questIndex, phase, ctx={}){
+  const key={intro:'ask',predict:'pick',act:'act',observe:'watch',confirm:'done',card:'done',free:'free'}[phase];
+  if(!Number.isInteger(questIndex)||!MISSION[questIndex]||!key)throw new RangeError('mission');
+  const row=MISSION[questIndex];
+  if(phase==='act'){
+    if(questIndex===1){
+      if(ctx.flags.visited.includes(0))return row.actMove;
+      if(ctx.flags.visited.includes(1))return row.actEarth;
+    }
+    if(questIndex===3&&ctx.body===7&&ctx.nWeights===1)return row.actMass;
+    if(questIndex===4){
+      if(ctx.flags.runs.some(r=>r.i===0))return row.actMove;
+      if(ctx.flags.runs.some(r=>r.i===1))return row.actEarth;
+    }
+  }
+  return row[key]||row.ask;
+}
+
 // Presentation consumes the single Q state. It never awards completion.
 const DIRECTOR={
   clock:0,eventLeft:0,snapshot:null,refit:false,
@@ -1875,7 +1921,7 @@ const DIRECTOR={
   chord(){this.sound([523.25,659.25,783.99],.7);},
   fit(animate=false){
     // Reserve the actual DOM bands, including cards and the expanded free-mode layer group.
-    const top=document.getElementById('quests').getBoundingClientRect().bottom+12;
+    const top=document.getElementById('mission').getBoundingClientRect().bottom+12;
     let bottom=document.body.classList.contains('q-event')?innerHeight-24:toolbar.getBoundingClientRect().top-12;
     if(!document.body.classList.contains('q-event')&&!qPictures.hidden&&qPictures.children.length)bottom=Math.min(bottom,qPictures.getBoundingClientRect().top-12);
     if(!layerGroup.hidden)bottom=Math.min(bottom,layerGroup.getBoundingClientRect().top-12);
@@ -1936,7 +1982,7 @@ const DIRECTOR={
       if(needsInspect){const r=document.getElementById('tool-inspect').getBoundingClientRect();body+=`<rect x="${r.x+2}" y="${r.y+2}" width="${r.width-4}" height="${r.height-4}" rx="12" stroke-dasharray="4 4"/>`;}
     }
     if(this.eventLeft>0&&!Q.free){
-      const [x,y]=project(focus),age=1.4-this.eventLeft,endX=Math.min(innerWidth-112,Math.max(112,x+75)),endY=Math.max(170,y-65),u=Math.min(1,age/.45);
+      const [x,y]=project(focus),age=1.4-this.eventLeft,endX=Math.min(innerWidth-112,Math.max(112,x+75)),endY=Math.max(document.getElementById('mission').getBoundingClientRect().bottom+106,y-65),u=Math.min(1,age/.45);
       const mini=Q.i===3||Q.i===5?CARDS.micro(this.snapshot):d.card(this.snapshot);
       body=`<circle cx="${x}" cy="${y}" r="4" fill="#37795d"/>`+path(`M${x} ${y}L${x+(endX-x)*u} ${y+(endY-y)*u}`)+(age>.45?`<svg x="${endX-100}" y="${endY-94}" width="200" height="94" viewBox="0 0 300 140"><rect x="0.75" y="0.75" width="298.5" height="138.5" rx="12" fill="#f4efe3" stroke="#221d18" stroke-width="2.25"/>${mini.replace(/^<svg[^>]*>|<\/svg>$/g,'')}</svg>`:'');
     }

@@ -108,3 +108,7 @@ Node 검사와 실제 투사 화면 검수는 구분합니다. 원거리 가독�
 
 
 R15: Navy paper, shared three-band ink renderer and cream HUD; 47 is byte-identical to dino-tug. Hand-check 166/166, quest/teacher/syntax pass; browser capture not run. [Settings, validation and engine workaround](docs/visual-grammar.md#r15---colorfigures-ink-rendering).
+
+학생 미션: `src/67-mission.js`의 `MISSION` 표와 순수 함수 `missionText`가 기존 Q 상태로 배너 문구를 계산합니다. intro는 질문, predict는 그림 선택, act는 조작, observe는 달성 후 관찰, confirm/card는 예측 일치 여부에 따른 결과와 다음 행동을 표시합니다. 자유 탐색에서는 자유 조작 문구를 표시하고 교사 모드에서는 숨깁니다. 문구 변경은 즉시 적용하며 120ms 페이드로 나타납니다(동작 줄이기 설정에서는 생략).
+
+`textAudit()`의 미션 예외는 `#mission[data-mission]`에만 적용됩니다. `hand-check`는 실제 표시 함수를 실행해 8개 퀘스트의 문구·32자 제한·단계 변경·정답/오답·자유 탐색·교사 숨김을 검사합니다. `capture.mjs`는 브라우저 호스트에서 같은 표시 계약과 기존 HUD/카드와의 겹침을 검사하며, 모바일 퀘스트의 모든 단계도 캡처합니다. 브라우저에서의 실제 줄바꿈·주인공 가림·페이드는 별도 시각 검수가 필요합니다.

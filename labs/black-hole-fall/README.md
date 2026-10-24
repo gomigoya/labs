@@ -54,6 +54,10 @@ node D:/labs/tools/serve.mjs --root labs/black-hole-fall
 
 ## 실제 window.__lab 훅
 
+학생 모드와 자유 탐색에서는 상단 퀘스트 막대 아래에 한국어 미션 한 줄을 표시합니다. `src/67-mission.js`의 `MISSION` 표와 `missionText`가 현재 퀘스트·단계·예측 결과로 문구를 정합니다. 거리/질량 비교가 준비되면 비교 버튼 안내로 즉시 바뀌고, 교사 모드에서는 숨깁니다. `textAudit()`는 `#mission[data-mission]`의 글자만 추가로 허용하며 다른 글자는 계속 위반으로 셉니다.
+
+`hand-check`는 미션의 6퀘스트 × 7단계 × 정오답 × 비교 준비 상태(168조합), 표시 변경, 교사 숨김, 모션 감소를 검사합니다. `quest-check`는 실제 퀘스트 전환에 따른 문구 변경을 검사합니다. 이 Node 검사는 DOM 경계를 대체하므로 실제 1440×900·375×812 배치와 페이드·장치 가림은 추정입니다. 호스트의 `node tools/capture.mjs`는 각 뷰포트에서 모든 퀘스트 단계의 배너와 상단/하단 막대·카드 겹침, 숨김, 글자 감사를 검사합니다.
+
 70-loop.js: `state`, `PHYS`, `quest`, `SHOTS`, `SHOTS_VERTICAL`, `PRESETS`, `set`, `preset`, `shot`, `flyTo`, `layer`, `step`, `quality`, `textAudit`, `heroCoverage`, `perf`, `capture`.
 
 80/85에서 `teacher`, `attract`를 추가합니다. `set`은 r·u·massIndex·orientation·playing·sound·cutaway·t, `quality`는 high/low를 받습니다. `layer`는 room·console·hero·grid·front·disk·horizon·probe와 여섯 GRAMMAR.LAYERS 키를 받습니다. `window.GRAMMAR`는 set·pin·unpin·baseline을 제공합니다.

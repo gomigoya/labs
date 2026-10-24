@@ -1,5 +1,7 @@
 // node tools/hand-check.mjs
 import fs from 'node:fs';
+import { checkMissions } from './mission-check.mjs';
+checkMissions();
 const src = fs.readFileSync(process.argv[2] || 'src/15-physics.js', 'utf8');
 const PHYS = new Function(src.match(/\/\/ ==== 1 PHYSICS ====([\s\S]*?)\/\/ ==== END PHYSICS ====/)[1] + '\nreturn PHYS;')();
 

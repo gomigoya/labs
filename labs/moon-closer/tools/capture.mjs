@@ -55,12 +55,44 @@ try {
     await page.goto(parsed.href, { waitUntil: 'load' });
     try { await page.waitForFunction(() => !!window.__lab, null, { timeout: 60000 }); }
     catch (error) { report.push({ viewportName, startupConsoleErrors: consoleErrors, startupPageErrors: pageErrors, requestErrors }); console.error(JSON.stringify(report.at(-1))); throw error; }
+    // Requirements, independent of MISSION's implementation: every visible phase,
+    // short Korean copy, changed instructions, free exploration, teacher exclusion.
+    const missionChecks = await page.evaluate(() => {
+      const lab = window.__lab, mission = document.getElementById('mission');
+      let checks = 0;
+      const check = (ok, reason) => { if (!ok) throw new Error(`mission: ${reason}`); checks++; };
+      const visible = el => el.getClientRects().length && getComputedStyle(el).display !== 'none' && getComputedStyle(el).visibility !== 'hidden';
+      const overlaps = (a, b) => a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top;
+      lab.attract.wake(false); lab.teacher.mode('student');
+      check(mission.getAttribute('role') === 'status' && mission.getAttribute('aria-live') === 'polite', 'live status');
+      check(getComputedStyle(mission).pointerEvents === 'none', 'must not intercept controls');
+      check(parseFloat(getComputedStyle(mission).fontSize) >= 15, 'minimum font size');
+      for (let i = 0; i < 8; i++) {
+        lab.quest.go(i); let previous = '';
+        for (const phase of ['intro', 'predict', 'act', 'observe', 'confirm', 'card']) {
+          lab.quest.skip(phase);
+          const text = mission.textContent.trim();
+          check(visible(mission) && /[가-힣]/u.test(text) && [...text].length <= 32, `Q${i + 1} ${phase} copy`);
+          if (previous && phase !== 'card') check(text !== previous, `Q${i + 1} ${phase} changed`);
+          previous = text;
+          const bounds = mission.getBoundingClientRect();
+          check(bounds.left >= 0 && bounds.right <= innerWidth && bounds.height <= 2 * parseFloat(getComputedStyle(mission).lineHeight) + 20, 'fits two lines');
+          for (const el of document.querySelectorAll('#quests,#tools,#q-extra,#q-pictures,#person-card'))
+            if (visible(el)) check(!overlaps(bounds, el.getBoundingClientRect()), `${phase} overlaps ${el.id}`);
+          check(lab.textAudit().length === 0, 'no other visible words');
+        }
+      }
+      lab.teacher.mode('free'); check(visible(mission) && mission.textContent === '마음대로 만져 보세요', 'free copy');
+      lab.teacher.mode('teacher'); check(!visible(mission), 'hidden in teacher mode');
+      lab.teacher.mode('student'); check(visible(mission), 'restored in student mode');
+      return { checks, failures: 0 };
+    });
+    report.push({ viewportName, missionChecks });
     for (const [name, preset] of states) {
       if (selected.length && !selected.includes(name)) continue;
       if (['projector', 'laptop'].includes(viewportName) && name !== 'teacher-strip') continue;
       if (name.startsWith('vertical-') && !mobile) continue;
       if (name === 'thumb' && viewportName !== 'desktop') continue;
-      if (mobile && /^q\d+-(intro|act|event|confirm)$/.test(name)) continue;
       const c0 = consoleErrors.length, p0 = pageErrors.length;
       const result = await page.evaluate(({ name, preset, mobile }) => {
         const lab = window.__lab;
@@ -92,7 +124,7 @@ try {
           if (!name.startsWith('attract-') && name !== 'touch-pulse') lab.step(100, 1 / 30);
           lab.step(1, 0);
           return { textAudit: lab.textAudit(), coverage: lab.heroCoverage(), perf: lab.perf(),
-            occlusion: [...document.querySelectorAll('#quests,#teacher-strip,#teacher-numbers,#q-pictures,#person-card')].filter(el => el.getClientRects().length && getComputedStyle(el).visibility !== 'hidden').map(el => {
+            occlusion: [...document.querySelectorAll('#mission,#quests,#teacher-strip,#teacher-numbers,#q-pictures,#person-card')].filter(el => el.getClientRects().length && getComputedStyle(el).visibility !== 'hidden').map(el => {
               const r = el.getBoundingClientRect(), b = lab.heroCoverage().bounds;
               return { id: el.id, overlaps: b.left < r.right && b.right > r.left && b.top < r.bottom && b.bottom > r.top };
             }),

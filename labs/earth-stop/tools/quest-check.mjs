@@ -14,7 +14,7 @@ const MODEL=PHYS.SCENE,currentPhi=()=>PHYS.phiFromRailX(S.phi.value),currentPeri
 const GRAMMAR={LAYERS:['접선 속도의 크기','벤치마크 비교','위도에 따른 감소','관성','낮밤 경계','상대 각속도','설계 속도 한계','반복 관측'],enabled:{},set(v){Object.assign(this.enabled,v)},pin(){},unpin(){},update(){}};
 const DIRECTOR={clear(){},intro(){},push(){},event(){},chord(){},time:dt=>dt,update(){}};
 const document={body:{classList:{remove(){},toggle(){}}},getElementById(){return {animate(){}}}};
-function questUI(){} function syncUI(){} function tick(){} function shot(){} function updateHero(){} function drawGraphs(){}
+function questUI(){} function syncUI(){} function syncMission(){} function tick(){} function shot(){} function updateHero(){} function drawGraphs(){}
 const controls={update(){},target:{}},camera={position:{distanceTo(){return 1}}},bokehPass={uniforms:{focus:{value:0}}},composer={render(){}},LAYERS={};
 `+section(hud,'function executeStop()','function action(')+section(hud,'function set(name,','const PRESETS=')+read('src/66-cards.js')+read('src/65-quests.js')+section(loop,'function update(dt)','const LAYERS='),context);
 const run=s=>vm.runInContext(s,context);
